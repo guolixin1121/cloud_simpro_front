@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
-const b = null
-console.log(b)
 </script>
 
 <template>
