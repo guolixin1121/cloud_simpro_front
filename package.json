@@ -8,15 +8,16 @@
     ]
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vue-tsc && vite",
     "build": "vue-tsc --noEmit && vite build",
     "preview": "vite preview",
     "eslint": "eslint --max-warnings=0",
-    "preinstall": "npx only-allow pnpm",
     "pre-check": "tsc && npx lint-staged"
   },
   "dependencies": {
-    "vue": "^3.2.47"
+    "pinia": "^2.0.33",
+    "vue": "^3.2.47",
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.5.1",

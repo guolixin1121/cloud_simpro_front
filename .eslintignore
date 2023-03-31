@@ -1,5 +1,0 @@
-*.md
-.vscode
-.idea
-dist
-node_modules
