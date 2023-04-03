@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "lint-staged": {
-    "src/**/*.{vue,ts,tsx}": [
+    "src/**/*.{js,jsx,vue,ts,tsx}": [
       "npm run eslint"
     ]
   },
