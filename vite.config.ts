@@ -53,6 +53,7 @@ export default defineConfig(({ mode }) => {
       }),
       eslintPlugin({
         include: ['src/**/*.vue', 'src/**/*.ts', 'src/**/*.tsx'], // 检查的文件
+        exclude: ['node_modules', 'dist', 'public', 'src/**/*.js'],
         cache: false
       })
       // //开启gzip压缩  ng需要配合  体积不是很大不建议使用

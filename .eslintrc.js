@@ -21,6 +21,7 @@ module.exports = {
     // }
   },
   plugins: ['vue', '@typescript-eslint'],
+  // ignorePatterns: ['./src/assets/iconfont/iconfont.js'],
   rules: {
     //关闭组件命名规则
     'vue/multi-word-component-names': 'off',

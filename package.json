@@ -3,17 +3,17 @@
   "private": true,
   "version": "0.0.0",
   "lint-staged": {
-    "src/**/*.{js,jsx,vue,ts,tsx}": [
+    "src/**/*.{vue,ts,tsx}": [
       "npm run eslint"
     ]
   },
   "scripts": {
     "dev": "vue-tsc && vite",
     "build": "vue-tsc --noEmit && vite build",
-    "build:prod": "vue-tsc --noEmit && vite build",
+    "build:prod": "vue-tsc --noEmit && vite build --mode prod",
     "preview": "vite preview",
     "eslint": "eslint --max-warnings=0",
-    "pre-check": "tsc && npx lint-staged"
+    "pre-check": "vue-tsc && npx lint-staged"
   },
   "dependencies": {
     "ant-design-vue": "4.0.0-alpha.3",

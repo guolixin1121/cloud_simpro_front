@@ -18,12 +18,12 @@
     "noEmit": true,
     "allowJs": true,  //编译时允许有js
   },
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/api/test.js", "src/api/test.js"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "exclude": [
     "node_modules",
     "dist",
     "public",
-    "src/assets/iconfont/*",
+    // "src/assets/iconfont/*",
     "src/**/*.js"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
