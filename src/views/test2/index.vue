@@ -8,7 +8,6 @@
 
 <script setup lang="ts">
 import { getTest } from '@/api/test'
-// import { message } from 'ant-design-vue'
 
 const f = async () => {
   const data = await getTest()
