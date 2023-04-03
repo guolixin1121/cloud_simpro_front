@@ -1,6 +1,6 @@
 # cloud_simpro_front 云仿真
 
-# 前言
+## 前言
 
 在前端项目工程日益复杂的今天，一套完善的开发环境配置可以极大的提升开发效率，提高代码质量，方便多人合作，以及后期的项目迭代和维护
 
@@ -52,13 +52,13 @@ vue3 + vue-router4 + vite4 + ant-design-vue4 + pinia + ts + eslint + prettier + 
 git cz 代替 git commit 需要全局安装 pnpm i commitizen -g
 跟据提示执行即可
 
-### 插件安装
+## 插件安装
 
 1. 安装 vscode 插件 EditorConfig
 2. 安装 vscode 插件 Prettier
 3. 安装 vscode 插件 ESLint
 
-### 目录结构
+## 目录结构
 
 1. src 所有开发代码均需放在 src 目录下
 2. api 存在各组件或模块的接口请求
@@ -72,7 +72,7 @@ git cz 代替 git commit 需要全局安装 pnpm i commitizen -g
 10. utils 工具文件（包括封装的请求，所有的接口路径已经公共函数等）
 11. views 项目路由组件
 
-### vite 配置
+## vite 配置
 
 1. 配置页面获取全局变量 process.env
 2. 配置路径别名 src 为@
@@ -80,5 +80,5 @@ git cz 代替 git commit 需要全局安装 pnpm i commitizen -g
 4. 配置 ant 按需加载
 5. 配置打包大文件拆分和静态资源分类打包
 6. 本地下采用 proxy 代理方式
-7. 支持 gzip 压缩 ng 需要配盒
+7. 支持 gzip 压缩 ng 需要配合
 8. 可配置 cdn 加速
