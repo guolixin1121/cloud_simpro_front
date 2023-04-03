@@ -15,5 +15,5 @@ testApi.post({ "name": "Angel", "age": 10 })
 const f = async () => {
   router.push(`/test2`)
 }
-console.log(process.env.VITE_BASE_STATIC_URL)
+console.log(process.env.VITE_BASE_STATIC_URL, 111)
 </script>
