@@ -1,10 +1,9 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
-// import Antd from 'ant-design-vue'
-// import 'ant-design-vue/dist/antd.css'
+// import SvgIcon from './assets/iconfont/svgIcon.vue'
+// import './assets/iconfont/iconfont.js'
 import App from './App.vue'
 import router from './router'
-// import './assets/styles/index.scss'
-
-// createApp(App).use(router).use(createPinia()).use(Antd).mount('#app')
+import './assets/styles/index.less'
+// component('SvgIcon', SvgIcon)
 createApp(App).use(router).use(createPinia()).mount('#app')

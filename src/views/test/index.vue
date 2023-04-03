@@ -1,13 +1,14 @@
 <template>
-  <div class="home" @click="() => f()">2222</div>
+  <div class="home" @click="f">click</div>
+  <img :src="img" />
 </template>
 
 <script setup lang="ts">
-type a = number
+import img from '@/assets/images/404.png'
+const router = useRouter()
 
-const f = (b: a) => {
-  console.log(b)
+const f = async () => {
+  router.push(`/test2`)
 }
-const h: number = 1
-console.log(h)
+console.log(process.env.VITE_BASE_STATIC_URL)
 </script>
