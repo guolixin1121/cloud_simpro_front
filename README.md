@@ -1,18 +1,81 @@
-# Vue 3 + TypeScript + Vite
+# cloud_simpro_front 云仿真
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+### 前言
 
-## Recommended IDE Setup
+在前端项目工程日益复杂的今天，一套完善的开发环境配置可以极大的提升开发效率，提高代码质量，方便多人合作，以及后期的项目迭代和维护
+# 项目规范分： 
+1.项目目录结构规范 
+2.代码格式规范
+3.git 提交规范
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+### 技术栈
 
-## Type Support For `.vue` Imports in TS
+vue3 + vue-router4 + vite4 + ant-design-vue4 + pinia + ts + eslint + prettier + husky + lint-staged + commitlint + pnpm + axios + iconfont + less
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+### 规范
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+## 1 代码格式规范和语法检测
 
-1. Disable the built-in TypeScript Extension
-   1. Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-   2. Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+1. vscode：统一前端编辑器。
+2. editorconfig: 统一团队 vscode 编辑器默认配置。
+3. prettier: 保存文件自动格式化代码。
+4. eslint: 检测代码语法规范和错误。
+5. lint-staged: 只检测暂存区文件代码，优化 eslint 检测速度。
+
+## 2 代码 git 提交规范
+
+1. husky:可以监听 githooks 执行，在对应 hook 执行阶段做一些处理的操作。
+2. pre-commit：githooks 之一， 在 commit 提交前使用 tsc 和 eslint 对语法进行检测。
+3. commit-msg：githooks 之一，在 commit 提交前对 commit 备注信息进行检测。
+4. commitlint：在 githooks 的 pre-commit 阶段对 commit 备注信息进行检测。
+5. commitizen：git 的规范化提交工具，辅助填写 commit 信息。
+
+## 3 提交实例
+
+# 1. git commit -m "feat: xxx"
+
+'feat', // 新功能 feature
+'fix', // 修复 bug
+'docs', // 文档注释
+'style', // 代码格式(不影响代码运行的变动)
+'refactor', // 重构(既不增加新功能，也不是修复 bug)
+'perf', // 性能优化
+'test', // 增加测试
+'chore', // 构建过程或辅助工具的变动
+'revert', // 回退
+'build' // 打包
+
+# 2 git cz
+git cz 代替 git commit 需要全局安装 pnpm i commitizen -g 
+跟据提示执行即可
+
+### 插件安装
+
+1. 安装 vscode 插件 EditorConfig
+2. 安装 vscode 插件 Prettier
+3. 安装 vscode 插件 ESLint
+
+### 目录结构
+
+1. src 所有开发代码均需放在src目录下
+2. api 存在各组件或模块的接口请求
+3. assets 存在静态资源文件
+4. common 存在业务公共组件
+5. components 存在基础公共组件
+6. hooks 存在公共hook
+7. layerout 页面布局组件
+8. router 页面路由组件
+9. store 工程数据资源管理
+10. utils 工具文件（包括封装的请求，所有的接口路径已经公共函数等）
+11. views 项目路由组件
+
+### vite 配置
+
+1. 配置页面获取全局变量 process.env
+2. 配置路径别名 src为@
+3. 配置自动导入vue， vue-router， pinia中的api，页面无需再做引用
+4. 配置ant 按需加载
+5. 配置打包大文件拆分和静态资源分类打包
+6. 本地下采用proxy代理方式
+7. 支持gzip压缩  ng需要配盒
+8. 可配置 cdn 加速
