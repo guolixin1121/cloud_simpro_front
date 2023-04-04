@@ -1,5 +1,5 @@
 <template>
-  <div class="home" @click="f">click</div>
+  <div class="home mb-10" @click="f">click</div>
   <img :src="img" />
 </template>
 

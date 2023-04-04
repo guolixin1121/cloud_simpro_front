@@ -9,6 +9,7 @@
 4. eslint: 检测代码语法规范和错误。
 5. lint-staged: 只检测暂存区文件代码，优化 eslint 检测速度。
 6. husky/commitizen：git提交的检测和规范
+7. tailwind：原子化的css框架，通过class就可以修改样式
 
 ## 二、目录结构
 | -- api             接口定义   
@@ -105,7 +106,8 @@ import 'ant-design-vue/dist/antd.css'
 + 类的不同状态用两个中横线(--)连接，如 search--active
 + 父子层级不超过三级
 
-
+### TailWind
+推荐使用 tailwind，内置了功能类优先的原子class，用户可以直接在HTML通过操作tailwind提供的class来使用CSS，提升开发效率
 
 ## 六、Git规范
 `husky`可以帮助我们在执行 git commit 提交的时候，通过监听不同阶段的hook进行自定义操作。如：提交前进行 eslint 规范进行修复代码。   
@@ -146,9 +148,7 @@ git cz 代替 git commit 需要全局安装 pnpm i commitizen -g
 
 ## 七、插件安装
 
-1. 安装 vscode 插件 EditorConfig
-2. 安装 vscode 插件 Prettier
-3. 安装 vscode 插件 ESLint
+EditorConfig，Prettier，ESLint，Volar，Tailwind CSS IntelliSense
 
 ## 八、vite 配置说明
 
