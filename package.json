@@ -13,7 +13,8 @@
     "build:prod": "vue-tsc --noEmit && vite build --mode prod",
     "preview": "vite preview",
     "eslint": "eslint --max-warnings=0",
-    "pre-check": "vue-tsc && npx lint-staged"
+    "pre-check": "vue-tsc && npx lint-staged",
+    "commit": "cz"
   },
   "dependencies": {
     "ant-design-vue": "4.0.0-alpha.3",
