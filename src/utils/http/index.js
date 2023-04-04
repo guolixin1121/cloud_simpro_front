@@ -91,7 +91,7 @@ class AxiosRequest {
           url,
           method,
           headers,
-          data: ['POST', 'PUT', 'DELETE'].includes(method) ? data : null,
+          data: ['POST', 'PUT', 'DELETE'].includes(method.toUpperCase()) ? data : null,
           params: method === 'GET' ? data : null
         })
         .then(res => {
