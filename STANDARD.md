@@ -11,21 +11,21 @@
 6. husky/commitizen：git提交的检测和规范
 
 ## 二、目录结构
-| -- api             接口定义
-| -- assets          样式、图片、字体等资源
-| ---- iconfont
-| ---- images
-| ---- styles  
-| -- components     公共基础组件
-| -- hooks          公共hooks
-| -- layout         页面布局
-| -- router			    页面路由
-| -- store			    数据资源存储
-| -- utils				  通用工具
+| -- api             接口定义   
+| -- assets          样式、图片、字体等资源   
+| ---- iconfont   
+| ---- images   
+| ---- styles     
+| -- components     公共基础组件   
+| -- hooks          公共hooks   
+| -- layout         页面布局   
+| -- router			    页面路由   
+| -- store			    数据资源存储   
+| -- utils				  通用工具   
 | -- views			    
-| ---- course           每个页面一个目录，尽量一个单词，多个单词用’-’连接
-| ------ components     页面级组件
-| ------ index.vue      以index.vue为默认页面
+| ---- course           每个页面一个目录，尽量一个单词，多个单词用’-’连接   
+| ------ components     页面级组件   
+| ------ index.vue      以index.vue为默认页面   
 
 ## 三、命名规范
 ### 1. 文件和文件夹
