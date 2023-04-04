@@ -87,7 +87,7 @@ import 'ant-design-vue/dist/antd.css'
 + **提交表单** 按钮增加loading或置灰等避免多次触发
 + **接口调用** 列表页等页面加载数据时，增加loading效果、数据为空时样式
 
-### 4. API
+### API
 + 本地环境使用vite.config.ts里的proxy
 + 其他环境使用.env进行配置
 
