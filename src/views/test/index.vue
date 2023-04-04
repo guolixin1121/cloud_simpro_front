@@ -10,10 +10,10 @@ const router = useRouter()
 
 const testApi = useTestApi()
 testApi.get()
-testApi.post({ "name": "Angel", "age": 10 })
+testApi.post({ name: 'Angel', age: 10 })
 
 const f = async () => {
   router.push(`/test2`)
 }
-console.log(process.env.VITE_BASE_STATIC_URL, 111)
+console.log(process.env.VITE_BASE_STATIC_URL, 222)
 </script>
