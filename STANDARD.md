@@ -146,6 +146,13 @@ commit文案格式：提交类型： 提交内容描述 （备注：冒号后面
 git cz 代替 git commit 需要全局安装 pnpm i commitizen -g
 使用参考： https://blog.csdn.net/weixin_47980825/article/details/127473686
 
+### troubleshooting
++ git commit没有触发husky，在.git/config文件[core]下增加 hooksPath
+```
+[core]
+  hooksPath = .husky
+```
+
 ## 七、插件安装
 
 EditorConfig，Prettier，ESLint，Volar，Tailwind CSS IntelliSense
