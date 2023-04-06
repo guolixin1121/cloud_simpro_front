@@ -5,6 +5,7 @@
 2. 不同的环境，通过.env文件配置
 
 ### 开发前环境预备
++ 安装STANDARD.md中**插件安装**部分的VS插件
 + 安装`commitizen`
 `npm i commitizen -g`
 + `husky`配置

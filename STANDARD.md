@@ -22,6 +22,7 @@
 | -- layout         页面布局   
 | -- router			    页面路由   
 | -- store			    数据资源存储   
+| -- types			    typescript的全局类型定义   
 | -- utils				  通用工具   
 | -- views			    
 | ---- course           每个页面一个目录，尽量一个单词，多个单词用’-’连接   
@@ -155,7 +156,7 @@ git cz 代替 git commit 需要全局安装 pnpm i commitizen -g
 
 ## 七、插件安装
 
-EditorConfig，Prettier，ESLint，Volar，Tailwind CSS IntelliSense
+EditorConfig，Prettier，ESLint，Volar，Tailwind CSS IntelliSense, Ant Design Vue helper
 
 ## 八、vite 配置说明
 
