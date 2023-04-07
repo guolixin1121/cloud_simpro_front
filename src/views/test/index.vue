@@ -1,34 +1,26 @@
 <template>
   <a-button type="primary" v-if="user.hasPermission('add')">上传</a-button>
-  <Table :data-source="dataSource" :columns="columns" @on-select="onSelect">
-    <template #bodyCell="{ column, text }">
-      <template v-if="column.key === 'age'">
-        {{ text > 18 ? "成人" : "未成年" }}
+  <a-spin :spinning="loading">
+    <Table :data-source="dataSource" :columns="columns" @on-select="onSelect">
+      <template #bodyCell="{ column, text }">
+        <template v-if="column.key === 'age'">
+          {{ text > 18 ? "成人" : "未成年" }}
+        </template>
       </template>
-    </template>
-  </Table>
+    </Table>
+  </a-spin>
 </template>
 
 <script setup lang="ts">
 import Table from '../../components/table/index.vue'
+import { useRequest} from 'vue-request'
 import { useUserStore } from '@/store/user';
+import { useTableApi } from '@/apis/table';
 const router = useRouter()
 const user = useUserStore()
+const table = useTableApi()
 
-const dataSource = [
-  {
-    key: '1',
-    name: '胡彦斌',
-    age: 12,
-    address: '西湖区湖底公园1号',
-  },
-  {
-    key: '2',
-    name: '胡彦祖',
-    age: 42,
-    address: '西湖区湖底公园1号',
-  },
-]
+const { data: dataSource, loading } = useRequest(table.getList)
 
 const columns = [
   {

@@ -57,6 +57,38 @@ module.exports = [
         'google': "http://www.google.com", 
       }
     }
+  },
+  {
+    url: "/config/topmenu",
+    method: "get",
+    data: {
+      code: 0,
+      data: {
+        '动力学': "http://www.baidu.com",
+        'google': "http://www.google.com", 
+      }
+    }
+  },
+  {
+    url: "/table/list",
+    method: "get",
+    data: {
+      code: 0,
+      data: [
+        {
+          key: '1',
+          name: '胡彦斌',
+          age: 12,
+          address: '西湖区湖底公园1号',
+        },
+        {
+          key: '2',
+          name: '胡彦祖',
+          age: 42,
+          address: '西湖区湖底公园1号',
+        },
+      ]
+    }
   }
 ];
 
