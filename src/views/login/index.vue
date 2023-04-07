@@ -1,5 +1,5 @@
 <template>
-  <a-form style="margin: 0 auto" class=" pt-20 w-1/2">
+  <a-form style="margin: 0 auto" class="pt-20 w-1/2">
     <a-form-item label="用户名">
       <a-input></a-input>
     </a-form-item>
@@ -9,7 +9,7 @@
     <a-form-item>
       <a-button @click="login">登录</a-button>
     </a-form-item>
-  </a-form>>
+  </a-form>
 </template>
 
 <script setup lang="ts">
