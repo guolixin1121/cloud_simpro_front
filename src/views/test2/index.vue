@@ -1,3 +1,4 @@
+<!-- eslint-disable no-undef -->
 <template>
   <a-button class="home" @click="f">btn</a-button>
   <p>
@@ -7,7 +8,7 @@
 </template>
 
 <script setup lang="ts">
-import { getTest } from '@/api/test'
+import { getTest } from '@/apis/test'
 
 const f = async () => {
   const data = await getTest()

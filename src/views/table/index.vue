@@ -51,7 +51,7 @@ const columns = [
     key: 'actions',
     actions: {
       view: () => router.push(`/test2`) ,
-      edit: () => router.push(`/test2`),
+      edit: ( data: any ) => console.log(data) ,
       delete: (data: any) => console.log(data)
     }
   }

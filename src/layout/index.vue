@@ -12,24 +12,33 @@ let collapsed = ref(false)
 const updateCollapsed = () => collapsed.value = !collapsed.value
 
 // menus for current login user
-let menus: MenuItem[] = useUserStore().user.permissions
+let menus: Permission[] = useUserStore().user.permissions
 
 // set selected menu, and open its parent menu
 const route = useRoute()
 const selectedKeys = computed(() => [route.path])
-const openKeys = computed(() => getParentKeys(menus, route.path)) 
+const openKeys = computed(() => getParentKeys(menus)) 
 
-function getParentKeys (list: MenuItem[], selectedPath: string, keys: string[] = []): string[] {
-  let parentKeys: string[] = []
+/**
+ * 递归获取当前路由的所有父节点的key
+ * @param list 要检索的路由列表
+ * @param currentRoute 当前路由
+ * @param keys 父节点key集合
+ */
+function getParentKeys (list: Permission[], keys: string[] = []): string[] | boolean {
   for(let item of list) {
-    if(item.path === selectedPath) {
-      parentKeys = [...keys]
+    if(item.path === route.path) {
+      return [...keys]
     } else if(item.children && item.children.length) {
-      parentKeys = getParentKeys(item.children, selectedPath, [...keys, item.path])
+      const parentKeys = getParentKeys(item.children,[...keys, item.path])
+      if(parentKeys !== false) {
+        return parentKeys
+      }
     }
   }
-  return parentKeys
+  return false
 }
+
 </script>
 
 <template>
