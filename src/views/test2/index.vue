@@ -13,8 +13,8 @@ const f = async () => {
   const data = await getTest()
   console.log(data)
 }
-console.log(ref)
-console.log(process.env.VITE_BASE_STATIC_URL)
+// console.log(ref)
+// console.log(process.env.VITE_BASE_STATIC_URL)
 </script>
 
 <style lang="less">

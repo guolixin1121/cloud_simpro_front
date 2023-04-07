@@ -96,7 +96,6 @@ class AxiosRequest {
         })
         .then(res => {
           const { code, data = {}, msg, err } = res.data
-          console.log(res, 1111)
           if (code === 0) {
             resolve(data)
           } else if (code === 100) {

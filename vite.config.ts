@@ -103,10 +103,10 @@ export default defineConfig(({ mode }) => {
       open: true,
       // 反向代理
       proxy: {
-        '/mcp': {
+        '/api': {
           target: env['VITE_BASE_API'],
-          changeOrigin: true
-          // rewrite: path => path.replace(/^\/api/, 'api')
+          changeOrigin: true,
+          rewrite: path => path.replace(/^\/api/, '')
         }
       }
     }

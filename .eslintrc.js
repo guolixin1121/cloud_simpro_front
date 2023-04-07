@@ -33,6 +33,7 @@ module.exports = {
     // 带有默认值的函数参数在最后 https://typescript-eslint.io/rules/default-param-last
     '@typescript-eslint/default-param-last': 'error',
     'no-eval': 2, //不允许使用eval
-    'no-var': 'error' // 禁止使用 var
+    'no-var': 'error', // 禁止使用 var
+    'no-debugger': 'off'
   }
 }

@@ -1,56 +1,48 @@
 <!-- eslint-disable no-undef -->
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue';
 import Header from './header.vue'
 import Menu from './menu.vue'
+import { useUserStore } from '../store/user'
 
 // folder or unfolder the left menu
 let collapsed = ref(false)
 const updateCollapsed = () => collapsed.value = !collapsed.value
 
-// default menu
-const route = useRoute()
-const selectedKeys = ref<string[]>([route.path])
-
 // menus for current login user
-let menus = [
-  { title: '首页', path: '/home'},
-  { 
-    title: '二级', 
-    path: '/erji',
-    children: [
-      { title: '测试', path: '/test2' }
-    ]
-  }
-]
+let menus: MenuItem[] = useUserStore().user.permissions
 
-// open parent menu of submenu
-const openKeys = getParentKeys(menus)
-function getParentKeys (list: MenuItem[], keys: string[] = []): string[] {
-  let result: string[] = []
+// set selected menu, and open its parent menu
+const route = useRoute()
+const selectedKeys = computed(() => [route.path])
+const openKeys = computed(() => getParentKeys(menus, route.path)) 
+
+function getParentKeys (list: MenuItem[], selectedPath: string, keys: string[] = []): string[] {
+  let parentKeys: string[] = []
   for(let item of list) {
-    if(item.path === route.path) {
-      result = [...keys]
+    if(item.path === selectedPath) {
+      parentKeys = [...keys]
     } else if(item.children && item.children.length) {
-      result = getParentKeys(item.children, [...keys, item.path])
+      parentKeys = getParentKeys(item.children, selectedPath, [...keys, item.path])
     }
   }
-  return result
+  return parentKeys
 }
 </script>
 
 <template>
   <a-layout>
     <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
-      <img src="../assets/images/logo.png" class="m-5" style="width: 160px;"/>
+      <i class="block mx-5 my-4 h-10 logo"></i>
+      <!-- <img src="../assets/images/logo.png" class="m-5" style="width: 160px;"/> -->
       <a-menu theme="dark" mode="inline" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys">
         <Menu :menus="menus"></Menu>
       </a-menu>
     </a-layout-sider>
     <a-layout>
-      <a-layout-header class="flex justify-between">
+      <a-layout-header class="flex justify-between items-center">
         <menu-unfold-outlined v-if="collapsed" class="hover:text-blue-500" @click="updateCollapsed"/>
         <menu-fold-outlined v-else class="hover:text-blue-500" @click="updateCollapsed" />
         <Header />
@@ -62,4 +54,14 @@ function getParentKeys (list: MenuItem[], keys: string[] = []): string[] {
   </a-layout>
 </template>
 
-<style scoped></style>
+<style scoped>
+.logo {
+  background-image: url(../assets/images/logo.png);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+}
+.ant-layout-sider-collapsed .logo{
+  background-image: url(../assets/images/logo-small.png);
+}
+</style>

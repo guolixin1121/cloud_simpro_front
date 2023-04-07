@@ -12,6 +12,9 @@
 7. tailwind：原子化的css框架，通过class就可以修改样式
 
 ## 二、目录结构
+mock
+| -- data.js         本地模拟接口  
+src
 | -- api             接口定义   
 | -- assets          样式、图片、字体等资源   
 | ---- iconfont   
@@ -91,7 +94,9 @@ import 'ant-design-vue/dist/antd.css'
 
 ### API
 + 本地环境使用vite.config.ts里的proxy
++ mock/data.js可以在本地模拟api
 + 其他环境使用.env进行配置
++ 使用defineApi函数定义api，以便支持智能提示
 
 ## 五、CSS规范
 ### 1. 文件命名
