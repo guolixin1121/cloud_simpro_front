@@ -29,3 +29,4 @@ const formState = reactive<Record<string, any>>({})
 
 ## ant design vue
 ### form.resetFields不起作用？
+`a-form-item`必须定义`name`

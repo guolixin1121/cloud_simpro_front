@@ -16,5 +16,5 @@ interface SearchFormItem {
   type: string,  // ant design type
   width?: string,
   default?: string, // default value
-  options?: Object[] // when type == select
+  options?: { label: string, value: string}[] // when type == select
 }

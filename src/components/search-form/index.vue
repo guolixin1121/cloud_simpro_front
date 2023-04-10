@@ -7,7 +7,7 @@
         <a-select v-if="item.type === 'select'" :style="{ width: item.width || '190px' }" v-model:value="formState[item.key]" allowClear>
           <a-select-option key="" value="">全部</a-select-option>
           <a-select-option v-for="option in item.options"
-            :key="option" :value="option">{{ option }}</a-select-option>
+            :key="option" :value="option.value">{{ option.label }}</a-select-option>
         </a-select>
         <a-range-picker v-if="item.type === 'range-picker'" :name="item.key" v-model:value="formState[item.key]"/>
     </a-form-item>
