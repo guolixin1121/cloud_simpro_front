@@ -44,12 +44,12 @@ export default defineConfig(({ mode }) => {
           filepath: './.eslintrc-auto-import.json', // 设置eslintrc-auto-import.json生成路径 Default `./.eslintrc-auto-import.json`
           globalsPropValue: true // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
         },
-        resolvers: [AntDesignVueResolver()],
+        resolvers: [AntDesignVueResolver({resolveIcons: true})],
         dts: 'src/auto-import.d.ts' // 会在根目录生成auto-imports.d.ts，里面可以看到自动导入的api
       }),
       // 如果需要自定义主题色，则需要配置importStyle: 'less',并安装less: npm install less --save-dev
       Components({
-        resolvers: [AntDesignVueResolver({ importStyle: 'less' })]
+        resolvers: [AntDesignVueResolver()]
       }),
       eslintPlugin({
         include: ['src/**/*.vue', 'src/**/*.ts', 'src/**/*.tsx'], // 检查的文件

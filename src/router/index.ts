@@ -12,17 +12,17 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/home',
         name: 'home',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/test/index.vue'),
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/home/index.vue'),
       },
       {
-        path: '/test2',
-        name: 'test2',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/test2/index.vue'),
+        path: '/icon',
+        name: 'icon',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/demo/icon/index.vue'),
       },
       {
         path: '/table',
         name: 'table',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/table/index.vue'),
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/demo/table/index.vue'),
       }
     ]
   },

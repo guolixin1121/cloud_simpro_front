@@ -8,3 +8,13 @@ declare type Permission = {
 }
 // 数据的操作权限
 type DataAction = 'add' | 'delete' | 'edit'
+
+// 列表搜索项
+interface SearchFormItem {
+  label: string,
+  key: string,
+  type: string,  // ant design type
+  width?: string,
+  default?: string, // default value
+  options?: Object[] // when type == select
+}

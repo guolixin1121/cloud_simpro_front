@@ -12,6 +12,8 @@
 + 推荐使用`npm run commit`代替`git commit`
 
 ## 命令说明
+使用本地mock服务时，需要先启动本地服务。   
+
 本地运行： `npm run dev`
 部署打包：`npm run build`
 提交git：`npm run commit` 或 `npx cz`
@@ -27,3 +29,5 @@
 使用`./src/hook/api`的`defineApi`接口，支持使用Compoisition API方式定义接口，并支持智能提示
 使用`vueuse`的Compoisition Utilities
 使用`tailwind`提高CSS编写效率
+使用`vue-request`提供API接口的扩展，如loading、error、防抖等
+开发通用组件时，推荐提供demo和readme。请参考`components/table`

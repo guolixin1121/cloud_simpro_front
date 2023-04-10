@@ -25,25 +25,16 @@ module.exports = [
             icon: 'AccountBookFilled',
             children: [
               { 
-                title: '表格及权限', 
+                title: '搜素、表格及权限', 
                 path: '/table', 
                 actions: ['add', 'delete', 'edit']
-             }
+             },
+             { 
+                title: 'ICON', 
+                path: '/icon', 
+              }
             ]
-          },
-          { 
-            title: '二级', 
-            path: '/erji',
-            icon: 'AccountBookFilled',
-            children: [
-              { 
-                title: '测试', 
-                path: '/test2', 
-                icon: 'AccountBookFilled',
-                actions: ['add', 'delete', 'edit']
-             }
-            ]
-          },
+          }
         ]
     }
   },
@@ -53,19 +44,8 @@ module.exports = [
     data: {
       code: 0,
       data: {
-        '动力学': "http://www.baidu.com",
-        'google': "http://www.google.com", 
-      }
-    }
-  },
-  {
-    url: "/config/topmenu",
-    method: "get",
-    data: {
-      code: 0,
-      data: {
-        '动力学': "http://www.baidu.com",
-        'google': "http://www.google.com", 
+        '顶部导航一': "http://www.baidu.com",
+        '顶部导航二': "http://www.google.com", 
       }
     }
   },

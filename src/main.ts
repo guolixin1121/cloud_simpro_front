@@ -1,5 +1,5 @@
 import { createApp } from 'vue'
-import SvgIcon from './components/svgIcon.vue'
+import SvgIcon from './components/icon/index.vue'
 import './assets/iconfont/iconfont.js'
 import App from './App.vue'
 import router from './router'

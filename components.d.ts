@@ -9,7 +9,6 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    AAnchorLink: typeof import('ant-design-vue/es')['AnchorLink']
     AButton: typeof import('ant-design-vue/es')['Button']
     AConfigProvider: typeof import('ant-design-vue/es')['ConfigProvider']
     ADivider: typeof import('ant-design-vue/es')['Divider']
@@ -30,13 +29,14 @@ declare module '@vue/runtime-core' {
     ASubMenu: typeof import('ant-design-vue/es')['SubMenu']
     ATable: typeof import('ant-design-vue/es')['Table']
     Components: typeof import('./src/components/index.vue')['default']
+    copy: typeof import('./src/components/search-form/index copy.vue')['default']
     Demo: typeof import('./src/components/search-form/demo.vue')['default']
     Icon: typeof import('./src/components/icon/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchForm: typeof import('./src/components/search-form/index.vue')['default']
     STable: typeof import('./src/components/table/s-table.vue')['default']
-    SvgIcon: typeof import('./src/components/svgIcon.vue')['default']
+    SvgIcon: typeof import('./src/components/icon/svgIcon.vue')['default']
     Table: typeof import('./src/components/table/index.vue')['default']
   }
 }

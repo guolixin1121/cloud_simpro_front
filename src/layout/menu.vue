@@ -15,9 +15,9 @@ const props = defineProps({
     <template v-if="!menu.children || !menu.children.length">
       <a-menu-item :key="menu.path">
         <component :is="Icons[(menu.icon || 'UserOutlined') as keyof typeof Icons]"></component>
-        <span
-          ><router-link :to="menu.path">{{ menu.title }}</router-link></span
-        >
+        <span>
+          <router-link :to="menu.path"><span class=" text-white" >{{ menu.title }}</span></router-link>
+        </span>
       </a-menu-item>
     </template>
     <a-sub-menu v-else :key="menu.path">

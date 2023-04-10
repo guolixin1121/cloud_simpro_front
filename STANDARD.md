@@ -21,6 +21,10 @@ src
 | ---- images   
 | ---- styles     
 | -- components     公共基础组件   
+| ---- table        每个组件一个目录，这里table是一个示例
+| ------ demo.vue   组件使用demo
+| ------ index.vue  组件定义
+| ------ readme.md   组件说明
 | -- hooks          公共hooks   
 | -- layout         页面布局   
 | -- router			    页面路由   
@@ -28,13 +32,13 @@ src
 | -- types			    typescript的全局类型定义   
 | -- utils				  通用工具   
 | -- views			    
-| ---- course           每个页面一个目录，尽量一个单词，多个单词用’-’连接   
+| ---- course           每个页面一个目录，尽量一个单词，多个单词用’-’连接 。这里 course 是一个示例  
 | ------ components     页面级组件   
 | ------ index.vue      以index.vue为默认页面   
 
 ## 三、命名规范
 ### 1. 文件和文件夹
-`kebab-case`命名方式，尽量使用单个单词
+使用`kebab-case`命名方式，尽量使用单个单词   
 
 ### 2. 变量
 #### 2.1 命名规范
@@ -179,4 +183,20 @@ EditorConfig，Prettier，ESLint，Volar，Tailwind CSS IntelliSense, Ant Design
 可通过layout文件在系统级别彻底禁用左侧菜单
 
 ### 菜单权限
-菜单的全量获取和权限通过API接口获取，支持多级菜单，支持数据增删改的权限
++ 顶部菜单由API获取；   
++ 左侧菜单通过API接口获取，支持多级菜单，支持数据增删改的权限
+``` javascript
+ // 菜单结构
+ [{ 
+  title: 'Demo',   // 菜单名称
+  path: '/demo',   // url路径，父级菜单也需要设置
+  icon: 'AccountBookFilled', // 对应ant design ICON
+  children: [
+    { 
+      title: '搜素、表格及权限', 
+      path: '/table', 
+      actions: ['add', 'edit'，'delete']  // 用户’新增，编辑，删除‘等权限设置
+    }
+  ]
+ }]
+ ```

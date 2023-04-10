@@ -16,8 +16,8 @@ let menus: Permission[] = useUserStore().user.permissions
 
 // set selected menu, and open its parent menu
 const route = useRoute()
-const selectedKeys = computed(() => [route.path])
-const openKeys = computed(() => getParentKeys(menus)) 
+let selectedKeys = computed(() => [route.path])
+let openKeys = computed(() => getParentKeys(menus)) 
 
 /**
  * 递归获取当前路由的所有父节点的key
@@ -45,7 +45,6 @@ function getParentKeys (list: Permission[], keys: string[] = []): string[] | boo
   <a-layout>
     <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
       <i class="block mx-5 my-4 h-10 logo"></i>
-      <!-- <img src="../assets/images/logo.png" class="m-5" style="width: 160px;"/> -->
       <a-menu theme="dark" mode="inline" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys">
         <Menu :menus="menus"></Menu>
       </a-menu>

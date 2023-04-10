@@ -38,7 +38,7 @@ import { useUserStore } from '@/store/user';
 
 defineProps({
   dataSource: {
-    type: Object,
+    type: Array,
     required: true
   },
   columns: {
