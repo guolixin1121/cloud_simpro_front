@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import img from '@/assets/images/404.png'
 const router = useRouter()
-
+// console.log(a)
 const f = async () => {
   router.push(`/test2`)
 }
