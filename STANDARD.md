@@ -179,4 +179,4 @@ EditorConfig，Prettier，ESLint，Volar，Tailwind CSS IntelliSense, Ant Design
 可通过layout文件在系统级别彻底禁用左侧菜单
 
 ### 菜单权限
-菜单的全量获取和权限通过API接口获取，支持多级菜单
+菜单的全量获取和权限通过API接口获取，支持多级菜单，支持数据增删改的权限

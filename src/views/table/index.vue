@@ -4,7 +4,7 @@
     <Table :data-source="dataSource" :columns="columns" @on-select="onSelect">
       <template #bodyCell="{ column, text }">
         <template v-if="column.key === 'age'">
-          {{ text > 18 ? '成人' : '未成年' }}
+          {{ text > 18 ? "成人" : "未成年" }}
         </template>
       </template>
     </Table>
@@ -13,9 +13,9 @@
 
 <script setup lang="ts">
 import Table from '../../components/table/index.vue'
-import { useRequest } from 'vue-request'
-import { useUserStore } from '@/store/user'
-import { useTableApi } from '@/apis/table'
+import { useRequest} from 'vue-request'
+import { useUserStore } from '@/store/user';
+import { useTableApi } from '@/apis/table';
 const router = useRouter()
 const user = useUserStore()
 const table = useTableApi()
@@ -26,12 +26,12 @@ const columns = [
   {
     title: '姓名',
     dataIndex: 'name',
-    key: 'name'
+    key: 'name',
   },
   {
     title: '年龄',
     dataIndex: 'age',
-    key: 'age'
+    key: 'age',
   },
   {
     title: '住址',
@@ -42,8 +42,8 @@ const columns = [
     title: '操作',
     key: 'actions',
     actions: {
-      view: () => router.push(`/test2`),
-      edit: () => router.push(`/test2`),
+      view: () => router.push(`/test2`) ,
+      edit: ( data: any ) => console.log(data) ,
       delete: (data: any) => console.log(data)
     }
   }
