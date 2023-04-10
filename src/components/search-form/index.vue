@@ -21,17 +21,9 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
 
-interface SearchFormItem {
-  label: string, // 显示标签
-  key: string, // 用于获取数据的字段
-  type: string,  // antd的组件类型，a-xx的xx
-  width?: string, // 组件宽度
-  default?: string, // default value
-  options?: Object[] // when type == select
-}
-
 const props = defineProps({
   items: {
+    // eslint-disable-next-line no-undef
     type: Array<SearchFormItem>,
     required: true
   },
