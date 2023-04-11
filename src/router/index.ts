@@ -6,22 +6,22 @@ import { useUserStore } from '../store/user'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/home',
+    redirect: '/scene/scene/',
     component: Layout,
     children: [
       {
-        path: '/home',
-        name: 'home',
+        path: '/scene/scene/',
+        name: 'scene/scene',
         component: async () => await import(/* webpackChunkName: "default" */ '@/views/home/index.vue'),
       },
       {
-        path: '/icon',
-        name: 'icon',
+        path: '/map/second/',
+        name: 'map/second',   
         component: async () => await import(/* webpackChunkName: "default" */ '@/views/demo/icon/index.vue'),
       },
       {
-        path: '/table',
-        name: 'table',
+        path: '/mapversion',
+        name: 'mapversion',
         component: async () => await import(/* webpackChunkName: "default" */ '@/views/demo/table/index.vue'),
       }
     ]
@@ -38,13 +38,18 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   if(to.path === '/login' || to.meta.isAuth == false) {
     next()
   } else {
     const store = useUserStore(pinia)
-    if(store.user.token) {
-      next()
+    if(store.token) {
+      if(!store.user) {
+        await store.getUserInfo()
+        next()
+      } else {
+        next()
+      }
     } else {
       router.push('/login')
     }

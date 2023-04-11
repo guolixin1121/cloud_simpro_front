@@ -1,31 +1,31 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
+import { ref } from 'vue'
 import { useUserStore } from '../store/user'
-import { useConfigApi } from '@/apis/config';
+import { useUserApi } from '@/apis/user';
 const store = useUserStore()
-const api = useConfigApi()
-let state = reactive({
-  topMenus: {}
-})
+const api = useUserApi()
 
-api.getTopMenu().then(data => {
-  state.topMenus = data
-})
+interface MenuItem {
+  title: string, 
+  path: string
+}
+let topMenus = ref<MenuItem[]>([])
+api.getTopMenu().then(data => topMenus.value = data)
 </script>
 
 <template>
   <div class="flex justify-between w-full">
     <div>
-      <a v-for="[key, value] in Object.entries(state.topMenus)" 
-        :key="key"
-        :href="value as string"
+      <a v-for="(menu, index) in topMenus" 
+        :key="index"
+        :href="menu.path"
         class=" ml-7"
         target="_blank">
-        {{ key }} 
+        {{ menu.title }} 
       </a>
     </div>
     <div>
-      <span>{{ store.user?.name }}</span>
+      <span>{{ store.user?.nickName }}</span>
       <a class=" ml-5" @click="store.logout">退出登录</a>
     </div>
   </div>

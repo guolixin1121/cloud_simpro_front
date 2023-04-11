@@ -1,7 +1,6 @@
-// import { AxiosError, AxiosInstance } from 'axios'
 import axios from 'axios'
 import { message } from 'ant-design-vue'
-
+import 'ant-design-vue/es/message/style/css' // 必须引用
 import { SStorage } from '@/utils/storage'
 
 import AxiosCanceler from './cancelCancel'
@@ -83,7 +82,7 @@ class AxiosRequest {
     return new Promise((resolve, reject) => {
       const { url, data = {}, method = 'POST', headers = {} } = params || {}
       Object.assign(headers, {
-        Authorization: `JWT ${SStorage.get('token')}`,
+        Authorization: `JWT ${SStorage.storage.token}`,
         'content-type': params.type ? params.type : 'application/json'
       })
       this.instance
@@ -96,11 +95,13 @@ class AxiosRequest {
         })
         .then(res => {
           const { code, data = {}, msg, err } = res.data
+          debugger
           if (code === 0) {
             resolve(data)
           } else if (code === 100) {
             // token过期跳到登录页
-            window.location.href = `${import.meta.env.VITE_LOGIN_URL}/admin/login/`
+            message.error(typeof msg === 'string' ? msg : err)
+            window.location.href = `${import.meta.env.VITE_LOGIN_URL}/`
           } else {
             message.error(typeof msg === 'string' ? msg : err)
             reject(typeof msg === 'string' ? msg : err)
