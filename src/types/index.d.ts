@@ -11,8 +11,8 @@ type DataAction = 'add' | 'delete' | 'edit'
 
 // 列表搜索项
 interface SearchFormItem {
-  label: string,
-  key: string,
+  label: string,  // display label
+  prop: string,   // data prop
   type: string,  // ant design type
   width?: string,
   default?: string, // default value

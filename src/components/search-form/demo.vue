@@ -10,9 +10,9 @@ let loading = ref(false)
 
 // eslint-disable-next-line no-undef
 const formItems: SearchFormItem[] = [
-  { label: '姓名', key: 'name', type: 'input', default: ''},
-  { label: '场景', key: 'scene', type: 'select', options: [{ label: '场景一', value: 'scene1' }, { label: '场景二', value: 'scene2'}], width: '190px', default: ''},
-  { label: '创建时间', key: 'date', type: 'range-picker' }
+  { label: '姓名', prop: 'name', type: 'input', default: ''},
+  { label: '场景', prop: 'scene', type: 'select', options: [{ label: '场景一', value: 'scene1' }, { label: '场景二', value: 'scene2'}], width: '190px', default: ''},
+  { label: '创建时间', prop: 'date', type: 'range-picker' }
 ]
 
 const onSearch = (query: Record<string, any>) => {
