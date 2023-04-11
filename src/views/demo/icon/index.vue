@@ -1,6 +1,6 @@
 <!-- eslint-disable no-undef -->
 <template>
-  <a-button class="home" @click="f">btn</a-button>
+  <!-- <a-button class="home" @click="f">btn</a-button> -->
   <p>
     <svg-icon icon="icon-chengbenfa"></svg-icon>
     <svg-icon icon="icon-jiahao" color="red"></svg-icon>
@@ -8,12 +8,12 @@
 </template>
 
 <script setup lang="ts">
-import { getTest } from '@/apis/test'
+// import { getTest } from '@/apis/test'
 
-const f = async () => {
-  const data = await getTest()
-  console.log(data)
-}
+// const f = async () => {
+//   const data = await getTest()
+//   console.log(data)
+// }
 // console.log(ref)
 // console.log(process.env.VITE_BASE_STATIC_URL)
 </script>

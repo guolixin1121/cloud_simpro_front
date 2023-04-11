@@ -29,7 +29,7 @@ declare module '@vue/runtime-core' {
     ASubMenu: typeof import('ant-design-vue/es')['SubMenu']
     ATable: typeof import('ant-design-vue/es')['Table']
     Components: typeof import('./src/components/index.vue')['default']
-    copy: typeof import('./src/components/search-form/index copy.vue')['default']
+    copy: typeof import('./src/components/table/index copy.vue')['default']
     Demo: typeof import('./src/components/search-form/demo.vue')['default']
     Icon: typeof import('./src/components/icon/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']

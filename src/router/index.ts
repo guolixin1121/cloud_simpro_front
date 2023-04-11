@@ -11,8 +11,8 @@ const routes: RouteRecordRaw[] = [
     children: [
       {
         path: '/scene/scene/',
-        name: 'scene/scene',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/home/index.vue'),
+        name: 'scene',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue'),
       },
       {
         path: '/map/second/',

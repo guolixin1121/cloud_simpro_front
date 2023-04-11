@@ -45,7 +45,7 @@ export function defineApi<A>(action: Actions<A>): () => Results<A> {
 
     for (const [key, value] of Object.entries<ActionValue>(action)) {
       if (typeof value === 'string') { // only a rul
-        results[key] = () => http.request({ url: value, method: 'get' })
+        results[key] = (data: any) => http.request({ url: value, method: 'get', data })
       } else if (typeof value === 'function') { // 自定义请求函数
         results[key] = value
       } else { // 与axios一样的请求配置

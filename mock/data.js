@@ -1,19 +1,18 @@
 
 module.exports = [
   {
-    url: "/user/login",
+    url: "/auth/user_info",
     method: "get",
     data: {
       code: 0,
       data: {
-        token: "463c37843fc78365f3d9e4c4ca7ba6c48d49dc53",
-        name: "测试账号",
+        mickname: "测试账号",
         username: "loginname"
       },
     },
   },
   {
-    url: "/user/permissions",
+    url: "/menus",
     method: "get",
     data: {
       code: 0,
@@ -50,7 +49,7 @@ module.exports = [
     }
   },
   {
-    url: "/table/list",
+    url: "/scene/scene/",
     method: "get",
     data: {
       code: 0,

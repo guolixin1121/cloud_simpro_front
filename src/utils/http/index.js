@@ -91,11 +91,10 @@ class AxiosRequest {
           method,
           headers,
           data: ['POST', 'PUT', 'DELETE'].includes(method.toUpperCase()) ? data : null,
-          params: method === 'GET' ? data : null
+          params: method.toUpperCase() === 'GET' ? data : null
         })
         .then(res => {
           const { code, data = {}, msg, err } = res.data
-          debugger
           if (code === 0) {
             resolve(data)
           } else if (code === 100) {
