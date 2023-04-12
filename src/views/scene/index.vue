@@ -5,7 +5,7 @@
   <a-button class="mt-5 mb-3" type="primary" v-if="user.hasPermission('add')">上传场景</a-button>
   <a-button class="mt-5 mb-3 ml-2" type="primary" v-if="user.hasPermission('delete')">批量删除</a-button>
 
-  <Table :api="api.getList" :query="query" :columns="columns" @on-select="onSelect" />
+  <Table :api="api.getList" :query="query" :columns="columns" @on-select="onSelect" ></Table>
 </template>
  
 <script setup lang="ts">

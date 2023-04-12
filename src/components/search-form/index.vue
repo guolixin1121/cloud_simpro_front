@@ -3,7 +3,12 @@
     <a-form-item v-for="item in items" :key="item"
       :label="item.label"
       :name="item.key">
-        <component :is="Ant[getComponent(item.type)]" allowClear
+        <a-select v-if="item.type == 'select'" style="width: 190px" allowClear
+          v-model:value="formState[item.key]"
+          v-bind="item" 
+          v-on="item"
+          @select="(value: string|string[]) => onSelectChange(item.key, value)"></a-select>
+        <component v-else :is="Ant[getComponent(item.type)]" allowClear
           v-model:value="formState[item.key]"
           v-bind="{ ...item, ...getDefaultStyle(item.type) }" 
           v-on="item"></component>
@@ -16,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue';
+import { reactive, ref } from 'vue'
 import * as Ant from 'ant-design-vue'
 import 'ant-design-vue/es/date-picker/style/css' // 有些组件样式需单独引入
 
@@ -80,5 +85,21 @@ const getDefaultStyle = (name: string) => {
     }
    } 
    return styleMap[name as keyof typeof styleMap] || {}
+}
+
+/**
+ * 多选时的排他处理：
+ * 选中'全部'，则清空其他项；
+ * 选中其他项时，清除'全部'
+ * @param key 控件在state中对应的key
+ * @param value 选中的项
+ */
+const onSelectChange = (key: string, value: string | string[]) => {
+  const selectedValue = formState[key]
+  const isMultiple = Array.isArray(selectedValue)
+  if(isMultiple) {
+    const isAllSelected = value == ''
+    formState[key] = isAllSelected ? selectedValue.filter(v => !v) : selectedValue.filter(v => !v)
+  }
 }
 </script>

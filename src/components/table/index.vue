@@ -12,13 +12,13 @@
     } : null "
     :pagination="pagination"
     @change="onChange">
-    <template v-slot:[item]="scope" v-for="item in Object.keys($slots)">
+    <template v-slot:[item] ="scope" v-for="item in Object.keys($slots)">
         <slot v-if="item !== 'bodyCell'" :name="item" :scope="scope" v-bind="scope || {}"></slot>
 
         <slot v-else :name="item" :scope="scope" v-bind="scope || {}" >
           <template v-if="scope.column.key == 'actions'">
             <template v-for="key in Object.keys(scope.column.actions) " :key="key">
-              <template v-if="hasPermission(key)">
+              <template v-if="hasPermission(key, scope.record)">
                 <a class="text-blue-500"
                   v-if="key !== 'delete'" 
                   @click="scope.column.actions[key](scope)">
@@ -38,7 +38,7 @@
     <template #bodyCell="scope">
       <template v-if="scope.column.key == 'actions'">
         <template v-for="key in Object.keys(scope.column.actions) " :key="key">
-          <template v-if="hasPermission(key)">
+          <template v-if="hasPermission(key, scope.record)">
             <a class="text-blue-500"
               v-if="key !== 'delete'" 
               @click="scope.column.actions[key](scope)">
@@ -83,6 +83,10 @@ const props = defineProps({
     type: Boolean,
     default: () => true
   },
+  isOnlyCreator: { // 是否只允许创建者编辑，删除 
+    type: Boolean,
+    default: () => false
+  }
 })
 const emits = defineEmits(['onSelect', 'onChange'])
 
@@ -109,6 +113,15 @@ watch(current, (newVal) => {
 })
 
 // check action permission
-const user = useUserStore()
-const hasPermission = (action: any) => user.hasPermission(action)
+const userStore = useUserStore()
+const hasPermission = (action: any, data: any) => {
+  let permission = userStore.hasPermission(action)
+
+  if(props.isOnlyCreator && (['edit', 'delete'].includes(action))) {
+    const isOwner = data.creator === userStore.user.username
+    permission = permission && isOwner
+  }
+  
+  return permission
+}
 </script>
