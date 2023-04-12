@@ -1,6 +1,8 @@
 <!-- 封装了操作列：有操作权限时才展示操作按钮 -->
 <template>
   <a-table 
+    v-bind="$attrs"
+    v-on="$attrs"
     :loading="loading"
     :dataSource="dataSource"
     :columns="columns"

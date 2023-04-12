@@ -1,15 +1,12 @@
 <template>
-  <a-form ref="form" layout="inline" class="mb-5" :model="formState">
+  <a-form ref="form" layout="inline" class="mb-5" :model="formState" v-bind="$attrs">
     <a-form-item v-for="item in items" :key="item"
       :label="item.label"
       :name="item.key">
-        <a-input v-if="item.type === 'input'"  v-model:value="formState[item.key]" allowClear :placeholder="item.placeholder || ''"></a-input>
-        <a-select v-if="item.type === 'select'" :style="{ width: item.width || '190px' }" v-model:value="formState[item.key]" allowClear>
-          <a-select-option key="" value="">全部</a-select-option>
-          <a-select-option v-for="option in item.options"
-            :key="option" :value="option.value">{{ option.label }}</a-select-option>
-        </a-select>
-        <a-range-picker v-if="item.type === 'range-picker'" :name="item.key" v-model:value="formState[item.key]" value-format="YYYY-MM-DD" />
+        <component :is="Ant[getComponent(item.type)]" allowClear
+          v-model:value="formState[item.key]"
+          v-bind="{ ...item, ...getDefaultStyle(item.type) }" 
+          v-on="item"></component>
     </a-form-item>
     <a-form-item class=" ml-8">
       <a-button type="primary" @click="search" :loading="loading">搜索</a-button>
@@ -20,6 +17,8 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue';
+import * as Ant from 'ant-design-vue'
+import 'ant-design-vue/es/date-picker/style/css' // 有些组件样式需单独引入
 
 const props = defineProps({
   items: {
@@ -36,7 +35,7 @@ const emits = defineEmits(['onSearch'])
 
 // form state, and get key&value from props
 const formState = reactive<Record<string, any>>({})
-props.items.forEach(item => formState[item.key] = item.default)
+props.items.forEach(item => formState[item.key] = item.defaultValue)
 
 // button events
 const form = ref();
@@ -57,5 +56,29 @@ const emitSeach = () => {
     }
   }
   emits('onSearch', {...formValues, start_date, end_date } )
+}
+  
+/** 
+ * change 'range-picker to RangePicker'
+ * @param name Ant Design component name, like: range-picker, input
+ * @returns Ant Design component
+ * */
+type AntComponent = keyof typeof Ant
+const getComponent = (name: string) => name.split('-').map(n => n.substring(0, 1).toUpperCase() + n.substring(1)).join('') as AntComponent
+
+/**
+ * get custom style form component
+ * @param name Ant Design component name, like: range-picker, input
+ */
+const getDefaultStyle = (name: string) => {
+   const styleMap = {
+    'range-picker': {
+      'value-format': "YYYY-MM-DD" 
+    },
+    'select': {
+      'style': 'width: 190px'
+    }
+   } 
+   return styleMap[name as keyof typeof styleMap] || {}
 }
 </script>

@@ -30,4 +30,6 @@
 使用`vueuse`的Compoisition Utilities
 使用`tailwind`提高CSS编写效率
 使用`vue-request`提供API接口的扩展，如loading、error、防抖等
+
+## 组件开发
 开发通用组件时，推荐提供demo和readme。请参考`components/table`

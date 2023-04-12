@@ -3,5 +3,5 @@ import { defineApi } from '../hooks/api'
 
 // 支持三种方式
 export const useTableApi = defineApi({
-  getList: '/api/scene/scene/'
+  getList: '/scene/scene/'
 })

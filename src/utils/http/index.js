@@ -32,7 +32,7 @@ class AxiosRequest {
 
   constructor() {
     this.instance = axios.create({
-      baseURL: '',
+      baseURL: '/api/',
       timeout: 60 * 1000
     })
   }
