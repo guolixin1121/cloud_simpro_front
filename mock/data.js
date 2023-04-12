@@ -1,7 +1,17 @@
 
 module.exports = [
   {
-    url: "/auth/user_info",
+    url: "/auth/login/",
+    method: "post",
+    data: {
+      code: 0,
+      data: {
+        token: '123456'
+      },
+    },
+  },
+  {
+    url: "/auth/user_info/",
     method: "get",
     data: {
       code: 0,
@@ -12,12 +22,12 @@ module.exports = [
     },
   },
   {
-    url: "/menus",
+    url: "/menus/",
     method: "get",
     data: {
       code: 0,
       data: [
-          { title: '首页', path: '/home', icon: "AccountBookFilled", actions: ['delete']},
+          { title: '场景', path: '/scene/scene', icon: "AccountBookFilled", actions: ['view', 'add', 'edit', 'delete']},
           { 
             title: 'Demo', 
             path: '/demo',
@@ -25,12 +35,12 @@ module.exports = [
             children: [
               { 
                 title: '搜素、表格及权限', 
-                path: '/table', 
+                path: '/demo/table', 
                 actions: ['add', 'delete', 'edit']
              },
              { 
                 title: 'ICON', 
-                path: '/icon', 
+                path: '/demo/icon', 
               }
             ]
           }
@@ -38,14 +48,14 @@ module.exports = [
     }
   },
   {
-    url: "/config/topmenu",
+    url: "/menus/top/",
     method: "get",
     data: {
       code: 0,
-      data: {
-        '顶部导航一': "http://www.baidu.com",
-        '顶部导航二': "http://www.google.com", 
-      }
+      data: [
+        {title: '顶部菜单一', path: 'http://www.baidu.com'},
+        {title: '顶部菜单二', path: 'http://www.baidu.com'},
+      ]
     }
   },
   {
@@ -53,20 +63,22 @@ module.exports = [
     method: "get",
     data: {
       code: 0,
-      data: [
+      data: {
+        count: 3,
+        results: [
         {
-          key: '1',
-          name: '胡彦斌',
+          id: '1',
+          adsName: '胡彦斌',
           age: 12,
           address: '西湖区湖底公园1号',
         },
         {
-          key: '2',
-          name: '胡彦祖',
+          id: '2',
+          adsName: '胡彦祖',
           age: 42,
           address: '西湖区湖底公园1号',
-        },
-      ]
+        }
+      ]}
     }
   }
 ];

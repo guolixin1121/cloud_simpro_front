@@ -23,7 +23,17 @@ const routes: RouteRecordRaw[] = [
         path: '/mapversion',
         name: 'mapversion',
         component: async () => await import(/* webpackChunkName: "default" */ '@/views/demo/table/index.vue'),
-      }
+      },
+      {
+        path: '/demo/table',
+        name: 'table',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/demo/table/index.vue'),
+      },
+      {
+        path: '/demo/icon/',
+        name: 'icon',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/demo/icon/index.vue'),
+      },
     ]
   },
   {

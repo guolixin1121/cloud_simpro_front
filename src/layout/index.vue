@@ -17,7 +17,10 @@ let menus: Permission[] = useUserStore().user.permissions
 // set selected menu, and open its parent menu
 const route = useRoute()
 let selectedKeys = computed(() => [route.path])
-let openKeys = computed(() => getParentKeys(menus)) 
+let openKeys = computed(() => {
+  const keys = getParentKeys(menus)
+  return !keys ? [] : keys
+})
 
 /**
  * 递归获取当前路由的所有父节点的key
