@@ -3,7 +3,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import SearchForm from '@/components/search-form/index.vue'
 
 let loading = ref(false)

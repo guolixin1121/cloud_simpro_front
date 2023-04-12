@@ -4,7 +4,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import Table from '@/components/table/index.vue'
 import { useTableApi } from '@/apis/table';
 

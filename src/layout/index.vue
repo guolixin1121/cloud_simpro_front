@@ -1,8 +1,5 @@
 <!-- eslint-disable no-undef -->
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue';
 import Header from './header.vue'
 import Menu from './menu.vue'
 import { useUserStore } from '../store/user'

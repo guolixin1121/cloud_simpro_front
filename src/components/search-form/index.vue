@@ -21,7 +21,6 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
 import * as Ant from 'ant-design-vue'
 import 'ant-design-vue/es/date-picker/style/css' // 有些组件样式需单独引入
 

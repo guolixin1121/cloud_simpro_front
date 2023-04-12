@@ -36,7 +36,7 @@ export default defineConfig(({ mode }) => {
         }
       }),
       AutoImport({
-        //安装两行后你会发现在组件中不用再导入ref，reactive等
+        //安装后你会发现在组件中不用再导入ref，reactive等
         imports: ['vue', 'vue-router', 'pinia'],
         include: [/\.[tj]sx?$/, /\.vue$/], // 匹配的文件，也就是哪些后缀的文件需要自动引入
         eslintrc: {

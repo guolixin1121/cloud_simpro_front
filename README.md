@@ -3,6 +3,10 @@
 ## 分支说明
 主分支
 
+## 组件开发
++ `vue, vue-router, pinia`已在vite中配置了自动引用，在程序中无需`import`
++ 开发通用组件时，推荐提供demo和readme。请参考`components/table`
+
 ## 开发前环境预备
 + 安装STANDARD.md中**插件安装**部分的VS插件
 + 安装`commitizen`
@@ -30,6 +34,3 @@
 使用`vueuse`的Compoisition Utilities
 使用`tailwind`提高CSS编写效率
 使用`vue-request`提供API接口的扩展，如loading、error、防抖等
-
-## 组件开发
-开发通用组件时，推荐提供demo和readme。请参考`components/table`

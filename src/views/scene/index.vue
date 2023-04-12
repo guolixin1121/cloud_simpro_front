@@ -9,7 +9,6 @@
 </template>
  
 <script setup lang="ts">
-import { ref } from 'vue'
 import SearchForm from '@/components/search-form/index.vue'
 import Table from '@/components/table/index.vue'
 import { useUserStore } from '@/store/user'
