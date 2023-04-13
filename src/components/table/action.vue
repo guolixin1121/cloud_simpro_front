@@ -30,7 +30,7 @@ const hasPermission = (action: any, data: any) => {
   let permission = userStore.hasPermission(action)
 
   if(props.isOnlyCreator && (['编辑', '删除'].includes(action))) {
-    const isOwner = data.creator === userStore.user.username
+    const isOwner = data.creator === userStore.user.nickname
     permission = permission && isOwner
   }
   

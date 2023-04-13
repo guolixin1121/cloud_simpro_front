@@ -4,6 +4,6 @@
  */
 
 import pinia from './pinia'
-import { useUserStore } from './user.m'
+import { useUserStore } from './user'
 
 export const user = useUserStore(pinia)

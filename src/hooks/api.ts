@@ -33,8 +33,8 @@ type Results<A> = {
  * 2. 使用API, 使用时支持智能提示   
  * import { useTestApi } from '@/api/test-api'   
  * const testApi = useTestApi()   
-   testapis.get()   
-   testapis.post({ "name": "Angel", "age": 10 })
+   testapi.get()   
+   testapi.post({ "name": "Angel", "age": 10 })
  *   
  * @param action：{ string: string | AxioxRequestConfig | Function}
  * @returns Function: { string: Function }

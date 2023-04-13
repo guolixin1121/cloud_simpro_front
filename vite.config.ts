@@ -39,9 +39,8 @@ export default defineConfig(({ mode }) => {
         //安装后你会发现在组件中不用再导入ref，reactive等
         imports: ['vue', 'vue-router', 'pinia',
           {
-            'vue-request': ['useRequest'],
             '@/hooks/api.ts': ['defineApi'], 
-            '@/apis/index.ts': [['*', 'apis']], 
+            '@/api/index.ts': [['*', 'api']], 
             '@/store/index.ts': [['*', 'store']], 
           }],
         include: [/\.[tj]sx?$/, /\.vue$/], // 匹配的文件，也就是哪些后缀的文件需要自动引入
@@ -53,10 +52,10 @@ export default defineConfig(({ mode }) => {
         resolvers: [AntDesignVueResolver({resolveIcons: true})],
         dts: 'src/auto-import.d.ts' // 会在根目录生成auto-imports.d.ts，里面可以看到自动导入的api
       }),
-      // 如果需要自定义主题色，则需要配置importStyle: 'less',并安装less: npm install less --save-dev
+     
       Components({
-        globs: ['src/components/**/index.vue'],
-        resolvers: [AntDesignVueResolver()]
+        globs: ['src/components/**/index.vue'], // 引入自定义组件
+        resolvers: [AntDesignVueResolver()]   // 如果需要自定义主题色，则需要配置importStyle: 'less',并安装less: npm install less --save-dev
       }),
       eslintPlugin({
         include: ['src/**/*.vue', 'src/**/*.ts', 'src/**/*.tsx'], // 检查的文件

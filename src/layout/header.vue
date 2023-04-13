@@ -5,7 +5,7 @@ interface MenuItem {
 }
 const user = store.user.user
 let topMenus = ref<MenuItem[]>([])
-apis.user.getTopMenu().then(data => topMenus.value = data)
+api.user.getTopMenu().then(data => topMenus.value = data)
 </script>
 
 <template>
