@@ -7,7 +7,9 @@
           v-model:value="formState[item.key]"
           v-bind="item" 
           v-on="item"
-          @select="(value: string|string[]) => onSelectChange(item.key, value)"></a-select>
+          :options="mergeOption(item.options)"
+          @select="(value: string|string[]) => onSelectChange(item.key, value)">
+        </a-select>
         <component v-else :is="Ant[getComponent(item.type)]" allowClear
           v-model:value="formState[item.key]"
           v-bind="{ ...item, ...getDefaultStyle(item.type) }" 
@@ -86,6 +88,7 @@ const getDefaultStyle = (name: string) => {
    return styleMap[name as keyof typeof styleMap] || {}
 }
 
+const mergeOption = (options = []) => [{ label: '全部', value: '' }].concat(options)
 /**
  * 多选时的排他处理：
  * 选中'全部'，则清空其他项；

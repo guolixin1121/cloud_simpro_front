@@ -9,12 +9,7 @@
 // store和apis直接在template使用时无效，为undefined
 const user = store.user
 const sceneApi = api.scene
-
-const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称或ID'},
-  { label: '场景来源', key: 'adsSource', type: 'select', options: [{ label: '全部', value: '' },{ label: '上传', value: '0' }, { label: '泛化', value: '1'}, { label: '外部', value: '2'}], defaultValue: ''},
-  { label: '创建时间', key: 'date', type: 'range-picker' }
-])
+const formItems = ref<SearchFormItem[]>([])
 
 const columns = [
   { title: '场景ID', dataIndex: 'id' },
@@ -33,8 +28,13 @@ const columns = [
 const getDataFromApi = async () => {
   const tagsData = await api.tags.getList()
   let options = tagsData.results.map((v: any) => ({ label: v.name, value: v.id }))
-  options = [{ label: '全部', value: '' }].concat(options)
-  formItems.value.push({ label: '标签', key: 'labels', type: 'select', options, defaultValue: ''})
+
+  formItems.value = [
+    { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称或ID'},
+    { label: '场景来源', key: 'adsSource', type: 'select', options: [{ label: '上传', value: '0' }, { label: '泛化', value: '1'}, { label: '外部', value: '2'}], defaultValue: ''},
+    { label: '标签', key: 'labels', type: 'select', options, defaultValue: ''},
+    { label: '创建时间', key: 'date', type: 'range-picker' }
+  ]
 }
 getDataFromApi()
 
