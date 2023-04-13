@@ -19,6 +19,10 @@ export const scene = defineApi({
   getList: '/scene/scene/',
 })()
 
+export const tags = defineApi({
+  getList: '/tags/list/',
+})()
+
 // export default {
 //   userApi: useSceneApi()
 // }

@@ -80,6 +80,25 @@ module.exports = [
         }
       ]}
     }
+  },
+  {
+    url: "/tags/list",
+    method: "get",
+    data: {
+      code: 0,
+      data: {
+        count: 3,
+        results: [
+        {
+          id: '1',
+          name: '广汽'
+        },
+        {
+          id: '2',
+          name: '赛目'
+        }
+      ]}
+    }
   }
 ];
 
