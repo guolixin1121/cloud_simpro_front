@@ -3,9 +3,11 @@
 ## 分支说明
 主分支
 
-## 组件开发
+## 自动import
++ `components`下所有的`index.vue`已在vite中配置了自动引用，在程序中无需`import`
 + `vue, vue-router, pinia`已在vite中配置了自动引用，在程序中无需`import`
-+ 开发通用组件时，推荐提供demo和readme。请参考`components/table`
++ `defineApi`已在vite中配置了自动引用，在程序中无需`import`
++ `/apis`和`/store`目录下定义的，已在vite中配置了自动引用，在程序中可直接使用`apis`和`store`变量
 
 ## 开发前环境预备
 + 安装STANDARD.md中**插件安装**部分的VS插件
@@ -30,7 +32,8 @@
 + 不同的环境，通过.env文件配置
 
 ## 其他说明
-使用`./src/hook/api`的`defineApi`接口，支持使用Compoisition API方式定义接口，并支持智能提示
-使用`vueuse`的Compoisition Utilities
-使用`tailwind`提高CSS编写效率
-使用`vue-request`提供API接口的扩展，如loading、error、防抖等
++ 使用`./src/hook/api`的`defineApi`接口定义api接口，支持使用Compoisition API方式定义接口，并支持智能提示
++ 使用`vueuse`的Compoisition Utilities
++ 使用`tailwind`提高CSS编写效率
++ 使用`vue-request`提供API接口的扩展，如loading、error、防抖等
++ 开发自定义组件时，推荐提供demo和readme。请参考`components/table`

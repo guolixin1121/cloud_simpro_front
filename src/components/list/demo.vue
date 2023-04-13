@@ -7,11 +7,9 @@
  
 <script setup lang="ts">
 import List from './index.vue'
-import { useUserStore } from '@/store/user'
-import { useSceneApi } from '@/apis/scene'
 
-const user = useUserStore()
-const api = useSceneApi()
+const user = store.user
+const api = apis.scene
 
 // eslint-disable-next-line no-undef
 const formItems: SearchFormItem[] = [

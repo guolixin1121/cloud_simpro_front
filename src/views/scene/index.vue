@@ -6,12 +6,9 @@
 </template>
  
 <script setup lang="ts">
-import List from '@/components/list/index.vue'
-import { useUserStore } from '@/store/user'
-import { useSceneApi } from '@/apis/scene'
-
-const user = useUserStore()
-const api = useSceneApi()
+// store和apis直接在template使用时无效，为undefined
+const user = store.user
+const api = apis.scene
 
 // eslint-disable-next-line no-undef
 const formItems: SearchFormItem[] = [

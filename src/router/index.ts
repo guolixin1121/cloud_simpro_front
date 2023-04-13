@@ -1,7 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '../layout/index.vue'
-import pinia from '../store/pinia' // router中使用pinia需要引入pinia实例
-import { useUserStore } from '../store/user'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -17,22 +15,27 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/map/second/',
         name: 'map/second',   
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/demo/icon/index.vue'),
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue'),
       },
       {
         path: '/mapversion',
         name: 'mapversion',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/demo/table/index.vue'),
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue'),
+      },
+      {
+        path: '/demo/list',
+        name: 'list',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/components/list/demo.vue'),
       },
       {
         path: '/demo/table',
         name: 'table',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/demo/table/index.vue'),
+        component: async () => await import(/* webpackChunkName: "default" */ '@/components/table/demo.vue'),
       },
       {
         path: '/demo/icon/',
         name: 'icon',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/demo/icon/index.vue'),
+        component: async () => await import(/* webpackChunkName: "default" */ '@/components/svgicon/index.vue'),
       },
     ]
   },
@@ -52,10 +55,10 @@ router.beforeEach(async (to, from, next) => {
   if(to.path === '/login' || to.meta.isAuth == false) {
     next()
   } else {
-    const store = useUserStore(pinia)
-    if(store.token) {
-      if(!store.user) {
-        await store.getUserInfo()
+    const user = store.user
+    if(user.token) {
+      if(!user.user) {
+        await user.getUserInfo()
         next()
       } else {
         next()

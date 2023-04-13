@@ -3,14 +3,13 @@
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue';
 import Header from './header.vue'
 import Menu from './menu.vue'
-import { useUserStore } from '../store/user'
 
 // folder or unfolder the left menu
 let collapsed = ref(false)
 const updateCollapsed = () => collapsed.value = !collapsed.value
 
 // menus for current login user
-let menus: Permission[] = useUserStore().user.permissions
+let menus: Permission[] =  store.user.user.permissions
 
 // set selected menu, and open its parent menu
 const route = useRoute()

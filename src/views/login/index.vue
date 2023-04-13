@@ -13,15 +13,13 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '@/store/user'
-
 const username = ref('')
 const password = ref('')
 
 const router = useRouter()
 
 const login = async () => {
-  await useUserStore().login({ username: username.value, password: password.value })
+  await store.user.login({ username: username.value, password: password.value })
   router.push('/')
 }
 </script>

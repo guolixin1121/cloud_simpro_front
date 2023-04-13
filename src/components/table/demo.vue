@@ -1,14 +1,10 @@
 <template>
-  <Table :api="tableApi.getList" :query="query" :columns="columns" @on-select="onSelect">
+  <Table :api="api" :query="{}" :columns="columns" @on-select="onSelect">
   </Table>
 </template>
 
 <script setup lang="ts">
-import Table from '@/components/table/index.vue'
-import { useTableApi } from '@/apis/table';
-
-const tableApi = useTableApi()
-const query = ref<{}>
+const api = apis.table.getList
 
 const columns = [
   {

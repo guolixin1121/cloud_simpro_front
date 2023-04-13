@@ -3,8 +3,6 @@
 </template>
 
 <script setup lang="ts">
-import SearchForm from '@/components/search-form/index.vue'
-
 let loading = ref(false)
 
 // eslint-disable-next-line no-undef

@@ -8,9 +8,6 @@
 </template>
  
 <script setup lang="ts">
-import SearchForm from '../search-form/index.vue'
-import Table from '../table/index.vue'
-
 defineProps({
   formItems: {
     // eslint-disable-next-line no-undef

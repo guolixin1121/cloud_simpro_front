@@ -18,8 +18,6 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '@/store/user';
-
 const props = defineProps(['scope', 'isOnlyCreator'])
 
 /**
@@ -27,8 +25,8 @@ const props = defineProps(['scope', 'isOnlyCreator'])
  * 1. 是否配置了该页面的操作权限
  * 2. 是否只允许自己操作
  */
- const userStore = useUserStore()
 const hasPermission = (action: any, data: any) => {
+  const userStore = store.user
   let permission = userStore.hasPermission(action)
 
   if(props.isOnlyCreator && (['编辑', '删除'].includes(action))) {

@@ -1,15 +1,11 @@
 <script setup lang="ts">
-import { useUserStore } from '../store/user'
-import { useUserApi } from '@/apis/user';
-const store = useUserStore()
-const api = useUserApi()
-
 interface MenuItem {
   title: string, 
   path: string
 }
+const user = store.user.user
 let topMenus = ref<MenuItem[]>([])
-api.getTopMenu().then(data => topMenus.value = data)
+apis.user.getTopMenu().then(data => topMenus.value = data)
 </script>
 
 <template>
@@ -24,8 +20,8 @@ api.getTopMenu().then(data => topMenus.value = data)
       </a>
     </div>
     <div>
-      <span>{{ store.user?.nickname }}</span>
-      <a class=" ml-5" @click="store.logout">退出登录</a>
+      <span>{{ user?.nickname }}</span>
+      <a class=" ml-5" @click="user.logout">退出登录</a>
     </div>
   </div>
 </template>

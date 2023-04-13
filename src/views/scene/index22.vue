@@ -10,16 +10,11 @@
 </template>
  
 <script setup lang="ts">
-import SearchForm from '@/components/search-form/index.vue'
-import Table from '@/components/table/index.vue'
-import { useUserStore } from '@/store/user'
-import { useSceneApi } from '@/apis/scene'
+const user = store.user
+const api = apis.scene
 
-const user = useUserStore()
-const api = useSceneApi()
 const query: Record<string, any> = ref(null)
 
-// eslint-disable-next-line no-undef
 const formItems: SearchFormItem[] = [
   { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称或ID'},
   { label: '场景来源', key: 'adsSource', type: 'select', options: [{ label: '全部', value: '' },{ label: '上传', value: '0' }, { label: '泛化', value: '1'}, { label: '外部', value: '2'}], defaultValue: ''},
