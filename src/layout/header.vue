@@ -24,7 +24,7 @@ api.getTopMenu().then(data => topMenus.value = data)
       </a>
     </div>
     <div>
-      <span>{{ store.user?.nickName }}</span>
+      <span>{{ store.user?.nickname }}</span>
       <a class=" ml-5" @click="store.logout">退出登录</a>
     </div>
   </div>

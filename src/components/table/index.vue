@@ -12,45 +12,18 @@
     } : null "
     :pagination="pagination"
     @change="onChange">
-    <template v-slot:[item] ="scope" v-for="item in Object.keys($slots)">
+    <template v-slot:[item]="scope" v-for="item in Object.keys($slots)">
         <slot v-if="item !== 'bodyCell'" :name="item" :scope="scope" v-bind="scope || {}"></slot>
-
         <slot v-else :name="item" :scope="scope" v-bind="scope || {}" >
           <template v-if="scope.column.key == 'actions'">
-            <template v-for="key in Object.keys(scope.column.actions) " :key="key">
-              <template v-if="hasPermission(key, scope.record)">
-                <a class="text-blue-500"
-                  v-if="key !== 'delete'" 
-                  @click="scope.column.actions[key](scope)">
-                  {{ ActionMap[key as keyof typeof ActionMap] }}
-                </a>
-                <a-popconfirm v-else title="你确定要删除吗？" ok-text="是" cancel-text="否"
-                  @confirm="scope.column.actions[key](scope)">
-                  <a class="text-blue-500">删除</a>
-                </a-popconfirm>
-                <a-divider type="vertical" />
-              </template>
-            </template>
+            <Action :scope="scope"></Action>
           </template>
         </slot>
     </template>
     <!-- 父组件中没有指定bodyCell时使用此模板 -->
     <template #bodyCell="scope">
       <template v-if="scope.column.key == 'actions'">
-        <template v-for="key in Object.keys(scope.column.actions) " :key="key">
-          <template v-if="hasPermission(key, scope.record)">
-            <a class="text-blue-500"
-              v-if="key !== 'delete'" 
-              @click="scope.column.actions[key](scope)">
-              {{ ActionMap[key as keyof typeof ActionMap] }}
-            </a>
-            <a-popconfirm v-else title="你确定要删除吗？" ok-text="是" cancel-text="否"
-              @confirm="scope.column.actions[key](scope)">
-              <a class="text-blue-500">删除</a>
-            </a-popconfirm>
-            <a-divider type="vertical" />
-          </template>
-        </template>
+        <Action :scope="scope"></Action>
       </template>
     </template>
   </a-table>
@@ -58,13 +31,7 @@
 
 <script setup lang="ts">
 import { Service, useRequest} from 'vue-request'
-import { useUserStore } from '@/store/user';
-
-const ActionMap = {
-  view: '查看',
-  edit: '编辑',
-  delete: '删除'
-}
+import Action from './action.vue'
 
 const props = defineProps({
   api: {
@@ -80,7 +47,7 @@ const props = defineProps({
   },
   isSelectable: {
     type: Boolean,
-    default: () => true
+    default: () => false
   },
   isOnlyCreator: { // 是否只允许创建者编辑，删除 
     type: Boolean,
@@ -110,17 +77,4 @@ watch(() => props.query, (newVal) => {
 watch(current, (newVal) => {
   run({...props.query, page: newVal})
 })
-
-// check action permission
-const userStore = useUserStore()
-const hasPermission = (action: any, data: any) => {
-  let permission = userStore.hasPermission(action)
-
-  if(props.isOnlyCreator && (['edit', 'delete'].includes(action))) {
-    const isOwner = data.creator === userStore.user.username
-    permission = permission && isOwner
-  }
-  
-  return permission
-}
 </script>

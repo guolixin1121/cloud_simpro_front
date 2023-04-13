@@ -25,10 +25,10 @@ const columns = [
     title: '操作',
     key: 'actions',
     actions: {
-      // 查看、编辑、删除的响应函数
-      view: ( data: any ) => console.log('go to view page', data) ,
-      edit: ( data: any ) => console.log('go to edit page', data) ,
-      delete: (data: any) => console.log('delete data after confirm', data)
+      '运行': ( data: any ) => console.log('run', data),
+      '查看': ( data: any ) => console.log('go to view page', data) ,
+      '编辑': ( data: any ) => console.log('go to edit page', data) ,
+      '删除': (data: any) => console.log('delete data after confirm', data)
     }
   }
 ]

@@ -6,7 +6,7 @@
 </template>
  
 <script setup lang="ts">
-import List from '@/components/list/index.vue'
+import List from './index.vue'
 import { useUserStore } from '@/store/user'
 import { useSceneApi } from '@/apis/scene'
 

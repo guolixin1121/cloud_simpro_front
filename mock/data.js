@@ -16,8 +16,8 @@ module.exports = [
     data: {
       code: 0,
       data: {
-        mickname: "测试账号",
-        username: "loginname"
+        nickname: "测试账号",
+        username: "admin"
       },
     },
   },
@@ -27,7 +27,7 @@ module.exports = [
     data: {
       code: 0,
       data: [
-          { title: '场景', path: '/scene/scene', icon: "AccountBookFilled", actions: ['view', 'add', 'edit', 'delete']},
+          { title: '场景', path: '/scene/scene/', icon: "AccountBookFilled", actions: ['view', 'add', 'delete']},
           { 
             title: 'Demo', 
             path: '/demo',

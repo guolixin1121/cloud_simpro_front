@@ -41,13 +41,22 @@ export const useUserStore = defineStore('use', () => {
    }
 
     /**
-     * 当前用户是否有某个操作权限
-     * @param action 要验证的操作：'add' | 'edit' | 'delete' | 'view'
+     * 当前用户是否有增删改的权限，其他操作不做限制
+     * @param action 要验证的操作：'add' | 'edit' | 'delete'
      * @param currentRoute（可选） 要验证的页面路由path
      * @returns boolean  是否有权限
      */
     const hasPermission = (action: DataAction, currentRoute: string = router.currentRoute.value.path): boolean => {
-       const index = getPermissionIndex(action, currentRoute, user.value?.permissions )
+       const ActionMap = {
+         '编辑': 'edit',
+         '删除': 'delete'
+       }
+
+       const newAction = ActionMap[action as keyof typeof ActionMap] || action
+       
+       if(!['add', 'edit', 'delete'].includes(newAction)) return true
+
+       const index = getPermissionIndex(newAction as DataAction, currentRoute, user.value?.permissions )
        return index > -1
     }
 
@@ -55,7 +64,8 @@ export const useUserStore = defineStore('use', () => {
     const getPermissionIndex = (action: DataAction, currentRoute: string, menuList: Array<any> = [] ): number => {
       for(let i = 0; i < menuList.length; i++) {
          const menu = menuList[i]
-         if(menu.path === currentRoute) {
+         // 避免有多余的'/'造成的不匹配
+         if(menu.path.split('/').join('') === currentRoute.split('/').join('')) {
             return menu.actions?.indexOf(action)
          } else {
             const isValid = getPermissionIndex(action, currentRoute, menu.children)
