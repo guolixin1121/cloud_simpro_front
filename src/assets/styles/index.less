@@ -16,7 +16,7 @@
     height: 16px;
     background: #1664FF;
     border-radius: 2px;
-    margin-right: 5px;
+    margin-right: 8px;
   }
 }
 
@@ -24,7 +24,23 @@
   color: #1664FF
 }
 
+.right-breadcrumb {
+  margin-bottom: 10px;
+  color: #999CA3;
+  font-size: 14px;
+
+  .current {
+    color: #1E2229;
+
+    &:before {
+      content: '/';
+      color: #999CA3;
+      display: inline-block;
+      padding: 0px 10px;
+    }
+  }
+}
 .right-content {
   background-color: #fff;
-  padding: 30px 24px;
+  padding: 25px;
 }

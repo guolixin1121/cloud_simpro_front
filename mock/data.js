@@ -27,7 +27,7 @@ module.exports = [
     data: {
       code: 0,
       data: [
-          { title: '场景管理', path: '/scene/scene/', icon: "scene", actions: ['view', 'add', 'delete']},
+          { title: '场景管理', path: '/scene/', icon: "scene", actions: ['view', 'add', 'edit', 'delete']},
           { 
             title: 'Demo', 
             path: '/demo',

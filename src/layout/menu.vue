@@ -12,7 +12,7 @@ const props = defineProps({
   <template v-for="menu in props.menus">
     <template v-if="!menu.children || !menu.children.length">
       <a-menu-item :key="menu.path">
-        <SvgIcon :icon="menu.icon"></SvgIcon>
+        <SvgIcon :icon="menu.icon || ''"></SvgIcon>
         <span>
           <router-link :to="menu.path">{{ menu.title }}</router-link>
         </span>
@@ -20,7 +20,7 @@ const props = defineProps({
     </template>
     <a-sub-menu v-else :key="menu.path">
       <template #title>
-        <SvgIcon :icon="menu.icon"></SvgIcon>
+        <SvgIcon :icon="menu.icon || ''"></SvgIcon>
         <span>{{ menu.title }}</span>
       </template>
       <Menu :menus="menu.children" />
@@ -28,7 +28,7 @@ const props = defineProps({
   </template>
 </template>
 
-<style scoped lang="less">
+<style lang="less">
 .ant-menu-item:hover, 
 .ant-menu-submenu-title:hover, 
 .ant-menu-submenu-selected .ant-menu-submenu-title, 

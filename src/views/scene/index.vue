@@ -4,7 +4,7 @@
       <div class="flex justify-between items-center">
         <span class="title">场景管理</span>
         <div>
-          <a-button class="mt-5 mb-3" type="primary" v-if="user.hasPermission('add')">上传场景</a-button>
+          <a-button class="mt-5 mb-3" type="primary" v-if="user.hasPermission('add')" @click=" router.push('/scene/edit/0')">上传场景</a-button>
         </div>
       </div>
     </list>
@@ -15,6 +15,7 @@
 // store和apis直接在template使用时无效，为undefined
 const user = store.user
 const sceneApi = api.scene
+const router = useRouter()
 const formItems = ref<SearchFormItem[]>([])
 
 const columns = [
@@ -25,7 +26,7 @@ const columns = [
     actions: { // 查看、编辑、删除的响应函数
       '运行': ( data: any ) => console.log('run', data),
       '查看': ( data: any ) => console.log('go to view page', data) ,
-      '编辑': ( data: any ) => console.log('go to edit page', data) ,
+      '编辑': ( data: any ) => router.push('/scene/edit/' + data.id) ,
       '删除': (data: any) => console.log('delete data after confirm', data)
     }
   }

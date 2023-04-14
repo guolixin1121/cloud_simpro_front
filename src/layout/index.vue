@@ -13,7 +13,6 @@
           <Menu :menus="menus"></Menu>
         </a-menu>
       </a-layout-sider>
-      
       <a-layout-content>
         <router-view />
       </a-layout-content>

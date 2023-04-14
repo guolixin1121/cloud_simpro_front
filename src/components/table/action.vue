@@ -4,12 +4,12 @@
         <!-- 删除列 -->
         <a-popconfirm v-if="key === '删除'" 
           title="你确定要删除吗？" ok-text="是" cancel-text="否"
-          @confirm="scope.column.actions[key](scope)">
+          @confirm="scope.column.actions[key](scope.record)">
           <a class="text-blue">删除</a>
         </a-popconfirm>
         <!-- 编辑删除查看 -->
         <a v-else class="text-blue"
-          @click="scope.column.actions[key](scope)">
+          @click="scope.column.actions[key](scope.record)">
           {{ key }}
         </a>
         <a-divider type="vertical" />

@@ -14,7 +14,7 @@ const getIcon = async () => {
   const iconFile = iconFiles?.['../../assets/icons/' + props.icon + '.ts']
 
   if(iconFile) {
-    const iconModule = await iconFile()
+    const iconModule = (await iconFile()) as { default: string }
     return iconModule?.default
   }
   return ''
