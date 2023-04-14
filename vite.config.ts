@@ -41,7 +41,7 @@ export default defineConfig(({ mode }) => {
           {
             '@/hooks/api.ts': ['defineApi'], 
             '@/api/index.ts': [['*', 'api']], 
-            '@/store/index.ts': [['*', 'store']], 
+            '@/store/index.ts': [['*', 'store']]
           }],
         include: [/\.[tj]sx?$/, /\.vue$/], // 匹配的文件，也就是哪些后缀的文件需要自动引入
         eslintrc: {

@@ -1,11 +1,14 @@
 <!-- 封装了操作列：有操作权限时才展示操作按钮 -->
 <template>
   <a-table 
+    bordered
+    class="ant-table-striped"
     v-bind="$attrs"
     v-on="$attrs"
     :loading="loading"
     :dataSource="dataSource"
     :columns="columns"
+    :row-class-name="(_record: any, index: number) => (index % 2 === 1 ? 'table-striped' : null)"
     :rowSelection="isSelectable ? {
       selectedRowKeys: selectedRowKeys,
       onChange: onSelectChange
@@ -59,7 +62,7 @@ const emits = defineEmits(['onSelect', 'onChange'])
 const current = ref(1)
 const { data, loading, run } = useRequest(props.api as Service<{results: [], count: number}, any>)
 const dataSource = computed(() => data.value?.results)
-const pagination = computed(() => ({ current: current.value, total: data.value?.count }))
+const pagination = computed(() => ({ current: current.value, total: data.value?.count, 'show-total': (total: number) => `共 ${total} 条` }))
 
 // selection handler
 const selectedRowKeys = ref<string[]>([])
@@ -78,3 +81,9 @@ watch(current, (newVal) => {
   run({...props.query, page: newVal})
 })
 </script>
+
+<style scoped>
+.ant-table-striped :deep(.table-striped) td, .ant-table-thead > tr > th {
+  background: #F7F8FA;
+}
+</style>

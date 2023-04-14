@@ -2,15 +2,16 @@
   <a-form ref="form" layout="inline" class="mb-5" :model="formState" v-bind="$attrs">
     <a-form-item v-for="item in items" :key="item"
       :label="item.label"
-      :name="item.key">
-        <a-select v-if="item.type == 'select'" style="width: 190px" allowClear
+      :name="item.key"
+      style="margin-bottom: 10px;">
+        <a-select v-if="item.type == 'select'" allowClear style="width: 245px;"
           v-model:value="formState[item.key]"
-          v-bind="item" 
+          v-bind="{ ...item, ...getDefaultStyle(item.type) }"
           v-on="item"
           :options="mergeOption(item.options)"
           @select="(value: string|string[]) => onSelectChange(item.key, value)">
         </a-select>
-        <component v-else :is="Ant[getComponent(item.type)]" allowClear
+        <component v-else :is="Ant[getComponent(item.type)]" allowClear style="width: 245px;"
           v-model:value="formState[item.key]"
           v-bind="{ ...item, ...getDefaultStyle(item.type) }" 
           v-on="item"></component>
@@ -82,7 +83,8 @@ const getDefaultStyle = (name: string) => {
       'value-format': "YYYY-MM-DD" 
     },
     'select': {
-      'style': 'width: 190px'
+      'max-tag-count': 1,
+      'max-tag-text-length': 4
     }
    } 
    return styleMap[name as keyof typeof styleMap] || {}
@@ -101,7 +103,13 @@ const onSelectChange = (key: string, value: string | string[]) => {
   const isMultiple = Array.isArray(selectedValue)
   if(isMultiple) {
     const isAllSelected = value == ''
-    formState[key] = isAllSelected ? selectedValue.filter(v => !v) : selectedValue.filter(v => !v)
+    formState[key] = isAllSelected ? [''] : selectedValue.filter(v => v)
   }
 }
 </script>
+
+<style>
+.ant-form-item-label > label::after {
+  content: ''
+}
+</style>

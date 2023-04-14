@@ -27,7 +27,7 @@ module.exports = [
     data: {
       code: 0,
       data: [
-          { title: '场景', path: '/scene/scene/', icon: "AccountBookFilled", actions: ['view', 'add', 'delete']},
+          { title: '场景管理', path: '/scene/scene/', icon: "scene", actions: ['view', 'add', 'delete']},
           { 
             title: 'Demo', 
             path: '/demo',
@@ -35,7 +35,7 @@ module.exports = [
             children: [
               { 
                 title: '搜素、表格及权限', 
-                path: '/demo/table', 
+                path: '/demo/list', 
                 actions: ['add', 'delete', 'edit']
              },
              { 
@@ -53,8 +53,8 @@ module.exports = [
     data: {
       code: 0,
       data: [
-        {title: '顶部菜单一', path: 'http://www.baidu.com'},
-        {title: '顶部菜单二', path: 'http://www.baidu.com'},
+        // {title: '顶部菜单一', path: 'http://www.baidu.com'},
+        // {title: '顶部菜单二', path: 'http://www.baidu.com'},
       ]
     }
   },
@@ -82,7 +82,7 @@ module.exports = [
     }
   },
   {
-    url: "/tags/list",
+    url: "/tags/",
     method: "get",
     data: {
       code: 0,
@@ -91,11 +91,11 @@ module.exports = [
         results: [
         {
           id: '1',
-          name: '广汽'
+          display_name: '广汽'
         },
         {
           id: '2',
-          name: '赛目'
+          display_name: '赛目'
         }
       ]}
     }

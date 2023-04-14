@@ -35,7 +35,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/demo/icon/',
         name: 'icon',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/components/svgicon/index.vue'),
+        component: async () => await import(/* webpackChunkName: "default" */ '@/components/svg-icon/demo.vue'),
       },
     ]
   },

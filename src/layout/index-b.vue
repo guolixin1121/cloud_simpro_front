@@ -1,15 +1,16 @@
+
+
 <template>
   <a-layout>
-    <a-layout-header class="flex justify-between items-center">
-      <i class="logo"></i>
+    <a-layout-header class="flex justify-between items-center" style="background-color: #1E2229; color: #fff">
+      <menu-unfold-outlined v-if="collapsed" class="hover:text-blue-500" @click="updateCollapsed"/>
+      <menu-fold-outlined v-else class="hover:text-blue-500" @click="updateCollapsed" />
       <Header />
     </a-layout-header>
     <a-layout>
-      <a-layout-sider width="235" style="background-color: #fff; padding-top: 10px">
-        <a-menu mode="inline" 
-          :style="{ height: '100%', borderRight: 0 }"
-          v-model:selectedKeys="selectedKeys" 
-          v-model:openKeys="openKeys">
+      <a-layout-sider v-model:collapsed="collapsed" :trigger="null" collapsible>
+        <i class="block mx-5 my-4 h-10 logo"></i>
+        <a-menu theme="dark" mode="inline" v-model:selectedKeys="selectedKeys" v-model:openKeys="openKeys">
           <Menu :menus="menus"></Menu>
         </a-menu>
       </a-layout-sider>
@@ -21,9 +22,15 @@
   </a-layout>
 </template>
 
+<!-- eslint-disable no-undef -->
 <script setup lang="ts">
+import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons-vue';
 import Header from './header.vue'
 import Menu from './menu.vue'
+
+// folder or unfolder the left menu
+let collapsed = ref(false)
+const updateCollapsed = () => collapsed.value = !collapsed.value
 
 // menus for current login user
 let menus: Permission[] =  store.user.user.permissions
@@ -60,13 +67,10 @@ function getParentKeys (list: Permission[], keys: string[] = []): string[] | boo
 
 <style scoped>
 .logo {
-  display: block;
   background-image: url(../assets/images/logo.png);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
-  width: 164px;
-  height: 40px;
 }
 .ant-layout-sider-collapsed .logo{
   background-image: url(../assets/images/logo-small.png);

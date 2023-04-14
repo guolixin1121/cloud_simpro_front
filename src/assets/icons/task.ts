@@ -1,0 +1,21 @@
+export default `
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon_task_n</title>
+    <g id="云仿真设计稿" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="云仿真-场景管理-地图详情" transform="translate(-25.000000, -193.000000)">
+            <g id="左侧导航栏" transform="translate(0.000000, 60.000000)">
+                <g id="Group-6" transform="translate(8.000000, 17.000000)">
+                    <g id="侧边导航/亮色-二级菜单-收起" transform="translate(0.000000, 104.000000)">
+                        <g id="Group" transform="translate(17.000000, 12.000000)">
+                            <polygon id="路径" points="0 0 16 0 16 16 0 16"></polygon>
+                            <polygon id="Rectangle" stroke="#60656E" stroke-width="1.5" points="2.5 2 13.5 2 13.5 14.5 2.5 14.5"></polygon>
+                            <rect id="Rectangle" fill="#60656E" x="5" y="5" width="6" height="1.5"></rect>
+                            <rect id="Rectangle" fill="#60656E" x="5" y="8" width="6" height="1.5"></rect>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
+`

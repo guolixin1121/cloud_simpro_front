@@ -20,7 +20,7 @@ export const scene = defineApi({
 })()
 
 export const tags = defineApi({
-  getList: '/tags/list/',
+  getList: '/tags/',
 })()
 
 // export default {

@@ -1,8 +1,14 @@
 <template>
-  <list :form-items="formItems" :api="sceneApi.getList" :columns="columns">
-    <a-button class="mt-5 mb-3" type="primary" v-if="user.hasPermission('add')">上传场景</a-button>
-    <a-button class="mt-5 mb-3 ml-2" type="primary" v-if="user.hasPermission('delete')">批量删除</a-button>
-  </list>
+  <div class="right-content" >
+    <list :form-items="formItems" :api="sceneApi.getList" :columns="columns">
+      <div class="flex justify-between items-center">
+        <span class="title">场景管理</span>
+        <div>
+          <a-button class="mt-5 mb-3" type="primary" v-if="user.hasPermission('add')">上传场景</a-button>
+        </div>
+      </div>
+    </list>
+  </div>
 </template>
  
 <script setup lang="ts">
@@ -27,12 +33,12 @@ const columns = [
 
 const getDataFromApi = async () => {
   const tagsData = await api.tags.getList()
-  let options = tagsData.results.map((v: any) => ({ label: v.name, value: v.id }))
+  let options = tagsData.results.map((v: any) => ({ label: v['display_name'], value: v.id }))
 
   formItems.value = [
     { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称或ID'},
     { label: '场景来源', key: 'adsSource', type: 'select', options: [{ label: '上传', value: '0' }, { label: '泛化', value: '1'}, { label: '外部', value: '2'}], defaultValue: ''},
-    { label: '标签', key: 'labels', type: 'select', options, defaultValue: ''},
+    { label: '标签', key: 'labels', type: 'select', mode: 'multiple', options, defaultValue: ''},
     { label: '创建时间', key: 'date', type: 'range-picker' }
   ]
 }
