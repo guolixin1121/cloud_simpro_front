@@ -1,5 +1,5 @@
 <template>
-  <div class="right-content" >
+  <div class="main" >
     <list :form-items="formItems" :api="sceneApi.getList" :columns="columns">
       <div class="flex justify-between items-center">
         <span class="title">场景管理</span>

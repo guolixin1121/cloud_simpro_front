@@ -109,7 +109,4 @@ const onSelectChange = (key: string, value: string | string[]) => {
 </script>
 
 <style>
-.ant-form-item-label > label::after {
-  content: ''
-}
 </style>
