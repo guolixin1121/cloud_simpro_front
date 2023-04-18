@@ -39,9 +39,15 @@ export default defineConfig(({ mode }) => {
         //安装后你会发现在组件中不用再导入ref，reactive等
         imports: ['vue', 'vue-router', 'pinia',
           {
+            'vue-request': ['useRequest'],
+            'ant-design-vue': ['message'],
             '@/hooks/api.ts': ['defineApi'], 
             '@/api/index.ts': [['*', 'api']], 
             '@/store/index.ts': [['*', 'store']]
+          },{
+            from: 'vue-request',
+            imports: ['Service'],
+            type: true,
           }],
         include: [/\.[tj]sx?$/, /\.vue$/], // 匹配的文件，也就是哪些后缀的文件需要自动引入
         eslintrc: {

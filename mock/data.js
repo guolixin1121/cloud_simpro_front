@@ -59,7 +59,7 @@ module.exports = [
     }
   },
   {
-    url: "/scene/scene/",
+    url: "/scene/scenes/",
     method: "get",
     data: {
       code: 0,
@@ -68,15 +68,11 @@ module.exports = [
         results: [
         {
           id: '1',
-          adsName: '胡彦斌',
-          age: 12,
-          address: '西湖区湖底公园1号',
+          adsName: '胡彦斌'
         },
         {
           id: '2',
-          adsName: '胡彦祖',
-          age: 42,
-          address: '西湖区湖底公园1号',
+          adsName: '胡彦祖'
         }
       ]}
     }

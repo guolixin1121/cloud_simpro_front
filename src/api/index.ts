@@ -16,11 +16,18 @@ export const user = defineApi({
 })()
 
 export const scene = defineApi({
-  getList: '/scene/scene/',
+  getSceneSets: '/scene/scenesets/',
+  getScenes: '/scene/scenes/',
+  addScene: { url: '/scene/scenes/', method: 'post', headers: { "content-type": 'multipart/form-data'} },
+  deleteScene: { url: '/scene/scenes/{sid}/', method: 'delete' }
 })()
 
 export const tags = defineApi({
-  getList: '/tags/',
+  getTags: '/tags/',
+})()
+
+export const maps = defineApi({
+  getMaps: '/baidu_map/map/'
 })()
 
 // export default {

@@ -81,16 +81,31 @@ class AxiosRequest {
   request(params) {
     return new Promise((resolve, reject) => {
       const { url, data = {}, method = 'POST', headers = {} } = params || {}
+      const type = headers['content-type']
       Object.assign(headers, {
         Authorization: `JWT ${SStorage.storage.token}`,
-        'content-type': params.type ? params.type : 'application/json'
+        'content-type': type || 'application/json'
       })
+      let postData = data
+      if(type === 'multipart/form-data') {
+        const formData = new FormData()
+        for(let prop in data) {
+          const value = data[prop]
+          if(Array.isArray(value)) {
+            value.forEach(v => formData.append(prop, v))
+          } else {
+            formData.append(prop, data[prop])
+          }
+        }
+        postData = formData
+      }
+
       this.instance
         .request({
           url,
           method,
           headers,
-          data: ['POST', 'PUT', 'DELETE'].includes(method.toUpperCase()) ? data : null,
+          data: ['POST', 'PUT', 'DELETE'].includes(method.toUpperCase()) ? postData : null,
           params: method.toUpperCase() === 'GET' ? data : null
         })
         .then(res => {

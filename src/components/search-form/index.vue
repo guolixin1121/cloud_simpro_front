@@ -40,7 +40,7 @@ const props = defineProps({
 })
 const emits = defineEmits(['onSearch'])
 
-// form state, and get key&value from props
+// form state, and get default value from props
 const formState = reactive<Record<string, any>>({})
 props.items.forEach(item => formState[item.key] = item.defaultValue)
 
@@ -90,7 +90,9 @@ const getDefaultStyle = (name: string) => {
    return styleMap[name as keyof typeof styleMap] || {}
 }
 
+/*********** a-select的配置 ****************/
 const mergeOption = (options = []) => [{ label: '全部', value: '' }].concat(options)
+
 /**
  * 多选时的排他处理：
  * 选中'全部'，则清空其他项；

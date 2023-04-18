@@ -1,5 +1,5 @@
 <template>
-  <list :form-items="formItems" :api="sceneApi.getList" :columns="columns">
+  <list :form-items="formItems" :api="sceneApi.getScenes" :columns="columns">
     <a-button class="mt-5 mb-3" type="primary" v-if="user.hasPermission('add')">上传场景</a-button>
     <a-button class="mt-5 mb-3 ml-2" type="primary" v-if="user.hasPermission('delete')">批量删除</a-button>
   </list>

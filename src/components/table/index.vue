@@ -2,7 +2,7 @@
 <template>
   <a-table 
     bordered
-    class="ant-table-striped"
+    class="ant-table-striped mt-2"
     v-bind="$attrs"
     v-on="$attrs"
     :loading="loading"
@@ -14,26 +14,26 @@
       onChange: onSelectChange
     } : null "
     :pagination="pagination"
+    :scroll="{ x: 1200, y: 400 }"
     @change="onChange">
     <template v-slot:[item]="scope" v-for="item in Object.keys($slots)">
         <slot v-if="item !== 'bodyCell'" :name="item" :scope="scope" v-bind="scope || {}"></slot>
         <slot v-else :name="item" :scope="scope" v-bind="scope || {}" >
           <template v-if="scope.column.key == 'actions'">
-            <Action :scope="scope"></Action>
+            <Action :scope="scope" @delete="refresh"></Action>
           </template>
         </slot>
     </template>
     <!-- 父组件中没有指定bodyCell时使用此模板 -->
     <template #bodyCell="scope">
       <template v-if="scope.column.key == 'actions'">
-        <Action :scope="scope"></Action>
+        <Action :scope="scope" @delete="refresh"></Action>
       </template>
     </template>
   </a-table>
 </template>
 
 <script setup lang="ts">
-import { Service, useRequest} from 'vue-request'
 import Action from './action.vue'
 
 const props = defineProps({
@@ -80,6 +80,10 @@ watch(() => props.query, (newVal) => {
 watch(current, (newVal) => {
   run({...props.query, page: newVal})
 })
+
+const refresh = () => {
+  run({...props.query, page: current.value})
+}
 </script>
 
 <style scoped>

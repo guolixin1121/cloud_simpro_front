@@ -49,7 +49,13 @@ export function defineApi<A>(action: Actions<A>): () => Results<A> {
       } else if (typeof value === 'function') { // 自定义请求函数
         results[key] = value
       } else { // 与axios一样的请求配置
-        results[key] = (data: any) => http.request({ ...value, data })
+        let { url } = value
+        if(url && url?.indexOf('/{') > -1) {
+          url = url.split('{')[0]
+          results[key] = (data: any) => http.request({ ...value, url: url + data + '/', data })
+        } else {
+          results[key] = (data: any) => http.request({ ...value, url, data })
+        }
       }
     }
     return results as Results<A>

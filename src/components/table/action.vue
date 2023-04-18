@@ -4,7 +4,7 @@
         <!-- 删除列 -->
         <a-popconfirm v-if="key === '删除'" 
           title="你确定要删除吗？" ok-text="是" cancel-text="否"
-          @confirm="scope.column.actions[key](scope.record)">
+          @confirm="onConfirmDelete(scope, key)">
           <a class="text-blue">删除</a>
         </a-popconfirm>
         <!-- 编辑删除查看 -->
@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 const props = defineProps(['scope', 'isOnlyCreator'])
-
+const emits = defineEmits(['delete'])
 /**
  * 判断用户是否有某个操作的权限，目前只检查’删除‘、’编辑‘
  * 1. 是否配置了该页面的操作权限
@@ -35,5 +35,11 @@ const hasPermission = (action: any, data: any) => {
   }
   
   return permission
+}
+
+const onConfirmDelete = async (scope: any, key: string) => {
+  const handler = scope.column.actions[key]
+  await handler(scope.record)
+  emits('delete')
 }
 </script>

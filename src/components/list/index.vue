@@ -1,9 +1,13 @@
 <template>
   <search-form :items="formItems" @on-search="onSearch"></search-form>
 
-  <slot></slot>
+  <!-- button lines -->
+  <slot></slot> 
   
   <Table :api="api" :query="query" :columns="columns" @on-select="onSelect" :isSelectable="isSelectable" :isOnlyCreator="isOnlyCreator">
+    <template v-slot:[item]="scope" v-for="item in Object.keys($slots)">
+      <slot :name="item" :scope="scope" v-bind="scope || {}"></slot>
+    </template>
   </Table>
 </template>
  

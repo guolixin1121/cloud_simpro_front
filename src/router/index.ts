@@ -4,12 +4,12 @@ import Layout from '../layout/index.vue'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/scene/',
+    redirect: '/scene/scene',
     component: Layout,
     children: [
       {
-        path: '/scene/',
-        name: 'scene',
+        path: '/scene/scene',
+        name: 'scene/scene',
         component: async () => await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue'),
       },
       {
