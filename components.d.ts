@@ -29,6 +29,7 @@ declare module '@vue/runtime-core' {
     ASelectOption: typeof import('ant-design-vue/es')['SelectOption']
     ASubMenu: typeof import('ant-design-vue/es')['SubMenu']
     ATable: typeof import('ant-design-vue/es')['Table']
+    ATooltip: typeof import('ant-design-vue/es')['Tooltip']
     ATransfer: typeof import('ant-design-vue/es')['Transfer']
     ATree: typeof import('ant-design-vue/es')['Tree']
     AUpload: typeof import('ant-design-vue/es')['Upload']

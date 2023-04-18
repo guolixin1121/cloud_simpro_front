@@ -5,7 +5,7 @@
       <Header />
     </a-layout-header>
     <a-layout>
-      <a-layout-sider width="235" style="background-color: #fff; padding-top: 10px">
+      <a-layout-sider width="235" style="background-color: #fff; padding-top: 10px; overflow: auto;">
         <a-menu mode="inline" 
           :style="{ height: '100%', borderRight: 0 }"
           v-model:selectedKeys="selectedKeys" 
@@ -66,8 +66,5 @@ function getParentKeys (list: Permission[], keys: string[] = []): string[] | boo
   background-position: center;
   width: 164px;
   height: 40px;
-}
-.ant-layout-sider-collapsed .logo{
-  background-image: url(../assets/images/logo-small.png);
 }
 </style>

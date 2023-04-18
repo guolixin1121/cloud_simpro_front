@@ -106,7 +106,7 @@ class AxiosRequest {
           method,
           headers,
           data: ['POST', 'PUT', 'DELETE'].includes(method.toUpperCase()) ? postData : null,
-          params: method.toUpperCase() === 'GET' ? data : null
+          params: method.toUpperCase() === 'GET' && typeof data == 'object' ? data : null
         })
         .then(res => {
           const { code, data = {}, msg, err } = res.data
@@ -122,7 +122,7 @@ class AxiosRequest {
           }
         })
         .catch(error => {
-          message.error(error.config.message || '请求错误，请稍后重试')
+          message.error(error.message || '请求错误，请稍后重试')
           reject(error)
         })
     })

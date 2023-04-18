@@ -10,6 +10,8 @@
   />
 </template>
 <script setup lang="ts">
+import { debounce } from '@/utils/tools'
+
 const props = defineProps({
   api: {
     type: Function
@@ -37,16 +39,17 @@ const getOptions = async (name: string = '') => {
   }
 }
 
-const onScroll = (direction: string, e: any) => {
+const onScroll = debounce((direction: string, e: any) => {
   if(props.api && !isAllLoaded.value) {
     const { target } = e
     if(target.scrollTop + target.offsetHeight === target.scrollHeight) {
       currentPage.value = currentPage.value + 1
+      getOptions()
     }
   }
-}
+})
 
-const onSearch =  (direction: string, value: string) => {
+const onSearch = debounce((direction: string, value: string) => {
   if(direction == 'left') {
     dateSource.value = []
     currentPage.value = 1
@@ -54,7 +57,7 @@ const onSearch =  (direction: string, value: string) => {
   } else {
     targetKeys.value = targetKeys.value.filter(v => v.indexOf(value) > -1)
   }
-};
+})
 
-watchEffect(() => getOptions())
+getOptions()
 </script>

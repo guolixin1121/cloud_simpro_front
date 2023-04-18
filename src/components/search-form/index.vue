@@ -4,13 +4,12 @@
       :label="item.label"
       :name="item.key"
       style="margin-bottom: 10px;">
-        <a-select v-if="item.type == 'select'" allowClear style="width: 245px;"
+        <scroll-select v-if="item.type == 'select'" allowClear style="width: 245px;"
           v-model:value="formState[item.key]"
           v-bind="{ ...item, ...getDefaultStyle(item.type) }"
           v-on="item"
-          :options="mergeOption(item.options)"
           @select="(value: string|string[]) => onSelectChange(item.key, value)">
-        </a-select>
+        </scroll-select>
         <component v-else :is="Ant[getComponent(item.type)]" allowClear style="width: 245px;"
           v-model:value="formState[item.key]"
           v-bind="{ ...item, ...getDefaultStyle(item.type) }" 
@@ -56,9 +55,13 @@ const emitSeach = () => {
   let start_date = formState.date?.[0]
   let end_date = formState.date?.[1]
   const formValues = {...formState}
-  // delete useless prop
+  // 删除空值的属性
   for(let prop in formValues){
-    if(prop === 'date' || !formValues[prop]) {
+    const value = formValues[prop]
+    if(prop === 'date' || !value) {
+      delete formValues[prop]
+    }
+    if(Array.isArray(value) && !value.join('')) {
       delete formValues[prop]
     }
   }
@@ -91,8 +94,6 @@ const getDefaultStyle = (name: string) => {
 }
 
 /*********** a-select的配置 ****************/
-const mergeOption = (options = []) => [{ label: '全部', value: '' }].concat(options)
-
 /**
  * 多选时的排他处理：
  * 选中'全部'，则清空其他项；

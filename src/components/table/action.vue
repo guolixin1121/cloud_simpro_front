@@ -5,14 +5,13 @@
         <a-popconfirm v-if="key === '删除'" 
           title="你确定要删除吗？" ok-text="是" cancel-text="否"
           @confirm="onConfirmDelete(scope, key)">
-          <a class="text-blue">删除</a>
+          <a class="text-blue mr-2">删除</a>
         </a-popconfirm>
         <!-- 编辑删除查看 -->
-        <a v-else class="text-blue"
+        <a v-else class="text-blue mr-2"
           @click="scope.column.actions[key](scope.record)">
           {{ key }}
         </a>
-        <a-divider type="vertical" />
       </template>
     </template>
 </template>
@@ -40,6 +39,7 @@ const hasPermission = (action: any, data: any) => {
 const onConfirmDelete = async (scope: any, key: string) => {
   const handler = scope.column.actions[key]
   await handler(scope.record)
+  message.info('删除成功')
   emits('delete')
 }
 </script>
