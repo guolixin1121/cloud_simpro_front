@@ -1,7 +1,6 @@
-// import { AxiosError, AxiosInstance } from 'axios'
 import axios from 'axios'
 import { message } from 'ant-design-vue'
-
+import 'ant-design-vue/es/message/style/css' // 必须引用
 import { SStorage } from '@/utils/storage'
 
 import AxiosCanceler from './cancelCancel'
@@ -33,7 +32,7 @@ class AxiosRequest {
 
   constructor() {
     this.instance = axios.create({
-      baseURL: '',
+      baseURL: '/api/',
       timeout: 60 * 1000
     })
   }
@@ -82,17 +81,32 @@ class AxiosRequest {
   request(params) {
     return new Promise((resolve, reject) => {
       const { url, data = {}, method = 'POST', headers = {} } = params || {}
+      const type = headers['content-type']
       Object.assign(headers, {
-        Authorization: `JWT ${SStorage.get('token')}`,
-        'content-type': params.type ? params.type : 'application/json'
+        Authorization: `JWT ${SStorage.storage.token}`,
+        'content-type': type || 'application/json'
       })
+      let postData = data
+      if(type === 'multipart/form-data') {
+        const formData = new FormData()
+        for(let prop in data) {
+          const value = data[prop]
+          if(Array.isArray(value)) {
+            value.forEach(v => formData.append(prop, v))
+          } else {
+            formData.append(prop, data[prop])
+          }
+        }
+        postData = formData
+      }
+
       this.instance
         .request({
           url,
           method,
           headers,
-          data: ['POST', 'PUT', 'DELETE'].includes(method.toUpperCase()) ? data : null,
-          params: method === 'GET' ? data : null
+          data: ['POST', 'PUT', 'DELETE'].includes(method.toUpperCase()) ? postData : null,
+          params: method.toUpperCase() === 'GET' && typeof data == 'object' ? data : null
         })
         .then(res => {
           const { code, data = {}, msg, err } = res.data
@@ -100,14 +114,15 @@ class AxiosRequest {
             resolve(data)
           } else if (code === 100) {
             // token过期跳到登录页
-            window.location.href = `${import.meta.env.VITE_LOGIN_URL}/admin/login/`
+            message.error(typeof msg === 'string' ? msg : err)
+            window.location.href = `${import.meta.env.VITE_LOGIN_URL}/`
           } else {
             message.error(typeof msg === 'string' ? msg : err)
             reject(typeof msg === 'string' ? msg : err)
           }
         })
         .catch(error => {
-          message.error(error.config.message || '请求错误，请稍后重试')
+          message.error(error.message || '请求错误，请稍后重试')
           reject(error)
         })
     })

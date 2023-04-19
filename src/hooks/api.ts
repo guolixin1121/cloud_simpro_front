@@ -3,7 +3,6 @@ import { AxiosRequestConfig } from 'axios'
 import http from '../utils/http/index.js'
 
 type ActionValue =
-  | string
   | AxiosRequestConfig
   | ((payload?: any) => Promise<any>)
 
@@ -33,8 +32,8 @@ type Results<A> = {
  * 2. 使用API, 使用时支持智能提示   
  * import { useTestApi } from '@/api/test-api'   
  * const testApi = useTestApi()   
-   testApi.get()   
-   testApi.post({ "name": "Angel", "age": 10 })
+   testapi.get()   
+   testapi.post({ "name": "Angel", "age": 10 })
  *   
  * @param action：{ string: string | AxioxRequestConfig | Function}
  * @returns Function: { string: Function }
@@ -44,12 +43,16 @@ export function defineApi<A>(action: Actions<A>): () => Results<A> {
     const results = {} as { [key: string]: Function }
 
     for (const [key, value] of Object.entries<ActionValue>(action)) {
-      if (typeof value === 'string') { // only a rul
-        results[key] = () => http.request({ url: value, method: 'get' })
-      } else if (typeof value === 'function') { // 自定义请求函数
+      if (typeof value === 'function') { // 自定义请求函数
         results[key] = value
       } else { // 与axios一样的请求配置
-        results[key] = (data: any) => http.request({ ...value, data })
+        let { url } = value
+        if(url && url?.indexOf('/{') > -1) { // url里含有变量 /scene/scenes/{sid}
+          url = url.split('{')[0]
+          results[key] = (data: any) => http.request({ ...value, url: url + (data.id || data)  + '/', data: data.data })
+        } else {
+          results[key] = (data: any) => http.request({ ...value, url, data })
+        }
       }
     }
     return results as Results<A>

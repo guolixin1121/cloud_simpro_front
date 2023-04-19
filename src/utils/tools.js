@@ -58,8 +58,10 @@ export function isEmpty(val) {
 export function debounce(fn, wait = 500) {
   let timerId = null
   let flag = true
+  console.log(1)
   return function () {
     const args = arguments
+    console.log(2)
     clearTimeout(timerId)
     if (flag) {
       fn.apply(this, args)

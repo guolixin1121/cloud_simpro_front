@@ -1,29 +1,47 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '../layout/index.vue'
-import pinia from '../store/pinia' // router中使用pinia需要引入pinia实例
-import { useUserStore } from '../store/user'
 
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/home',
+    redirect: '/scene/scene',
     component: Layout,
     children: [
       {
-        path: '/home',
-        name: 'home',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/test/index.vue'),
+        path: '/scene/scene',
+        name: 'scene/scene',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue'),
       },
       {
-        path: '/test2',
-        name: 'test2',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/test2/index.vue'),
+        path: '/scene/edit/:id',
+        name: 'scene/edit',   
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/scene/edit.vue'),
       },
       {
-        path: '/table',
+        path: '/scene/view/:id',
+        name: 'scene/view',   
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/scene/view.vue'),
+      },
+      {
+        path: '/mapversion',
+        name: 'mapversion',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue'),
+      },
+      {
+        path: '/demo/list',
+        name: 'list',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/components/list/demo.vue'),
+      },
+      {
+        path: '/demo/table',
         name: 'table',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/table/index.vue'),
-      }
+        component: async () => await import(/* webpackChunkName: "default" */ '@/components/table/table.vue'),
+      },
+      {
+        path: '/demo/icon/',
+        name: 'icon',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/components/svg-icon/demo.vue'),
+      },
     ]
   },
   {
@@ -38,13 +56,18 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   if(to.path === '/login' || to.meta.isAuth == false) {
     next()
   } else {
-    const store = useUserStore(pinia)
-    if(store.user.token) {
-      next()
+    const user = store.user
+    if(user.token) {
+      if(!user.user) {
+        await user.getUserInfo()
+        next()
+      } else {
+        next()
+      }
     } else {
       router.push('/login')
     }

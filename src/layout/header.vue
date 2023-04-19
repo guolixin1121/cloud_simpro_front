@@ -1,34 +1,74 @@
 <script setup lang="ts">
-import { reactive } from 'vue'
-import { useUserStore } from '../store/user'
-import { useConfigApi } from '@/apis/config';
-const store = useUserStore()
-const api = useConfigApi()
-let state = reactive({
-  topMenus: {}
-})
-
-api.getTopMenu().then(data => {
-  state.topMenus = data
-})
+interface MenuItem {
+  title: string, 
+  path: string
+}
+const user = store.user.user
+let topMenus = ref<MenuItem[]>([])
+api.user.getTopMenu().then(data => topMenus.value = data)
 </script>
 
 <template>
   <div class="flex justify-between w-full">
     <div>
-      <a v-for="[key, value] in Object.entries(state.topMenus)" 
-        :key="key"
-        :href="value as string"
-        class=" ml-7"
+      <a v-for="(menu, index) in topMenus" 
+        :key="index"
+        :href="menu.path"
+        class=" ml-16"
         target="_blank">
-        {{ key }} 
+        {{ menu.title }} 
       </a>
     </div>
-    <div>
-      <span>{{ store.user?.name }}</span>
-      <a class=" ml-5" @click="store.logout">退出登录</a>
+    <div class="flex items-center justify-center">
+      <div class="alert mr-5">
+        <i class="alert-icon"></i>
+        <i class="alert-circle"></i>
+      </div>
+      <div class="name text-white opacity-80 cursor-pointer">
+        <span>{{ user?.nickname || '管理员' }}</span>
+      </div>
     </div>
   </div>
 </template>
 
-<style scoped></style>
+<style scoped lang="less">
+.alert {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  background-color: #30353F;
+  position: relative;
+
+  &-icon {
+    background-image: url('@/assets/images/alert.png');
+    display: inline-block;
+    vertical-align: super;
+    width: 24px;
+    height: 24px;
+  }
+
+  &-circle {
+    display: inline-block;
+    background-color: #FF4040;
+    width: 6px;
+    height: 6px;
+    border-radius: 6px;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+  }
+}
+.name:after {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border: 2px solid #B1B6C3;
+  border-right: transparent;
+  border-top: transparent;
+  transform: rotate(-45deg);
+  margin-left: 10px;
+  position: relative;
+  top: -4px;
+}
+</style>

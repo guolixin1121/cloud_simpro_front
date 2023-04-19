@@ -1,11 +1,73 @@
 .ant-layout {
   height: 100%;
-  
+
   .ant-layout-header {
-    background-color: #fefefe;
-    padding-inline: 20px;
+    background-color: #1E2229;
+    padding-left: 20px;
+    padding-right: 30px;
   }
+  
   .ant-layout-content {
-    padding: 20px;
+    padding: 15px;
+    padding-bottom: 0px;
+  }
+}
+
+.ant-form-item-label > label::after {
+  content: '' !important;
+}
+
+
+.ant-menu:not(.ant-menu-horizontal) {
+  background-color: rgba(255, 255, 255, 0.08);
+  padding: 0 8px;
+  
+  .ant-menu-submenu-title {
+    margin: 0;
+  }
+
+  .ant-menu-item-selected {
+    background: rgba(36,120,255,0.1);
+    border-radius: 2px;
+
+    &:after {
+      display: none;
+    }
+  }
+
+  .ant-menu-submenu-arrow {
+    color: #B1B6C3;
+  }
+
+  .ant-menu-item-selected  {
+    font-weight: 600;
+  }
+}
+
+.ant-transfer {
+  .ant-transfer-list {
+    width: 220px;
+    height: 280px;
+  }
+  .ant-transfer-list-header-selected {
+    span:first-child {
+      display: none;
+    }
+  }
+
+  .ant-transfer-list-header-dropdown {
+    display: none;
+  }
+}
+
+.min-main {
+
+ .ant-select-disabled.ant-select:not(.ant-select-customize-input) .ant-select-selector,
+ .ant-input[disabled],
+ .ant-transfer-list-content-item-disabled,
+ .ant-input-affix-wrapper-disabled,
+ .ant-transfer-disabled .ant-transfer-list {
+    color: rgba(0, 0, 0, 0.85);
+    background-color: #fff;
   }
 }

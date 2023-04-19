@@ -34,6 +34,7 @@ module.exports = {
     '@typescript-eslint/default-param-last': 'error',
     'no-eval': 2, //不允许使用eval
     'no-var': 'error', // 禁止使用 var
-    'no-debugger': 'off'
+    'no-debugger': 'off',
+    'no-undef': 'off'
   }
 }

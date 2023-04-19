@@ -1,3 +1,52 @@
 @import './reset.less';
 @import './antd.less';
 @import './tailwind.css';
+
+.title {
+  color: #1E2229;
+  font-weight: 600;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+
+  &:before {
+    content: '';
+    display: inline-block;
+    width: 3px;
+    height: 16px;
+    background: #1664FF;
+    border-radius: 2px;
+    margin-right: 8px;
+  }
+}
+
+.text-blue {
+  color: #1664FF
+}
+
+.breadcrumb {
+  margin-bottom: 10px;
+  color: #999CA3;
+  font-size: 14px;
+
+  &--current {
+    color: #1E2229;
+
+    &:before {
+      content: '/';
+      color: #999CA3;
+      display: inline-block;
+      padding: 0px 10px;
+    }
+  }
+}
+.main, .min-main {
+  background-color: #fff;
+  padding: 25px;
+  padding-bottom: 0px;
+  height: 100%;
+  overflow: auto;
+}
+.min-main {
+  height: calc(100% - 35px);
+}
