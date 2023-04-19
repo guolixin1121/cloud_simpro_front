@@ -6,6 +6,7 @@
       <span class="title">场景管理</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click=" router.push('/scene/edit/0')">上传场景</a-button>
     </div>
+    
     <Table 
       :api="sceneApi.getScenes" 
       :query="query" 

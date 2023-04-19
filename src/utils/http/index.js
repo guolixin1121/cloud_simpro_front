@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css' // 必须引用
-import { SStorage } from '@/utils/storage'
+import { LStorage } from '@/utils/storage'
 
 import AxiosCanceler from './cancelCancel'
 
@@ -83,7 +83,7 @@ class AxiosRequest {
       const { url, data = {}, method = 'POST', headers = {} } = params || {}
       const type = headers['content-type']
       Object.assign(headers, {
-        Authorization: `JWT ${SStorage.storage.token}`,
+        Authorization: `JWT ${LStorage.storage.token}`,
         'content-type': type || 'application/json'
       })
       let postData = data

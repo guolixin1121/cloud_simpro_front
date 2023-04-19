@@ -1,11 +1,11 @@
-import { useSessionStorage } from "@vueuse/core"
+import { useLocalStorage } from "@vueuse/core"
 import router from '../router'
 
 export const useUserStore = defineStore('use', () => {
    // const defaultUser = { username: '', nickName: '', userId: 0, permissions: [] }
    // const user = useLocalStorage('user', defaultUser)
    const user = ref()
-   const token = useSessionStorage('token', null)
+   const token = useLocalStorage('token', null)
    
    const userApi = api.user
    /**

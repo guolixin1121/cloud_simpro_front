@@ -12,7 +12,6 @@
 <script setup lang="ts">
 import { OptionProps } from 'ant-design-vue/lib/select';
 import type { PropType } from 'vue';
-import { debounce } from '@/utils/tools'
 
 // 自定义字段
 interface FieldName {
@@ -29,9 +28,18 @@ const props = defineProps({
   }
 })
 
-const currentPage = ref(1)
+const currentPage = ref(1) // 分页load选项
 const isAllLoaded = ref(false)
-const options = ref<OptionProps>([{ label: '全部', value: ''}])
+const options = ref<OptionProps>([])
+
+const resetOptions = () => {
+  options.value = []
+
+  // 根据defaultValue是否为空，判断是否需要加‘全部’的option
+  const defaultValue = useAttrs().defaultValue
+  const hasAllOption = defaultValue === '' || (Array.isArray(defaultValue) && defaultValue.toString() === '')
+  hasAllOption && options.value.push({label: '全部', value: ''})
+}
 
 const filterOption = (input: string, option: any) => {
   return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
@@ -61,22 +69,23 @@ const onScroll = (e: any) => {
   }
 }
 
-const onSearch = debounce((input: string) => {
+const onSearch = (input: string) => {
   if(props.api) {
     currentPage.value = 1
     options.value = []
     getOptions(input)
   }
-})
+}
 
 // 重新获取全量数据
-const onBlur = debounce(() => {
+const onBlur = () => {
   if(props.api) {
     currentPage.value = 1
-    options.value = [{ label: '全部', value: ''}]
+    resetOptions()
     getOptions()
   }
-})
+}
 
+resetOptions()
 getOptions()
 </script>

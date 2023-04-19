@@ -1,6 +1,6 @@
 <template>
   <div class="breadcrumb">
-    <router-link to="/scene/scene">场景管理</router-link>
+    <router-link to="/scene/scene/">场景管理</router-link>
     <span class="breadcrumb--current">场景详情</span>
   </div>
   <div class="min-main">
@@ -16,8 +16,7 @@
         <scroll-select disabled v-model:value="formState.map_version_obj" :api="getMaps"></scroll-select>
       </a-form-item>
       <a-form-item label="场景文件" name="xosc" :rules="[{ required: true, message: '请上传场景文件!' }]">
-        <a-upload disabled :fileList="[]">
-        </a-upload>
+        <a-upload disabled :fileList="fileList"></a-upload>
       </a-form-item>
       <a-form-item label="标签">
         <scroll-transfer disabled v-model:target-keys="formState.labels" :api="getScennTags" labelKey="display_name"></scroll-transfer>
@@ -44,6 +43,7 @@ const getMaps = api.maps.getMaps
 const getSceneSet = api.scenesets.getSceneSets
 const getScennTags = () => api.tags.getTags({ tag_type: 3 })
 
+const fileList = ref()
 const formState = reactive({
   name: undefined,
   map_version_obj: undefined,
@@ -68,6 +68,7 @@ const getEditData = async () => {
      formState.createTime = scene.createTime
      formState.updateTime = scene.updateTime
      formState.createUser = scene.createUser
+    //  fileList.value = [scene.xosc]
    }
 }
 getEditData()
