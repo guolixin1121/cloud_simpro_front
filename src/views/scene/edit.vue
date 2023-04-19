@@ -1,6 +1,6 @@
 <template>
   <div class="breadcrumb">
-    <router-link to="/scene/scene">场景管理</router-link>
+    <router-link to="/scene/scene/">场景管理</router-link>
     <span class="breadcrumb--current">{{ title }}</span>
   </div>
   <div class="min-main">
@@ -69,6 +69,7 @@ const add = async () => {
     : await api.scene.editScene({ id, data: {...formState, source: 0} })
 
   loading.value = false
+  message.info( isAdd ? '上传成功' : '修改成功')
   goback()
 }
 
@@ -80,6 +81,7 @@ const getEditData = async () => {
      formState.labels = scene.labels
      formState.sceneSet = scene.baiduSceneSets
      formState.map_version_obj = scene.map_version_obj
+    //  fileList.value = [scene.xosc]
    }
 }
 getEditData()
