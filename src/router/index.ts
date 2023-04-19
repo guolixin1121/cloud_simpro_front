@@ -10,44 +10,57 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/scene/scene',
         name: 'scene/scene',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue'),
+        component: async () =>
+          await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue')
       },
       {
         path: '/scene/edit/:id',
-        name: 'scene/edit',   
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/scene/edit.vue'),
+        name: 'scene/edit',
+        component: async () =>
+          await import(/* webpackChunkName: "default" */ '@/views/scene/edit.vue')
       },
       {
         path: '/scene/view/:id',
-        name: 'scene/view',   
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/scene/view.vue'),
+        name: 'scene/view',
+        component: async () =>
+          await import(/* webpackChunkName: "default" */ '@/views/scene/view.vue')
       },
       {
         path: '/mapversion',
         name: 'mapversion',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue'),
+        component: async () =>
+          await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue')
       },
       {
         path: '/demo/list',
         name: 'list',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/components/list/demo.vue'),
+        component: async () =>
+          await import(/* webpackChunkName: "default" */ '@/components/list/demo.vue')
       },
       {
         path: '/demo/table',
         name: 'table',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/components/table/table.vue'),
+        component: async () =>
+          await import(/* webpackChunkName: "default" */ '@/components/table/demo.vue')
       },
       {
         path: '/demo/icon/',
         name: 'icon',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/components/svg-icon/demo.vue'),
+        component: async () =>
+          await import(/* webpackChunkName: "default" */ '@/components/svg-icon/demo.vue')
       },
+      {
+        path: '/map/manage',
+        name: 'map-manage',
+        component: async () =>
+          await import(/* webpackChunkName: "default" */ '@/views/mapManage/index.vue')
+      }
     ]
   },
   {
     name: 'login',
     path: '/login',
-    component: async () => await import(/* webpackChunkName: "default" */ '@/views/login/index.vue'),
+    component: async () => await import(/* webpackChunkName: "default" */ '@/views/login/index.vue')
   }
 ]
 
@@ -57,12 +70,12 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  if(to.path === '/login' || to.meta.isAuth == false) {
+  if (to.path === '/login' || to.meta.isAuth == false) {
     next()
   } else {
     const user = store.user
-    if(user.token) {
-      if(!user.user) {
+    if (user.token) {
+      if (!user.user) {
         await user.getUserInfo()
         next()
       } else {
