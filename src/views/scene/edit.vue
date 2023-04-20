@@ -27,6 +27,8 @@
         </a-upload>
       </a-form-item>
       <a-form-item label="标签">
+        <scroll-transfer2 v-model:target-keys="formState.labels" :api="getScennTags" :filedNames="{label: 'display_name', value: 'id'}"></scroll-transfer2>
+     
         <scroll-transfer v-model:target-keys="formState.labels" :api="getScennTags" labelKey="display_name"></scroll-transfer>
       </a-form-item>
       <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '80px' }}">

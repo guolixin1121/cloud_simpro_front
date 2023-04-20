@@ -20,3 +20,14 @@ interface SearchFormItem {
   // ant design 组件原有属性
   [key: string]: any // 支持和antd组件一样的属性
 }
+
+interface SelectOption {
+  label: string | number,
+  value: string | number
+}
+
+// 自定义字段
+interface FieldNames {
+  label: string,
+  value: string
+}

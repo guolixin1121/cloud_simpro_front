@@ -14,17 +14,12 @@ import { OptionProps } from 'ant-design-vue/lib/select';
 import type { PropType } from 'vue';
 import { watchOnce } from '@vueuse/core'
 
-// 自定义字段
-interface FieldName {
-  label: string,
-  value: string
-}
 const props = defineProps({
   api: {
     type: Function
   },
   fieldNames: {
-    type: Object as PropType<FieldName>,
+    type: Object as PropType<FieldNames>,
     default: () => ({ label: 'name', value: 'id'})
   }
 })
