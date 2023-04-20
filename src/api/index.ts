@@ -5,7 +5,7 @@
  */
 
 export const table = defineApi({
-  getList: { url: '/scene/scene/', method: 'get' },
+  getList: { url: '/scene/scenes/', method: 'get' },
 })() // 注意末尾的括号
 
 export const user = defineApi({

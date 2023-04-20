@@ -11,7 +11,7 @@
         <a-input v-model:value="formState.name"></a-input>
       </a-form-item>
       <a-form-item label="场景集" name="sceneSet" :rules="[{ required: true, message: '请选择场景集!' }]">
-        <scroll-select v-model:value="formState.sceneSet" :api="getSceneSet"></scroll-select>
+        <tree-select v-model:value="formState.sceneSet" :api="getSceneSet"></tree-select>
       </a-form-item>
       <a-form-item label="关联地图" name="map_version_obj" :rules="[{ required: true, message: '请选择关联地图!' }]">
         <scroll-select v-model:value="formState.map_version_obj" :api="getMaps"></scroll-select>
@@ -46,8 +46,8 @@ const id = useRoute().params.id
 const isAdd = id === '0'
 const title =  isAdd ? '上传场景' : '修改场景'
 const getMaps = api.maps.getMaps
-const getSceneSet = api.scenesets.getSceneSets
-const getScennTags = () => api.tags.getTags({ tag_type: 3 })
+const getSceneSet = (args: object) => api.scenesets.getSceneSets({ tree: 1, ...args} )
+const getScennTags = (args: object) => api.tags.getTags({ tag_type: 3, ...args })
 
 const fileList = ref()
 const formState = reactive({

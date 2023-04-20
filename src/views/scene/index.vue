@@ -35,7 +35,7 @@ import { SceneSourceOptions, getSceneSourceName } from '@/utils/dict'
 /****** api */
 const user = store.user
 const sceneApi = api.scene
-const tagsApi = (params: Object) => api.tags.getTags({ tag_type: 3, ...params })
+const tagsApi = (args: object) => api.tags.getTags({ tag_type: 3, ...args })
 
 /****** 搜素区域 */
 type Query = Record<string, any> 
