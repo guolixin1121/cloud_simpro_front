@@ -10,8 +10,8 @@
       <a-form-item label="场景名称" name="name" :rules="[{ required: true, message: '请输入场景名称!'}, { min: 2, max: 50, message: '场景名称长度为2到50位'}]">
         <a-input v-model:value="formState.name" :maxlength="50" ></a-input>
       </a-form-item>
-      <a-form-item label="场景集" name="sceneSet" :rules="[{ required: true, message: '请选择场景集!' }]">
-        <tree-select v-model:value="formState.sceneSet" :api="getSceneSet"></tree-select>
+      <a-form-item label="场景集" name="baiduSceneSets" :rules="[{ required: true, message: '请选择场景集!' }]">
+        <tree-select v-model:value="formState.baiduSceneSets" :api="getSceneSet"></tree-select>
       </a-form-item>
       <a-form-item label="关联地图" name="map_version_obj" :rules="[{ required: true, message: '请选择关联地图!' }]">
         <scroll-select v-model:value="formState.map_version_obj" :api="getMaps"></scroll-select>
@@ -55,7 +55,7 @@ const fileList = ref()
 const formState = reactive({
   name: undefined,
   map_version_obj: undefined,
-  sceneSet: undefined,
+  baiduSceneSets: undefined,
   xosc: null,
   labels: [],
 })
@@ -81,7 +81,7 @@ const getEditData = async () => {
      const scene = await api.scene.getScene(id)
      formState.name = scene.adsName
      formState.labels = scene.labels
-     formState.sceneSet = scene.baiduSceneSets
+     formState.baiduSceneSets = scene.baiduSceneSets
      formState.map_version_obj = scene.map_version_obj
     //  fileList.value = [scene.xosc]
    }

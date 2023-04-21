@@ -32,12 +32,6 @@ const routes: RouteRecordRaw[] = [
           await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue')
       },
       {
-        path: '/demo/list',
-        name: 'list',
-        component: async () =>
-          await import(/* webpackChunkName: "default" */ '@/components/list/demo.vue')
-      },
-      {
         path: '/demo/table',
         name: 'table',
         component: async () => await import(/* webpackChunkName: "default" */ '@/components/table/demo.vue')
