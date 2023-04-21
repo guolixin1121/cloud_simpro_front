@@ -1,5 +1,7 @@
 <template>
  <div class="ant-transfer">
+  {{ leftDataSource.length }}
+  {{ rightDataSource.length }}
     <list  
       ref="leftListRef"
       :title="titles[0]"
@@ -63,13 +65,22 @@ const onRightSelect = (data: SelectOption[]) => rightSelectedValues.value = data
 
 const addToRight = () => {
    rightDataSource.value = [...leftSelectedValues.value, ...rightDataSource.value]
+  //  leftDataSource.value = removeOptions(leftDataSource.value, leftSelectedValues.value)
+
+   // bakcup and clear data
    rightDataSourceBackup.value = rightDataSource.value
- 
+  //  leftSelectedValues.value = []
+  //  leftListRef.value?.clear()
    isValueFromParent.value = false
 }
 const addToLeft = () => {
-   rightDataSource.value = removeOptions(rightDataSource.value, rightSelectedValues.value)  
+  //  leftDataSource.value = [...rightSelectedValues.value, ...leftDataSource.value]
+   rightDataSource.value = removeOptions(rightDataSource.value, rightSelectedValues.value)
+
+   // bakcup and clear data   
    rightDataSourceBackup.value = rightDataSource.value
+  //  rightSelectedValues.value = []
+  //  rightListRef.value?.clear()
 }
 
 const removeOptions = (source: SelectOption[], removedData: SelectOption[] ) => {
@@ -88,13 +99,13 @@ const getOptionsFromApi = async () => {
       value: item[fieldNames.value]
     }))
 
+    // leftDataSource.value.push(...newOptions)
     dataSourceFromApi.value.push(...newOptions)
     isAllLoaded.value = dataSourceFromApi.value.length >= res.count 
   }
 }
 
-// 分页回写时，默认选中项可能不是第一页的数据
-// 为每个默认value值调用接口获取{label，value}放到右侧列表
+// 分页时，默认选中项可能不是第一页的数据。为每个默认value值调用接口获取{label，value}
 const setDefaultOptions = async() => {
   if(props.api && isValueFromParent.value) {
     const targetKeys = props.targetKeys || []
@@ -111,7 +122,9 @@ const setDefaultOptions = async() => {
         // 右侧数据
         rightDataSource.value.push(...options)
         rightDataSourceBackup.value = rightDataSource.value
-
+        // 左侧数据：数据源过滤掉右侧数据后的
+        // leftDataSource.value = dataSourceFromApi.value.filter((item: SelectOption) => !rightDataSource.value.find(rItem => rItem.value === item.value))
+     
         // 左侧数据不够一屏，继续加载数据，确保滚动条出现
         if(rightDataSource.value.length === targetKeys.length && !isAllLoaded.value) {
           page.value++
@@ -121,25 +134,21 @@ const setDefaultOptions = async() => {
     })
   }
 }
-// 仅用于回写
+// 仅仅初始化时回写
 watchOnce(() => props.targetKeys, () => setDefaultOptions())
 
-// 发送数据给父组件
 watch(rightDataSource, () => {
   const newTargetKeys = rightDataSource.value.map((v: SelectOption) => v.value)
   emits('update:targetKeys', newTargetKeys)
 })
 
 watchEffect(() => {
-  // 从所有数据中过滤出右侧数据
-  const isInRightList = (item: SelectOption ) => rightDataSource.value.find(rItem => rItem.value === item.value)
-  leftDataSource.value = dataSourceFromApi.value.filter((item: SelectOption) => !isInRightList(item))
-
-  // clear data
   leftSelectedValues.value = []
   rightSelectedValues.value = []
   leftListRef.value?.clear()
   rightListRef.value?.clear()
+  // 从所有数据中过滤出右侧数据
+  leftDataSource.value = dataSourceFromApi.value.filter((item: SelectOption) => !rightDataSource.value.find(rItem => rItem.value === item.value))
 })
 
 const onScroll = (e: any) => {

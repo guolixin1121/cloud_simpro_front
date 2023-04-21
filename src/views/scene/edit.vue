@@ -7,8 +7,8 @@
     <span class="title mb-5">{{ title }}</span>
     <a-form :model="formState" :labelCol ="{ style: { width: '80px' } }"  style="width: 550px;"
       @finish="add">
-      <a-form-item label="场景名称" name="name" :rules="[{ required: true, message: '请输入场景名称!' }]">
-        <a-input v-model:value="formState.name"></a-input>
+      <a-form-item label="场景名称" name="name" :rules="[{ required: true, message: '请输入场景名称!'}, { min: 2, max: 50, message: '场景名称长度为2到50位'}]">
+        <a-input v-model:value="formState.name" :maxlength="50" ></a-input>
       </a-form-item>
       <a-form-item label="场景集" name="sceneSet" :rules="[{ required: true, message: '请选择场景集!' }]">
         <tree-select v-model:value="formState.sceneSet" :api="getSceneSet"></tree-select>
@@ -27,9 +27,9 @@
         </a-upload>
       </a-form-item>
       <a-form-item label="标签">
-        <scroll-transfer2 v-model:target-keys="formState.labels" :api="getScennTags" :filedNames="{label: 'display_name', value: 'id'}"></scroll-transfer2>
-     
-        <scroll-transfer v-model:target-keys="formState.labels" :api="getScennTags" labelKey="display_name"></scroll-transfer>
+        <scroll-transfer v-model:target-keys="formState.labels" :api="getScennTags" 
+          :fieldNames="{label: 'display_name', value: 'id'}"
+          :titles="['可选标签', '选中标签']"></scroll-transfer>
       </a-form-item>
       <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '80px' }}">
         <a-button @click="goback" class="mr-2">取消</a-button>

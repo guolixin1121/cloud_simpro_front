@@ -51,7 +51,6 @@ const getOptions = async (query: string = '') => {
       label: item[fieldNames.label],
       value: item[fieldNames.value]
     }))
-
     options.value.push(...newOptions)
     isAllLoaded.value = options.value.length >= res.count
   }
@@ -62,7 +61,6 @@ const onScroll = (e: any) => {
     const { target } = e
     if(target.scrollTop + target.offsetHeight === target.scrollHeight) {
       currentPage.value = currentPage.value + 1
-      console.log('onScroll')
       getOptions()
     }
   }
@@ -71,7 +69,6 @@ const onScroll = (e: any) => {
 // 搜索查询数据
 const onSearch = (input: string) => {
   if(props.api) {
-    console.log('onSearch')
     currentPage.value = 1
     options.value = []
     getOptions(input)
@@ -82,23 +79,18 @@ const onSearch = (input: string) => {
 const onFocus = () => {
   if(props.api) {
     currentPage.value = 1
-    console.log('onFocus')
     initOptions()
     getOptions()
   }
 }
 
-initOptions()
-getOptions()
-
 // 分页时，默认选中项可能不是第一页的数据，需要单独加载
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const getDefaultOptions = async() => {
   if(props.api) {
     // 统一转换成多选，方便处理
     const values = Array.isArray(attrs.value) ? attrs.value : [attrs.value || '']
     const { label, value } = props.fieldNames
-    values.map(async (data: string) => {
+    values.forEach(async (data: string) => {
       if(props.api) {
         const res = await props.api( { [value]: data })
 
@@ -114,4 +106,7 @@ const getDefaultOptions = async() => {
 }
 // 仅仅初始化时回写
 watchOnce(() => attrs.value, getDefaultOptions)
+
+initOptions()
+getOptions()
 </script>

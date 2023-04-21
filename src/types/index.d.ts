@@ -22,8 +22,8 @@ interface SearchFormItem {
 }
 
 interface SelectOption {
-  label: string | number,
-  value: string | number
+  label: string,
+  value?: string | number
 }
 
 // 自定义字段
