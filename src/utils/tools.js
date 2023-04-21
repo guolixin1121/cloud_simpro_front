@@ -1,3 +1,4 @@
+import dayjs from 'dayjs'
 import { getType } from './validate'
 /**
  * 获取 url 中的参数
@@ -69,4 +70,9 @@ export function debounce(fn, wait = 500) {
       flag = true
     }, wait)
   }
+}
+
+export function formatDate(date) {
+  if(!date) return ''
+  return dayjs(date).format('YYYY-MM-DD HH:MM:ss')
 }

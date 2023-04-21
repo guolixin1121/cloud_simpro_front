@@ -16,7 +16,8 @@ export const user = defineApi({
 })()
 
 export const scenesets = defineApi({
-  getSceneSets: { url: '/scene/scenesets/', method: 'get' }
+  getSceneSets: { url: '/scene/scenesets/', method: 'get' },
+  getSceneSet: { url: '/scene/scenesets/{sid}', method: 'get' }
 })()
 
 export const scene = defineApi({
@@ -33,6 +34,7 @@ export const tags = defineApi({
 
 export const maps = defineApi({
   getMaps: { url: '/baidu_map/map/', method: 'get' }, 
+  getMap: { url: '/baidu_map/map/{sid}/', method: 'get' }, 
 })()
 
 // export default {
