@@ -28,7 +28,7 @@
           <Action :scope="scope" @delete="refresh"></Action>
         </template>
         <!-- 格式化时间 -->
-        <template v-else-if="scope.column.dataIndex.indexOf('Time') > -1">
+        <template v-else-if="scope.column.dataIndex.indexOf('Time') > -1 || scope.column.dataIndex.indexOf('_time') > -1">
           {{ dayjs(scope.record[scope.column.dataIndex]).format('YYYY-MM-DD HH:MM:ss') }}
         </template>
         <!-- hover时加tooltip -->
@@ -46,7 +46,7 @@
         <Action :scope="scope" @delete="refresh"></Action>
       </template>
       <!-- 格式化时间 -->
-      <template v-else-if="scope.column.dataIndex.indexOf('Time') > -1">
+      <template v-else-if="scope.column.dataIndex.indexOf('Time') > -1 || scope.column.dataIndex.indexOf('_time') > -1">
         {{ dayjs(scope.record[scope.column.dataIndex]).format('YYYY-MM-DD HH:MM:ss') }}
       </template>
       <!-- hover时加tooltip -->

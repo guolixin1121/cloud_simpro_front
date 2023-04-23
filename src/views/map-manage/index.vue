@@ -10,7 +10,7 @@
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'versionCount'">
           <a-tooltip :title="record.versionCount">
-            <a class="text-blue" @click="() => router.push({ path: '/map/version/' + record.id, query: { name: 11, preRoute } })">
+            <a class="text-blue" @click="() => router.push({ path: '/map/version/' + record.id, query: { preRoute } })">
               {{ record.versionCount }}
             </a>
           </a-tooltip>
@@ -66,8 +66,8 @@ const columns = [
   { title: '地图版本数量', dataIndex: 'versionCount', ellipsis: true },
   { title: '地图文件', dataIndex: 'xodr', width: 180, ellipsis: true },
   // { title: '地图类型', dataIndex: 'mapType', ellipsis: true },
-  { title: '创建时间', dataIndex: 'createTime', width: 180 },
-  { title: '所属用户', dataIndex: 'createUser', width: 100, ellipsis: true },
+  { title: '创建时间', dataIndex: 'create_time', width: 180 },
+  { title: '所属用户', dataIndex: 'create_user', width: 100, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',

@@ -3,7 +3,7 @@
 @import './tailwind.css';
 
 .title {
-  color: #1E2229;
+  color: #1e2229;
   font-weight: 600;
   font-size: 16px;
   display: flex;
@@ -14,33 +14,40 @@
     display: inline-block;
     width: 3px;
     height: 16px;
-    background: #1664FF;
+    background: #1664ff;
     border-radius: 2px;
     margin-right: 8px;
   }
 }
 
 .text-blue {
-  color: #1664FF
+  color: #1664ff;
 }
 
 .breadcrumb {
   margin-bottom: 10px;
-  color: #999CA3;
+  color: #999ca3;
   font-size: 14px;
 
   &--current {
-    color: #1E2229;
+    color: #1e2229;
 
     &:before {
       content: '/';
-      color: #999CA3;
+      color: #999ca3;
       display: inline-block;
       padding: 0px 10px;
     }
   }
+  .breadcrumb-title {
+    color: #999ca3;
+    &:hover {
+      color: #188fffc1;
+    }
+  }
 }
-.main, .min-main {
+.main,
+.min-main {
   background-color: #fff;
   padding: 25px;
   padding-bottom: 0px;

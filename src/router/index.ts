@@ -63,6 +63,11 @@ const routes: RouteRecordRaw[] = [
         component: async () => await import(/* webpackChunkName: "default" */ '@/views/map-manage/map-version.vue')
       },
       {
+        path: '/map/m-version/edit/:id',
+        name: 'm-version-edit',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/map-manage/m-version-edit.vue')
+      },
+      {
         path: '/map/edit/:id',
         name: 'map-edit',
         component: async () => await import(/* webpackChunkName: "default" */ '@/views/map-manage/edit.vue')

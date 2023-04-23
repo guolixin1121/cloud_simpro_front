@@ -52,7 +52,10 @@ export const maps = defineApi({
   addMaps: { url: '/baidu_map/map/', method: 'post', headers: { 'content-type': 'multipart/form-data' } },
   editMaps: { url: '/baidu_map/map/{sid}/', method: 'put', headers: { 'content-type': 'multipart/form-data' } },
   lookMaps: { url: '/baidu_map/map/{sid}/', method: 'get' },
-  getMap: { url: '/baidu_map/map/{sid}/', method: 'get' }
+  getMap: { url: '/baidu_map/map/{sid}/', method: 'get' },
+  lookMapVersion: { url: '/baidu_map/map_version/{id}/', method: 'get' },
+  deleteMapVersion: { url: '/baidu_map/map_version/{id}/', method: 'delete' },
+  editMapVersion: { url: '/baidu_map/map_version/{id}/', method: 'put', headers: { 'content-type': 'multipart/form-data' } }
 })()
 
 // export default {
