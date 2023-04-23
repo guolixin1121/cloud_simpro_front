@@ -47,7 +47,8 @@ const getOptions = async (query: string = '') => {
   if(props.api) {
     const res = await props.api({ page: currentPage.value, [props.fieldNames.label]: query })
     const { fieldNames } = props
-    const newOptions = res.results.map((item: any) => ({ 
+    const results = res.results || res.datalist
+    const newOptions = results.map((item: any) => ({ 
       label: item[fieldNames.label],
       value: item[fieldNames.value]
     }))
@@ -93,8 +94,8 @@ const getDefaultOptions = async() => {
     values.forEach(async (data: string) => {
       if(props.api) {
         const res = await props.api( { [value]: data })
-
-        const newOptions = res.results.map((item: any) => ({ 
+        const results = res.results || res.datalist
+        const newOptions = results.map((item: any) => ({ 
           label: item[label],
           value: item[value]
         }))

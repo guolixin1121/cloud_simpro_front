@@ -58,8 +58,8 @@ const getEditData = async () => {
      formState.name = sceneset.name
      formState.parentName = sceneset.parentName
      formState.labels = sceneset.labels_detail || []
-     formState.createTime = formatDate(sceneset.createTime)
-     formState.updateTime = formatDate(sceneset.updateTime)
+     formState.createTime = formatDate(sceneset.create_time)
+     formState.updateTime = formatDate(sceneset.update_time)
    }
 }
 

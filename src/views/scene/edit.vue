@@ -32,10 +32,10 @@
           :titles="['可选标签', '选中标签']"></scroll-transfer>
       </a-form-item>
       <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '80px' }}">
-        <a-button @click="goback" class="mr-2">取消</a-button>
         <a-button type="primary" html-type="submit" :loading="loading">
           {{ isAdd ? '上传' : '修改' }}
         </a-button>
+        <a-button @click="goback" class="ml-2">取消</a-button>
       </a-form-item>
     </a-form>
   </div>

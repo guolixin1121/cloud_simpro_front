@@ -2,6 +2,14 @@
 @import './antd.less';
 @import './tailwind.css';
 
+.title-primary {
+  color: #1E2229;
+  font-weight: 600;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
 .title {
   color: #1E2229;
   font-weight: 600;
@@ -40,6 +48,8 @@
     }
   }
 }
+
+// 内容页通用class
 .main, .min-main {
   background-color: #fff;
   padding: 25px;
@@ -47,6 +57,7 @@
   height: 100%;
   overflow: auto;
 }
+// 用于带导航的内容页
 .min-main {
   height: calc(100% - 35px);
 }

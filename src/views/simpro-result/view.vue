@@ -12,9 +12,6 @@
       <a-form-item label="场景名称">
         {{ formState.name }}
       </a-form-item>
-      <a-form-item label="场景来源" >
-        {{ getSceneSourceName(formState.adsSource) }}
-      </a-form-item>
       <a-form-item label="场景集">
         {{ formState.baiduSceneSets }}
       </a-form-item>
@@ -46,7 +43,6 @@
 
 <script setup lang="ts">
 import { formatDate } from '@/utils/tools';
-import { getSceneSourceName } from '@/utils/dict';
 const id = useRoute().params.id
 
 const fileList = ref()
@@ -54,7 +50,6 @@ const formState = reactive({
   name: undefined,
   map_version_obj: undefined,
   baiduSceneSets: undefined,
-  adsSource: '',
   xosc: null,
   labels: [],
   createTime: '',
@@ -70,7 +65,6 @@ const getEditData = async () => {
      const scene = await api.scene.getScene(id)
      formState.name = scene.adsName
      formState.labels = scene.labels_detail
-     formState.adsSource = scene.adsSource
      formState.createTime = formatDate(scene.createTime)
      formState.updateTime = formatDate(scene.updateTime)
      formState.createUser = scene.createUser

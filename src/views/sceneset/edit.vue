@@ -10,7 +10,7 @@
       <a-form-item label="场景集名称" name="name" :rules="[{ required: true, message: '请输入场景集名称!'}, { min: 2, max: 50, message: '场景名称长度为2到50位'}]">
         <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景集名称"></a-input>
       </a-form-item>
-      <a-form-item label="所属场景集" name="parentId" :rules="[{ required: true, message: '请选择场景集!' }]">
+      <a-form-item label="所属场景集" name="parentId" :rules="[{ required: true, message: '请选择所属场景集!' }]">
         <tree-select v-model:value="formState.parentId" :api="getSceneSet"></tree-select>
       </a-form-item>
       <a-form-item label="标签">
@@ -19,10 +19,10 @@
           :titles="['可选标签', '选中标签']"></scroll-transfer>
       </a-form-item>
       <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
-        <a-button @click="goback" class="mr-2">取消</a-button>
         <a-button type="primary" html-type="submit" :loading="loading">
-          {{ isAdd ? '上传' : '修改' }}
+          {{ isAdd ? '创建' : '修改' }}
         </a-button>
+        <a-button @click="goback" class="ml-2">取消</a-button>
       </a-form-item>
     </a-form>
   </div>

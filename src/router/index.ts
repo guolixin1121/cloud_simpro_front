@@ -1,48 +1,33 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '../layout/index.vue'
+import { generateRouteFromViews } from './route'
 
+const routeFromViews = generateRouteFromViews()
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
     redirect: '/scene',
     component: Layout,
     children: [
-      {
-        path: '/scene',
-        name: 'scene',
-        component: async () =>
-          await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue')
-      },
-      {
-        path: '/scene/edit/:id',
-        name: 'scene/edit',
-        component: async () =>
-          await import(/* webpackChunkName: "default" */ '@/views/scene/edit.vue')
-      },
-      {
-        path: '/scene/view/:id',
-        name: 'scene/view',
-        component: async () =>
-          await import(/* webpackChunkName: "default" */ '@/views/scene/view.vue')
-      },
-      {
-        path: '/sceneset',
-        name: 'sceneset',
-        component: async () =>
-          await import(/* webpackChunkName: "default" */ '@/views/sceneset/index.vue')
-      },
-      {
-        path: '/sceneset/edit/:id',
-        name: 'sceneset/edit',
-        component: async () =>
-          await import(/* webpackChunkName: "default" */ '@/views/sceneset/edit.vue')
-      },
-      {
-        path: '/sceneset/view/:id',
-        name: 'sceneset/view',
-        component: async () =>
-          await import(/* webpackChunkName: "default" */ '@/views/sceneset/view.vue')
-      },
+      ...routeFromViews,
+      // {
+      //   path: '/scene',
+      //   name: 'scene',
+      //   component: async () =>
+      //     await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue')
+      // },
+      // {
+      //   path: '/scene/edit/:id',
+      //   name: 'scene/edit',
+      //   component: async () =>
+      //     await import(/* webpackChunkName: "default" */ '@/views/scene/edit.vue')
+      // },
+      // {
+      //   path: '/scene/view/:id',
+      //   name: 'scene/view',
+      //   component: async () =>
+      //     await import(/* webpackChunkName: "default" */ '@/views/scene/view.vue')
+      // },
       {
         path: '/mapversion',
         name: 'mapversion',

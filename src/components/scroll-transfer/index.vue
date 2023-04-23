@@ -1,5 +1,6 @@
 <template>
  <div class="ant-transfer">
+   <a-form-item-rest>
     <list  
       ref="leftListRef"
       :title="titles[0]"
@@ -21,6 +22,7 @@
       :dataSource="rightDataSource" 
       @search="onRightSearch"
       @select="onRightSelect"></list>
+  </a-form-item-rest>
  </div>
 </template>
 <script setup lang="ts">
