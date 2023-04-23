@@ -5,7 +5,7 @@
  */
 
 export const table = defineApi({
-  getList: { url: '/scene/scene/', method: 'get' }
+  getList: { url: '/scene/scenes/', method: 'get' }
 })() // 注意末尾的括号
 
 export const user = defineApi({
@@ -16,7 +16,11 @@ export const user = defineApi({
 })()
 
 export const scenesets = defineApi({
-  getSceneSets: { url: '/scene/scenesets/', method: 'get' }
+  getSceneSets: { url: '/scene/scenesets/', method: 'get' },
+  getSceneSet: { url: '/scene/scenesets/{sid}', method: 'get' },
+  deleteSceneset: { url: '/scene/scenesets/{sid}/', method: 'delete' },
+  editSceneset: { url: '/scene/scenesets/{sid}/', method: 'put', headers: { 'content-type': 'multipart/form-data' } },
+  addSceneset: { url: '/scene/scenesets/', method: 'post', headers: { 'content-type': 'multipart/form-data' } }
 })()
 
 export const scene = defineApi({
@@ -47,7 +51,8 @@ export const maps = defineApi({
   getMapVersion: { url: '/baidu_map/map_version/', method: 'get' },
   addMaps: { url: '/baidu_map/map/', method: 'post', headers: { 'content-type': 'multipart/form-data' } },
   editMaps: { url: '/baidu_map/map/{sid}/', method: 'put', headers: { 'content-type': 'multipart/form-data' } },
-  lookMaps: { url: '/baidu_map/map/{sid}/', method: 'get' }
+  lookMaps: { url: '/baidu_map/map/{sid}/', method: 'get' },
+  getMap: { url: '/baidu_map/map/{sid}/', method: 'get' }
 })()
 
 // export default {

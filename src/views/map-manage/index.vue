@@ -46,9 +46,8 @@ const formItems = ref<SearchFormItem[]>([
     label: '地图目录',
     key: 'catalog',
     type: 'tree-select',
-    api: mapsApi.getMapCatalog,
-    params: { tree: 1 },
-    fieldNames: { title: 'name', id: 'id' },
+    api: () => mapsApi.getMapCatalog({ tree: 1 }),
+    fieldNames: { label: 'name', value: 'id' },
     placeholder: '请选择地图目录'
     // defaultValue: ''
   },

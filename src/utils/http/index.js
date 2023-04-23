@@ -114,8 +114,8 @@ class AxiosRequest {
             resolve(data)
           } else if (code === 100) {
             // token过期跳到登录页
-            message.error(typeof msg === 'string' ? msg : err)
-            window.location.href = `${import.meta.env.VITE_LOGIN_URL}/`
+            message.error('登录失效，请重新登录')
+            window.location.href = `${import.meta.env.VITE_LOGIN_URL}`
           } else {
             message.error(typeof msg === 'string' ? msg : err)
             reject(typeof msg === 'string' ? msg : err)

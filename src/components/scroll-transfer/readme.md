@@ -1,16 +1,40 @@
-# 支持分页查询的a-select  
-除a-select自带属性外，新增以下属性
+# scroll-transfer  
+支持分页，查询的穿梭框组件
 
 ## 属性
+### titles
+左右两侧列表的title，可以为空
+``` javascript
+ titles: {
+    type: Array<string>,
+    default: () => ['', '']
+  },
+```
+
 ### api
-获取数据的api接口
-> a-select原有的options属性优先级高于api
-> options和api使用一个即可
-```javascript
-{
-  'api': {
+获取数据的api函数
+``` javascript
+  api: {
     type: Function
+  },
+
+```
+
+### targetKeys
+默认选中的值
+``` javascript
+  targetKeys: {
+    type: Array<String>
   }
-}
+
+```
+
+### fieldNames
+自定义显示的label和value对应的api字段
+``` javascript
+  fieldNames: {
+    type: Object as PropType<FieldNames>,
+    default: () => ({ label: 'name', value: 'id'})
+  }
 ```
 

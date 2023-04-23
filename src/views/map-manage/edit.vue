@@ -20,9 +20,8 @@
           allowClear
           style="width: 245px"
           v-model:value="formState.catalog"
-          :api="mapApi.getMapCatalog"
-          :params="{ tree: 1 }"
-          :fieldNames="{ title: 'name', id: 'id' }"
+          :api="() => mapApi.getMapCatalog({ tree: 1 })"
+          :fieldNames="{ label: 'name', value: 'id' }"
           placeholder="请选择地图目录"
         >
         </tree-select>
