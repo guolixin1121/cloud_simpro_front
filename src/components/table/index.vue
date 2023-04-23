@@ -83,7 +83,11 @@ const emits = defineEmits(['onSelect', 'onChange'])
 
 const current = ref(1)
 const { data, loading, run } = useRequest(props.api as Service<{results: [], count: number}, any>)
-const dataSource = computed(() => data.value?.results)
+const dataSource = computed(() => {
+  const results = data.value?.results
+  addKeysToData(results)
+  return results
+})
 const pagination = computed(() => ({ current: current.value, total: data.value?.count, 'show-total': (total: number) => `共 ${total} 条` }))
 
 // selection handler
@@ -102,6 +106,15 @@ watch(() => props.query, (newVal) => {
 watch(current, (newVal) => run({...props.query, page: newVal}))
 
 const refresh = () => run({...props.query, page: current.value})
+
+// 为了兼容树状的table，为每个数据增加key
+const addKeysToData = (data: any) => {
+  if(!Array.isArray(data)) return
+  data.forEach(item => {
+    item.key = item.id
+    addKeysToData(item.children)
+  })
+}
 </script>
 
 <style scoped>

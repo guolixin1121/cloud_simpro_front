@@ -17,7 +17,10 @@ export const user = defineApi({
 
 export const scenesets = defineApi({
   getSceneSets: { url: '/scene/scenesets/', method: 'get' },
-  getSceneSet: { url: '/scene/scenesets/{sid}', method: 'get' }
+  getSceneSet: { url: '/scene/scenesets/{sid}', method: 'get' },
+  deleteSceneset: { url: '/scene/scenesets/{sid}/', method: 'delete' },
+  editSceneset: { url: '/scene/scenesets/{sid}/', method: 'put', headers: { "content-type": 'multipart/form-data'}  }, 
+  addSceneset: { url: '/scene/scenesets/', method: 'post', headers: { "content-type": 'multipart/form-data'} }
 })()
 
 export const scene = defineApi({

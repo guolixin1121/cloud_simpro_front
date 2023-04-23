@@ -1,6 +1,6 @@
 <template>
   <div class="breadcrumb">
-    <router-link to="/scene/scene/">场景管理</router-link>
+    <router-link to="/scene/">场景管理</router-link>
     <span class="breadcrumb--current">{{ title }}</span>
   </div>
   <div class="min-main">
@@ -8,7 +8,7 @@
     <a-form :model="formState" :labelCol ="{ style: { width: '80px' } }"  style="width: 550px;"
       @finish="add">
       <a-form-item label="场景名称" name="name" :rules="[{ required: true, message: '请输入场景名称!'}, { min: 2, max: 50, message: '场景名称长度为2到50位'}]">
-        <a-input v-model:value="formState.name" :maxlength="50" ></a-input>
+        <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></a-input>
       </a-form-item>
       <a-form-item label="场景集" name="baiduSceneSets" :rules="[{ required: true, message: '请选择场景集!' }]">
         <tree-select v-model:value="formState.baiduSceneSets" :api="getSceneSet"></tree-select>

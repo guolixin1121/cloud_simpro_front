@@ -50,7 +50,7 @@ watch(
   val => {
     const length = props.dataSource?.length || 0
     state.indeterminate = !!val.length && (val.length < length)
-    state.allChecked = val.length === length
+    state.allChecked = length > 0 && val.length === length
   },
 )
 watch(() => props.dataSource, () => state.indeterminate = false)

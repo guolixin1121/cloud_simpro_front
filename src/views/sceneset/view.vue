@@ -1,25 +1,22 @@
 <template>
   <div class="breadcrumb">
-    <router-link to="/scene/">场景管理</router-link>
-    <span class="breadcrumb--current">场景详情</span>
+    <router-link to="/sceneset/">场景集管理</router-link>
+    <span class="breadcrumb--current">场景集详情</span>
   </div>
   <div class="min-main">
     <div style="color: #60656E" class=" cursor-pointer" @click="goback">
       <svg-icon icon="back" class="mr-2"></svg-icon>返回
     </div>
-    <span class="title mb-5 mt-3">场景详情</span>
+    <span class="title mb-5 mt-3">场景集详情</span>
     <a-form :model="formState" :labelCol ="{ style: { width: '80px' } }"  style="width: 550px;">
-      <a-form-item label="场景名称">
+      <a-form-item label="场景集ID">
+        {{ formState.id }}
+      </a-form-item>
+      <a-form-item label="场景集名称">
         {{ formState.name }}
       </a-form-item>
-      <a-form-item label="场景集">
-        {{ formState.baiduSceneSets }}
-      </a-form-item>
-      <a-form-item label="关联地图">
-        {{ formState.map_version_obj }}
-      </a-form-item>
-      <a-form-item label="场景文件" >
-        <a-upload disabled :fileList="fileList"></a-upload>
+      <a-form-item label="所属场景集">
+        {{ formState.parentName }}
       </a-form-item>
       <a-form-item label="标签">
         <ul class="view-list">
@@ -34,9 +31,6 @@
       <a-form-item label="修改时间">
         {{ formState.updateTime }}
       </a-form-item>
-      <a-form-item label="所属用户">
-        {{ formState.createUser }}
-      </a-form-item>
     </a-form>
   </div>
 </template>
@@ -45,16 +39,13 @@
 import { formatDate } from '@/utils/tools';
 const id = useRoute().params.id
 
-const fileList = ref()
 const formState = reactive({
+  id: '',
   name: undefined,
-  map_version_obj: undefined,
-  baiduSceneSets: undefined,
-  xosc: null,
+  parentName: '',
   labels: [],
   createTime: '',
-  updateTime: '',
-  createUser: ''
+  updateTime: ''
 })
 
 const router = useRouter()
@@ -62,25 +53,16 @@ const goback = () => router.go(-1)
 
 const getEditData = async () => {
    if(id !== '0') {
-     const scene = await api.scene.getScene(id)
-     formState.name = scene.adsName
-     formState.labels = scene.labels_detail
-     formState.createTime = formatDate(scene.createTime)
-     formState.updateTime = formatDate(scene.updateTime)
-     formState.createUser = scene.createUser
-    //  fileList.value = [scene.xosc]
-
-     getSceneSet(scene)
+     const sceneset = await api.scenesets.getSceneSet(id)
+     formState.id = sceneset.id
+     formState.name = sceneset.name
+     formState.parentName = sceneset.parentName
+     formState.labels = sceneset.labels_detail || []
+     formState.createTime = formatDate(sceneset.createTime)
+     formState.updateTime = formatDate(sceneset.updateTime)
    }
 }
 
-const getSceneSet = async (data: any) => {
-  let res = await api.scenesets.getSceneSet(data.baiduSceneSets)
-  formState.baiduSceneSets = res.name
-
-  res = await api.maps.getMap(data.map_version_obj)
-  formState.map_version_obj = res.name
-}
 getEditData()
 </script>
 

@@ -4,12 +4,12 @@ import Layout from '../layout/index.vue'
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/scene/scene',
+    redirect: '/scene',
     component: Layout,
     children: [
       {
-        path: '/scene/scene',
-        name: 'scene/scene',
+        path: '/scene',
+        name: 'scene',
         component: async () =>
           await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue')
       },
@@ -24,6 +24,24 @@ const routes: RouteRecordRaw[] = [
         name: 'scene/view',
         component: async () =>
           await import(/* webpackChunkName: "default" */ '@/views/scene/view.vue')
+      },
+      {
+        path: '/sceneset',
+        name: 'sceneset',
+        component: async () =>
+          await import(/* webpackChunkName: "default" */ '@/views/sceneset/index.vue')
+      },
+      {
+        path: '/sceneset/edit/:id',
+        name: 'sceneset/edit',
+        component: async () =>
+          await import(/* webpackChunkName: "default" */ '@/views/sceneset/edit.vue')
+      },
+      {
+        path: '/sceneset/view/:id',
+        name: 'sceneset/view',
+        component: async () =>
+          await import(/* webpackChunkName: "default" */ '@/views/sceneset/view.vue')
       },
       {
         path: '/mapversion',
