@@ -32,10 +32,13 @@ declare module '@vue/runtime-core' {
     ASelectOption: typeof import('ant-design-vue/es')['SelectOption']
     ASpin: typeof import('ant-design-vue/es')['Spin']
     ASubMenu: typeof import('ant-design-vue/es')['SubMenu']
+    ASwitch: typeof import('ant-design-vue/es')['Switch']
     ATable: typeof import('ant-design-vue/es')['Table']
+    ATextarea: typeof import('ant-design-vue/es')['Textarea']
     ATooltip: typeof import('ant-design-vue/es')['Tooltip']
     ATransfer: typeof import('ant-design-vue/es')['Transfer']
     ATree: typeof import('ant-design-vue/es')['Tree']
+    ATreeSelect: typeof import('ant-design-vue/es')['TreeSelect']
     AUpload: typeof import('ant-design-vue/es')['Upload']
     copy: typeof import('./src/components/scroll-select copy/index.vue')['default']
     Demo: typeof import('./src/components/list/demo.vue')['default']
@@ -47,6 +50,7 @@ declare module '@vue/runtime-core' {
     SearchForm: typeof import('./src/components/search-form/index.vue')['default']
     SvgIcon: typeof import('./src/components/svg-icon/index.vue')['default']
     Table: typeof import('./src/components/table/index.vue')['default']
+    TreeSelect: typeof import('./src/components/tree-select/index.vue')['default']
     TreeTransfer: typeof import('./src/components/tree-transfer/index.vue')['default']
   }
 }

@@ -6,16 +6,17 @@
     :filter-option="filterOption"
     @search="onSearch"
     @blur="onBlur"
-    @popupScroll="onScroll">
+    @popupScroll="onScroll"
+  >
   </a-select>
 </template>
 <script setup lang="ts">
-import { OptionProps } from 'ant-design-vue/lib/select';
-import type { PropType } from 'vue';
+import { OptionProps } from 'ant-design-vue/lib/select'
+import type { PropType } from 'vue'
 
 // 自定义字段
 interface FieldName {
-  label: string,
+  label: string
   value: string
 }
 const props = defineProps({
@@ -24,7 +25,7 @@ const props = defineProps({
   },
   fieldNames: {
     type: Object as PropType<FieldName>,
-    default: () => ({ label: 'name', value: 'id'})
+    default: () => ({ label: 'name', value: 'id' })
   }
 })
 
@@ -34,22 +35,22 @@ const options = ref<OptionProps>([])
 
 const resetOptions = () => {
   options.value = []
-
   // 根据defaultValue是否为空，判断是否需要加‘全部’的option
   const defaultValue = useAttrs().defaultValue
-  const hasAllOption = defaultValue === '' || (Array.isArray(defaultValue) && defaultValue.toString() === '')
-  hasAllOption && options.value.push({label: '全部', value: ''})
+  const hasAllOption =
+    defaultValue === '' || (Array.isArray(defaultValue) && defaultValue.toString() === '')
+  hasAllOption && options.value.push({ label: '全部', value: '' })
 }
 
 const filterOption = (input: string, option: any) => {
-  return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-};
+  return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+}
 
 const getOptions = async (query: string = '') => {
-  if(props.api) {
+  if (props.api) {
     const res = await props.api({ page: currentPage.value, [props.fieldNames.value]: query })
     const { fieldNames } = props
-    const newOptions = res.results.map((item: any) => ({ 
+    const newOptions = res.results.map((item: any) => ({
       label: item[fieldNames.label],
       value: item[fieldNames.value]
     }))
@@ -60,9 +61,9 @@ const getOptions = async (query: string = '') => {
 }
 
 const onScroll = (e: any) => {
-  if(props.api && !isAllLoaded.value) {
+  if (props.api && !isAllLoaded.value) {
     const { target } = e
-    if(target.scrollTop + target.offsetHeight === target.scrollHeight) {
+    if (target.scrollTop + target.offsetHeight === target.scrollHeight) {
       currentPage.value = currentPage.value + 1
       getOptions()
     }
@@ -70,7 +71,7 @@ const onScroll = (e: any) => {
 }
 
 const onSearch = (input: string) => {
-  if(props.api) {
+  if (props.api) {
     currentPage.value = 1
     options.value = []
     getOptions(input)
@@ -79,7 +80,7 @@ const onSearch = (input: string) => {
 
 // 重新获取全量数据
 const onBlur = () => {
-  if(props.api) {
+  if (props.api) {
     currentPage.value = 1
     resetOptions()
     getOptions()
