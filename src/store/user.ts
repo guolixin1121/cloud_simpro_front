@@ -1,78 +1,77 @@
-import { useLocalStorage } from "@vueuse/core"
+import { useLocalStorage } from '@vueuse/core'
 import router from '../router'
 
 export const useUserStore = defineStore('use', () => {
-   // const defaultUser = { username: '', nickName: '', userId: 0, permissions: [] }
-   // const user = useLocalStorage('user', defaultUser)
-   const user = ref()
-   const token = useLocalStorage('token', null)
-   
-   const userApi = api.user
-   /**
-    * 退出当前登录
-    */
-   const logout = () => {
-      token.value = null
-      user.value = null
-      router.push('/login')
-   }
+  // const defaultUser = { username: '', nickName: '', userId: 0, permissions: [] }
+  // const user = useLocalStorage('user', defaultUser)
+  const user = ref()
+  const token = useLocalStorage('token', null)
 
-   /**
-    * 登录
-    */
-   const login = async (auth: Record<string, any>) => { 
-      const authData = await userApi.login(auth)
+  const userApi = api.user
+  /**
+   * 退出当前登录
+   */
+  const logout = () => {
+    token.value = null
+    user.value = null
+    router.push('/login')
+  }
 
-      token.value = authData.token
-      // SStorage.storage.token = authData.token
-   }
+  /**
+   * 登录
+   */
+  const login = async (auth: Record<string, any>) => {
+    const authData = await userApi.login(auth)
 
-   /**
-    * 获取当前登录用户信息
-    */
-   const getUserInfo = async () => {
-      user.value = await userApi.getLoginUser()
-      
-      const permissions = await userApi.getPermissions()
-      user.value.permissions = permissions
-   }
+    token.value = authData.token
+    // SStorage.storage.token = authData.token
+  }
 
-    /**
-     * 当前用户是否有增删改的权限，其他操作不做限制
-     * @param action 要验证的操作：'add' | 'edit' | 'delete'
-     * @param currentRoute（可选） 要验证的页面路由path
-     * @returns boolean  是否有权限
-     */
-    const hasPermission = (action: DataAction, currentRoute: string = router.currentRoute.value.path): boolean => {
-       const ActionMap = {
-         '编辑': 'edit',
-         '删除': 'delete'
-       }
+  /**
+   * 获取当前登录用户信息
+   */
+  const getUserInfo = async () => {
+    user.value = await userApi.getLoginUser()
+    const permissions = await userApi.getPermissions()
 
-       const newAction = ActionMap[action as keyof typeof ActionMap] || action
-       
-       if(!['add', 'edit', 'delete'].includes(newAction)) return true
+    user.value.permissions = permissions
+  }
 
-       const index = getPermissionIndex(newAction as DataAction, currentRoute, user.value?.permissions )
-       return index > -1
+  /**
+   * 当前用户是否有增删改的权限，其他操作不做限制
+   * @param action 要验证的操作：'add' | 'edit' | 'delete'
+   * @param currentRoute（可选） 要验证的页面路由path
+   * @returns boolean  是否有权限
+   */
+  const hasPermission = (action: DataAction, currentRoute: string = router.currentRoute.value.path): boolean => {
+    const ActionMap = {
+      编辑: 'edit',
+      删除: 'delete'
     }
+    const curRoute = (router.currentRoute.value?.query?.preRoute || currentRoute) as string
+    const newAction = ActionMap[action as keyof typeof ActionMap] || action
+    if (!['add', 'edit', 'delete'].includes(newAction)) return true
 
-    // 获取指定action(增删改查等)在权限中的索引，>-1则表示有权限
-    const getPermissionIndex = (action: DataAction, currentRoute: string, menuList: Array<any> = [] ): number => {
-      for(let i = 0; i < menuList.length; i++) {
-         const menu = menuList[i]
-         // 避免有多余的'/'造成的不匹配
-         if(menu.path.split('/').join('') === currentRoute.split('/').join('')) {
-            return menu.actions?.indexOf(action)
-         } else {
-            const isValid = getPermissionIndex(action, currentRoute, menu.children)
-            if(isValid != -1){
-               return isValid
-            }
-         }
+    const index = getPermissionIndex(newAction as DataAction, curRoute, user.value?.permissions)
+    return index > -1
+  }
+
+  // 获取指定action(增删改查等)在权限中的索引，>-1则表示有权限
+  const getPermissionIndex = (action: DataAction, currentRoute: string, menuList: Array<any> = []): number => {
+    for (let i = 0; i < menuList.length; i++) {
+      const menu = menuList[i]
+      // 避免有多余的'/'造成的不匹配
+      if (menu.path.split('/').join('') === currentRoute.split('/').join('')) {
+        return menu.actions?.indexOf(action)
+      } else {
+        const isValid = getPermissionIndex(action, currentRoute, menu.children)
+        if (isValid != -1) {
+          return isValid
+        }
       }
-      return -1
     }
+    return -1
+  }
 
-   return { user, token, login, logout, hasPermission, getUserInfo }
+  return { user, token, login, logout, hasPermission, getUserInfo }
 })

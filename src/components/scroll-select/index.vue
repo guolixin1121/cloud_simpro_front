@@ -6,12 +6,13 @@
     :filter-option="filterOption"
     @search="onSearch"
     @focus="onFocus"
-    @popupScroll="onScroll">
+    @popupScroll="onScroll"
+  >
   </a-select>
 </template>
 <script setup lang="ts">
-import { OptionProps } from 'ant-design-vue/lib/select';
-import type { PropType } from 'vue';
+import { OptionProps } from 'ant-design-vue/lib/select'
+import type { PropType } from 'vue'
 import { watchOnce } from '@vueuse/core'
 
 const props = defineProps({
@@ -20,11 +21,11 @@ const props = defineProps({
   },
   fieldNames: {
     type: Object as PropType<FieldNames>,
-    default: () => ({ label: 'name', value: 'id'})
+    default: () => ({ label: 'name', value: 'id' })
   }
 })
 const attrs = useAttrs()
-const allOption = {label: '全部', value: ''}
+const allOption = { label: '全部', value: '' }
 const currentPage = ref(1) // 分页load选项
 const isAllLoaded = ref(false)
 const options = ref<OptionProps>([])
@@ -40,11 +41,11 @@ const initOptions = () => {
 }
 
 const filterOption = (input: string, option: any) => {
-  return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0;
-};
+  return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
+}
 
 const getOptions = async (query: string = '') => {
-  if(props.api) {
+  if (props.api) {
     const res = await props.api({ page: currentPage.value, [props.fieldNames.label]: query })
     const { fieldNames } = props
     const results = res.results || res.datalist
@@ -58,9 +59,9 @@ const getOptions = async (query: string = '') => {
 }
 
 const onScroll = (e: any) => {
-  if(props.api && !isAllLoaded.value) {
+  if (props.api && !isAllLoaded.value) {
     const { target } = e
-    if(target.scrollTop + target.offsetHeight === target.scrollHeight) {
+    if (target.scrollTop + target.offsetHeight === target.scrollHeight) {
       currentPage.value = currentPage.value + 1
       getOptions()
     }
@@ -69,7 +70,7 @@ const onScroll = (e: any) => {
 
 // 搜索查询数据
 const onSearch = (input: string) => {
-  if(props.api) {
+  if (props.api) {
     currentPage.value = 1
     options.value = []
     getOptions(input)
@@ -78,7 +79,7 @@ const onSearch = (input: string) => {
 
 // 重新获取数据
 const onFocus = () => {
-  if(props.api) {
+  if (props.api) {
     currentPage.value = 1
     initOptions()
     getOptions()
@@ -86,8 +87,8 @@ const onFocus = () => {
 }
 
 // 分页时，默认选中项可能不是第一页的数据，需要单独加载
-const getDefaultOptions = async() => {
-  if(props.api) {
+const getDefaultOptions = async () => {
+  if (props.api) {
     // 统一转换成多选，方便处理
     const values = Array.isArray(attrs.value) ? attrs.value : [attrs.value || '']
     const { label, value } = props.fieldNames

@@ -5,14 +5,14 @@
  */
 
 export const table = defineApi({
-  getList: { url: '/scene/scenes/', method: 'get' },
+  getList: { url: '/scene/scenes/', method: 'get' }
 })() // 注意末尾的括号
 
 export const user = defineApi({
   login: { url: '/auth/login/', method: 'post' },
-  getLoginUser: { url: '/auth/user_info/', method: 'get' }, 
-  getPermissions: { url: '/menus/', method: 'get' }, 
-  getTopMenu: { url: 'menus/top/', method: 'get' }, 
+  getLoginUser: { url: '/auth/user_info/', method: 'get' },
+  getPermissions: { url: '/menus/', method: 'get' },
+  getTopMenu: { url: 'menus/top/', method: 'get' }
 })()
 
 export const scenesets = defineApi({
@@ -24,20 +24,38 @@ export const scenesets = defineApi({
 })()
 
 export const scene = defineApi({
-  getScenes: { url: '/scene/scenes/',   method: 'get' }, 
-  getScene: { url: '/scene/scenes/{sid}/', method: 'get' }, 
+  getScenes: { url: '/scene/scenes/', method: 'get' },
+  getScene: { url: '/scene/scenes/{sid}/', method: 'get' },
   deleteScene: { url: '/scene/scenes/{sid}/', method: 'delete' },
-  editScene: { url: '/scene/scenes/{sid}/', method: 'put', headers: { "content-type": 'multipart/form-data'}  }, 
-  addScene: { url: '/scene/scenes/', method: 'post', headers: { "content-type": 'multipart/form-data'} }
+  editScene: {
+    url: '/scene/scenes/{sid}/',
+    method: 'put',
+    headers: { 'content-type': 'multipart/form-data' }
+  },
+  addScene: {
+    url: '/scene/scenes/',
+    method: 'post',
+    headers: { 'content-type': 'multipart/form-data' }
+  }
 })()
 
 export const tags = defineApi({
-  getTags: { url: '/tags/', method: 'get' }, 
+  getTags: { url: '/tags/', method: 'get' }
 })()
 
+// 地图管理接口
 export const maps = defineApi({
-  getMaps: { url: '/baidu_map/map/', method: 'get' }, 
-  getMap: { url: '/baidu_map/map/{sid}/', method: 'get' }, 
+  getMaps: { url: '/baidu_map/map/', method: 'get' },
+  getMapCatalog: { url: '/baidu_map/catalog/', method: 'get' },
+  deleteMaps: { url: '/baidu_map/map/{sid}', method: 'delete' },
+  getMapVersion: { url: '/baidu_map/map_version/', method: 'get' },
+  addMaps: { url: '/baidu_map/map/', method: 'post', headers: { 'content-type': 'multipart/form-data' } },
+  editMaps: { url: '/baidu_map/map/{sid}/', method: 'put', headers: { 'content-type': 'multipart/form-data' } },
+  lookMaps: { url: '/baidu_map/map/{sid}/', method: 'get' },
+  getMap: { url: '/baidu_map/map/{sid}/', method: 'get' },
+  lookMapVersion: { url: '/baidu_map/map_version/{id}/', method: 'get' },
+  deleteMapVersion: { url: '/baidu_map/map_version/{id}/', method: 'delete' },
+  editMapVersion: { url: '/baidu_map/map_version/{id}/', method: 'put', headers: { 'content-type': 'multipart/form-data' } }
 })()
 
 export const simpro = defineApi({

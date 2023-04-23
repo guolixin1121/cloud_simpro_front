@@ -31,8 +31,7 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/mapversion',
         name: 'mapversion',
-        component: async () =>
-          await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue')
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue')
       },
       {
         path: '/demo/table',
@@ -42,14 +41,42 @@ const routes: RouteRecordRaw[] = [
       {
         path: '/demo/icon/',
         name: 'icon',
-        component: async () =>
-          await import(/* webpackChunkName: "default" */ '@/components/svg-icon/demo.vue')
+        component: async () => await import(/* webpackChunkName: "default" */ '@/components/svg-icon/demo.vue')
       },
       {
         path: '/map/manage',
         name: 'map-manage',
-        component: async () =>
-          await import(/* webpackChunkName: "default" */ '@/views/mapManage/index.vue')
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/map-manage/index.vue')
+      },
+      {
+        path: '/map/version/:id',
+        name: 'map-version',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/map-manage/map-version.vue')
+      },
+      {
+        path: '/map/m-version/edit/:id',
+        name: 'm-version-edit',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/map-manage/m-version-edit.vue')
+      },
+      {
+        path: '/map/edit/:id',
+        name: 'map-edit',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/map-manage/edit.vue')
+      },
+      {
+        path: '/algorithm/manage',
+        name: 'algorithm-manage',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/algorithm/index.vue')
+      },
+      {
+        path: '/tags/manage',
+        name: 'tags-manage',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/tags/index.vue')
+      },
+      {
+        path: '/tags/edit/:id',
+        name: 'tags-edit',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/views/tags/edit.vue')
       }
     ]
   },

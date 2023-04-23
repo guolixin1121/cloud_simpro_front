@@ -1,19 +1,22 @@
 <template>
-    <template v-for="key in Object.keys(scope.column.actions) " :key="key">
-      <template v-if="hasPermission(key, scope.record)">
-        <!-- 删除列 -->
-        <a-popconfirm v-if="key === '删除'" 
-          title="你确定要删除吗？" ok-text="是" cancel-text="否"
-          @confirm="onConfirmDelete(scope, key)">
-          <a class="text-blue mr-2">删除</a>
-        </a-popconfirm>
-        <!-- 编辑删除查看 -->
-        <a v-else class="text-blue mr-2"
-          @click="scope.column.actions[key](scope.record)">
-          {{ key }}
-        </a>
-      </template>
+  <template v-for="key in Object.keys(scope.column.actions)" :key="key">
+    <template v-if="hasPermission(key, scope.record)">
+      <!-- 删除列 -->
+      <a-popconfirm
+        v-if="key === '删除'"
+        title="你确定要删除吗？"
+        ok-text="是"
+        cancel-text="否"
+        @confirm="onConfirmDelete(scope, key)"
+      >
+        <a class="text-blue mr-2">删除</a>
+      </a-popconfirm>
+      <!-- 编辑删除查看 -->
+      <a v-else class="text-blue mr-2" @click="scope.column.actions[key](scope.record)">
+        {{ key }}
+      </a>
     </template>
+  </template>
 </template>
 
 <script setup lang="ts">
@@ -28,11 +31,11 @@ const hasPermission = (action: any, data: any) => {
   const userStore = store.user
   let permission = userStore.hasPermission(action)
 
-  if(props.isOnlyCreator && (['编辑', '删除'].includes(action))) {
+  if (props.isOnlyCreator && ['编辑', '删除'].includes(action)) {
     const isOwner = data.creator === userStore.user.nickname
     permission = permission && isOwner
   }
-  
+
   return permission
 }
 
