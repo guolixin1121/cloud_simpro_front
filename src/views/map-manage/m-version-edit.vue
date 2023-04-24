@@ -1,6 +1,6 @@
 <template>
   <div class="breadcrumb">
-    <router-link to="/map/manage/">地图管理</router-link>
+    <router-link to="/map-manage/">地图管理</router-link>
     <a class="breadcrumb--current breadcrumb-title" @click="goback">地图版本</a>
     <span class="breadcrumb--current">{{ title }}</span>
   </div>
@@ -55,7 +55,7 @@
           ><span>{{ formState.importTime }}</span></a-form-item
         >
         <a-form-item label="修改时间："
-          ><span>{{ formState.updateTime }}</span></a-form-item
+          ><span>{{ formState.update_time }}</span></a-form-item
         >
         <a-form-item label="所属用户："
           ><span>{{ formState.importUserName }}</span></a-form-item
@@ -73,6 +73,7 @@
 
 <script setup lang="ts">
 import type { UploadChangeParam } from 'ant-design-vue'
+import { formatDate } from '@/utils/tools'
 
 const id = useRoute().params.id
 const { type = '' } = useRoute().query || {}
@@ -107,8 +108,8 @@ const getLookData = async () => {
     formState.mapVersionDesc = res.mapVersionDesc
     formState.mapUrl = res.mapUrl
     formState.mapVersion = res.mapVersion
-    formState.importTime = res.importTime
-    formState.updateTime = res.updateTime
+    formState.importTime = formatDate(res.importTime)
+    formState.update_time = formatDate(res.update_time)
     formState.importUserName = res.importUserName
   }
 }

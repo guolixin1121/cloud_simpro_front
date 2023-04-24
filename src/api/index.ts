@@ -19,7 +19,7 @@ export const scenesets = defineApi({
   getSceneSets: { url: '/scene/scenesets/', method: 'get' },
   getSceneSet: { url: '/scene/scenesets/{sid}', method: 'get' },
   deleteSceneset: { url: '/scene/scenesets/{sid}/', method: 'delete' },
-  editSceneset: { url: '/scene/scenesets/{sid}/', method: 'put'}, 
+  editSceneset: { url: '/scene/scenesets/{sid}/', method: 'put' },
   addSceneset: { url: '/scene/scenesets/', method: 'post' }
 })()
 
@@ -59,29 +59,29 @@ export const maps = defineApi({
 })()
 
 export const simpro = defineApi({
-  getSimproTasks: { url: '/simpro/simtask/',   method: 'get' }, 
-  getSimproTask: { url: '/simpro/simtask/{sid}/', method: 'get' }, 
+  getSimproTasks: { url: '/simpro/simtask/', method: 'get' },
+  getSimproTask: { url: '/simpro/simtask/{sid}/', method: 'get' },
   deleteSimproTask: { url: '/simpro/simtask/{sid}/', method: 'delete' },
-  editSimproTask: { url: '/simpro/simtask/{sid}/', method: 'put' }, 
-  addSimproTask: { url: '/simpro/simtask/', method: 'post'},
+  editSimproTask: { url: '/simpro/simtask/{sid}/', method: 'put' },
+  addSimproTask: { url: '/simpro/simtask/', method: 'post' },
 
-  getSimproResults: { url: '/simpro/simtask_result/',   method: 'get' }, 
-  getSimproResult: { url: '/simpro/simtask_result/{sid}/', method: 'get' }, 
+  getSimproResults: { url: '/simpro/simtask_result/', method: 'get' },
+  getSimproResult: { url: '/simpro/simtask_result/{sid}/', method: 'get' },
   deleteSimproResult: { url: '/simpro/simtask_result/{sid}/', method: 'delete' },
-  editSimproResult: { url: '/simpro/simtask_result/{sid}/', method: 'put' }, 
-  addSimproResult: { url: '/simpro/simtask_result/', method: 'post'},
+  editSimproResult: { url: '/simpro/simtask_result/{sid}/', method: 'put' },
+  addSimproResult: { url: '/simpro/simtask_result/', method: 'post' }
 })()
 
 export const algorithm = defineApi({
-  getAlgorithms: { url: '/alg/algorithm/',   method: 'get' }, 
+  getAlgorithms: { url: '/alg/algorithm/', method: 'get' }
 })()
 
 export const vehicle = defineApi({
-  getVehicle: { url: '/vehicle/dynamic_vehicle/',   method: 'get' }, 
+  getVehicle: { url: '/vehicle/dynamic_vehicle/', method: 'get' }
 })()
 
 export const kpi = defineApi({
-  getKpis: { url: '/simpro/kpi/',   method: 'get' }, 
+  getKpis: { url: '/simpro/kpi/', method: 'get' }
 })()
 // export default {
 //   userApi: useSceneApi()
