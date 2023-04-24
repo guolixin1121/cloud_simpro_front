@@ -5,11 +5,13 @@
       <Header />
     </a-layout-header>
     <a-layout>
-      <a-layout-sider width="235" style="background-color: #fff; padding-top: 10px; overflow: auto;">
-        <a-menu mode="inline" 
+      <a-layout-sider width="235" style="background-color: #fff; padding-top: 10px; overflow: auto">
+        <a-menu
+          mode="inline"
           :style="{ height: '100%', borderRight: 0 }"
-          v-model:selectedKeys="selectedKeys" 
-          v-model:openKeys="openKeys">
+          v-model:selectedKeys="selectedKeys"
+          v-model:openKeys="openKeys"
+        >
           <Menu :menus="menus"></Menu>
         </a-menu>
       </a-layout-sider>
@@ -25,7 +27,7 @@ import Header from './header.vue'
 import Menu from './menu.vue'
 
 // menus for current login user
-let menus: Permission[] =  store.user.user.permissions
+let menus: Permission[] = store.user.user.permissions
 
 // set selected menu, and open its parent menu
 const route = useRoute()
@@ -41,20 +43,19 @@ let openKeys = computed(() => {
  * @param currentRoute 当前路由
  * @param keys 父节点key集合
  */
-function getParentKeys (list: Permission[], keys: string[] = []): string[] | boolean {
-  for(let item of list) {
-    if(item.path === route.path) {
+function getParentKeys(list: Permission[], keys: string[] = []): string[] | boolean {
+  for (let item of list) {
+    if (item.path === route.path) {
       return [...keys]
-    } else if(item.children && item.children.length) {
-      const parentKeys = getParentKeys(item.children,[...keys, item.path])
-      if(parentKeys !== false) {
+    } else if (item.children && item.children.length) {
+      const parentKeys = getParentKeys(item.children, [...keys, item.path])
+      if (parentKeys !== false) {
         return parentKeys
       }
     }
   }
   return false
 }
-
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 <template>
   <div class="breadcrumb">
-    <router-link to="/map/manage/">地图管理</router-link>
+    <router-link to="/map-manage/">地图管理</router-link>
     <span class="breadcrumb--current">{{ title }}</span>
   </div>
   <div class="min-main">
@@ -71,6 +71,7 @@
 
 <script setup lang="ts">
 import type { UploadChangeParam } from 'ant-design-vue'
+import { formatDate } from '@/utils/tools'
 
 const id = useRoute().params.id
 const { type = '' } = useRoute().query || {}
@@ -124,8 +125,8 @@ const getLookData = async () => {
     formState.desc = res.desc
     formState.latestVersion = res.latestVersion
     formState.latestVersionUrl = res.latestVersionUrl
-    formState.create_time = res.create_time
-    formState.update_time = res.update_time
+    formState.create_time = formatDate(res.create_time)
+    formState.update_time = formatDate(res.update_time)
     formState.create_user = res.create_user
     formState.mapFileName = res.mapFileName
   }
