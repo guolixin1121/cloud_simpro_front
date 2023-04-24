@@ -23,21 +23,14 @@ const columns = [
   { title: '算法名称', dataIndex: 'name', width: 150, ellipsis: true },
   { title: '算法版本', dataIndex: 'version', width: 80, ellipsis: true },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
-  // { title: '修改时间', dataIndex: 'update_time', width: 180 },
   { title: '所属用户', dataIndex: 'create_user', width: 100, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 130,
+    width: 40,
     actions: {
-      查看: (data: any) => router.push('/algorithm/edit/' + data.id),
-      编辑: () => {
-        return
-      },
-      删除: () => {
-        return
-      }
+      查看: (data: any) => router.push('/algorithm/edit/' + data.id)
     }
   }
 ]

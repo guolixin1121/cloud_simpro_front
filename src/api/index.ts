@@ -40,7 +40,8 @@ export const scene = defineApi({
 })()
 
 export const tags = defineApi({
-  getTags: { url: '/tags/', method: 'get' }
+  getTags: { url: '/tags/', method: 'get' },
+  deleteTags: { url: '/tags/{sid}', method: 'delete' }
 })()
 
 // 地图管理接口
@@ -83,6 +84,7 @@ export const vehicle = defineApi({
 export const kpi = defineApi({
   getKpis: { url: '/simpro/kpi/', method: 'get' }
 })()
+
 // export default {
 //   userApi: useSceneApi()
 // }

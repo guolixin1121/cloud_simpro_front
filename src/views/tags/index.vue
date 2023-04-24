@@ -5,7 +5,7 @@
       <span class="title">标签管理</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/tags/edit/0')">创建标签</a-button>
     </div>
-    <Table :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 1200, y: 420 }">
+    <Table :api="tagsApi.getTags" :query="query" :columns="columns" :scroll="{ x: 1200, y: 420 }">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'isTag'">
           <a-tooltip :title="record.isTag">
@@ -23,7 +23,7 @@
 import { SceneSourceOptions } from '@/utils/dict'
 /****** api */
 const user = store.user
-const mapsApi = api.maps
+const tagsApi = api.tags
 /****** 搜素区域 */
 type Query = Record<string, any>
 const query: Query = ref({})
@@ -55,7 +55,7 @@ const columns = [
     actions: {
       查看: (data: any) => router.push('/tags/edit/' + data.id + '?type=0'),
       编辑: (data: any) => router.push('/tags/edit/' + data.id),
-      删除: async ({ id }: { id: string }) => await mapsApi.deleteMaps(id)
+      删除: async ({ id }: { id: string }) => await tagsApi.deleteTags(id)
     }
   }
 ]
