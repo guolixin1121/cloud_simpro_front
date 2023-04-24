@@ -11,21 +11,21 @@
         <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></a-input>
       </a-form-item>
       <a-form-item label="主车模型" name="dynamic_vehicle" :rules="[{ required: true, message: '请选择主车模性!' }]">
-        <scroll-select v-model:value="formState.dynamic_vehicle" :api="optionsApi.vehicle.getVehicle"></scroll-select>
+        <scroll-select v-model:value="formState.dynamic_vehicle" :api="getVehicle"></scroll-select>
       </a-form-item>
      <a-form-item label="算法" name="algorithm" :rules="[{ required: true, message: '请选择算法!' }]">
-        <scroll-select v-model:value="formState.algorithm" :api="optionsApi.algorithm.getAlgorithms"></scroll-select>
+        <scroll-select v-model:value="formState.algorithm" :api="optionsApi.algorithm.getList"></scroll-select>
       </a-form-item>
       <a-form-item label="任务执行次数" name="batch" :rules="[{ required: true, message: '请输入任务执行次数!'}]">
         <a-input-number v-model:value="formState.batch" min="1" placeholder="请输入任务执行次数"></a-input-number>
       </a-form-item>
       <a-form-item label="场景" name="scenes" :rules="[{ required: true, message: '请选择场景!'}]">
-        <scroll-transfer v-model:target-keys="formState.scenes" :api="optionsApi.scene.getScenes" 
-          :fieldNames="{label: 'adsName', value: 'id'}"
+        <scroll-transfer v-model:target-keys="formState.scenes" :api="optionsApi.scene.getList" 
+          :fieldNames="{label: 'adsName', value: 'baidu_id'}"
           :titles="['可选场景', '选中场景']"></scroll-transfer>
       </a-form-item> 
       <a-form-item label="评测指标" name="kpi" :rules="[{ required: true, message: '请选择评测指标!'}]">
-        <scroll-transfer v-model:target-keys="formState.kpi" :api="optionsApi.kpi.getKpis"
+        <scroll-transfer v-model:target-keys="formState.kpi" :api="optionsApi.kpi.getList"
           :titles="['可选评测指标', '选中评测指标']"></scroll-transfer>
       </a-form-item>
       <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
@@ -41,9 +41,11 @@
 <script setup lang="ts">
 const id = useRoute().params.id
 const isAdd = id === '0'
-const title =  isAdd ? '创建仿真任务' : '修改仿真任务'
+const actionText = isAdd ? '创建' : '修改'
+const title =  actionText + '仿真任务'
 const optionsApi = api
-const simproApi = api.simpro
+const currentApi = api.task
+const getVehicle = (arg: any) => api.vehicle.getList({ is_share: 1, ...arg })
 
 const formState = reactive({
   name: undefined,
@@ -60,24 +62,27 @@ const goback = () => router.go(-1)
 const add = async () => {
   loading.value = true
 
-  isAdd 
-    ? await simproApi.addSimproTask({...formState, source: 0})
-    : await simproApi.editSimproTask({ id, data: {...formState, source: 0} })
+  try {
+    isAdd 
+      ? await currentApi.add({...formState, source: 0})
+      : await currentApi.edit({ id, data: {...formState, source: 0} })
 
-  loading.value = false
-  message.info( isAdd ? '上传成功' : '修改成功')
-  goback()
+    message.info(`${actionText}成功`)
+    goback()
+  } finally {
+    loading.value = false
+  }
 }
 
 /****** 获取编辑数据 */
 const getEditData = async () => {
    if(id !== '0') {
-     const data = await simproApi.getSimproTask(id)
+     const data = await currentApi.get(id)
      formState.name = data.name
      formState.batch = data.batch
      formState.algorithm = data.algorithm
      formState.dynamic_vehicle = data.dynamic_vehicle
-     formState.kpi = data.kpi
+     formState.kpi = data.kpi_detail.map((v: any) => v.id)
      formState.scenes = data.scenes
    }
 }

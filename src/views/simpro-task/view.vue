@@ -77,7 +77,7 @@ const goback = () => router.go(-1)
 
 const getEditData = async () => {
    if(id !== '0') {
-     const data = await api.simpro.getSimproTask(id)
+     const data = await api.task.get(id)
      formState.id = data.id
      formState.name = data.name
      formState.batch = data.batch

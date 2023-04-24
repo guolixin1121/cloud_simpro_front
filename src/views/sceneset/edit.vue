@@ -14,13 +14,13 @@
         <tree-select v-model:value="formState.parentId" :api="getSceneSet"></tree-select>
       </a-form-item>
       <a-form-item label="标签">
-        <scroll-transfer v-model:target-keys="formState.labels" :api="getScennTags" 
+        <scroll-transfer v-model:target-keys="formState.labels" :api="getSceneTags" 
           :fieldNames="{label: 'display_name', value: 'id'}"
           :titles="['可选标签', '选中标签']"></scroll-transfer>
       </a-form-item>
       <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
         <a-button type="primary" html-type="submit" :loading="loading">
-          {{ isAdd ? '创建' : '修改' }}
+          {{ actionText }}
         </a-button>
         <a-button @click="goback" class="ml-2">取消</a-button>
       </a-form-item>
@@ -31,9 +31,11 @@
 <script setup lang="ts">
 const id = useRoute().params.id
 const isAdd = id === '0'
-const title =  isAdd ? '创建场景集' : '修改场景集'
-const getSceneSet = (args: object) => api.scenesets.getSceneSets({ tree: 1, ...args} )
-const getScennTags = (args: object) => api.tags.getTags({ tag_type: 2, ...args })
+const actionText = isAdd ? '创建' : '修改'
+const title =  actionText + '场景集'
+const currentApi = api.scenesets
+const getSceneSet = (args: object) => currentApi.getList({ tree: 1, ...args} )
+const getSceneTags = (args: object) => api.tags.getList({ tag_type: 2, ...args })
 
 const formState = reactive({
   name: undefined,
@@ -47,19 +49,22 @@ const goback = () => router.go(-1)
 const add = async () => {
   loading.value = true
   
-  isAdd 
-    ? await api.scenesets.addSceneset(formState)
-    : await api.scenesets.editSceneset({ id, data: {...formState} })
+  try {
+    isAdd 
+      ? await currentApi.add(formState)
+      : await currentApi.edit({ id, data: {...formState} })
 
-  loading.value = false
-  message.info( isAdd ? '创建成功' : '修改成功')
-  goback()
+    message.info(`${actionText}成功`)
+    goback()
+  } finally {
+    loading.value = false
+  }
 }
 
 /****** 获取编辑数据 */
 const getEditData = async () => {
    if(id !== '0') {
-     const scene = await api.scenesets.getSceneSet(id)
+     const scene = await currentApi.get(id)
      formState.name = scene.name
      formState.parentId = scene.parentId
      formState.labels = scene.labels

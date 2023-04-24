@@ -24,8 +24,9 @@
 <script setup lang="ts">
 /****** api */
 const user = store.user
-const scenesetApi = (args: object) => api.scenesets.getSceneSets({ tree: 1, ...args })
-const tagsApi = (args: object) => api.tags.getTags({ tag_type: 2, ...args })
+const currentApi = api.scenesets
+const scenesetApi = (args: object) => currentApi.getList({ tree: 1, ...args })
+const tagsApi = (args: object) => api.tags.getList({ tag_type: 2, ...args })
 
 /****** 搜素区域 */
 type Query = Record<string, any>
@@ -49,7 +50,7 @@ const columns = [
     actions: {
       '查看': (data: any) => router.push('/sceneset/view/' + data.id),
       '编辑': (data: any) => router.push('/sceneset/edit/' + data.id),
-      '删除': async ({ id }: { id: string }) => await api.scenesets.deleteSceneset(id)
+      '删除': async ({ id }: { id: string }) => await currentApi.delete(id)
     }
   }
 ]

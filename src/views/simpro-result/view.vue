@@ -62,24 +62,14 @@ const goback = () => router.go(-1)
 
 const getEditData = async () => {
    if(id !== '0') {
-     const scene = await api.scene.getScene(id)
+     const scene = await api.result.get(id)
      formState.name = scene.adsName
      formState.labels = scene.labels_detail
      formState.createTime = formatDate(scene.createTime)
      formState.updateTime = formatDate(scene.updateTime)
      formState.createUser = scene.createUser
     //  fileList.value = [scene.xosc]
-
-     getSceneSet(scene)
    }
-}
-
-const getSceneSet = async (data: any) => {
-  let res = await api.scenesets.getSceneSet(data.baiduSceneSets)
-  formState.baiduSceneSets = res.name
-
-  res = await api.maps.getMap(data.map_version_obj)
-  formState.map_version_obj = res.name
 }
 getEditData()
 </script>
