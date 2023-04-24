@@ -53,7 +53,7 @@ const goback = () => router.go(-1)
 
 const getEditData = async () => {
    if(id !== '0') {
-     const sceneset = await api.scenesets.getSceneSet(id)
+     const sceneset = await api.scenesets.get(id)
      formState.id = sceneset.id
      formState.name = sceneset.name
      formState.parentName = sceneset.parentName

@@ -51,7 +51,7 @@ const goback = () => router.go(-1)
 
 /****** 获取查看数据 */
 const getLookData = async () => {
-  const res = await algorithmApi.getAlgorithms({ id })
+  const res = await algorithmApi.getList({ id })
   console.log(res)
   formState.name = res?.results[0].name
   formState.version = res?.results[0].version

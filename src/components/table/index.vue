@@ -17,6 +17,8 @@
           }
         : null
     "
+    :defaultExpandAllRows="true"
+    tree-default-expand-all
     :pagination="pagination"
     @change="onChange"
   >
