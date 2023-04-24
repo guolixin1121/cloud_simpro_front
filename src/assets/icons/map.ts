@@ -1,0 +1,17 @@
+export default `<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icoh_map_n</title>
+    <g id="云仿真设计稿" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="云仿真-标签管理-新建标签" transform="translate(-25.000000, -384.000000)">
+            <g id="左侧导航栏" transform="translate(0.000000, 60.000000)">
+                <g id="Group-6" transform="translate(8.000000, 16.000000)">
+                    <g id="侧边导航/亮色-二级菜单-收起" transform="translate(0.000000, 296.000000)">
+                        <g id="Group" transform="translate(17.000000, 12.000000)">
+                            <polygon id="路径" points="0 0 16 0 16 16 0 16"></polygon>
+                            <path d="M14.2788619,10.528724 L15.5,11.4138982 L8,15.3096543 L0.5,11.4138982 L1.790928,10.5851528 L8,13.6913863 L14.2788619,10.528724 Z M14.2788619,7.169653 L15.5,8.05482725 L8,11.9505833 L0.5,8.05482725 L1.790928,7.2260818 L8,10.3323153 L14.2788619,7.169653 Z M8,0.8 L15.5,4.69575604 L8,8.59151208 L0.5,4.69575604 L8,0.8 Z M8,2.41098278 L3.6008493,4.6954682 L8,6.97995363 L12.3991507,4.6954682 L8,2.41098278 Z" id="Combined-Shape" fill="#60656E" fill-rule="nonzero"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>`

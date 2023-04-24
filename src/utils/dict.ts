@@ -11,7 +11,7 @@ export const TaskSourceOptions = [
   { label: '全部', value: '' },
   { label: '云平台', value: 0 },
   { label: 'SOTIF', value: 1 },
-  { label: 'CICD', value: 2 },
+  { label: 'CICD', value: 2 }
 ]
 
 export const getTaskSourceName = (value: number | string) => TaskSourceOptions.find(v => v.value === value)?.label
@@ -23,3 +23,17 @@ export const MapManageSourceOptions = [
   { label: '真实', value: 1 },
   { label: '虚拟', value: 2 }
 ]
+
+export const IsTag = [
+  { label: '全部', value: '' },
+  { label: '是', value: 1 },
+  { label: '否', value: 0 }
+]
+// export const TagType: any = {
+//   '0': '数据标签',
+//   '1': '数据集标签',
+//   '2': '场景集标签',
+//   '3': '场景标签',
+//   '4': '地图标签',
+//   '5': 'case标签'
+// }

@@ -41,7 +41,11 @@ export const scene = defineApi({
 
 export const tags = defineApi({
   getList: { url: '/tags/', method: 'get' },
-  deleteTags: { url: '/tags/{sid}', method: 'delete' }
+  getType: { url: '/tags/type/', method: 'get' },
+  delete: { url: '/tags/{sid}/', method: 'delete' },
+  edit: { url: '/tags/{sid}/', method: 'put' },
+  add: { url: '/tags/', method: 'post' },
+  get: { url: '/tags/{sid}/', method: 'get' }
 })()
 
 // 地图管理接口
