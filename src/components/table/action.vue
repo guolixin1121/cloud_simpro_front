@@ -12,6 +12,9 @@
         <a class="text-blue mr-2">删除</a>
       </a-popconfirm>
       <!-- 编辑删除查看 -->
+      <template v-else-if="scope.column.actions[key].validator?.(scope.record)">
+        <a disabled class="mr-2">{{ key }}</a>
+      </template>
       <a v-else class="text-blue mr-2" @click="scope.column.actions[key](scope.record)">
         {{ key }}
       </a>
@@ -32,7 +35,7 @@ const hasPermission = (action: any, data: any) => {
   let permission = userStore.hasPermission(action)
 
   if (props.isOnlyCreator && ['编辑', '删除'].includes(action)) {
-    const isOwner = data.creator === userStore.user.nickname
+    const isOwner = data.createUser === userStore.user.nickname || data.create_user === userStore.user.nickname
     permission = permission && isOwner
   }
 

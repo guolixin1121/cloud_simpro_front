@@ -13,7 +13,8 @@
       isSelectable
         ? {
             selectedRowKeys: selectedRowKeys,
-            onChange: onSelectChange
+            onChange: onSelectChange,
+            ...rowSelection
           }
         : null
     "
@@ -88,6 +89,7 @@ const props = defineProps({
   }
 })
 const emits = defineEmits(['onSelect', 'onChange'])
+const rowSelection = useAttrs()['row-selection'] || {}
 
 const current = ref(1)
 const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number }, any>)
