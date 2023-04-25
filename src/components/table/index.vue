@@ -30,7 +30,7 @@
           <Action :scope="scope" @delete="refresh"></Action>
         </template>
         <!-- 格式化时间 -->
-        <template v-else-if="scope.column.dataIndex.indexOf('Time') > -1 || scope.column.dataIndex.indexOf('_time') > -1">
+        <template v-else-if="scope.column.dataIndex.toLowerCase().indexOf('time') > -1 || scope.column.dataIndex.toLowerCase().indexOf('date') > -1">
           {{ dayjs(scope.record[scope.column.dataIndex]).format('YYYY-MM-DD HH:MM:ss') }}
         </template>
         <!-- hover时加tooltip -->
@@ -48,7 +48,7 @@
         <Action :scope="scope" @delete="refresh"></Action>
       </template>
       <!-- 格式化时间 -->
-      <template v-else-if="scope.column.dataIndex.indexOf('Time') > -1 || scope.column.dataIndex.indexOf('_time') > -1">
+      <template v-else-if="scope.column.dataIndex.toLowerCase().indexOf('time') > -1 || scope.column.dataIndex.toLowerCase().indexOf('date') > -1">
         {{ dayjs(scope.record[scope.column.dataIndex]).format('YYYY-MM-DD HH:MM:ss') }}
       </template>
       <!-- hover时加tooltip -->
@@ -115,12 +115,12 @@ watch(
   () => props.query,
   newVal => {
     current.value = 1
-    run({ ...newVal, page: 1 })
+    run({ ...newVal, page: 1, size: 10 })
   }
 )
-watch(current, newVal => run({ ...props.query, page: newVal }))
+watch(current, newVal => run({ ...props.query, page: newVal, size: 10}))
 
-const refresh = () => run({ ...props.query, page: current.value })
+const refresh = () => run({ ...props.query, page: current.value, size: 10 })
 
 // 为了兼容树状的table，为每个数据增加key
 const addKeysToData = (data: any) => {

@@ -72,6 +72,16 @@ export function debounce(fn, wait = 500) {
   }
 }
 
+export function deepClone(source) {
+  if(typeof source !== 'object') return source
+
+  const result = Array.isArray(source) ? [] : []
+  for(let prop in source) {
+    result[prop] = deepClone(source[prop])
+  }
+  return result
+}
+
 export function formatDate(date) {
   if(!date) return ''
   return dayjs(date).format('YYYY-MM-DD HH:MM:ss')

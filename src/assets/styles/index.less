@@ -28,6 +28,14 @@
   }
 }
 
+.sub-title {
+  font-size: 14px;
+  font-weight: 500;;
+  color: #1E2229;
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+
 .text-blue {
   color: #1664ff;
 }
@@ -57,12 +65,49 @@
 .main,
 .min-main {
   background-color: #fff;
-  padding: 25px;
-  padding-bottom: 0px;
+  padding: 16px 25px;
+  border-radius: 4px;
   height: 100%;
   overflow: auto;
 }
 // 用于带导航的内容页
 .min-main {
   height: calc(100% - 35px);
+}
+
+main {
+  .white-block {
+    padding: 16px 24px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    background-color: #fff;
+    box-shadow: 0px 1px 2px 0px rgba(0,0,0,0.04);
+  }
+}
+
+.table {
+  width: 100%;
+  margin-top: 16px;
+  thead tr {
+    text-align: left;
+    background: #F2F3F5;
+  }
+  tr {
+    background-color: #FCFDFF;
+    height: 40px;
+
+    &:nth-child(2n) {
+      background-color: #F7F8FA;
+    }
+
+    td, th{ 
+      border: 1px solid #DADCE0; 
+      padding-left: 16px;
+
+      .value {
+        margin-left: 8px;
+        margin-right: 2px;
+      }
+    }
+  }
 }

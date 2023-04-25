@@ -84,6 +84,10 @@ export const vehicle = defineApi({
 
 export const kpi = defineApi({
   getList: { url: '/simpro/kpi/custom/',   method: 'get' }, 
+  get: { url: '/simpro/kpi/{sid}/', method: 'get' }, 
+  delete: { url: '/simpro/kpi/{sid}/', method: 'delete' },
+  edit: { url: '/simpro/kpi/{sid}/', method: 'put' }, 
+  add: { url: '/simpro/kpi/custom/', method: 'post'},
 })()
 // export default {
 //   userApi: useSceneApi()

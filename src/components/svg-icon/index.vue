@@ -27,6 +27,7 @@ getIcon().then(i => icon.value = i)
 <style lang="less">
 .icon {
   vertical-align: middle;
+  display: inline-block;
 }
 
 .icon:hover {
