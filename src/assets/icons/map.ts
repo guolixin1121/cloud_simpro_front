@@ -1,9 +1,7 @@
-export default `
-<?xml version="1.0" encoding="UTF-8"?>
-<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+export default `<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>icoh_map_n</title>
     <g id="云仿真设计稿" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="云仿真-仿真管理" transform="translate(-25.000000, -384.000000)">
+        <g id="云仿真-标签管理-新建标签" transform="translate(-25.000000, -384.000000)">
             <g id="左侧导航栏" transform="translate(0.000000, 60.000000)">
                 <g id="Group-6" transform="translate(8.000000, 16.000000)">
                     <g id="侧边导航/亮色-二级菜单-收起" transform="translate(0.000000, 296.000000)">

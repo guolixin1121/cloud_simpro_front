@@ -19,7 +19,7 @@ export const scenesets = defineApi({
   getList: { url: '/scene/scenesets/', method: 'get' },
   get: { url: '/scene/scenesets/{sid}', method: 'get' },
   delete: { url: '/scene/scenesets/{sid}/', method: 'delete' },
-  edit: { url: '/scene/scenesets/{sid}/', method: 'put'}, 
+  edit: { url: '/scene/scenesets/{sid}/', method: 'put' },
   add: { url: '/scene/scenesets/', method: 'post' }
 })()
 
@@ -40,7 +40,12 @@ export const scene = defineApi({
 })()
 
 export const tags = defineApi({
-  getList: { url: '/tags/', method: 'get' }
+  getList: { url: '/tags/', method: 'get' },
+  getType: { url: '/tags/type/', method: 'get' },
+  delete: { url: '/tags/{sid}/', method: 'delete' },
+  edit: { url: '/tags/{sid}/', method: 'put' },
+  add: { url: '/tags/', method: 'post' },
+  get: { url: '/tags/{sid}/', method: 'get' }
 })()
 
 // 地图管理接口
@@ -59,27 +64,27 @@ export const maps = defineApi({
 })()
 
 export const task = defineApi({
-  getList: { url: '/simpro/simtask/',   method: 'get' }, 
-  get: { url: '/simpro/simtask/{sid}/', method: 'get' }, 
+  getList: { url: '/simpro/simtask/', method: 'get' },
+  get: { url: '/simpro/simtask/{sid}/', method: 'get' },
   delete: { url: '/simpro/simtask/{sid}/', method: 'delete' },
-  edit: { url: '/simpro/simtask/{sid}/', method: 'put' }, 
-  add: { url: '/simpro/simtask/', method: 'post'},
+  edit: { url: '/simpro/simtask/{sid}/', method: 'put' },
+  add: { url: '/simpro/simtask/', method: 'post' }
 })()
 
 export const result = defineApi({
-  getList: { url: '/simpro/simtask_result/',   method: 'get' }, 
-  get: { url: '/simpro/simtask_result/{sid}/', method: 'get' }, 
+  getList: { url: '/simpro/simtask_result/', method: 'get' },
+  get: { url: '/simpro/simtask_result/{sid}/', method: 'get' },
   delete: { url: '/simpro/simtask_result/{sid}/', method: 'delete' },
-  edit: { url: '/simpro/simtask_result/{sid}/', method: 'put' }, 
-  add: { url: '/simpro/simtask_result/', method: 'post'},
+  edit: { url: '/simpro/simtask_result/{sid}/', method: 'put' },
+  add: { url: '/simpro/simtask_result/', method: 'post' }
 })()
 
 export const algorithm = defineApi({
-  getList: { url: '/alg/algorithm/',   method: 'get' }, 
+  getList: { url: '/alg/algorithm/', method: 'get' }
 })()
 
 export const vehicle = defineApi({
-  getList: { url: '/vehicle/dynamic_vehicle/',   method: 'get' }, 
+  getList: { url: '/vehicle/dynamic_vehicle/', method: 'get' }
 })()
 
 export const kpi = defineApi({
@@ -89,6 +94,7 @@ export const kpi = defineApi({
   edit: { url: '/simpro/kpi/{sid}/', method: 'put' }, 
   add: { url: '/simpro/kpi/custom/', method: 'post'},
 })()
+
 // export default {
 //   userApi: useSceneApi()
 // }
