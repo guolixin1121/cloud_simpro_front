@@ -113,7 +113,6 @@ const setDefaultOptions = async() => {
         // 右侧数据
         rightDataSource.value.push(...options)
         rightDataSourceBackup.value = rightDataSource.value
-        debugger
 
         // 左侧数据不够一屏，继续加载数据，确保滚动条出现
         if(rightDataSource.value.length === targetKeys.length && !isAllLoaded.value) {

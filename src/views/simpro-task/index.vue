@@ -76,7 +76,7 @@ const columns = [
     title: '操作', dataIndex: 'actions', fixed: 'right', width: 150,
     actions: {
       '运行': {
-        validator: (data: any) => data.status === '运行中',
+        validate: (data: any) => data.status === '运行中',
         handler: async (data: any) => await currentApi.run(data.id)
       },
       '查看': ( data: any ) => router.push('/simpro-task/view/' + data.id),

@@ -22,7 +22,7 @@ const columns = [
     key: 'actions',
     actions: {
       '运行': {
-        validator: (data: any) => data.status === '运行中',
+        validate: (data: any) => data.status === '运行中',
         handler: (data: any) => console.log('need disable', data)
       },
       '查看': ( data: any ) => console.log('go to view page', data) ,

@@ -8,7 +8,7 @@
     </div>
     
     <Table 
-      :api="curentApi.getList" 
+      :api="currentApi.getList" 
       :query="query" 
       :columns="columns"
       :scroll="{ x: 1100 }">
@@ -21,27 +21,27 @@
             </a-tooltip>
           </template>
 
-          <template v-else-if="column.dataIndex == 'type'">
+          <!-- <template v-else-if="column.dataIndex == 'type'">
             {{ getKpiTypeName(record.type)}}
-          </template>
+          </template> -->
       </template>
     </Table>
   </div>
 </template>
  
 <script setup lang="ts">
-import { KpiTypeOptions, getKpiTypeName } from '@/utils/dict'
+// import { KpiTypeOptions, getKpiTypeName } from '@/utils/dict'
 // store、api、useRouter等通过auto import自动导入的，直接在template、自定义函数等使用时无效，为undefined
 /****** api */
 const user = store.user
-const curentApi = api.kpi
+const currentApi = api.kpi
 
 /****** 搜素区域 */
 type Query = Record<string, any> 
 const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入评测指标名称'},
-  { label: '类别', key: 'kpi_type', type: 'select', options: KpiTypeOptions, defaultValue: ''},
+  { label: '类别', key: 'kpi_type', type: 'tree-select', api: currentApi.getTypes, fieldNames: { label: 'title', value: 'id'}, defaultValue: ''},
   { label: '创建时间', key: 'date', type: 'range-picker' }
 ])
 const onSearch = (data: Query) => query.value = data
@@ -58,9 +58,12 @@ const columns = [
   {
     title: '操作', dataIndex: 'actions', fixed: 'right', width: 150,
     actions: {
-      '查看': ( data: any ) => router.push('/kpi/view/' + data.id) ,
-      '编辑': ( data: any ) => router.push('/kpi/edit/' + data.id) ,
-      '删除': async ({ id }: { id: string} ) => await curentApi.delete(id)
+      '查看': ( data: RObject ) => router.push('/kpi/view/' + data.id) ,
+      '编辑': ( data: RObject ) => router.push('/kpi/edit/' + data.id) ,
+      '删除': {
+        validate: ( data: RObject) => data.custom === 0,
+        handler: async ({ id }: RObject ) => await currentApi.delete(id)
+      }
     }
   }
 ]

@@ -4,18 +4,20 @@
       <!-- 删除列 -->
       <a-popconfirm
         v-if="key === '删除'"
+        :disabled="scope.column.actions[key].validate?.(scope.record)"
         title="你确定要删除吗？"
         ok-text="是"
         cancel-text="否"
         @confirm="onConfirmDelete(scope, key)"
       >
-        <a class="text-blue mr-2">删除</a>
+        <a 
+          :disabled="scope.column.actions[key].validate?.(scope.record)"
+          class="text-blue mr-2">删除</a>
       </a-popconfirm>
-      <!-- 编辑删除查看 -->
-      <template v-else-if="scope.column.actions[key].validator?.(scope.record)">
-        <a disabled class="mr-2">{{ key }}</a>
-      </template>
-      <a v-else class="text-blue mr-2" @click="scope.column.actions[key](scope.record)">
+      <!-- 其他列 -->
+      <a v-else 
+        :disabled="scope.column.actions[key].validate?.(scope.record)"
+        class="text-blue mr-2" @click="scope.column.actions[key](scope.record)">
         {{ key }}
       </a>
     </template>

@@ -8,7 +8,7 @@
     </div>
     
     <Table 
-      :api="curentApi.getList" 
+      :api="currentApi.getList" 
       :query="query" 
       :columns="columns"
       :scroll="{ x: 1400 }">
@@ -34,7 +34,7 @@ import { SceneSourceOptions, getSceneSourceName } from '@/utils/dict'
 // store、api、useRouter等通过auto import自动导入的，直接在template、自定义函数等使用时无效，为undefined
 /****** api */
 const user = store.user
-const curentApi = api.scene
+const currentApi = api.scene
 const tagsApi = (args: object) => api.tags.getList({ tag_type: 3, ...args })
 
 /****** 搜素区域 */
@@ -64,7 +64,7 @@ const columns = [
     actions: {
       '查看': ( data: any ) => router.push('/scene/view/' + data.id) ,
       '编辑': ( data: any ) => router.push('/scene/edit/' + data.id) ,
-      '删除': async ({ id }: { id: string} ) => await curentApi.delete(id)
+      '删除': async ({ id }: { id: string} ) => await currentApi.delete(id)
     }
   }
 ]

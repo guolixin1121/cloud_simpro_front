@@ -29,7 +29,7 @@ const props = defineProps({
 </template>
 
 <style lang="less">
-.ant-menu-item {
+.ant-menu-item, .ant-menu-submenu-title {
   .icon {
     position: relative;
     top: 2px;

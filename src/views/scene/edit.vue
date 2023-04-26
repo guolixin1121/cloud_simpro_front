@@ -28,6 +28,9 @@
           <a-button> 选择文件 </a-button>
         </a-upload> -->
       </a-form-item>
+      <a-form-item label="场景路径" name="baiduSceneSets">
+        <a-input disabled :value="path"></a-input>
+      </a-form-item>
       <a-form-item label="标签">
         <scroll-transfer
           v-model:target-keys="formState.labels"
@@ -60,11 +63,21 @@ const currentApi = api.scene
 
 // const fileList = ref()
 const formState = reactive({
-  name: undefined,
-  map_version_obj: undefined,
-  baiduSceneSets: undefined,
+  name: '',
+  map_version_obj: '',
+  baiduSceneSets: '',
   xosc: undefined,
   labels: []
+})
+const path = ref('')
+watch([
+  () => formState.baiduSceneSets,
+  () => formState.name
+], async () => {
+  const res = await api.scenesets.get(formState.baiduSceneSets)
+  if(res) {
+    path.value = (res.name || '')  + '/' + formState.name
+  }
 })
 
 const loading = ref(false)
@@ -92,7 +105,7 @@ const getEditData = async () => {
     formState.name = scene.adsName
     formState.labels = scene.labels
     formState.baiduSceneSets = scene.baiduSceneSets
-    formState.map_version_obj = scene.map_version_obj
+    formState.map_version_obj = scene.map_version_obj.value
     //  fileList.value = [scene.xosc]
   }
 }

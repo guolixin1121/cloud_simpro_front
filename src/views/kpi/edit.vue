@@ -22,11 +22,11 @@
           <a-button> 选择文件 </a-button>
         </a-upload> -->
       </a-form-item>
-      <a-form-item label="评测指标类型" name="baiduSceneSets" :rules="[{ required: true, message: '请选择评测指标类型!' }]">
-        <tree-select v-model:value="formState.kpi_type" :api="getSceneSet"></tree-select>
+      <a-form-item label="评测指标类型" name="kpi_type" :rules="[{ required: true, message: '请选择评测指标类型!' }]">
+        <tree-select v-model:value="formState.kpi_type" :api="currentApi.getTypes" :fieldNames="{label: 'title', value: 'id'}"></tree-select>
       </a-form-item>
       <a-form-item label="描述">
-        <a-textarea v-model:value="formState.desc" :api="getSceneSet" :rows="6"></a-textarea>
+        <a-textarea v-model:value="formState.desc" :rows="6"></a-textarea>
       </a-form-item>
       <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
         <a-button type="primary" html-type="submit" :loading="loading">
@@ -45,7 +45,6 @@ const id = useRoute().params.id
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '评测指标'
-const getSceneSet = (args: object) => api.scenesets.getList({ tree: 1, ...args })
 const currentApi = api.kpi
 
 // const fileList = ref()

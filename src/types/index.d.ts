@@ -31,3 +31,8 @@ interface FieldNames {
   label: string,
   value: string
 }
+
+interface RObject {
+  id: string,
+  [key: string]: any
+}
