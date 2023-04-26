@@ -31,7 +31,11 @@
           <Action :scope="scope" :is-only-creator="isOnlyCreator" @delete="refresh"></Action>
         </template>
         <!-- 格式化时间 -->
-        <template v-else-if="scope.column.dataIndex.toLowerCase().indexOf('time') > -1 || scope.column.dataIndex.toLowerCase().indexOf('date') > -1">
+        <template
+          v-else-if="
+            scope.column.dataIndex.toLowerCase().indexOf('time') > -1 || scope.column.dataIndex.toLowerCase().indexOf('date') > -1
+          "
+        >
           {{ dayjs(scope.record[scope.column.dataIndex]).format('YYYY-MM-DD HH:MM:ss') }}
         </template>
         <!-- hover时加tooltip -->
@@ -49,7 +53,11 @@
         <Action :scope="scope" :is-only-creator="isOnlyCreator" @delete="refresh"></Action>
       </template>
       <!-- 格式化时间 -->
-      <template v-else-if="scope.column.dataIndex.toLowerCase().indexOf('time') > -1 || scope.column.dataIndex.toLowerCase().indexOf('date') > -1">
+      <template
+        v-else-if="
+          scope.column.dataIndex.toLowerCase().indexOf('time') > -1 || scope.column.dataIndex.toLowerCase().indexOf('date') > -1
+        "
+      >
         {{ dayjs(scope.record[scope.column.dataIndex]).format('YYYY-MM-DD HH:MM:ss') }}
       </template>
       <!-- hover时加tooltip -->
@@ -75,7 +83,7 @@ const props = defineProps({
     type: Object
   },
   columns: {
-    type: Array<Object>,
+    type: Array,
     required: true
   },
   isSelectable: {
@@ -87,9 +95,9 @@ const props = defineProps({
     type: Boolean,
     default: () => true
   }
-})
+} as any)
 const emits = defineEmits(['onSelect', 'onChange'])
-const rowSelection = useAttrs()['row-selection'] || {}
+const rowSelection: any = useAttrs()['row-selection'] || {}
 
 const current = ref(1)
 const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number; datalist: [] }, any>)
@@ -120,7 +128,7 @@ watch(
     run({ ...newVal, page: 1, size: 10 })
   }
 )
-watch(current, newVal => run({ ...props.query, page: newVal, size: 10}))
+watch(current, newVal => run({ ...props.query, page: newVal, size: 10 }))
 
 const refresh = () => run({ ...props.query, page: current.value, size: 10 })
 

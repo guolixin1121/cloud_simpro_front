@@ -44,7 +44,7 @@ import 'ant-design-vue/es/date-picker/style/css' // 有些组件样式需单独�
 
 const props = defineProps({
   items: {
-    type: Array<SearchFormItem>,
+    type: Array,
     required: true
   },
   loading: {
@@ -55,7 +55,7 @@ const props = defineProps({
     type: Object,
     default: () => ({})
   }
-})
+} as any)
 const emits = defineEmits(['onSearch'])
 
 // form state, and get default value from props
