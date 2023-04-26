@@ -21,7 +21,7 @@ const props = defineProps({
   },
   fieldNames: {
     type: Object as PropType<FieldNames>,
-    default: () => ({ label: 'name', value: 'id' })
+    default: () => ({ label: 'name', value: 'id', apiField: undefined })
   }
 })
 const attrs = useAttrs()
@@ -48,7 +48,8 @@ const getOptions = async (query: string = '') => {
   if (props.api) {
     const res = await props.api({ page: currentPage.value, [props.fieldNames.label]: query })
     const { fieldNames } = props
-    const results = res.results || res.datalist || res
+    const { apiField = '' } = fieldNames
+    const results = res.results || res.datalist || res[apiField] || res
     const newOptions = results.map((item: any) => ({
       label: item[fieldNames.label],
       value: item[fieldNames.value]

@@ -14,6 +14,17 @@
           placeholder="请输入地图名称"
         ></a-input>
       </a-form-item>
+      <a-form-item label="地图类型：" name="mapType" :rules="[{ required: true, message: '请选择地图类型!' }]">
+        <scroll-select
+          :disabled="isView || !isAdd"
+          allowClear
+          style="width: 245px"
+          v-model:value="formState.mapType"
+          :options="MapManageSourceOptions"
+          placeholder="请选择地图类型"
+        >
+        </scroll-select>
+      </a-form-item>
       <a-form-item label="地图目录：" name="catalog" :rules="[{ required: true, message: '请选择地图目录!' }]">
         <tree-select
           :disabled="isView || !isAdd"
@@ -72,6 +83,7 @@
 <script setup lang="ts">
 import type { UploadChangeParam } from 'ant-design-vue'
 import { formatDate } from '@/utils/tools'
+import { MapManageSourceOptions } from '@/utils/dict'
 
 const id = useRoute().params.id
 const { type = '' } = useRoute().query || {}
@@ -90,7 +102,8 @@ const formState = reactive<any>({
   latestVersionUrl: '',
   create_time: '',
   update_time: '',
-  create_user: ''
+  create_user: '',
+  mapType: null
 })
 
 const loading = ref(false)
@@ -102,7 +115,8 @@ const add = async () => {
     name: formState.name,
     catalog: formState.catalog,
     xodr: formState.xodr,
-    desc: formState.desc
+    desc: formState.desc,
+    mapType: formState.mapType
   }
   for (const key in params) {
     if (!params[key]) delete params[key]
@@ -129,6 +143,7 @@ const getLookData = async () => {
     formState.update_time = formatDate(res.update_time)
     formState.create_user = res.create_user
     formState.mapFileName = res.mapFileName
+    formState.mapType = res.mapType
   }
 }
 getLookData()

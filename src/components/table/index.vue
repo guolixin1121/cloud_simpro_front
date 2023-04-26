@@ -90,9 +90,9 @@ const props = defineProps({
 const emits = defineEmits(['onSelect', 'onChange'])
 
 const current = ref(1)
-const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number }, any>)
+const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number; datalist: [] }, any>)
 const dataSource = computed(() => {
-  const results = data.value?.results
+  const results = data.value?.results || data.value?.datalist
   addKeysToData(results)
   return results
 })

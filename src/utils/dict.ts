@@ -37,3 +37,9 @@ export const IsTag = [
 //   '4': '地图标签',
 //   '5': 'case标签'
 // }
+// 车辆模型数
+export const typeList = [
+  { label: '全部', value: '' },
+  { label: '导入', value: 1 },
+  { label: '新建', value: 2 }
+]

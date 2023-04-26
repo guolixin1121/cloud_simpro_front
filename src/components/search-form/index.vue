@@ -49,6 +49,10 @@ const props = defineProps({
   loading: {
     type: Boolean,
     default: () => false
+  },
+  query: {
+    type: Object,
+    default: () => ({})
   }
 })
 const emits = defineEmits(['onSearch'])
@@ -127,6 +131,15 @@ const onSelectChange = (key: string, value: string | string[]) => {
     formState[key] = isAllSelected ? [''] : selectedValue.filter(v => v)
   }
 }
+/***** 组件外部按钮重置table *****/
+watch(
+  () => props.query,
+  newVal => {
+    if (JSON.stringify(newVal) === '{}') {
+      reset()
+    }
+  }
+)
 </script>
 
 <style></style>
