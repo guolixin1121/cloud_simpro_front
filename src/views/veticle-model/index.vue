@@ -125,8 +125,8 @@ const columns = [
     fixed: 'right',
     width: 200,
     actions: {
-      查看: (data: any) => gotoVeticlePro(data.id),
-      编辑: (data: any) => gotoVeticlePro(data.id),
+      查看: (data: any) => gotoVeticlePro(data.id, '?type=look'),
+      编辑: (data: any) => gotoVeticlePro(data.id, '?type=edit'),
       复制: (data: any) => copy(data),
       删除: async ({ id }: { id: string }) => await veticleModelApi.delete(id)
     }
@@ -148,10 +148,10 @@ const changeShare = async (checked: boolean, val: any, index: number) => {
 }
 const add = async (template_id = '') => {
   const res = await veticleModelApi.add({ template_id })
-  gotoVeticlePro(res.id)
+  gotoVeticlePro(res.id, '')
 }
-const gotoVeticlePro = (id: string | number) => {
-  window.open(process.env.VITE_BASE_API + '/vehicle_front/model/carBody/' + id, '_blank')
+const gotoVeticlePro = (id: string | number, params?: string) => {
+  window.open('/vehicle_front/model/carBody/' + id + params, '_blank')
 }
 const cancleMadol = () => {
   fileList.value = []
