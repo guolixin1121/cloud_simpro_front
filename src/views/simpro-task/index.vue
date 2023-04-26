@@ -1,7 +1,7 @@
 <template>
-  <div class="main" >
-    <search-form :items="formItems" @on-search="onSearch"></search-form>
+  <search-form :items="formItems" @on-search="onSearch"></search-form>
 
+  <div class="main" >
     <div class="flex justify-between items-center">
       <span class="title">仿真任务管理</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click=" router.push('/simpro-task/edit/0')">创建任务</a-button>
@@ -11,7 +11,13 @@
       :api="currentApi.getList" 
       :query="query" 
       :columns="columns"
-      :scroll="{ x: 1800 }">
+      :scroll="{ x: 1800 }"
+      :isSelectable="true"
+      :row-selection="{
+        getCheckboxProps: (record: any) => ({
+          disabled: record.status === '运行中'
+        }),
+      }">
       <template #bodyCell="{column, record}">
           <template v-if="column.dataIndex == 'kpi_detail'">
             <a-tooltip :title="record.kpi_detail.map((d: any) => d.name).join('  ')">
@@ -69,6 +75,10 @@ const columns = [
   {
     title: '操作', dataIndex: 'actions', fixed: 'right', width: 150,
     actions: {
+      '运行': {
+        validate: (data: any) => data.status === '运行中',
+        handler: async (data: any) => await currentApi.run(data.id)
+      },
       '查看': ( data: any ) => router.push('/simpro-task/view/' + data.id),
       '编辑': ( data: any ) => router.push('/simpro-task/edit/' + data.id),
       '删除': async ({ id }: { id: string} ) => await currentApi.delete(id)

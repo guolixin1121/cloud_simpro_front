@@ -32,3 +32,8 @@ interface FieldNames {
   value: string
   apiField?: string
 }
+
+interface RObject {
+  id: string,
+  [key: string]: any
+}

@@ -1,9 +1,9 @@
 <template>
-  <div class="main" >
     <search-form :items="formItems" @on-search="onSearch"></search-form>
 
+  <div class="main" >
     <div class="flex justify-between items-center">
-      <span class="title">场景管理</span>
+      <span class="title">仿真结果管理</span>
     </div>
     
     <Table 

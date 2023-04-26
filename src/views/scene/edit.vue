@@ -5,7 +5,7 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
-    <a-form :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 550px" @finish="add">
+    <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 550px" @finish="add">
       <a-form-item
         label="场景名称"
         name="name"
@@ -16,7 +16,7 @@
       >
         <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></a-input>
       </a-form-item>
-      <a-form-item label="场景集" name="baiduSceneSets" :rules="[{ required: true, message: '请选择场景集!' }]">
+      <a-form-item label="所属场景集" name="baiduSceneSets" :rules="[{ required: true, message: '请选择场景集!' }]">
         <tree-select v-model:value="formState.baiduSceneSets" :api="getSceneSet"></tree-select>
       </a-form-item>
       <a-form-item label="关联地图" name="map_version_obj" :rules="[{ required: true, message: '请选择关联地图!' }]">
@@ -28,6 +28,9 @@
           <a-button> 选择文件 </a-button>
         </a-upload> -->
       </a-form-item>
+      <a-form-item label="场景路径" name="baiduSceneSets">
+        <a-input disabled :value="path"></a-input>
+      </a-form-item>
       <a-form-item label="标签">
         <scroll-transfer
           v-model:target-keys="formState.labels"
@@ -36,7 +39,7 @@
           :titles="['可选标签', '选中标签']"
         ></scroll-transfer>
       </a-form-item>
-      <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '80px' }}">
+      <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
         <a-button type="primary" html-type="submit" :loading="loading">
           {{ actionText }}
         </a-button>
@@ -60,11 +63,21 @@ const currentApi = api.scene
 
 // const fileList = ref()
 const formState = reactive({
-  name: undefined,
-  map_version_obj: undefined,
-  baiduSceneSets: undefined,
+  name: '',
+  map_version_obj: '',
+  baiduSceneSets: '',
   xosc: undefined,
   labels: []
+})
+const path = ref('')
+watch([
+  () => formState.baiduSceneSets,
+  () => formState.name
+], async () => {
+  const res = await api.scenesets.get(formState.baiduSceneSets)
+  if(res) {
+    path.value = (res.name || '')  + '/' + formState.name
+  }
 })
 
 const loading = ref(false)
@@ -92,7 +105,7 @@ const getEditData = async () => {
     formState.name = scene.adsName
     formState.labels = scene.labels
     formState.baiduSceneSets = scene.baiduSceneSets
-    formState.map_version_obj = scene.map_version_obj
+    formState.map_version_obj = scene.map_version_obj.value
     //  fileList.value = [scene.xosc]
   }
 }

@@ -1,0 +1,80 @@
+<template>
+  <div class="breadcrumb">
+    <router-link to="/kpi/">评测指标管理</router-link>
+    <span class="breadcrumb--current">评测指标详情</span>
+  </div>
+  <div class="min-main">
+    <div class="cursor-pointer" @click="goback">
+      <svg-icon icon="back" class="mr-2"></svg-icon>返回
+    </div>
+    <span class="title mb-5 mt-3">评测指标详情</span>
+    <a-form :model="formState" :labelCol ="{ style: { width: '120px' } }"  style="width: 550px;">
+      <a-form-item label="评测指标ID">
+        {{ formState.id }}
+      </a-form-item>
+      <a-form-item label="评测指标名称">
+        {{ formState.name }}
+      </a-form-item>
+      <a-form-item label="评测指标类型" >
+        {{ formState.kpi_type_name}}
+      </a-form-item>
+      <a-form-item label="描述">
+        {{ formState.desc }}
+      </a-form-item>
+      <a-form-item label="创建时间">
+        {{ formState.create_date }}
+      </a-form-item>
+      <a-form-item label="修改时间">
+        {{ formState.update_date }}
+      </a-form-item>
+      <a-form-item label="所属用户">
+        {{ formState.create_user }}
+      </a-form-item>
+    </a-form>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { formatDate } from '@/utils/tools';
+const id = useRoute().params.id
+
+const formState = reactive({
+  id: '',
+  name: undefined,
+  desc: '',
+  kpi_type_name: '',
+  create_date: '',
+  update_date: '',
+  create_user: ''
+})
+
+const router = useRouter()
+const goback = () => router.go(-1)
+
+const getEditData = async () => {
+   if(id !== '0') {
+     const res = await api.kpi.getList({id})
+     const data = res.results?.[0]
+     formState.id = data.id
+     formState.name = data.name
+     formState.desc = data.desc
+     formState.kpi_type_name = data.category_name
+     formState.create_date = formatDate(data.create_date)
+     formState.update_date = formatDate(data.update_time)
+     formState.create_user = data.create_user
+   }
+}
+getEditData()
+</script>
+
+<style lang="less">
+.view-list {
+  border: 1px solid #d9d9d9;
+  border-radius: 2px;
+  height: 260px;
+  width: 220px;
+  overflow: auto;
+  padding: 8px 10px;
+  margin-top: 5px;
+}
+</style>

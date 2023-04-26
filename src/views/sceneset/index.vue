@@ -1,7 +1,7 @@
 <template>
-  <div class="main">
-    <search-form :items="formItems" @on-search="onSearch"></search-form>
+  <search-form :items="formItems" @on-search="onSearch"></search-form>
 
+  <div class="main">
     <div class="flex justify-between items-center">
       <span class="title">场景集管理</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/sceneset/edit/0')">创建场景集</a-button>
@@ -32,7 +32,7 @@ const tagsApi = (args: object) => api.tags.getList({ tag_type: 2, ...args })
 type Query = Record<string, any>
 const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景集名称或ID' },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景集名称' },
   { label: '标签', key: 'labels', type: 'select', mode: 'multiple', api: tagsApi, fieldNames: { label: 'display_name', value: 'name' }, defaultValue: [''] },
 ])
 const onSearch = (data: Query) => query.value = data
@@ -54,11 +54,5 @@ const columns = [
     }
   }
 ]
-
-// const getSceneSets = async () => {
-//     const res = await api.scenesets.getSceneSets({ tree: 1 })
-//     dataSource.value = res.results
-// }
-// getSceneSets()
 </script>
  

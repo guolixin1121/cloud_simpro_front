@@ -64,11 +64,12 @@ export const maps = defineApi({
 })()
 
 export const task = defineApi({
-  getList: { url: '/simpro/simtask/', method: 'get' },
-  get: { url: '/simpro/simtask/{sid}/', method: 'get' },
-  delete: { url: '/simpro/simtask/{sid}/', method: 'delete' },
-  edit: { url: '/simpro/simtask/{sid}/', method: 'put' },
-  add: { url: '/simpro/simtask/', method: 'post' }
+  getList: { url: '/simpro/simtask/template/', method: 'get' },
+  get: { url: '/simpro/simtask/template/{sid}/', method: 'get' },
+  delete: { url: '/simpro/simtask/template/{sid}/', method: 'delete' },
+  edit: { url: '/simpro/simtask/template/{sid}/', method: 'put' },
+  add: { url: '/simpro/simtask/template/', method: 'post' },
+  run: { url: '/simpro/sim_task/', method: 'post' }
 })()
 
 export const result = defineApi({
@@ -88,7 +89,20 @@ export const vehicle = defineApi({
 })()
 
 export const kpi = defineApi({
-  getList: { url: '/simpro/kpi/custom/', method: 'get' }
+  getList: { url: '/simpro/kpi/custom/',   method: 'get' }, 
+  getTypes: { url: '/simpro/kpi/type/', method: 'get' }, 
+  get: { url: '/simpro/kpi/{sid}/', method: 'get' }, 
+  delete: { url: '/simpro/kpi/{sid}/', method: 'delete' },
+  edit: { 
+    url: '/simpro/kpi/{sid}/', 
+    method: 'put',
+    headers: { 'content-type': 'multipart/form-data' } 
+  }, 
+  add: { 
+    url: '/simpro/kpi/custom/', 
+    method: 'post',
+    headers: { 'content-type': 'multipart/form-data' }
+  },
 })()
 // 车辆动力学
 export const veticleModel = defineApi({

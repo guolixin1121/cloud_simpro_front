@@ -1,17 +1,17 @@
 <template>
-  <div class="main" >
-    <search-form :items="formItems" @on-search="onSearch"></search-form>
+  <search-form :items="formItems" @on-search="onSearch"></search-form>
 
+  <div class="main">
     <div class="flex justify-between items-center">
       <span class="title">场景管理</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click=" router.push('/scene/edit/0')">上传场景</a-button>
     </div>
     
     <Table 
-      :api="curentApi.getList" 
+      :api="currentApi.getList" 
       :query="query" 
       :columns="columns"
-      :scroll="{ x: 1400 }">
+      :scroll="{ x: 1300 }">
       <template #bodyCell="{column, record}">
           <template v-if="column.dataIndex == 'labels_detail'">
             <a-tooltip :title="record.labels_detail.map((d: any) => d.display_name).join('  ')">
@@ -34,7 +34,7 @@ import { SceneSourceOptions, getSceneSourceName } from '@/utils/dict'
 // store、api、useRouter等通过auto import自动导入的，直接在template、自定义函数等使用时无效，为undefined
 /****** api */
 const user = store.user
-const curentApi = api.scene
+const currentApi = api.scene
 const tagsApi = (args: object) => api.tags.getList({ tag_type: 3, ...args })
 
 /****** 搜素区域 */
@@ -57,14 +57,13 @@ const columns = [
   { title: '标签', dataIndex: 'labels_detail', ellipsis: true },
   { title: '所属场景集', dataIndex: 'sceneset_name', width: 180, ellipsis: true },
   { title: '创建时间', dataIndex: 'createTime', width: 180 },
-  { title: '修改时间', dataIndex: 'updateTime', width: 180 },
   { title: '所属用户', dataIndex: 'createUser', width: 150, ellipsis: true },
   {
     title: '操作', dataIndex: 'actions', fixed: 'right', width: 150,
     actions: {
       '查看': ( data: any ) => router.push('/scene/view/' + data.id) ,
       '编辑': ( data: any ) => router.push('/scene/edit/' + data.id) ,
-      '删除': async ({ id }: { id: string} ) => await curentApi.delete(id)
+      '删除': async ({ id }: { id: string} ) => await currentApi.delete(id)
     }
   }
 ]

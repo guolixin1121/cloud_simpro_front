@@ -22,7 +22,7 @@ const props = defineProps({
   }
 })
 const attrs = useAttrs()
-const allOption = { title: '全部', value: '', children: [] }
+const allOption: TreeItem = { title: '全部', value: '', children: [] }
 const treeData = ref<TreeItem[]>([])
 
 // 根据defaultValue是否为空，判断是否需要加‘全部’的option
@@ -37,9 +37,9 @@ const initOptions = () => {
 
 const getOptions = async () => {
   if (props.api) {
-    console.log(props.api)
     const res = await props.api()
-    treeData.value = treeTransfer(res.results)
+    const data = treeTransfer(res.results || res)
+    treeData.value.push(...data)
   }
 }
 

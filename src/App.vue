@@ -11,4 +11,9 @@ dayjs.locale('zh-cn');
   </a-config-provider>
 </template>
 
-<style scoped></style>
+<style>
+#app {
+  min-width: 1440px;
+  overflow: auto;
+}
+</style>

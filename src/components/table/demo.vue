@@ -21,7 +21,10 @@ const columns = [
     title: '操作',
     key: 'actions',
     actions: {
-      '运行': ( data: any ) => console.log('run', data),
+      '运行': {
+        validate: (data: any) => data.status === '运行中',
+        handler: (data: any) => console.log('need disable', data)
+      },
       '查看': ( data: any ) => console.log('go to view page', data) ,
       '编辑': ( data: any ) => console.log('go to edit page', data) ,
       '删除': (data: any) => console.log('delete data after confirm', data)
