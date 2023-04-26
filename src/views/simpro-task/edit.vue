@@ -64,8 +64,8 @@ const add = async () => {
 
   try {
     isAdd 
-      ? await currentApi.add({...formState, source: 0})
-      : await currentApi.edit({ id, data: {...formState, source: 0} })
+      ? await currentApi.add({...formState})
+      : await currentApi.edit({ id, data: {...formState} })
 
     message.info(`${actionText}成功`)
     goback()

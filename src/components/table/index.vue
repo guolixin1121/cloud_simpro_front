@@ -28,7 +28,7 @@
       <slot v-else :name="item" :scope="scope" v-bind="scope || {}">
         <!-- 封装操作列 -->
         <template v-if="scope.column.dataIndex == 'actions'">
-          <Action :scope="scope" @delete="refresh"></Action>
+          <Action :scope="scope" :is-only-creator="isOnlyCreator" @delete="refresh"></Action>
         </template>
         <!-- 格式化时间 -->
         <template v-else-if="scope.column.dataIndex.toLowerCase().indexOf('time') > -1 || scope.column.dataIndex.toLowerCase().indexOf('date') > -1">
@@ -46,7 +46,7 @@
     <template #bodyCell="scope">
       <!-- 封装操作列 -->
       <template v-if="scope.column.dataIndex == 'actions'">
-        <Action :scope="scope" @delete="refresh"></Action>
+        <Action :scope="scope" :is-only-creator="isOnlyCreator" @delete="refresh"></Action>
       </template>
       <!-- 格式化时间 -->
       <template v-else-if="scope.column.dataIndex.toLowerCase().indexOf('time') > -1 || scope.column.dataIndex.toLowerCase().indexOf('date') > -1">
@@ -85,7 +85,7 @@ const props = defineProps({
   isOnlyCreator: {
     // 是否只允许创建者编辑，删除
     type: Boolean,
-    default: () => false
+    default: () => true
   }
 })
 const emits = defineEmits(['onSelect', 'onChange'])

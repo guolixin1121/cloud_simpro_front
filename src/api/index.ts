@@ -64,11 +64,11 @@ export const maps = defineApi({
 })()
 
 export const task = defineApi({
-  getList: { url: '/simpro/simtask/', method: 'get' },
-  get: { url: '/simpro/simtask/{sid}/', method: 'get' },
-  delete: { url: '/simpro/simtask/{sid}/', method: 'delete' },
-  edit: { url: '/simpro/simtask/{sid}/', method: 'put' },
-  add: { url: '/simpro/simtask/', method: 'post' },
+  getList: { url: '/simpro/simtask/template/', method: 'get' },
+  get: { url: '/simpro/simtask/template/{sid}/', method: 'get' },
+  delete: { url: '/simpro/simtask/template/{sid}/', method: 'delete' },
+  edit: { url: '/simpro/simtask/template/{sid}/', method: 'put' },
+  add: { url: '/simpro/simtask/template/', method: 'post' },
   run: { url: '/simpro/sim_task/', method: 'post' }
 })()
 

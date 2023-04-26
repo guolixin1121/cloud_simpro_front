@@ -8,14 +8,17 @@
       <svg-icon icon="back" class="mr-2"></svg-icon>返回
     </div>
     <span class="title mb-5 mt-3">场景详情</span>
-    <a-form :model="formState" :labelCol ="{ style: { width: '80px' } }"  style="width: 550px;">
+    <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 550px;">
+      <a-form-item label="场景ID">
+        {{ formState.id }}
+      </a-form-item>
       <a-form-item label="场景名称">
         {{ formState.name }}
       </a-form-item>
       <a-form-item label="场景来源" >
         {{ getSceneSourceName(formState.adsSource) }}
       </a-form-item>
-      <a-form-item label="场景集">
+      <a-form-item label="所属场景集">
         {{ formState.baiduSceneSets }}
       </a-form-item>
       <a-form-item label="关联地图">
@@ -51,6 +54,7 @@ const id = useRoute().params.id
 
 const fileList = ref()
 const formState = reactive({
+  id: '',
   name: undefined,
   map_version_obj: undefined,
   baiduSceneSets: undefined,
@@ -68,6 +72,7 @@ const goback = () => router.go(-1)
 const getEditData = async () => {
    if(id !== '0') {
      const scene = await api.scene.get(id)
+     formState.id = scene.id
      formState.name = scene.adsName
      formState.labels = scene.labels_detail
      formState.adsSource = scene.adsSource

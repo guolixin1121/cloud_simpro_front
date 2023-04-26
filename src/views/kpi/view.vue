@@ -58,9 +58,9 @@ const getEditData = async () => {
      formState.id = data.id
      formState.name = data.name
      formState.desc = data.desc
-     formState.kpi_type_name = data.kpi_type_name
+     formState.kpi_type_name = data.category_name
      formState.create_date = formatDate(data.create_date)
-     formState.update_date = formatDate(data.update_date)
+     formState.update_date = formatDate(data.update_time)
      formState.create_user = data.create_user
    }
 }

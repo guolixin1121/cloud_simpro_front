@@ -41,7 +41,7 @@ type Query = Record<string, any>
 const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入评测指标名称'},
-  { label: '类别', key: 'kpi_type', type: 'tree-select', api: currentApi.getTypes, fieldNames: { label: 'title', value: 'id'}, defaultValue: ''},
+  { label: '类别', key: 'category', type: 'tree-select', api: currentApi.getTypes, fieldNames: { label: 'title', value: 'id'}, defaultValue: ''},
   { label: '创建时间', key: 'date', type: 'range-picker' }
 ])
 const onSearch = (data: Query) => query.value = data
@@ -51,7 +51,7 @@ const router = useRouter()
 const columns = [
   { title: '评测指标ID', dataIndex: 'id', width: 120 },
   { title: '评测指标名称', dataIndex: 'name', ellipsis: true},
-  { title: '指标类型', dataIndex: 'kpi_type_name', width: 150 },
+  { title: '指标类型', dataIndex: 'category_name', width: 150 },
   { title: '创建时间', dataIndex: 'create_date', width: 180 },
   { title: '修改时间', dataIndex: 'update_date', width: 180 },
   { title: '所属用户', dataIndex: 'create_user', width: 100, ellipsis: true },
@@ -59,9 +59,12 @@ const columns = [
     title: '操作', dataIndex: 'actions', fixed: 'right', width: 150,
     actions: {
       '查看': ( data: RObject ) => router.push('/kpi/view/' + data.id) ,
-      '编辑': ( data: RObject ) => router.push('/kpi/edit/' + data.id) ,
+      '编辑': {
+        validate: ( data: RObject) => data.custom != 0,
+        handler: ( data: RObject ) => router.push('/kpi/edit/' + data.id)
+      },
       '删除': {
-        validate: ( data: RObject) => data.custom === 0,
+        validate: ( data: RObject) => data.custom !== 0,
         handler: async ({ id }: RObject ) => await currentApi.delete(id)
       }
     }

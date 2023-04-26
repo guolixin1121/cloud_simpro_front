@@ -11,7 +11,7 @@
       :api="currentApi.getList" 
       :query="query" 
       :columns="columns"
-      :scroll="{ x: 1400 }">
+      :scroll="{ x: 1300 }">
       <template #bodyCell="{column, record}">
           <template v-if="column.dataIndex == 'labels_detail'">
             <a-tooltip :title="record.labels_detail.map((d: any) => d.display_name).join('  ')">
@@ -57,7 +57,6 @@ const columns = [
   { title: '标签', dataIndex: 'labels_detail', ellipsis: true },
   { title: '所属场景集', dataIndex: 'sceneset_name', width: 180, ellipsis: true },
   { title: '创建时间', dataIndex: 'createTime', width: 180 },
-  { title: '修改时间', dataIndex: 'updateTime', width: 180 },
   { title: '所属用户', dataIndex: 'createUser', width: 150, ellipsis: true },
   {
     title: '操作', dataIndex: 'actions', fixed: 'right', width: 150,

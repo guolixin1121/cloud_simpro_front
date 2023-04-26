@@ -22,11 +22,11 @@
           <a-button> 选择文件 </a-button>
         </a-upload> -->
       </a-form-item>
-      <a-form-item label="评测指标类型" name="kpi_type" :rules="[{ required: true, message: '请选择评测指标类型!' }]">
-        <tree-select v-model:value="formState.kpi_type" :api="currentApi.getTypes" :fieldNames="{label: 'title', value: 'id'}"></tree-select>
+      <a-form-item label="评测指标类型" name="category" :rules="[{ required: true, message: '请选择评测指标类型!' }]">
+        <a-select v-model:value="formState.category" :options="typesOptions"></a-select>
       </a-form-item>
       <a-form-item label="描述">
-        <a-textarea v-model:value="formState.desc" :rows="6"></a-textarea>
+        <a-textarea v-model:value="formState.desc" :maxLength="255" :rows="6"></a-textarea>
       </a-form-item>
       <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
         <a-button type="primary" html-type="submit" :loading="loading">
@@ -47,11 +47,12 @@ const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '评测指标'
 const currentApi = api.kpi
 
+const typesOptions = ref([])
 // const fileList = ref()
 const formState = reactive({
   name: '',
   desc: '',
-  kpi_type: undefined,
+  category: undefined,
   pyfile: undefined,
 })
 
@@ -63,8 +64,8 @@ const add = async () => {
 
   try {
     isAdd
-      ? await currentApi.add({ ...formState, source: 0 })
-      : await currentApi.edit({ id, data: { ...formState, source: 0 } })
+      ? await currentApi.add({ ...formState })
+      : await currentApi.edit({ id, data: { ...formState } })
 
     message.info(`${actionText}成功`)
     goback()
@@ -73,13 +74,21 @@ const add = async () => {
   }
 }
 
+// 仅能用自定义的类别
+const getTypes = async () => {
+  const res = await currentApi.getTypes()
+  const options = res.filter((d: RObject) => d.title === '自定义')
+  typesOptions.value = options?.[0].children?.map((d: RObject) => ({ label: d.title, value: d.id }))
+}
+getTypes()
+
 /****** 获取编辑数据 */
 const getEditData = async () => {
   if (id !== '0') {
     const res = await api.kpi.getList({id})
     const data = res.results?.[0]
     formState.name = data.name
-    formState.kpi_type = data.kpi_type
+    formState.category = data.category
     formState.desc = data.desc
     formState.pyfile = data.pyfile
   }

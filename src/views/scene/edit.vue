@@ -5,7 +5,7 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
-    <a-form :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 550px" @finish="add">
+    <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 550px" @finish="add">
       <a-form-item
         label="场景名称"
         name="name"
@@ -16,7 +16,7 @@
       >
         <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></a-input>
       </a-form-item>
-      <a-form-item label="场景集" name="baiduSceneSets" :rules="[{ required: true, message: '请选择场景集!' }]">
+      <a-form-item label="所属场景集" name="baiduSceneSets" :rules="[{ required: true, message: '请选择场景集!' }]">
         <tree-select v-model:value="formState.baiduSceneSets" :api="getSceneSet"></tree-select>
       </a-form-item>
       <a-form-item label="关联地图" name="map_version_obj" :rules="[{ required: true, message: '请选择关联地图!' }]">
@@ -39,7 +39,7 @@
           :titles="['可选标签', '选中标签']"
         ></scroll-transfer>
       </a-form-item>
-      <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '80px' }}">
+      <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
         <a-button type="primary" html-type="submit" :loading="loading">
           {{ actionText }}
         </a-button>

@@ -82,7 +82,7 @@ export function deepClone(source) {
   return result
 }
 
-export function formatDate(date) {
+export function formatDate(date, formatter) {
   if(!date) return ''
-  return dayjs(date).format('YYYY-MM-DD HH:MM:ss')
+  return dayjs(date).format(formatter|| 'YYYY-MM-DD HH:MM:ss')
 }
