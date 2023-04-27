@@ -1,33 +1,43 @@
 <template>
-  <Table :api="tableApi.getList" :query="{}" :columns="columns" @on-select="onSelect">
-  </Table>
+  <a-tabs>
+    <a-tab-pane key="1" tab="示例">
+      <Table :api="tableApi.getList" :query="{}" :columns="columns" @on-select="onSelect">
+      </Table>
+    </a-tab-pane>
+    <a-tab-pane key="2" tab="代码">
+      
+    </a-tab-pane>
+  </a-tabs>
 </template>
 
 <script setup lang="ts">
+import { getSceneSourceName } from '@/utils/dict'
 const tableApi = api.table
 
 const columns = [
   {
     title: 'ID',
     dataIndex: 'id',
-    key: 'id',
   },
   {
     title: '名称',
-    dataIndex: 'adsName',
-    key: 'adsName',
+    dataIndex: 'adsName'
   },
+  
+  { title: '场景来源', dataIndex: 'adsSource', formatter: getSceneSourceName, width: 90 },
+  { title: '标签', dataIndex: 'labels_detail', label: 'display_name' },
   {
     title: '操作',
-    key: 'actions',
+    dataIndex: 'actions',
+    width: 200,
     actions: {
       '运行': {
-        validate: (data: any) => data.status === '运行中',
+        validate: (data: any) => data.adsSource === 0,
         handler: (data: any) => console.log('need disable', data)
       },
       '查看': ( data: any ) => console.log('go to view page', data) ,
-      '编辑': ( data: any ) => console.log('go to edit page', data) ,
-      '删除': (data: any) => console.log('delete data after confirm', data)
+      '编辑2': ( data: any ) => console.log('go to edit page', data) ,
+      '删除2': (data: any) => console.log('delete data after confirm', data)
     }
   }
 ]

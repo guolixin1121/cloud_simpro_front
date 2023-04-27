@@ -18,18 +18,12 @@
             </a>
           </a-tooltip>
         </template>
-
-        <!-- <template v-else-if="column.dataIndex == 'adsSource'">
-          {{ getSceneSourceName(record.adsSource) }}
-        </template> -->
       </template>
     </Table>
   </div>
 </template>
 
 <script setup lang="ts">
-// import { MapManageSourceOptions } from '@/utils/dict'
-// store、api、useRouter等通过auto import自动导入的，直接在template、自定义函数等使用时无效，为undefined
 /****** api */
 const user = store.user
 const mapsApi = api.maps
@@ -50,7 +44,6 @@ const formItems = ref<SearchFormItem[]>([
     key: 'catalog',
     type: 'tree-select',
     api: () => mapsApi.getMapCatalog({ tree: 1 }),
-    fieldNames: { label: 'name', value: 'id' },
     placeholder: '请选择地图目录'
     // defaultValue: ''
   },
@@ -66,11 +59,11 @@ const columns = [
   { title: '地图ID', dataIndex: 'id', width: 80 },
   { title: '地图名称', dataIndex: 'name', width: 150, ellipsis: true },
   { title: '所属地图目录', dataIndex: 'catalogName', width: 130 },
-  { title: '地图版本数量', dataIndex: 'versionCount', width: 130, ellipsis: true },
+  { title: '地图版本数量', dataIndex: 'versionCount', width: 130 },
   { title: '地图文件', dataIndex: 'xodr', ellipsis: true },
   // { title: '地图类型', dataIndex: 'mapType', ellipsis: true },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
-  { title: '所属用户', dataIndex: 'create_user', width: 100, ellipsis: true },
+  { title: '所属用户', dataIndex: 'create_user', width: 100 },
   {
     title: '操作',
     dataIndex: 'actions',

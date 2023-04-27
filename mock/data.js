@@ -35,7 +35,7 @@ module.exports = [
             children: [
               { 
                 title: '搜素、表格及权限', 
-                path: '/demo/list', 
+                path: '/demo/table', 
                 actions: ['add', 'delete', 'edit']
              },
              { 
@@ -69,12 +69,18 @@ module.exports = [
         {
           id: '1',
           adsName: '胡彦斌',
-          labels_detail: ['胡彦祖']
+          adsSource: 0,
+          labels_detail: [
+            { id: 82, name: "right_backward_ob", display_name: "右后" }
+          ]
         },
         {
           id: '2',
           adsName: '胡彦祖',
-          labels_detail: ['胡彦祖']
+          adsSource: 1,
+          labels_detail: [
+            { id: 82, name: "right_backward_ob", display_name: "右后" }
+          ]
         }
       ]}
     }

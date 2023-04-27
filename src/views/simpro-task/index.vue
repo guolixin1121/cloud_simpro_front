@@ -19,34 +19,6 @@
           disabled: record.status === '运行中'
         }),
       }">
-      <template #bodyCell="{column, record}">
-          <template v-if="column.dataIndex == 'kpi_detail'">
-            <a-tooltip :title="record.kpi_detail.map((d: any) => d.name).join('  ')">
-              <span v-for="label in record.kpi_detail" :key="label.id" class="text-blue mr-2">
-                {{ label.name }}
-              </span>
-            </a-tooltip>
-          </template>
-
-          <template v-if="column.dataIndex == 'scene_detail'">
-            <a-tooltip :title="record.scenes_detail.map((d: any) => d.name).join('  ')">
-              <span v-for="label in record.scenes_detail" :key="label.id" class="text-blue mr-2">
-                {{ label.adsName }}
-              </span>
-            </a-tooltip>
-          </template>
-
-          <template v-if="column.dataIndex == 'source'">
-            {{ getTaskSourceName(record.source)}}
-          </template>
-
-          <template v-if="column.dataIndex == 'vehicle_detail'">
-            {{ record.vehicle_detail?.name }}
-          </template>
-          <template v-if="column.dataIndex == 'algorithm_detail'">
-            {{ record.algorithm_detail?.name }}
-          </template>
-      </template>
     </Table>
   </div>
 </template>
@@ -73,16 +45,16 @@ const table = ref()
 const router = useRouter()
 const columns = [
   { title: '任务ID', dataIndex: 'id', width: 80 },
-  { title: '仿真任务名称', dataIndex: 'name', width: 150, ellipsis: true},
-  { title: '任务来源', dataIndex: 'source', width: 90 },
-  { title: '主车模型', dataIndex: 'vehicle_detail', width: 150, ellipsis: true },
+  { title: '仿真任务名称', dataIndex: 'name', width: 150},
+  { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90,  },
+  { title: '主车模型', dataIndex: 'vehicle_detail', width: 150 },
   { title: '场景文件数量', dataIndex: 'scene_count', width: 100 },
-  { title: '仿真算法', dataIndex: 'algorithm_detail', width: 100, ellipsis: true  },
-  { title: '评测指标', dataIndex: 'kpi_detail', width: 180, ellipsis: true },
-  { title: '场景', dataIndex: 'scene_detail', width: 180, ellipsis: true },
+  { title: '仿真算法', dataIndex: 'algorithm_detail', width: 100  },
+  { title: '评测指标', dataIndex: 'kpi_detail', width: 180 },
+  { title: '场景', dataIndex: 'scenes_detail', width: 180 },
   { title: '执行任务次数', dataIndex: 'batch', width: 100 },
-  { title: '创建时间', dataIndex: 'createTime', width: 150 },
-  { title: '所属用户', dataIndex: 'create_user', width: 100, ellipsis: true },
+  { title: '创建时间', dataIndex: 'create_time', width: 150 },
+  { title: '所属用户', dataIndex: 'create_user', width: 100 },
   {
     title: '操作', dataIndex: 'actions', fixed: 'right', width: 150,
     actions: {

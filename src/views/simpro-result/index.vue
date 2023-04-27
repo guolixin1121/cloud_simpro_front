@@ -12,29 +12,8 @@
       :columns="columns"
       :scroll="{ x: 1800 }">
       <template #bodyCell="{column, record}">
-          <template v-if="column.dataIndex == 'kpi_detail'">
-            <a-tooltip :title="record.kpi_detail.map((d: any) => d.name).join('  ')">
-              <span v-for="label in record.kpi_detail" :key="label.id" class="text-blue mr-2">
-                {{ label.name }}
-              </span>
-            </a-tooltip>
-          </template>
-
-          <template v-if="column.dataIndex == 'source'">
-            {{ getTaskSourceName(record.source)}}
-          </template>
           <template v-if="column.dataIndex == 'is_passed'">
             {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '不通过' }}
-          </template>
-          <template v-if="column.dataIndex == 'vehicle_detail'">
-            {{ record.vehicle_detail?.name }}
-          </template>
-          <template v-if="column.dataIndex == 'algorithm_detail'">
-            {{ record.algorithm_detail.name }}
-          </template>
-
-          <template v-if="column.dataIndex == 'finish_time'">
-            {{ record.finish_time || '--' }}
           </template>
           <template v-if="column.dataIndex == 'actions'">
             <span v-if="record.status == '运行中'">---</span>
@@ -74,15 +53,15 @@ const onSearch = (data: Query) => query.value = data
 const router = useRouter()
 const columns = [
   { title: '任务ID', dataIndex: 'id', width: 80 },
-  { title: '仿真任务名称', dataIndex: 'name', width: 150, ellipsis: true},
-  { title: '任务来源', dataIndex: 'source', width: 90 },
-  { title: '主车模型', dataIndex: 'vehicle_detail', width: 150, ellipsis: true },
-  { title: '仿真算法', dataIndex: 'algorithm_detail', width: 150, ellipsis: true  },
-  { title: '评测指标', dataIndex: 'kpi_detail', width: 180, ellipsis: true },
+  { title: '仿真任务名称', dataIndex: 'name', width: 150},
+  { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90 },
+  { title: '主车模型', dataIndex: 'vehicle_detail', width: 150 },
+  { title: '仿真算法', dataIndex: 'algorithm_detail', width: 150  },
+  { title: '评测指标', dataIndex: 'kpi_detail', width: 180 },
   { title: '任务状态', dataIndex: 'status', width: 80 },
   { title: '任务结果', dataIndex: 'is_passed', width: 80 },
   { title: '完成时间', dataIndex: 'finish_time', width: 150 },
-  { title: '所属用户', dataIndex: 'createUser', width: 100, ellipsis: true },
+  { title: '所属用户', dataIndex: 'createUser', width: 100 },
   {
     title: '操作', dataIndex: 'actions', fixed: 'right', width: 150,
     actions: {

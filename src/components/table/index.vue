@@ -1,6 +1,8 @@
-<!-- 封装了操作列：有操作权限时才展示操作按钮 -->
+<!-- 封装了 - 日期格式化、操作列（有操作权限时才展示操作按钮） -->
+<!-- tree table默认展开只支持首次赋值，所以增加v-if="$attrs['tree-default-expand-all'] != '' || dataSource?.length" -->
 <template>
   <a-table
+    v-if="$attrs['tree-default-expand-all'] != '' || dataSource?.length"
     bordered
     class="ant-table-striped mt-2"
     v-bind="$attrs"
@@ -19,52 +21,26 @@
         : null
     "
     :defaultExpandAllRows="true"
-    tree-default-expand-all
     :pagination="pagination"
     @change="onChange"
   >
     <template v-slot:[item]="scope" v-for="item in Object.keys($slots)">
       <slot v-if="item !== 'bodyCell'" :name="item" :scope="scope" v-bind="scope || {}"></slot>
       <slot v-else :name="item" :scope="scope" v-bind="scope || {}">
-        <!-- 封装操作列 -->
-        <template v-if="scope.column.dataIndex == 'actions'">
-          <Action :scope="scope" :is-only-creator="isOnlyCreator" @delete="refresh"></Action>
-        </template>
-        <!-- 格式化时间 -->
-        <template v-else-if="scope.column.dataIndex.toLowerCase().indexOf('time') > -1 || scope.column.dataIndex.toLowerCase().indexOf('date') > -1">
-          {{ scope.record[scope.column.dataIndex] ? dayjs(scope.record[scope.column.dataIndex]).format('YYYY-MM-DD HH:MM:ss') : '' }}
-        </template>
-        <!-- hover时加tooltip -->
-        <template v-else-if="scope.column.dataIndex != 'actions'">
-          <a-tooltip :title="scope.text">
-            {{ scope.text }}
-          </a-tooltip>
-        </template>
+        <column :scope="scope" :is-only-creator="isOnlyCreator" @refresh="refresh"/>
       </slot>
     </template>
     <!-- 父组件中没有指定bodyCell时使用此模板 -->
     <template #bodyCell="scope">
-      <!-- 封装操作列 -->
-      <template v-if="scope.column.dataIndex == 'actions'">
-        <Action :scope="scope" :is-only-creator="isOnlyCreator" @delete="refresh"></Action>
-      </template>
-      <!-- 格式化时间 -->
-      <template v-else-if="scope.column.dataIndex.toLowerCase().indexOf('time') > -1 || scope.column.dataIndex.toLowerCase().indexOf('date') > -1">
-        {{ scope.record[scope.column.dataIndex] ? dayjs(scope.record[scope.column.dataIndex]).format('YYYY-MM-DD HH:MM:ss') : '' }}
-      </template>
-      <!-- hover时加tooltip -->
-      <template v-else-if="scope.column.dataIndex != 'actions'">
-        <a-tooltip :title="scope.text">
-          {{ scope.text }}
-        </a-tooltip>
-      </template>
+      <column :scope="scope" :is-only-creator="isOnlyCreator" @refresh="refresh"/>
     </template>
   </a-table>
+  <a-spin v-else  style="padding-top: 100px; width: 100%;">
+  </a-spin>
 </template>
 
 <script setup lang="ts">
-import dayjs from 'dayjs'
-import Action from './action.vue'
+import Column from './column.vue'
 
 const props = defineProps({
   api: {
@@ -87,8 +63,8 @@ const props = defineProps({
     type: Boolean,
     default: () => false
   }
-} as any)
-const emits = defineEmits(['onSelect', 'onChange'])
+})
+const emits = defineEmits(['onSelect'])
 const rowSelection: any = useAttrs()['row-selection'] || {}
 
 const current = ref(1)
