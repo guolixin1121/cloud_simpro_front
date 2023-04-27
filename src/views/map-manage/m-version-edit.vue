@@ -10,6 +10,17 @@
       <a-form-item label="地图名称：" name="mapName" :rules="[{ required: true, message: '请输入地图名称!' }]">
         <a-input :disabled="true" v-model:value="formState.mapName" maxlength="50" placeholder="请输入地图名称"></a-input>
       </a-form-item>
+      <a-form-item label="地图类型：" name="mapType" :rules="[{ required: true, message: '请选择地图类型!' }]">
+        <scroll-select
+          :disabled="true"
+          allowClear
+          style="width: 245px"
+          v-model:value="formState.mapType"
+          :options="MapManageSourceOptions"
+          placeholder="请选择地图类型"
+        >
+        </scroll-select>
+      </a-form-item>
       <a-form-item label="地图目录：" name="catalog" :rules="[{ required: true, message: '请选择地图目录!' }]">
         <tree-select
           :disabled="true"
@@ -74,11 +85,11 @@
 <script setup lang="ts">
 import type { UploadChangeParam } from 'ant-design-vue'
 import { formatDate } from '@/utils/tools'
+import { MapManageSourceOptions } from '@/utils/dict'
 
 const id = useRoute().params.id
 const { type = '' } = useRoute().query || {}
 const isView = type === '0' ? true : false // 查看
-// const isAdd = id === '0'
 const title = isView ? '查看地图' : '修改地图'
 const mapApi = api.maps
 
@@ -111,6 +122,7 @@ const getLookData = async () => {
     formState.importTime = formatDate(res.importTime)
     formState.update_time = formatDate(res.update_time)
     formState.importUserName = res.importUserName
+    formState.mapType = res.mapType
   }
 }
 getLookData()

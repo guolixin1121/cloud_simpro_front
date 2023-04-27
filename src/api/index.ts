@@ -102,7 +102,12 @@ export const kpi = defineApi({
     headers: { 'content-type': 'multipart/form-data' }
   },
 })()
-
-// export default {
-//   userApi: useSceneApi()
-// }
+// 车辆动力学
+export const veticleModel = defineApi({
+  getTurnModel: { url: '/vehicle/checkbox/', method: 'get' },
+  getList: { url: '/vehicle/dynamic_vehicle/', method: 'get' },
+  edit: { url: '/vehicle/dynamic_vehicle/{sid}', method: 'put' },
+  add: { url: '/vehicle/dynamic_vehicle/', method: 'post' },
+  upload: { url: '/vehicle/import_vehicle/', method: 'post', headers: { 'content-type': 'multipart/form-data' } },
+  delete: { url: '/vehicle/dynamic_vehicle/{sid}', method: 'delete' }
+})()

@@ -75,7 +75,7 @@ const props = defineProps({
     type: Object
   },
   columns: {
-    type: Array<Object>,
+    type: Array,
     required: true
   },
   isSelectable: {
@@ -87,14 +87,14 @@ const props = defineProps({
     type: Boolean,
     default: () => false
   }
-})
+} as any)
 const emits = defineEmits(['onSelect', 'onChange'])
-const rowSelection = useAttrs()['row-selection'] || {}
+const rowSelection: any = useAttrs()['row-selection'] || {}
 
 const current = ref(1)
-const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number }, any>)
+const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number; datalist: [] }, any>)
 const dataSource = computed(() => {
-  const results = data.value?.results
+  const results = data.value?.results || data.value?.datalist
   addKeysToData(results)
   return results
 })
@@ -120,7 +120,7 @@ watch(
     run({ ...newVal, page: 1, size: 10 })
   }
 )
-watch(current, newVal => run({ ...props.query, page: newVal, size: 10}))
+watch(current, newVal => run({ ...props.query, page: newVal, size: 10 }))
 
 const refresh = () => run({ ...props.query, page: current.value, size: 10 })
 

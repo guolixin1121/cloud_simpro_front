@@ -44,14 +44,18 @@ import 'ant-design-vue/es/date-picker/style/css' // 有些组件样式需单独�
 
 const props = defineProps({
   items: {
-    type: Array<SearchFormItem>,
+    type: Array,
     required: true
   },
   loading: {
     type: Boolean,
     default: () => false
+  },
+  query: {
+    type: Object,
+    default: () => ({})
   }
-})
+} as any)
 const emits = defineEmits(['onSearch'])
 
 // form state, and get default value from props
@@ -127,6 +131,15 @@ const onSelectChange = (key: string, value: string | string[]) => {
     formState[key] = isAllSelected ? [''] : selectedValue.filter(v => v)
   }
 }
+/***** 组件外部按钮重置table *****/
+watch(
+  () => props.query,
+  newVal => {
+    if (JSON.stringify(newVal) === '{}') {
+      reset()
+    }
+  }
+)
 </script>
 
 <style></style>
