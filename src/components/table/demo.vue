@@ -5,15 +5,23 @@
       </Table>
     </a-tab-pane>
     <a-tab-pane key="2" tab="代码">
-      
+      <div class="bg-white px-8 py-4 markdown">
+        <VueComponent />
+      </div>
     </a-tab-pane>
   </a-tabs>
 </template>
 
 <script setup lang="ts">
+import * as markdown from './readme.md'
 import { getSceneSourceName } from '@/utils/dict'
-const tableApi = api.table
 
+interface Markdown {
+  VueComponent: any
+}
+const VueComponent = (markdown as unknown as Markdown).VueComponent
+
+const tableApi = api.table
 const columns = [
   {
     title: 'ID',
