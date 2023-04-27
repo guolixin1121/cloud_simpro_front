@@ -50,12 +50,11 @@
 </template>
 
 <script setup lang="ts">
-// import type { UploadChangeParam } from 'ant-design-vue'
-
 const id = useRoute().params.id
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '场景'
+
 const getMaps = api.maps.getMaps
 const getSceneSet = (args: object) => api.scenesets.getList({ tree: 1, ...args })
 const getScennTags = (args: object) => api.tags.getList({ tag_type: 3, ...args })
@@ -69,6 +68,7 @@ const formState = reactive({
   xosc: undefined,
   labels: []
 })
+
 const path = ref('')
 watch([
   () => formState.baiduSceneSets,
@@ -105,8 +105,7 @@ const getEditData = async () => {
     formState.name = scene.adsName
     formState.labels = scene.labels
     formState.baiduSceneSets = scene.baiduSceneSets
-    formState.map_version_obj = scene.map_version_obj.value
-    //  fileList.value = [scene.xosc]
+    formState.map_version_obj = scene.map_version_obj
   }
 }
 getEditData()

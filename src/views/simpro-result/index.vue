@@ -20,15 +20,21 @@
             </a-tooltip>
           </template>
 
-          <template v-if="column.dataIndex == 'adsSource'">
+          <template v-if="column.dataIndex == 'source'">
             {{ getTaskSourceName(record.source)}}
           </template>
-
+          <template v-if="column.dataIndex == 'is_passed'">
+            {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '不通过' }}
+          </template>
           <template v-if="column.dataIndex == 'vehicle_detail'">
             {{ record.vehicle_detail?.name }}
           </template>
           <template v-if="column.dataIndex == 'algorithm_detail'">
             {{ record.algorithm_detail.name }}
+          </template>
+
+          <template v-if="column.dataIndex == 'finish_time'">
+            {{ record.finish_time || '--' }}
           </template>
           <template v-if="column.dataIndex == 'actions'">
             123123
@@ -62,11 +68,11 @@ const columns = [
   { title: '仿真任务名称', dataIndex: 'name', width: 150, ellipsis: true},
   { title: '任务来源', dataIndex: 'source', width: 90 },
   { title: '主车模型', dataIndex: 'vehicle_detail', width: 150, ellipsis: true },
-  { title: '场景文件数量', dataIndex: 'scene_count', width: 100 },
   { title: '仿真算法', dataIndex: 'algorithm_detail', width: 150, ellipsis: true  },
   { title: '评测指标', dataIndex: 'kpi_detail', width: 180, ellipsis: true },
-  { title: '执行任务次数', dataIndex: 'batch', width: 100 },
-  { title: '创建时间', dataIndex: 'createTime', width: 150 },
+  { title: '任务状态', dataIndex: 'status', width: 80 },
+  { title: '任务结果', dataIndex: 'is_passed', width: 80 },
+  { title: '完成时间', dataIndex: 'finish_time', width: 150 },
   { title: '所属用户', dataIndex: 'createUser', width: 100, ellipsis: true },
   {
     title: '操作', dataIndex: 'actions', fixed: 'right', width: 150,

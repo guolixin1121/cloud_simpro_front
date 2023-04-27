@@ -30,7 +30,7 @@
       <a-form-item label="场景">
         <ul class="view-list">
           <li class="mb-2" v-for="item in formState.scenes_detail as any" :key="item">
-            {{ item.name }}
+            {{ item.adsName }}
           </li>
         </ul>
       </a-form-item>
@@ -86,18 +86,10 @@ const getEditData = async () => {
      formState.kpi_detail = data.kpi_detail
      formState.vehicle_detail = data.vehicle_detail
      formState.scenes_detail = data.scenes_detail
-     formState.createTime = formatDate(data.create_date)
-     formState.createUser = data.createUser
+     formState.createTime = formatDate(data.create_time)
+     formState.createUser = data.create_user
    }
 }
-
-// const getSceneSet = async (data: any) => {
-//   let res = await api.scenesets.getSceneSet(data.baiduSceneSets)
-//   formState.baiduSceneSets = res.name
-
-//   res = await api.maps.getMap(data.map_version_obj)
-//   formState.map_version_obj = res.name
-// }
 getEditData()
 </script>
 

@@ -68,13 +68,27 @@ module.exports = [
         results: [
         {
           id: '1',
-          adsName: '胡彦斌'
+          adsName: '胡彦斌',
+          labels_detail: ['胡彦祖']
         },
         {
           id: '2',
-          adsName: '胡彦祖'
+          adsName: '胡彦祖',
+          labels_detail: ['胡彦祖']
         }
       ]}
+    }
+  },
+  {
+    url: "/scene/scenes/1",
+    method: "get",
+    data: {
+      code: 0,
+      data: {
+        adsName: '123',
+        adsSource: 0,
+        labels: [{display_name: 'nitest', value: 1}]
+      }
     }
   },
   {

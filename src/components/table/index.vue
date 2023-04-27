@@ -85,7 +85,7 @@ const props = defineProps({
   isOnlyCreator: {
     // 是否只允许创建者编辑，删除
     type: Boolean,
-    default: () => true
+    default: () => false
   }
 })
 const emits = defineEmits(['onSelect', 'onChange'])
@@ -132,6 +132,8 @@ const addKeysToData = (data: any) => {
     addKeysToData(item.children)
   })
 }
+
+defineExpose({ refresh })
 </script>
 
 <style scoped>

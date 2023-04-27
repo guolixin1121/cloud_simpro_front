@@ -69,15 +69,12 @@ export const task = defineApi({
   delete: { url: '/simpro/simtask/template/{sid}/', method: 'delete' },
   edit: { url: '/simpro/simtask/template/{sid}/', method: 'put' },
   add: { url: '/simpro/simtask/template/', method: 'post' },
-  run: { url: '/simpro/sim_task/', method: 'post' }
+  run: { url: '/simpro/simtask/run/', method: 'post' }
 })()
 
 export const result = defineApi({
-  getList: { url: '/simpro/simtask_result/', method: 'get' },
-  get: { url: '/simpro/simtask_result/{sid}/', method: 'get' },
+  getList: { url: '/simpro/simtask/', method: 'get' },
   delete: { url: '/simpro/simtask_result/{sid}/', method: 'delete' },
-  edit: { url: '/simpro/simtask_result/{sid}/', method: 'put' },
-  add: { url: '/simpro/simtask_result/', method: 'post' }
 })()
 
 export const algorithm = defineApi({

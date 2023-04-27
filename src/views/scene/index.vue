@@ -41,7 +41,7 @@ const tagsApi = (args: object) => api.tags.getList({ tag_type: 3, ...args })
 type Query = Record<string, any> 
 const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称或ID'},
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景名称或ID'},
   { label: '场景来源', key: 'adsSource', type: 'select', options: SceneSourceOptions, defaultValue: ''},
   { label: '标签', key: 'labels', type: 'select', mode: 'multiple', api: tagsApi, fieldNames: { label: 'display_name', value: 'name'}, defaultValue: ['']},
   { label: '创建时间', key: 'date', type: 'range-picker' }
