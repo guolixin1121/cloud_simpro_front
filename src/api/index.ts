@@ -74,7 +74,8 @@ export const task = defineApi({
 
 export const result = defineApi({
   getList: { url: '/simpro/simtask/', method: 'get' },
-  delete: { url: '/simpro/simtask_result/{sid}/', method: 'delete' },
+  getScenes: { url: '/simpro/simtask/result/', method: 'get' },
+  delete: { url: '/simpro/simtask/result/{sid}/', method: 'delete' },
 })()
 
 export const algorithm = defineApi({

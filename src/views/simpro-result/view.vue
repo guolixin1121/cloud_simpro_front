@@ -8,10 +8,11 @@
   </div>
   <a-tabs v-model:activeKey="activeKey" class="tabs">
     <a-tab-pane key="1" tab="总体测试结果">
-      <result></result>
+      <result v-if="activeKey == '1'"/>
     </a-tab-pane>
     <a-tab-pane key="2" tab="场景列表">
-      <scene />
+      <!-- 加v-if强制每次切换时刷新组件，重载数据 -->
+      <scene v-if="activeKey == '2'"/> 
     </a-tab-pane>
   </a-tabs>
 </template>
@@ -21,18 +22,6 @@ import "ant-design-vue/es/tabs/style/index.css"
 import Result from './components/results.vue'
 import Scene from './components/scene.vue'
 const activeKey = ref('1')
-// const id = useRoute().params.id
-
-// const formState = reactive({
-//   name: undefined,
-//   map_version_obj: undefined,
-//   baiduSceneSets: undefined,
-//   xosc: null,
-//   labels: [],
-//   createTime: '',
-//   updateTime: '',
-//   createUser: ''
-// })
 </script>
 
 <style lang="less" scoped>

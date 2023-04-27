@@ -37,7 +37,16 @@
             {{ record.finish_time || '--' }}
           </template>
           <template v-if="column.dataIndex == 'actions'">
-            123123
+            <span v-if="record.status == '运行中'">---</span>
+            <router-link :to="`/simpro-result/view/${record.id}`" class="text-blue mr-2">查看结果</router-link>
+            <a class="text-blue mr-2">回放</a>
+            <a-popconfirm
+              title="你确定要删除吗？"
+              ok-text="是"
+              cancel-text="否"
+            >
+              <a class="text-blue mr-2">删除</a>
+            </a-popconfirm>
           </template>
       </template>
     </Table>

@@ -32,7 +32,7 @@
         </template>
         <!-- 格式化时间 -->
         <template v-else-if="scope.column.dataIndex.toLowerCase().indexOf('time') > -1 || scope.column.dataIndex.toLowerCase().indexOf('date') > -1">
-          {{ dayjs(scope.record[scope.column.dataIndex]).format('YYYY-MM-DD HH:MM:ss') }}
+          {{ scope.record[scope.column.dataIndex] ? dayjs(scope.record[scope.column.dataIndex]).format('YYYY-MM-DD HH:MM:ss') : '' }}
         </template>
         <!-- hover时加tooltip -->
         <template v-else-if="scope.column.dataIndex != 'actions'">
@@ -50,7 +50,7 @@
       </template>
       <!-- 格式化时间 -->
       <template v-else-if="scope.column.dataIndex.toLowerCase().indexOf('time') > -1 || scope.column.dataIndex.toLowerCase().indexOf('date') > -1">
-        {{ dayjs(scope.record[scope.column.dataIndex]).format('YYYY-MM-DD HH:MM:ss') }}
+        {{ scope.record[scope.column.dataIndex] ? dayjs(scope.record[scope.column.dataIndex]).format('YYYY-MM-DD HH:MM:ss') : '' }}
       </template>
       <!-- hover时加tooltip -->
       <template v-else-if="scope.column.dataIndex != 'actions'">
