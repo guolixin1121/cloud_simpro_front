@@ -34,7 +34,7 @@ class MyStorage {
     }
   }
 
-  removeItem(key) {
+  remove(key) {
     this.storage.removeItem(key)
   }
 
