@@ -40,7 +40,7 @@ const columns = [
   { title: '场景ID', dataIndex: 'id', width: 90 },
   { title: '场景名称', dataIndex: 'adsName', width: 150, ellipsis: true },
   { title: '场景来源', dataIndex: 'adsSource', formatter: getSceneSourceName, width: 90 },
-  { title: '标签', dataIndex: 'labels_detail', label: 'display_name' },
+  { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name' },
   { title: '所属场景集', dataIndex: 'sceneset_name', width: 180, ellipsis: true  },
   { title: '创建时间', dataIndex: 'createTime', width: 180 },
   { title: '所属用户', dataIndex: 'createUser', width: 150, ellipsis: true },

@@ -51,7 +51,7 @@ const columns = [
   { title: '场景文件数量', dataIndex: 'scene_count', width: 100 },
   { title: '仿真算法', dataIndex: 'algorithm_detail', width: 150, ellipsis: true },
   { title: '评测指标', dataIndex: 'kpi_detail', width: 180, ellipsis: true },
-  { title: '场景', dataIndex: 'scenes_detail', label: 'adsName', width: 180, ellipsis: true },
+  { title: '场景', dataIndex: 'scenes_detail', apiField: 'adsName', width: 180, ellipsis: true },
   { title: '执行任务次数', dataIndex: 'batch', width: 100 },
   { title: '创建时间', dataIndex: 'create_time', width: 150 },
   { title: '所属用户', dataIndex: 'create_user', width: 100 },

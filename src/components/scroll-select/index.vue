@@ -7,6 +7,7 @@
     @search="onSearch"
     @focus="onFocus"
     @popupScroll="onScroll"
+    @change="onChange"
   >
   </a-select>
 </template>
@@ -87,9 +88,14 @@ const onFocus = () => {
   }
 }
 
-// 分页时，默认选中项可能不是第一页的数据，需要单独加载
+/**** 分页时的数据回写，默认选中项可能不是第一页 ****/
+// 值从父组件传过来时触发getDefaultOptions，内部的更改则不触发
+const isValueFromParent = ref(true) 
+const onChange = () => {
+  isValueFromParent.value = false
+}
 const getDefaultOptions = async () => {
-  if (props.api) {
+  if (props.api && isValueFromParent.value) {
     // 统一转换成多选，方便处理
     const values = Array.isArray(attrs.value) ? attrs.value : [attrs.value || '']
     const { label, value } = props.fieldNames
@@ -107,7 +113,7 @@ const getDefaultOptions = async () => {
     })
   }
 }
-// 仅仅初始化时回写
+// 仅仅初始化时回写数据
 watchOnce(() => attrs.value, getDefaultOptions)
 
 initOptions()

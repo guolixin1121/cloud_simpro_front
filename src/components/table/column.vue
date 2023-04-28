@@ -9,13 +9,13 @@
   </template>
   <!-- 值为对象：获取name -->
   <template v-else-if="isObject(dataValue)">
-      {{ dataValue[column.label] || dataValue.name }}
+      {{ dataValue[column.apiField] || dataValue.name }}
   </template>
   <!-- 值为数组： 默认获取name值，可通过label指定字段 -->
   <template v-else-if="Array.isArray(dataValue)">
-    <a-tooltip :title="dataValue.map((d: any) => d[column.label]|| d.name).join('  ')">
+    <a-tooltip :title="dataValue.map((d: any) => d[column.apiField]|| d.name).join('  ')">
       <span v-for="label in dataValue" :key="label.id" class="text-blue mr-2">
-        {{ label[column.label] || label.name }}
+        {{ label[column.apiField] || label.name }}
       </span>
     </a-tooltip>
   </template>
