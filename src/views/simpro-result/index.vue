@@ -7,6 +7,7 @@
     </div>
     
     <Table 
+      ref="table"
       :api="currentApi.getList" 
       :query="query" 
       :columns="columns"
@@ -16,13 +17,17 @@
             {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '不通过' }}
           </template>
           <template v-if="column.dataIndex == 'actions'">
-            <span v-if="record.status == '运行中'">---</span>
-            <router-link :to="`/simpro-result/view/${record.id}`" class="text-blue mr-2">查看结果</router-link>
-            <a class="text-blue mr-2">回放</a>
+            <span v-if="record.status == '运行'">---</span>
+            <template v-else>
+              <router-link :to="`/simpro-result/view/${record.id}`" class="text-blue mr-2">查看结果</router-link>
+              <a class="text-blue mr-2">回放</a>
+            </template>
             <a-popconfirm
+              v-if="record.status != '运行'"
               title="你确定要删除吗？"
               ok-text="是"
               cancel-text="否"
+              @confirm="onConfirmDelete(record)"
             >
               <a class="text-blue mr-2">删除</a>
             </a-popconfirm>
@@ -50,7 +55,7 @@ const formItems = ref<SearchFormItem[]>([
 const onSearch = (data: Query) => query.value = data
 
 /****** 表格区域 */
-const router = useRouter()
+const table = ref()
 const columns = [
   { title: '任务ID', dataIndex: 'id', width: 80 },
   { title: '仿真任务名称', dataIndex: 'name', width: 150, ellipsis: true},
@@ -62,14 +67,13 @@ const columns = [
   { title: '任务结果', dataIndex: 'is_passed', width: 80 },
   { title: '完成时间', dataIndex: 'finish_time', width: 150 },
   { title: '所属用户', dataIndex: 'createUser', width: 100 },
-  {
-    title: '操作', dataIndex: 'actions', fixed: 'right', width: 150,
-    actions: {
-      '查看': ( data: any ) => router.push('/simpro/view/' + data.id),
-      '编辑': ( data: any ) => router.push('/simpro/edit/' + data.id),
-      '删除': async ({ id }: { id: string} ) => await currentApi.delete(id)
-    }
-  }
+  { title: '操作', dataIndex: 'actions', fixed: 'right', width: 150 }
 ]
+
+const onConfirmDelete = async (record: RObject) => {
+  await currentApi.delete(record.id)
+  message.info('删除成功')
+  table.value.refresh()
+}
  </script>
  
