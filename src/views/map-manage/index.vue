@@ -1,12 +1,12 @@
 <template>
-  <div class="main">
     <search-form :items="formItems" @on-search="onSearch"></search-form>
 
+  <div class="main">
     <div class="flex justify-between items-center">
       <span class="title">地图管理</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')">上传地图</a-button>
     </div>
-    <Table :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 1200, y: 420 }">
+    <Table :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 1200 }">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'versionCount'">
           <a-tooltip :title="record.versionCount">

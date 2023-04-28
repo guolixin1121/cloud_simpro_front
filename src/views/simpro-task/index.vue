@@ -45,13 +45,13 @@ const table = ref()
 const router = useRouter()
 const columns = [
   { title: '任务ID', dataIndex: 'id', width: 80 },
-  { title: '仿真任务名称', dataIndex: 'name', width: 150},
+  { title: '仿真任务名称', dataIndex: 'name', width: 150, ellipsis: true},
   { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90,  },
-  { title: '主车模型', dataIndex: 'vehicle_detail', width: 150 },
+  { title: '主车模型', dataIndex: 'vehicle_detail', width: 150, ellipsis: true },
   { title: '场景文件数量', dataIndex: 'scene_count', width: 100 },
   { title: '仿真算法', dataIndex: 'algorithm_detail', width: 100  },
-  { title: '评测指标', dataIndex: 'kpi_detail', width: 180 },
-  { title: '场景', dataIndex: 'scenes_detail', width: 180 },
+  { title: '评测指标', dataIndex: 'kpi_detail', width: 180, ellipsis: true },
+  { title: '场景', dataIndex: 'scenes_detail', width: 180, ellipsis: true },
   { title: '执行任务次数', dataIndex: 'batch', width: 100 },
   { title: '创建时间', dataIndex: 'create_time', width: 150 },
   { title: '所属用户', dataIndex: 'create_user', width: 100 },

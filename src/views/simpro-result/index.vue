@@ -53,11 +53,11 @@ const onSearch = (data: Query) => query.value = data
 const router = useRouter()
 const columns = [
   { title: '任务ID', dataIndex: 'id', width: 80 },
-  { title: '仿真任务名称', dataIndex: 'name', width: 150},
+  { title: '仿真任务名称', dataIndex: 'name', width: 150, ellipsis: true},
   { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90 },
-  { title: '主车模型', dataIndex: 'vehicle_detail', width: 150 },
-  { title: '仿真算法', dataIndex: 'algorithm_detail', width: 150  },
-  { title: '评测指标', dataIndex: 'kpi_detail', width: 180 },
+  { title: '主车模型', dataIndex: 'vehicle_detail', width: 150, ellipsis: true },
+  { title: '仿真算法', dataIndex: 'algorithm_detail', width: 150, ellipsis: true  },
+  { title: '评测指标', dataIndex: 'kpi_detail', width: 180 , ellipsis: true},
   { title: '任务状态', dataIndex: 'status', width: 80 },
   { title: '任务结果', dataIndex: 'is_passed', width: 80 },
   { title: '完成时间', dataIndex: 'finish_time', width: 150 },

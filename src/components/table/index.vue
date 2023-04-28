@@ -2,6 +2,7 @@
 <!-- tree table默认展开只支持首次赋值，所以增加v-if="$attrs['tree-default-expand-all'] != '' || dataSource?.length" -->
 <template>
   <a-table
+    style="height: calc(100% - 40px); overflow: auto;"
     v-if="$attrs['tree-default-expand-all'] != '' || dataSource?.length"
     bordered
     class="ant-table-striped mt-2"
@@ -87,7 +88,7 @@ const onSelectChange = (selectedKeys: string[]) => {
   emits('onSelect', selectedKeys)
 }
 
-// page event handler
+// 页面切换 event handler
 const onChange = (params: any) => (current.value = params.current)
 watch(
   () => props.query,
@@ -98,6 +99,16 @@ watch(
 )
 watch(current, newVal => run({ ...props.query, page: newVal, size: 10 }))
 
+// 动态计算表格父容器高度
+onMounted(() => {
+  const height = document.getElementsByClassName('ant-form')?.[0]?.clientHeight + 20
+  const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
+  if(mainContent) {
+    mainContent.style.height = 'calc(100% - ' + height + 'px)'
+  }
+})
+
+// 用于删除等操作后，重新加载table
 const refresh = () => run({ ...props.query, page: current.value, size: 10 })
 
 // 为了兼容树状的table，为每个数据增加key

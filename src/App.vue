@@ -15,5 +15,6 @@ dayjs.locale('zh-cn');
 #app {
   min-width: 1440px;
   overflow: auto;
+  display: flex;
 }
 </style>
