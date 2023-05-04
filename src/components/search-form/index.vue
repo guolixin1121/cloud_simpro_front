@@ -69,7 +69,7 @@ props.items.forEach((item: any) => formState[item.key] = item.defaultValue)
 const route = useRoute()
 onMounted(() => {
   const storage = SStorage.get(route.path)
-  const isFromCache = route.query.menu !== null && storage
+  const isFromCache = route.query.clear !== null && storage
   if(isFromCache) {
     props.items.forEach((item: any) => {
       const key = item.key

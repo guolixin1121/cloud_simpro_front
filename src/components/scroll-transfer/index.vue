@@ -70,7 +70,7 @@ const rightSelectedValues = ref<SelectOption[]>([])
 
 const rightDataSourceBackup = ref<SelectOption[]>([])
 const dataSourceFromApi = ref<SelectOption[]>([]) // 左侧全部列表数据。从接口获取
-const isEdit = ref() // 是否是回写
+const isWriteBack = ref() // 是否是回写
 
 const onLeftSelect = (data: SelectOption[]) => (leftSelectedValues.value = data)
 const onRightSelect = (data: SelectOption[]) => (rightSelectedValues.value = data)
@@ -79,7 +79,7 @@ const addToRight = () => {
   rightDataSource.value = [...leftSelectedValues.value, ...rightDataSource.value]
   rightDataSourceBackup.value = rightDataSource.value
 
-  isEdit.value = false
+  isWriteBack.value = false
 }
 const addToLeft = () => {
   rightDataSource.value = removeOptions(rightDataSource.value, rightSelectedValues.value)
@@ -106,7 +106,7 @@ const getOptions = async () => {
     dataSourceFromApi.value.push(...newOptions)
     isAllLoaded.value = dataSourceFromApi.value.length >= (res.count || res.length)
 
-    if(isEdit.value && !isAllLoaded.value) {
+    if(isWriteBack.value && !isAllLoaded.value) {
       setDefaultOptions()
     }
   }
@@ -130,11 +130,11 @@ const setDefaultOptions = async () => {
         // 右侧数据
         rightDataSource.value.push(...options)
         rightDataSourceBackup.value = rightDataSource.value
+        isWriteBack.value = false
 
         // 左侧数据不够一屏，继续加载数据，确保滚动条出现
         if (rightDataSource.value.length === targetKeys.length && !isAllLoaded.value) {
           page.value++
-          isEdit.value = false
           getOptions()
         }
       }
@@ -145,7 +145,7 @@ const setDefaultOptions = async () => {
 // 仅用于回写
 watchOnce(
   () => props.targetKeys,
-  () => isEdit.value = true
+  () => isWriteBack.value = true
 )
 
 // 发送数据给父组件
@@ -154,7 +154,7 @@ watch(rightDataSource, () => {
   emits('update:targetKeys', newTargetKeys)
 })
 
-// 从所有数据中过滤出右侧数据
+// 左侧数据 = 从所有数据中过滤掉右侧数据
 watchEffect(() => {
   const isInRightList = (item: SelectOption) => rightDataSource.value.find(rItem => rItem.value === item.value)
   leftDataSource.value = dataSourceFromApi.value.filter((item: SelectOption) => !isInRightList(item))

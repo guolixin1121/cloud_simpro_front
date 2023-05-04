@@ -3,6 +3,7 @@
     :options="options"
     placeholder="请选择"
     showSearch
+    :not-found-content="null"
     :filter-option="filterOption"
     @search="onSearch"
     @focus="onFocus"
@@ -28,7 +29,7 @@ const props = defineProps({
 const attrs = useAttrs()
 const currentPage = ref(1) // 分页load选项
 const isAllLoaded = ref(false)
-const isEdit = ref()  // 是否是回写
+const isWriteBack = ref()  // 是否是回写
 const options = ref<OptionProps>([])
 
 // 根据defaultValue是否为空，判断是否需要加‘全部’的option
@@ -76,7 +77,7 @@ const onFocus = () => {
 }
 
 // 值从父组件传过来时触发getDefaultOptions，内部的更改则不触发
-const onChange = () => isEdit.value = false
+const onChange = () => isWriteBack.value = false
 
 const getOptions = async (query: string = '') => {
   if (props.api) {
@@ -84,7 +85,7 @@ const getOptions = async (query: string = '') => {
     options.value.push(...transformOption(res))
     isAllLoaded.value = options.value.length >= (res.count || res.length)
 
-    if(isEdit.value && !isAllLoaded.value) {
+    if(isWriteBack.value && !isAllLoaded.value) {
       getDefaultOptions()
     }
   }
@@ -97,26 +98,30 @@ const getDefaultOptions = async () => {
     const values = Array.isArray(attrs.value) ? attrs.value : [attrs.value || '']
     values.forEach(async (data: string) => {
       const isExistInOptions = options.value.find((item: any) => item.value == data)
+      console.log(isExistInOptions, options.value)
       if (props.api && !isExistInOptions) {
         const res = await props.api({ [props.fieldNames.value]: data })
         options.value.push(...transformOption(res))
       }
     })
+    isWriteBack.value = false
   }
 }
 
 const transformOption = (response: RObject) => {
   const { label, value, apiField = '' } = props.fieldNames
   const results = response.results || response.datalist || response[apiField] || response
-  const options = results.map((item: any) => ({
+  let newOptions = results.map((item: any) => ({
     label: item[label],
     value: item[value]
   }))
-  return options || []
+  // 过滤掉列表中已存在的项
+  newOptions = newOptions.filter((item: SelectOption) => !options.value.find((option: SelectOption) => option.value === item.value))
+  return newOptions || []
 }
 
 // 仅仅初始化时回写数据
-watchOnce(() => attrs.value, () => isEdit.value = true)
+watchOnce(() => attrs.value, () => isWriteBack.value = true)
 
 initOptions()
 getOptions()
