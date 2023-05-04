@@ -69,7 +69,7 @@ const emits = defineEmits(['onSelect'])
 const rowSelection: any = useAttrs()['row-selection'] || {}
 
 const current = ref(1)
-const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number; datalist: [] }, any>)
+const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number; datalist: [] }, any>, { manual: true})
 const dataSource = computed(() => {
   const results = data.value?.results || data.value?.datalist
   addKeysToData(results)
@@ -80,6 +80,7 @@ const pagination = computed(() => ({
   total: data.value?.count,
   'show-total': (total: number) => `共 ${total} 条`
 }))
+const size = 10
 
 // selection handler
 const selectedRowKeys = ref<string[]>([])
@@ -97,7 +98,7 @@ watch(
     run({ ...newVal, page: 1, size: 10 })
   }
 )
-watch(current, newVal => run({ ...props.query, page: newVal, size: 10 }))
+watch(current, newVal => run({ ...props.query, page: newVal, size }))
 
 // 动态计算表格父容器高度
 onMounted(() => {
@@ -109,7 +110,7 @@ onMounted(() => {
 })
 
 // 用于删除等操作后，重新加载table
-const refresh = () => run({ ...props.query, page: current.value, size: 10 })
+const refresh = () => run({ ...props.query, page: current.value, size })
 
 // 为了兼容树状的table，为每个数据增加key
 const addKeysToData = (data: any) => {
@@ -120,6 +121,7 @@ const addKeysToData = (data: any) => {
   })
 }
 
+refresh()
 defineExpose({ refresh })
 </script>
 

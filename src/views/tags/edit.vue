@@ -128,7 +128,7 @@ const getLookData = async () => {
     formState.display_name = res.display_name
     formState.desc = res.desc
     formState.isTag = res.isTag
-    formState.tag_type = res.tag_type_name
+    formState.tag_type = res.tag_type
     formState.create_time = res.create_time
     formState.update_time = res.update_time
     formState.create_user = res.create_user

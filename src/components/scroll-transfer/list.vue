@@ -7,7 +7,9 @@
     <a-input-search class="my-2" placeholder="请输入搜索内容" allowClear 
       @search="onSearch"
       @pressEnter="onSearch"></a-input-search>
-    <div style="height: calc(100% - 40px); overflow: auto" @scroll="(e: Event) => onScroll(e)">
+    <div style="height: calc(100% - 40px); overflow: auto" 
+      @scroll="(e: Event) => onScroll(e)">
+      <a-spin v-if="loading" style="width: 100%; padding-top: 20px"></a-spin>
       <a-checkbox-group 
         v-model:value="state.checkedList" 
         :options="dataSource"
@@ -27,6 +29,10 @@ const props = defineProps({
   dataSource: {
     type: Array as PropType<SelectOption[]>,
     default: () => []
+  },
+  loading: {
+    type: Boolean,
+    default: () => false
   }
 })
 const state = reactive({
