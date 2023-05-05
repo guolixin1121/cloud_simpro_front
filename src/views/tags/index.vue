@@ -1,11 +1,12 @@
 <template>
+  <search-form :items="formItems" @on-search="onSearch"></search-form>
+  
   <div class="main">
-    <search-form :items="formItems" @on-search="onSearch"></search-form>
-    <div class="flex justify-between items-center">
+      <div class="flex justify-between items-center">
       <span class="title">标签管理</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/tags/edit/0')">创建标签</a-button>
     </div>
-    <Table :api="tagsApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 420 }">
+    <Table :api="tagsApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200 }">
       <template #bodyCell="data">
         <template v-if="data.column.dataIndex == 'isTag'">
           <a-switch
@@ -33,7 +34,7 @@ const active = ref(-1)
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'id', type: 'input', placeholder: '请输入标签名称或ID' },
   {
-    label: '标签',
+    label: '标签类型',
     key: 'tag_type',
     type: 'select',
     mode: 'multiple',

@@ -14,7 +14,8 @@ const props = defineProps({
       <a-menu-item :key="menu.path">
         <svg-icon :icon="menu.icon || ''"></svg-icon>
         <span>
-          <router-link :to="menu.path">{{ menu.title }}</router-link>
+          <!-- 通过 -->
+          <router-link :to="menu.path + '?clear'">{{ menu.title }}</router-link>
         </span>
       </a-menu-item>
     </template>

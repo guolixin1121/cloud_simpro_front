@@ -55,7 +55,7 @@ const props = defineProps({
   },
   fieldNames: {
     type: Object as PropType<FieldNames>,
-    default: () => ({ label: 'name', value: 'id' })
+    default: () => ({ label: 'name', value: 'id', apiField: '' })
   }
 } as any)
 
@@ -70,7 +70,7 @@ const rightSelectedValues = ref<SelectOption[]>([])
 
 const rightDataSourceBackup = ref<SelectOption[]>([])
 const dataSourceFromApi = ref<SelectOption[]>([]) // 左侧全部列表数据。从接口获取
-const isValueFromParent = ref(true) // 记录下targetKeys首次赋值是从父组件还是从内部，解决从左向右添加时watchOnce多触发一次的问题
+const isWriteBack = ref() // 是否是回写
 
 const onLeftSelect = (data: SelectOption[]) => (leftSelectedValues.value = data)
 const onRightSelect = (data: SelectOption[]) => (rightSelectedValues.value = data)
@@ -79,7 +79,7 @@ const addToRight = () => {
   rightDataSource.value = [...leftSelectedValues.value, ...rightDataSource.value]
   rightDataSourceBackup.value = rightDataSource.value
 
-  isValueFromParent.value = false
+  isWriteBack.value = false
 }
 const addToLeft = () => {
   rightDataSource.value = removeOptions(rightDataSource.value, rightSelectedValues.value)
@@ -93,52 +93,59 @@ const removeOptions = (source: SelectOption[], removedData: SelectOption[]) => {
 // 分页获取数据
 const page = ref(1)
 const isAllLoaded = ref(false)
-const getOptionsFromApi = async () => {
+const getOptions = async () => {
   if (props.api) {
     const res = await props.api({ page: page.value, [props.fieldNames.label]: leftSearchText })
-    const { fieldNames } = props
-    const newOptions = res.results.map((item: any) => ({
-      label: item[fieldNames.label],
-      value: item[fieldNames.value]
+    const { label, value, apiField } = props.fieldNames
+    const results = res.results ||  res[apiField] || res
+    const newOptions = results.map((item: any) => ({
+      label: item[label],
+      value: item[value]
     }))
 
     dataSourceFromApi.value.push(...newOptions)
-    isAllLoaded.value = dataSourceFromApi.value.length >= res.count
+    isAllLoaded.value = dataSourceFromApi.value.length >= (res.count || res.length)
+
+    if(isWriteBack.value && !isAllLoaded.value) {
+      setDefaultOptions()
+    }
   }
 }
 
 // 分页回写时，默认选中项可能不是第一页的数据
 // 为每个默认value值调用接口获取{label，value}放到右侧列表
 const setDefaultOptions = async () => {
-  if (props.api && isValueFromParent.value) {
+  if (props.api) {
     const targetKeys = props.targetKeys || []
-    const { label, value } = props.fieldNames
+    const { label, value, apiField } = props.fieldNames
 
     targetKeys.forEach(async (key: String) => {
       if (props.api) {
         const res = await props.api({ [value]: key })
-
-        const options: SelectOption[] = res.results.map((item: any) => ({
+        const results = res.results ||  res[apiField] || res
+        const options: SelectOption[] = results.map((item: any) => ({
           label: item[label],
           value: item[value]
         }))
         // 右侧数据
         rightDataSource.value.push(...options)
         rightDataSourceBackup.value = rightDataSource.value
+        isWriteBack.value = false
 
         // 左侧数据不够一屏，继续加载数据，确保滚动条出现
         if (rightDataSource.value.length === targetKeys.length && !isAllLoaded.value) {
           page.value++
-          getOptionsFromApi()
+          getOptions()
         }
       }
     })
   }
 }
+
 // 仅用于回写
 watchOnce(
   () => props.targetKeys,
-  () => setDefaultOptions()
+  () => isWriteBack.value = true
 )
 
 // 发送数据给父组件
@@ -147,8 +154,8 @@ watch(rightDataSource, () => {
   emits('update:targetKeys', newTargetKeys)
 })
 
+// 左侧数据 = 从所有数据中过滤掉右侧数据
 watchEffect(() => {
-  // 从所有数据中过滤出右侧数据
   const isInRightList = (item: SelectOption) => rightDataSource.value.find(rItem => rItem.value === item.value)
   leftDataSource.value = dataSourceFromApi.value.filter((item: SelectOption) => !isInRightList(item))
 
@@ -164,7 +171,7 @@ const onScroll = (e: any) => {
     const { target } = e
     if (target.scrollTop + target.offsetHeight === target.scrollHeight) {
       page.value = page.value + 1
-      getOptionsFromApi()
+      getOptions()
     }
   }
 }
@@ -176,7 +183,7 @@ const onLeftSearch = (input: string) => {
     page.value = 1
     dataSourceFromApi.value = []
     // leftDataSource.value = []
-    getOptionsFromApi()
+    getOptions()
   }
 }
 // 右侧仅查询
@@ -184,5 +191,5 @@ const onRightSearch = (input: string) => {
   rightDataSource.value = rightDataSourceBackup.value.filter((v: SelectOption) => v.label.indexOf(input) > -1)
 }
 
-getOptionsFromApi()
+getOptions()
 </script>

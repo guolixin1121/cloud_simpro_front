@@ -3,10 +3,12 @@
     :options="options"
     placeholder="请选择"
     showSearch
+    :not-found-content="null"
     :filter-option="filterOption"
     @search="onSearch"
     @focus="onFocus"
     @popupScroll="onScroll"
+    @change="onChange"
   >
   </a-select>
 </template>
@@ -25,9 +27,9 @@ const props = defineProps({
   }
 })
 const attrs = useAttrs()
-const allOption = { label: '全部', value: '' }
 const currentPage = ref(1) // 分页load选项
 const isAllLoaded = ref(false)
+const isWriteBack = ref()  // 是否是回写
 const options = ref<OptionProps>([])
 
 // 根据defaultValue是否为空，判断是否需要加‘全部’的option
@@ -37,28 +39,14 @@ const initOptions = () => {
 
   const defaultValue = attrs.defaultValue
   const hasAllOption = defaultValue === '' || (Array.isArray(defaultValue) && defaultValue.toString() === '')
-  hasAllOption && options.value.push(allOption)
+  hasAllOption && options.value.push({ label: '全部', value: '' })
 }
 
 const filterOption = (input: string, option: any) => {
   return option.label.toLowerCase().indexOf(input.toLowerCase()) >= 0
 }
 
-const getOptions = async (query: string = '') => {
-  if (props.api) {
-    const res = await props.api({ page: currentPage.value, [props.fieldNames.label]: query })
-    const { fieldNames } = props
-    const { apiField = '' } = fieldNames
-    const results = res.results || res.datalist || res[apiField] || res
-    const newOptions = results.map((item: any) => ({
-      label: item[fieldNames.label],
-      value: item[fieldNames.value]
-    }))
-    options.value.push(...newOptions)
-    isAllLoaded.value = options.value.length >= res.count
-  }
-}
-
+// 滚动分页查询
 const onScroll = (e: any) => {
   if (props.api && !isAllLoaded.value) {
     const { target } = e
@@ -82,33 +70,58 @@ const onSearch = (input: string) => {
 const onFocus = () => {
   if (props.api) {
     currentPage.value = 1
+    options.value = []
     initOptions()
     getOptions()
   }
 }
 
-// 分页时，默认选中项可能不是第一页的数据，需要单独加载
+// 值从父组件传过来时触发getDefaultOptions，内部的更改则不触发
+const onChange = () => isWriteBack.value = false
+
+const getOptions = async (query: string = '') => {
+  if (props.api) {
+    const res = await props.api({ page: currentPage.value, size: 10, [props.fieldNames.label]: query })
+    options.value.push(...transformOption(res))
+    isAllLoaded.value = options.value.length >= (res.count || res.length)
+
+    if(isWriteBack.value && !isAllLoaded.value) {
+      getDefaultOptions()
+    }
+  }
+}
+
+/**** 分页时的数据回写，默认选中项可能不是第一页 ****/
 const getDefaultOptions = async () => {
   if (props.api) {
     // 统一转换成多选，方便处理
     const values = Array.isArray(attrs.value) ? attrs.value : [attrs.value || '']
-    const { label, value } = props.fieldNames
     values.forEach(async (data: string) => {
-      if (props.api) {
-        const res = await props.api({ [value]: data })
-        const results = res.results || res.datalist || res
-        const newOptions = results.map((item: any) => ({
-          label: item[label],
-          value: item[value]
-        }))
-
-        options.value.push(...newOptions)
+      const isExistInOptions = options.value.find((item: any) => item.value == data)
+      console.log(isExistInOptions, options.value)
+      if (props.api && !isExistInOptions) {
+        const res = await props.api({ [props.fieldNames.value]: data })
+        options.value.push(...transformOption(res))
       }
     })
+    isWriteBack.value = false
   }
 }
-// 仅仅初始化时回写
-watchOnce(() => attrs.value, getDefaultOptions)
+
+const transformOption = (response: RObject) => {
+  const { label, value, apiField = '' } = props.fieldNames
+  const results = response.results || response.datalist || response[apiField] || response
+  let newOptions = results.map((item: any) => ({
+    label: item[label],
+    value: item[value]
+  }))
+  // 过滤掉列表中已存在的项
+  newOptions = newOptions.filter((item: SelectOption) => !options.value.find((option: SelectOption) => option.value === item.value))
+  return newOptions || []
+}
+
+// 仅仅初始化时回写数据
+watchOnce(() => attrs.value, () => isWriteBack.value = true)
 
 initOptions()
 getOptions()

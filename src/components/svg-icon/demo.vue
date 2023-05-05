@@ -1,7 +1,7 @@
 <template>
   <div class=" inline-block text-center m-5 border border-gray-50"  v-for="icon in icons" :key="icon">
     <p>{{icon}}</p>
-    <SvgIcon :icon="icon"></SvgIcon>
+    <svg-icon :icon="icon"></svg-icon>
   </div>
 </template>
 

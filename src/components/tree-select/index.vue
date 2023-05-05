@@ -1,5 +1,9 @@
 <template>
-  <a-tree-select :treeData="treeData" placeholder="请选择" treeDefaultExpandAll> </a-tree-select>
+  <a-tree-select 
+    :treeData="treeData" 
+    :not-found-content="null"
+    placeholder="请选择" 
+    treeDefaultExpandAll> </a-tree-select>
 </template>
 <script setup lang="ts">
 // 自定义字段

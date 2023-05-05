@@ -17,10 +17,13 @@
         <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></a-input>
       </a-form-item>
       <a-form-item label="所属场景集" name="baiduSceneSets" :rules="[{ required: true, message: '请选择场景集!' }]">
-        <tree-select v-model:value="formState.baiduSceneSets" :api="getSceneSet"></tree-select>
+        <tree-select v-model:value="formState.baiduSceneSets" :api="getSceneSet"
+          placeholder="请选择所属场景集"></tree-select>
       </a-form-item>
       <a-form-item label="关联地图" name="map_version_obj" :rules="[{ required: true, message: '请选择关联地图!' }]">
-        <scroll-select v-model:value="formState.map_version_obj" :api="getMaps"></scroll-select>
+        <scroll-select v-model:value="formState.map_version_obj" :api="getMaps" 
+          :fieldNames="{label: 'mapName', value: 'id'}"
+          placeholder="请选择关联地图"></scroll-select>
       </a-form-item>
       <a-form-item label="场景文件" name="xosc" :rules="[{ required: true, message: '请上传场景文件!' }]">
         <single-upload accept=".xosc" v-model:value="formState.xosc"></single-upload>
@@ -50,13 +53,12 @@
 </template>
 
 <script setup lang="ts">
-// import type { UploadChangeParam } from 'ant-design-vue'
-
 const id = useRoute().params.id
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '场景'
-const getMaps = api.maps.getMaps
+
+const getMaps = api.maps.getMapVersion
 const getSceneSet = (args: object) => api.scenesets.getList({ tree: 1, ...args })
 const getScennTags = (args: object) => api.tags.getList({ tag_type: 3, ...args })
 const currentApi = api.scene
@@ -64,11 +66,12 @@ const currentApi = api.scene
 // const fileList = ref()
 const formState = reactive({
   name: '',
-  map_version_obj: '',
-  baiduSceneSets: '',
+  map_version_obj: undefined,
+  baiduSceneSets: undefined,
   xosc: undefined,
   labels: []
 })
+
 const path = ref('')
 watch([
   () => formState.baiduSceneSets,
@@ -88,8 +91,8 @@ const add = async () => {
 
   try {
     isAdd
-      ? await currentApi.add({ ...formState, source: 0 })
-      : await currentApi.edit({ id, data: { ...formState, source: 0 } })
+      ? await currentApi.add({ ...formState, path: path.value, source: 0 })
+      : await currentApi.edit({ id, data: { ...formState, path: path.value, source: 0 } })
 
     message.info(`${actionText}成功`)
     goback()
@@ -105,8 +108,7 @@ const getEditData = async () => {
     formState.name = scene.adsName
     formState.labels = scene.labels
     formState.baiduSceneSets = scene.baiduSceneSets
-    formState.map_version_obj = scene.map_version_obj.value
-    //  fileList.value = [scene.xosc]
+    formState.map_version_obj = scene.map_version_obj
   }
 }
 getEditData()

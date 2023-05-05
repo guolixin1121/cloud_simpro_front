@@ -1,5 +1,7 @@
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import mdPlugin from 'vite-plugin-markdown'
+import { Mode } from 'vite-plugin-markdown'
 import eslintPlugin from 'vite-plugin-eslint'
 import { createHtmlPlugin } from 'vite-plugin-html'
 // import viteCompression from 'vite-plugin-compression'
@@ -28,6 +30,7 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       vue(),
+      mdPlugin({mode: [Mode.VUE]}),
       createHtmlPlugin({
         inject: {
           data: {

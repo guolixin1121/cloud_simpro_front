@@ -22,7 +22,7 @@
         {{ formState.baiduSceneSets }}
       </a-form-item>
       <a-form-item label="关联地图">
-        {{ formState.map_version_obj }}
+        {{ formState.mapName }}
       </a-form-item>
       <a-form-item label="场景文件" >
         <a-upload disabled :fileList="fileList"></a-upload>
@@ -55,9 +55,9 @@ const id = useRoute().params.id
 const fileList = ref()
 const formState = reactive({
   id: '',
-  name: undefined,
-  map_version_obj: undefined,
-  baiduSceneSets: undefined,
+  name: '',
+  mapName: '',
+  baiduSceneSets: '',
   adsSource: '',
   xosc: null,
   labels: [],
@@ -79,6 +79,7 @@ const getEditData = async () => {
      formState.createTime = formatDate(scene.createTime)
      formState.updateTime = formatDate(scene.updateTime)
      formState.createUser = scene.createUser
+     formState.mapName = scene.mapName
     //  fileList.value = [scene.xosc]
 
      getSceneSet(scene)
@@ -88,9 +89,6 @@ const getEditData = async () => {
 const getSceneSet = async (data: any) => {
   let res = await api.scenesets.get(data.baiduSceneSets)
   formState.baiduSceneSets = res.name
-
-  res = await api.maps.getMap(data.map_version_obj)
-  formState.map_version_obj = res.name
 }
 getEditData()
 </script>

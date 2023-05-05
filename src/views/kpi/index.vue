@@ -11,27 +11,12 @@
       :api="currentApi.getList" 
       :query="query" 
       :columns="columns"
-      :scroll="{ x: 1100 }">
-      <template #bodyCell="{column, record}">
-          <template v-if="column.dataIndex == 'labels_detail'">
-            <a-tooltip :title="record.labels_detail.map((d: any) => d.display_name).join('  ')">
-              <span v-for="label in record.labels_detail" :key="label.id" class="text-blue mr-2">
-                {{ label.display_name }}
-              </span>
-            </a-tooltip>
-          </template>
-
-          <!-- <template v-else-if="column.dataIndex == 'type'">
-            {{ getKpiTypeName(record.type)}}
-          </template> -->
-      </template>
+      :scroll="{ x: 1100 }"> 
     </Table>
   </div>
 </template>
  
 <script setup lang="ts">
-// import { KpiTypeOptions, getKpiTypeName } from '@/utils/dict'
-// store、api、useRouter等通过auto import自动导入的，直接在template、自定义函数等使用时无效，为undefined
 /****** api */
 const user = store.user
 const currentApi = api.kpi
@@ -53,18 +38,18 @@ const columns = [
   { title: '评测指标名称', dataIndex: 'name', ellipsis: true},
   { title: '指标类型', dataIndex: 'category_name', width: 150 },
   { title: '创建时间', dataIndex: 'create_date', width: 180 },
-  { title: '修改时间', dataIndex: 'update_date', width: 180 },
-  { title: '所属用户', dataIndex: 'create_user', width: 100, ellipsis: true },
+  { title: '修改时间', dataIndex: 'update_time', width: 180 },
+  { title: '所属用户', dataIndex: 'create_user', width: 100 },
   {
     title: '操作', dataIndex: 'actions', fixed: 'right', width: 150,
     actions: {
       '查看': ( data: RObject ) => router.push('/kpi/view/' + data.id) ,
       '编辑': {
-        validate: ( data: RObject) => data.custom != 0,
+        validate: ( data: RObject) => data.custom != 0, // 内置指标不可编辑
         handler: ( data: RObject ) => router.push('/kpi/edit/' + data.id)
       },
       '删除': {
-        validate: ( data: RObject) => data.custom !== 0,
+        validate: ( data: RObject) => data.custom !== 0, // 内置指标不可删除
         handler: async ({ id }: RObject ) => await currentApi.delete(id)
       }
     }

@@ -1,6 +1,9 @@
-<!-- 封装了操作列：有操作权限时才展示操作按钮 -->
+<!-- 封装了 - 日期格式化、操作列（有操作权限时才展示操作按钮） -->
+<!-- tree table默认展开只支持首次赋值，所以增加v-if="$attrs['tree-default-expand-all'] != '' || dataSource?.length" -->
 <template>
   <a-table
+    style="height: calc(100% - 40px); overflow: auto;"
+    v-if="$attrs['tree-default-expand-all'] != '' || dataSource?.length"
     bordered
     class="ant-table-striped mt-2"
     v-bind="$attrs"
@@ -19,60 +22,26 @@
         : null
     "
     :defaultExpandAllRows="true"
-    tree-default-expand-all
     :pagination="pagination"
     @change="onChange"
   >
     <template v-slot:[item]="scope" v-for="item in Object.keys($slots)">
       <slot v-if="item !== 'bodyCell'" :name="item" :scope="scope" v-bind="scope || {}"></slot>
       <slot v-else :name="item" :scope="scope" v-bind="scope || {}">
-        <!-- 封装操作列 -->
-        <template v-if="scope.column.dataIndex == 'actions'">
-          <Action :scope="scope" :is-only-creator="isOnlyCreator" @delete="refresh"></Action>
-        </template>
-        <!-- 格式化时间 -->
-        <template
-          v-else-if="
-            scope.column.dataIndex.toLowerCase().indexOf('time') > -1 || scope.column.dataIndex.toLowerCase().indexOf('date') > -1
-          "
-        >
-          {{ dayjs(scope.record[scope.column.dataIndex]).format('YYYY-MM-DD HH:MM:ss') }}
-        </template>
-        <!-- hover时加tooltip -->
-        <template v-else-if="scope.column.dataIndex != 'actions'">
-          <a-tooltip :title="scope.text">
-            {{ scope.text }}
-          </a-tooltip>
-        </template>
+        <column :scope="scope" :is-only-creator="isOnlyCreator" @refresh="refresh"/>
       </slot>
     </template>
     <!-- 父组件中没有指定bodyCell时使用此模板 -->
     <template #bodyCell="scope">
-      <!-- 封装操作列 -->
-      <template v-if="scope.column.dataIndex == 'actions'">
-        <Action :scope="scope" :is-only-creator="isOnlyCreator" @delete="refresh"></Action>
-      </template>
-      <!-- 格式化时间 -->
-      <template
-        v-else-if="
-          scope.column.dataIndex.toLowerCase().indexOf('time') > -1 || scope.column.dataIndex.toLowerCase().indexOf('date') > -1
-        "
-      >
-        {{ dayjs(scope.record[scope.column.dataIndex]).format('YYYY-MM-DD HH:MM:ss') }}
-      </template>
-      <!-- hover时加tooltip -->
-      <template v-else-if="scope.column.dataIndex != 'actions'">
-        <a-tooltip :title="scope.text">
-          {{ scope.text }}
-        </a-tooltip>
-      </template>
+      <column :scope="scope" :is-only-creator="isOnlyCreator" @refresh="refresh"/>
     </template>
   </a-table>
+  <a-spin v-else  style="padding-top: 100px; width: 100%;">
+  </a-spin>
 </template>
 
 <script setup lang="ts">
-import dayjs from 'dayjs'
-import Action from './action.vue'
+import Column from './column.vue'
 
 const props = defineProps({
   api: {
@@ -93,14 +62,14 @@ const props = defineProps({
   isOnlyCreator: {
     // 是否只允许创建者编辑，删除
     type: Boolean,
-    default: () => true
+    default: () => false
   }
-} as any)
-const emits = defineEmits(['onSelect', 'onChange'])
+})
+const emits = defineEmits(['onSelect'])
 const rowSelection: any = useAttrs()['row-selection'] || {}
 
 const current = ref(1)
-const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number; datalist: [] }, any>)
+const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number; datalist: [] }, any>, { manual: true})
 const dataSource = computed(() => {
   const results = data.value?.results || data.value?.datalist
   addKeysToData(results)
@@ -111,6 +80,7 @@ const pagination = computed(() => ({
   total: data.value?.count,
   'show-total': (total: number) => `共 ${total} 条`
 }))
+const size = 10
 
 // selection handler
 const selectedRowKeys = ref<string[]>([])
@@ -119,7 +89,7 @@ const onSelectChange = (selectedKeys: string[]) => {
   emits('onSelect', selectedKeys)
 }
 
-// page event handler
+// 页面切换 event handler
 const onChange = (params: any) => (current.value = params.current)
 watch(
   () => props.query,
@@ -128,9 +98,19 @@ watch(
     run({ ...newVal, page: 1, size: 10 })
   }
 )
-watch(current, newVal => run({ ...props.query, page: newVal, size: 10 }))
+watch(current, newVal => run({ ...props.query, page: newVal, size }))
 
-const refresh = () => run({ ...props.query, page: current.value, size: 10 })
+// 动态计算表格父容器高度
+onMounted(() => {
+  const height = document.getElementsByClassName('ant-form')?.[0]?.clientHeight + 20
+  const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
+  if(mainContent) {
+    mainContent.style.height = 'calc(100% - ' + height + 'px)'
+  }
+})
+
+// 用于删除等操作后，重新加载table
+const refresh = () => run({ ...props.query, page: current.value, size })
 
 // 为了兼容树状的table，为每个数据增加key
 const addKeysToData = (data: any) => {
@@ -140,6 +120,9 @@ const addKeysToData = (data: any) => {
     addKeysToData(item.children)
   })
 }
+
+refresh()
+defineExpose({ refresh })
 </script>
 
 <style scoped>

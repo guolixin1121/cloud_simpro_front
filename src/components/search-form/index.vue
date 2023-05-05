@@ -40,7 +40,9 @@
 <script setup lang="ts">
 import * as Ant from 'ant-design-vue'
 import { formatDate } from '@/utils/tools'
+import { SStorage } from '@/utils/storage'
 import 'ant-design-vue/es/date-picker/style/css' // 有些组件样式需单独引入
+import dayjs from 'dayjs'
 
 const props = defineProps({
   items: {
@@ -60,7 +62,33 @@ const emits = defineEmits(['onSearch'])
 
 // form state, and get default value from props
 const formState = reactive<Record<string, any>>({})
-props.items.forEach((item: any) => (formState[item.key] = item.defaultValue))
+props.items.forEach((item: any) => formState[item.key] = item.defaultValue)
+
+// 获取缓存的搜索项
+// 从菜单进入时设置?menu来清空缓存
+const route = useRoute()
+onMounted(() => {
+  const storage = SStorage.get(route.path)
+  const isFromCache = route.query.clear !== null && storage
+  if(isFromCache) {
+    props.items.forEach((item: any) => {
+      const key = item.key
+      const isTimeKey = key.toLowerCase().indexOf('time') > -1 || key.toLowerCase().indexOf('date') > -1
+      if(isTimeKey) {
+        // 日期控件
+        const timeValue = storage[key]
+        if(timeValue && timeValue[0]) {
+          formState[key] = [dayjs(timeValue[0]), dayjs(timeValue[1])]
+        }
+      } else {
+        formState[key] = storage[key]
+      }
+    })
+    emitSearch()
+  } else {
+    SStorage.clear()
+  }
+})
 
 // button events
 const form = ref()
@@ -85,6 +113,8 @@ const emitSearch = () => {
     }
   }
   emits('onSearch', { ...formValues, start_date, end_date })
+  // 缓存搜索项
+  SStorage.set(route.path, formState)
 }
 
 /**

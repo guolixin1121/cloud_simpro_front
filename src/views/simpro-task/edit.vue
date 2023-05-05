@@ -64,8 +64,8 @@ const add = async () => {
 
   try {
     isAdd 
-      ? await currentApi.add({...formState})
-      : await currentApi.edit({ id, data: {...formState} })
+      ? await currentApi.add({...formState, source: 0 })
+      : await currentApi.edit({ id, data: {...formState, source: 0 } })
 
     message.info(`${actionText}成功`)
     goback()
@@ -82,8 +82,8 @@ const getEditData = async () => {
      formState.batch = data.batch
      formState.algorithm = data.algorithm
      formState.dynamic_vehicle = data.dynamic_vehicle
-     formState.kpi = data.kpi_detail.map((v: any) => v.id)
-     formState.scenes = data.scenes
+     formState.kpi = data.kpi_detail?.map((v: any) => v.id)
+     formState.scenes = data.scenes_detail?.map((v: RObject) => v.baidu_id)
    }
 }
 getEditData()

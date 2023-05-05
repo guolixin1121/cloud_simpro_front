@@ -4,28 +4,14 @@
   <div class="main">
     <div class="flex justify-between items-center">
       <span class="title">场景管理</span>
-      <a-button type="primary" v-if="user.hasPermission('add')" @click=" router.push('/scene/edit/0')">上传场景</a-button>
+      <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
     </div>
     
     <Table 
       :api="currentApi.getList" 
       :query="query" 
       :columns="columns"
-      :scroll="{ x: 1300 }">
-      <template #bodyCell="{column, record}">
-          <template v-if="column.dataIndex == 'labels_detail'">
-            <a-tooltip :title="record.labels_detail.map((d: any) => d.display_name).join('  ')">
-              <span v-for="label in record.labels_detail" :key="label.id" class="text-blue mr-2">
-                {{ label.display_name }}
-              </span>
-            </a-tooltip>
-          </template>
-
-          <template v-else-if="column.dataIndex == 'adsSource'">
-            {{ getSceneSourceName(record.adsSource)}}
-          </template>
-      </template>
-    </Table>
+      :scroll="{ x: 1300 }" />
   </div>
 </template>
  
@@ -41,7 +27,7 @@ const tagsApi = (args: object) => api.tags.getList({ tag_type: 3, ...args })
 type Query = Record<string, any> 
 const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称或ID'},
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景名称或ID'},
   { label: '场景来源', key: 'adsSource', type: 'select', options: SceneSourceOptions, defaultValue: ''},
   { label: '标签', key: 'labels', type: 'select', mode: 'multiple', api: tagsApi, fieldNames: { label: 'display_name', value: 'name'}, defaultValue: ['']},
   { label: '创建时间', key: 'date', type: 'range-picker' }
@@ -52,10 +38,10 @@ const onSearch = (data: Query) => query.value = data
 const router = useRouter()
 const columns = [
   { title: '场景ID', dataIndex: 'id', width: 90 },
-  { title: '场景名称', dataIndex: 'adsName', width: 150, ellipsis: true},
-  { title: '场景来源', dataIndex: 'adsSource', width: 90 },
-  { title: '标签', dataIndex: 'labels_detail', ellipsis: true },
-  { title: '所属场景集', dataIndex: 'sceneset_name', width: 180, ellipsis: true },
+  { title: '场景名称', dataIndex: 'adsName', width: 150, ellipsis: true },
+  { title: '场景来源', dataIndex: 'adsSource', formatter: getSceneSourceName, width: 90 },
+  { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name' },
+  { title: '所属场景集', dataIndex: 'sceneset_name', width: 180, ellipsis: true  },
   { title: '创建时间', dataIndex: 'createTime', width: 180 },
   { title: '所属用户', dataIndex: 'createUser', width: 150, ellipsis: true },
   {

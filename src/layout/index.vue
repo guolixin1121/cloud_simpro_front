@@ -31,10 +31,17 @@ let menus: Permission[] = store.user.user.permissions
 
 // set selected menu, and open its parent menu
 const route = useRoute()
-let selectedKeys = computed(() => [route.path])
+let selectedKeys = computed(() => [menuPath.value])
 let openKeys = computed(() => {
   const keys = getParentKeys(menus)
   return !keys ? [] : keys
+})
+
+// 获取当前路由对应的菜单
+// 二级页面以一级页面为根路径
+const menuPath = computed(() => {
+  const path: string = route.path.split('/')[1]
+  return `/${path}/`
 })
 
 /**
@@ -45,7 +52,7 @@ let openKeys = computed(() => {
  */
 function getParentKeys(list: Permission[], keys: string[] = []): string[] | boolean {
   for (let item of list) {
-    if (item.path === route.path) {
+    if (item.path === menuPath.value) {
       return [...keys]
     } else if (item.children && item.children.length) {
       const parentKeys = getParentKeys(item.children, [...keys, item.path])
