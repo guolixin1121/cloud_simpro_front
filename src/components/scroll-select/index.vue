@@ -3,7 +3,7 @@
     :options="options"
     placeholder="请选择"
     showSearch
-    :not-found-content="null"
+    :not-found-content="'加载中...'"
     :filter-option="filterOption"
     @search="onSearch"
     @focus="onFocus"
@@ -98,7 +98,6 @@ const getDefaultOptions = async () => {
     const values = Array.isArray(attrs.value) ? attrs.value : [attrs.value || '']
     values.forEach(async (data: string) => {
       const isExistInOptions = options.value.find((item: any) => item.value == data)
-      console.log(isExistInOptions, options.value)
       if (props.api && !isExistInOptions) {
         const res = await props.api({ [props.fieldNames.value]: data })
         options.value.push(...transformOption(res))

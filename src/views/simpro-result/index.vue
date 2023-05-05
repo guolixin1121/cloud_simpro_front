@@ -3,7 +3,7 @@
 
   <div class="main" >
     <div class="flex justify-between items-center">
-      <span class="title">仿真结果管理</span>
+      <span class="title">仿真结果</span>
     </div>
 
     <Table 
@@ -20,7 +20,6 @@
             <span v-if="record.status == '运行'">---</span>
             <template v-else>
               <router-link :to="`/simpro-result/view/${record.id}`" class="text-blue mr-2">查看结果</router-link>
-              <a class="text-blue mr-2" @click="showVideo(record)">回放</a>
             </template>
             <a-popconfirm
               v-if="record.status != '运行'"
@@ -35,12 +34,6 @@
       </template>
     </Table>
   </div>
-
-  <a-modal class="video-player" :visible="isModal" @cancel="closeVideo" :footer="null">
-    <video style="height: 100%; width: 100%;" controls autoplay loop>
-      <source :src="videoSrc" type="video/mp4">
-    </video>
-  </a-modal>
 </template>
  
 <script setup lang="ts">
@@ -81,25 +74,5 @@ const onConfirmDelete = async (record: RObject) => {
   message.info('删除成功')
   table.value.refresh()
 }
-
-const isModal = ref(false)
-const videoSrc = ref('')
-const showVideo = (record: RObject) => {
-  isModal.value = true
-  videoSrc.value = record.video
-  videoSrc.value = 'https://10.31.255.202/x8v-drivingcloud-xtest/saimo/mp4/b2fdb736-5bde-41c2-99db-f2640399e259/61835.mp4?Expires=1683169812&AWSAccessKeyId=CB350C40B87AA1F98EC4&Signature=%2B1LmsNSKb82RA2IL4BNaTLQFvC4%3D'
-}
-const closeVideo = () => {
-  isModal.value = false
-}
  </script>
-
- <style lang="less">
-.video-player {
-  .ant-modal-body {
-    padding: 0px;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-}
-</style>
  

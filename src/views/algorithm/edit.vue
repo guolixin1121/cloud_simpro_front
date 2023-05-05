@@ -52,7 +52,6 @@ const goback = () => router.go(-1)
 /****** 获取查看数据 */
 const getLookData = async () => {
   const res = await algorithmApi.getList({ id })
-  console.log(res)
   formState.name = res?.results[0].name
   formState.version = res?.results[0].version
   formState.docker_path = res?.results[0].docker_path

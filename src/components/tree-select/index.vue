@@ -52,6 +52,8 @@ const treeTransfer = (data: any): TreeItem[] => {
   const options = data.map((item: any) => ({
     title: item[label],
     value: item[value],
+    key: item[value],
+    selectable: item.isLeaf,
     children: treeTransfer(item.children || [])
   }))
   return options

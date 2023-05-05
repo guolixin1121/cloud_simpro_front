@@ -3,7 +3,7 @@
 
   <div class="main" >
     <div class="flex justify-between items-center">
-      <span class="title">仿真任务管理</span>
+      <span class="title">仿真任务</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click=" router.push('/simpro-task/edit/0')">创建任务</a-button>
     </div>
     

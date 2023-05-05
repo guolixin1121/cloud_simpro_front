@@ -111,7 +111,6 @@ const add = async () => {
       if (!params[key]) delete params[key]
     }
   }
-  console.log(params, formState)
   isAdd ? await tagsApi.add({ ...params }) : await tagsApi.edit({ id, data: { ...params } })
   loading.value = false
   message.info(isAdd ? '创建成功' : '修改成功')

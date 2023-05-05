@@ -18,6 +18,9 @@
       <a-form-item label="评测指标类型" >
         {{ formState.kpi_type_name}}
       </a-form-item>
+      <a-form-item label="指标文件地址" >
+        {{ formState.py_url}}
+      </a-form-item>
       <a-form-item label="描述">
         {{ formState.desc }}
       </a-form-item>
@@ -43,6 +46,7 @@ const formState = reactive({
   name: undefined,
   desc: '',
   kpi_type_name: '',
+  py_url: '',
   create_date: '',
   update_date: '',
   create_user: ''
@@ -57,6 +61,7 @@ const getEditData = async () => {
      const data = res.results?.[0]
      formState.id = data.id
      formState.name = data.name
+     formState.py_url = data.py_url
      formState.desc = data.desc
      formState.kpi_type_name = data.category_name
      formState.create_date = formatDate(data.create_date)

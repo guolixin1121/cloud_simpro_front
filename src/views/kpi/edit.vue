@@ -16,14 +16,14 @@
       >
         <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入评测指标名称"></a-input>
       </a-form-item>
-      <a-form-item label="评测指标选择" name="pyfile" :rules="[{ required: true, message: '请上传评测指标文件!' }]">
-        <single-upload accept=".py" v-model:value="formState.pyfile"></single-upload>
-        <!-- <a-upload accept=".xosc" :fileList="fileList" :before-upload="beforeUpload" @remove="onRemove" @change="onFileChange">
-          <a-button> 选择文件 </a-button>
-        </a-upload> -->
-      </a-form-item>
       <a-form-item label="评测指标类型" name="category" :rules="[{ required: true, message: '请选择评测指标类型!' }]">
         <a-select v-model:value="formState.category" :options="typesOptions"></a-select>
+      </a-form-item>
+      <a-form-item label="指标文件" name="pyfile" :rules="[{ required: isAdd, message: '请上传评测指标文件!' }]">
+        <single-upload accept=".py" v-model:value="formState.pyfile"></single-upload>
+      </a-form-item>
+      <a-form-item v-if="!isAdd" label="指标文件地址" name="pyfile" :rules="[{ required: isAdd, message: '请上传评测指标文件!' }]">
+        {{ formState.py_url }}
       </a-form-item>
       <a-form-item label="描述">
         <a-textarea v-model:value="formState.desc" :maxLength="255" :rows="6"></a-textarea>
@@ -39,7 +39,6 @@
 </template>
 
 <script setup lang="ts">
-// import type { UploadChangeParam } from 'ant-design-vue'
 
 const id = useRoute().params.id
 const isAdd = id === '0'
@@ -54,6 +53,7 @@ const formState = reactive({
   desc: '',
   category: undefined,
   pyfile: undefined,
+  py_url: ''
 })
 
 const loading = ref(false)
@@ -90,7 +90,7 @@ const getEditData = async () => {
     formState.name = data.name
     formState.category = data.category
     formState.desc = data.desc
-    formState.pyfile = data.pyfile
+    formState.py_url = data.py_url
   }
 }
 getEditData()

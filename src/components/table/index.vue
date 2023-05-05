@@ -2,7 +2,8 @@
 <!-- tree table默认展开只支持首次赋值，所以增加v-if="$attrs['tree-default-expand-all'] != '' || dataSource?.length" -->
 <template>
   <a-table
-    style="height: calc(100% - 40px); overflow: auto;"
+    style="overflow: auto;"
+    :style="tableStyle"
     v-if="$attrs['tree-default-expand-all'] != '' || dataSource?.length"
     bordered
     class="ant-table-striped mt-2"
@@ -101,11 +102,16 @@ watch(
 watch(current, newVal => run({ ...props.query, page: newVal, size }))
 
 // 动态计算表格父容器高度
+const tableStyle = ref()
 onMounted(() => {
-  const height = document.getElementsByClassName('ant-form')?.[0]?.clientHeight + 20
   const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
   if(mainContent) {
+    let height = document.getElementsByClassName('top')?.[0]?.clientHeight
+    height = isNaN(height) ? 0 : (height + 20)
     mainContent.style.height = 'calc(100% - ' + height + 'px)'
+    tableStyle.value = 'height: calc(100% - 40px);'
+  } else {
+    tableStyle.value = 'height: 100%'
   }
 })
 

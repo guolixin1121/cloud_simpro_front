@@ -1,12 +1,12 @@
 <template>
-  <div class="top bg-white h-20 flex items-center pl-6">
+  <div class="top bg-white h-20 flex items-center pl-6 ant-form">
      <div class="item">总体评价<span class="value"></span></div>
      <div class="item">综合评分<span class="value">85.4</span></div>
      <div class="item">测试场景数量<span class="value">85.4</span></div>
      <div class="item">测试用例个数 <span class="value">85.4</span></div>
      <div class="item">测试次数 <span class="value">85.4</span></div>
   </div>
-  <a-tabs v-model:activeKey="activeKey" class="tabs">
+  <a-tabs v-model:activeKey="activeKey" class="tabs" style="height: calc(100% - 86px)">
     <a-tab-pane key="1" tab="总体测试结果">
       <result v-if="activeKey == '1'"/>
     </a-tab-pane>
@@ -40,7 +40,7 @@ const activeKey = ref('1')
 }
 .tabs {
   margin-top: 16px;
-  padding: 24px;
+  padding: 0 24px;
   background-color: #fff;
   border-radius: 4px;
 }

@@ -24,8 +24,8 @@
       <a-form-item label="关联地图">
         {{ formState.mapName }}
       </a-form-item>
-      <a-form-item label="场景文件" >
-        <a-upload disabled :fileList="fileList"></a-upload>
+      <a-form-item label="场景文件地址" >
+        {{ formState.adsUrl }}
       </a-form-item>
       <a-form-item label="标签">
         <ul class="view-list">
@@ -52,14 +52,13 @@ import { formatDate } from '@/utils/tools';
 import { getSceneSourceName } from '@/utils/dict';
 const id = useRoute().params.id
 
-const fileList = ref()
 const formState = reactive({
   id: '',
   name: '',
   mapName: '',
   baiduSceneSets: '',
   adsSource: '',
-  xosc: null,
+  adsUrl: '',
   labels: [],
   createTime: '',
   updateTime: '',
@@ -79,16 +78,19 @@ const getEditData = async () => {
      formState.createTime = formatDate(scene.createTime)
      formState.updateTime = formatDate(scene.updateTime)
      formState.createUser = scene.createUser
-     formState.mapName = scene.mapName
-    //  fileList.value = [scene.xosc]
+    //  formState.mapName = scene.mapName
+     formState.adsUrl = scene.adsUrl
 
-     getSceneSet(scene)
+     getData(scene)
    }
 }
 
-const getSceneSet = async (data: any) => {
+const getData = async (data: any) => {
   let res = await api.scenesets.get(data.baiduSceneSets)
   formState.baiduSceneSets = res.name
+
+  res = await api.maps.lookMapVersion(data.map_version_obj)
+  formState.mapName = res.mapName
 }
 getEditData()
 </script>

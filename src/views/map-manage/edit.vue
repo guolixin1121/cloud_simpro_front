@@ -121,7 +121,6 @@ const add = async () => {
   for (const key in params) {
     if (!params[key]) delete params[key]
   }
-  console.log(params, formState)
   isAdd ? await mapApi.addMaps({ ...params }) : await mapApi.editMaps({ id, data: { ...params } })
   loading.value = false
   message.info(isAdd ? '上传成功' : '修改成功')

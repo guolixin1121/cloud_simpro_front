@@ -1,5 +1,5 @@
 <template>
-  <a-form ref="form" layout="inline" class="white-block mb-5" :model="formState" v-bind="$attrs">
+  <a-form ref="form" layout="inline" class="white-block mb-5 top" :model="formState" v-bind="$attrs">
     <a-form-item v-for="item in items" :key="item" :label="item.label" :name="item.key" style="margin-bottom: 10px">
       <scroll-select
         v-if="item.type == 'select'"
