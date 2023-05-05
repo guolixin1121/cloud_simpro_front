@@ -1,6 +1,7 @@
 <template>
   <Table :api="getScenes"
-    :columns="columns">
+    :columns="columns"
+    :scroll="{ y: 'auto' }">
     <template #bodyCell="{column, record}">
         <template v-if="column.dataIndex == 'labels_detail'">
           <a-tooltip :title="record.labels_detail.map((d: any) => d.display_name).join('  ')">
@@ -32,12 +33,12 @@ const task = useRoute().params.id
 const getScenes = () => api.result.getScenes({ task })
 
 const columns = [
-  { dataIndex: 'id', title: '场景ID'},
+  { dataIndex: 'id', title: '场景ID', width: 100},
   { dataIndex: 'adsName', title: '场景名称'},
   { dataIndex: 'labels_detail', title: '场景标签'},
   { dataIndex: 'batch', title: '仿真轮次', width: 100},
-  { dataIndex: 'run-time', title: '开始时间'},
-  { dataIndex: 'funish-time', title: '完成时间'},
+  { dataIndex: 'run-time', title: '开始时间', width: 150},
+  { dataIndex: 'funish-time', title: '完成时间', width: 150},
   {
     dataIndex: 'actions', title: '操作', fixed: 'right', width: 150
   }

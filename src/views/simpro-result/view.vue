@@ -1,5 +1,5 @@
 <template>
-  <div class="top bg-white h-20 flex items-center pl-6 ant-form">
+  <div class="top bg-white h-20 flex items-center pl-6">
      <div class="item">总体评价<span class="value"></span></div>
      <div class="item">综合评分<span class="value">85.4</span></div>
      <div class="item">测试场景数量<span class="value">85.4</span></div>
