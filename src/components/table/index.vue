@@ -104,9 +104,9 @@ watch(current, newVal => run({ ...props.query, page: newVal, size }))
 onMounted(() => {
   const height = document.getElementsByClassName('ant-form')?.[0]?.clientHeight + 20
   const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
-  const a = document.getElementsByClassName('ant-table-body')?.[0] as HTMLElement
-  if (a) {
-    a.style.maxHeight = 'calc(100vh - ' + (40 + height + 230) + 'px)'
+  const tableScrollBody = document.getElementsByClassName('ant-table-body')?.[0] as HTMLElement
+  if (tableScrollBody) {
+    tableScrollBody.style.maxHeight = 'calc(100vh - ' + (40 + height + 230) + 'px)'
   }
   if (mainContent) {
     mainContent.style.height = 'calc(100% - ' + height + 'px)'
