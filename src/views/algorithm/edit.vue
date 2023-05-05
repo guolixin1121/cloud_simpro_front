@@ -7,16 +7,16 @@
     <span class="title mb-5">算法详情</span>
     <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px">
       <a-form-item label="算法名称：" name="name">
-        <a-input :disabled="true" v-model:value="formState.name" maxlength="50" placeholder="请输入地图名称"></a-input>
+        <span>{{ formState.name }}</span>
       </a-form-item>
       <a-form-item label="算法版本：" name="name">
-        <a-input :disabled="true" v-model:value="formState.version" maxlength="50" placeholder="请输入算法版本："></a-input>
+        <span>{{ formState.version }}</span>
       </a-form-item>
       <a-form-item label="算法镜像：" name="name">
-        <a-input :disabled="true" v-model:value="formState.docker_path" maxlength="50" placeholder="请输入算法版本："></a-input>
+        <span>{{ formState.docker_path }}</span>
       </a-form-item>
       <a-form-item label="描述" name="name">
-        <a-textarea :disabled="true" v-model:value="formState.desc" placeholder="请输入描述" rows="10" style="resize: none" />
+        <span>{{ formState.desc }}</span>
       </a-form-item>
       <a-form-item label="创建时间："
         ><span>{{ formState.create_time }}</span></a-form-item
@@ -52,7 +52,6 @@ const goback = () => router.go(-1)
 /****** 获取查看数据 */
 const getLookData = async () => {
   const res = await algorithmApi.getList({ id })
-  console.log(res)
   formState.name = res?.results[0].name
   formState.version = res?.results[0].version
   formState.docker_path = res?.results[0].docker_path
