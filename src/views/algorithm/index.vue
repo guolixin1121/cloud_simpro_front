@@ -4,7 +4,7 @@
     <div class="flex justify-between items-center">
       <span class="title">算法管理</span>
     </div>
-    <Table :api="algorithmApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200 }"> </Table>
+    <Table :api="algorithmApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }"> </Table>
   </div>
 </template>
 

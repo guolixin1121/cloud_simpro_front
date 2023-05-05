@@ -2,7 +2,7 @@
 <!-- tree table默认展开只支持首次赋值，所以增加v-if="$attrs['tree-default-expand-all'] != '' || dataSource?.length" -->
 <template>
   <a-table
-    style="height: calc(100% - 40px); overflow: auto;"
+    style="height: calc(100% - 40px); overflow: auto"
     v-if="$attrs['tree-default-expand-all'] != '' || dataSource?.length"
     bordered
     class="ant-table-striped mt-2"
@@ -28,21 +28,19 @@
     <template v-slot:[item]="scope" v-for="item in Object.keys($slots)">
       <slot v-if="item !== 'bodyCell'" :name="item" :scope="scope" v-bind="scope || {}"></slot>
       <slot v-else :name="item" :scope="scope" v-bind="scope || {}">
-        <column :scope="scope" :is-only-creator="isOnlyCreator" @refresh="refresh"/>
+        <column :scope="scope" :is-only-creator="isOnlyCreator" @refresh="refresh" />
       </slot>
     </template>
     <!-- 父组件中没有指定bodyCell时使用此模板 -->
     <template #bodyCell="scope">
-      <column :scope="scope" :is-only-creator="isOnlyCreator" @refresh="refresh"/>
+      <column :scope="scope" :is-only-creator="isOnlyCreator" @refresh="refresh" />
     </template>
   </a-table>
-  <a-spin v-else  style="padding-top: 100px; width: 100%;">
-  </a-spin>
+  <a-spin v-else style="padding-top: 100px; width: 100%"> </a-spin>
 </template>
 
 <script setup lang="ts">
 import Column from './column.vue'
-
 const props = defineProps({
   api: {
     type: Function,
@@ -69,7 +67,9 @@ const emits = defineEmits(['onSelect'])
 const rowSelection: any = useAttrs()['row-selection'] || {}
 
 const current = ref(1)
-const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number; datalist: [] }, any>, { manual: true})
+const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number; datalist: [] }, any>, {
+  manual: true
+})
 const dataSource = computed(() => {
   const results = data.value?.results || data.value?.datalist
   addKeysToData(results)
@@ -104,7 +104,11 @@ watch(current, newVal => run({ ...props.query, page: newVal, size }))
 onMounted(() => {
   const height = document.getElementsByClassName('ant-form')?.[0]?.clientHeight + 20
   const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
-  if(mainContent) {
+  const a = document.getElementsByClassName('ant-table-body')?.[0] as HTMLElement
+  if (a) {
+    a.style.maxHeight = 'calc(100vh - ' + (40 + height + 230) + 'px)'
+  }
+  if (mainContent) {
     mainContent.style.height = 'calc(100% - ' + height + 'px)'
   }
 })
@@ -126,6 +130,12 @@ defineExpose({ refresh })
 </script>
 
 <style scoped>
+/* .ant-table-striped :deep(.ant-table-body) {
+  max-height: calc(100vh - 360px) !important;
+} */
+.ant-table-striped :deep(.ant-table-pagination.ant-pagination) {
+  margin: 16px 0 0 0 !important;
+}
 .ant-table-striped :deep(.table-striped) td,
 .ant-table-thead > tr > th {
   background: #f7f8fa;

@@ -5,7 +5,7 @@
       <!-- <a>地图管理</a> -->
       <span class="breadcrumb--current">地图版本</span>
     </div>
-    <Table :api="() => mapsApi.getMapVersion({ map: +id })" :query="query" :columns="columns" :scroll="{ x: 1200 }">
+    <Table :api="() => mapsApi.getMapVersion({ map: +id })" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'mapType'">
           <a-tooltip :title="type[record.mapType]">

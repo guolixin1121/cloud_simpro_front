@@ -1,6 +1,6 @@
 <template>
   <search-form :items="formItems" @on-search="onSearch" :query="query"></search-form>
-   
+
   <div class="main">
     <div class="flex justify-between items-center">
       <!-- <span class="title">地图管理</span> -->
@@ -10,7 +10,7 @@
       </div>
       <a-checkbox v-model:checked="checked" class="table_model" @change="() => selectModel(checked)">我的模型</a-checkbox>
     </div>
-    <Table :api="veticleModelApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200 }">
+    <Table :api="veticleModelApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.dataIndex == 'type'">
           <span v-if="record.type === 1">导入</span><span v-else-if="record.type === 2">新建</span> <span v-else>全部</span>
