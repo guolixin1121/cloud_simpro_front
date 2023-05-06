@@ -2,8 +2,6 @@
 <!-- tree table默认展开只支持首次赋值，所以增加v-if="$attrs['tree-default-expand-all'] != '' || dataSource?.length" -->
 <template>
   <a-table
-    style="height: calc(100% - 40px); overflow: auto"
-    v-if="$attrs['tree-default-expand-all'] != '' || dataSource?.length"
     bordered
     class="ant-table-striped mt-2"
     v-bind="$attrs"
@@ -36,7 +34,6 @@
       <column :scope="scope" :is-only-creator="isOnlyCreator" @refresh="refresh" />
     </template>
   </a-table>
-  <a-spin v-else style="padding-top: 100px; width: 100%"> </a-spin>
 </template>
 
 <script setup lang="ts">
@@ -102,12 +99,13 @@ watch(current, newVal => run({ ...props.query, page: newVal, size }))
 
 // 动态计算表格父容器高度
 onMounted(() => {
-  const height = document.getElementsByClassName('ant-form')?.[0]?.clientHeight + 20
-  const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
+  let height = document.getElementsByClassName('top')?.[0]?.clientHeight
+  height = isNaN(height) ? 0 : (height + 20) // + 20的padding高度
   const tableScrollBody = document.getElementsByClassName('ant-table-body')?.[0] as HTMLElement
   if (tableScrollBody) {
     tableScrollBody.style.maxHeight = 'calc(100vh - ' + (40 + height + 230) + 'px)'
   }
+  const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
   if (mainContent) {
     mainContent.style.height = 'calc(100% - ' + height + 'px)'
   }

@@ -30,7 +30,7 @@ module.exports = [
           { title: '场景管理', path: '/scene/', icon: "scene", actions: ['view', 'add', 'edit', 'delete']},
           { 
             title: 'Demo', 
-            path: '/demo',
+            path: '/demo/',
             icon: 'AccountBookFilled',
             children: [
               { 
@@ -115,7 +115,57 @@ module.exports = [
         }
       ]}
     }
-  }
+  },
+  {
+    url: "/scene/scenesets",
+    method: "get",
+    data: {
+      code: 0,
+      data: {
+        count: 3,
+        results: [
+        {
+          id: '2',
+          baidu_id: '1',
+          name: '广汽',
+          children: [
+            {
+              id: '2',
+              baidu_id: '2',
+              name: '广汽2'
+          }]
+        },
+        {
+          id: '2',
+          baidu_id: '3',
+          name: '场景集1'
+        }
+      ]}
+    }
+  },
+  {
+    url: "/scene/scenesets/2/",
+    method: "get",
+    data: {
+      code: 0,
+      data: {
+              id: '2',
+              baidu_id: '2',
+              name: '广汽2'
+          }
+    }
+  },
+  {
+    url: "/baidu_map/map_version/",
+    method: "get",
+    data: {
+      code: 0,
+      data: [{
+              id: '2',
+              mapName: '内置地图'
+          }]
+    }
+  },
 ];
 
 

@@ -7,14 +7,7 @@
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/sceneset/edit/0')">创建场景集</a-button>
     </div>
 
-    <Table
-      :api="scenesetApi"
-      :query="query"
-      :columns="columns"
-      :scroll="{ x: 1200, y: 'auto' }"
-      :pagination="false"
-      tree-default-expand-all
-    >
+    <Table :api="scenesetApi" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }" :pagination="false">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'labels_detail'">
           <a-tooltip :title="record.labels_detail.map((d: any) => d.display_name).join('  ')">

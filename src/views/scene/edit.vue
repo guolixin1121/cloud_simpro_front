@@ -25,14 +25,14 @@
           :fieldNames="{label: 'mapName', value: 'id'}"
           placeholder="请选择关联地图"></scroll-select>
       </a-form-item>
-      <a-form-item label="场景文件" name="xosc" :rules="[{ required: true, message: '请上传场景文件!' }]">
+      <a-form-item label="场景文件" name="xosc" :rules="[{ required: isAdd, message: '请上传场景文件!' }]">
         <single-upload accept=".xosc" v-model:value="formState.xosc"></single-upload>
-        <!-- <a-upload accept=".xosc" :fileList="fileList" :before-upload="beforeUpload" @remove="onRemove" @change="onFileChange">
-          <a-button> 选择文件 </a-button>
-        </a-upload> -->
+      </a-form-item>
+      <a-form-item v-if="!isAdd" label="场景文件地址" name="adsUrl">
+        <span>{{ formState.adsUrl }}</span>
       </a-form-item>
       <a-form-item label="场景路径" name="baiduSceneSets">
-        <a-input disabled :value="path"></a-input>
+        <span>{{ path }}</span>
       </a-form-item>
       <a-form-item label="标签">
         <scroll-transfer
@@ -69,7 +69,8 @@ const formState = reactive({
   map_version_obj: undefined,
   baiduSceneSets: undefined,
   xosc: undefined,
-  labels: []
+  labels: [],
+  adsUrl: undefined
 })
 
 const path = ref('')
@@ -79,7 +80,7 @@ watch([
 ], async () => {
   const res = await api.scenesets.get(formState.baiduSceneSets)
   if(res) {
-    path.value = (res.name || '')  + '/' + formState.name
+    path.value = (res.name.trim() || '')  + '/' + formState.name.trim()
   }
 })
 
@@ -89,10 +90,19 @@ const goback = () => router.go(-1)
 const add = async () => {
   loading.value = true
 
+  const params = {
+    ...formState,
+    path: path.value,
+    source: 0
+  }
+
+  delete params.adsUrl
+  !params.xosc && delete params.xosc
+
   try {
     isAdd
-      ? await currentApi.add({ ...formState, path: path.value, source: 0 })
-      : await currentApi.edit({ id, data: { ...formState, path: path.value, source: 0 } })
+      ? await currentApi.add(params)
+      : await currentApi.edit({ id, data: params })
 
     message.info(`${actionText}成功`)
     goback()
@@ -109,6 +119,7 @@ const getEditData = async () => {
     formState.labels = scene.labels
     formState.baiduSceneSets = scene.baiduSceneSets
     formState.map_version_obj = scene.map_version_obj
+    formState.adsUrl = scene.adsUrl
   }
 }
 getEditData()

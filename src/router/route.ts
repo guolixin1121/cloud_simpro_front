@@ -9,7 +9,8 @@ export const generateRouteFromViews = () => {
       routes.push({
         path: path,
         name: path,
-        component: async () => await import(/* @vite-ignore */filePath)
+        component: views[filePath]
+        // component: async () => await import(/* @vite-ignore */filePath)
       })
     }
   }
