@@ -32,7 +32,7 @@ type Query = Record<string, any>
 const query: Query = ref({})
 const active = ref(-1)
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'id', type: 'input', placeholder: '请输入标签名称或ID' },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入标签名称或ID' },
   {
     label: '标签类型',
     key: 'tag_type',
