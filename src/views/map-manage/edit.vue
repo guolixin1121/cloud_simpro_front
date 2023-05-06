@@ -6,7 +6,7 @@
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px" @finish="add">
-      <a-form-item label="地图名称：" name="name" :rules="[{ required: true, message: '请输入地图名称!' }]">
+      <a-form-item label="地图名称：" name="name" :rules="[{ required: isAdd ? true : false, message: '请输入地图名称!' }]">
         <a-input
           :disabled="isView || !isAdd"
           v-model:value="formState.name"
@@ -14,7 +14,7 @@
           placeholder="请输入地图名称"
         ></a-input>
       </a-form-item>
-      <a-form-item label="地图类型：" name="mapType" :rules="[{ required: true, message: '请选择地图类型!' }]">
+      <a-form-item label="地图类型：" name="mapType" :rules="[{ required: isAdd ? true : false, message: '请选择地图类型!' }]">
         <scroll-select
           :disabled="isView || !isAdd"
           allowClear
@@ -25,7 +25,7 @@
         >
         </scroll-select>
       </a-form-item>
-      <a-form-item label="地图目录：" name="catalog" :rules="[{ required: true, message: '请选择地图目录!' }]">
+      <a-form-item label="地图目录：" name="catalog" :rules="[{ required: isAdd ? true : false, message: '请选择地图目录!' }]">
         <tree-select
           :disabled="isView || !isAdd"
           allowClear
@@ -50,9 +50,7 @@
           <span class="ml-2" v-if="!isAdd">{{ formState.mapFileName }}</span>
         </a-upload>
       </a-form-item>
-      <a-form-item v-if="!isAdd" label="地图文件地址："
-        ><span>{{ formState.latestVersionUrl }}</span>
-      </a-form-item>
+      <a-form-item v-if="!isAdd" label="地图文件地址：">{{ formState.latestVersionUrl }} </a-form-item>
       <a-form-item v-if="!isAdd" label="地图版本：" name="name">
         <span>{{ formState.latestVersion }}</span>
       </a-form-item>
@@ -121,11 +119,14 @@ const add = async () => {
   for (const key in params) {
     if (!params[key]) delete params[key]
   }
-  console.log(params, formState)
-  isAdd ? await mapApi.addMaps({ ...params }) : await mapApi.editMaps({ id, data: { ...params } })
-  loading.value = false
-  message.info(isAdd ? '上传成功' : '修改成功')
-  goback()
+  try {
+    isAdd ? await mapApi.addMaps({ ...params }) : await mapApi.editMaps({ id, data: { ...params } })
+    loading.value = false
+    message.info(isAdd ? '上传成功' : '修改成功')
+    goback()
+  } catch {
+    loading.value = false
+  }
 }
 
 /****** 获取查看数据 */
@@ -135,7 +136,7 @@ const getLookData = async () => {
     const res = await mapApi.lookMaps(id)
     formState.name = res.name
     formState.catalog = res.catalog
-    formState.xodr = res.xodr
+    formState.xodr = null
     formState.desc = res.desc
     formState.latestVersion = res.latestVersion
     formState.latestVersionUrl = res.latestVersionUrl

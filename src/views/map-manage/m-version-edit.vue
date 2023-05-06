@@ -7,10 +7,10 @@
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px" @finish="add">
-      <a-form-item label="地图名称：" name="mapName" :rules="[{ required: true, message: '请输入地图名称!' }]">
+      <a-form-item label="地图名称：" name="mapName" :rules="[{ message: '请输入地图名称!' }]">
         <a-input :disabled="true" v-model:value="formState.mapName" maxlength="50" placeholder="请输入地图名称"></a-input>
       </a-form-item>
-      <a-form-item label="地图类型：" name="mapType" :rules="[{ required: true, message: '请选择地图类型!' }]">
+      <a-form-item label="地图类型：" name="mapType" :rules="[{ message: '请选择地图类型!' }]">
         <scroll-select
           :disabled="true"
           allowClear
@@ -21,7 +21,7 @@
         >
         </scroll-select>
       </a-form-item>
-      <a-form-item label="地图目录：" name="catalog" :rules="[{ required: true, message: '请选择地图目录!' }]">
+      <a-form-item label="地图目录：" name="catalog" :rules="[{ message: '请选择地图目录!' }]">
         <tree-select
           :disabled="true"
           allowClear
@@ -102,10 +102,14 @@ const goback = () => router.go(-1)
 const add = async () => {
   loading.value = true
   const params: any = { mapVersionDesc: formState.mapVersionDesc }
-  await mapApi.editMapVersion({ id, data: { ...params } })
-  loading.value = false
-  message.info('修改成功')
-  goback()
+  try {
+    await mapApi.editMapVersion({ id, data: { ...params } })
+    loading.value = false
+    message.info('修改成功')
+    goback()
+  } catch {
+    loading.value = false
+  }
 }
 
 /****** 获取查看数据 */

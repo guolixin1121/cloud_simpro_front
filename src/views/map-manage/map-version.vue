@@ -30,7 +30,7 @@ const query: Query = ref({ map: id })
 const router = useRouter()
 const columns = [
   { title: '地图版本ID', dataIndex: 'id', width: 110 },
-  { title: '地图名称', dataIndex: 'mapName', width: 100, ellipsis: true },
+  { title: '地图名称', dataIndex: 'mapName', width: 150, ellipsis: true },
   { title: '地图版本', dataIndex: 'mapVersion', width: 90 },
   { title: '地图文件', dataIndex: 'mapFileName', width: 100, ellipsis: true },
   { title: '地图类型', dataIndex: 'mapType', width: 100 },

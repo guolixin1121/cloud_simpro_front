@@ -30,7 +30,7 @@ export default defineConfig(({ mode }) => {
     },
     plugins: [
       vue(),
-      mdPlugin({mode: [Mode.VUE]}),
+      mdPlugin({ mode: [Mode.VUE] }),
       createHtmlPlugin({
         inject: {
           data: {
@@ -40,31 +40,36 @@ export default defineConfig(({ mode }) => {
       }),
       AutoImport({
         //安装后你会发现在组件中不用再导入ref，reactive等
-        imports: ['vue', 'vue-router', 'pinia',
+        imports: [
+          'vue',
+          'vue-router',
+          'pinia',
           {
             'vue-request': ['useRequest'],
             'ant-design-vue': ['message'],
-            '@/hooks/api.ts': ['defineApi'], 
-            '@/api/index.ts': [['*', 'api']], 
+            '@/hooks/api.ts': ['defineApi'],
+            '@/api/index.ts': [['*', 'api']],
             '@/store/index.ts': [['*', 'store']]
-          },{
+          },
+          {
             from: 'vue-request',
             imports: ['Service'],
-            type: true,
-          }],
+            type: true
+          }
+        ],
         include: [/\.[tj]sx?$/, /\.vue$/], // 匹配的文件，也就是哪些后缀的文件需要自动引入
         eslintrc: {
           enabled: false, // 若没此json文件，先开启，生成后在关闭
           filepath: './.eslintrc-auto-import.json', // 设置eslintrc-auto-import.json生成路径 Default `./.eslintrc-auto-import.json`
           globalsPropValue: true // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
         },
-        resolvers: [AntDesignVueResolver({resolveIcons: true})],
+        resolvers: [AntDesignVueResolver({ resolveIcons: true })],
         dts: 'src/auto-import.d.ts' // 会在根目录生成auto-imports.d.ts，里面可以看到自动导入的api
       }),
-     
+
       Components({
         globs: ['src/components/**/index.vue'], // 引入自定义组件
-        resolvers: [AntDesignVueResolver()]   // 如果需要自定义主题色，则需要配置importStyle: 'less',并安装less: npm install less --save-dev
+        resolvers: [AntDesignVueResolver()] // 如果需要自定义主题色，则需要配置importStyle: 'less',并安装less: npm install less --save-dev
       }),
       eslintPlugin({
         include: ['src/**/*.vue', 'src/**/*.ts', 'src/**/*.tsx'], // 检查的文件

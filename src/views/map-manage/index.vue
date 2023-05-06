@@ -60,7 +60,7 @@ const columns = [
   { title: '地图名称', dataIndex: 'name', width: 150, ellipsis: true },
   { title: '所属地图目录', dataIndex: 'catalogName', width: 130 },
   { title: '地图版本数量', dataIndex: 'versionCount', width: 130 },
-  { title: '地图文件', dataIndex: 'xodr', ellipsis: true },
+  { title: '地图文件', dataIndex: 'mapFileName', ellipsis: true },
   // { title: '地图类型', dataIndex: 'mapType', ellipsis: true },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '所属用户', dataIndex: 'create_user', width: 100 },

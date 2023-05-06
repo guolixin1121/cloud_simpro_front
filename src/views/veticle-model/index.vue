@@ -90,7 +90,7 @@ const formItems = ref<SearchFormItem[]>([
   },
   {
     label: '转向模型',
-    key: 'turnModel',
+    key: 'direct',
     type: 'select',
     api: () => veticleModelApi.getTurnModel({ query: ['direct_model'] }),
     fieldNames: { label: 'name', value: 'key', apiField: 'direct_model' },
@@ -98,7 +98,7 @@ const formItems = ref<SearchFormItem[]>([
   },
   {
     label: '动力形式',
-    key: 'dynamicForm',
+    key: 'power',
     type: 'select',
     api: () => veticleModelApi.getTurnModel({ query: ['power_type'] }),
     fieldNames: { label: 'name', value: 'key', apiField: 'power_type' },
@@ -111,15 +111,15 @@ const onSearch = (data: Query) => {
 }
 /****** 表格区域 */
 const columns = [
-  { title: '模型ID', dataIndex: 'id', width: 80 },
+  { title: '模型ID', dataIndex: 'id', width: 90 },
   { title: '模型名称', dataIndex: 'name', width: 150, ellipsis: true },
-  { title: '用户名', dataIndex: 'username', width: 80 },
+  { title: '用户名', dataIndex: 'username', width: 130 },
   { title: '类型', dataIndex: 'type', width: 80, ellipsis: true },
   { title: '转向模型', dataIndex: 'direct', width: 120, ellipsis: true },
   { title: '动力形式', dataIndex: 'power', width: 90, ellipsis: true },
   { title: '是否共享', dataIndex: 'is_share', width: 90, ellipsis: true },
   { title: '创建时间', dataIndex: 'create_date', width: 180 },
-  { title: '修改时间', dataIndex: 'update_date', ellipsis: true },
+  { title: '修改时间', dataIndex: 'update_date', width: 180, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',
