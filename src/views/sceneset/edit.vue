@@ -10,8 +10,8 @@
       <a-form-item label="场景集名称" name="name" :rules="[{ required: true, message: '请输入场景集名称!'}, { min: 2, max: 50, message: '场景名称长度为2到50位'}]">
         <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景集名称"></a-input>
       </a-form-item>
-      <a-form-item label="所属场景集" name="parentId" :rules="[{ required: true, message: '请选择所属场景集!' }]">
-        <tree-select v-model:value="formState.parentId" :api="getSceneSet"></tree-select>
+      <a-form-item label="所属场景集" name="parentId">
+        <tree-select v-model:value="formState.parentId" :api="getSceneSet" :fieldNames="{label: 'name', value: 'baidu_id'}"></tree-select>
       </a-form-item>
       <a-form-item label="标签">
         <scroll-transfer v-model:target-keys="formState.labels" :api="getSceneTags" 
@@ -64,10 +64,10 @@ const add = async () => {
 /****** 获取编辑数据 */
 const getEditData = async () => {
    if(id !== '0') {
-     const scene = await currentApi.get(id)
-     formState.name = scene.name
-     formState.parentId = scene.parentId
-     formState.labels = scene.labels
+     const data = await currentApi.get(id)
+     formState.name = data.name
+     formState.parentId = data.parentId === -1 ? undefined : data.parentId
+     formState.labels = data.labels
    }
 }
 getEditData()

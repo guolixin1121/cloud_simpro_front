@@ -18,7 +18,6 @@
         <scroll-select
           :disabled="isView || !isAdd"
           allowClear
-          style="width: 245px"
           v-model:value="formState.mapType"
           :options="MapManageSourceOptions"
           placeholder="请选择地图类型"
@@ -29,7 +28,6 @@
         <tree-select
           :disabled="isView || !isAdd"
           allowClear
-          style="width: 245px"
           v-model:value="formState.catalog"
           :api="() => mapApi.getMapCatalog({ tree: 1 })"
           :fieldNames="{ label: 'name', value: 'id' }"
@@ -76,10 +74,10 @@
         >
       </template>
       <a-form-item class="ml-8" :wrapper-col="{ style: { paddingLeft: '80px' } }">
-        <a-button @click="goback" class="mr-2">取消</a-button>
         <a-button v-if="!isView" type="primary" html-type="submit" :loading="loading">
           {{ isAdd ? '上传' : '修改' }}
         </a-button>
+        <a-button @click="goback" class="ml-2">取消</a-button>
       </a-form-item>
     </a-form>
   </div>
