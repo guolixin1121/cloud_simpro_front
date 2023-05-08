@@ -26,7 +26,7 @@
         {{ formState.py_url }}
       </a-form-item>
       <a-form-item label="描述">
-        <a-textarea v-model:value="formState.desc" :maxLength="255" :rows="6"></a-textarea>
+        <a-textarea v-model:value="formState.desc" :maxLength="255" rows="10" style="resize: none" ></a-textarea>
       </a-form-item>
       <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
         <a-button type="primary" html-type="submit" :loading="loading">

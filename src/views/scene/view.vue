@@ -27,6 +27,9 @@
       <a-form-item label="场景文件地址" >
         {{ formState.adsUrl }}
       </a-form-item>
+      <a-form-item label="场景路径">
+        {{ formState.baiduSceneSets + '/' + formState.name }}
+      </a-form-item>
       <a-form-item label="标签">
         <ul class="view-list">
           <li class="mb-2" v-for="item in formState.labels as any" :key="item">
@@ -85,12 +88,16 @@ const getEditData = async () => {
    }
 }
 
-const getData = async (data: any) => {
-  let res = await api.scenesets.get(data.baiduSceneSets)
-  formState.baiduSceneSets = res.name
+const getData = async ({ map_version_obj, baiduSceneSets } : RObject) => {
+  if(baiduSceneSets) {
+    let res = await api.scenesets.get(baiduSceneSets)
+    formState.baiduSceneSets = res.name
+  }
 
-  res = await api.maps.lookMapVersion(data.map_version_obj)
-  formState.mapName = res.mapName
+  if(map_version_obj) {
+    let res = await api.maps.lookMapVersion(map_version_obj)
+    formState.mapName = res.mapName
+  }
 }
 getEditData()
 </script>

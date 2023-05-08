@@ -11,19 +11,9 @@ const routes: RouteRecordRaw[] = [
     children: [
       ...routeFromViews,
       {
-        path: '/mapversion',
-        name: 'mapversion',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/scene/index.vue')
-      },
-      {
-        path: '/demo/table',
-        name: 'table',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/components/table/demo.vue')
-      },
-      {
-        path: '/demo/icon/',
-        name: 'icon',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/components/svg-icon/demo.vue')
+        path: '/demo',
+        name: 'demo',
+        component: async () => await import(/* webpackChunkName: "default" */ '@/components/index.vue')
       }
     ]
   },

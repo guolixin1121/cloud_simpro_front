@@ -1,9 +1,11 @@
 <template>
   <a-tree-select 
-    :treeData="treeData" 
-    :not-found-content="null"
     placeholder="请选择" 
-    treeDefaultExpandAll> </a-tree-select>
+    treeDefaultExpandAll
+    showSearch
+    treeNodeFilterProp="title"
+    :treeData="treeData" 
+    :not-found-content="null"> </a-tree-select>
 </template>
 <script setup lang="ts">
 // 自定义字段
@@ -23,6 +25,10 @@ const props = defineProps({
   fieldNames: {
     type: Object as PropType<FieldName>,
     default: () => ({ label: 'name', value: 'id' })
+  },
+  checkLeaf: {
+    type: Boolean,
+    default: () => true
   }
 })
 const attrs = useAttrs()
@@ -43,7 +49,7 @@ const getOptions = async () => {
   if (props.api) {
     const res = await props.api()
     const data = treeTransfer(res.results || res)
-    treeData.value.push(...data)
+    treeData.value = [...data]
   }
 }
 
@@ -53,7 +59,7 @@ const treeTransfer = (data: any): TreeItem[] => {
     title: item[label],
     value: item[value],
     key: item[value],
-    selectable: item.isLeaf,
+    selectable: props.checkLeaf ? item.isLeaf : true,
     children: treeTransfer(item.children || [])
   }))
   return options

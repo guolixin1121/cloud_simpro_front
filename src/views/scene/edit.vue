@@ -78,9 +78,11 @@ watch([
   () => formState.baiduSceneSets,
   () => formState.name
 ], async () => {
-  const res = await api.scenesets.get(formState.baiduSceneSets)
-  if(res) {
-    path.value = (res.name.trim() || '')  + '/' + formState.name.trim()
+  if(formState.baiduSceneSets) {
+    const res = await api.scenesets.get(formState.baiduSceneSets)
+    if(res) {
+      path.value = (res.name.trim() || '')  + '/' + formState.name.trim()
+    }
   }
 })
 

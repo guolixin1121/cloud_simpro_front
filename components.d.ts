@@ -39,6 +39,7 @@ declare module '@vue/runtime-core' {
     ATreeSelect: typeof import('ant-design-vue/es')['TreeSelect']
     AUpload: typeof import('ant-design-vue/es')['Upload']
     Chart: typeof import('./src/components/chart/index.vue')['default']
+    Components: typeof import('./src/components/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScrollSelect: typeof import('./src/components/scroll-select/index.vue')['default']

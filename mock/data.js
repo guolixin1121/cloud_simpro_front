@@ -31,18 +31,7 @@ module.exports = [
           { 
             title: 'Demo', 
             path: '/demo/',
-            icon: 'AccountBookFilled',
-            children: [
-              { 
-                title: '搜素、表格及权限', 
-                path: '/demo/table', 
-                actions: ['add', 'delete', 'edit']
-             },
-             { 
-                title: 'ICON', 
-                path: '/demo/icon', 
-              }
-            ]
+            icon: 'map'
           }
         ]
     }

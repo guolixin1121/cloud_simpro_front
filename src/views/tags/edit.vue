@@ -59,7 +59,7 @@
           ><span>{{ formState.update_time }}</span></a-form-item
         >
         <a-form-item label="所属用户"
-          ><span>{{ formState.user }}</span></a-form-item
+          ><span>{{ formState.create_user }}</span></a-form-item
         >
       </template>
       <a-form-item class="ml-8" :wrapper-col="{ style: { paddingLeft: '80px' } }">
