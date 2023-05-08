@@ -1,11 +1,13 @@
 <template>
-  <a-tree-select 
-    placeholder="请选择" 
+  <a-tree-select
+    placeholder="请选择"
     treeDefaultExpandAll
     showSearch
     treeNodeFilterProp="title"
-    :treeData="treeData" 
-    :not-found-content="null"> </a-tree-select>
+    :treeData="treeData"
+    :not-found-content="null"
+  >
+  </a-tree-select>
 </template>
 <script setup lang="ts">
 // 自定义字段
@@ -59,7 +61,7 @@ const treeTransfer = (data: any): TreeItem[] => {
     title: item[label],
     value: item[value],
     key: item[value],
-    selectable: props.checkLeaf ? item.isLeaf : true,
+    selectable: props.checkLeaf ? !!item.isLeaf : true,
     children: treeTransfer(item.children || [])
   }))
   return options
