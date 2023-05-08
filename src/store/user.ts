@@ -1,36 +1,37 @@
-import { useLocalStorage } from '@vueuse/core'
+// import { useLocalStorage } from '@vueuse/core'
+import { LStorage } from '@/utils/storage'
 import router from '../router'
+import { getQueryParmas } from '@/utils/tools'
 
 export const useUserStore = defineStore('use', () => {
-  // const defaultUser = { username: '', nickName: '', userId: 0, permissions: [] }
-  // const user = useLocalStorage('user', defaultUser)
   const user = ref()
-  const token = useLocalStorage('token', null)
-
+  const token = ref()
   const userApi = api.user
   /**
    * 退出当前登录
    */
   const logout = () => {
-    token.value = null
     user.value = null
-    router.push('/login')
+    token.value = null
+    LStorage.remove('token')
+    location.href = import.meta.env.VITE_LOGIN_URL
+  }
+
+  const hasToken = () => {
+    if(token.value) return true
+
+    const value = getQueryParmas('token')
+    token.value = value
+    LStorage.set('token', value)
+    return token.value
   }
 
   /**
-   * 登录
-   */
-  const login = async (auth: Record<string, any>) => {
-    const authData = await userApi.login(auth)
-
-    token.value = authData.token
-    // SStorage.storage.token = authData.token
-  }
-
-  /**
-   * 获取当前登录用户信息
+   * 获取当前登录用户信息及权限
    */
   const getUserInfo = async () => {
+    if(user.value) return
+
     user.value = await userApi.getLoginUser()
     const permissions = await userApi.getPermissions()
 
@@ -73,5 +74,5 @@ export const useUserStore = defineStore('use', () => {
     return -1
   }
 
-  return { user, token, login, logout, hasPermission, getUserInfo }
+  return { user, token, hasToken, logout, hasPermission, getUserInfo }
 })

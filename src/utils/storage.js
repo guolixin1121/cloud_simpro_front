@@ -23,7 +23,7 @@ class MyStorage {
   }
 
   set(key, value) {
-    const data = JSON.stringify(value)
+    const data = typeof value === 'string' ? value : JSON.stringify(value)
     this.storage.setItem(key, data)
   }
 

@@ -6,7 +6,7 @@ import { getType } from './validate'
  * @param { String } href 链接
  **/
 export function getQueryParmas(name = '', href = '') {
-  const url = href || window.location.href
+  const url = href || window.location.search
   if (name) {
     const reg = new RegExp('(^|\\?|&)' + name + '=([^&]*)(\\s|&|$)', 'i')
     if (reg.test(url)) return RegExp.$2.replace(/\+/g, ' ')

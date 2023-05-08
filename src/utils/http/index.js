@@ -3,7 +3,6 @@ import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css' // 必须引用
 import { LStorage } from '@/utils/storage'
 import AxiosCanceler from './cancelCancel'
-import router from '@/router'
 
 // 处理错误信息
 
@@ -115,8 +114,7 @@ class AxiosRequest {
           } else if (code === 100) {
             // token过期跳到登录页
             message.error('登录失效，请重新登录')
-            router.push('/login')
-            // window.location.href = `${import.meta.env.VITE_LOGIN_URL}`
+            store.user.logout()
           } else {
             message.error(typeof msg === 'string' ? msg : err)
             reject(typeof msg === 'string' ? msg : err)

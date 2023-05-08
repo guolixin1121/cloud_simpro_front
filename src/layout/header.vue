@@ -6,6 +6,8 @@ interface MenuItem {
 const user = store.user.user
 let topMenus = ref<MenuItem[]>([])
 api.user.getTopMenu().then(data => topMenus.value = data)
+
+const logout = store.user.logout
 </script>
 
 <template>
@@ -24,9 +26,18 @@ api.user.getTopMenu().then(data => topMenus.value = data)
         <i class="alert-icon"></i>
         <i class="alert-circle"></i>
       </div>
-      <div class="name text-white opacity-80 cursor-pointer">
-        <span>{{ user?.nickname || '管理员' }}</span>
-      </div>
+      <a-dropdown>
+        <div class="name text-white opacity-80 cursor-pointer">
+          <span>{{ user?.nickname || '管理员' }}</span>
+        </div>
+        <template #overlay>
+          <a-menu>
+            <a-menu-item>
+              <a @click="logout">退出登录</a>
+            </a-menu-item>
+          </a-menu>
+        </template>
+      </a-dropdown>
     </div>
   </div>
 </template>
