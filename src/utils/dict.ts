@@ -18,7 +18,7 @@ export const getTaskSourceName = (value: number | string) => TaskSourceOptions.f
 
 // 地图管理数据
 export const MapManageSourceOptions = [
-  { label: '全部', value: '' },
+  // { label: '全部', value: '' },
   { label: '内置', value: 0 },
   { label: '真实', value: 1 },
   { label: '虚拟', value: 2 }

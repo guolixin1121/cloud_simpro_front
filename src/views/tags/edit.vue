@@ -49,7 +49,14 @@
         <a-switch :disabled="isView" checked-children="是" un-checked-children="否" v-model:checked="formState.isTag" />
       </a-form-item>
       <a-form-item label="描述" name="desc">
-        <a-textarea :disabled="isView" v-model:value="formState.desc" placeholder="请输入描述" rows="10" style="resize: none" />
+        <a-textarea
+          :disabled="isView"
+          v-model:value="formState.desc"
+          placeholder="请输入描述"
+          rows="10"
+          style="resize: none"
+          maxlength="255"
+        />
       </a-form-item>
       <template v-if="isView">
         <a-form-item label="创建时间"

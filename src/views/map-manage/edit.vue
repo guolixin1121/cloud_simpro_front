@@ -55,7 +55,14 @@
         <span>{{ formState.latestVersion }}</span>
       </a-form-item>
       <a-form-item label="描述" name="name">
-        <a-textarea :disabled="isView" v-model:value="formState.desc" placeholder="请输入描述" rows="10" style="resize: none" />
+        <a-textarea
+          :disabled="isView"
+          v-model:value="formState.desc"
+          placeholder="请输入描述"
+          rows="10"
+          style="resize: none"
+          maxlength="255"
+        />
       </a-form-item>
       <template v-if="isView">
         <a-form-item label="创建时间："
@@ -117,7 +124,7 @@ const add = async () => {
     mapType: formState.mapType
   }
   for (const key in params) {
-    if (!params[key]) delete params[key]
+    if (params[key] === null || params[key] === undefined || params[key] === '') delete params[key]
   }
   try {
     isAdd ? await mapApi.addMaps({ ...params }) : await mapApi.editMaps({ id, data: { ...params } })

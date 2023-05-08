@@ -59,6 +59,7 @@
           placeholder="请输入描述"
           rows="10"
           style="resize: none"
+          maxlength="255"
         />
       </a-form-item>
       <template v-if="isView">
