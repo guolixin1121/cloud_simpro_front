@@ -14,7 +14,7 @@
       </a-form-item>
       <a-form-item label="标签英文名称：" name="name" :rules="[{ required: true, message: '请输入标签英文名称!' }]">
         <a-input
-          :disabled="isView"
+          :disabled="isAdd ? false : true"
           :value="formState.name"
           maxlength="50"
           placeholder="请输入标签英文名称"
