@@ -67,7 +67,7 @@ const current = ref(1)
 const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number; datalist: [] }, any>, {
   manual: true
 })
-const dataSource = computed(() => {
+const dataSource: any = computed(() => {
   const results = data.value?.results || data.value?.datalist
   addKeysToData(results)
   return results
@@ -100,7 +100,7 @@ watch(current, newVal => run({ ...props.query, page: newVal, size }))
 // 动态计算表格父容器高度
 onMounted(() => {
   let height = document.getElementsByClassName('top')?.[0]?.clientHeight
-  height = isNaN(height) ? 0 : (height + 20) // + 20的padding高度
+  height = isNaN(height) ? 0 : height + 20 // + 20的padding高度
   const tableScrollBody = document.getElementsByClassName('ant-table-body')?.[0] as HTMLElement
   if (tableScrollBody) {
     tableScrollBody.style.maxHeight = 'calc(100vh - ' + (40 + height + 230) + 'px)'
@@ -112,7 +112,14 @@ onMounted(() => {
 })
 
 // 用于删除等操作后，重新加载table
-const refresh = () => run({ ...props.query, page: current.value, size })
+const refresh = () => {
+  console.log({ ...props.query }, current.value, size, dataSource.value)
+  if (dataSource?.value?.length === 1) {
+    run({ ...props.query, page: current.value > 1 ? current.value - 1 : current.value, size })
+    return
+  }
+  run({ ...props.query, page: current.value, size })
+}
 
 // 为了兼容树状的table，为每个数据增加key
 const addKeysToData = (data: any) => {
