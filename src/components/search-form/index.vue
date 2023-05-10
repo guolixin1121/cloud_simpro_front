@@ -39,9 +39,10 @@
 
 <script setup lang="ts">
 import * as Ant from 'ant-design-vue'
-import { formatDate } from '@/utils/tools'
+import { formatDate, isEmpty } from '@/utils/tools'
 import { SStorage } from '@/utils/storage'
 import 'ant-design-vue/es/date-picker/style/css' // 有些组件样式需单独引入
+import { isString } from 'lodash'
 import dayjs from 'dayjs'
 
 const props = defineProps({
@@ -99,16 +100,17 @@ const reset = () => {
 }
 
 const emitSearch = () => {
+  const formValues = {...formState}
+  
   let start_date = formatDate(formState.date?.[0], 'YYYY-MM-DD')
   let end_date = formatDate(formState.date?.[1], 'YYYY-MM-DD')
-  const formValues = { ...formState }
-  // 删除空值的属性
+  
+  // 去除空格，去除空值等
   for (let prop in formValues) {
-    const value = formValues[prop]
-    if (prop === 'date' || value === '' || value === null || value === undefined) {
-      delete formValues[prop]
-    }
-    if (Array.isArray(value) && !value.join('')) {
+    let value = formValues[prop]
+    value = isString(value) ? value.trim() : value
+    formValues[prop] = value
+    if(prop === 'date' || isEmpty(value)) {
       delete formValues[prop]
     }
   }

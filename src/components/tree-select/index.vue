@@ -51,7 +51,7 @@ const getOptions = async () => {
   if (props.api) {
     const res = await props.api()
     const data = treeTransfer(res.results || res)
-    treeData.value = [...data]
+    treeData.value.push(...data)
   }
 }
 

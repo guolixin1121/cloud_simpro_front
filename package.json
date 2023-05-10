@@ -10,7 +10,6 @@
   "scripts": {
     "dev": "vue-tsc && vite",
     "build": "vue-tsc --noEmit && vite build",
-    "build:prod": "vue-tsc --noEmit && vite build --mode prod",
     "preview": "vite preview",
     "eslint": "eslint --max-warnings=0",
     "pre-check": "vue-tsc && npx lint-staged",
