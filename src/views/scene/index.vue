@@ -25,6 +25,15 @@ const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景名称或ID' },
   { label: '场景来源', key: 'adsSource', type: 'select', options: SceneSourceOptions, defaultValue: '' },
+  { 
+    label: '所属场景集', 
+    key: 'scene_set', 
+    type: 'tree-select', 
+    api: () => api.scenesets.getList({ tree: 1 }), 
+    checkLeaf: false,
+    defaultValue: '',
+    placeholder: '请输入场景集' 
+  },
   {
     label: '标签',
     key: 'labels',

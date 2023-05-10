@@ -15,7 +15,7 @@
       <a-form-item label="场景集名称">
         {{ formState.name }}
       </a-form-item>
-      <a-form-item label="所属场景集">
+      <a-form-item label="父场景集">
         {{ formState.parentName }}
       </a-form-item>
       <a-form-item label="标签">

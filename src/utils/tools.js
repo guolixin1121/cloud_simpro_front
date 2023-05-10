@@ -41,10 +41,10 @@ export function isEmpty(val) {
     return false
   }
   if (valType === 'string') {
-    return val === ''
+    return val.trim() === ''
   }
   if (valType === 'array') {
-    return !val.length
+    return !val.join('').length
   }
   if (valType === 'object') {
     return !Object.keys(val).length

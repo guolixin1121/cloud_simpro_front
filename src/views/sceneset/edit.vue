@@ -10,7 +10,7 @@
       <a-form-item label="场景集名称" name="name" :rules="[{ required: true, message: '请输入场景集名称!'}, { min: 2, max: 50, message: '场景名称长度为2到50位'}]">
         <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景集名称"></a-input>
       </a-form-item>
-      <a-form-item label="所属场景集" name="parentId">
+      <a-form-item label="父场景集" name="parentId">
         <tree-select v-model:value="formState.parentId" :api="getSceneSet" :fieldNames="{label: 'name', value: 'baidu_id'}"></tree-select>
       </a-form-item>
       <a-form-item label="标签">
