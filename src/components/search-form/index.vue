@@ -62,7 +62,7 @@ const emits = defineEmits(['onSearch'])
 
 // form state, and get default value from props
 const formState = reactive<Record<string, any>>({})
-props.items.forEach((item: any) => formState[item.key] = item.defaultValue)
+props.items.forEach((item: any) => (formState[item.key] = item.defaultValue))
 
 // 获取缓存的搜索项
 // 从菜单进入时设置?menu来清空缓存
@@ -70,14 +70,14 @@ const route = useRoute()
 onMounted(() => {
   const storage = SStorage.get(route.path)
   const isFromCache = route.query.clear !== null && storage
-  if(isFromCache) {
+  if (isFromCache) {
     props.items.forEach((item: any) => {
       const key = item.key
       const isTimeKey = key.toLowerCase().indexOf('time') > -1 || key.toLowerCase().indexOf('date') > -1
-      if(isTimeKey) {
+      if (isTimeKey) {
         // 日期控件
         const timeValue = storage[key]
-        if(timeValue && timeValue[0]) {
+        if (timeValue && timeValue[0]) {
           formState[key] = [dayjs(timeValue[0]), dayjs(timeValue[1])]
         }
       } else {

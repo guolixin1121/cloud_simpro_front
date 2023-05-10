@@ -5,11 +5,11 @@
   </template>
   <!-- 值为时间：格式化时间 -->
   <template v-else-if="dataIndex?.toLowerCase().indexOf('time') > -1 || dataIndex?.toLowerCase().indexOf('date') > -1">
-    {{ dataValue ? dayjs(dataValue).format('YYYY-MM-DD HH:MM:ss') : '' }}
+    {{ dataValue ? dayjs(dataValue).format('YYYY-MM-DD HH:mm:ss') : '' }}
   </template>
   <!-- 值为对象：获取name -->
   <template v-else-if="isObject(dataValue)">
-      {{ dataValue[column.apiField] || dataValue.name }}
+    {{ dataValue[column.apiField] || dataValue.name }}
   </template>
   <!-- 值为数组： 默认获取name值，可通过label指定字段 -->
   <template v-else-if="Array.isArray(dataValue)">
@@ -21,7 +21,7 @@
   </template>
   <!-- 自定义格式化函数 -->
   <template v-else-if="column.formatter">
-    {{ column.formatter(dataValue)  }}
+    {{ column.formatter(dataValue) }}
   </template>
   <!-- 默认列 -->
   <!-- hover时加tooltip -->
