@@ -7,23 +7,39 @@
     <span class="title mb-5">{{ title }}</span>
     <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 550px" @finish="add">
       <a-form-item v-if="isView" label="标签ID" name="id">
-        <span>{{ formState.id }}</span>
+        {{ formState.id }}
       </a-form-item>
-      <a-form-item label="标签名称：" name="display_name" :rules="[{ required: true, message: '请输入标签名称!' }]">
-        <a-input :disabled="isView" v-model:value="formState.display_name" maxlength="50" placeholder="请输入标签名称"></a-input>
+      <a-form-item
+        label="标签名称："
+        name="display_name"
+        :rules="[
+          { required: isView ? false : true, message: '请输入标签名称!' },
+          { min: 1, max: 64, message: '标签名称长度为1到32位' }
+        ]"
+      >
+        <a-input v-if="!isView" v-model:value="formState.display_name" maxlength="32" placeholder="请输入标签名称"></a-input>
+        <template v-else>{{ formState.display_name }}</template>
       </a-form-item>
-      <a-form-item label="标签英文名称：" name="name" :rules="[{ required: true, message: '请输入标签英文名称!' }]">
+      <a-form-item
+        label="标签英文名称："
+        name="name"
+        :rules="[
+          { required: isAdd ? true : false, message: '请输入标签英文名称!' },
+          { min: 1, max: 64, message: '标签英文名称长度为1到64位' }
+        ]"
+      >
         <a-input
-          :disabled="isAdd ? false : true"
+          v-if="isAdd"
           :value="formState.name"
-          maxlength="50"
+          maxlength="64"
           placeholder="请输入标签英文名称"
           @change="onlyEnlishInput"
         ></a-input>
+        <template v-else>{{ formState.name }}</template>
       </a-form-item>
-      <a-form-item label="标签类型：" name="tag_type" :rules="[{ required: true, message: '请选择标签类型!' }]">
+      <a-form-item label="标签类型：" name="tag_type" :rules="[{ required: isView ? false : true, message: '请选择标签类型!' }]">
         <scroll-select
-          :disabled="isView"
+          v-if="!isView"
           allowClear
           style="width: 245px"
           v-model:value="formState.tag_type"
@@ -31,6 +47,7 @@
           :fieldNames="{ label: 'value', value: 'key' }"
           placeholder="请选择标签类型"
         />
+        <template v-else>{{ formState.tag_type }}</template>
       </a-form-item>
       <!-- <a-form-item label="上级标签：" name="tag_type">
         <tree-select
@@ -45,18 +62,19 @@
         >
         </tree-select>
       </a-form-item> -->
-      <a-form-item label="是否可打标签" name="isTag" :rules="[{ required: true, message: '请打标!' }]">
-        <a-switch :disabled="isView" checked-children="是" un-checked-children="否" v-model:checked="formState.isTag" />
+      <a-form-item label="是否可打标签" name="isTag" :rules="[{ required: isView ? false : true, message: '请打标!' }]">
+        <a-switch v-if="!isView" checked-children="是" un-checked-children="否" v-model:checked="formState.isTag" />
       </a-form-item>
       <a-form-item label="描述" name="desc">
         <a-textarea
-          :disabled="isView"
+          v-if="!isView"
           v-model:value="formState.desc"
           placeholder="请输入描述"
           rows="10"
           style="resize: none"
           maxlength="255"
         />
+        <template v-else>{{ formState.desc }}</template>
       </a-form-item>
       <template v-if="isView">
         <a-form-item label="创建时间"
@@ -145,7 +163,7 @@ const getLookData = async () => {
   }
 }
 const onlyEnlishInput = (e: { target: { value: string } }) => {
-  formState.name = e.target.value.replace(/[^a-z]/g, '')
+  formState.name = e.target.value.replace(/[^a-z_]/g, '')
 }
 getLookData()
 </script>

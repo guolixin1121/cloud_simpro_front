@@ -7,11 +7,12 @@
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px" @finish="add">
-      <a-form-item label="地图名称：" name="mapName" :rules="[{ message: '请输入地图名称!' }]">
-        <a-input :disabled="true" v-model:value="formState.mapName" maxlength="50" placeholder="请输入地图名称"></a-input>
+      <a-form-item label="地图名称：" name="mapName">
+        <!-- <a-input v-model:value="formState.mapName" maxlength="50" placeholder="请输入地图名称"></a-input> -->
+        {{ formState.mapName }}
       </a-form-item>
-      <a-form-item label="地图类型：" name="mapType" :rules="[{ message: '请选择地图类型!' }]">
-        <scroll-select
+      <a-form-item label="地图类型：" name="mapType">
+        <!-- <scroll-select
           :disabled="true"
           allowClear
           style="width: 245px"
@@ -19,10 +20,11 @@
           :options="MapManageSourceOptions"
           placeholder="请选择地图类型"
         >
-        </scroll-select>
+        </scroll-select> -->
+        {{ formState.mapTypeName }}
       </a-form-item>
-      <a-form-item label="地图目录：" name="catalog" :rules="[{ message: '请选择地图目录!' }]">
-        <tree-select
+      <a-form-item label="地图目录：" name="catalog">
+        <!-- <tree-select
           :disabled="true"
           allowClear
           style="width: 245px"
@@ -31,11 +33,12 @@
           :fieldNames="{ label: 'name', value: 'id' }"
           placeholder="请选择地图目录"
         >
-        </tree-select>
+        </tree-select> -->
+        {{ formState.catalogName }}
       </a-form-item>
       <a-form-item label="地图文件：" name="xodr">
-        <a-upload
-          :disabled="true"
+        <!-- <a-upload
+          v-if="!isView"
           accept=".xodr"
           :fileList="fileList"
           :before-upload="beforeUpload"
@@ -44,7 +47,8 @@
         >
           <a-button :disabled="true">选择文件</a-button>
           <span class="ml-2">{{ formState.mapFileName }}</span>
-        </a-upload>
+        </a-upload> -->
+        {{ formState.mapFileName }}
       </a-form-item>
       <a-form-item label="地图文件地址："
         ><span>{{ formState.mapUrl }}</span>
@@ -54,13 +58,14 @@
       </a-form-item>
       <a-form-item label="描述" name="name">
         <a-textarea
-          :disabled="isView"
+          v-if="!isView"
           v-model:value="formState.mapVersionDesc"
           placeholder="请输入描述"
           rows="10"
           style="resize: none"
           maxlength="255"
         />
+        <template v-else>{{ formState.mapVersionDesc }}</template>
       </a-form-item>
       <template v-if="isView">
         <a-form-item label="创建时间："
@@ -84,9 +89,9 @@
 </template>
 
 <script setup lang="ts">
-import type { UploadChangeParam } from 'ant-design-vue'
+// import type { UploadChangeParam } from 'ant-design-vue'
 import { formatDate } from '@/utils/tools'
-import { MapManageSourceOptions } from '@/utils/dict'
+// import { MapManageSourceOptions } from '@/utils/dict'
 
 const id = useRoute().params.id
 const { type = '' } = useRoute().query || {}
@@ -94,7 +99,7 @@ const isView = type === '0' ? true : false // 查看
 const title = isView ? '查看地图' : '修改地图'
 const mapApi = api.maps
 
-const fileList = ref()
+// const fileList = ref()
 const formState = reactive<any>({})
 
 const loading = ref(false)
@@ -120,6 +125,7 @@ const getLookData = async () => {
     const res = await mapApi.lookMapVersion(id)
     formState.mapName = res.mapName
     formState.catalog = res.catalog
+    formState.catalogName = res.catalogName
     formState.mapFileName = res.mapFileName
     formState.mapVersionDesc = res.mapVersionDesc
     formState.mapUrl = res.mapUrl
@@ -128,27 +134,28 @@ const getLookData = async () => {
     formState.update_time = formatDate(res.update_time)
     formState.importUserName = res.importUserName
     formState.mapType = res.mapType
+    formState.mapTypeName = res.mapTypeName
   }
 }
 getLookData()
 
-/****** 上传文件限制 */
-const beforeUpload = (file: File) => {
-  const isLt50M = file.size / 1024 / 1024 < 50
-  if (!isLt50M) {
-    message.warning('文件不能大于50M！')
-    return false
-  }
-  return false
-}
+// /****** 上传文件限制 */
+// const beforeUpload = (file: File) => {
+//   const isLt50M = file.size / 1024 / 1024 < 50
+//   if (!isLt50M) {
+//     message.warning('文件不能大于50M！')
+//     return false
+//   }
+//   return false
+// }
 
-const onFileChange = (info: UploadChangeParam) => {
-  fileList.value = [info.file]
-  formState.xodr = fileList.value[0]
-}
+// const onFileChange = (info: UploadChangeParam) => {
+//   fileList.value = [info.file]
+//   formState.xodr = fileList.value[0]
+// }
 
-const onRemove = () => {
-  fileList.value = []
-  formState.xodr = null
-}
+// const onRemove = () => {
+//   fileList.value = []
+//   formState.xodr = null
+// }
 </script>

@@ -6,27 +6,31 @@
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px" @finish="add">
-      <a-form-item label="地图名称：" name="name" :rules="[{ required: isAdd ? true : false, message: '请输入地图名称!' }]">
-        <a-input
-          :disabled="isView || !isAdd"
-          v-model:value="formState.name"
-          maxlength="50"
-          placeholder="请输入地图名称"
-        ></a-input>
+      <a-form-item
+        label="地图名称："
+        name="name"
+        :rules="[
+          { required: isAdd ? true : false, message: '请输入地图名称!' },
+          { min: 2, max: 64, message: '地图名称长度为2到50位' }
+        ]"
+      >
+        <a-input v-if="isAdd" v-model:value="formState.name" maxlength="50" placeholder="请输入地图名称"></a-input>
+        <template v-else>{{ formState.name }}</template>
       </a-form-item>
       <a-form-item label="地图类型：" name="mapType" :rules="[{ required: isAdd ? true : false, message: '请选择地图类型!' }]">
         <scroll-select
-          :disabled="isView || !isAdd"
+          v-if="isAdd"
           allowClear
           v-model:value="formState.mapType"
           :options="MapManageSourceOptions"
           placeholder="请选择地图类型"
         >
         </scroll-select>
+        <template v-else>{{ formState.mapTypeName }}</template>
       </a-form-item>
       <a-form-item label="地图目录：" name="catalog" :rules="[{ required: isAdd ? true : false, message: '请选择地图目录!' }]">
         <tree-select
-          :disabled="isView || !isAdd"
+          v-if="isAdd"
           allowClear
           v-model:value="formState.catalog"
           :api="() => mapApi.getMapCatalog({ tree: 1 })"
@@ -34,10 +38,11 @@
           placeholder="请选择地图目录"
         >
         </tree-select>
+        <template v-else>{{ formState.catalogName }}</template>
       </a-form-item>
       <a-form-item label="地图文件：" name="xodr" :rules="[{ required: isAdd, message: '请上传地图文件!' }]">
         <a-upload
-          :disabled="isView"
+          v-if="!isView"
           accept=".xodr"
           :fileList="fileList"
           :before-upload="beforeUpload"
@@ -47,6 +52,7 @@
           <a-button :disabled="isView">选择文件</a-button>
           <span class="ml-2" v-if="!isAdd">{{ formState.mapFileName }}</span>
         </a-upload>
+        <template v-else>{{ formState.mapFileName }}</template>
       </a-form-item>
       <a-form-item v-if="!isAdd" label="地图文件地址：">{{ formState.latestVersionUrl }} </a-form-item>
       <a-form-item v-if="!isAdd" label="地图版本：" name="name">
@@ -54,13 +60,14 @@
       </a-form-item>
       <a-form-item label="描述" name="name">
         <a-textarea
-          :disabled="isView"
+          v-if="!isView"
           v-model:value="formState.desc"
           placeholder="请输入描述"
           rows="10"
           style="resize: none"
           maxlength="255"
         />
+        <template v-else>{{ formState.desc }}</template>
       </a-form-item>
       <template v-if="isView">
         <a-form-item label="创建时间："
@@ -141,6 +148,7 @@ const getLookData = async () => {
     const res = await mapApi.lookMaps(id)
     formState.name = res.name
     formState.catalog = res.catalog
+    formState.catalogName = res.catalogName
     formState.xodr = null
     formState.desc = res.desc
     formState.latestVersion = res.latestVersion
@@ -150,6 +158,7 @@ const getLookData = async () => {
     formState.create_user = res.create_user
     formState.mapFileName = res.mapFileName
     formState.mapType = res.mapType
+    formState.mapTypeName = res.mapTypeName
   }
 }
 getLookData()

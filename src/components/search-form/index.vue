@@ -100,17 +100,17 @@ const reset = () => {
 }
 
 const emitSearch = () => {
-  const formValues = {...formState}
-  
+  const formValues = { ...formState }
+
   let start_date = formatDate(formState.date?.[0], 'YYYY-MM-DD')
   let end_date = formatDate(formState.date?.[1], 'YYYY-MM-DD')
-  
+
   // 去除空格，去除空值等
   for (let prop in formValues) {
     let value = formValues[prop]
     value = isString(value) ? value.trim() : value
     formValues[prop] = value
-    if(prop === 'date' || isEmpty(value)) {
+    if (prop === 'date' || isEmpty(value)) {
       delete formValues[prop]
     }
   }

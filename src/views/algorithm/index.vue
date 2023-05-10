@@ -14,7 +14,7 @@ const algorithmApi = api.algorithm
 /****** 搜素区域 */
 type Query = Record<string, any>
 const query: Query = ref({})
-const formItems = ref<SearchFormItem[]>([{ label: '算法名称', key: 'name', type: 'input', placeholder: '请输入算法名称或ID' }])
+const formItems = ref<SearchFormItem[]>([{ label: '算法名称', key: 'name', type: 'input', placeholder: '请输入算法名称' }])
 const onSearch = (data: Query) => (query.value = data)
 /****** 表格区域 */
 const router = useRouter()
