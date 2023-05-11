@@ -10,7 +10,7 @@ const formItems: SearchFormItem[] = [
   { label: '姓名', key: 'name', type: 'input', pressEnter: () => console.log(111)},
   { label: '场景', key: 'scene', type: 'select', options: [{ label: '全部', value: '' }, { label: '场景一', value: 'scene1' }, { label: '场景二', value: 'scene2'}], defaultValue: ''},
   { label: '标签', key: 'tag', type: 'select', mode: 'multiple', options: [{ label: '全部', value: '' }, { label: '车架', value: '1' }, { label: '车身', value: '2'}], defaultValue: ['']},
-  { label: '创建时间', key: 'date', type: 'range-picker' }
+  { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ]
 
 const onSearch = (query: Record<string, any>) => {

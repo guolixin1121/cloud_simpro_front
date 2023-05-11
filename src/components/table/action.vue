@@ -7,7 +7,7 @@
         title="你确定要删除吗？"
         ok-text="是"
         cancel-text="否"
-        @confirm="onConfirmDelete(scope, key)"
+        @confirm="onHandler(scope, key)"
       >
         <a class="text-blue mr-2">删除</a>
       </a-popconfirm>
@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 const props = defineProps(['scope', 'isOnlyCreator'])
-const emits = defineEmits(['delete'])
+const emits = defineEmits(['refresh'])
 /**
  * 判断用户是否有某个操作的权限，目前只检查’删除‘、’编辑‘
  * 1. 是否配置了该页面的操作权限
@@ -50,16 +50,16 @@ const hasPermission = (scope: RObject, key: string) => {
 
   return permission
 }
-const onHandler = async (scope: RObject, key: string) => {
-  const action = scope.column.actions[key]
+const onHandler = async ({column, record}: RObject, key: string) => {
+  const action = column.actions[key]
   const handler = action.handler || action
-  await handler(scope.record)
-}
-const onConfirmDelete = async (scope: any, key: string) => {
-  const action = scope.column.actions[key]
-  const handler = action.handler || action
-  await handler(scope.record)
-  message.info('删除成功')
-  emits('delete')
+  const isAync = handler.constructor.name === 'AsyncFunction'
+  if(isAync) {
+    await handler(record)
+    message.info(key + '成功')
+    emits('refresh')
+  } else {
+    handler(record)
+  }
 }
 </script>

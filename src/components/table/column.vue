@@ -1,7 +1,7 @@
 <template>
   <!-- 封装操作列 -->
   <template v-if="dataIndex == 'actions'">
-    <Action :scope="scope" :is-only-creator="isOnlyCreator" @delete="() => emits('refresh')"></Action>
+    <Action :scope="scope" :is-only-creator="isOnlyCreator" @refresh="emits('refresh')"></Action>
   </template>
   <!-- 值为时间：格式化时间 -->
   <template v-else-if="dataIndex?.toLowerCase().indexOf('time') > -1 || dataIndex?.toLowerCase().indexOf('date') > -1">

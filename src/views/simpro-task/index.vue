@@ -12,7 +12,7 @@
       :api="currentApi.getList"
       :query="query"
       :columns="columns"
-      :scroll="{ x: 2000, y: 'auto' }"
+      :scroll="{ x: 2100, y: 'auto' }"
       :isSelectable="true"
       :row-selection="{
         getCheckboxProps: (record: any) => ({
@@ -37,7 +37,7 @@ const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入仿真任务名称或主车模型' },
   { label: '任务来源', key: 'source', type: 'select', options: TaskSourceOptions, defaultValue: '' },
   { label: '仿真算法', key: 'algorithm', type: 'select', api: api.algorithm.getList, defaultValue: '' },
-  { label: '创建时间', key: 'date', type: 'range-picker' }
+  { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
 const onSearch = (data: Query) => (query.value = data)
 
@@ -54,6 +54,7 @@ const columns = [
   { title: '评测指标', dataIndex: 'kpi_detail', width: 180, ellipsis: true },
   { title: '场景', dataIndex: 'scenes_detail', apiField: 'adsName', width: 180, ellipsis: true },
   { title: '执行任务次数', dataIndex: 'batch', width: 100 },
+  { title: '状态', dataIndex: 'status', width: 80 },
   { title: '创建时间', dataIndex: 'create_time', width: 150 },
   { title: '所属用户', dataIndex: 'create_user', width: 100 },
   {
@@ -63,11 +64,8 @@ const columns = [
     width: 150,
     actions: {
       运行: {
-        validate: (data: RObject) => data.status != '运行中',
-        handler: async (data: RObject) => {
-          await currentApi.run({ template_id: data.id })
-          table.value.refresh()
-        }
+        validate: (data: RObject) => ['运行', '等待'].indexOf(data.status) === -1,
+        handler: async (data: RObject) => await currentApi.run({ template_id: data.id })
       },
       查看: (data: RObject) => router.push('/simpro-task/view/' + data.id),
       编辑: (data: RObject) => router.push('/simpro-task/edit/' + data.id),

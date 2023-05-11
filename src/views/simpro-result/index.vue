@@ -47,9 +47,9 @@ type Query = Record<string, any>
 const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入仿真任务名称或主车模型' },
-  { label: '场景来源', key: 'source', type: 'select', options: TaskSourceOptions, defaultValue: '' },
+  { label: '任务来源', key: 'source', type: 'select', options: TaskSourceOptions, defaultValue: '' },
   { label: '仿真算法', key: 'algorithm', type: 'select', api: api.algorithm.getList, defaultValue: '' },
-  { label: '创建时间', key: 'date', type: 'range-picker' }
+  { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
 const onSearch = (data: Query) => (query.value = data)
 

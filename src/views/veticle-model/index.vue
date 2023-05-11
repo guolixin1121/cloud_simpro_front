@@ -104,7 +104,7 @@ const formItems = ref<SearchFormItem[]>([
     fieldNames: { label: 'name', value: 'key', apiField: 'power_type' },
     defaultValue: ''
   },
-  { label: '创建时间', key: 'date', type: 'range-picker' }
+  { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
 const onSearch = (data: Query) => {
   query.value = { ...data, owner: checked.value ? 1 : 0 }

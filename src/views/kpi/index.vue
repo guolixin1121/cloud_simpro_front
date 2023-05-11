@@ -25,11 +25,12 @@ const formItems = ref<SearchFormItem[]>([
     label: '类别',
     key: 'category',
     type: 'tree-select',
+    checkLeaf: false,
     api: currentApi.getTypes,
     fieldNames: { label: 'title', value: 'id' },
     defaultValue: ''
   },
-  { label: '创建时间', key: 'date', type: 'range-picker' }
+  { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
 const onSearch = (data: Query) => (query.value = data)
 

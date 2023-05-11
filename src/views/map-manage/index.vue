@@ -48,7 +48,7 @@ const formItems = ref<SearchFormItem[]>([
     placeholder: '请选择地图目录'
     // defaultValue: ''
   },
-  { label: '创建时间', key: 'date', type: 'range-picker' }
+  { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
 const onSearch = (data: Query) => {
   query.value = data

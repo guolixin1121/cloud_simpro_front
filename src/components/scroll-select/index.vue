@@ -85,7 +85,7 @@ const getOptions = async (query: string = '') => {
     options.value.push(...transformOption(res))
     isAllLoaded.value = options.value.length >= (res.count || res.length)
 
-    if(isWriteBack.value && !isAllLoaded.value) {
+    if(isWriteBack.value) {
       getDefaultOptions()
     }
   }
