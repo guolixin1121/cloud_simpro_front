@@ -23,7 +23,7 @@ const props = defineProps({
   },
   fieldNames: {
     type: Object as PropType<FieldNames>,
-    default: () => ({ label: 'name', value: 'id', apiField: undefined })
+    default: () => ({ label: 'name', value: 'id', apiField: '', sublabel: '' })
   }
 })
 const attrs = useAttrs()
@@ -68,16 +68,19 @@ const onSearch = (input: string) => {
 
 // 重新获取数据
 const onFocus = () => {
-  if (props.api) {
-    currentPage.value = 1
-    options.value = []
-    initOptions()
-    getOptions()
-  }
+  // if (props.api) {
+  //   currentPage.value = 1
+  //   options.value = []
+  //   initOptions()
+  //   getOptions()
+  // }
 }
 
 // 值从父组件传过来时触发getDefaultOptions，内部的更改则不触发
-const onChange = () => isWriteBack.value = false
+const onChange = () => {
+  console.log(1)
+  isWriteBack.value = false
+}
 
 const getOptions = async (query: string = '') => {
   if (props.api) {
@@ -108,10 +111,10 @@ const getDefaultOptions = async () => {
 }
 
 const transformOption = (response: RObject) => {
-  const { label, value, apiField = '' } = props.fieldNames
+  const { label, value, sublabel, apiField = '' } = props.fieldNames
   const results = response.results || response.datalist || response[apiField] || response
   let newOptions = results.map((item: any) => ({
-    label: item[label],
+    label: item[label] + (sublabel ? ('_' + item[sublabel]) : ''),
     value: item[value]
   }))
   // 过滤掉列表中已存在的项

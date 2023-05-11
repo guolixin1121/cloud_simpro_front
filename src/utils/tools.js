@@ -55,6 +55,13 @@ export function isEmpty(val) {
   return false
 }
 
+// 是否为日期类属性
+export function isDateProp(prop) {
+  if(!prop) return false
+  const propLowercase = prop.toLocaleLowerCase()
+  return propLowercase.indexOf('date') > -1 || propLowercase.indexOf('time') > -1
+}
+
 // 防抖(立即执行)
 export function debounce(fn, wait = 500) {
   let timerId = null
@@ -84,8 +91,9 @@ export function deepClone(source) {
 
 export function formatDate(date, formatter) {
   if (!date) return ''
-  return dayjs(date).format(formatter || 'YYYY-MM-DD HH:MM:ss')
+  return dayjs(date).format(formatter || 'YYYY-MM-DD HH:mm:ss')
 }
+
 // 判断字符串中中文个数
 export function getCnWordTotal(str) {
   let total = 0
