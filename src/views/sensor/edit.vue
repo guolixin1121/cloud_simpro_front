@@ -29,7 +29,7 @@
           v-if="isAdd"
           allowClear
           v-model:value="formState.mapType"
-          :options="MapManageSourceOptions"
+          :options="sensorType.slice(1)"
           placeholder="请选择传感器类型"
         >
         </scroll-select>
@@ -85,7 +85,7 @@
 <script setup lang="ts">
 import type { UploadChangeParam } from 'ant-design-vue'
 import { formatDate } from '@/utils/tools'
-import { MapManageSourceOptions } from '@/utils/dict'
+import { sensorType } from '@/utils/dict'
 
 const id = useRoute().params.id
 const { type = '' } = useRoute().query || {}

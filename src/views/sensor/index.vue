@@ -11,6 +11,7 @@
 </template>
 
 <script setup lang="ts">
+import { sensorType } from '@/utils/dict'
 /****** api */
 const user = store.user
 const mapsApi = api.maps
@@ -22,9 +23,8 @@ const formItems = ref<SearchFormItem[]>([
   {
     label: '传感器类型',
     key: 'catalog',
-    type: 'tree-select',
-    checkLeaf: false,
-    api: () => mapsApi.getMapCatalog({ tree: 1 }),
+    type: 'select',
+    options: sensorType,
     placeholder: '请选择传感器类型'
   },
   { label: '创建时间', key: 'create_time', type: 'range-picker' }

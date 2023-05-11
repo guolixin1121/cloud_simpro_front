@@ -53,3 +53,11 @@ export const typeList = [
   { label: '导入', value: 1 },
   { label: '新建', value: 2 }
 ]
+
+export const sensorType = [
+  { label: '全部', value: '' },
+  { label: '激光雷达', value: 1 },
+  { label: '毫米波雷达', value: 2 },
+  { label: '超声波雷达', value: 3 },
+  { label: '摄像机', value: 4 }
+]
