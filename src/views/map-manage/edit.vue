@@ -4,7 +4,8 @@
     <span class="breadcrumb--current">{{ title }}</span>
   </div>
   <div class="min-main">
-    <span class="title mb-5">{{ title }}</span>
+    <div v-if="isView" class="cursor-pointer" @click="goback"><svg-icon icon="back" class="mr-2"></svg-icon>返回</div>
+    <span class="title mb-5 mt-3">{{ title }}</span>
     <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px" @finish="add">
       <a-form-item
         label="地图名称："
@@ -80,8 +81,8 @@
           ><span>{{ formState.create_user }}</span></a-form-item
         >
       </template>
-      <a-form-item class="ml-8" :wrapper-col="{ style: { paddingLeft: '80px' } }">
-        <a-button v-if="!isView" type="primary" html-type="submit" :loading="loading">
+      <a-form-item v-if="!isView" class="ml-8" :wrapper-col="{ style: { paddingLeft: '80px' } }">
+        <a-button type="primary" html-type="submit" :loading="loading">
           {{ isAdd ? '上传' : '修改' }}
         </a-button>
         <a-button @click="goback" class="ml-2">取消</a-button>

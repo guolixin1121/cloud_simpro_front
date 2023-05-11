@@ -4,7 +4,8 @@
     <span class="breadcrumb--current">查看</span>
   </div>
   <div class="min-main">
-    <span class="title mb-5">算法详情</span>
+    <div class="cursor-pointer" @click="goback"><svg-icon icon="back" class="mr-2"></svg-icon>返回</div>
+    <span class="title mb-5 mt-3">算法详情</span>
     <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px">
       <a-form-item label="算法名称：" name="name">
         <span>{{ formState.name }}</span>
@@ -24,9 +25,9 @@
       <a-form-item label="所属用户："
         ><span>{{ formState.create_user }}</span></a-form-item
       >
-      <a-form-item class="ml-8" :wrapper-col="{ style: { paddingLeft: '80px' } }">
+      <!-- <a-form-item class="ml-8" :wrapper-col="{ style: { paddingLeft: '80px' } }">
         <a-button @click="goback" class="mr-2">取消</a-button>
-      </a-form-item>
+      </a-form-item> -->
     </a-form>
   </div>
 </template>

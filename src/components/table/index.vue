@@ -113,7 +113,7 @@ onMounted(() => {
 
 // 用于删除等操作后，重新加载table
 const refresh = () => {
-  console.log({ ...props.query }, current.value, size, dataSource.value)
+  // 判断是否还剩一条，剩一条删除成功后请求上一页
   if (dataSource?.value?.length === 1) {
     run({ ...props.query, page: current.value > 1 ? current.value - 1 : current.value, size })
     return
