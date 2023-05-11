@@ -4,7 +4,7 @@
     <span class="breadcrumb--current">场景集详情</span>
   </div>
   <div class="min-main">
-    <div class="cursor-pointer" @click="goback">
+    <div class="cursor-pointer text-gray-400" @click="goback">
       <svg-icon icon="back" class="mr-2"></svg-icon>返回
     </div>
     <span class="title mb-5 mt-3">场景集详情</span>

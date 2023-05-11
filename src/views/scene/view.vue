@@ -4,7 +4,7 @@
     <span class="breadcrumb--current">场景详情</span>
   </div>
   <div class="min-main">
-    <div class="cursor-pointer" @click="goback">
+    <div class="cursor-pointer text-gray-400" @click="goback">
       <svg-icon icon="back" class="mr-2"></svg-icon>返回
     </div>
     <span class="title mb-5 mt-3">场景详情</span>
@@ -13,22 +13,22 @@
         {{ formState.id }}
       </a-form-item>
       <a-form-item label="场景名称">
-        {{ formState.name }}
+        {{ formState.adsName }}
       </a-form-item>
       <a-form-item label="场景来源" >
         {{ getSceneSourceName(formState.adsSource) }}
       </a-form-item>
       <a-form-item label="所属场景集">
-        {{ formState.baiduSceneSets }}
+        {{ formState.sceneset_name }}
       </a-form-item>
       <a-form-item label="关联地图">
-        {{ formState.mapName }}
+        {{ formState.mapName + '_' + formState.mapVersion }}
       </a-form-item>
       <a-form-item label="场景文件地址" >
         {{ formState.adsUrl }}
       </a-form-item>
       <a-form-item label="场景路径">
-        {{ formState.baiduSceneSets + '/' + formState.name }}
+        {{ formState.sceneset_name + '/' + formState.adsName }}
       </a-form-item>
       <a-form-item label="标签">
         <ul class="view-list">
@@ -51,15 +51,16 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate } from '@/utils/tools';
 import { getSceneSourceName } from '@/utils/dict';
+import { formatDate, isDateProp } from '@/utils/tools';
 const id = useRoute().params.id
 
 const formState = reactive({
   id: '',
-  name: '',
+  adsName: '',
   mapName: '',
-  baiduSceneSets: '',
+  mapVersion: '',
+  sceneset_name: '',
   adsSource: '',
   adsUrl: '',
   labels: [],
@@ -73,31 +74,11 @@ const goback = () => router.go(-1)
 
 const getEditData = async () => {
    if(id !== '0') {
-     const scene = await api.scene.get(id)
-     formState.id = scene.id
-     formState.name = scene.adsName
-     formState.labels = scene.labels_detail
-     formState.adsSource = scene.adsSource
-     formState.createTime = formatDate(scene.createTime)
-     formState.updateTime = formatDate(scene.updateTime)
-     formState.createUser = scene.createUser
-    //  formState.mapName = scene.mapName
-     formState.adsUrl = scene.adsUrl
-
-     getData(scene)
+      const scene = await api.scene.get(id)
+      for(const prop in formState) {
+        formState[prop as keyof typeof formState] = isDateProp(prop) ? formatDate(scene[prop]) : scene[prop]
+      }
    }
-}
-
-const getData = async ({ map_version_obj, baiduSceneSets } : RObject) => {
-  if(baiduSceneSets) {
-    let res = await api.scenesets.get(baiduSceneSets)
-    formState.baiduSceneSets = res.name
-  }
-
-  if(map_version_obj) {
-    let res = await api.maps.lookMapVersion(map_version_obj)
-    formState.mapName = res.mapName
-  }
 }
 getEditData()
 </script>

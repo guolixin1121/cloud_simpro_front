@@ -30,7 +30,8 @@ interface SelectOption {
 interface FieldNames {
   label: string
   value: string
-  apiField?: string
+  apiField?: string  // api返回的字段，默认为results
+  sublabel?: string // 其他额外的lable展示字段
 }
 
 interface RObject {
