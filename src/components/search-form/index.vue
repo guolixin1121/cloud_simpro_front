@@ -100,17 +100,20 @@ const reset = () => {
 }
 
 const emitSearch = () => {
-  const formValues = { ...formState }
+  const formValues = {...formState}
 
-  let start_date = formatDate(formState.date?.[0], 'YYYY-MM-DD')
-  let end_date = formatDate(formState.date?.[1], 'YYYY-MM-DD')
+  // '创建时间'字段转化
+  let start_date = formatDate(formValues.create_time?.[0], 'YYYY-MM-DD')
+  let end_date = formatDate(formValues.create_time?.[1], 'YYYY-MM-DD')
 
-  // 去除空格，去除空值等
   for (let prop in formValues) {
     let value = formValues[prop]
+    // 去除空格
     value = isString(value) ? value.trim() : value
     formValues[prop] = value
-    if (prop === 'date' || isEmpty(value)) {
+
+    // 删除空属性
+    if(prop === 'create_time' || isEmpty(value)) {
       delete formValues[prop]
     }
   }

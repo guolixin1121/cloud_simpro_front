@@ -43,7 +43,7 @@ const formItems = ref<SearchFormItem[]>([
     defaultValue: ['']
   },
   { label: '打标', key: 'isTag', type: 'select', options: IsTag, defaultValue: '' },
-  { label: '创建时间', key: 'date', type: 'range-picker' }
+  { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
 const onSearch = (data: Query) => {
   query.value = data

@@ -79,6 +79,7 @@ const addToRight = () => {
   rightDataSource.value = [...leftSelectedValues.value, ...rightDataSource.value]
   rightDataSourceBackup.value = rightDataSource.value
 
+  // 右侧数据是用户手动添加的，不再需要反写
   isWriteBack.value = false
 }
 const addToLeft = () => {
@@ -95,7 +96,7 @@ const page = ref(1)
 const isAllLoaded = ref(false)
 const getOptions = async () => {
   if (props.api) {
-    const res = await props.api({ page: page.value, [props.fieldNames.label]: leftSearchText })
+    const res = await props.api({ page: page.value, size: 10,  [props.fieldNames.label]: leftSearchText })
     const { label, value, apiField } = props.fieldNames
     const results = res.results ||  res[apiField] || res
     const newOptions = results.map((item: any) => ({
@@ -106,7 +107,7 @@ const getOptions = async () => {
     dataSourceFromApi.value.push(...newOptions)
     isAllLoaded.value = dataSourceFromApi.value.length >= (res.count || res.length)
 
-    if(isWriteBack.value && !isAllLoaded.value) {
+    if(isWriteBack.value) {
       setDefaultOptions()
     }
   }
@@ -120,23 +121,24 @@ const setDefaultOptions = async () => {
     const { label, value, apiField } = props.fieldNames
 
     targetKeys.forEach(async (key: String) => {
-      if (props.api) {
+      let options = dataSourceFromApi.value.filter((item: any) => item.value == key)
+      if (props.api && !options.length) {
         const res = await props.api({ [value]: key })
         const results = res.results ||  res[apiField] || res
-        const options: SelectOption[] = results.map((item: any) => ({
+        options = results.map((item: any) => ({
           label: item[label],
           value: item[value]
         }))
-        // 右侧数据
-        rightDataSource.value.push(...options)
-        rightDataSourceBackup.value = rightDataSource.value
-        isWriteBack.value = false
+      }
+      // 右侧数据
+      rightDataSource.value.push(...options)
+      rightDataSourceBackup.value = rightDataSource.value
+      isWriteBack.value = false
 
-        // 左侧数据不够一屏，继续加载数据，确保滚动条出现
-        if (rightDataSource.value.length === targetKeys.length && !isAllLoaded.value) {
-          page.value++
-          getOptions()
-        }
+      // 左侧数据不够一屏，继续加载数据，确保滚动条出现
+      if (rightDataSource.value.length === targetKeys.length && !isAllLoaded.value) {
+        page.value++
+        getOptions()
       }
     })
   }
@@ -169,7 +171,7 @@ watchEffect(() => {
 const onScroll = (e: any) => {
   if (props.api && !isAllLoaded.value) {
     const { target } = e
-    if (target.scrollTop + target.offsetHeight === target.scrollHeight) {
+    if (target.scrollTop + target.offsetHeight == target.scrollHeight) {
       page.value = page.value + 1
       getOptions()
     }

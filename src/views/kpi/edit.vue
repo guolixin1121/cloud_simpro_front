@@ -17,7 +17,7 @@
         <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入评测指标名称"></a-input>
       </a-form-item>
       <a-form-item label="评测指标类型" name="category" :rules="[{ required: true, message: '请选择评测指标类型!' }]">
-        <a-select v-model:value="formState.category" :options="typesOptions"></a-select>
+        <a-select v-model:value="formState.category" :options="typesOptions" placeholder="请选择评测指标类型"></a-select>
       </a-form-item>
       <a-form-item label="指标文件" name="pyfile" :rules="[{ required: isAdd, message: '请上传评测指标文件!' }]">
         <single-upload accept=".py" v-model:value="formState.pyfile"></single-upload>
