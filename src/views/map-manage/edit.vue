@@ -4,7 +4,9 @@
     <span class="breadcrumb--current">{{ title }}</span>
   </div>
   <div class="min-main">
-    <div v-if="isView" class="cursor-pointer" @click="goback"><svg-icon icon="back" class="mr-2"></svg-icon>返回</div>
+    <div v-if="isView" class="cursor-pointer text-gray-400" @click="goback">
+      <svg-icon icon="back" class="mr-2"></svg-icon>返回
+    </div>
     <span class="title mb-5 mt-3">{{ title }}</span>
     <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px" @finish="add">
       <a-form-item
@@ -12,10 +14,10 @@
         name="name"
         :rules="[
           { required: isAdd ? true : false, message: '请输入地图名称!' },
-          { min: 2, max: 64, message: '地图名称长度为2到50位' }
+          { min: 2, max: 32, message: '地图名称长度为2到32位' }
         ]"
       >
-        <a-input v-if="isAdd" v-model:value="formState.name" maxlength="50" placeholder="请输入地图名称"></a-input>
+        <a-input v-if="isAdd" v-model:value="formState.name" maxlength="32" placeholder="请输入地图名称"></a-input>
         <template v-else>{{ formState.name }}</template>
       </a-form-item>
       <a-form-item label="地图类型：" name="mapType" :rules="[{ required: isAdd ? true : false, message: '请选择地图类型!' }]">

@@ -27,6 +27,8 @@
         </template>
         <template v-if="column.dataIndex === 'is_share'">
           <a-switch
+            checked-children="ON"
+            un-checked-children="OFF"
             :disabled="record.user !== user.user.userId"
             :checked="record.is_share"
             :loading="index === active ? true : false"

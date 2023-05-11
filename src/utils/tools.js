@@ -73,16 +73,29 @@ export function debounce(fn, wait = 500) {
 }
 
 export function deepClone(source) {
-  if(typeof source !== 'object') return source
+  if (typeof source !== 'object') return source
 
   const result = Array.isArray(source) ? [] : []
-  for(let prop in source) {
+  for (let prop in source) {
     result[prop] = deepClone(source[prop])
   }
   return result
 }
 
 export function formatDate(date, formatter) {
-  if(!date) return ''
-  return dayjs(date).format(formatter|| 'YYYY-MM-DD HH:MM:ss')
+  if (!date) return ''
+  return dayjs(date).format(formatter || 'YYYY-MM-DD HH:MM:ss')
+}
+// 判断字符串中中文个数
+export function getCnWordTotal(str) {
+  let total = 0
+  if (str.length > 0) {
+    for (let i = 0; i < str.length; i++) {
+      let c = str.charAt(i)
+      if (c.match(/[\u4E00-\u9FFF]/)) {
+        total++
+      }
+    }
+  }
+  return total
 }

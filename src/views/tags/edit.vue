@@ -4,7 +4,9 @@
     <span class="breadcrumb--current">{{ title }}</span>
   </div>
   <div class="min-main">
-    <div v-if="isView" class="cursor-pointer" @click="goback"><svg-icon icon="back" class="mr-2"></svg-icon>返回</div>
+    <div v-if="isView" class="cursor-pointer text-gray-400" @click="goback">
+      <svg-icon icon="back" class="mr-2"></svg-icon>返回
+    </div>
     <span class="title mb-5 mt-3">{{ title }}</span>
     <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 550px" @finish="add">
       <a-form-item v-if="isView" label="标签ID" name="id">
@@ -15,10 +17,17 @@
         name="display_name"
         :rules="[
           { required: isView ? false : true, message: '请输入标签名称!' },
-          { min: 1, max: 64, message: '标签名称长度为1到32位' }
+          { min: 1, max: 32, message: '标签名称长度为1到32位' }
         ]"
       >
-        <a-input v-if="!isView" v-model:value="formState.display_name" maxlength="32" placeholder="请输入标签名称"></a-input>
+        <template v-if="!isView">
+          <chInput
+            :value="formState.display_name"
+            maxlength="32"
+            placeholder="请输入标签名称"
+            @change="(val: string)=>{formState.display_name=val}"
+          />
+        </template>
         <template v-else>{{ formState.display_name }}</template>
       </a-form-item>
       <a-form-item
@@ -166,5 +175,6 @@ const getLookData = async () => {
 const onlyEnlishInput = (e: { target: { value: string } }) => {
   formState.name = e.target.value.replace(/[^a-z_]/g, '')
 }
+
 getLookData()
 </script>
