@@ -1,3 +1,4 @@
+<!-- 可判断中文个数的input组件 -->
 <template>
   <a-input :value="value" :placeholder="placeholder" :maxlength="maxlength" @change="inputChange"></a-input>
 </template>
