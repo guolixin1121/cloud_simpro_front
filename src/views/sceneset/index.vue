@@ -7,16 +7,7 @@
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/sceneset/edit/0')">创建场景集</a-button>
     </div>
 
-    <Table :api="scenesetApi" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }" :pagination="false">
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.dataIndex == 'labels_detail'">
-          <a-tooltip :title="record.labels_detail.map((d: any) => d.display_name).join('  ')">
-            <span v-for="label in record.labels_detail" :key="label.id" class="text-blue mr-2">
-              {{ label.display_name }}
-            </span>
-          </a-tooltip>
-        </template>
-      </template>
+    <Table :api="scenesetApi" :query="query" :columns="columns" :scroll="{ y: 'auto' }" :pagination="false">
     </Table>
   </div>
 </template>
@@ -49,18 +40,24 @@ const onSearch = (data: Query) => (query.value = data)
 const router = useRouter()
 const columns = [
   { title: '场景集名称', dataIndex: 'name', width: 200, ellipsis: true },
-  { title: '标签', dataIndex: 'labels_detail', ellipsis: true },
+  // { title: '标签', dataIndex: 'labels_detail', ellipsis: true },
   { title: '路径', dataIndex: 'path', width: 200, ellipsis: true },
   { title: '场景数量', dataIndex: 'count', width: 100 },
-  { title: '创建时间', dataIndex: 'create_time', width: 180 },
+  // { title: '创建时间', dataIndex: 'create_time', width: 180 },
   {
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 150,
+    width: 100,
     actions: {
-      查看: (data: any) => router.push('/sceneset/view/' + data.id),
-      编辑: (data: any) => router.push('/sceneset/edit/' + data.id),
+      查看: {
+        validate: (data: RObject) => data.isLeaf === 1,
+        handler: (data: any) => router.push('/sceneset/view/' + data.id)
+      },
+      编辑: {
+        validate: (data: RObject) => data.isLeaf === 1,
+        handler: (data: any) => router.push('/sceneset/edit/' + data.id),
+      },
       删除: async ({ id }: { id: string }) => await currentApi.delete(id)
     }
   }
