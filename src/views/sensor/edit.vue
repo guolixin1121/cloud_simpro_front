@@ -20,34 +20,31 @@
         <a-input v-if="isAdd" v-model:value="formState.name" maxlength="50" placeholder="请输入传感器名称"></a-input>
         <template v-else>{{ formState.name }}</template>
       </a-form-item>
-      <a-form-item
-        label="传感器类型："
-        name="mapType"
-        :rules="[{ required: isAdd ? true : false, message: '请选择传感器类型!' }]"
-      >
+      <a-form-item label="传感器类型：" name="type" :rules="[{ required: isAdd ? true : false, message: '请选择传感器类型!' }]">
         <scroll-select
           v-if="isAdd"
           allowClear
-          v-model:value="formState.mapType"
+          v-model:value="formState.type"
           :options="sensorType.slice(1)"
           placeholder="请选择传感器类型"
         >
         </scroll-select>
-        <template v-else>{{ formState.mapTypeName }}</template>
+        <template v-else>{{ formState.type_name }}</template>
       </a-form-item>
-      <a-form-item label="传感器文件：" name="xodr" :rules="[{ required: isAdd, message: '请上传传感器文件!' }]">
+      <a-form-item label="传感器文件：" name="csv" :rules="[{ required: isAdd, message: '请上传传感器文件!' }]">
         <a-upload
           v-if="!isView"
-          accept=".xodr"
+          accept=".csv"
           :fileList="fileList"
           :before-upload="beforeUpload"
           @remove="onRemove"
           @change="onFileChange"
         >
           <a-button :disabled="isView">选择文件</a-button>
-          <span class="ml-2" v-if="!isAdd">{{ formState.mapFileName }}</span>
+          <!-- <single-upload :disabled="isView" accept=".csv" v-model:value="fileList" :desc="'选择文件'"></single-upload> -->
+          <span class="ml-2">{{ formState.csv_url }}</span>
         </a-upload>
-        <template v-else>{{ formState.mapFileName }}</template>
+        <template v-else>{{ formState.csv_url }}</template>
       </a-form-item>
       <!-- <a-form-item v-if="!isAdd" label="传感器文件地址：">{{ formState.latestVersionUrl }} </a-form-item> -->
       <a-form-item label="描述" name="name">
@@ -84,7 +81,6 @@
 
 <script setup lang="ts">
 import type { UploadChangeParam } from 'ant-design-vue'
-import { formatDate } from '@/utils/tools'
 import { sensorType } from '@/utils/dict'
 
 const id = useRoute().params.id
@@ -92,20 +88,15 @@ const { type = '' } = useRoute().query || {}
 const isView = type === '0' ? true : false // 查看
 const isAdd = id === '0'
 const title = isView ? '查看传感器' : isAdd ? '上传传感器' : '修改传感器'
-const mapApi = api.maps
+const sensorApi = api.sensor
 
 const fileList = ref()
 const formState = reactive<any>({
   name: undefined,
-  catalog: null,
-  xodr: null,
+  csv: null,
   desc: '',
-  latestVersion: '',
-  latestVersionUrl: '',
-  create_time: '',
-  update_time: '',
-  create_user: '',
-  mapType: null
+  type: null,
+  type_name: null
 })
 
 const loading = ref(false)
@@ -115,16 +106,16 @@ const add = async () => {
   loading.value = true
   const params: any = {
     name: formState.name,
-    catalog: formState.catalog,
-    xodr: formState.xodr,
+    type: formState.type,
+    csv: formState.csv,
     desc: formState.desc,
-    mapType: formState.mapType
+    type_name: formState.type_name
   }
   for (const key in params) {
     if (params[key] === null || params[key] === undefined || params[key] === '') delete params[key]
   }
   try {
-    isAdd ? await mapApi.addMaps({ ...params }) : await mapApi.editMaps({ id, data: { ...params } })
+    isAdd ? await sensorApi.add({ ...params }) : await sensorApi.edit({ id, data: { ...params } })
     loading.value = false
     message.info(isAdd ? '新建成功' : '修改成功')
     goback()
@@ -137,20 +128,12 @@ const add = async () => {
 const getLookData = async () => {
   // 非上传
   if (id !== '0') {
-    const res = await mapApi.lookMaps(id)
+    const res = await sensorApi.get(id)
     formState.name = res.name
-    formState.catalog = res.catalog
-    formState.catalogName = res.catalogName
-    formState.xodr = null
+    formState.csv = null
     formState.desc = res.desc
-    formState.latestVersion = res.latestVersion
-    formState.latestVersionUrl = res.latestVersionUrl
-    formState.create_time = formatDate(res.create_time)
-    formState.update_time = formatDate(res.update_time)
-    formState.create_user = res.create_user
-    formState.mapFileName = res.mapFileName
-    formState.mapType = res.mapType
-    formState.mapTypeName = res.mapTypeName
+    formState.type = res.type
+    formState.type_name = res.type_name
   }
 }
 getLookData()
@@ -167,11 +150,12 @@ const beforeUpload = (file: File) => {
 
 const onFileChange = (info: UploadChangeParam) => {
   fileList.value = [info.file]
-  formState.xodr = fileList.value[0]
+  // formState.csv_url = fileList.value[0]
+  formState.csv = fileList.value[0]
 }
 
 const onRemove = () => {
   fileList.value = []
-  formState.xodr = null
+  formState.csv = null
 }
 </script>

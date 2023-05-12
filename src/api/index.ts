@@ -75,7 +75,7 @@ export const task = defineApi({
 export const result = defineApi({
   getList: { url: '/simpro/simtask/', method: 'get' },
   getScenes: { url: '/simpro/simtask/result/', method: 'get' },
-  delete: { url: '/simpro/simtask/{sid}/', method: 'delete' },
+  delete: { url: '/simpro/simtask/{sid}/', method: 'delete' }
 })()
 
 export const algorithm = defineApi({
@@ -87,20 +87,20 @@ export const vehicle = defineApi({
 })()
 
 export const kpi = defineApi({
-  getList: { url: '/simpro/kpi/custom/',   method: 'get' }, 
-  getTypes: { url: '/simpro/kpi/type/', method: 'get' }, 
-  get: { url: '/simpro/kpi/{sid}/', method: 'get' }, 
+  getList: { url: '/simpro/kpi/custom/', method: 'get' },
+  getTypes: { url: '/simpro/kpi/type/', method: 'get' },
+  get: { url: '/simpro/kpi/{sid}/', method: 'get' },
   delete: { url: '/simpro/kpi/{sid}/', method: 'delete' },
-  edit: { 
-    url: '/simpro/kpi/{sid}/', 
+  edit: {
+    url: '/simpro/kpi/{sid}/',
     method: 'put',
-    headers: { 'content-type': 'multipart/form-data' } 
-  }, 
-  add: { 
-    url: '/simpro/kpi/custom/', 
-    method: 'post',
     headers: { 'content-type': 'multipart/form-data' }
   },
+  add: {
+    url: '/simpro/kpi/custom/',
+    method: 'post',
+    headers: { 'content-type': 'multipart/form-data' }
+  }
 })()
 // 车辆动力学
 export const veticleModel = defineApi({
@@ -110,4 +110,12 @@ export const veticleModel = defineApi({
   add: { url: '/vehicle/dynamic_vehicle/', method: 'post' },
   upload: { url: '/vehicle/import_vehicle/', method: 'post', headers: { 'content-type': 'multipart/form-data' } },
   delete: { url: '/vehicle/dynamic_vehicle/{sid}', method: 'delete' }
+})()
+// 传感器
+export const sensor = defineApi({
+  getList: { url: '/sensor/', method: 'get' },
+  get: { url: '/sensor/{sid}', method: 'get' },
+  edit: { url: '/sensor/{sid}', method: 'put', headers: { 'content-type': 'multipart/form-data' } },
+  add: { url: '/sensor/', method: 'post', headers: { 'content-type': 'multipart/form-data' } },
+  delete: { url: '/sensor/{sid}', method: 'delete' }
 })()
