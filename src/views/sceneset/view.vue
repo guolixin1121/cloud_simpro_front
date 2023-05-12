@@ -26,26 +26,24 @@
         </ul>
       </a-form-item>
       <a-form-item label="创建时间">
-        {{ formState.createTime }}
+        {{ formState.create_time }}
       </a-form-item>
-      <a-form-item label="修改时间">
+      <!-- <a-form-item label="修改时间">
         {{ formState.updateTime }}
-      </a-form-item>
+      </a-form-item> -->
     </a-form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { formatDate } from '@/utils/tools';
 const id = useRoute().params.id
 
 const formState = reactive({
   id: '',
-  name: undefined,
+  name: '',
   parentName: '',
   labels: [],
-  createTime: '',
-  updateTime: ''
+  create_time: ''
 })
 
 const router = useRouter()
@@ -53,13 +51,16 @@ const goback = () => router.go(-1)
 
 const getEditData = async () => {
    if(id !== '0') {
-     const sceneset = await api.scenesets.get(id)
-     formState.id = sceneset.id
-     formState.name = sceneset.name
-     formState.parentName = sceneset.parentName
-     formState.labels = sceneset.labels_detail || []
-     formState.createTime = formatDate(sceneset.create_time)
-     formState.updateTime = formatDate(sceneset.update_time)
+     const data = await api.scenesets.get(id)
+    //  formState.id = data.id
+    //  formState.name = data.name
+    //  formState.parentName = data.parentName
+    //  formState.labels = data.labels_detail || []
+    //  formState.create_time = formatDate(data.create_time)
+    //  formState.update_time = formatDate(data.update_time)
+     for(const prop in formState) {
+        formState[prop as keyof typeof formState] = data[prop]
+      }
    }
 }
 
