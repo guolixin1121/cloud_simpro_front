@@ -108,12 +108,12 @@ const add = async () => {
     name: formState.name,
     type: formState.type,
     csv: formState.csv,
-    desc: formState.desc,
-    type_name: formState.type_name
+    desc: formState.desc
   }
   for (const key in params) {
     if (params[key] === null || params[key] === undefined || params[key] === '') delete params[key]
   }
+
   try {
     isAdd ? await sensorApi.add({ ...params }) : await sensorApi.edit({ id, data: { ...params } })
     loading.value = false
@@ -134,6 +134,7 @@ const getLookData = async () => {
     formState.desc = res.desc
     formState.type = res.type
     formState.type_name = res.type_name
+    formState.csv_url = res.csv_url
   }
 }
 getLookData()
