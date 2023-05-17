@@ -133,7 +133,6 @@ const addKeysToData = (data: any) => {
   })
 }
 
-refresh()
 defineExpose({ refresh })
 </script>
 

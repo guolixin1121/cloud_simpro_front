@@ -15,8 +15,8 @@
       <a-form-item label="场景集名称">
         {{ formState.name }}
       </a-form-item>
-      <a-form-item label="父场景集">
-        {{ formState.parentName }}
+      <a-form-item label="父场景集Id">
+        {{ formState.parentId }}
       </a-form-item>
       <a-form-item label="标签">
         <ul class="view-list">
@@ -41,6 +41,7 @@ const id = useRoute().params.id
 const formState = reactive({
   id: '',
   name: '',
+  parentId: '',
   parentName: '',
   labels: [],
   create_time: ''
@@ -61,8 +62,15 @@ const getEditData = async () => {
      for(const prop in formState) {
         formState[prop as keyof typeof formState] = data[prop]
       }
+
+      // getParentName(data.parentId)
    }
 }
+
+// const getParentName = async (id: string) => {
+//    const res = await api.scenesets.get(id)
+//    formState.parentName = res ? res.name : ''
+// }
 
 getEditData()
 </script>
