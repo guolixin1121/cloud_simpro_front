@@ -85,10 +85,10 @@ onMounted(() => {
         formState[key] = storage[key]
       }
     })
-    emitSearch()
   } else {
     SStorage.clear()
   }
+  emitSearch()
 })
 
 // button events

@@ -11,7 +11,13 @@
         <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景集名称"></a-input>
       </a-form-item>
       <a-form-item label="父场景集" name="parentId">
-        <tree-select v-model:value="formState.parentId" :api="getSceneSet" :fieldNames="{label: 'name', value: 'baidu_id'}"></tree-select>
+        <a-tree-select placeholder="请选择父节点" 
+         v-model:value="formState.parentId"
+          :treeData="parentScenesets" 
+          treeDefaultExpandAll
+          showSearch>
+        </a-tree-select>
+        <!-- <tree-select v-model:value="formState.parentId" :api="getSceneSet" :fieldNames="{label: 'name', value: 'baidu_id'}"></tree-select> -->
       </a-form-item>
       <a-form-item label="标签">
         <scroll-transfer v-model:target-keys="formState.labels" :api="getSceneTags" 
@@ -42,6 +48,7 @@ const formState = reactive({
   parentId: undefined,
   labels: [],
 })
+const parentScenesets = ref([])
 
 const loading = ref(false)
 const router = useRouter()
@@ -60,6 +67,26 @@ const add = async () => {
     loading.value = false
   }
 }
+
+const getParents = async () => {
+  const res = await getSceneSet({})
+
+  const treeTransfer = (data: any): [] => {
+    const parents = data.filter((item: any) => item.isLeaf === 0)
+    const options = parents.map((item: any) => ({
+      title: item.name,
+      value: item.baidu_id,
+      key: item.baidu_id,
+      children: treeTransfer(item.children || [])
+    }))
+    return options
+  }
+
+  parentScenesets.value = treeTransfer(res.results || res)
+
+  console.log(parentScenesets.value)
+}
+getParents()
 
 /****** 获取编辑数据 */
 const getEditData = async () => {

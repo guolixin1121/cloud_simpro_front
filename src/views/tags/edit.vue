@@ -57,7 +57,7 @@
           :fieldNames="{ label: 'value', value: 'key' }"
           placeholder="请选择标签类型"
         />
-        <template v-else>{{ formState.tag_type }}</template>
+        <template v-else>{{ formState.tag_type_name }}</template>
       </a-form-item>
       <!-- <a-form-item label="上级标签：" name="tag_type">
         <tree-select
@@ -74,6 +74,7 @@
       </a-form-item> -->
       <a-form-item label="是否可打标签" name="isTag" :rules="[{ required: isView ? false : true, message: '请打标!' }]">
         <a-switch v-if="!isView" checked-children="是" un-checked-children="否" v-model:checked="formState.isTag" />
+        <span v-else>{{ formState.isTag ? '是' : '否' }}</span>
       </a-form-item>
       <a-form-item label="描述" name="desc">
         <a-textarea
@@ -167,6 +168,7 @@ const getLookData = async () => {
     formState.desc = res.desc
     formState.isTag = res.isTag
     formState.tag_type = res.tag_type
+    formState.tag_type_name = res.tag_type_name
     formState.create_time = res.create_time
     formState.update_time = res.update_time
     formState.create_user = res.create_user

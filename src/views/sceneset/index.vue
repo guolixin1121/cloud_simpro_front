@@ -67,7 +67,9 @@ const formItems = ref<SearchFormItem[]>([
     defaultValue: ['']
   }
 ])
-const onSearch = (query: RObject) => fetchTableData(query)
+const query = ref({})
+const onSearch = (params: RObject) => query.value = params
+watch(query, () => fetchTableData(query.value))
 
 /****** 表格区域 */
 const router = useRouter()
@@ -106,7 +108,6 @@ const transformTreeToArray = (data: []) => {
   }
   return results
 }
-fetchTableData()
 </script>
 
 <style scoped>

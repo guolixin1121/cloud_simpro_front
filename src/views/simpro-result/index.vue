@@ -17,8 +17,8 @@
           {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '不通过' }}
         </template>
         <template v-if="column.dataIndex == 'actions'">
-          <span v-if="record.status == '运行'">---</span>
-          <template v-else>
+          <span v-if="record.status == '运行'">-</span>
+          <template v-if="record.status == '结束'">
             <router-link :to="`/simpro-result/view/${record.id}`" class="text-blue mr-2">查看结果</router-link>
           </template>
           <a-popconfirm
