@@ -1,5 +1,12 @@
 <template>
-  <a-upload :disabled="disabled" :fileList="fileList" :before-upload="beforeUpload" @remove="onRemove" @change="onFileChange">
+  <a-upload
+    :disabled="disabled"
+    :fileList="fileList"
+    :accept="accept"
+    :before-upload="beforeUpload"
+    @remove="onRemove"
+    @change="onFileChange"
+  >
     <a-button>{{ desc ? desc : '选择文件' }}</a-button>
     <!-- <span class="ml-2">{{ formState.mapFileName }}</span> -->
   </a-upload>
@@ -8,7 +15,7 @@
 <script setup lang="ts">
 import type { UploadChangeParam } from 'ant-design-vue'
 
-const props = defineProps(['value', 'disabled', 'desc'])
+const props = defineProps(['value', 'disabled', 'desc', 'accept'])
 const emits = defineEmits(['update:value'])
 const { desc } = toRefs(props)
 const fileList = ref()
@@ -24,6 +31,14 @@ const beforeUpload = (file: File) => {
 }
 
 const onFileChange = (info: UploadChangeParam) => {
+  // 文件类型限制
+  const fileType: any = info.file.name.replace(/.+\./, '')
+  if (props.accept?.indexOf(fileType) === -1) {
+    message.error(`仅支持${props.accept}格式文件`)
+    fileList.value = fileList.value ? fileList.value : null
+    emits('update:value', fileList.value?.[0])
+    return false
+  }
   fileList.value = [info.file]
   emits('update:value', fileList.value?.[0])
 }

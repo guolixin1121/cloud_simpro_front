@@ -88,7 +88,7 @@ onMounted(() => {
   } else {
     SStorage.clear()
   }
-  emitSearch()
+  // emitSearch()
 })
 
 // button events
@@ -100,7 +100,7 @@ const reset = () => {
 }
 
 const emitSearch = () => {
-  const formValues = {...formState}
+  const formValues = { ...formState }
 
   // '创建时间'字段转化
   let start_date = formatDate(formValues.create_time?.[0], 'YYYY-MM-DD')
@@ -113,7 +113,7 @@ const emitSearch = () => {
     formValues[prop] = value
 
     // 删除空属性
-    if(prop === 'create_time' || isEmpty(value)) {
+    if (prop === 'create_time' || isEmpty(value)) {
       delete formValues[prop]
     }
   }

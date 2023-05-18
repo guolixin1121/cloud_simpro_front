@@ -32,19 +32,15 @@
         <template v-else>{{ formState.type_name }}</template>
       </a-form-item>
       <a-form-item label="传感器文件：" name="csv" :rules="[{ required: isAdd, message: '请上传传感器文件!' }]">
-        <a-upload
+        <single-upload
           v-if="!isView"
+          class="inline-block"
           accept=".csv"
-          :fileList="fileList"
-          :before-upload="beforeUpload"
-          @remove="onRemove"
-          @change="onFileChange"
-        >
-          <a-button :disabled="isView">选择文件</a-button>
-          <!-- <single-upload :disabled="isView" accept=".csv" v-model:value="fileList" :desc="'选择文件'"></single-upload> -->
-          <span class="ml-2">{{ formState.csv_url }}</span>
-        </a-upload>
+          v-model:value="formState.csv"
+          :desc="'选择文件'"
+        ></single-upload>
         <template v-else>{{ formState.csv_url }}</template>
+        <span class="ml-2" v-if="!isAdd && !isView">{{ formState.csv_url }}</span>
       </a-form-item>
       <!-- <a-form-item v-if="!isAdd" label="传感器文件地址：">{{ formState.latestVersionUrl }} </a-form-item> -->
       <a-form-item label="描述" name="name">
@@ -80,7 +76,6 @@
 </template>
 
 <script setup lang="ts">
-import type { UploadChangeParam } from 'ant-design-vue'
 import { sensorType } from '@/utils/dict'
 
 const id = useRoute().params.id
@@ -90,7 +85,6 @@ const isAdd = id === '0'
 const title = isView ? '查看传感器' : isAdd ? '上传传感器' : '修改传感器'
 const sensorApi = api.sensor
 
-const fileList = ref()
 const formState = reactive<any>({
   name: undefined,
   csv: null,
@@ -138,25 +132,4 @@ const getLookData = async () => {
   }
 }
 getLookData()
-
-/****** 上传文件限制 */
-const beforeUpload = (file: File) => {
-  const isLt50M = file.size / 1024 / 1024 < 50
-  if (!isLt50M) {
-    message.warning('文件不能大于50M！')
-    return false
-  }
-  return false
-}
-
-const onFileChange = (info: UploadChangeParam) => {
-  fileList.value = [info.file]
-  // formState.csv_url = fileList.value[0]
-  formState.csv = fileList.value[0]
-}
-
-const onRemove = () => {
-  fileList.value = []
-  formState.csv = null
-}
 </script>

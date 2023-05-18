@@ -11,46 +11,15 @@
     <span class="title mb-5 mt-3">{{ title }}</span>
     <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px" @finish="add">
       <a-form-item label="地图名称：" name="mapName">
-        <!-- <a-input v-model:value="formState.mapName" maxlength="50" placeholder="请输入地图名称"></a-input> -->
         {{ formState.mapName }}
       </a-form-item>
       <a-form-item label="地图类型：" name="mapType">
-        <!-- <scroll-select
-          :disabled="true"
-          allowClear
-          style="width: 245px"
-          v-model:value="formState.mapType"
-          :options="MapManageSourceOptions"
-          placeholder="请选择地图类型"
-        >
-        </scroll-select> -->
         {{ formState.mapTypeName }}
       </a-form-item>
       <a-form-item label="地图目录：" name="catalog">
-        <!-- <tree-select
-          :disabled="true"
-          allowClear
-          style="width: 245px"
-          v-model:value="formState.catalog"
-          :api="() => mapApi.getMapCatalog({ tree: 1 })"
-          :fieldNames="{ label: 'name', value: 'id' }"
-          placeholder="请选择地图目录"
-        >
-        </tree-select> -->
         {{ formState.catalogName }}
       </a-form-item>
       <a-form-item label="地图文件：" name="xodr">
-        <!-- <a-upload
-          v-if="!isView"
-          accept=".xodr"
-          :fileList="fileList"
-          :before-upload="beforeUpload"
-          @remove="onRemove"
-          @change="onFileChange"
-        >
-          <a-button :disabled="true">选择文件</a-button>
-          <span class="ml-2">{{ formState.mapFileName }}</span>
-        </a-upload> -->
         {{ formState.mapFileName }}
       </a-form-item>
       <a-form-item label="地图文件地址："
@@ -92,9 +61,7 @@
 </template>
 
 <script setup lang="ts">
-// import type { UploadChangeParam } from 'ant-design-vue'
 import { formatDate } from '@/utils/tools'
-// import { MapManageSourceOptions } from '@/utils/dict'
 
 const id = useRoute().params.id
 const { type = '' } = useRoute().query || {}
@@ -102,7 +69,6 @@ const isView = type === '0' ? true : false // 查看
 const title = isView ? '查看地图' : '修改地图'
 const mapApi = api.maps
 
-// const fileList = ref()
 const formState = reactive<any>({})
 
 const loading = ref(false)
@@ -141,24 +107,4 @@ const getLookData = async () => {
   }
 }
 getLookData()
-
-// /****** 上传文件限制 */
-// const beforeUpload = (file: File) => {
-//   const isLt50M = file.size / 1024 / 1024 < 50
-//   if (!isLt50M) {
-//     message.warning('文件不能大于50M！')
-//     return false
-//   }
-//   return false
-// }
-
-// const onFileChange = (info: UploadChangeParam) => {
-//   fileList.value = [info.file]
-//   formState.xodr = fileList.value[0]
-// }
-
-// const onRemove = () => {
-//   fileList.value = []
-//   formState.xodr = null
-// }
 </script>

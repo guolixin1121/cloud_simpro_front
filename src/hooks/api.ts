@@ -39,7 +39,6 @@ type Results<A> = {
 export function defineApi<A>(action: Actions<A>): () => Results<A> {
   return () => {
     const results = {} as { [key: string]: Function }
-
     for (const [key, value] of Object.entries<ActionValue>(action)) {
       if (typeof value === 'function') {
         // 自定义请求函数
@@ -50,8 +49,7 @@ export function defineApi<A>(action: Actions<A>): () => Results<A> {
         if (url && url?.indexOf('/{') > -1) {
           // url里含有变量 /scene/scenes/{sid}
           url = url.split('{')[0]
-          results[key] = (data: any) =>
-            http.request({ ...value, url: url + (data.id || data) + '/', data: data.data })
+          results[key] = (data: any) => http.request({ ...value, url: url + (data.id || data) + '/', data: data.data })
         } else {
           results[key] = (data: any) => http.request({ ...value, url, data })
         }

@@ -65,7 +65,9 @@ const emits = defineEmits(['onSelect'])
 const rowSelection: any = useAttrs()['row-selection'] || {}
 
 const current = ref(1)
-const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number; datalist: [] }, any>, { manual: true })
+const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number; datalist: [] }, any>, {
+  manual: true
+})
 const dataSource: any = computed(() => {
   const results = data.value?.results || data.value?.datalist
   addKeysToData(results)
@@ -125,14 +127,14 @@ const addKeysToData = (data: any) => {
   if (!Array.isArray(data)) return
   data.forEach(item => {
     item.key = item.id
-    if(isEmpty(item.children)) {
+    if (isEmpty(item.children)) {
       delete item.children
     } else {
       addKeysToData(item.children)
     }
   })
 }
-
+refresh()
 defineExpose({ refresh })
 </script>
 

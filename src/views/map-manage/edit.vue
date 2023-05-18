@@ -44,18 +44,15 @@
         <template v-else>{{ formState.catalogName }}</template>
       </a-form-item>
       <a-form-item label="地图文件：" name="xodr" :rules="[{ required: isAdd, message: '请上传地图文件!' }]">
-        <a-upload
+        <single-upload
           v-if="!isView"
           accept=".xodr"
-          :fileList="fileList"
-          :before-upload="beforeUpload"
-          @remove="onRemove"
-          @change="onFileChange"
-        >
-          <a-button :disabled="isView">选择文件</a-button>
-          <span class="ml-2" v-if="!isAdd">{{ formState.mapFileName }}</span>
-        </a-upload>
+          class="inline-block"
+          v-model:value="formState.xodr"
+          :desc="'选择文件'"
+        ></single-upload>
         <template v-else>{{ formState.mapFileName }}</template>
+        <span class="ml-2" v-if="!isAdd && !isView">{{ formState.mapFileName }}</span>
       </a-form-item>
       <a-form-item v-if="!isAdd" label="地图文件地址：">{{ formState.latestVersionUrl }} </a-form-item>
       <a-form-item v-if="!isAdd" label="地图版本：" name="name">
@@ -94,7 +91,6 @@
 </template>
 
 <script setup lang="ts">
-import type { UploadChangeParam } from 'ant-design-vue'
 import { formatDate } from '@/utils/tools'
 import { MapManageSourceOptions } from '@/utils/dict'
 
@@ -105,7 +101,6 @@ const isAdd = id === '0'
 const title = isView ? '查看地图' : isAdd ? '上传地图' : '修改地图'
 const mapApi = api.maps
 
-const fileList = ref()
 const formState = reactive<any>({
   name: undefined,
   catalog: null,
@@ -165,24 +160,4 @@ const getLookData = async () => {
   }
 }
 getLookData()
-
-/****** 上传文件限制 */
-const beforeUpload = (file: File) => {
-  const isLt50M = file.size / 1024 / 1024 < 50
-  if (!isLt50M) {
-    message.warning('文件不能大于50M！')
-    return false
-  }
-  return false
-}
-
-const onFileChange = (info: UploadChangeParam) => {
-  fileList.value = [info.file]
-  formState.xodr = fileList.value[0]
-}
-
-const onRemove = () => {
-  fileList.value = []
-  formState.xodr = null
-}
 </script>
