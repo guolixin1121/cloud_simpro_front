@@ -39,6 +39,22 @@ export const scene = defineApi({
   }
 })()
 
+export const logicScene = defineApi({
+  getList: { url: '/simpro/logic_scenes/', method: 'get' },
+  get: { url: '/simpro/logic_scenes/{sid}/', method: 'get' },
+  delete: { url: '/simpro/logic_scenes/{sid}/', method: 'delete' },
+  edit: {
+    url: '/simpro/logic_scenes/{sid}/',
+    method: 'put',
+    headers: { 'content-type': 'multipart/form-data' }
+  },
+  add: {
+    url: '/simpro/logic_scenes/',
+    method: 'post',
+    headers: { 'content-type': 'multipart/form-data' }
+  }
+})()
+
 export const tags = defineApi({
   getList: { url: '/tags/', method: 'get' },
   getType: { url: '/tags/type/', method: 'get' },

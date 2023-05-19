@@ -71,15 +71,3 @@ const getEditData = async () => {
 }
 getEditData()
 </script>
-
-<style lang="less">
-.view-list {
-  border: 1px solid #d9d9d9;
-  border-radius: 2px;
-  height: 260px;
-  width: 220px;
-  overflow: auto;
-  padding: 8px 10px;
-  margin-top: 5px;
-}
-</style>

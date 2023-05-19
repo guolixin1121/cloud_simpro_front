@@ -15,12 +15,12 @@
       <a-form-item label="场景集名称">
         {{ formState.name }}
       </a-form-item>
-      <a-form-item label="父场景集Id">
-        {{ formState.parentId }}
+      <a-form-item label="父场景集">
+        {{ formState.parentName }}
       </a-form-item>
       <a-form-item label="标签">
         <ul class="view-list">
-          <li class="mb-2" v-for="item in formState.labels as any" :key="item">
+          <li class="mb-2" v-for="item in formState.labels_detail as any" :key="item">
             {{ item.display_name }}
           </li>
         </ul>
@@ -43,7 +43,7 @@ const formState = reactive({
   name: '',
   parentId: '',
   parentName: '',
-  labels: [],
+  labels_detail: [],
   create_time: ''
 })
 
@@ -56,7 +56,7 @@ const getEditData = async () => {
     //  formState.id = data.id
     //  formState.name = data.name
     //  formState.parentName = data.parentName
-    //  formState.labels = data.labels_detail || []
+    //  formState.labels_detail = data.labels_detail_detail || []
     //  formState.create_time = formatDate(data.create_time)
     //  formState.update_time = formatDate(data.update_time)
      for(const prop in formState) {
@@ -74,15 +74,3 @@ const getEditData = async () => {
 
 getEditData()
 </script>
-
-<style lang="less">
-.view-list {
-  border: 1px solid #d9d9d9;
-  border-radius: 2px;
-  height: 260px;
-  width: 220px;
-  overflow: auto;
-  padding: 8px 10px;
-  margin-top: 5px;
-}
-</style>
