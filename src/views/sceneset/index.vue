@@ -80,7 +80,6 @@ const columns = [
 ]
 
 const onDelete = async (row: RObject) => {
-  console.log(row)
    await currentApi.delete(row.id)
    fetchTableData()
 }

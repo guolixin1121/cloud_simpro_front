@@ -21,7 +21,7 @@
       </a-form-item>
       <a-form-item label="标签">
         <scroll-transfer v-model:target-keys="formState.labels" :api="getSceneTags" 
-          :fieldNames="{label: 'display_name', value: 'id'}"
+          :fieldNames="{label: 'display_name', value: 'name'}"
           :titles="['可选标签', '选中标签']"></scroll-transfer>
       </a-form-item>
       <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
@@ -83,8 +83,6 @@ const getParents = async () => {
   }
 
   parentScenesets.value = treeTransfer(res.results || res)
-
-  console.log(parentScenesets.value)
 }
 getParents()
 
@@ -94,7 +92,7 @@ const getEditData = async () => {
      const data = await currentApi.get(id)
      formState.name = data.name
      formState.parentId = data.parentId === -1 ? undefined : data.parentId
-     formState.labels = data.labels
+     formState.labels = data.labels_detail.map((item: any) => item.name)
    }
 }
 getEditData()

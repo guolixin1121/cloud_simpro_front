@@ -1,20 +1,22 @@
 <template>
   <div class="ant-transfer-list">
     <a-checkbox 
+      v-if="showAllChecked"
       v-model:checked="state.allChecked" 
       :indeterminate="state.indeterminate"
       @change="onCheckAllChange">{{ title }}</a-checkbox>
+    <div v-else class=" mt-1 ml-2">{{ title }}</div>
     <a-input-search class="my-2" placeholder="请输入搜索内容" allowClear 
       @search="onSearch"
       @pressEnter="onSearch"></a-input-search>
     <div style="height: calc(100% - 40px); overflow: auto" 
       @scroll="(e: Event) => onScroll(e)">
-      <a-spin v-if="loading" style="width: 100%; padding-top: 20px"></a-spin>
       <a-checkbox-group 
         v-model:value="state.checkedList" 
         :options="dataSource"
         @change="onChange">
       </a-checkbox-group>
+      <a-spin v-if="loading" style="width: 100%; padding-top: 20px"></a-spin>
     </div>
   </div>
 </template>
@@ -33,6 +35,10 @@ const props = defineProps({
   loading: {
     type: Boolean,
     default: () => false
+  },
+  showAllChecked: {
+    type: Boolean,
+    default: () => true
   }
 })
 const state = reactive({

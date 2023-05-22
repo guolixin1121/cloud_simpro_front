@@ -29,7 +29,7 @@ const props = defineProps({
 const attrs = useAttrs()
 const currentPage = ref(1) // 分页load选项
 const isAllLoaded = ref(false)
-const isWriteBack = ref()  // 是否是回写
+const hasDefaultValue = ref(true)
 const options = ref<OptionProps>([])
 
 // 根据defaultValue是否为空，判断是否需要加‘全部’的option
@@ -77,20 +77,13 @@ const onFocus = () => {
 }
 
 // 值从父组件传过来时触发getDefaultOptions，内部的更改则不触发
-const onChange = () => {
-  console.log(1)
-  isWriteBack.value = false
-}
+const onChange = () => hasDefaultValue.value = false
 
 const getOptions = async (query: string = '') => {
   if (props.api) {
     const res = await props.api({ page: currentPage.value, size: 10, [props.fieldNames.label]: query })
     options.value.push(...transformOption(res))
     isAllLoaded.value = options.value.length >= (res.count || res.length)
-
-    if(isWriteBack.value) {
-      getDefaultOptions()
-    }
   }
 }
 
@@ -106,7 +99,7 @@ const getDefaultOptions = async () => {
         options.value.push(...transformOption(res))
       }
     })
-    isWriteBack.value = false
+    // hasDefaultValue.value = false
   }
 }
 
@@ -123,7 +116,14 @@ const transformOption = (response: RObject) => {
 }
 
 // 仅仅初始化时回写数据
-watchOnce(() => attrs.value, () => isWriteBack.value = true)
+watchOnce(
+  () => attrs.value, 
+  () => {
+    if(hasDefaultValue.value) {
+      getDefaultOptions()
+    }
+  }
+)
 
 initOptions()
 getOptions()

@@ -1,34 +1,28 @@
 <template>
   <div class="breadcrumb">
-    <router-link to="/scene/">场景管理</router-link>
-    <span class="breadcrumb--current">场景详情</span>
+    <router-link to="/logic-scene/">逻辑场景管理</router-link>
+    <span class="breadcrumb--current">逻辑场景详情</span>
   </div>
   <div class="min-main">
     <div class="cursor-pointer text-gray-400" @click="goback">
       <svg-icon icon="back" class="mr-2"></svg-icon>返回
     </div>
-    <span class="title mb-5 mt-3">场景详情</span>
+    <span class="title mb-5 mt-3">逻辑场景详情</span>
     <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 550px;">
       <a-form-item label="场景ID">
         {{ formState.id }}
       </a-form-item>
       <a-form-item label="场景名称">
-        {{ formState.adsName }}
-      </a-form-item>
-      <a-form-item label="场景来源" >
-        {{ getSceneSourceName(formState.adsSource) }}
-      </a-form-item>
-      <a-form-item label="所属场景集">
-        {{ formState.sceneset_name }}
-      </a-form-item>
-      <a-form-item label="关联地图">
-        {{ formState.mapName + '_' + formState.mapVersion }}
+        {{ formState.name }}
       </a-form-item>
       <a-form-item label="场景文件地址" >
         {{ formState.adsUrl }}
       </a-form-item>
-      <a-form-item label="场景路径">
-        {{ formState.sceneset_name + '/' + formState.adsName }}
+      <a-form-item label="配置文件地址" >
+        {{ formState.config }}
+      </a-form-item>
+      <a-form-item label="关联地图">
+        {{ formState.mapName + '_' + formState.mapVersion }}
       </a-form-item>
       <a-form-item label="标签">
         <ul class="view-list">
@@ -38,35 +32,29 @@
         </ul>
       </a-form-item>
       <a-form-item label="创建时间">
-        {{ formState.createTime }}
-      </a-form-item>
-      <a-form-item label="修改时间">
-        {{ formState.updateTime }}
+        {{ formState.create_time }}
       </a-form-item>
       <a-form-item label="所属用户">
-        {{ formState.createUser }}
+        {{ formState.create_user }}
       </a-form-item>
     </a-form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { getSceneSourceName } from '@/utils/dict';
 import { formatDate, isDateProp } from '@/utils/tools';
 const id = useRoute().params.id
 
 const formState = reactive({
   id: '',
-  adsName: '',
+  name: '',
   mapName: '',
   mapVersion: '',
-  sceneset_name: '',
-  adsSource: '',
   adsUrl: '',
+  config: '',
   labels: [],
-  createTime: '',
-  updateTime: '',
-  createUser: ''
+  create_time: '',
+  create_user: ''
 })
 
 const router = useRouter()
@@ -74,9 +62,9 @@ const goback = () => router.go(-1)
 
 const getEditData = async () => {
    if(id !== '0') {
-      const scene = await api.scene.get(id)
+      const data = await api.logicScene.get(id)
       for(const prop in formState) {
-        formState[prop as keyof typeof formState] = isDateProp(prop) ? formatDate(scene[prop]) : scene[prop]
+        formState[prop as keyof typeof formState] = isDateProp(prop) ? formatDate(data[prop]) : data[prop]
       }
    }
 }
