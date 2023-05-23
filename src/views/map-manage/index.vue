@@ -6,7 +6,7 @@
       <span class="title">地图管理</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')">上传地图</a-button>
     </div>
-    <Table :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
+    <Table :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'versionCount'">
           <a-tooltip :title="record.versionCount">
@@ -57,22 +57,21 @@ const onSearch = (data: Query) => {
 const router = useRouter()
 const preRoute = router.currentRoute.value.path
 const columns = [
-  { title: '地图ID', dataIndex: 'id', width: 80 },
-  { title: '地图名称', dataIndex: 'name', width: 150, ellipsis: true },
-  { title: '所属地图目录', dataIndex: 'catalogName', width: 130 },
-  { title: '地图版本数量', dataIndex: 'versionCount', width: 130 },
-  { title: '地图文件', dataIndex: 'mapFileName', ellipsis: true },
-  // { title: '地图类型', dataIndex: 'mapType', ellipsis: true },
-  { title: '创建时间', dataIndex: 'create_time', width: 180 },
-  { title: '所属用户', dataIndex: 'create_user', width: 100 },
+  { title: '地图ID', dataIndex: 'id', width: 60 },
+  { title: '地图名称', dataIndex: 'name', width: 150 },
+  // { title: '所属地图目录', dataIndex: 'catalogName', width: 100 },
+  { title: '地图版本数量', dataIndex: 'versionCount', width: 60 },
+  // { title: '地图文件', dataIndex: 'mapFileName', ellipsis: true },
+  // { title: '创建时间', dataIndex: 'create_time', width: 180 },
+  // { title: '所属用户', dataIndex: 'create_user', width: 100 },
   {
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 150,
+    width: 60,
     actions: {
-      查看: (data: any) => router.push('/map-manage/edit/' + data.id + '?type=0'),
-      编辑: (data: any) => router.push('/map-manage/edit/' + data.id),
+      查看: (data: any) => router.push('/map-manage/edit/' + data.id + '?type=0&name=' + data.name),
+      编辑: (data: any) => router.push('/map-manage/edit/' + data.id + '?name=' + data.name),
       删除: async ({ id }: { id: string }) => await mapsApi.deleteMaps(id)
     }
   }

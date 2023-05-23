@@ -95,7 +95,7 @@ import { formatDate } from '@/utils/tools'
 import { MapManageSourceOptions } from '@/utils/dict'
 
 const id = useRoute().params.id
-const { type = '' } = useRoute().query || {}
+const { type = '', name = '' } = useRoute().query || {}
 const isView = type === '0' ? true : false // 查看
 const isAdd = id === '0'
 const title = isView ? '查看地图' : isAdd ? '上传地图' : '修改地图'
@@ -143,7 +143,7 @@ const add = async () => {
 const getLookData = async () => {
   // 非上传
   if (id !== '0') {
-    const res = await mapApi.lookMaps(id)
+    const res = await mapApi.lookMaps({ id, data: { name } })
     formState.name = res.name
     formState.catalog = res.catalog
     formState.catalogName = res.catalogName

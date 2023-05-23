@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { IsTag } from '@/utils/dict'
+// import { IsTag } from '@/utils/dict'
 /****** api */
 const user = store.user
 const tagsApi = api.tags
@@ -42,7 +42,7 @@ const formItems = ref<SearchFormItem[]>([
     fieldNames: { label: 'value', value: 'key' },
     defaultValue: ['']
   },
-  { label: '打标', key: 'isTag', type: 'select', options: IsTag, defaultValue: '' },
+  // { label: '打标', key: 'isTag', type: 'select', options: IsTag, defaultValue: '' },
   { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
 const onSearch = (data: Query) => {

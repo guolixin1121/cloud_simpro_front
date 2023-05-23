@@ -47,6 +47,16 @@
         ></a-input>
         <template v-else>{{ formState.name }}</template>
       </a-form-item>
+      <a-form-item
+        label="上级标签："
+        name="name"
+        :rules="[
+          { required: isAdd ? true : false, message: '请输入标签英文名称!' },
+          { min: 1, max: 64, message: '标签英文名称长度为1到64位' }
+        ]"
+      >
+        1111
+      </a-form-item>
       <a-form-item label="标签类型：" name="tag_type" :rules="[{ required: isView ? false : true, message: '请选择标签类型!' }]">
         <scroll-select
           v-if="!isView"

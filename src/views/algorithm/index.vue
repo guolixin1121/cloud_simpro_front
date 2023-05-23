@@ -4,7 +4,7 @@
     <div class="flex justify-between items-center">
       <span class="title">算法管理</span>
     </div>
-    <Table :api="algorithmApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }"> </Table>
+    <Table :api="algorithmApi.getList" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }"> </Table>
   </div>
 </template>
 
@@ -28,7 +28,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 40,
+    width: 60,
     actions: {
       查看: (data: any) => router.push('/algorithm/edit/' + data.id)
     }
