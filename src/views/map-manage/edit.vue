@@ -52,7 +52,7 @@
           :desc="'选择文件'"
         ></single-upload>
         <template v-else>{{ formState.mapFileName }}</template>
-        <span class="ml-2" v-if="!isAdd && !isView">{{ formState.mapFileName }}</span>
+        <span class="ml-2" v-if="!isAdd && !isView && !formState.xodr">{{ formState.mapFileName }}</span>
       </a-form-item>
       <a-form-item v-if="!isAdd" label="地图文件地址：">{{ formState.latestVersionUrl }} </a-form-item>
       <a-form-item v-if="!isAdd" label="地图版本：" name="name">
@@ -93,7 +93,7 @@
 <script setup lang="ts">
 import { formatDate } from '@/utils/tools'
 import { MapManageSourceOptions } from '@/utils/dict'
-
+import { SStorage } from '@/utils/storage'
 const id = useRoute().params.id
 const { type = '', name = '' } = useRoute().query || {}
 const isView = type === '0' ? true : false // 查看
@@ -127,7 +127,9 @@ const add = async () => {
     mapType: formState.mapType
   }
   for (const key in params) {
-    if (params[key] === null || params[key] === undefined || params[key] === '') delete params[key]
+    if (key !== 'desc') {
+      if (params[key] === null || params[key] === undefined || params[key] === '') delete params[key]
+    }
   }
   try {
     isAdd ? await mapApi.addMaps({ ...params }) : await mapApi.editMaps({ id, data: { ...params } })
@@ -143,10 +145,11 @@ const add = async () => {
 const getLookData = async () => {
   // 非上传
   if (id !== '0') {
+    const catalog = SStorage.get('catalog')
     const res = await mapApi.lookMaps({ id, data: { name } })
     formState.name = res.name
-    formState.catalog = res.catalog
-    formState.catalogName = res.catalogName
+    formState.catalog = res.catalog || catalog.id
+    formState.catalogName = res.catalogName || catalog.name
     formState.xodr = null
     formState.desc = res.desc
     formState.latestVersion = res.latestVersion

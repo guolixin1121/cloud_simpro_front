@@ -105,7 +105,9 @@ const add = async () => {
     desc: formState.desc
   }
   for (const key in params) {
-    if (params[key] === null || params[key] === undefined || params[key] === '') delete params[key]
+    if (key !== 'desc') {
+      if (params[key] === null || params[key] === undefined || params[key] === '') delete params[key]
+    }
   }
 
   try {

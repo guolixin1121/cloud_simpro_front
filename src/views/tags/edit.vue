@@ -153,7 +153,9 @@ const add = async () => {
     isClassify: formState.isClassify
   }
   for (const key in params) {
-    if (key !== 'isTag') {
+    if (key === 'isTag' || key === 'desc') {
+      console.log(1)
+    } else {
       if (!params[key]) delete params[key]
     }
   }

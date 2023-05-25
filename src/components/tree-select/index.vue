@@ -31,6 +31,9 @@ const props = defineProps({
   checkLeaf: {
     type: Boolean,
     default: () => true
+  },
+  select: {
+    type: Function
   }
 })
 const attrs = useAttrs()

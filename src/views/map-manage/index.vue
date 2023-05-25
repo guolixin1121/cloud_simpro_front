@@ -12,7 +12,7 @@
           <a-tooltip :title="record.versionCount">
             <a
               class="text-blue"
-              @click="() => router.push({ path: '/map-manage/map-version/' + record.id, query: { preRoute } })"
+              @click="() => router.push({ path: '/map-manage/map-version/' + record.id, query: { preRoute, name: record.name } })"
             >
               {{ record.versionCount }}
             </a>
@@ -24,6 +24,7 @@
 </template>
 
 <script setup lang="ts">
+import { SStorage } from '@/utils/storage'
 /****** api */
 const user = store.user
 const mapsApi = api.maps
@@ -45,7 +46,10 @@ const formItems = ref<SearchFormItem[]>([
     type: 'tree-select',
     checkLeaf: false,
     api: () => mapsApi.getMapCatalog({ tree: 1 }),
-    placeholder: '请选择地图目录'
+    placeholder: '请选择地图目录',
+    onSelect: (id: any, node: any) => {
+      SStorage.set('catalog', { id, name: node.title })
+    }
     // defaultValue: ''
   }
   // { label: '创建时间', key: 'date', type: 'range-picker' }
@@ -72,7 +76,7 @@ const columns = [
     actions: {
       查看: (data: any) => router.push('/map-manage/edit/' + data.id + '?type=0&name=' + data.name),
       编辑: (data: any) => router.push('/map-manage/edit/' + data.id + '?name=' + data.name),
-      删除: async ({ id }: { id: string }) => await mapsApi.deleteMaps(id)
+      删除: async ({ id, name }: any) => await mapsApi.deleteMaps({ id, data: { name } })
     }
   }
 ]

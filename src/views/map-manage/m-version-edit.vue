@@ -62,7 +62,7 @@
 
 <script setup lang="ts">
 import { formatDate } from '@/utils/tools'
-
+import { SStorage } from '@/utils/storage'
 const id = useRoute().params.id
 const { type = '' } = useRoute().query || {}
 const isView = type === '0' ? true : false // 查看
@@ -76,7 +76,8 @@ const router = useRouter()
 const goback = () => router.go(-1)
 const add = async () => {
   loading.value = true
-  const params: any = { mapVersionDesc: formState.mapVersionDesc }
+  const catalog = SStorage.get('catalog') || {}
+  const params: any = { mapVersionDesc: formState.mapVersionDesc, catalog: catalog?.id }
   try {
     await mapApi.editMapVersion({ id, data: { ...params } })
     loading.value = false
@@ -91,10 +92,11 @@ const add = async () => {
 const getLookData = async () => {
   // 非上传
   if (id !== '0') {
-    const res = await mapApi.lookMapVersion(id)
+    const catalog = SStorage.get('catalog') || {}
+    const res = await mapApi.lookMapVersion({ id, data: { catalog: catalog?.id } })
     formState.mapName = res.mapName
     formState.catalog = res.catalog
-    formState.catalogName = res.catalogName
+    formState.catalogName = res.catalogName || catalog?.name
     formState.mapFileName = res.mapFileName
     formState.mapVersionDesc = res.mapVersionDesc
     formState.mapUrl = res.mapUrl
