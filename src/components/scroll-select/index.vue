@@ -125,6 +125,13 @@ watchOnce(
   }
 )
 
+watch(
+  () => props.api,
+  () => {
+    getOptions()
+  }
+)
+
 initOptions()
 getOptions()
 </script>

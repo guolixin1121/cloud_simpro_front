@@ -1,6 +1,6 @@
 // list页面使用，需要自己提供‘全部’选项
 export const SceneSourceOptions = [
-  { label: '全部', value: '' },
+  // { label: '全部', value: '' },
   { label: '编辑', value: 0 },
   { label: '泛化', value: 1 },
   { label: '导入', value: 2 }
@@ -61,3 +61,15 @@ export const sensorType = [
   { label: '超声波雷达', value: 3 },
   { label: '摄像机', value: 4 }
 ]
+
+// 仿真结果状态
+export const resultStatus = [
+  { label: '', value: 0 },
+  { label: '等待', value: 1 },
+  { label: '运行', value: 2 },
+  { label: '结束', value: 3 },
+  { label: '异常', value: 4 },
+  { label: '取消', value: 5 }
+]
+
+export const getResultStatus = (value: number | string) => resultStatus.find(v => v.value === value)?.label

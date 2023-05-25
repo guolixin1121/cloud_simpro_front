@@ -24,6 +24,11 @@
           :width="column.width"
           :tree-node="column.dataIndex === 'name'">
         </vxe-column>
+        <vxe-column title="类别">
+          <template #default="{ row }">
+            <span>{{ row.isLeaf ? '场景集' : '场景目录'}}</span>
+          </template>
+        </vxe-column>
         <vxe-column title="操作" width="150">
           <template #default="{ row }">
             <a class="text-blue mr-2" v-if="row.isLeaf === 1" @click="onView(row)">查看</a>
@@ -107,6 +112,8 @@ const transformTreeToArray = (data: []) => {
   }
   return results
 }
+
+fetchTableData()
 </script>
 
 <style scoped>

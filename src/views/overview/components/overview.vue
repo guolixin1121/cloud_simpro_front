@@ -1,31 +1,72 @@
 <template>
-  <div class="item-list mt-4">
+  <div class="item-list">
     <div class="item">
       <div class="flex flex-col">
-        <p>创建任务总数</p>
-        <p><span class="value">4566</span>个</p>
+        <p>仿真任务总数</p>
+        <p class="mt-4"><span class="value">{{ tasks.total }}</span>个</p>
       </div>
-      <img src="@/assets/images/icon_todaytaskdo.png">
+      <div class="flex flex-col items-center">
+        <span class="text-gray flex items-center mb-2">月环比 
+          <i :class="tasks.monthGrowth > 0 ? 'icon-rise' : 'icon-down'" />
+          {{ tasks.monthGrowth }}%
+        </span>
+        <img src="@/assets/images/icon_taskcreate.png">
+      </div>
     </div>
     <div class="item">
       <div class="flex flex-col">
-        <span>创建任务总数</span>
-        <span><span class="value">4566</span>个</span>
+        <span>仿真运行次数</span>
+        <span class="mt-4"><span class="value">{{executions.total}}</span>次</span>
       </div>
-      <img src="@/assets/images/icon_todaytaskdo.png">
+      <div class="flex flex-col items-center">
+        <span class="text-gray flex items-center mb-2">月环比 
+          <i :class="executions.monthGrowth > 0 ? 'icon-rise' : 'icon-down'" />
+          {{ executions.monthGrowth }}%
+        </span>
+        <img src="@/assets/images/icon_taskdo.png">
+      </div>
     </div>
     <div class="item">
       <div class="flex flex-col">
-        <span>创建任务总数</span>
-        <span><span class="value">4566</span>个</span>
+        <span>仿真报告</span>
+        <span class="mt-4"><span class="value">{{reports.total}}</span>个</span>
       </div>
-      <img src="@/assets/images/icon_todaytaskdo.png">
+      <div class="flex flex-col items-center">
+        <span class="text-gray flex items-center  mb-2">月环比 
+          <i :class="reports.monthGrowth > 0 ? 'icon-rise' : 'icon-down'" />
+          {{ reports.monthGrowth }}%
+        </span>
+        <img src="@/assets/images/icon_todaytaskdo.png">
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+const tasks = reactive({
+  total: 0,
+  monthGrowth: 0
+})
+const executions = reactive({
+  total: 0,
+  monthGrowth: 0
+})
+const reports = reactive({
+  total: 0,
+  monthGrowth: 0
+})
 
+const fetchData = async () => {
+  const res = await api.overview.summary()
+  tasks.total = res.tasks.total
+  tasks.monthGrowth = res.tasks.monthGrowth
+  executions.total = res.executions.total
+  executions.monthGrowth = res.executions.monthGrowth
+  reports.total = res.reports.total
+  reports.monthGrowth = res.reports.monthGrowth
+}
+
+fetchData()
 </script>
 
 <style lang="less" scoped>
@@ -34,15 +75,27 @@
   justify-content: space-between;
   .item {
     width: 32.5%;
-    height: 120px;
+    height: 128px;
     display: flex;
     background-color: #fff;
     justify-content: space-between;
     padding: 24px;
 
+    .icon-rise {
+      display: inline-block;
+      width: 16px;
+      height: 17px;
+      background-image: url(../../../assets/images/icon_rise.png);
+    }
+    .icon-down {
+      display: inline-block;
+      width: 16px;
+      height: 17px;
+      background-image: url(../../../assets/images/icon_down.png);
+    }
+
     .value {
       // @apply flex bg-white p-6
-      padding-top: 8px;
       font-size: 32px;
       font-weight: 600;
       color: #1F1F1F;

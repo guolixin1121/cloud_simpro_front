@@ -16,13 +16,16 @@
         <template v-if="column.dataIndex == 'is_passed'">
           {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '不通过' }}
         </template>
+        <template v-if="column.dataIndex == 'status'">
+          <span :class="'task-status task-status--' + record.status">{{ getResultStatus(record.status) }}</span>
+        </template>
         <template v-if="column.dataIndex == 'actions'">
-          <span v-if="record.status == '运行'">-</span>
-          <template v-if="record.status == '结束'">
+          <span v-if="isRunning(record.status)">-</span>
+          <template v-if="isFinished(record.status)">
             <router-link :to="`/simpro-result/view/${record.id}`" class="text-blue mr-2">查看结果</router-link>
           </template>
           <a-popconfirm
-            v-if="record.status != '运行'"
+            v-if="isNotRunning(record.status)"
             title="你确定要删除吗？"
             ok-text="是"
             cancel-text="否"
@@ -37,10 +40,14 @@
 </template>
 
 <script setup lang="ts">
-import { TaskSourceOptions, getTaskSourceName } from '@/utils/dict'
+import { TaskSourceOptions, getTaskSourceName, getResultStatus } from '@/utils/dict'
 
 /****** api */
 const currentApi = api.result
+
+const isRunning = (status: number) => status === 2
+const isFinished = (status: number) => status === 3
+const isNotRunning = (status: number) => status !== 2
 
 /****** 搜素区域 */
 type Query = Record<string, any>
