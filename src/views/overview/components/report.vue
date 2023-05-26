@@ -42,7 +42,4 @@ defineProps(['option'])
 .item {
   width: 49%;
 }
-.text-gray {
- color: #999CA3;
-}
 </style>

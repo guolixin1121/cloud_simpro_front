@@ -135,3 +135,13 @@ export const sensor = defineApi({
   add: { url: '/sensor/', method: 'post', headers: { 'content-type': 'multipart/form-data' } },
   delete: { url: '/sensor/{sid}', method: 'delete' }
 })()
+
+export const overview = defineApi({
+  summary: { url: '/stats/simpro/summary/', method: 'get' },
+  executions: { url: '/stats/simtask/executions/', method: 'get' },
+  runningtime: { url: '/stats/simtask/runningtime/', method: 'get' },
+  tasks: { url: '/stats/simtasks/tasks/', method: 'get' },
+  reports: { url: '/stats/simresults/reports/', method: 'get' },
+  scenes: { url: '/stats/scenes/count/', method: 'get' },
+  status: { url: '/stats/simtask/status/', method: 'get' }
+})()

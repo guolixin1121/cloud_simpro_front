@@ -22,18 +22,18 @@ const defaultOption = {
       // 坐标轴指示器，坐标轴触发有效
       type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
     },
-    // formatter: (series: any) => {
-    //   const name = series[0].name
-    //   let relVal = '<div><p style="font-weight: 500; margin-bottom: 5px">' + name + '</p>';
-    //   for (let i = 0, l = series.length; i < l; i++) {
-    //       relVal += '<div>' + 
-    //         '<span style="display: inline-block; margin-right: 5px; width: 10px; height: 10px; border-radius: 10px; background-color:' + series[i].color + '"></span>' +
-    //         '<span>' + series[i].seriesName + '：</span>' + 
-    //         '<span style="float: right">' + series[i].value + ('') + '</span></div>'
-    //   }
-    //   relVal += '<div> <div style="clear: both"></div>'
-    //   return relVal
-    // }
+    formatter: (series: any) => {
+      const name = series[0].name
+      let relVal = '<div><p style="font-weight: 500; margin-bottom: 5px">' + name + '</p>';
+      for (let i = 0, l = series.length; i < l; i++) {
+          relVal += '<div>' + 
+            '<span style="display: inline-block; margin-right: 5px; width: 10px; height: 10px; border-radius: 10px; background-color:' + series[i].color + '"></span>' +
+            '<span>' + series[i].seriesName + '：</span>' + 
+            '<span style="float: right">' + (series[i].value || 0) + ('') + '</span></div>'
+      }
+      relVal += '<div> <div style="clear: both"></div>'
+      return relVal
+    }
   },
   xAxis: {
     type: 'category',
@@ -77,17 +77,33 @@ const defaultOption = {
       }
     }
   }
+}
 
+const seriesOptions = {
+  'bar': {
+    barMaxWidth: '30',
+    barMinHeight:'5',
+  },
+  'line': {
+    smooth: true
+  },
+  'pie': {
+    radius: ['35%', '55%'],
+    avoidLabelOverlap: false,
+    itemStyle: {
+      borderRadius: 10,
+      borderColor: '#fff',
+      borderWidth: 2
+    }
+  }
 }
 
 export default (option: any) => {
   option.series?.forEach((series: any) => {
-    if(series.type === 'bar') {
-      merge(series, {
-        barMaxWidth: '30',
-        barMinHeight:'5',
-      })
-    }
+    const config = seriesOptions[series.type as keyof typeof seriesOptions]
+    merge(series, config)
   })
-  return merge( cloneDeep(defaultOption), option)
+  option = merge(cloneDeep(defaultOption), option)
+  
+  return option
 }

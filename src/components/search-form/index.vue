@@ -1,6 +1,7 @@
 <template>
   <a-form ref="form" layout="inline" class="white-block mb-5 top" :model="formState" v-bind="$attrs">
-    <a-form-item v-for="item in items" :key="item" :label="item.label" :name="item.key" style="margin-bottom: 10px">
+    <a-form-item v-for="item in items" :key="item" :label="item.label" :name="item.key" style="margin-bottom: 10px"
+      :rules="[{required: item.required}]">
       <scroll-select
         v-if="item.type == 'select'"
         allowClear
@@ -13,7 +14,6 @@
       </scroll-select>
       <tree-select
         v-else-if="item.type == 'tree-select'"
-        allowClear
         style="width: 245px"
         v-model:value="formState[item.key]"
         v-bind="{ ...item, ...getDefaultStyle(item.type) }"
@@ -88,7 +88,7 @@ onMounted(() => {
   } else {
     SStorage.clear()
   }
-  // emitSearch()
+  emitSearch()
 })
 
 // button events

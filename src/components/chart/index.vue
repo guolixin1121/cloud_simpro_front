@@ -1,5 +1,5 @@
 <template>
-  <div class="mt-4 h-80">
+  <div class="h-80">
     <div class="name mb-3">{{ title }}</div>
     <div
       :style="title ? 'height:90%' : 'height:100%'"
@@ -43,3 +43,11 @@ const produceOption = (option: any) => {
 
 onUnmounted(() => window.removeEventListener('resize', () => chartInstance?.resize))
 </script>
+
+<style lang="less" scoped>
+.name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1E2229;
+}
+</style>

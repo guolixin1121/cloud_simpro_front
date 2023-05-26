@@ -1,32 +1,56 @@
 <template>
   <div class="overview">
-    <div class="flex justify-between" style="height: 286px">
+    <overview />
+
+    <div class="flex justify-between mt-4" style="height: 286px">
       <entry style="width: 432px;"></entry>
       <task style="width: calc(100% - 432px); margin-left: 16px;"></task>
     </div>
 
-    <section>
-      <span class="title-primary">任务统计</span>
-      <overview />
-      <div class="flex justify-between">
-        <chart class="chart white-block" title="今日仿真任务执行情况" :option="barOptions"></chart>
-        <chart class="chart white-block" title="仿真任务耗时" :option="lineOptions"></chart>
-      </div>
-    </section>
+    <div class="flex justify-between">
+      <chart 
+        :loading="tasksLoading" 
+        class="chart white-block" 
+        title="近7日仿真任务创建情况" 
+        :option="tasksOptions">
+      </chart>
+      <chart 
+        :loading="scenesLoading"
+        class="chart white-block" 
+        title="近7日场景数量新增情况" 
+        :option="scenesOptions">
+      </chart>
+    </div>
 
-    <section>
-      <span class="title-primary">场景概况</span>
-      <overview />
-      <chart class=" white-block" title="场景数量新增情况" :option="barOptions"></chart>
-    </section>
+    <div class="flex justify-between">
+      <chart 
+        :loading="executionsLoading" 
+        class="mr-4 white-block" 
+        style="width: 65%"
+        title="近7日仿真任务执行情况" 
+        :option="executionsOptions">
+      </chart>
+      <chart 
+        class="w-1/3 white-block"
+        title="近7日仿真任务统计"
+        :option="statusOptions">
+      </chart>
+    </div>
 
-    <section>
-      <span class="title-primary mb-4">SOTIF</span>
-      <div class="flex justify-between">
-        <report class="chart" :option="radarOptions"></report> 
-        <report class="chart" :option="radarOptions"></report>
-      </div>
-    </section>
+    <div class="flex justify-between">
+      <chart 
+        :loading="runningtimeLoading" 
+        class="chart white-block" 
+        title="近7日仿真任务耗时" 
+        :option="runningtimeOptions">
+      </chart>
+      <chart 
+        :loading="reportsLoading"
+        class="chart white-block" 
+        title="近7日仿真报告" 
+        :option="reportsOptions">
+      </chart>
+    </div>
   </div>
 </template>
 
@@ -34,54 +58,167 @@
 import Entry from './components/entry.vue'
 import Task from './components/task.vue'
 import Overview from './components/overview.vue'
-import Report from './components/report.vue'
+// import Report from './components/report.vue'
 
-const barOptions =  {
-  xAxis: {
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-  },
-  series: [
-    {
-      data: [820, 932, 901, 934, 1290, 1330, 1320],
-      type: 'bar',
-       name: '昨日',
+// const radarOptions =  {
+//   series: [{
+//     type: 'radar',
+//     data: [
+//       { name: '2020', value: [ 90, 25, 0.5, 200, 2] }
+//     ]
+//   }],
+//   radar: {
+//     indicator: [
+//       { name: '指标1', max: 100, unit: '个'},
+//       { name: '指标2', max: 50, unit: '米'},
+//       { name: '指标3', max: 1, unit: '元'},
+//       { name: '指标4', max: 200, unit: '个'},
+//       { name: '指标5', max: 10, unit: '个'},
+//     ]
+//   }
+// }
+
+const getXData = (source: []) => source.map((item: any) => item.time)
+const getLineYData = (source: []) => source.map((item: any) => item.value)
+const getBarYData = (source: []) => source.map((item: any) => item.value === 0 ? null : item.value)
+
+const executionsLoading = ref(false)
+const executionsOptions =  ref({})
+const fetchExecutions = async () => {
+  executionsLoading.value = true
+  const res = await api.overview.executions()
+  const xData = getXData(res.failed)
+  runningtimeLoading.value = false
+  executionsOptions.value = {
+    xAxis: {
+      data: xData
     },
-    {
-      data: [820, 932, 901, 934, 1290, 1330, 1320],
-      type: 'bar',
-       name: '今日',
-    }
-  ]
-}
-const lineOptions = {
-  xAxis: {
-    data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-  },
-  series: [
-    {
-      data: [820, 932, 901, 934, 1290, 1330, 1320],
-      type: 'line',
-      name: '今日',
-    }
-  ]
-}
-const radarOptions =  {
-  series: [{
-    type: 'radar',
-    data: [
-      { name: '2020', value: [ 90, 25, 0.5, 200, 2] }
-    ]
-  }],
-  radar: {
-    indicator: [
-      { name: '指标1', max: 100, unit: '个'},
-      { name: '指标2', max: 50, unit: '米'},
-      { name: '指标3', max: 1, unit: '元'},
-      { name: '指标4', max: 200, unit: '个'},
-      { name: '指标5', max: 10, unit: '个'},
+    series: [
+      {
+        data: getBarYData(res.passed),
+        type: 'bar',
+        name: '通过',
+      },
+      {
+        data: getBarYData(res.failed),
+        type: 'bar',
+        name: '未通过',
+      }
     ]
   }
 }
+fetchExecutions()
+
+const runningtimeLoading = ref(false)
+const runningtimeOptions = ref({})
+const fetchRunningtime = async () => {
+  runningtimeLoading.value = true
+  const res = await api.overview.runningtime()
+  const xData = getXData(res)
+  runningtimeLoading.value = false
+  runningtimeOptions.value = {
+    xAxis: {
+      data: xData
+    },
+    series: [
+      {
+        data: res.map((item: any) => item.value),
+        type: 'line',
+        name: '耗时'
+      }
+    ]
+  }
+}
+fetchRunningtime()
+
+const tasksLoading = ref(false)
+const tasksOptions =  ref({})
+const fetchTasks = async () => {
+  tasksLoading.value = true
+  const res = await api.overview.tasks({ interval: 'day' })
+  const xData = getXData(res)
+  tasksLoading.value = false
+  tasksOptions.value = {
+    xAxis: {
+      data: xData
+    },
+    series: [
+      {
+        data: getBarYData(res),
+        type: 'bar',
+        name: '任务数',
+      }
+    ]
+  }
+}
+fetchTasks()
+
+const reportsLoading = ref(false)
+const reportsOptions =  ref({})
+const fetchReports = async () => {
+  reportsLoading.value = true
+  const res = await api.overview.reports()
+  const xData = getXData(res)
+  reportsLoading.value = false
+  reportsOptions.value = {
+    xAxis: {
+      data: xData
+    },
+    series: [
+      {
+        data: getBarYData(res),
+        type: 'bar',
+        name: '仿真报告数量',
+      }
+    ]
+  }
+}
+fetchReports()
+
+const statusLoading = ref(false)
+const statusOptions =  ref({})
+const fetchStatus = async () => {
+  statusLoading.value = true
+  const res = await api.overview.status()
+  statusLoading.value = false
+  statusOptions.value = {
+    color: ['#FFC371', '#32D0BF', '#5E89FF', '#FD706D', '#DADCE0'],
+    xAxis: {
+      show: false
+    },
+    series: [{
+      name: '运行状态',
+      type: 'pie',
+      label: {
+        formatter: (params: any) => params.value
+      },
+      data: res
+    }]
+  }
+}
+fetchStatus()
+
+const scenesLoading = ref(false)
+const scenesOptions = ref({})
+const fetchScenes = async () => {
+  scenesLoading.value = true
+  const res = await api.overview.scenes()
+  const xData = getXData(res)
+  scenesLoading.value = false
+  scenesOptions.value = {
+    xAxis: {
+      data: xData
+    },
+    series: [
+      {
+        data: getLineYData(res),
+        type: 'line',
+        name: '场景数量'
+      }
+    ]
+  }
+}
+fetchScenes()
 </script>
 
 <style lang="less">
