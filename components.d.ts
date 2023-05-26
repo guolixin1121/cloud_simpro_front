@@ -38,10 +38,12 @@ declare module '@vue/runtime-core' {
     ATabs: typeof import('ant-design-vue/es')['Tabs']
     ATextarea: typeof import('ant-design-vue/es')['Textarea']
     ATooltip: typeof import('ant-design-vue/es')['Tooltip']
+    ATree: typeof import('ant-design-vue/es')['Tree']
     ATreeSelect: typeof import('ant-design-vue/es')['TreeSelect']
     AUpload: typeof import('ant-design-vue/es')['Upload']
     Chart: typeof import('./src/components/chart/index.vue')['default']
     ChInput: typeof import('./src/components/ch-input/index.vue')['default']
+    LeftTree: typeof import('./src/components/left-tree/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScrollSelect: typeof import('./src/components/scroll-select/index.vue')['default']
@@ -50,6 +52,7 @@ declare module '@vue/runtime-core' {
     SingleUpload: typeof import('./src/components/single-upload/index.vue')['default']
     SvgIcon: typeof import('./src/components/svg-icon/index.vue')['default']
     Table: typeof import('./src/components/table/index.vue')['default']
+    Tree: typeof import('./src/components/tree/index.vue')['default']
     TreeSelect: typeof import('./src/components/tree-select/index.vue')['default']
   }
 }

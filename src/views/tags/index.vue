@@ -38,7 +38,8 @@ const formItems = ref<SearchFormItem[]>([
     key: 'tag_type',
     type: 'select',
     mode: 'multiple',
-    api: tagsApi.getType,
+    // api: tagsApi.getType,
+    api: () => tagsApi.getType({ tree: 1 }),
     fieldNames: { label: 'value', value: 'key' },
     defaultValue: ['']
   },

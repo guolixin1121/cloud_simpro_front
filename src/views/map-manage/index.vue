@@ -1,30 +1,31 @@
 <template>
   <search-form :items="formItems" @on-search="onSearch"></search-form>
-
-  <div class="main">
-    <div class="flex justify-between items-center">
-      <span class="title">地图管理</span>
+  <div class="main main-bg">
+    <left-tree :title="'地图管理'" @select="onSelect" />
+    <div class="right-table">
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')">上传地图</a-button>
-    </div>
-    <Table :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }">
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.dataIndex == 'versionCount'">
-          <a-tooltip :title="record.versionCount">
-            <a
-              class="text-blue"
-              @click="() => router.push({ path: '/map-manage/map-version/' + record.id, query: { preRoute, name: record.name } })"
-            >
-              {{ record.versionCount }}
-            </a>
-          </a-tooltip>
+      <Table :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 300, y: 'auto' }">
+        <template #bodyCell="{ column, record }">
+          <template v-if="column.dataIndex == 'versionCount'">
+            <a-tooltip :title="record.versionCount">
+              <a
+                class="text-blue"
+                @click="
+                  () => router.push({ path: '/map-manage/map-version/' + record.id, query: { preRoute, name: record.name } })
+                "
+              >
+                {{ record.versionCount }}
+              </a>
+            </a-tooltip>
+          </template>
         </template>
-      </template>
-    </Table>
+      </Table>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { SStorage } from '@/utils/storage'
+// import { SStorage } from '@/utils/storage'
 /****** api */
 const user = store.user
 const mapsApi = api.maps
@@ -32,7 +33,7 @@ const mapsApi = api.maps
 type Query = Record<string, any>
 const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入地图名称或ID' },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入地图名称或ID' }
   // {
   //   label: '地图类型',
   //   key: 'mapType',
@@ -40,22 +41,21 @@ const formItems = ref<SearchFormItem[]>([
   //   options: MapManageSourceOptions,
   //   defaultValue: ''
   // },
-  {
-    label: '地图目录',
-    key: 'catalog',
-    type: 'tree-select',
-    checkLeaf: false,
-    api: () => mapsApi.getMapCatalog({ tree: 1 }),
-    placeholder: '请选择地图目录',
-    onSelect: (id: any, node: any) => {
-      SStorage.set('catalog', { id, name: node.title })
-    }
-    // defaultValue: ''
-  }
+  // {
+  //   label: '地图目录',
+  //   key: 'catalog',
+  //   type: 'tree-select',
+  //   checkLeaf: false,
+  //   api: () => mapsApi.getMapCatalog({ tree: 1 }),
+  //   placeholder: '请选择地图目录',
+  //   onSelect: (id: any, node: any) => {
+  //     SStorage.set('catalog', { id, name: node.title })
+  //   }
+  // }
   // { label: '创建时间', key: 'date', type: 'range-picker' }
 ])
 const onSearch = (data: Query) => {
-  query.value = data
+  query.value = { ...query.value, ...data }
 }
 /****** 表格区域 */
 const router = useRouter()
@@ -80,4 +80,8 @@ const columns = [
     }
   }
 ]
+
+const onSelect = (selectedKeys: any, e: any) => {
+  query.value = { ...query.value, catalog: e.node.id }
+}
 </script>
