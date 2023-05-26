@@ -4,7 +4,10 @@
   <div class="main main-bg">
     <left-tree :title="'所属场景集'" @select="onSelect" :api="() => sceneApi.getList({ tree: 1 })" />
     <div class="right-table">
-      <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
+      <div class="flex justify-between items-center">
+        <span class="title">场景管理</span>
+        <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
+      </div>
       <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1100, y: 'auto' }" />
     </div>
     <!-- <div class="flex justify-between items-center">

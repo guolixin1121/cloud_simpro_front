@@ -1,9 +1,12 @@
 <template>
   <search-form :items="formItems" @on-search="onSearch"></search-form>
   <div class="main main-bg">
-    <left-tree :title="'地图管理'" @select="onSelect" :api="() => mapsApi.getMapCatalog({ tree: 1 })" />
+    <left-tree :title="'地图目录'" @select="onSelect" :api="() => mapsApi.getMapCatalog({ tree: 1 })" />
     <div class="right-table">
-      <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')">上传地图</a-button>
+      <div class="flex justify-between items-center">
+        <span class="title">地图管理</span>
+        <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')">上传地图</a-button>
+      </div>
       <Table :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 300, y: 'auto' }">
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'versionCount'">
