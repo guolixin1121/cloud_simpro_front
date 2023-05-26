@@ -1,7 +1,7 @@
 <template>
   <search-form :items="formItems" @on-search="onSearch"></search-form>
   <div class="main main-bg">
-    <left-tree :title="'地图管理'" @select="onSelect" />
+    <left-tree :title="'地图管理'" @select="onSelect" :api="() => mapsApi.getMapCatalog({ tree: 1 })" />
     <div class="right-table">
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')">上传地图</a-button>
       <Table :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 300, y: 'auto' }">

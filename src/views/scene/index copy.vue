@@ -1,18 +1,13 @@
 <template>
   <search-form :items="formItems" @on-search="onSearch"></search-form>
 
-  <div class="main main-bg">
-    <left-tree :title="'所属场景集'" @select="onSelect" :api="() => sceneApi.getList({ tree: 1 })" />
-    <div class="right-table">
-      <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
-      <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1100, y: 'auto' }" />
-    </div>
-    <!-- <div class="flex justify-between items-center">
+  <div class="main">
+    <div class="flex justify-between items-center">
       <span class="title">场景管理</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
     </div>
 
-    <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1100, y: 'auto' }" /> -->
+    <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1100, y: 'auto' }" />
   </div>
 </template>
 
@@ -22,23 +17,23 @@ import { SceneSourceOptions, getSceneSourceName } from '@/utils/dict'
 /****** api */
 const user = store.user
 const currentApi = api.scene
-const sceneApi = api.scenesets
 const tagsApi = (args: object) => api.tags.getList({ tag_type: 3, ...args })
 
 /****** 搜素区域 */
 type Query = Record<string, any>
 const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
-  // {
-  //   label: '所属场景集',
-  //   key: 'scene_set',
-  //   type: 'tree-select',
-  //   required: true,
-  //   api: () => api.scenesets.getList({ tree: 1 }),
-  //   placeholder: '请选择所属场景集'
-  // },
+  { 
+    label: '所属场景集', 
+    key: 'scene_set', 
+    type: 'tree-select',
+    required: true,
+    api: () => api.scenesets.getList({ tree: 1 }), 
+    placeholder: '请选择所属场景集' 
+  },
   { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称' },
-  { label: '场景来源', key: 'adsSource', type: 'select', options: SceneSourceOptions, placeholder: '请选择场景来源' },
+  { label: '场景来源', key: 'adsSource', type: 'select', options: SceneSourceOptions, 
+    placeholder: '请选择场景来源', },
   {
     label: '标签',
     key: 'labels',
@@ -46,8 +41,8 @@ const formItems = ref<SearchFormItem[]>([
     mode: 'multiple',
     api: tagsApi,
     placeholder: '请选择标签',
-    fieldNames: { label: 'display_name', value: 'name' }
-  }
+    fieldNames: { label: 'display_name', value: 'name' },
+  },
   // { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
 const onSearch = (data: Query) => (query.value = data)
@@ -74,8 +69,4 @@ const columns = [
     }
   }
 ]
-
-const onSelect = (selectedKeys: any, e: any) => {
-  query.value = { ...query.value, scene_set: e.node.id }
-}
 </script>

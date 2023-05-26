@@ -13,11 +13,14 @@
 
 <script setup lang="ts">
 import { TreeDataItem } from 'ant-design-vue/es/tree/Tree'
-const mapsApi = api.maps
+// const mapsApi = api.maps
 const props = defineProps({
   searchValue: {
     type: String,
     default: ''
+  },
+  api: {
+    type: Function
   }
 })
 const gData = ref<TreeDataItem[]>([])
@@ -27,10 +30,12 @@ const expandedKeys = ref<string[]>([])
 const autoExpandParent = ref<boolean>(true)
 
 const getMapCatalog = async () => {
-  const res = await mapsApi.getMapCatalog({ tree: 1 })
-  generateData(res.results)
-  gData.value = res.results
-  generateList(res.results)
+  if (props.api) {
+    const res = await props.api()
+    generateData(res.results)
+    gData.value = res.results
+    generateList(res.results)
+  }
 }
 const generateData = (val: any[], _preKey?: string) => {
   const preKey = _preKey || '0'
