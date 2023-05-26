@@ -1,6 +1,6 @@
 <template>
   <div class="left-tree">
-    <span class="title">{{ title }}</span>
+    <span class="sub-title">{{ title }}</span>
     <a-input-search v-model:value="searchValue" style="margin-bottom: 8px" :placeholder="placeholder" />
     <div class="tree-container">
       <Tree :searchValue="searchValue" v-bind="$attrs" />

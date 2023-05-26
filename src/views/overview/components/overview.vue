@@ -7,7 +7,8 @@
       </div>
       <div class="flex flex-col items-center">
         <span class="text-gray flex items-center mb-2">月环比 
-          <i :class="tasks.monthGrowth > 0 ? 'icon-rise' : 'icon-down'" />
+          <i class="icon-rise" v-if="tasks.monthGrowth > 0"></i>
+          <i class="icon-rise" v-if="tasks.monthGrowth < 0"></i>
           {{ tasks.monthGrowth }}%
         </span>
         <img src="@/assets/images/icon_taskcreate.png">
@@ -20,7 +21,8 @@
       </div>
       <div class="flex flex-col items-center">
         <span class="text-gray flex items-center mb-2">月环比 
-          <i :class="executions.monthGrowth > 0 ? 'icon-rise' : 'icon-down'" />
+          <i class="icon-rise" v-if="executions.monthGrowth > 0"></i>
+          <i class="icon-rise" v-if="executions.monthGrowth < 0"></i>
           {{ executions.monthGrowth }}%
         </span>
         <img src="@/assets/images/icon_taskdo.png">
@@ -33,7 +35,8 @@
       </div>
       <div class="flex flex-col items-center">
         <span class="text-gray flex items-center  mb-2">月环比 
-          <i :class="reports.monthGrowth > 0 ? 'icon-rise' : 'icon-down'" />
+          <i class="icon-rise" v-if="reports.monthGrowth > 0"></i>
+          <i class="icon-rise" v-if="reports.monthGrowth < 0"></i>
           {{ reports.monthGrowth }}%
         </span>
         <img src="@/assets/images/icon_todaytaskdo.png">

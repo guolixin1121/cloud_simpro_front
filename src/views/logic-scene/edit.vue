@@ -5,49 +5,65 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
-    <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 550px" @finish="add">
-      <a-form-item
-        label="场景名称"
-        name="adsName"
-        :rules="[
-          { required: true, message: '请输入场景名称!' },
-          { min: 2, max: 50, message: '场景名称长度为2到50位' }
-        ]"
-      >
-        <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></a-input>
-      </a-form-item>
-      <a-form-item v-if="isAdd" label="场景文件" name="xosc" :rules="[{ required: isAdd, message: '请上传场景文件!' }]">
-        <single-upload accept=".xosc" v-model:value="formState.xosc"></single-upload>
-      </a-form-item>
-      <a-form-item v-if="!isAdd" label="场景文件地址" name="adsUrl">
-        <span>{{ formState.adsUrl }}</span>
-      </a-form-item>
-      <a-form-item v-if="isAdd" label="配置文件" name="xosc" :rules="[{ required: isAdd, message: '请上传配置文件!' }]">
-        <single-upload accept=".xosc" v-model:value="formState.config"></single-upload>
-      </a-form-item>
-      <a-form-item v-if="!isAdd" label="配置文件地址" name="adsUrl">
-        <span>{{ formState.adsUrl }}</span>
-      </a-form-item>
-      <a-form-item label="关联地图" name="map_version_obj" :rules="[{ required: true, message: '请选择关联地图!' }]">
-        <scroll-select v-model:value="formState.map_version_obj" :api="getMaps" 
-          placeholder="请选择关联地图"
-          :fieldNames="{label: 'mapName', value: 'id', sublabel: 'mapVersion'}"></scroll-select>
-      </a-form-item>
-      <a-form-item label="标签">
-        <scroll-transfer
-          v-model:target-keys="formState.labels"
-          :api="getScennTags"
-          :fieldNames="{ label: 'display_name', value: 'id' }"
-          :titles="['可选标签', '选中标签']"
-        ></scroll-transfer>
-      </a-form-item>
-      <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
-        <a-button type="primary" html-type="submit" :loading="loading">
-          {{ actionText }}
-        </a-button>
-        <a-button @click="goback" class="ml-2">取消</a-button>
-      </a-form-item>
-    </a-form>
+    <a-spin :spinning="dataLoading">
+      <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 550px" @finish="add">
+        <a-form-item
+          label="场景名称"
+          name="name"
+          :rules="[
+            { required: true, message: '请输入场景名称!' },
+            { min: 2, max: 50, message: '场景名称长度为2到50位' }
+          ]"
+        >
+          <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></a-input>
+        </a-form-item>
+
+        <a-form-item label="关联地图" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
+          <div class="flex justify-between">
+            <tree-select v-model:value="formState.mapCatalog" :api="getMapCatalog" 
+              placeholder="请选择地图目录" @change="onMapCateogryChanged"
+              style="width: 33%;"></tree-select>
+            <scroll-select v-model:value="formState.map"
+              placeholder="请选择地图"
+              label-in-value
+              :api="getMaps"
+              style="width: 33%;"
+              @change="onMapChanged"></scroll-select>
+            <scroll-select v-model:value="formState.mapVersion" 
+              placeholder="请选择地图版本"
+              :api="getMapVersions"
+              style="width: 33%;"
+              :fieldNames="{ label: 'mapVersion', value: 'mapId'}"></scroll-select>
+          </div>
+        </a-form-item>
+        <a-form-item label="场景文件" name="xosc_scene" :rules="[{ required: isAdd, message: '请上传场景文件!' }]">
+          <single-upload accept=".xosc" v-model:value="formState.xosc_scene"></single-upload>
+        </a-form-item>
+        <a-form-item v-if="!isAdd" label="场景文件地址" name="adsUrl">
+          <span>{{ formState.scene_url }}</span>
+        </a-form-item>
+        <a-form-item label="配置文件" name="xosc_config" :rules="[{ required: isAdd, message: '请上传配置文件!' }]">
+          <single-upload accept=".xosc" v-model:value="formState.xosc_config"></single-upload>
+        </a-form-item>
+        <a-form-item v-if="!isAdd" label="配置文件地址" name="adsUrl">
+          <span>{{ formState.config_url }}</span>
+        </a-form-item>
+        <a-form-item label="标签">
+          <scroll-transfer
+            v-model:target-keys="formState.labels"
+            :api="getScennTags"
+            :fieldNames="{ label: 'display_name', value: 'name' }"
+            :titles="['可选标签', '选中标签']"
+          ></scroll-transfer>
+        </a-form-item>
+        <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
+          <a-button type="primary" html-type="submit" :loading="loading">
+            {{ actionText }}
+          </a-button>
+          <a-button @click="goback" class="ml-2">取消</a-button>
+        </a-form-item>
+      </a-form>
+    </a-spin>
   </div>
 </template>
 
@@ -55,21 +71,26 @@
 const id = useRoute().params.id
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
+const title =  actionText + '逻辑场景'
 
-const title =  actionText + '场景'
-const getMaps = api.maps.getMapVersion
+const getMapCatalog = () => api.maps.getMapCatalog({ tree: 1 })
+const getMaps = ref()
+const getMapVersions = ref()
 const getScennTags = (args: object) => api.tags.getList({ tag_type: 3, ...args })
-const currentApi = api.scene
+const currentApi = api.logicScene
 
 const formState = reactive({
   name: '',
-  map_version_obj: undefined,
-  xosc: undefined,
-  config: undefined,
+  mapCatalog: undefined,
+  map: undefined,
+  mapVersion: undefined,
+  xosc_scene: undefined,
+  xosc_config: undefined,
+  scene_url: '',
+  config_url: '',
   labels: undefined,
-  adsUrl: undefined
+  adsUrl: undefined,
 })
-
 const loading = ref(false)
 const router = useRouter()
 const goback = () => router.go(-1)
@@ -77,11 +98,13 @@ const add = async () => {
   loading.value = true
 
   const params = {
-    ...formState
+    source: 0,
+    name: formState.name,
+    map_id: formState.mapVersion,
+    xosc_scene: formState.xosc_scene || null,
+    xosc_config: formState.xosc_config || null,
+    labels: formState.labels
   }
-
-  delete params.adsUrl
-  !params.xosc && delete params.xosc
 
   try {
     isAdd
@@ -94,19 +117,26 @@ const add = async () => {
     loading.value = false
   }
 }
+const onMapCateogryChanged = (value: string) => {
+  formState.map = undefined
+  formState.mapVersion = undefined
+  getMaps.value = (args: any) => api.maps.getMaps({catalog: value, ...args})
+}
+const onMapChanged = (item: any) => {
+  formState.mapVersion = undefined
+  getMapVersions.value = (args: any) => api.maps.getMapVersion({map: item.value, name: item.label, ...args})
+}
 
 /****** 获取编辑数据 */
+const dataLoading = ref(false)
 const getEditData = async () => {
   if (id !== '0') {
-    const data = await currentApi.get(id)
-    // formState.adsName = scene.adsName
-    // formState.labels = scene.labels
-    // formState.baiduSceneSets = scene.baiduSceneSets
-    // formState.map_version_obj = scene.map_version_obj
-    // formState.adsUrl = scene.adsUrl
-    for(const prop in formState) {
-      formState[prop as keyof typeof formState] = data[prop] as never
-    }
+    // dataLoading.value = true
+    // const data = await currentApi.get(id)
+    // dataLoading.value = false
+    // for(const prop in formState) {
+    //   formState[prop as keyof typeof formState] = data[prop]
+    // }
   }
 }
 getEditData()

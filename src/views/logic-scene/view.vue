@@ -16,17 +16,17 @@
         {{ formState.name }}
       </a-form-item>
       <a-form-item label="场景文件地址" >
-        {{ formState.adsUrl }}
+        {{ formState.scene_url }}
       </a-form-item>
       <a-form-item label="配置文件地址" >
-        {{ formState.config }}
+        {{ formState.config_url }}
       </a-form-item>
       <a-form-item label="关联地图">
-        {{ formState.mapName + '_' + formState.mapVersion }}
+        {{ formState.map_name + '_' + formState.mapVersion }}
       </a-form-item>
       <a-form-item label="标签">
         <ul class="view-list">
-          <li class="mb-2" v-for="item in formState.labels as any" :key="item">
+          <li class="mb-2" v-for="item in formState.labels_detail as any" :key="item">
             {{ item.display_name }}
           </li>
         </ul>
@@ -48,11 +48,11 @@ const id = useRoute().params.id
 const formState = reactive({
   id: '',
   name: '',
-  mapName: '',
+  map_name: '',
   mapVersion: '',
-  adsUrl: '',
-  config: '',
-  labels: [],
+  config_url: '',
+  scene_url: '',
+  labels_detail: [],
   create_time: '',
   create_user: ''
 })

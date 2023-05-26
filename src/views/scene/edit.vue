@@ -11,7 +11,7 @@
           label="场景名称"
           name="adsName"
           :rules="[
-            { required: true, message: '请输入场景名称!' },
+            { required: true, message: '请输入场景名称' },
             { min: 2, max: 50, message: '场景名称长度为2到50位' }
           ]"
         >
@@ -21,24 +21,25 @@
           <tree-select v-model:value="formState.scenesets" :api="getSceneSet"
             placeholder="请选择所属场景集" label-in-value></tree-select>
         </a-form-item>
-        <a-form-item label="关联地图目录" name="mapCatalog" :rules="[{ required: true, message: '请选择关联地图目录' }]">
-          <tree-select v-model:value="formState.mapCatalog" :api="getMapCatalog" 
-            placeholder="请选择关联地图目录" @change="onMapCateogryChanged"></tree-select>
+        <a-form-item label="关联地图" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
+          <div class="flex justify-between">
+            <tree-select v-model:value="formState.mapCatalog" :api="getMapCatalog" 
+              placeholder="请选择地图目录" @change="onMapCateogryChanged"
+              style="width: 33%;"></tree-select>
+            <scroll-select v-model:value="formState.map"
+              placeholder="请选择地图"
+              label-in-value
+              :api="getMaps"
+              style="width: 33%;"
+              @change="onMapChanged"></scroll-select>
+            <scroll-select v-model:value="formState.mapVersion" 
+              placeholder="请选择地图版本"
+              :api="getMapVersions"
+              style="width: 33%;"
+              :fieldNames="{ label: 'mapVersion', value: 'mapVersion'}"></scroll-select>
+          </div>
         </a-form-item>
-        <a-form-item label="关联地图" name="map" :rules="[{ required: true, message: '请选择关联地图' }]">
-          <scroll-select v-model:value="formState.map"
-            placeholder="请选择关联地图"
-            label-in-value
-            :api="getMaps"
-            @change="onMapChanged"></scroll-select>
-        </a-form-item>
-        <a-form-item label="关联地图版本" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图版本' }]">
-          <scroll-select v-model:value="formState.mapVersion" 
-            placeholder="请选择关联地图版本"
-            :api="getMapVersions"
-            :fieldNames="{ label: 'mapVersion', value: 'mapVersion'}"></scroll-select>
-        </a-form-item>
-        <a-form-item label="场景文件" name="xosc" :rules="[{ required: isAdd, message: '请上传场景文件!' }]">
+        <a-form-item label="场景文件" name="xosc" :rules="[{ required: isAdd, message: '请上传场景文件' }]">
           <single-upload accept=".xosc" v-model:value="formState.xosc"></single-upload>
         </a-form-item>
         <a-form-item v-if="!isAdd" label="场景文件地址" name="adsUrl">
@@ -54,6 +55,13 @@
             :fieldNames="{ label: 'display_name', value: 'name' }"
             :titles="['可选标签', '选中标签']"
           ></scroll-transfer>
+        </a-form-item>
+        <a-form-item label="标签">
+          <tree-transfer
+            v-model:target-keys="formState.labels"
+            :api="getScennTags"
+            :titles="['可选标签', '选中标签']"
+          ></tree-transfer>
         </a-form-item>
         <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
           <a-button type="primary" html-type="submit" :loading="loading">
@@ -122,11 +130,22 @@ const add = async () => {
   }
 }
 const onMapCateogryChanged = (value: string) => {
+  formState.map = undefined
+  formState.mapVersion = undefined
   getMaps.value = (args: any) => api.maps.getMaps({catalog: value, ...args})
 }
 const onMapChanged = (item: any) => {
+  formState.mapVersion = undefined
   getMapVersions.value = (args: any) => api.maps.getMapVersion({map: item.value, name: item.label, ...args})
 }
+
+// const mapValidator = () => {
+//   // const { mapCatalog, map, mapVersion } = formState
+//   // if (!mapCatalog || !map || !mapVersion) {
+//   //   return Promise.reject('请选择关联地图');
+//   // }
+//   return Promise.resolve();
+// }
 
 /****** 获取编辑数据 */
 const dataLoading = ref(false)

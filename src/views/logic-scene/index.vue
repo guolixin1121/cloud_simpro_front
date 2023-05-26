@@ -50,9 +50,9 @@ const columns = [
     fixed: 'right',
     width: 150,
     actions: {
-      运行: (data: any) => router.push('/scene/view/' + data.id),
-      查看: (data: any) => router.push('/scene/view/' + data.id),
-      编辑: (data: any) => router.push('/scene/edit/' + data.id),
+      运行: (data: any) => router.push('/logic-scene/view/' + data.id),
+      查看: (data: any) => router.push('/logic-scene/view/' + data.id),
+      编辑: (data: any) => router.push('/logic-scene/edit/' + data.id),
       删除: async ({ id }: { id: string }) => await currentApi.delete(id)
     }
   }

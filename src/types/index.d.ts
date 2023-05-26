@@ -38,3 +38,14 @@ interface RObject {
   id: string,
   [key: string]: any
 }
+
+// 自定义字段
+interface FieldName {
+  label: string
+  value: string
+}
+interface TreeItem {
+  title: string
+  value: string
+  children: TreeItem[]
+}

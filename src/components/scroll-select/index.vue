@@ -3,7 +3,6 @@
     :options="options"
     placeholder="请选择"
     showSearch
-    :not-found-content="'加载中...'"
     :filter-option="filterOption"
     @search="onSearch"
     @focus="onFocus"
@@ -128,6 +127,7 @@ watchOnce(
 watch(
   () => props.api,
   () => {
+    options.value = []
     getOptions()
   }
 )

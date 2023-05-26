@@ -10,16 +10,6 @@
   </a-tree-select>
 </template>
 <script setup lang="ts">
-// 自定义字段
-interface FieldName {
-  label: string
-  value: string
-}
-interface TreeItem {
-  title: string
-  value: string
-  children: TreeItem[]
-}
 const props = defineProps({
   api: {
     type: Function

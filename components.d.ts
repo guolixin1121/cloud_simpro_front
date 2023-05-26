@@ -56,5 +56,6 @@ declare module '@vue/runtime-core' {
     Table: typeof import('./src/components/table/index.vue')['default']
     Tree: typeof import('./src/components/tree/index.vue')['default']
     TreeSelect: typeof import('./src/components/tree-select/index.vue')['default']
+    TreeTransfer: typeof import('./src/components/tree-transfer/index.vue')['default']
   }
 }
