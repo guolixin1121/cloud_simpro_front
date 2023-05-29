@@ -18,9 +18,8 @@ export const useUserStore = defineStore('use', () => {
   }
 
   const hasToken = () => {
-    if(token.value) return true
-
-    const value = getQueryParmas('token')
+    if (token.value) return true
+    const value = getQueryParmas('token') || localStorage.getItem('token')
     token.value = value
     LStorage.set('token', value)
     return token.value
@@ -30,7 +29,7 @@ export const useUserStore = defineStore('use', () => {
    * 获取当前登录用户信息及权限
    */
   const getUserInfo = async () => {
-    if(user.value) return
+    if (user.value) return
 
     user.value = await userApi.getLoginUser()
     const permissions = await userApi.getPermissions()

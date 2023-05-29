@@ -2,16 +2,16 @@
   <div class="flex ant-transfer">
     <div class="ant-transfer-list">
       <div class="ant-transfer-list-title mt-1 ml-2">{{ titles[0] }}</div>
-      <a-input-search class="my-2" placeholder="请输入搜索内容" allowClear 
+      <a-input-search
+        class="my-2"
+        placeholder="请输入搜索内容"
+        allowClear
         @search="onSearch"
-        @pressEnter="onSearch"></a-input-search>
-      <div style="height: calc(100% - 40px); overflow: auto;">
-        <a-tree
-          checkable
-          :tree-data="treeData"
-          v-model:checkedKeys="checkedKeys"
-          @check="onChecked"></a-tree>
-        <a-spin :spinning="loading" style="width: 100%; padding-top: 20px;"></a-spin>
+        @pressEnter="onSearch"
+      ></a-input-search>
+      <div style="height: calc(100% - 40px); overflow: auto">
+        <a-tree checkable :tree-data="treeData" v-model:checkedKeys="checkedKeys" @check="onChecked"></a-tree>
+        <a-spin :spinning="loading" style="width: 100%; padding-top: 20px"></a-spin>
       </div>
     </div>
 
@@ -20,7 +20,7 @@
       <ul>
         <li class="transfer-checked-item flex justify-between items-center" v-for="item in selectedNodes" :key="item.key">
           {{ item.title }}
-          <CloseOutlined class="delete-icon"/>
+          <CloseOutlined class="delete-icon" />
         </li>
       </ul>
     </div>
@@ -28,7 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-import {CloseOutlined} from '@ant-design/icons-vue'
+// import {CloseOutlined} from '@ant-design/icons-vue'
 import { TreeDataItem } from 'ant-design-vue/lib/tree'
 
 const emits = defineEmits(['update:targetKeys'])
@@ -92,15 +92,15 @@ getOptions()
 
 <style lang="less" scoped>
 .ant-transfer-list-title {
-  padding-bottom: 8px;;
-  border-bottom: 1px solid #E6E7EB;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e6e7eb;
 }
 .transfer-checked-item {
   height: 32px;
   line-height: 32px;
   padding: 0px 12px;
   &:hover {
-    background: #F2F3F5;  
+    background: #f2f3f5;
   }
   .delete-icon {
     cursor: pointer;
