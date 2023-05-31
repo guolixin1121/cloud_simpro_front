@@ -3,8 +3,8 @@
 
   <div class="main" style="height: calc(100% - 100px)">
     <div class="flex justify-between items-center">
-      <span class="title">场景集管理</span>
-      <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/sceneset/edit/0')">创建场景集</a-button>
+      <span class="title">地图集管理</span>
+      <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/mapset/edit/0')">创建地图集</a-button>
     </div>
    
     <div style="height: calc(100% - 50px);" class="mt-4 overflow-auto">
@@ -21,18 +21,17 @@
           :key="column.dataIndex"
           :field="column.dataIndex"
           :title="column.title"
-          :width="column.width"
           :tree-node="column.dataIndex === 'name'">
         </vxe-column>
         <vxe-column title="类型">
           <template #default="{ row }">
-            <span>{{ row.isLeaf ? '场景集' : '场景目录'}}</span>
+            <span>{{ row.isLeaf ? '地图集' : '地图目录'}}</span>
           </template>
         </vxe-column>
         <vxe-column title="操作" width="150">
           <template #default="{ row }">
-            <a class="text-blue mr-2" v-if="row.isLeaf === 1" @click="onView(row)">查看</a>
-            <a class="text-blue mr-2" v-if="row.isLeaf === 1" @click="onEdit(row)">编辑</a>
+            <a class="text-blue mr-2" @click="onView(row)">查看</a>
+            <a class="text-blue mr-2" @click="onEdit(row)">编辑</a>
             <a-popconfirm
               title="你确定要删除吗？"
               ok-text="是"
@@ -55,8 +54,8 @@ import { isEmpty } from '@/utils/tools'
 
 /****** api */
 const user = store.user
-const currentApi = api.scenesets
-const scenesetApi = (args: object) => currentApi.getList({tree: 1, ...args })
+const currentApi = api.mapsets
+const listApi = (args: object) => currentApi.getList({tree: 1, ...args })
 const tagsApi = (args: object) => api.tags.getList({ tag_type: 2, ...args })
 
 /****** 搜素区域 */
@@ -79,30 +78,24 @@ watch(query, () => fetchTableData(query.value))
 /****** 表格区域 */
 const router = useRouter()
 const columns = [
-  { title: '场景集名称', dataIndex: 'name', ellipsis: true },
-  { title: '路径', dataIndex: 'path', ellipsis: true },
-  { title: '场景数量', dataIndex: 'count', width: 150 }
+  { title: '地图集名称', dataIndex: 'name', ellipsis: true }
 ]
 
 const onDelete = async (row: RObject) => {
    await currentApi.delete(row.id)
    fetchTableData()
 }
-const onView = ({id} : RObject) => router.push('/sceneset/view/' + id)
-const onEdit = ({id} : RObject) => router.push('/sceneset/edit/' + id)
+const onView = ({id, name} : RObject) => router.push('/mapset/view/' + id + '/' + name)
+const onEdit = ({id, name} : RObject) => router.push('/mapset/edit/' + id + '/' + name)
 
 const loading = ref(false)
 const tableData = ref([])
 const fetchTableData = async (params: any = {}) => {
   loading.value = true
-  try {
-  const res = await scenesetApi(params)
+  const res = await listApi(params)
   tableData.value = transformTreeToArray(res.results)
-  } finally {
-    loading.value = false
-  }
+  loading.value = false
 }
-
 const transformTreeToArray = (data: []) => {
   let results: any = []
   if(!isEmpty(data)) {

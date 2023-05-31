@@ -9,7 +9,7 @@
         cancel-text="否"
         @confirm="onHandler(scope, key)"
       >
-        <a class="text-blue mr-2">删除</a>
+        <a class="text-blue mr-2">{{ key }}</a>
       </a-popconfirm>
       <!-- 其他列 -->
       <a v-else class="text-blue mr-2" @click="onHandler(scope, key)">
@@ -44,8 +44,8 @@ const hasPermission = (scope: RObject, key: string) => {
   }
 
   // 自定义的验证
-  if(action.validate) {
-    permission = permission && action.validate(data)
+  if(action.validator) {
+    permission = permission && action.validator(data)
   }
 
   return permission

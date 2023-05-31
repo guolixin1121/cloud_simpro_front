@@ -19,8 +19,13 @@
       <a-form-item label="任务执行次数" name="batch" :rules="[{ required: true, message: '请输入任务执行次数!'}]">
         <a-input-number v-model:value="formState.batch" min="1" placeholder="请输入任务执行次数"></a-input-number>
       </a-form-item>
+      <a-form-item label="所属场景集" name="scenesets" :rules="[{ required: true, message: '请选择场景集' }]">
+          <tree-select v-model:value="formState.scenesets" :api="getSceneSet"
+            placeholder="请选择所属场景集"
+            @change="onScenesetChanged"></tree-select>
+        </a-form-item>
       <a-form-item label="场景" name="scenes" :rules="[{ required: true, message: '请选择场景!'}]">
-        <scroll-transfer v-model:target-keys="formState.scenes" :api="optionsApi.scene.getList" 
+        <scroll-transfer v-model:target-keys="formState.scenes" :api="getScenes" 
           :fieldNames="{label: 'adsName', value: 'baidu_id'}"
           :titles="['可选场景', '选中场景']"></scroll-transfer>
       </a-form-item> 
@@ -45,12 +50,15 @@ const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '仿真任务'
 const optionsApi = api
 const currentApi = api.task
+const getScenes = ref()
+const getSceneSet = (args: object) => api.scenesets.getList({ tree: 1, ...args })
 const getVehicle = (arg: any) => api.vehicle.getList({ is_share: 1, ...arg })
 
 const formState = reactive({
   name: undefined,
   dynamic_vehicle: undefined,
   algorithm: undefined,
+  scenesets: undefined,
   scenes: [],
   batch: undefined,
   kpi: []
@@ -58,20 +66,27 @@ const formState = reactive({
 
 const loading = ref(false)
 const router = useRouter()
-const goback = () => router.go(-1)
+const goback = () => router.push('/simpro-task')
 const add = async () => {
   loading.value = true
 
+  const params = {...formState, source:0 }
+  delete params.scenesets
+
   try {
     isAdd 
-      ? await currentApi.add({...formState, source: 0 })
-      : await currentApi.edit({ id, data: {...formState, source: 0 } })
+      ? await currentApi.add(params)
+      : await currentApi.edit({ id, data: params })
 
     message.info(`${actionText}成功`)
     goback()
   } finally {
     loading.value = false
   }
+}
+
+const onScenesetChanged = () => {
+  getScenes.value = (args: any)  => api.scene.getList({scene_set: formState.scenesets, ...args})
 }
 
 /****** 获取编辑数据 */

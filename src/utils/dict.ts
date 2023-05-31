@@ -73,3 +73,12 @@ export const resultStatus = [
 ]
 
 export const getResultStatus = (value: number | string) => resultStatus.find(v => v.value === value)?.label
+
+// list页面使用，需要自己提供‘全部’选项
+export const SotifStatusOptions = [
+  // { label: '全部', value: '' },
+  { label: '暂停', value: '1' },
+  { label: '进行中', value: '2' },
+  { label: '已结束', value: '3' },
+]
+export const getSotifStatus = (value: number | string) => SotifStatusOptions.find(v => v.value == value)?.label

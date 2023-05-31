@@ -22,7 +22,7 @@
         {{ formState.config_url }}
       </a-form-item>
       <a-form-item label="关联地图">
-        {{ formState.map_name + '_' + formState.mapVersion }}
+        {{ formState.map_name + '_' + formState.map_version_num }}
       </a-form-item>
       <a-form-item label="标签">
         <ul class="view-list">
@@ -49,7 +49,7 @@ const formState = reactive({
   id: '',
   name: '',
   map_name: '',
-  mapVersion: '',
+  map_version_num: '',
   config_url: '',
   scene_url: '',
   labels_detail: [],

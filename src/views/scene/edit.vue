@@ -21,7 +21,12 @@
           <tree-select v-model:value="formState.scenesets" :api="getSceneSet"
             placeholder="请选择所属场景集" label-in-value></tree-select>
         </a-form-item>
-        <a-form-item label="关联地图" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
+        <a-form-item v-if="!isAdd" label="关联地图" name="mapVersion">
+          <span>{{ (formState.mapName || '') + '_' + (formState.mapVersion || '') }}</span>
+          <svg-icon icon="edit" class="ml-4 cursor-pointer hover:text-blue"/>
+        </a-form-item>
+        <a-form-item v-if="isAdd" label="关联地图" name="mapVersionAdd" :rules="[{ required: isAdd, message: '请选择关联地图' }]">
+          <a-form-item-rest>
           <div class="flex justify-between">
             <tree-select v-model:value="formState.mapCatalog" :api="getMapCatalog" 
               placeholder="请选择地图目录" @change="onMapCateogryChanged"
@@ -32,12 +37,13 @@
               :api="getMaps"
               style="width: 33%;"
               @change="onMapChanged"></scroll-select>
-            <scroll-select v-model:value="formState.mapVersion" 
+            <scroll-select v-model:value="formState.mapVersionAdd" 
               placeholder="请选择地图版本"
               :api="getMapVersions"
               style="width: 33%;"
               :fieldNames="{ label: 'mapVersion', value: 'mapVersion'}"></scroll-select>
           </div>
+          </a-form-item-rest>
         </a-form-item>
         <a-form-item label="场景文件" name="xosc" :rules="[{ required: isAdd, message: '请上传场景文件' }]">
           <single-upload accept=".xosc" v-model:value="formState.xosc"></single-upload>
@@ -55,13 +61,6 @@
             :fieldNames="{ label: 'display_name', value: 'name' }"
             :titles="['可选标签', '选中标签']"
           ></scroll-transfer>
-        </a-form-item>
-        <a-form-item label="标签">
-          <tree-transfer
-            v-model:target-keys="formState.labels"
-            :api="getScennTags"
-            :titles="['可选标签', '选中标签']"
-          ></tree-transfer>
         </a-form-item>
         <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
           <a-button type="primary" html-type="submit" :loading="loading">
@@ -84,13 +83,15 @@ const getMapCatalog = () => api.maps.getMapCatalog({ tree: 1 })
 const getMaps = ref()
 const getMapVersions = ref()
 const getSceneSet = (args: object) => api.scenesets.getList({ tree: 1, ...args })
-const getScennTags = (args: object) => api.tags.getList({ tag_type: 3, ...args })
+const getScennTags = (args: object) => api.tags.getList({ tag_type: 3, isTag:true, ...args })
 const currentApi = api.scene
 
 const formState = reactive({
   adsName: '',
   mapCatalog: undefined,
   map: undefined,
+  mapVersionAdd: undefined,
+  mapName: undefined,
   mapVersion: undefined,
   scenesets: undefined,
   xosc: undefined,
@@ -113,7 +114,7 @@ const add = async () => {
     adsName: formState.adsName,
     baiduSceneSets: (formState.scenesets as unknown as SelectOption).value,
     mapName: (formState.map as unknown as SelectOption).label,
-    mapVersion: formState.mapVersion,
+    mapVersion: formState.mapVersionAdd || formState.mapVersion,
     xosc: formState.xosc || null,
     labels: formState.labels
   }
@@ -139,14 +140,6 @@ const onMapChanged = (item: any) => {
   getMapVersions.value = (args: any) => api.maps.getMapVersion({map: item.value, name: item.label, ...args})
 }
 
-// const mapValidator = () => {
-//   // const { mapCatalog, map, mapVersion } = formState
-//   // if (!mapCatalog || !map || !mapVersion) {
-//   //   return Promise.reject('请选择关联地图');
-//   // }
-//   return Promise.resolve();
-// }
-
 /****** 获取编辑数据 */
 const dataLoading = ref(false)
 const getEditData = async () => {
@@ -155,8 +148,9 @@ const getEditData = async () => {
     const scene = await currentApi.get(id)
     dataLoading.value = false
     formState.adsName = scene.adsName
-    formState.labels = scene.label_detail?.map((item: any) => item.name)
+    formState.labels = scene.labels_detail?.map((item: any) => item.name)
     formState.mapVersion = scene.mapVersion
+    formState.mapName = scene.mapName
     formState.adsUrl = scene.adsUrl
     
     getEditOptions(scene)

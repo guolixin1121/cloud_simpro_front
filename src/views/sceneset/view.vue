@@ -50,7 +50,7 @@ const formState = reactive({
 })
 
 const router = useRouter()
-const goback = () => router.go(-1)
+const goback = () => router.push('/sceneset')
 
 const loading = ref(false)
 const getEditData = async () => {

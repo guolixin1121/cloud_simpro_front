@@ -8,6 +8,20 @@
     </div>
 
     <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1100, y: 'auto' }" />
+
+    <a-modal v-model:visible="showRunConfirm" 
+      :closable="false"
+      :footer="null">
+      <div>
+        <svg-icon style="color: #faad14" icon="alert"></svg-icon>
+        <span class="ml-4" style="font-size: 16px">是否要对此逻辑场景进行泛化？</span>
+      </div>
+      <p class="ml-8 mt-2">泛化结果为{{ runScene.count }}个具体场景</p>
+      <div class=" text-right">
+        <a-button @click="closeRunConfirm">否</a-button>
+        <a-button @click="runConfirm" type="primary" class="ml-2">是</a-button>
+      </div>
+    </a-modal>
   </div>
 </template>
 
@@ -36,6 +50,8 @@ const formItems = ref<SearchFormItem[]>([
 const onSearch = (data: Query) => (query.value = data)
 
 /****** 表格区域 */
+const showRunConfirm = ref(false)
+const runScene = ref<any>()
 const router = useRouter()
 const columns = [
   { title: '场景ID', dataIndex: 'id', width: 90 },
@@ -48,13 +64,24 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 150,
+    width: 180,
     actions: {
-      运行: (data: any) => router.push('/logic-scene/view/' + data.id),
+      运行: (data: any) => {
+        showRunConfirm.value = true
+        runScene.value = data
+      },
       查看: (data: any) => router.push('/logic-scene/view/' + data.id),
       编辑: (data: any) => router.push('/logic-scene/edit/' + data.id),
       删除: async ({ id }: { id: string }) => await currentApi.delete(id)
     }
   }
 ]
+
+const closeRunConfirm = () => showRunConfirm.value = false
+const runConfirm = async () => {
+  await currentApi.run({data: {
+    logic_scene: [runScene.value.id]
+  }})
+  closeRunConfirm()
+}
 </script>

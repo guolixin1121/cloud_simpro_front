@@ -164,12 +164,21 @@ watchEffect(() => {
 const onScroll = (e: any) => {
   if (props.api && !isAllLoaded) {
     const { target } = e
+    console.log(target.scrollTop + target.offsetHeight == target.scrollHeight)
     if (target.scrollTop + target.offsetHeight == target.scrollHeight) {
       page = page + 1
       getOptions()
     }
   }
 }
+
+watch(
+  () => props.api,
+  () => {
+    allDataSource.value = []
+    getOptions()
+  }
+)
 
 // 搜索查询数据
 const onLeftSearch = (input: string) => {
