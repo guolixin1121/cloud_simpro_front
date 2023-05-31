@@ -19,10 +19,13 @@ export const useUserStore = defineStore('use', () => {
 
   const hasToken = () => {
     if (token.value) return true
-    const value = getQueryParmas('token') || localStorage.getItem('token')
-    token.value = value
-    LStorage.set('token', value)
-    return token.value
+    const code = getQueryParmas('code')
+    if (!code) {
+      const value = getQueryParmas('token') || localStorage.getItem('token')
+      token.value = value
+      LStorage.set('token', value)
+      return token.value
+    }
   }
 
   /**

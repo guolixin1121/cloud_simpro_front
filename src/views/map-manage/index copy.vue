@@ -1,8 +1,7 @@
 <template>
   <search-form :items="formItems" @on-search="onSearch"></search-form>
   <div class="main main-bg">
-    <!-- <left-tree :title="'地图目录'" @select="onSelect" :api="() => mapsApi.getMapCatalog({ tree: 1 })" /> -->
-    <l-tree :title="'地图目录'" :api="() => mapsApi.getMapCatalog({ tree: 1 })" :showCheckbox="false" @select="onSelect" />
+    <left-tree :title="'地图目录'" @select="onSelect" :api="() => mapsApi.getMapCatalog({ tree: 1 })" />
     <div class="right-table">
       <div class="flex justify-between items-center">
         <span class="title">地图管理</span>
@@ -85,8 +84,7 @@ const columns = [
   }
 ]
 
-const onSelect = (val: any) => {
-  console.log(val, 777)
-  query.value = { ...query.value, catalog: val.id }
+const onSelect = (selectedKeys: any, e: any) => {
+  query.value = { ...query.value, catalog: e.node.id }
 }
 </script>

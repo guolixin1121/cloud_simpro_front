@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@vueuse/core": "^9.13.0",
+    "@ysx-libs/vue-virtual-tree": "^0.0.3",
     "ant-design-vue": "^3.2.16",
     "axios": "^1.3.4",
     "dayjs": "^1.11.7",
@@ -41,6 +42,7 @@
     "@typescript-eslint/eslint-plugin": "^5.57.0",
     "@typescript-eslint/parser": "^5.57.0",
     "@vitejs/plugin-vue": "^4.1.0",
+    "@vitejs/plugin-vue-jsx": "^3.0.1",
     "autoprefixer": "^10.4.14",
     "cz-conventional-changelog": "^3.3.0",
     "cz-customizable": "^7.0.0",

@@ -35,17 +35,19 @@ router.beforeEach(async (to, from, next) => {
     next()
   } else {
     const user = store.user
-    if (user.hasToken()) {
+    if (await user.hasToken()) {
       await user.getUserInfo()
       next()
     } else {
+      // message.info('无效身份，请先登录!')
+      // user.logout()
       const code = getQueryParmas('code')
       // 从其他业务系统跳转
       if (code) {
         const userApi = api.user
         const res = await userApi.getToken({ code })
         localStorage.setItem('token', res.token)
-        location.href = '/'
+        location.href = process.env.VITE_BASE_STATIC_URL || '/'
       } else {
         message.info('无效身份，请先登录!')
         user.logout()

@@ -15,10 +15,10 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
     sourceType: 'module',
-    parser: '@typescript-eslint/parser'
-    // ecmaFeatures: {
-    //   jsx: true // 开启jsx模板支持
-    // }
+    parser: '@typescript-eslint/parser',
+    ecmaFeatures: {
+      jsx: true // 开启jsx模板支持
+    }
   },
   plugins: ['vue', '@typescript-eslint'],
   // ignorePatterns: ['./src/assets/iconfont/iconfont.js'],

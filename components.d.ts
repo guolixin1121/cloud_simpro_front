@@ -45,7 +45,11 @@ declare module '@vue/runtime-core' {
     AUpload: typeof import('ant-design-vue/es')['Upload']
     Chart: typeof import('./src/components/chart/index.vue')['default']
     ChInput: typeof import('./src/components/ch-input/index.vue')['default']
+    copy: typeof import('./src/components/left-tree copy/index.vue')['default']
     LeftTree: typeof import('./src/components/left-tree/index.vue')['default']
+    LeftTree2: typeof import('./src/components/left-tree2/index.vue')['default']
+    LeftTreeV: typeof import('./src/components/left-tree-v/index.vue')['default']
+    LTree: typeof import('./src/components/l-tree/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScrollSelect: typeof import('./src/components/scroll-select/index.vue')['default']
@@ -57,5 +61,6 @@ declare module '@vue/runtime-core' {
     Tree: typeof import('./src/components/tree/index.vue')['default']
     TreeSelect: typeof import('./src/components/tree-select/index.vue')['default']
     TreeTransfer: typeof import('./src/components/tree-transfer/index.vue')['default']
+    VTree: typeof import('./src/components/v-tree/index.vue')['default']
   }
 }
