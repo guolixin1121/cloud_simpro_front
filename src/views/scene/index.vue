@@ -2,7 +2,8 @@
   <search-form :items="formItems" @on-search="onSearch"></search-form>
 
   <div class="main main-bg">
-    <left-tree :title="'所属场景集'" @select="onSelect" :api="() => sceneApi.getList({ tree: 1 })" />
+    <l-tree :title="'所属场景集'" :api="() => sceneApi.getList({ tree: 1 })" :showCheckbox="true" @select="onSelect" />
+    <!-- <left-tree :title="'所属场景集'" @select="onSelect" :api="() => sceneApi.getList({ tree: 1 })" /> -->
     <div class="right-table">
       <div class="flex justify-between items-center">
         <span class="title">场景管理</span>
@@ -77,8 +78,8 @@ const columns = [
     }
   }
 ]
-
-const onSelect = (selectedKeys: any, e: any) => {
-  query.value = { ...query.value, scene_set: e.node.id }
+const onSelect = (val: any) => {
+  console.log(val, 777)
+  query.value = { ...query.value, scene_set: val }
 }
 </script>

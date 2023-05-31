@@ -86,7 +86,6 @@ const columns = [
 ]
 
 const onSelect = (val: any) => {
-  console.log(val, 777)
   query.value = { ...query.value, catalog: val.id }
 }
 </script>
