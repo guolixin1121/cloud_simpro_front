@@ -26,12 +26,12 @@
     <template v-slot:[item]="scope" v-for="item in Object.keys($slots)">
       <slot v-if="item !== 'bodyCell'" :name="item" :scope="scope" v-bind="scope || {}"></slot>
       <slot v-else :name="item" :scope="scope" v-bind="scope || {}">
-        <column :scope="scope" :is-only-creator="isOnlyCreator" @refresh="refresh" />
+        <column :scope="scope" :pagination="pagination" :is-only-creator="isOnlyCreator" @refresh="refresh" />
       </slot>
     </template>
     <!-- 父组件中没有指定bodyCell时使用此模板 -->
     <template #bodyCell="scope">
-      <column :scope="scope" :is-only-creator="isOnlyCreator" @refresh="refresh" />
+      <column :scope="scope" :pagination="pagination" :is-only-creator="isOnlyCreator" @refresh="refresh" />
     </template>
   </a-table>
 </template>
@@ -61,7 +61,7 @@ const props = defineProps({
     default: () => false
   }
 })
-const emits = defineEmits(['onSelect'])
+const emits = defineEmits(['select'])
 const rowSelection: any = useAttrs()['row-selection'] || {}
 
 const current = ref(1)
@@ -74,17 +74,18 @@ const dataSource: any = computed(() => {
   return results
 })
 const pagination = computed(() => ({
+  size: 10,
   current: current.value,
   total: data.value?.count,
   'show-total': (total: number) => `共 ${total} 条`
 }))
-const size = 10
+const size = pagination.value.size
 
 // selection handler
 const selectedRowKeys = ref<string[]>([])
 const onSelectChange = (selectedKeys: string[]) => {
   selectedRowKeys.value = selectedKeys
-  emits('onSelect', selectedKeys)
+  emits('select', selectedKeys)
 }
 
 // 页面切换 event handler
@@ -93,7 +94,7 @@ watch(
   () => props.query,
   newVal => {
     current.value = 1
-    run({ ...newVal, page: 1, size: 10 })
+    run({ ...newVal, page: 1, size })
   }
 )
 watch(current, newVal => run({ ...props.query, page: newVal, size }))

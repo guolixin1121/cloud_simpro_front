@@ -20,7 +20,7 @@
       <ul>
         <li class="transfer-checked-item flex justify-between items-center" v-for="item in selectedNodes" :key="item.key">
           {{ item.title }}
-          <CloseOutlined class="delete-icon" />
+          <!-- <CloseOutlined class="delete-icon"/> -->
         </li>
       </ul>
     </div>
@@ -45,7 +45,7 @@ const props = defineProps({
   },
   fieldNames: {
     type: Object as PropType<FieldNames>,
-    default: () => ({ label: 'name', value: 'id', apiField: '' })
+    default: () => ({ label: 'name', value: 'nodeId', apiField: '' })
   }
 } as any)
 
@@ -56,7 +56,7 @@ const checkedKeys = ref([])
 const loading = ref(false)
 const getOptions = async () => {
   loading.value = true
-  const res = await api.scenesets.getList({ tree: 1 })
+  const res = await props.api()
   loading.value = false
   treeData.value = treeTransfer(res.results || res)
 }
@@ -67,9 +67,8 @@ const treeTransfer = (data: any): TreeDataItem[] => {
     title: item[label],
     value: item[value],
     key: item[value],
-    checked: true,
-    isLeaf: item.isLeaf === 1,
-    children: treeTransfer(item.children || [])
+    children: treeTransfer(item.children || []),
+    isTag: item.isTag
   }))
   return options
 }
@@ -78,8 +77,8 @@ watch(checkedKeys, () => {
   console.log(checkedKeys)
 })
 const onChecked = (_checkedKeys: any, e: any) => {
-  console.log(e)
-  // selectedNodes.value = e.checkedNodes.filter((item: any) => item.isLeaf)
+  console.log( 'checkedNodes', e.checkedNodes)
+  selectedNodes.value = e.checkedNodes.filter((item: any) => item.isTag)
   emits('update:targetKeys', selectedNodes.value)
 }
 

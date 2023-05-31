@@ -33,7 +33,7 @@
         </a-form-item>
         <a-form-item label="标签">
           <ul class="view-list">
-            <li class="mb-2" v-for="item in formState.label_detail as any" :key="item">
+            <li class="mb-2" v-for="item in formState.labels_detail as any" :key="item">
               {{ item.display_name }}
             </li>
           </ul>
@@ -65,7 +65,7 @@ const formState = reactive({
   sceneset_name: '',
   adsSource: '',
   adsUrl: '',
-  label_detail: [],
+  labels_detail: [],
   createTime: '',
   updateTime: '',
   createUser: ''
@@ -78,10 +78,13 @@ const loading = ref(false)
 const getEditData = async () => {
    if(id !== '0') {
       loading.value = true
-      const scene = await api.scene.get(id)
-      loading.value = false
-      for(const prop in formState) {
-        formState[prop as keyof typeof formState] = isDateProp(prop) ? formatDate(scene[prop]) : scene[prop]
+      try {
+        const scene = await api.scene.get(id)
+        for(const prop in formState) {
+          formState[prop as keyof typeof formState] = isDateProp(prop) ? formatDate(scene[prop]) : scene[prop]
+        }
+      } finally {
+        loading.value = false
       }
    }
 }

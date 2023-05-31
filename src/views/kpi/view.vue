@@ -53,7 +53,7 @@ const formState = reactive({
 })
 
 const router = useRouter()
-const goback = () => router.go(-1)
+const goback = () => router.push('/kpi')
 
 const getEditData = async () => {
    if(id !== '0') {

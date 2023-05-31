@@ -51,11 +51,11 @@ const columns = [
     actions: {
       查看: (data: RObject) => router.push('/kpi/view/' + data.id),
       编辑: {
-        validate: (data: RObject) => data.custom != 0, // 内置指标不可编辑
+        validator: (data: RObject) => data.custom != 0, // 内置指标不可编辑
         handler: (data: RObject) => router.push('/kpi/edit/' + data.id)
       },
       删除: {
-        validate: (data: RObject) => data.custom !== 0, // 内置指标不可删除
+        validator: (data: RObject) => data.custom !== 0, // 内置指标不可删除
         handler: async ({ id }: RObject) => await currentApi.delete(id)
       }
     }

@@ -53,6 +53,10 @@ export const logicScene = defineApi({
     url: '/simpro/logic_scenes/',
     method: 'post',
     headers: { 'content-type': 'multipart/form-data' }
+  },
+  run: {
+    url: '/simpro/generalize/task/',
+    method: 'post'
   }
 })()
 
@@ -80,6 +84,14 @@ export const maps = defineApi({
   editMapVersion: { url: '/baidu_map/map_version/{id}/', method: 'put', headers: { 'content-type': 'multipart/form-data' } }
 })()
 
+export const mapsets = defineApi({
+  getList: { url: '/baidu_map/catalog/', method: 'get' },
+  get: { url: '/baidu_map/catalog/{id}/', method: 'get' },
+  delete: { url: '/baidu_map/catalog/{id}', method: 'delete' },
+  edit: { url: '/baidu_map/catalog/{id}/', method: 'put' },
+  add: { url: '/baidu_map/catalog/', method: 'post' }
+})()
+
 export const task = defineApi({
   getList: { url: '/simpro/simtask/template/', method: 'get' },
   get: { url: '/simpro/simtask/template/{sid}/', method: 'get' },
@@ -93,6 +105,11 @@ export const result = defineApi({
   getList: { url: '/simpro/simtask/', method: 'get' },
   getScenes: { url: '/simpro/simtask/result/', method: 'get' },
   delete: { url: '/simpro/simtask/{sid}/', method: 'delete' }
+})()
+
+export const sotif = defineApi({
+  getList: { url: '/stats/sotif/projects/', method: 'post' },
+  getManagers: { url: '/stats/sotif/managers/', method: 'get' }
 })()
 
 export const algorithm = defineApi({

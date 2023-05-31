@@ -58,7 +58,7 @@ const formState = reactive({
 
 const loading = ref(false)
 const router = useRouter()
-const goback = () => router.go(-1)
+const goback = () => router.push('/kpi')
 const add = async () => {
   loading.value = true
 

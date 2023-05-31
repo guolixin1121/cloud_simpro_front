@@ -56,7 +56,7 @@ table获取数据的api接口，内置封装了分页及查询操作
     key: 'actions',
     actions: {  
       '运行': {
-        validate: (data: any) => data.adsSource === 0,
+        validator: (data: any) => data.adsSource === 0,
         handler: (data: any) => console.log('need disable', data)
       },
       '查看': ( data: any ) => console.log('go to view page', data) ,

@@ -1,4 +1,7 @@
 <template>
+  <template v-if="dataIndex == 'index'">
+    {{ (pagination.current -1) * pagination.size + scope.index + 1}}
+  </template>
   <!-- 封装操作列 -->
   <template v-if="dataIndex == 'actions'">
     <Action :scope="scope" :is-only-creator="isOnlyCreator" @refresh="emits('refresh')"></Action>
@@ -37,7 +40,7 @@ import dayjs from 'dayjs'
 import { isObject } from '@/utils/validate'
 import Action from './action.vue'
 
-const props = defineProps(['scope', 'isOnlyCreator'])
+const props = defineProps(['scope', 'isOnlyCreator', 'pagination'])
 const emits = defineEmits(['refresh'])
 
 const column = computed(() => props.scope?.column)

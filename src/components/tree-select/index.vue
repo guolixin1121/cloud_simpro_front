@@ -5,7 +5,7 @@
     showSearch
     treeNodeFilterProp="title"
     :treeData="treeData"
-    :not-found-content="null"
+    :not-found-content="api? '数据加载中...' : ''"
   >
   </a-tree-select>
 </template>

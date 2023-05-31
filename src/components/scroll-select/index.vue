@@ -3,6 +3,7 @@
     :options="options"
     placeholder="请选择"
     showSearch
+    :not-found-content="api? '数据加载中...' :''"
     :filter-option="filterOption"
     @search="onSearch"
     @focus="onFocus"
