@@ -12,7 +12,8 @@ export const user = defineApi({
   login: { url: '/auth/login/', method: 'post' },
   getLoginUser: { url: '/auth/user_info/', method: 'get' },
   getPermissions: { url: '/menus/', method: 'get' },
-  getTopMenu: { url: 'menus/top/', method: 'get' }
+  getTopMenu: { url: 'menus/top/', method: 'get' },
+  getToken: { url: '/auth/token/', method: 'get' }
 })()
 
 export const scenesets = defineApi({
