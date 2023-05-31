@@ -2,7 +2,7 @@
   <search-form :items="formItems" @on-search="onSearch"></search-form>
 
   <div class="main main-bg">
-    <l-tree :title="'所属场景集'" :api="() => sceneApi.getList({ tree: 1 })" :showCheckbox="true" @select="onSelect" />
+    <l-tree :title="'场景集'" :api="() => sceneApi.getList({ tree: 1 })" :showCheckbox="true" @select="onSelect" />
     <!-- <left-tree :title="'所属场景集'" @select="onSelect" :api="() => sceneApi.getList({ tree: 1 })" /> -->
     <div class="right-table">
       <div class="flex justify-between items-center">

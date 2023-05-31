@@ -1,16 +1,21 @@
 <template>
-  <div style="display: flex">
-    <VirTree
-      ref="virTree"
-      :show-checkbox="showCheckbox"
-      :source="list"
-      :default-checked-keys="defaultCheckedKeys"
-      :default-expanded-keys="defaultExpandKeys"
-      :render-node="renderNode"
-      @expandChange="toggleExpand"
-      @checkChange="checkChange"
-      @selectChange="selectChange"
-    />
+  <div class="v-tree-containter">
+    <template v-if="loading">
+      <a-spin class="v-spin" />
+    </template>
+    <template v-else>
+      <VirTree
+        ref="virTree"
+        :show-checkbox="showCheckbox"
+        :source="list"
+        :default-checked-keys="defaultCheckedKeys"
+        :default-expanded-keys="defaultExpandKeys"
+        :render-node="renderNode"
+        @expandChange="toggleExpand"
+        @checkChange="checkChange"
+        @selectChange="selectChange"
+      />
+    </template>
   </div>
 </template>
 <script setup lang="tsx">
@@ -40,6 +45,7 @@ const list = ref<any>([])
 const gData = ref([])
 const defaultCheckedKeys = ref<string[]>([])
 const defaultExpandKeys = ref<NodeKey[]>([])
+const loading = ref<boolean>(true)
 const virTree = ref<any>()
 let curData: any = {}
 let curCheckData: any = ''
@@ -47,10 +53,15 @@ let dom: any = null
 
 const getMapCatalog = async () => {
   if (props.api) {
-    const res = await props.api()
-    gData.value = res.results
-    const data = recursion(res.results)
-    list.value = data
+    try {
+      const res = await props.api()
+      gData.value = JSON.parse(JSON.stringify(res.results))
+      const data = recursion(res.results)
+      list.value = data
+      loading.value = false
+    } catch {
+      loading.value = false
+    }
   }
 }
 const recursion = (val: any[], _preKey?: string): any => {
@@ -68,18 +79,36 @@ getMapCatalog()
 const renderNode = (node: BaseTreeNode) => {
   // console.log(node, 11)
   const wrapValue = node.name.replace(searchKey.value, `<span class="node-highlight">${searchKey.value}</span>`)
-  return <div class='node-title' innerHTML={wrapValue} onClick={e => onclick(e, node.hasChildren)}></div>
+  return <div class='node-title' innerHTML={wrapValue} onClick={e => onclick(e, node)}></div>
 }
-const onclick = (e: any, hasChildren: boolean) => {
-  // console.log(e, hasChildren, node)
+const onclick = (e: any, node: any, data = list.value) => {
+  let cur: any = {}
   // 单选
   if (!showCheckbox.value) {
-    if (hasChildren) return
+    // 根据key 查出点击的数据
+    for (let i = 0; i < data.length; i++) {
+      if (node?.key === data[i].nodeKey) {
+        cur = data[i]
+        break
+      } else {
+        if (data[i].children && data[i].children.length > 0) {
+          onclick(e, node, data[i].children)
+          // break
+        }
+      }
+    }
+    if (!cur.isLeaf) return
+    // if (node.hasChildren) return
     if (dom) {
       dom.className = 'node-title'
     }
-    dom = e.target
-    e.target.className = 'node-title selected'
+    if (e.target.className === 'node-highlight') {
+      e.target.parentNode.className = 'node-title selected'
+      dom = e.target.parentNode
+    } else {
+      dom = e.target
+      e.target.className = 'node-title selected'
+    }
   }
 }
 function searchData(origin: TreeNodeOptions[], keyword: string) {
@@ -144,7 +173,9 @@ const checkChange = (val: any) => {
 }
 // 单选
 const selectChange = (val: any, data = list.value) => {
+  curData = {}
   if (showCheckbox.value) return
+  if (!val || !val.node) return
   for (let i = 0; i < data.length; i++) {
     if (val?.node?.key === data[i].nodeKey) {
       curData = data[i]
@@ -152,12 +183,11 @@ const selectChange = (val: any, data = list.value) => {
     } else {
       if (data[i].children && data[i].children.length > 0) {
         selectChange(val, data[i].children)
-        return
+        // break
       }
     }
   }
   if (curData.isLeaf) {
-    // emits('onSelect', curData)
     if (props.onSelect) props.onSelect(curData)
   }
 }
@@ -166,16 +196,41 @@ watch(
   newVal => {
     searchKey.value = newVal
     defaultExpandKeys.value = []
-    list.value = searchData(recursion(gData.value), newVal)
+    list.value = searchData(recursion(JSON.parse(JSON.stringify(gData.value))), newVal)
     defaultExpandKeys.value = [...new Set(defaultExpandKeys.value)]
-    console.log(list.value)
+    if (newVal !== '') {
+      filterData(list.value, newVal)
+      list.value = [...list.value]
+    }
   }
 )
+const filterData = (data: any[], keyword: string) => {
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].children && data[i].children.length > 0) {
+      filterData(data[i].children, keyword)
+    } else {
+      if (!data[i].name.toLowerCase().includes(keyword.toLowerCase())) {
+        data.splice(i, 1)
+        i--
+      }
+    }
+  }
+}
 </script>
 
-<style>
-.node-highlight {
-  color: #f60;
+<style scoped lang="less">
+.v-tree-containter {
+  height: 100%;
+  position: relative;
+  .v-spin {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+/deep/.node-highlight {
+  color: #1890ff;
 }
 .vir-checkbox .inner {
   margin-bottom: 2px;
@@ -183,4 +238,7 @@ watch(
 .vir-tree {
   width: auto;
 }
+// /deep/.vir-tree-node .node-content .node-title.selected {
+//   background-color: #1890ff;
+// }
 </style>
