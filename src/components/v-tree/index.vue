@@ -232,12 +232,17 @@ watch(
 /deep/.node-highlight {
   color: #1890ff;
 }
-.vir-checkbox .inner {
+/deep/.vir-checkbox .inner {
   margin-bottom: 2px;
 }
 .vir-tree {
   width: auto;
   min-width: 100%;
+}
+/deep/.vir-checkbox .content {
+  width: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 // /deep/.vir-tree-node .node-content .node-title.selected {
 //   background-color: #1890ff;
