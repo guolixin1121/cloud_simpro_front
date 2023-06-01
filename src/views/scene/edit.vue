@@ -23,26 +23,27 @@
         </a-form-item>
         <a-form-item v-if="!isAdd" label="关联地图" name="mapVersion">
           <span>{{ (formState.mapName || '') + '_' + (formState.mapVersion || '') }}</span>
-          <svg-icon icon="edit" class="ml-4 cursor-pointer hover:text-blue"/>
         </a-form-item>
         <a-form-item v-if="isAdd" label="关联地图" name="mapVersionAdd" :rules="[{ required: isAdd, message: '请选择关联地图' }]">
           <a-form-item-rest>
-          <div class="flex justify-between">
-            <tree-select v-model:value="formState.mapCatalog" :api="getMapCatalog" 
-              placeholder="请选择地图目录" @change="onMapCateogryChanged"
-              style="width: 33%;"></tree-select>
-            <scroll-select v-model:value="formState.map"
-              placeholder="请选择地图"
-              label-in-value
-              :api="getMaps"
-              style="width: 33%;"
-              @change="onMapChanged"></scroll-select>
-            <scroll-select v-model:value="formState.mapVersionAdd" 
-              placeholder="请选择地图版本"
-              :api="getMapVersions"
-              style="width: 33%;"
-              :fieldNames="{ label: 'mapVersion', value: 'mapVersion'}"></scroll-select>
-          </div>
+            <div class="flex justify-between items-center">
+              <div class="flex justify-between w-full">
+                <tree-select v-model:value="formState.mapCatalog" :api="getMapCatalog" 
+                  placeholder="请选择地图目录" @change="onMapCateogryChanged"
+                  style="width: 33%;"></tree-select>
+                <scroll-select v-model:value="formState.map"
+                  placeholder="请选择地图"
+                  label-in-value
+                  :api="getMaps"
+                  style="width: 33%;"
+                  @change="onMapChanged"></scroll-select>
+                <scroll-select v-model:value="formState.mapVersionAdd" 
+                  placeholder="请选择地图版本"
+                  :api="getMapVersions"
+                  style="width: 33%;"
+                  :fieldNames="{ label: 'mapVersion', value: 'mapVersion'}"></scroll-select>
+              </div>
+            </div>
           </a-form-item-rest>
         </a-form-item>
         <a-form-item label="场景文件" name="xosc" :rules="[{ required: isAdd, message: '请上传场景文件' }]">
@@ -106,20 +107,23 @@ const loading = ref(false)
 const router = useRouter()
 const goback = () => router.go(-1)
 const add = async () => {
-  loading.value = true
-
   const params = {
     source: 0,
     path: path.value,
     adsName: formState.adsName,
     baiduSceneSets: (formState.scenesets as unknown as SelectOption).value,
-    mapName: (formState.map as unknown as SelectOption).label,
+    mapName: formState.map ? (formState.map as unknown as SelectOption).label : formState.mapName,
     mapVersion: formState.mapVersionAdd || formState.mapVersion,
-    xosc: formState.xosc || null,
+    xosc: formState.xosc,
     labels: formState.labels
+  }
+  if(!params.xosc) {
+    delete params.xosc
   }
 
   try {
+    loading.value = true
+
     isAdd
       ? await currentApi.add(params)
       : await currentApi.edit({ id, data: params })

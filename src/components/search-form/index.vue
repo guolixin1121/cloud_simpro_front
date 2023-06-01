@@ -31,7 +31,7 @@
       ></component>
     </a-form-item>
     <a-form-item class="ml-8">
-      <a-button type="primary" @click="search" :loading="loading">搜索</a-button>
+      <a-button type="primary" @click="search">搜索</a-button>
       <a-button @click="reset" class="ml-2">重置</a-button>
     </a-form-item>
   </a-form>
@@ -50,13 +50,14 @@ const props = defineProps({
     type: Array,
     required: true
   },
-  loading: {
-    type: Boolean,
-    default: () => false
-  },
   query: {
     type: Object,
     default: () => ({})
+  },
+  manual:{
+    // 是否手动触发首次搜索
+    type: Boolean,
+    default: ()=> false
   }
 } as any)
 const emits = defineEmits(['onSearch'])
@@ -88,7 +89,8 @@ onMounted(() => {
   } else {
     SStorage.clear()
   }
-  emitSearch()
+  
+  !props.manual && emitSearch()
 })
 
 // button events

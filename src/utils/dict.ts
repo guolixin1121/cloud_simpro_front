@@ -82,3 +82,15 @@ export const SotifStatusOptions = [
   { label: '已结束', value: '3' },
 ]
 export const getSotifStatus = (value: number | string) => SotifStatusOptions.find(v => v.value == value)?.label
+
+export const VerticalOptions = [
+  { label: '预期纵向加速度', value: 0 },
+  { label: '油门开度+制动主缸压力', value: 1 },
+  { label: '驱动扭矩+预期制动减速度', value: 2 },
+  { label: '剩余停车距离+最大允许车速+制动类型+档位', value: 3 }
+]
+
+export const HorizontalOptions = [
+  { label: '方向盘转角', value: 0 },
+  { label: '方向盘扭矩', value: 1 }
+]

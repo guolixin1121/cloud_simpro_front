@@ -5,7 +5,7 @@
       <!-- <a>地图管理</a> -->
       <span class="breadcrumb--current">地图版本</span>
     </div>
-    <Table :api="mapsApi.getMapVersion" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
+    <Table ref="table" :api="mapsApi.getMapVersion" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'mapType'">
           <a-tooltip :title="type[record.mapType]">
@@ -48,4 +48,7 @@ const columns = [
     }
   }
 ]
+
+const table = ref()
+onMounted(()=> table.value.refresh())
 </script>

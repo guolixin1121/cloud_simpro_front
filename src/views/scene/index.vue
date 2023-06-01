@@ -1,5 +1,5 @@
 <template>
-  <search-form :items="formItems" @on-search="onSearch"></search-form>
+  <search-form :items="formItems" :manual="true" @on-search="onSearch"></search-form>
 
   <div class="main main-bg">
     <l-tree :title="'所属场景集'" :api="() => sceneApi.getList({ tree: 1 })" :showCheckbox="true" @select="onSelect" />
