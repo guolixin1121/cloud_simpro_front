@@ -1,5 +1,5 @@
 <template>
-  <search-form :items="formItems" @on-search="onSearch"></search-form>
+  <search-form :items="formItems" :manual="true" @on-search="onSearch"></search-form>
   <div class="main main-bg">
     <!-- <left-tree :title="'地图目录'" @select="onSelect" :api="() => mapsApi.getMapCatalog({ tree: 1 })" /> -->
     <l-tree :title="'地图集'" :api="() => mapsApi.getMapCatalog({ tree: 1 })" :showCheckbox="false" @select="onSelect" />

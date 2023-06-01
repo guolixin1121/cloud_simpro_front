@@ -41,9 +41,6 @@
           </li>
         </ul>
       </a-form-item>
-      <a-form-item label="任务执行次数">
-        {{ formState.batch }}
-      </a-form-item>
       <a-form-item label="创建时间">
         {{ formState.createTime }}
       </a-form-item>
