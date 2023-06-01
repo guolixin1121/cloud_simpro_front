@@ -36,6 +36,7 @@ const mapsApi = api.maps
 /****** 搜素区域 */
 type Query = Record<string, any>
 const query: Query = ref({})
+const selectTreeQuery = ref({})
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入地图名称或ID' }
   // {
@@ -59,7 +60,7 @@ const formItems = ref<SearchFormItem[]>([
   // { label: '创建时间', key: 'date', type: 'range-picker' }
 ])
 const onSearch = (data: Query) => {
-  query.value = { ...query.value, ...data }
+  query.value = { ...data, ...selectTreeQuery.value }
 }
 /****** 表格区域 */
 const router = useRouter()
@@ -86,6 +87,7 @@ const columns = [
 ]
 
 const onSelect = (val: any) => {
+  selectTreeQuery.value = { catalog: val.id }
   query.value = { ...query.value, catalog: val.id }
 }
 </script>

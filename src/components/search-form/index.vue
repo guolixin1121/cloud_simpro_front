@@ -1,7 +1,13 @@
 <template>
   <a-form ref="form" layout="inline" class="white-block mb-5 top" :model="formState" v-bind="$attrs">
-    <a-form-item v-for="item in items" :key="item" :label="item.label" :name="item.key" style="margin-bottom: 10px"
-      :rules="[{required: item.required}]">
+    <a-form-item
+      v-for="item in items"
+      :key="item"
+      :label="item.label"
+      :name="item.key"
+      style="margin-bottom: 10px"
+      :rules="[{ required: item.required }]"
+    >
       <scroll-select
         v-if="item.type == 'select'"
         allowClear
@@ -101,7 +107,6 @@ const reset = () => {
 
 const emitSearch = () => {
   const formValues = { ...formState }
-
   // '创建时间'字段转化
   let start_date = formatDate(formValues.create_time?.[0], 'YYYY-MM-DD')
   let end_date = formatDate(formValues.create_time?.[1], 'YYYY-MM-DD')

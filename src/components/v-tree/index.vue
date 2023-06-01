@@ -51,7 +51,7 @@ let curData: any = {}
 let curCheckData: any = ''
 let dom: any = null
 
-const getMapCatalog = async () => {
+const getData = async () => {
   if (props.api) {
     try {
       const res = await props.api()
@@ -75,7 +75,7 @@ const recursion = (val: any[], _preKey?: string): any => {
   })
   return val
 }
-getMapCatalog()
+getData()
 const renderNode = (node: BaseTreeNode) => {
   // console.log(node, 11)
   const wrapValue = node.name.replace(searchKey.value, `<span class="node-highlight">${searchKey.value}</span>`)
@@ -198,24 +198,24 @@ watch(
     defaultExpandKeys.value = []
     list.value = searchData(recursion(JSON.parse(JSON.stringify(gData.value))), newVal)
     defaultExpandKeys.value = [...new Set(defaultExpandKeys.value)]
-    if (newVal !== '') {
-      filterData(list.value, newVal)
-      list.value = [...list.value]
-    }
+    // if (newVal !== '') {
+    //   filterData(list.value, newVal)
+    //   list.value = [...list.value]
+    // }
   }
 )
-const filterData = (data: any[], keyword: string) => {
-  for (let i = 0; i < data.length; i++) {
-    if (data[i].children && data[i].children.length > 0) {
-      filterData(data[i].children, keyword)
-    } else {
-      if (!data[i].name.toLowerCase().includes(keyword.toLowerCase())) {
-        data.splice(i, 1)
-        i--
-      }
-    }
-  }
-}
+// const filterData = (data: any[], keyword: string) => {
+//   for (let i = 0; i < data.length; i++) {
+//     if (data[i].children && data[i].children.length > 0) {
+//       filterData(data[i].children, keyword)
+//     } else {
+//       if (!data[i].name.toLowerCase().includes(keyword.toLowerCase())) {
+//         data.splice(i, 1)
+//         i--
+//       }
+//     }
+//   }
+// }
 </script>
 
 <style scoped lang="less">
@@ -237,6 +237,7 @@ const filterData = (data: any[], keyword: string) => {
 }
 .vir-tree {
   width: auto;
+  min-width: 100%;
 }
 // /deep/.vir-tree-node .node-content .node-title.selected {
 //   background-color: #1890ff;

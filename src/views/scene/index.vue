@@ -32,6 +32,7 @@ const tagsApi = (args: object) => api.tags.getList({ tag_type: 3, ...args })
 /****** 搜素区域 */
 type Query = Record<string, any>
 const query: Query = ref({})
+const selectTreeQuery = ref({})
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称' },
   { label: '场景来源', key: 'adsSource', type: 'select', options: SceneSourceOptions, placeholder: '请选择场景来源' },
@@ -45,7 +46,7 @@ const formItems = ref<SearchFormItem[]>([
     fieldNames: { label: 'display_name', value: 'name' }
   }
 ])
-const onSearch = (data: Query) => (query.value = data)
+const onSearch = (data: Query) => (query.value = { ...data, ...selectTreeQuery.value })
 
 /****** 表格区域 */
 const router = useRouter()
@@ -69,7 +70,7 @@ const columns = [
   }
 ]
 const onSelect = (val: any) => {
-  console.log(val, 777)
+  selectTreeQuery.value = { scene_set: val }
   query.value = { ...query.value, scene_set: val }
 }
 </script>
