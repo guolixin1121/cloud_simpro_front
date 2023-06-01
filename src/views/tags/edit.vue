@@ -47,7 +47,7 @@
         ></a-input>
         <template v-else>{{ formState.name }}</template>
       </a-form-item>
-      <a-form-item
+      <!-- <a-form-item
         label="上级标签："
         name="name"
         :rules="[
@@ -56,7 +56,7 @@
         ]"
       >
         1111
-      </a-form-item>
+      </a-form-item> -->
       <a-form-item label="标签类型：" name="tag_type" :rules="[{ required: isView ? false : true, message: '请选择标签类型!' }]">
         <scroll-select
           v-if="!isView"
