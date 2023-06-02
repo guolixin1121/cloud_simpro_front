@@ -2,7 +2,14 @@
   <search-form :items="formItems" :manual="true" @on-search="onSearch"></search-form>
 
   <div class="main main-bg">
-    <l-tree :title="'场景集'" :api="() => sceneApi.getList({ tree: 1 })" :showCheckbox="true" @select="onSelect" />
+    <l-tree
+      :title="'场景集'"
+      :api="() => sceneApi.getList({ tree: 1 })"
+      :showCheckbox="false"
+      @select="onSelect"
+      v-model:treeSearchName="treeSearchName"
+      :treeSelectId="treeSelectId"
+    />
     <!-- <left-tree :title="'所属场景集'" @select="onSelect" :api="() => sceneApi.getList({ tree: 1 })" /> -->
     <div class="right-table">
       <div class="flex justify-between items-center">
@@ -28,7 +35,8 @@ const user = store.user
 const currentApi = api.scene
 const sceneApi = api.scenesets
 const tagsApi = (args: object) => api.tags.getList({ tag_type: 3, ...args })
-
+const treeSearchName = ref('111')
+const treeSelectId = ref('10014812')
 /****** 搜素区域 */
 type Query = Record<string, any>
 const query: Query = ref({})
@@ -70,7 +78,7 @@ const columns = [
   }
 ]
 const onSelect = (val: any) => {
-  selectTreeQuery.value = { scene_set: val }
-  query.value = { ...query.value, scene_set: val }
+  selectTreeQuery.value = { scene_set: val.id }
+  query.value = { ...query.value, scene_set: val.id }
 }
 </script>

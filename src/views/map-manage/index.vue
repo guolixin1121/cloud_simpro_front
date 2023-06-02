@@ -90,4 +90,17 @@ const onSelect = (val: any) => {
   selectTreeQuery.value = { catalog: val.id }
   query.value = { ...query.value, catalog: val.id }
 }
+
+// const route = useRoute()
+// watch(
+//   () => route,
+//   (newVal: any, oldVal) => {
+//     console.log(newVal, newVal.meta, oldVal)
+//     // if(newVal.meta.keepAlive && state.includeList.indexOf(newVal.name) === -1){
+//     //   state.includeList.push(newVal.name);
+//     //   console.log(state.includeList);
+//     // }
+//   },
+//   { deep: true }
+// ) // 开启深度监听
 </script>
