@@ -11,14 +11,16 @@
         <a-form-item label="场景集名称" name="name" :rules="[{ required: true, message: '请输入场景集名称'}, { min: 2, max: 50, message: '场景名称长度为2到50位'}]">
           <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景集名称"></a-input>
         </a-form-item>
-        <a-form-item label="所属场景目录" name="parentId" :rules="[{ required: true, message: '请选择所属场景目录'}]">
+        <a-form-item label="所属场景目录" name="parent" :rules="[{ required: true, message: '请选择所属场景目录'}]">
           <a-tree-select placeholder="请选择所属场景目录" 
-          v-model:value="formState.parentId"
+            v-model:value="formState.parent"
             :treeData="parentScenesets" 
+            :filterTreeNode="filterTreeNode"
+            :not-found-content="'加载中...'"
+            label-in-value
             treeDefaultExpandAll
             showSearch>
           </a-tree-select>
-          <!-- <tree-select v-model:value="formState.parentId" :api="getSceneSet" :fieldNames="{label: 'name', value: 'baidu_id'}"></tree-select> -->
         </a-form-item>
         <a-form-item label="场景集类型" v-if="isAdd" name="isLeaf" :rules="[{ required: true, message: '请选择场景集类型'}]">
           <a-radio-group v-model:value="formState.isLeaf">
@@ -26,10 +28,21 @@
             <a-radio value="1">场景集</a-radio>
           </a-radio-group>
         </a-form-item>
-        <a-form-item label="标签">
+        <a-form-item label="场景集路径" name="path">
+          <span>{{ path }}</span>
+        </a-form-item>
+        <!-- <a-form-item label="标签">
           <scroll-transfer v-model:target-keys="formState.labels" :api="getSceneTags" 
             :fieldNames="{label: 'display_name', value: 'name'}"
             :titles="['可选标签', '选中标签']"></scroll-transfer>
+        </a-form-item> -->
+        <a-form-item label="标签">
+          <tree-transfer
+            v-model:target-keys="formState.labels"
+            :api="getSceneTags"
+            :fieldNames="{ label: 'display_name', value: 'name' }"
+            :titles="['可选标签', '选中标签']"
+          ></tree-transfer>
         </a-form-item>
         <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
           <a-button type="primary" html-type="submit" :loading="loading">
@@ -49,26 +62,38 @@ const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '场景集'
 const currentApi = api.scenesets
 const getSceneSet = (args: object) => currentApi.getList({ tree: 1, ...args} )
-const getSceneTags = (args: object) => api.tags.getList({ tag_type: 2, isTag: true, ...args })
+const getSceneTags = (args: object) => api.tags.getList({ tag_type: 2, tree: 1, ...args })
 
 const formState = reactive({
-  name: undefined,
-  parentId: undefined,
+  name: '',
+  parent: undefined as any,
   labels: [],
   isLeaf: undefined
 })
 const parentScenesets = ref([])
+const path = computed(() => {
+  const scenesets = formState.parent as unknown as SelectOption
+  return (scenesets?.label || '') + '/' + formState.name
+})
 
 const loading = ref(false)
 const router = useRouter()
 const goback = () => router.push('/sceneset/')
 const add = async () => {
   loading.value = true
+
+  const params = {
+    name: formState.name,
+    parentId: formState.parent.value,
+    labels: formState.labels?.map((item: any) => item.value),
+    isLeaf:formState.isLeaf,
+    path: path.value
+  }
   
   try {
     isAdd 
-      ? await currentApi.add(formState)
-      : await currentApi.edit({ id, data: {...formState} })
+      ? await currentApi.add(params)
+      : await currentApi.edit({ id, data: params })
 
     message.info(`${actionText}成功`)
     goback()
@@ -77,6 +102,7 @@ const add = async () => {
   }
 }
 
+const filterTreeNode = (input: string, treeNode: any) => treeNode.title.indexOf(input) >-1
 const getParents = async () => {
   const res = await getSceneSet({})
 
@@ -103,8 +129,9 @@ const getEditData = async () => {
     const data = await currentApi.get(id)
     dataLoading.value = false
     formState.name = data.name
-    formState.parentId = data.parentId === -1 ? undefined : data.parentId
-    formState.labels = data.labels_detail.map((item: any) => item.name)
+    // formState.parentId = data.parentId === -1 ? undefined : data.parentId
+    formState.parent = { label: data.parentName, value: data.parentId }
+    formState.labels = data.labels_detail
     formState.isLeaf = data.isLeaf.toString()
   }
 }

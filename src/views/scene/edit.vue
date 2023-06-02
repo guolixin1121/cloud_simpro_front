@@ -18,8 +18,8 @@
           <a-input v-model:value="formState.adsName" :maxlength="50" placeholder="请输入场景名称"></a-input>
         </a-form-item>
         <a-form-item label="所属场景集" name="scenesets" :rules="[{ required: true, message: '请选择场景集' }]">
-          <tree-select v-model:value="formState.scenesets" :api="getSceneSet"
-            placeholder="请选择所属场景集" label-in-value></tree-select>
+          <tree-select v-model:value="formState.scenesets" :api="getSceneSet" label-in-value
+            placeholder="请选择所属场景集"></tree-select>
         </a-form-item>
         <a-form-item v-if="!isAdd" label="关联地图" name="mapVersion">
           <span>{{ (formState.mapName || '') + '_' + (formState.mapVersion || '') }}</span>
@@ -52,16 +52,21 @@
         <a-form-item v-if="!isAdd" label="场景文件地址" name="adsUrl">
           <span>{{ formState.adsUrl }}</span>
         </a-form-item>
-        <a-form-item label="场景路径" name="baiduSceneSets">
-          <span>{{ path }}</span>
-        </a-form-item>
-        <a-form-item label="标签">
+        <!-- <a-form-item label="标签">
           <scroll-transfer
             v-model:target-keys="formState.labels"
             :api="getScennTags"
             :fieldNames="{ label: 'display_name', value: 'name' }"
             :titles="['可选标签', '选中标签']"
           ></scroll-transfer>
+        </a-form-item> -->
+        <a-form-item label="标签">
+          <tree-transfer
+            v-model:target-keys="formState.labels"
+            :api="getScennTagsTree"
+            :fieldNames="{ label: 'display_name', value: 'name' }"
+            :titles="['可选标签', '选中标签']"
+          ></tree-transfer>
         </a-form-item>
         <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
           <a-button type="primary" html-type="submit" :loading="loading">
@@ -84,7 +89,8 @@ const getMapCatalog = () => api.maps.getMapCatalog({ tree: 1 })
 const getMaps = ref()
 const getMapVersions = ref()
 const getSceneSet = (args: object) => api.scenesets.getList({ tree: 1, ...args })
-const getScennTags = (args: object) => api.tags.getList({ tag_type: 3, isTag:true, ...args })
+// const getScennTags = (args: object) => api.tags.getList({ tag_type: 3, isTag:true, ...args })
+const getScennTagsTree = (args: object) => api.tags.getList({ tag_type: 3, tree: 1, ...args })
 const currentApi = api.scene
 
 const formState = reactive({
@@ -94,28 +100,23 @@ const formState = reactive({
   mapVersionAdd: undefined,
   mapName: undefined,
   mapVersion: undefined,
-  scenesets: undefined,
+  scenesets: undefined as any,
   xosc: undefined,
-  labels: undefined,
+  labels: [],
   adsUrl: undefined,
-})
-const path = computed(() => {
-  const scenesets = formState.scenesets as unknown as SelectOption
-  return (scenesets?.label || '') + '/' + formState.adsName
 })
 const loading = ref(false)
 const router = useRouter()
-const goback = () => router.go(-1)
+const goback = () => router.push('/scene')
 const add = async () => {
   const params = {
     source: 0,
-    path: path.value,
     adsName: formState.adsName,
-    baiduSceneSets: (formState.scenesets as unknown as SelectOption).value,
+    baiduSceneSets: formState.scenesets.value,
     mapName: formState.map ? (formState.map as unknown as SelectOption).label : formState.mapName,
     mapVersion: formState.mapVersionAdd || formState.mapVersion,
     xosc: formState.xosc,
-    labels: formState.labels
+    labels: formState.labels.map((item: any) => item.name)
   }
   if(!params.xosc) {
     delete params.xosc
@@ -152,20 +153,21 @@ const getEditData = async () => {
     const scene = await currentApi.get(id)
     dataLoading.value = false
     formState.adsName = scene.adsName
-    formState.labels = scene.labels_detail?.map((item: any) => item.name)
+    formState.labels = scene.labels_detail //?.map((item: any) => item.name)
     formState.mapVersion = scene.mapVersion
     formState.mapName = scene.mapName
     formState.adsUrl = scene.adsUrl
-    
-    getEditOptions(scene)
+    formState.scenesets = { value: scene.baiduSceneSets, label: scene.sceneset_name }
+
+    // getEditOptions(scene)
   }
 }
-const getEditOptions = async ({ baiduSceneSets } : any) => {
-  const res = await api.scenesets.get(baiduSceneSets)
-  formState.scenesets = {
-    label: res.name,
-    value: res.id
-  } as any
-}
+// const getEditOptions = async ({ baiduSceneSets } : any) => {
+//   const res = await api.scenesets.get(baiduSceneSets)
+//   formState.scenesets = {
+//     label: res.name,
+//     value: res.id
+//   } as any
+// }
 getEditData()
 </script>

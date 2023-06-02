@@ -57,6 +57,10 @@ export const logicScene = defineApi({
   run: {
     url: '/simpro/generalize/task/',
     method: 'post'
+  },
+  getResultList: {
+    url: '/simpro/generalize/task/',
+    method: 'get'
   }
 })()
 

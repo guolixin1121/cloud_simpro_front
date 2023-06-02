@@ -4,7 +4,7 @@
   <div class="main">
     <div class="flex justify-between items-center">
       <span class="title">传感器模型列表</span>
-      <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/sensor/edit/0')">新建</a-button>
+      <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/sensor/edit/0')">创建传感器</a-button>
     </div>
     <Table :api="sensorApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }"> </Table>
   </div>

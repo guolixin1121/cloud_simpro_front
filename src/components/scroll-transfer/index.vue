@@ -88,7 +88,7 @@ const addToLeft = () => {
 
 // 分页获取数据
 let page = 1
-let isAllLoaded = false
+let isAllLoaded = ref(false)
 let loading = ref(false)
 const getOptions = async () => {
   if (props.api) {
@@ -103,40 +103,29 @@ const getOptions = async () => {
 
     loading.value = false
     allDataSource.value.push(...newOptions)
-    isAllLoaded = allDataSource.value.length >= (res.count || res.length)
+    isAllLoaded.value = allDataSource.value.length >= (res.count || res.length)
   }
 }
 
-// 设置默认值，没有的数据从接口获取
-const setDefaultOptions = async () => {
-  if (props.api) {
-    const targetKeys = props.targetKeys || []
-    const { label, value, apiField } = props.fieldNames
-
-    targetKeys.forEach(async (key: String) => {
-      let options = allDataSource.value.filter((item: any) => item.value == key)
-      if (props.api && !options.length) {
-        const res = await props.api({ [value]: key })
-        const results = res.results ||  res[apiField] || res
-        options = results.map((item: any) => ({
-          label: item[label],
-          value: item[value]
-        }))
-      }
-      rightAllDataSource.value.push(...options)
-    })
-  }
-}
-
-// 仅用于回写
+// 仅用于编辑时的回写
 watchOnce(
   () => props.targetKeys,
-  () => hasDefaultValue && setDefaultOptions()
+  () => {
+    if(hasDefaultValue) {
+      const { label, value } = props.fieldNames
+      rightAllDataSource.value = props.targetKeys?.map((item: any) => ({
+        label: item[label],
+        value: item[value]
+      }))
+      console.log(props.targetKeys, 'rightalldatasource2')
+      hasDefaultValue = false
+    }
+  }
 )
 
 // 发送数据给父组件
 watch(rightAllDataSource, () => {
-  const newTargetKeys = rightAllDataSource.value.map((v: SelectOption) => v.value)
+  const newTargetKeys = rightAllDataSource.value // .map((v: SelectOption) => v.value)
   emits('update:targetKeys', newTargetKeys)
 })
 
@@ -155,23 +144,23 @@ watchEffect(() => {
 
   // 左侧数据不够一屏，继续加载数据，确保滚动条出现
   const leftLength = leftDataSource.value.length
-  if (leftLength > 0 && leftLength < 10 && !isAllLoaded) {
+  if (allDataSource.value.length > 0 && leftLength < 10 && !isAllLoaded.value) {
     page++
     getOptions()
   }
 })
 
 const onScroll = (e: any) => {
-  if (props.api && !isAllLoaded) {
+  if (props.api && !isAllLoaded.value) {
     const { target } = e
-    console.log(target.scrollTop + target.offsetHeight == target.scrollHeight)
-    if (target.scrollTop + target.offsetHeight == target.scrollHeight) {
+    if (target.scrollTop + target.offsetHeight >= target.scrollHeight) {
       page = page + 1
       getOptions()
     }
   }
 }
 
+// 动态api
 watch(
   () => props.api,
   () => {

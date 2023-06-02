@@ -12,16 +12,6 @@ const routes: RouteRecordRaw[] = [
     children: [
       ...routeFromViews,
       {
-        path: '/mapset/edit/:id/:name',
-        name: '/mapset/edit/',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/mapset/edit.vue')
-      },
-      {
-        path: '/mapset/view/:id/:name',
-        name: '/mapset/view/',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/views/mapset/view.vue')
-      },
-      {
         path: '/demo',
         name: 'demo',
         component: async () => await import(/* webpackChunkName: "default" */ '@/components/demo.vue')

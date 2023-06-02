@@ -33,7 +33,7 @@
         <scroll-transfer v-model:target-keys="formState.kpi" :api="optionsApi.kpi.getList"
           :titles="['可选评测指标', '选中评测指标']"></scroll-transfer>
       </a-form-item>
-      <a-form-item v-if="isAdd" label="所属场景集" name="scenesets" :rules="[{ required: isAdd, message: '请选择场景集' }]">
+      <a-form-item v-if="isAdd" label="所属场景集" name="scenesets" :rules="[{ required: isAdd, message: '请先选择场景集，再选择场景' }]">
           <tree-select v-model:value="formState.scenesets" :api="getSceneSet"
             placeholder="请选择所属场景集"
             @change="onScenesetChanged"></tree-select>
@@ -45,7 +45,7 @@
       </a-form-item> 
        <a-form-item label="场景" v-if="!isAdd">
         <ul class="view-list">
-          <li class="mb-2" v-for="item in formState.scenes_detail as any" :key="item">
+          <li class="mb-2" v-for="item in formState.scenes as any" :key="item">
             {{ item.adsName }}
           </li>
         </ul>
@@ -75,13 +75,13 @@ const getVehicle = (arg: any) => api.vehicle.getList({ is_share: 1, ...arg })
 const formState = reactive({
   name: undefined,
   dynamic_vehicle: undefined,
-  vehicle_horizontal: 0,
-  vehicle_vertical: 0,
+  vehicle_detail: undefined,
+  vehicle_horizontal: 1,
+  vehicle_vertical: 1,
   sensors: [],
   algorithm: undefined,
   scenesets: undefined,
   scenes: [],
-  scenes_detail: [],
   batch: 1,
   kpi: []
 })
@@ -92,13 +92,23 @@ const goback = () => router.push('/simpro-task')
 const add = async () => {
   loading.value = true
 
-  const params = {...formState, source:0 }
-  delete params.scenesets
+  const data = {
+    source: 0,
+    name: formState.name,
+    algorithm: formState.algorithm,
+    dynamic_vehicle:formState.dynamic_vehicle,
+    vehicle_horizontal: formState.vehicle_horizontal,
+    vehicle_vertical: formState.vehicle_vertical,
+    batch: formState.batch,
+    sensors: formState.sensors.map((item:any) =>item.value),
+    scenes: formState.scenes.map((item:any) =>item.value || item.baidu_id),
+    kpi: formState.kpi.map((item:any) =>item.value),
+  }
 
   try {
     isAdd 
-      ? await currentApi.add(params)
-      : await currentApi.edit({ id, data: params })
+      ? await currentApi.add(data)
+      : await currentApi.edit({ id, data })
 
     message.info(`${actionText}成功`)
     goback()
@@ -117,14 +127,13 @@ const getEditData = async () => {
      const data = await currentApi.get(id)
      formState.name = data.name
      formState.batch = data.batch
-     formState.algorithm = data.algorithm
-     formState.dynamic_vehicle = data.dynamic_vehicle
+     formState.algorithm = data.algorithm_detail?.id
+     formState.dynamic_vehicle = data.vehicle_detail.id
      formState.vehicle_horizontal = data.vehicle_vertical
      formState.vehicle_vertical = data.vehicle_vertical
-     formState.sensors = data.sensors
-     formState.scenes_detail = data.scenes_detail
-     formState.scenes= data.scenes_detail?.map((v: RObject) => v.baidu_id)
-     formState.kpi = data.kpi_detail?.map((v: any) => v.id)
+     formState.sensors = data.sensors_detail
+     formState.scenes= data.scenes_detail
+     formState.kpi = data.kpi_detail
    }
 }
 getEditData()

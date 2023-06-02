@@ -5,12 +5,10 @@
     <l-tree
       :title="'场景集'"
       :api="() => sceneApi.getList({ tree: 1 })"
-      :showCheckbox="false"
-      @select="onSelect"
       v-model:treeSearchName="treeSearchName"
       :treeSelectId="treeSelectId"
+      @select="onSelect"
     />
-    <!-- <left-tree :title="'所属场景集'" @select="onSelect" :api="() => sceneApi.getList({ tree: 1 })" /> -->
     <div class="right-table">
       <div class="flex justify-between items-center">
         <span class="title">场景管理</span>
@@ -18,25 +16,19 @@
       </div>
       <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1100, y: 'auto' }" />
     </div>
-    <!-- <div class="flex justify-between items-center">
-      <span class="title">场景管理</span>
-      <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
-    </div>
-
-    <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1100, y: 'auto' }" /> -->
   </div>
 </template>
 
 <script setup lang="ts">
 import { SceneSourceOptions, getSceneSourceName } from '@/utils/dict'
-// store、api、useRouter等通过auto import自动导入的，直接在template、自定义函数等使用时无效，为undefined
-/****** api */
 const user = store.user
 const currentApi = api.scene
 const sceneApi = api.scenesets
 const tagsApi = (args: object) => api.tags.getList({ tag_type: 3, ...args })
-const treeSearchName = ref('111')
-const treeSelectId = ref('10014812')
+
+const route = useRoute()
+const treeSearchName = ref(route.query.name)
+const treeSelectId = ref(route.query.id)
 /****** 搜素区域 */
 type Query = Record<string, any>
 const query: Query = ref({})
@@ -60,7 +52,7 @@ const onSearch = (data: Query) => (query.value = { ...data, ...selectTreeQuery.v
 const router = useRouter()
 const columns = [
   { title: '场景ID', dataIndex: 'id', width: 150 },
-  { title: '场景名称', dataIndex: 'adsName', width: 150, ellipsis: true },
+  { title: '场景名称', dataIndex: 'adsName', width: 200, ellipsis: true },
   { title: '场景来源', dataIndex: 'adsSource', formatter: getSceneSourceName, width: 90 },
   { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
   { title: '创建时间', dataIndex: 'createTime', width: 180 },

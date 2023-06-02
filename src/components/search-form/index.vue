@@ -75,8 +75,9 @@ props.items.forEach((item: any) => (formState[item.key] = item.defaultValue))
 // 获取缓存的搜索项
 // 从菜单进入时设置?menu来清空缓存
 const route = useRoute()
+const routeName = route.path.replaceAll('/', '')
 onMounted(() => {
-  const storage = SStorage.get(route.path)
+  const storage = SStorage.get(routeName)
   const isFromCache = route.query.clear !== null && storage
   if (isFromCache) {
     props.items.forEach((item: any) => {
@@ -126,7 +127,7 @@ const emitSearch = () => {
   }
   emits('onSearch', { ...formValues, start_date, end_date })
   // 缓存搜索项
-  SStorage.set(route.path, formState)
+  SStorage.set(routeName, formState)
 }
 
 /**

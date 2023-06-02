@@ -57,20 +57,20 @@ import { isEmpty } from '@/utils/tools'
 const user = store.user
 const currentApi = api.scenesets
 const scenesetApi = (args: object) => currentApi.getList({tree: 1, ...args })
-const tagsApi = (args: object) => api.tags.getList({ tag_type: 2, ...args })
+// const tagsApi = (args: object) => api.tags.getList({ tag_type: 2, ...args })
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景集名称' },
-  {
-    label: '标签',
-    key: 'labels',
-    type: 'select',
-    mode: 'multiple',
-    api: tagsApi,
-    fieldNames: { label: 'display_name', value: 'name' },
-    defaultValue: ['']
-  }
+  // {
+  //   label: '标签',
+  //   key: 'labels',
+  //   type: 'select',
+  //   mode: 'multiple',
+  //   api: tagsApi,
+  //   fieldNames: { label: 'display_name', value: 'name' },
+  //   defaultValue: ['']
+  // }
 ])
 const query = ref({})
 const onSearch = (params: RObject) => query.value = params
@@ -86,7 +86,7 @@ const columns = [
 
 const onDelete = async (row: RObject) => {
    await currentApi.delete(row.id)
-   fetchTableData()
+   fetchTableData(query.value)
 }
 const onView = ({id} : RObject) => router.push('/sceneset/view/' + id)
 const onEdit = ({id} : RObject) => router.push('/sceneset/edit/' + id)
@@ -117,7 +117,7 @@ const transformTreeToArray = (data: []) => {
   return results
 }
 
-fetchTableData()
+// fetchTableData()
 </script>
 
 <style scoped>

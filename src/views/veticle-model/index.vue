@@ -5,7 +5,7 @@
     <div class="flex justify-between items-center">
       <!-- <span class="title">地图管理</span> -->
       <div>
-        <a-button type="primary" class="mr-2" v-if="user.hasPermission('add')" @click="() => add('')">新建</a-button>
+        <a-button type="primary" class="mr-2" v-if="user.hasPermission('add')" @click="() => add('')">创建模型</a-button>
         <a-button v-if="user.hasPermission('add')" @click="() => (importVisible = true)">导入外部模型</a-button>
       </div>
       <a-checkbox v-model:checked="checked" class="table_model" @change="() => selectModel(checked)">我的模型</a-checkbox>

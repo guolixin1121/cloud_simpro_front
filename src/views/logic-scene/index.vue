@@ -7,7 +7,13 @@
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/logic-scene/edit/0')">上传逻辑场景</a-button>
     </div>
 
-    <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1100, y: 'auto' }" />
+    <Table ref="table" :api="listApi" :query="query" :columns="columns" :scroll="{ x: 1100, y: 'auto' }">
+      <template #bodyCell="{column, record, text}">
+        <template v-if="column.dataIndex == 'result_scene_count'">
+          <router-link class=" text-blue" :to="'/logic-scene/result/' + record.id +'?name=' +record.name">{{ text }}</router-link>
+        </template>
+      </template>
+    </Table>
 
     <a-modal v-model:visible="showRunConfirm" 
       :closable="false"
@@ -16,7 +22,7 @@
         <svg-icon style="color: #faad14" icon="alert"></svg-icon>
         <span class="ml-4" style="font-size: 16px">是否要对此逻辑场景进行泛化？</span>
       </div>
-      <p class="ml-8 mt-2">泛化结果为{{ runScene.count }}个具体场景</p>
+      <p class="ml-8 mt-2">泛化结果为{{ runScene.config_result_count }}个具体场景</p>
       <div class=" text-right">
         <a-button @click="closeRunConfirm">否</a-button>
         <a-button @click="runConfirm" type="primary" class="ml-2">是</a-button>
@@ -29,6 +35,7 @@
 /****** api */
 const user = store.user
 const currentApi = api.logicScene
+const listApi = (args: any) => currentApi.getList({ source: 0, ...args})
 const tagsApi = (args: object) => api.tags.getList({ tag_type: 3, ...args })
 
 /****** 搜素区域 */
@@ -56,7 +63,7 @@ const router = useRouter()
 const columns = [
   { title: '场景ID', dataIndex: 'id', width: 90 },
   { title: '逻辑场景名称', dataIndex: 'name', width: 150, ellipsis: true },
-  { title: '关联场景数', dataIndex: 'count', width: 150, ellipsis: true },
+  { title: '关联场景数', dataIndex: 'result_scene_count', width: 150, ellipsis: true },
   { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name' },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
@@ -77,11 +84,18 @@ const columns = [
   }
 ]
 
+const table = ref()
 const closeRunConfirm = () => showRunConfirm.value = false
 const runConfirm = async () => {
-  await currentApi.run({data: {
-    logic_scene: [runScene.value.id]
-  }})
+  await currentApi.run({
+    source: 0,
+    data: [{
+      logic_scene_version_id: runScene.value.logic_scene_version_id
+  }]})
   closeRunConfirm()
+  setTimeout(() => {
+    
+    table.value.refresh()
+  }, 500);
 }
 </script>

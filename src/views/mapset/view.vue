@@ -25,7 +25,8 @@
 </template>
 
 <script setup lang="ts">
-const {id, name} = useRoute().params
+const { id } = useRoute().params
+const { name } = useRoute().query
 
 const formState = reactive({
   id: '',

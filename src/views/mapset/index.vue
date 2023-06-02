@@ -85,8 +85,8 @@ const onDelete = async (row: RObject) => {
    await currentApi.delete(row.id)
    fetchTableData()
 }
-const onView = ({id, name} : RObject) => router.push('/mapset/view/' + id + '/' + name)
-const onEdit = ({id, name} : RObject) => router.push('/mapset/edit/' + id + '/' + name)
+const onView = ({id, name} : RObject) => router.push('/mapset/view/' + id + '/?name=' + name)
+const onEdit = ({id, name} : RObject) => router.push('/mapset/edit/' + id + '/?name=' + name)
 
 const loading = ref(false)
 const tableData = ref([])

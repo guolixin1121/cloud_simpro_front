@@ -5,7 +5,7 @@
     <div class="flex justify-between items-center">
       <span class="title">仿真任务</span>
       <div>
-        <a-button type="primary" class="mr-2" :disabled="!selectedRows.length" @click="batchRun">批量运行</a-button>
+        <!-- <a-button type="primary" class="mr-2" :disabled="!selectedRows.length" @click="batchRun">批量运行</a-button> -->
         <a-button type="primary" v-if="user.hasPermission('add')" @click=" router.push('/simpro-task/edit/0')">创建任务</a-button>
       </div>
     </div>
@@ -16,7 +16,6 @@
       :query="query"
       :columns="columns"
       :scroll="{ x: 2100, y: 'auto' }"
-      :isSelectable="true"
       :row-selection="{
         getCheckboxProps: (record: any) => ({
           disabled: ['运行', '等待'].indexOf(record.status) > -1
@@ -49,15 +48,16 @@ const onSearch = (data: Query) => (query.value = data)
 const table = ref()
 const router = useRouter()
 const columns = [
-  { title: '任务ID', dataIndex: 'id', width: 80 },
+  { title: '任务ID', dataIndex: 'number', width: 120 },
   { title: '仿真任务名称', dataIndex: 'name', width: 150, ellipsis: true },
   { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90 },
   { title: '主车模型', dataIndex: 'vehicle_detail', width: 150, ellipsis: true },
   { title: '场景文件数量', dataIndex: 'scene_count', width: 100 },
   { title: '仿真算法', dataIndex: 'algorithm_detail', width: 150, ellipsis: true },
-  { title: '评测指标', dataIndex: 'kpi_detail', width: 180, ellipsis: true },
+  // { title: '评测指标', dataIndex: 'kpi_detail', width: 180, ellipsis: true },
   { title: '场景', dataIndex: 'scenes_detail', apiField: 'adsName', width: 180, ellipsis: true },
   { title: '执行任务次数', dataIndex: 'batch', width: 100 },
+  { title: '运行状态', dataIndex: 'status', width: 80 },
   { title: '创建时间', dataIndex: 'create_time', width: 150 },
   { title: '所属用户', dataIndex: 'create_user', width: 100 },
   {
@@ -79,8 +79,8 @@ const columns = [
 
 const selectedRows = ref([])
 const onSelect = (data: any) => selectedRows.value = data 
-const batchRun = async () =>{
-  console.log(selectedRows.value)
-  // await currentApi.run({ template_id: data.id })
-}
+// const batchRun = async () =>{
+//   console.log(selectedRows.value)
+//   // await currentApi.run({ template_id: data.id })
+// }
 </script>

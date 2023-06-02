@@ -17,8 +17,10 @@
         >
           <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></a-input>
         </a-form-item>
-
-        <a-form-item label="关联地图" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
+        <a-form-item label="关联地图" v-if="!isAdd">
+          {{ formState.mapName + '_' + formState.mapVersion }}
+        </a-form-item>
+        <a-form-item label="关联地图" v-if="isAdd" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
           <div class="flex justify-between">
             <tree-select v-model:value="formState.mapCatalog" :api="getMapCatalog" 
               placeholder="请选择地图目录" @change="onMapCateogryChanged"
@@ -48,13 +50,21 @@
         <a-form-item v-if="!isAdd" label="配置文件地址" name="adsUrl">
           <span>{{ formState.config_url }}</span>
         </a-form-item>
-        <a-form-item label="标签">
+        <!-- <a-form-item label="标签">
           <scroll-transfer
             v-model:target-keys="formState.labels"
             :api="getScennTags"
             :fieldNames="{ label: 'display_name', value: 'name' }"
             :titles="['可选标签', '选中标签']"
           ></scroll-transfer>
+        </a-form-item> -->
+         <a-form-item label="标签">
+          <tree-transfer
+            v-model:target-keys="formState.labels"
+            :api="getScennTags"
+            :fieldNames="{ label: 'display_name', value: 'name' }"
+            :titles="['可选标签', '选中标签']"
+          ></tree-transfer>
         </a-form-item>
         <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
           <a-button type="primary" html-type="submit" :loading="loading">
@@ -76,13 +86,14 @@ const title =  actionText + '逻辑场景'
 const getMapCatalog = () => api.maps.getMapCatalog({ tree: 1 })
 const getMaps = ref()
 const getMapVersions = ref()
-const getScennTags = (args: object) => api.tags.getList({ tag_type: 3, ...args })
+const getScennTags = (args: object) => api.tags.getList({ tag_type: 3, tree: 1, ...args })
 const currentApi = api.logicScene
 
 const formState = reactive({
   name: '',
   mapCatalog: undefined,
   map: undefined,
+  mapName: '',
   mapVersion: undefined,
   xosc_scene: undefined,
   xosc_config: undefined,
@@ -101,10 +112,13 @@ const add = async () => {
     source: 0,
     name: formState.name,
     map_id: formState.mapVersion,
-    xosc_scene: formState.xosc_scene || null,
-    xosc_config: formState.xosc_config || null,
-    labels: formState.labels
+    xosc_scene: formState.xosc_scene,
+    xosc_config: formState.xosc_config,
+    // labels: formState.labels.map((item: any) => item.value)
   }
+
+  !formState.xosc_config && delete params.xosc_config
+  !formState.xosc_scene && delete params.xosc_scene
 
   try {
     isAdd
@@ -131,12 +145,15 @@ const onMapChanged = (item: any) => {
 const dataLoading = ref(false)
 const getEditData = async () => {
   if (id !== '0') {
-    // dataLoading.value = true
-    // const data = await currentApi.get(id)
-    // dataLoading.value = false
-    // for(const prop in formState) {
-    //   formState[prop as keyof typeof formState] = data[prop]
-    // }
+    dataLoading.value = true
+    const data = await currentApi.get(id)
+    dataLoading.value = false
+    formState.name = data.name
+    formState.mapName = data.map_name
+    formState.mapVersion = data.map_version_num
+    formState.labels = data.labels_detail
+    formState.scene_url = data.scene_url
+    formState.config_url = data.config_url
   }
 }
 getEditData()

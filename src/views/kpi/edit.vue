@@ -62,10 +62,12 @@ const goback = () => router.push('/kpi')
 const add = async () => {
   loading.value = true
 
+  const data = {...formState}
+
   try {
     isAdd
-      ? await currentApi.add({ ...formState })
-      : await currentApi.edit({ id, data: { ...formState } })
+      ? await currentApi.add( data)
+      : await currentApi.edit({ id, data })
 
     message.info(`${actionText}成功`)
     goback()

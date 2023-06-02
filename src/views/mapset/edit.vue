@@ -40,7 +40,8 @@
 </template>
 
 <script setup lang="ts">
-const { id, name } = useRoute().params
+const { id } = useRoute().params
+const { name } = useRoute().query
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '地图集'
