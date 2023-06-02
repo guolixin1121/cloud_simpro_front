@@ -53,8 +53,7 @@ const loading = ref<boolean>(true)
 const virTree = ref<any>()
 let curData: any = {}
 let curCheckData: any = ''
-let dom: any = null
-
+let selectedId = ''
 const getData = async () => {
   if (props.api) {
     try {
@@ -62,15 +61,13 @@ const getData = async () => {
       gData.value = JSON.parse(JSON.stringify(res.results))
       loading.value = false
       if (props.searchValue) {
-        console.log(9999, props)
         // 初始化状态 search  有数据
         resetRender(props.searchValue)
         const obj: any = {}
         obj.node = {}
         obj.node.key = props.treeSelectId
-        console.log(obj)
         selectChange(obj)
-        getdom(props.treeSelectId)
+        selectedId = props.treeSelectId
       } else {
         // 初始化状态 search  为空
         const data = recursion(res.results)
@@ -94,13 +91,15 @@ const recursion = (val: any[], _preKey?: string): any => {
 }
 getData()
 const renderNode = (node: any) => {
+  console.log(node)
   const wrapValue = node.name.replace(searchKey.value, `<span class="node-highlight">${searchKey.value}</span>`)
-  // if (node.key)
-  return <div class='node-title' data-id={node.key} innerHTML={wrapValue} onClick={e => onclick(e, node)}></div>
-}
-const getdom = (id: string) => {
-  const element = document.querySelectorAll("[data-id='" + 10014812 + "']")
-  console.log(element, 'element', +id)
+  return (
+    <div
+      class={`node-title ${+selectedId === +node.key ? 'selected' : ''}`}
+      innerHTML={wrapValue}
+      onClick={e => onclick(e, node)}
+    ></div>
+  )
 }
 const onclick = (e: any, node: any, data = list.value) => {
   let cur: any = {}
@@ -117,15 +116,17 @@ const onclick = (e: any, node: any, data = list.value) => {
         }
       }
     }
-    if (!cur.isLeaf) return
-    if (dom) {
-      dom.className = 'node-title'
+    if (!cur.isLeaf) {
+      return
     }
+    const d = document.getElementsByClassName('node-title selected')
+    if (d && d[0]) {
+      d[0].className = 'node-title'
+    }
+    selectedId = node?.key
     if (e.target.className === 'node-highlight') {
       e.target.parentNode.className = 'node-title selected'
-      dom = e.target.parentNode
     } else {
-      dom = e.target
       e.target.className = 'node-title selected'
     }
   }
@@ -175,7 +176,6 @@ const checkChange = (val: any) => {
   if (!showCheckbox.value) return
   curCheckData = ''
   console.log(val)
-  // console.log(virTree.value.getCheckedNodes())
   const getCheckedNodes = virTree.value.getCheckedNodes()
   const getKeys = (data: string | any[]) => {
     for (let i = 0; i < data.length; i++) {
@@ -187,7 +187,6 @@ const checkChange = (val: any) => {
     }
   }
   getKeys(getCheckedNodes)
-  // console.log(curCheckData)
   if (props.onSelect) props.onSelect(curCheckData)
 }
 // 单选
@@ -205,7 +204,6 @@ const selectChange = (val: any, data = list.value) => {
       }
     }
   }
-  console.log(val, curData, 222)
   if (curData.isLeaf) {
     if (props.onSelect) props.onSelect(curData)
   }
@@ -219,7 +217,6 @@ const resetRender = (newVal: string) => {
   defaultExpandKeys.value = []
   list.value = searchData(recursion(JSON.parse(JSON.stringify(gData.value))), newVal)
   defaultExpandKeys.value = [...new Set(defaultExpandKeys.value)]
-  console.log(list.value, 777)
   // if (newVal !== '') {
   //   filterData(list.value, newVal)
   //   list.value = [...list.value]
@@ -236,6 +233,41 @@ const resetRender = (newVal: string) => {
 //       }
 //     }
 //   }
+// }
+// onBeforeUnmount(() => {
+//   clearTimeout(timer)
+// })
+
+// const filterData = (data: any, id: string) => {
+//   for (let i = 0; i < data.length; i++) {
+//     if (+data[i].id !== +id) {
+//       filterData(data[i].children, id)
+//     } else {
+//       params = data[i]
+//       return
+//     }
+//   }
+// }
+// const loop = (id: string) => {
+//   timer = setTimeout(() => {
+//     const element = document.querySelectorAll("[data-id='" + +id + "']")
+//     if (!element.length) {
+//       clearTimeout(timer)
+//       loop(id)
+//     } else {
+//       clearTimeout(timer)
+//       if (dom) {
+//         dom.className = 'node-title'
+//       }
+//       dom = element[0]
+//       element[0].className = 'node-title selected'
+//       selectedId = id
+//     }
+//   }, 100)
+// }
+// const getdom = (data: any, id: string) => {
+//   filterData(data, id)
+//   if (params) loop(id)
 // }
 </script>
 
