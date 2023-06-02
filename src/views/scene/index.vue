@@ -35,8 +35,8 @@ const user = store.user
 const currentApi = api.scene
 const sceneApi = api.scenesets
 const tagsApi = (args: object) => api.tags.getList({ tag_type: 3, ...args })
-const treeSearchName = ref('111')
-const treeSelectId = ref('10014812')
+const treeSearchName = ref('')
+const treeSelectId = ref('')
 /****** 搜素区域 */
 type Query = Record<string, any>
 const query: Query = ref({})
