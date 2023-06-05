@@ -7,10 +7,10 @@
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/logic-scene/edit/0')">上传逻辑场景</a-button>
     </div>
 
-    <Table ref="table" :api="listApi" :query="query" :columns="columns" :scroll="{ x: 1100, y: 'auto' }">
-      <template #bodyCell="{column, record, text}">
-        <template v-if="column.dataIndex == 'result_scene_count'">
-          <router-link class=" text-blue" :to="'/logic-scene/result/' + record.id +'?name=' +record.name">{{ text }}</router-link>
+    <Table ref="table" :api="listApi" :query="query" :columns="columns" :scroll="{ x: 1300, y: 'auto' }">
+      <template #bodyCell="{ record, column }">
+        <template v-if="column.dataIndex == 'last_gen_scene_task'">
+          <span>{{ getLogicSceneStatusOption(record.last_gen_scene_task.status) }}</span>
         </template>
       </template>
     </Table>
@@ -32,6 +32,8 @@
 </template>
 
 <script setup lang="ts">
+import {getLogicSceneStatusOption} from '@/utils/dict'
+
 /****** api */
 const user = store.user
 const currentApi = api.logicScene
@@ -63,20 +65,22 @@ const router = useRouter()
 const columns = [
   { title: '场景ID', dataIndex: 'id', width: 90 },
   { title: '逻辑场景名称', dataIndex: 'name', width: 150, ellipsis: true },
-  { title: '关联场景数', dataIndex: 'result_scene_count', width: 150, ellipsis: true },
-  { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name' },
+  { title: '关联场景数', dataIndex: 'result_scene_count', width: 120, ellipsis: true },
+  { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
+  { title: '状态', dataIndex: 'last_gen_scene_task', width: 100 },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 180,
+    width: 250,
     actions: {
       运行: (data: any) => {
         showRunConfirm.value = true
         runScene.value = data
       },
+      泛化任务: (data: any) => router.push('/logic-scene/result/' + data.id +'?name=' + data.name),
       查看: (data: any) => router.push('/logic-scene/view/' + data.id),
       编辑: (data: any) => router.push('/logic-scene/edit/' + data.id),
       删除: async ({ id }: { id: string }) => await currentApi.delete(id)

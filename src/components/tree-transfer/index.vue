@@ -106,12 +106,12 @@ watchOnce(
     if(hasDefaultValue) {
       hasDefaultValue = false
       const { label, value } = props.fieldNames
-      selectedNodes.value = props.targetKeys.map((item: any) => ({
+      selectedNodes.value = props.targetKeys?.map((item: any) => ({
         title: item[label],
         key: item[value],
         value: item[value]
       }))
-      checkedKeys.value = selectedNodes.value.map((data: any) => data.key)
+      checkedKeys.value = selectedNodes.value?.map((data: any) => data.key)
     }
   })
 

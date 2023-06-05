@@ -98,3 +98,14 @@ export const HorizontalOptions = [
 ]
 
 export const getHorizontalOptions = (value: number | string) => HorizontalOptions.find(v => v.value == value)?.label
+
+export const LogicSceneStatusOption = [
+  { label: '新建', value: 1 },
+  { label: '运行', value: 2 },
+  { label: '泛化结束上传中', value: 3 },
+  { label: '泛化错误', value: 4 },
+  { label: '上传结束', value: 5 },
+  { label: '上传错误', value: 6 }
+]
+
+export const getLogicSceneStatusOption = (value: number | string) => LogicSceneStatusOption.find(v => v.value == value)?.label

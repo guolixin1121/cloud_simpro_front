@@ -99,7 +99,7 @@ const formState = reactive({
   xosc_config: undefined,
   scene_url: '',
   config_url: '',
-  labels: undefined,
+  labels: [],
   adsUrl: undefined,
 })
 const loading = ref(false)
@@ -107,18 +107,19 @@ const router = useRouter()
 const goback = () => router.go(-1)
 const add = async () => {
   loading.value = true
-
+  
   const params = {
     source: 0,
     name: formState.name,
     map_id: formState.mapVersion,
     xosc_scene: formState.xosc_scene,
     xosc_config: formState.xosc_config,
-    // labels: formState.labels.map((item: any) => item.value)
+    labels: formState.labels?.map((item: any) => item.value || item.name)
   }
 
   !formState.xosc_config && delete params.xosc_config
   !formState.xosc_scene && delete params.xosc_scene
+  !formState.labels && delete params.labels
 
   try {
     isAdd

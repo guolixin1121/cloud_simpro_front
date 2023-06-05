@@ -13,6 +13,9 @@
         <template v-if="column.dataIndex == 'name'">
           {{ name }}
         </template>
+        <template v-if="column.dataIndex == 'status'">
+          {{ getLogicSceneStatusOption(record.status) }}
+        </template>
         <template v-if="column.dataIndex == 'result_scene_set'">
           {{ record.result_scene_set.name }}
         </template>
@@ -27,12 +30,12 @@
 </template>
 
 <script setup lang="ts">
+import {getLogicSceneStatusOption} from '@/utils/dict'
 /****** api */
 const { id } = useRoute().params
 const { name } = useRoute().query
 const currentApi = api.logicScene
 const listApi = () => currentApi.getResultList({ source: 0, logic_scene_id: id })
-
 
 /****** 表格区域 */
 const router = useRouter()
@@ -41,7 +44,7 @@ const columns = [
   { title: '场景集名称', dataIndex: 'result_scene_set' },
   { title: '关联场景数', dataIndex: 'scene_count', width: 150, ellipsis: true },
   { title: '开始时间', dataIndex: 'running_time' },
-  { title: '状态', dataIndex: 'finish_time' },
+  { title: '状态', dataIndex: 'status' },
   {
     title: '操作',
     dataIndex: 'actions',

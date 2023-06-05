@@ -12,10 +12,12 @@
           name="adsName"
           :rules="[
             { required: true, message: '请输入场景名称' },
-            { min: 2, max: 50, message: '场景名称长度为2到50位' }
+            { min: 2, max: 160, message: '场景名称长度为2到160位' }
           ]"
         >
-          <a-input v-model:value="formState.adsName" :maxlength="50" placeholder="请输入场景名称"></a-input>
+          <ch-input v-model:value="formState.adsName" :maxlength="160" 
+            placeholder="请输入场景名称"
+            @change="(val: string)=>{formState.adsName = val}"></ch-input>
         </a-form-item>
         <a-form-item label="所属场景集" name="scenesets" :rules="[{ required: true, message: '请选择场景集' }]">
           <tree-select v-model:value="formState.scenesets" :api="getSceneSet" label-in-value

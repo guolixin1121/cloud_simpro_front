@@ -12,10 +12,10 @@
           <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入地图集名称"></a-input>
         </a-form-item>
         <a-form-item label="地图集类型" name="isLeaf" :rules="[{ required: true, message: '请选择地图集类型'}]">
-          <a-radio-group v-model:value="formState.isLeaf">
-            <a-radio value="0">地图目录</a-radio>
-            <a-radio value="1">地图集</a-radio>
-          </a-radio-group>
+          <a-select v-model:value="formState.isLeaf" :disabled="!isAdd">
+            <a-select-option value="0">地图目录</a-select-option>
+            <a-select-option value="1">地图集</a-select-option>
+          </a-select>
         </a-form-item>
 
         <a-form-item label="所属地图目录" name="parentId">

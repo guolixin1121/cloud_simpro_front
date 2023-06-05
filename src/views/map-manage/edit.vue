@@ -148,8 +148,8 @@ const getLookData = async () => {
     const catalog = SStorage.get('catalog')
     const res = await mapApi.lookMaps({ id, data: { name } })
     formState.name = res.name
-    formState.catalog = res.catalog || catalog.id
-    formState.catalogName = res.catalogName || catalog.name
+    formState.catalog = res.catalog || catalog?.id
+    formState.catalogName = res.catalogName || catalog?.name
     formState.xodr = null
     formState.desc = res.desc
     formState.latestVersion = res.latestVersion

@@ -11,7 +11,14 @@
         <a-form-item label="场景集名称" name="name" :rules="[{ required: true, message: '请输入场景集名称'}, { min: 2, max: 50, message: '场景名称长度为2到50位'}]">
           <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景集名称"></a-input>
         </a-form-item>
-        <a-form-item label="所属场景目录" name="parent" :rules="[{ required: true, message: '请选择所属场景目录'}]">
+        <a-form-item label="场景集类型"  name="isLeaf" :rules="[{ required: true, message: '请选择场景集类型'}]">
+          <a-select v-model:value="formState.isLeaf" :disabled="!isAdd">
+            <a-select-option value="0">场景目录</a-select-option>
+            <a-select-option value="1">场景集</a-select-option>
+          </a-select>
+        </a-form-item>
+        <a-form-item label="所属场景目录" name="parent" 
+          :rules="[{ required: true && formState.isLeaf == '1', message: '请选择所属场景目录'}]">
           <a-tree-select placeholder="请选择所属场景目录" 
             v-model:value="formState.parent"
             :treeData="parentScenesets" 
@@ -22,20 +29,9 @@
             showSearch>
           </a-tree-select>
         </a-form-item>
-        <a-form-item label="场景集类型" v-if="isAdd" name="isLeaf" :rules="[{ required: true, message: '请选择场景集类型'}]">
-          <a-radio-group v-model:value="formState.isLeaf">
-            <a-radio value="0">场景目录</a-radio>
-            <a-radio value="1">场景集</a-radio>
-          </a-radio-group>
-        </a-form-item>
         <a-form-item label="场景集路径" name="path">
           <span>{{ path }}</span>
         </a-form-item>
-        <!-- <a-form-item label="标签">
-          <scroll-transfer v-model:target-keys="formState.labels" :api="getSceneTags" 
-            :fieldNames="{label: 'display_name', value: 'name'}"
-            :titles="['可选标签', '选中标签']"></scroll-transfer>
-        </a-form-item> -->
         <a-form-item label="标签">
           <tree-transfer
             v-model:target-keys="formState.labels"
@@ -68,7 +64,7 @@ const formState = reactive({
   name: '',
   parent: undefined as any,
   labels: [],
-  isLeaf: undefined
+  isLeaf: '1'
 })
 const parentScenesets = ref([])
 const path = computed(() => {
@@ -84,7 +80,7 @@ const add = async () => {
 
   const params = {
     name: formState.name,
-    parentId: formState.parent.value,
+    parentId: formState.parent?.value,
     labels: formState.labels?.map((item: any) => item.value),
     isLeaf:formState.isLeaf,
     path: path.value

@@ -32,6 +32,7 @@ declare module '@vue/runtime-core' {
     ARadio: typeof import('ant-design-vue/es')['Radio']
     ARadioGroup: typeof import('ant-design-vue/es')['RadioGroup']
     ASelect: typeof import('ant-design-vue/es')['Select']
+    ASelectOption: typeof import('ant-design-vue/es')['SelectOption']
     ASpin: typeof import('ant-design-vue/es')['Spin']
     ASubMenu: typeof import('ant-design-vue/es')['SubMenu']
     ASwitch: typeof import('ant-design-vue/es')['Switch']
@@ -57,6 +58,7 @@ declare module '@vue/runtime-core' {
     Table: typeof import('./src/components/table/index.vue')['default']
     Tree: typeof import('./src/components/tree/index.vue')['default']
     TreeSelect: typeof import('./src/components/tree-select/index.vue')['default']
+    TreeTable: typeof import('./src/components/tree-table/index.vue')['default']
     TreeTransfer: typeof import('./src/components/tree-transfer/index.vue')['default']
     VTree: typeof import('./src/components/v-tree/index.vue')['default']
   }
