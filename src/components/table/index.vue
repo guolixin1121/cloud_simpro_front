@@ -68,12 +68,16 @@ const current = ref(1)
 const loading = ref(false)
 const data = ref()
 const run = async (query: any, slient = false) => {
-  if(!slient) {
-    loading.value = true
+  try {  
+    if(!slient) {
+      loading.value = true
+    }
+    data.value = []
+    const res = await props.api(query)
+    data.value = res
+  } finally {
+    loading.value = false
   }
-  const res = await props.api(query)
-  data.value = res
-  loading.value = false
 }
 // const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number; datalist: [] }, any>, {
 //   manual: true

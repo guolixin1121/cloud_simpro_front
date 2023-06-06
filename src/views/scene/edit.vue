@@ -112,6 +112,7 @@ const loading = ref(false)
 const router = useRouter()
 const goback = () => router.push('/scene')
 const add = async () => {
+  const { labels } = formState
   const params = {
     source: 0,
     adsName: formState.adsName,
@@ -119,8 +120,9 @@ const add = async () => {
     mapName: formState.map ? (formState.map as unknown as SelectOption).label : formState.mapName,
     mapVersion: formState.mapVersionAdd || formState.mapVersion,
     xosc: formState.xosc,
-    labels: formState.labels.map((item: any) => item.name)
+    labels: labels ? labels.map((item: any) => item.name || item.key) : []
   }
+
   if(!params.xosc) {
     delete params.xosc
   }

@@ -49,7 +49,7 @@
       </a-form-item>
       <a-form-item label="标签类型：" name="tag_type" :rules="[{ required: isView ? false : true, message: '请选择标签类型!' }]">
         <scroll-select
-          v-if="!isView"
+          v-if="isAdd"
           allowClear
           style="width: 245px"
           v-model:value="formState.tag_type"
