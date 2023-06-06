@@ -42,6 +42,7 @@
 <script setup lang="ts">
 import { TaskSourceOptions, getTaskSourceName, getResultStatus } from '@/utils/dict'
 
+const templateId = useRoute().query.templateId as string
 /****** api */
 const currentApi = api.result
 
@@ -55,9 +56,9 @@ const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入仿真任务名称或主车模型' },
   { label: '任务来源', key: 'source', type: 'select', options: TaskSourceOptions, defaultValue: '' },
+  { label: '仿真任务', key: 'template_id', type: 'select', api: api.task.getList, defaultValue: parseInt(templateId) || '', placeholder: '请选择仿真任务' },
   { label: '仿真算法', key: 'algorithm', type: 'select', api: api.algorithm.getList, defaultValue: '' },
-  { label: '创建时间', key: 'create_time', type: 'range-picker' }
-])
+  { label: '创建时间', key: 'create_time', type: 'range-picker' }])
 const onSearch = (data: Query) => (query.value = data)
 
 /****** 表格区域 */

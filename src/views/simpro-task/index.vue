@@ -64,12 +64,13 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 150,
+    width: 180,
     actions: {
       运行: {
         validator: (data: RObject) => ['运行', '等待'].indexOf(data.status) === -1,
         handler: async (data: RObject) => await currentApi.run({ template_id: data.id })
       },
+      仿真结果: (data: RObject) => router.push('/simpro-result/?templateId=' + data.id),
       查看: (data: RObject) => router.push('/simpro-task/view/' + data.id),
       编辑: (data: RObject) => router.push('/simpro-task/edit/' + data.id),
       删除: async ({ id }: RObject) => await currentApi.delete(id)
