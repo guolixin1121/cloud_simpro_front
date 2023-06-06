@@ -119,7 +119,7 @@ const add = async () => {
 
   !formState.xosc_config && delete params.xosc_config
   !formState.xosc_scene && delete params.xosc_scene
-  !formState.labels && delete params.labels
+  !formState.labels && (params.labels = [])
 
   try {
     isAdd

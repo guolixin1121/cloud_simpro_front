@@ -65,9 +65,19 @@ const emits = defineEmits(['select'])
 const rowSelection: any = useAttrs()['row-selection'] || {}
 
 const current = ref(1)
-const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number; datalist: [] }, any>, {
-  manual: true
-})
+const loading = ref(false)
+const data = ref()
+const run = async (query: any, slient = false) => {
+  if(!slient) {
+    loading.value = true
+  }
+  const res = await props.api(query)
+  data.value = res
+  loading.value = false
+}
+// const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number; datalist: [] }, any>, {
+//   manual: true
+// })
 const dataSource: any = computed(() => {
   const results = data.value?.results || data.value?.datalist
   addKeysToData(results)
@@ -114,13 +124,16 @@ onMounted(() => {
 })
 
 // 用于删除等操作后，重新加载table
-const refresh = () => {
+// slient: 是否显示loading
+const refresh = (option: any) => {
   // 判断是否还剩一条，剩一条删除成功后请求上一页
+  const slient = option?.slient
+  console.log(slient)
   if (dataSource?.value?.length === 1) {
-    run({ ...props.query, page: current.value > 1 ? current.value - 1 : current.value, size })
+    run({ ...props.query, page: current.value > 1 ? current.value - 1 : current.value, size }, slient)
     return
   }
-  run({ ...props.query, page: current.value, size })
+  run({ ...props.query, page: current.value, size }, slient)
 }
 
 // 为了兼容树状的table，为每个数据增加key

@@ -82,7 +82,8 @@
 </template>
 
 <script setup lang="ts">
-const id = useRoute().params.id
+const route = useRoute()
+const { id } = route.params
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '场景'
@@ -91,9 +92,9 @@ const getMapCatalog = () => api.maps.getMapCatalog({ tree: 1 })
 const getMaps = ref()
 const getMapVersions = ref()
 const getSceneSet = (args: object) => api.scenesets.getList({ tree: 1, ...args })
-// const getScennTags = (args: object) => api.tags.getList({ tag_type: 3, isTag:true, ...args })
 const getScennTagsTree = (args: object) => api.tags.getList({ tag_type: 3, tree: 1, ...args })
 const currentApi = api.scene
+const sceneCatalog = store.catalog.sceneCatalog as any
 
 const formState = reactive({
   adsName: '',
@@ -102,7 +103,7 @@ const formState = reactive({
   mapVersionAdd: undefined,
   mapName: undefined,
   mapVersion: undefined,
-  scenesets: undefined as any,
+  scenesets: sceneCatalog ? { label: sceneCatalog.sourceName, value: sceneCatalog.id} : undefined,
   xosc: undefined,
   labels: [],
   adsUrl: undefined,
@@ -114,7 +115,7 @@ const add = async () => {
   const params = {
     source: 0,
     adsName: formState.adsName,
-    baiduSceneSets: formState.scenesets.value,
+    baiduSceneSets: formState.scenesets?.value,
     mapName: formState.map ? (formState.map as unknown as SelectOption).label : formState.mapName,
     mapVersion: formState.mapVersionAdd || formState.mapVersion,
     xosc: formState.xosc,
@@ -160,16 +161,7 @@ const getEditData = async () => {
     formState.mapName = scene.mapName
     formState.adsUrl = scene.adsUrl
     formState.scenesets = { value: scene.baiduSceneSets, label: scene.sceneset_name }
-
-    // getEditOptions(scene)
   }
 }
-// const getEditOptions = async ({ baiduSceneSets } : any) => {
-//   const res = await api.scenesets.get(baiduSceneSets)
-//   formState.scenesets = {
-//     label: res.name,
-//     value: res.id
-//   } as any
-// }
 getEditData()
 </script>

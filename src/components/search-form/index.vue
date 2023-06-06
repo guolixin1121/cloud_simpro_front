@@ -78,21 +78,23 @@ const route = useRoute()
 const routeName = route.path.replaceAll('/', '')
 onMounted(() => {
   const storage = SStorage.get(routeName)
-  const isFromCache = route.query.clear !== null && storage
-  if (isFromCache) {
-    props.items.forEach((item: any) => {
-      const key = item.key
-      const isTimeKey = key.toLowerCase().indexOf('time') > -1 || key.toLowerCase().indexOf('date') > -1
-      if (isTimeKey) {
-        // 日期控件
-        const timeValue = storage[key]
-        if (timeValue && timeValue[0]) {
-          formState[key] = [dayjs(timeValue[0]), dayjs(timeValue[1])]
+  const clear = route.query.clear === null
+  if (!clear) {
+    if(storage) {
+      props.items.forEach((item: any) => {
+        const key = item.key
+        const isTimeKey = key.toLowerCase().indexOf('time') > -1 || key.toLowerCase().indexOf('date') > -1
+        if (isTimeKey) {
+          // 日期控件
+          const timeValue = storage[key]
+          if (timeValue && timeValue[0]) {
+            formState[key] = [dayjs(timeValue[0]), dayjs(timeValue[1])]
+          }
+        } else {
+          formState[key] = storage[key]
         }
-      } else {
-        formState[key] = storage[key]
-      }
-    })
+      })
+    }
   } else {
     SStorage.clear()
   }

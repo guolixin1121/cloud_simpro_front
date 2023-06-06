@@ -5,5 +5,7 @@
 
 import pinia from './pinia'
 import { useUserStore } from './user'
+import { useCatalogStore } from './catalog'
 
 export const user = useUserStore(pinia)
+export const catalog = useCatalogStore(pinia)

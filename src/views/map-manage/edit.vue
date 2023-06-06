@@ -35,13 +35,13 @@
         <tree-select
           v-if="isAdd"
           allowClear
+          label-in-value
           v-model:value="formState.catalog"
           :api="() => mapApi.getMapCatalog({ tree: 1 })"
-          :fieldNames="{ label: 'name', value: 'id' }"
           placeholder="请选择地图目录"
         >
         </tree-select>
-        <template v-else>{{ formState.catalogName }}</template>
+        <template v-else>{{ formState.catalog.label }}</template>
       </a-form-item>
       <a-form-item label="地图文件：" name="xodr" :rules="[{ required: isAdd, message: '请上传地图文件!' }]">
         <single-upload
@@ -58,14 +58,22 @@
       <a-form-item v-if="!isAdd" label="地图版本：" name="name">
         <span>{{ formState.latestVersion }}</span>
       </a-form-item>
+      <a-form-item label="标签">
+          <tree-transfer
+            v-model:target-keys="formState.labels"
+            :api="getTagsTree"
+            :fieldNames="{ label: 'display_name', value: 'name' }"
+            :titles="['可选标签', '选中标签']"
+          ></tree-transfer>
+        </a-form-item>
       <a-form-item label="描述" name="name">
         <a-textarea
           v-if="!isView"
           v-model:value="formState.desc"
           placeholder="请输入描述"
-          rows="10"
+          rows="6"
           style="resize: none"
-          maxlength="255"
+          maxlength="160"
         />
         <template v-else>{{ formState.desc }}</template>
       </a-form-item>
@@ -93,17 +101,20 @@
 <script setup lang="ts">
 import { formatDate } from '@/utils/tools'
 import { MapManageSourceOptions } from '@/utils/dict'
-import { SStorage } from '@/utils/storage'
-const id = useRoute().params.id
-const { type = '', name = '' } = useRoute().query || {}
+// import { SStorage } from '@/utils/storage'
+const mapCatalog = store.catalog.mapCatalog as any
+const route = useRoute()
+const { id } = route.params
+const { type = '', name = ''} = route.query || {}
 const isView = type === '0' ? true : false // 查看
 const isAdd = id === '0'
 const title = isView ? '查看地图' : isAdd ? '上传地图' : '修改地图'
 const mapApi = api.maps
+const getTagsTree = (args: object) => api.tags.getList({ tag_type: 4, tree: 1, ...args })
 
 const formState = reactive<any>({
   name: undefined,
-  catalog: null,
+  catalog: mapCatalog ? { label: mapCatalog?.name, value: mapCatalog?.id} : null,
   xodr: null,
   desc: '',
   latestVersion: '',
@@ -111,7 +122,8 @@ const formState = reactive<any>({
   create_time: '',
   update_time: '',
   create_user: '',
-  mapType: null
+  mapType: null,
+  labels: [],
 })
 
 const loading = ref(false)
@@ -119,12 +131,14 @@ const router = useRouter()
 const goback = () => router.go(-1)
 const add = async () => {
   loading.value = true
+  debugger
   const params: any = {
     name: formState.name,
-    catalog: formState.catalog,
+    catalog: formState.catalog?.value,
     xodr: formState.xodr,
     desc: formState.desc,
-    mapType: formState.mapType
+    mapType: formState.mapType,
+    labels: formState.labels.map((item: any) => item.name)
   }
   for (const key in params) {
     if (key !== 'desc') {
@@ -145,11 +159,9 @@ const add = async () => {
 const getLookData = async () => {
   // 非上传
   if (id !== '0') {
-    const catalog = SStorage.get('catalog')
     const res = await mapApi.lookMaps({ id, data: { name } })
     formState.name = res.name
-    formState.catalog = res.catalog || catalog?.id
-    formState.catalogName = res.catalogName || catalog?.name
+    formState.catalog = { label: mapCatalog?.name, value: mapCatalog?.id }
     formState.xodr = null
     formState.desc = res.desc
     formState.latestVersion = res.latestVersion
@@ -160,6 +172,7 @@ const getLookData = async () => {
     formState.mapFileName = res.mapFileName
     formState.mapType = res.mapType
     formState.mapTypeName = res.mapTypeName
+    formState.labels = res.labels_detail
   }
 }
 getLookData()

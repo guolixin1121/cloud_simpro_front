@@ -6,12 +6,16 @@
     treeNodeFilterProp="title"
     :treeData="treeData"
     :not-found-content="api? '数据加载中...' : ''"
+    @select="onSelect"
   >
   </a-tree-select>
 </template>
 <script setup lang="ts">
 const props = defineProps({
   api: {
+    type: Function
+  },
+  apiFilter: {
     type: Function
   },
   fieldNames: {
@@ -24,8 +28,12 @@ const props = defineProps({
   },
   select: {
     type: Function
+  },
+  selectNode: {
+    type: Object
   }
 })
+const emits = defineEmits(['update:selectNode'])
 const attrs = useAttrs()
 const allOption: TreeItem = { title: '全部', value: '', children: [] }
 const treeData = ref<TreeItem[]>([])
@@ -48,16 +56,27 @@ const getOptions = async () => {
   }
 }
 
-const treeTransfer = (data: any): TreeItem[] => {
+const treeTransfer = (data: any, level: number = 0): TreeItem[] => {
+  let parents = data
+  const apiFilter = props.apiFilter
+  if(apiFilter) {
+    parents = parents.filter((item: any) => apiFilter(item))
+  }
   const { label, value } = props.fieldNames
-  const options = data.map((item: any) => ({
+  const options = parents.map((item: any) => ({
     title: item[label],
     value: item[value],
     key: item[value],
+    level,
+    id: item.nodeId || item.id,
     selectable: props.checkLeaf ? !!item.isLeaf : true,
-    children: treeTransfer(item.children || [])
+    children: treeTransfer(item.children || [], level + 1)
   }))
   return options
+}
+
+const onSelect = (value: string, node: any) => {
+  emits('update:selectNode', node)
 }
 
 initOptions()

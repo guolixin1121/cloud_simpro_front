@@ -2,7 +2,7 @@
   <search-form :items="formItems" :manual="true" @on-search="onSearch"></search-form>
 
   <div class="main main-bg">
-    <l-tree
+    <left-tree
       :title="'场景集'"
       :api="() => sceneApi.getList({ tree: 1 })"
       v-model:treeSearchName="treeSearchName"
@@ -32,7 +32,7 @@ const treeSelectId = ref(route.query.id)
 /****** 搜素区域 */
 type Query = Record<string, any>
 const query: Query = ref({})
-const selectTreeQuery = ref({})
+let catalog = store.catalog
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称' },
   { label: '场景来源', key: 'adsSource', type: 'select', options: SceneSourceOptions, placeholder: '请选择场景来源' },
@@ -46,7 +46,10 @@ const formItems = ref<SearchFormItem[]>([
     fieldNames: { label: 'display_name', value: 'name' }
   }
 ])
-const onSearch = (data: Query) => (query.value = { ...data, ...selectTreeQuery.value })
+const onSearch = (data: Query) => {
+  const sceneCatalog = catalog.sceneCatalog as any
+  query.value = { ...data, scene_set: sceneCatalog?.id }
+}
 
 /****** 表格区域 */
 const router = useRouter()
@@ -70,7 +73,7 @@ const columns = [
   }
 ]
 const onSelect = (val: any) => {
-  selectTreeQuery.value = { scene_set: val.id }
+  catalog.sceneCatalog = val
   query.value = { ...query.value, scene_set: val.id }
 }
 </script>

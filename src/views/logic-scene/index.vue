@@ -67,7 +67,7 @@ const columns = [
   { title: '逻辑场景名称', dataIndex: 'name', width: 150, ellipsis: true },
   { title: '关联场景数', dataIndex: 'result_scene_count', width: 120, ellipsis: true },
   { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
-  { title: '状态', dataIndex: 'last_gen_scene_task', width: 100 },
+  // { title: '状态', dataIndex: 'last_gen_scene_task', width: 100 },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
   {

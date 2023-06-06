@@ -1,16 +1,26 @@
 <template>
   <div class="left-tree">
     <span class="sub-title">{{ title }}</span>
-    <a-input-search v-model:value="searchValue" style="margin-bottom: 8px" :placeholder="placeholder" />
+    <a-input-search
+      allowClear
+      :value="searchValue"
+      style="margin-bottom: 8px"
+      :placeholder="placeholder"
+      @change="onChange"
+      @search="onSearch"
+    />
     <div class="tree-container">
-      <Tree :searchValue="searchValue" v-bind="$attrs" />
+      <tree :searchValue="val" :api="api" :showCheckbox="showCheckbox" :onSelect="onSelect" :treeSelectId="treeSelectId" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const searchValue = ref<string>('')
-// const emits = defineEmits(['select'])
+import { useSessionStorage } from '@vueuse/core';
+
+const routeName = useRoute().path.replaceAll('/', '')
+const searchValue = useSessionStorage(routeName + '-tree-catalog-search', '')
+const val = ref('')
 const props = defineProps({
   title: {
     type: String,
@@ -18,12 +28,40 @@ const props = defineProps({
   },
   placeholder: {
     type: String,
-    default: '请选择...'
+    default: '请输入名称搜索'
   },
   select: {
     type: Function
+  },
+  api: {
+    type: Function
+  },
+  showCheckbox: {
+    type: Boolean
+  },
+  onSelect: {
+    type: Function
+  },
+  treeSearchName: {
+    type: String,
+    default: ''
+  },
+  treeSelectId: {
+    type: String,
+    default: ''
   }
 })
 
-const { title, placeholder } = toRefs(props)
+const emits = defineEmits(['update:treeSearchName'])
+const { title, placeholder, treeSearchName } = toRefs(props)
+searchValue.value = treeSearchName.value
+val.value = treeSearchName.value
+const onChange = (e: { target: { value: string } }) => {
+  searchValue.value = e.target.value
+}
+const onSearch = (value: any) => {
+  emits('update:treeSearchName', value)
+  val.value = value
+}
 </script>
+<style></style>

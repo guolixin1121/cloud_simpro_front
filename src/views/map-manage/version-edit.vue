@@ -16,9 +16,9 @@
       <a-form-item label="地图类型：" name="mapType">
         {{ formState.mapTypeName }}
       </a-form-item>
-      <a-form-item label="地图目录：" name="catalog">
+      <!-- <a-form-item label="地图目录：" name="catalog">
         {{ formState.catalogName }}
-      </a-form-item>
+      </a-form-item> -->
       <a-form-item label="地图文件：" name="xodr">
         {{ formState.mapFileName }}
       </a-form-item>
@@ -63,6 +63,7 @@
 <script setup lang="ts">
 import { formatDate } from '@/utils/tools'
 import { SStorage } from '@/utils/storage'
+const mapCategory = store.catalog.mapCatalog as any
 const id = useRoute().params.id
 const { type = '' } = useRoute().query || {}
 const isView = type === '0' ? true : false // 查看
@@ -76,8 +77,7 @@ const router = useRouter()
 const goback = () => router.go(-1)
 const add = async () => {
   loading.value = true
-  const catalog = SStorage.get('catalog') || {}
-  const params: any = { mapVersionDesc: formState.mapVersionDesc, catalog: catalog?.id }
+  const params: any = { mapVersionDesc: formState.mapVersionDesc, catalog: mapCategory?.id }
   try {
     await mapApi.editMapVersion({ id, data: { ...params } })
     loading.value = false
@@ -95,8 +95,8 @@ const getLookData = async () => {
     const catalog = SStorage.get('catalog') || {}
     const res = await mapApi.lookMapVersion({ id, data: { catalog: catalog?.id } })
     formState.mapName = res.mapName
-    formState.catalog = res.catalog
-    formState.catalogName = res.catalogName || catalog?.name
+    // formState.catalog = res.catalog
+    // formState.catalogName = res.catalogName || catalog?.name
     formState.mapFileName = res.mapFileName
     formState.mapVersionDesc = res.mapVersionDesc
     formState.mapUrl = res.mapUrl

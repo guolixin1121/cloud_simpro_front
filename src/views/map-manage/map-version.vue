@@ -42,8 +42,8 @@ const columns = [
     fixed: 'right',
     width: 150,
     actions: {
-      查看: (data: any) => router.push('/map-manage/m-version-edit/' + data.id + '?type=0'),
-      编辑: (data: any) => router.push('/map-manage/m-version-edit/' + data.id),
+      查看: (data: any) => router.push('/map-manage/version-edit/' + data.id + '?type=0'),
+      编辑: (data: any) => router.push('/map-manage/version-edit/' + data.id),
       删除: async ({ id }: { id: string }) => await mapsApi.deleteMapVersion(id)
     }
   }

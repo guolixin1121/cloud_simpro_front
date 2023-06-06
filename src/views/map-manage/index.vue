@@ -1,8 +1,7 @@
 <template>
   <search-form :items="formItems" :manual="true" @on-search="onSearch"></search-form>
   <div class="main main-bg">
-    <!-- <left-tree :title="'地图目录'" @select="onSelect" :api="() => mapsApi.getMapCatalog({ tree: 1 })" /> -->
-    <l-tree :title="'地图集'" :api="() => mapsApi.getMapCatalog({ tree: 1 })" :showCheckbox="false" @select="onSelect" />
+    <left-tree :title="'地图集'" :api="() => mapsApi.getMapCatalog({ tree: 1 })" :showCheckbox="false" @select="onSelect" />
     <div class="right-table">
       <div class="flex justify-between items-center">
         <span class="title">地图管理</span>
@@ -29,38 +28,19 @@
 </template>
 
 <script setup lang="ts">
-// import { SStorage } from '@/utils/storage'
 /****** api */
 const user = store.user
 const mapsApi = api.maps
+let catelog = store.catalog
 /****** 搜素区域 */
 type Query = Record<string, any>
 const query: Query = ref({})
-const selectTreeQuery = ref({})
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入地图名称或ID' }
-  // {
-  //   label: '地图类型',
-  //   key: 'mapType',
-  //   type: 'select',
-  //   options: MapManageSourceOptions,
-  //   defaultValue: ''
-  // },
-  // {
-  //   label: '地图目录',
-  //   key: 'catalog',
-  //   type: 'tree-select',
-  //   checkLeaf: false,
-  //   api: () => mapsApi.getMapCatalog({ tree: 1 }),
-  //   placeholder: '请选择地图目录',
-  //   onSelect: (id: any, node: any) => {
-  //     SStorage.set('catalog', { id, name: node.title })
-  //   }
-  // }
-  // { label: '创建时间', key: 'date', type: 'range-picker' }
 ])
 const onSearch = (data: Query) => {
-  query.value = { ...data, ...selectTreeQuery.value }
+  const mapCatalog = catelog.mapCatalog as any
+  query.value = { ...data, catalog: mapCatalog?.id }
 }
 /****** 表格区域 */
 const router = useRouter()
@@ -68,11 +48,7 @@ const preRoute = router.currentRoute.value.path
 const columns = [
   { title: '地图ID', dataIndex: 'id', width: 60 },
   { title: '地图名称', dataIndex: 'name', width: 150 },
-  // { title: '所属地图目录', dataIndex: 'catalogName', width: 100 },
   { title: '地图版本数量', dataIndex: 'versionCount', width: 60 },
-  // { title: '地图文件', dataIndex: 'mapFileName', ellipsis: true },
-  // { title: '创建时间', dataIndex: 'create_time', width: 180 },
-  // { title: '所属用户', dataIndex: 'create_user', width: 100 },
   {
     title: '操作',
     dataIndex: 'actions',
@@ -87,20 +63,7 @@ const columns = [
 ]
 
 const onSelect = (val: any) => {
-  selectTreeQuery.value = { catalog: val.id }
+  catelog.mapCatalog = val
   query.value = { ...query.value, catalog: val.id }
 }
-
-// const route = useRoute()
-// watch(
-//   () => route,
-//   (newVal: any, oldVal) => {
-//     console.log(newVal, newVal.meta, oldVal)
-//     // if(newVal.meta.keepAlive && state.includeList.indexOf(newVal.name) === -1){
-//     //   state.includeList.push(newVal.name);
-//     //   console.log(state.includeList);
-//     // }
-//   },
-//   { deep: true }
-// ) // 开启深度监听
 </script>

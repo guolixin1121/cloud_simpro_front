@@ -57,5 +57,10 @@ const columns = [
 ]
 
 const table = ref()
-onMounted(() => table.value.refresh())
+let interval = null as any
+onMounted(() => {
+  interval = setInterval(() => table.value.refresh({slient: true}), 5000)
+  table.value.refresh()
+})
+onUnmounted(() => clearInterval(interval))
 </script>

@@ -13,7 +13,7 @@
           :field="column.dataIndex"
           :title="column.title"
           :width="column.width"
-          :tree-node="column.dataIndex === 'name'">
+          :tree-node="column.dataIndex === treeNode">
           <template #default="{ row }">
             <template v-if="column.dataIndex == 'operation'">
               <template v-for="action in Object.keys(column.actions || {})" :key="action">
@@ -60,6 +60,10 @@ const props = defineProps({
     type: Array<any>,
     required: true
   },
+  treeNode: {
+    type: String,
+    default: () => 'name'
+  },
   isOnlyCreator: {
     // 是否只允许创建者编辑，删除
     type: Boolean,
@@ -74,7 +78,7 @@ watch(() => props.query,
 
 const route = useRoute()
 const routeName = route.path.replaceAll('/', '')
-const expandRowKeys = useSessionStorage<number[]>(routeName + '-tree', [])
+const expandRowKeys = useSessionStorage<number[]>(routeName + '-tree-table', [])
 const table = ref()
 const loading = ref(false)
 const tableData = ref([])
@@ -82,21 +86,27 @@ const fetchTableData = async (params: any = {}) => {
   loading.value = true
   try {
     const res = await props.api(params)
-    tableData.value = transformTreeToArray(res.results)
-    table.value.setTreeExpand(expandRowKeys.value, true)
+    tableData.value = transformTreeToArray(res.results || res)
+    table.value?.setTreeExpand(expandRowKeys.value, true)
   } finally {
     loading.value = false
   }
 }
 
-const transformTreeToArray = (data: []) => {
+// 数据转换成一维数组，组件的渲染性能高
+const transformTreeToArray = (data: [], parentId: string | number = '') => {
   let results: any = []
   if(!isEmpty(data)) {
     data.forEach((item: RObject) => {
       const itemObj = {...item}
-      const children = transformTreeToArray(item.children)
-      delete itemObj.children
-      results.push(item)
+      if(!itemObj.parentId) {
+        itemObj.parentId = parentId
+      }
+      if(!itemObj.id) {
+        itemObj.id = '-1'
+      }
+      const children = transformTreeToArray(itemObj.children, itemObj.id)
+      results.push(itemObj)
       results.push(...children)
     })
   }
@@ -104,12 +114,12 @@ const transformTreeToArray = (data: []) => {
 }
 
 const onTreeExpand = ({ expanded, row }: any) => {
-  // const id = row.id
-  if(expanded) {
-    expandRowKeys.value = expandRowKeys.value.length ? [...expandRowKeys.value, row] : [row]
-  } else {
-    expandRowKeys.value = expandRowKeys.value.filter((item: number) => item != row.id)
-  }
+  expandRowKeys.value = expanded ? [row] : []
+  // if(expanded) {
+  //   expandRowKeys.value = expandRowKeys.value.length ? [...expandRowKeys.value, row] : [row]
+  // } else {
+  //   expandRowKeys.value = expandRowKeys.value.filter((item: number) => item != row.id)
+  // }
 }
 
 const hasPermission = (column: RObject, row: RObject, key: string) => {
@@ -140,7 +150,7 @@ const onHandler = async (column: any, record: RObject, key: string) => {
   if(isAync) {
     await handler(record)
     message.info(key + '成功')
-    fetchTableData(props.query?.value)
+    fetchTableData(props.query)
   } else {
     handler(record)
   }

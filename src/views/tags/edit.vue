@@ -13,7 +13,7 @@
         {{ formState.id }}
       </a-form-item>
       <a-form-item
-        label="标签名称："
+        label="标签中文名称："
         name="display_name"
         :rules="[
           { required: isView ? false : true, message: '请输入标签名称!' },
@@ -24,7 +24,7 @@
           <chInput
             :value="formState.display_name"
             maxlength="32"
-            placeholder="请输入标签名称"
+            placeholder="请输入标签中文名称"
             @change="(val: string)=>{formState.display_name=val}"
           />
         </template>
@@ -47,16 +47,6 @@
         ></a-input>
         <template v-else>{{ formState.name }}</template>
       </a-form-item>
-      <!-- <a-form-item
-        label="上级标签："
-        name="name"
-        :rules="[
-          { required: isAdd ? true : false, message: '请输入标签英文名称!' },
-          { min: 1, max: 64, message: '标签英文名称长度为1到64位' }
-        ]"
-      >
-        1111
-      </a-form-item> -->
       <a-form-item label="标签类型：" name="tag_type" :rules="[{ required: isView ? false : true, message: '请选择标签类型!' }]">
         <scroll-select
           v-if="!isView"
@@ -69,24 +59,22 @@
         />
         <template v-else>{{ formState.tag_type_name }}</template>
       </a-form-item>
-      <!-- <a-form-item label="上级标签：" name="tag_type">
+      <a-form-item v-if="isAdd" label="上级标签：" name="tag_type">
         <tree-select
+          placeholder="请选择上级标签"
           :disabled="isView"
           allowClear
           style="width: 245px"
-          v-model:value="formState.rr"
-          :api="mapApi.getMapCatalog"
-          :params="{ tree: 1 }"
-          :fieldNames="{ title: 'name', id: 'id' }"
-          placeholder="请选择上级标签"
+          v-model:value="formState.parentId"
+          v-model:selectNode="formState.parentNode"
+          :api="tagsList"
+          :api-filter="(item: any) => !item.isTag"
+          :check-leaf="false"
+          :fieldNames="{ label: 'display_name', value: 'name' }"
         >
         </tree-select>
-      </a-form-item> -->
-      <a-form-item label="是否可打标签" name="isTag" :rules="[{ required: isView ? false : true, message: '请打标!' }]">
-        <a-switch v-if="!isView" checked-children="是" un-checked-children="否" v-model:checked="formState.isTag" />
-        <span v-else>{{ formState.isTag ? '是' : '否' }}</span>
       </a-form-item>
-      <a-form-item label="描述" name="desc">
+      <a-form-item label="描述" name="desc" :rules="[{required: !isView , message: '请输入标签描述' }]">
         <a-textarea
           v-if="!isView"
           v-model:value="formState.desc"
@@ -120,20 +108,21 @@
 
 <script setup lang="ts">
 const id = useRoute().params.id
-const { type = '' } = useRoute().query || {}
+const { type = '', tag_type = '' } = useRoute().query || {}
 const isView = type === '0' ? true : false // 查看
 const isAdd = id === '0'
 const title = isView ? '查看标签' : isAdd ? '创建标签' : '修改标签'
 const tagsApi = api.tags
+const tagsList = () => tagsApi.getList({ tag_type,  tree: 1 })
 
 const formState = reactive<any>({
   id: null,
   name: undefined,
   display_name: null,
   desc: '',
-  isTag: false,
-  type: null,
-  isClassify: false,
+  tag_type: parseInt(tag_type as string),
+  parentId: null,
+  parentNode: null,
   create_time: '',
   update_time: '',
   create_user: ''
@@ -143,23 +132,26 @@ const loading = ref(false)
 const router = useRouter()
 const goback = () => router.go(-1)
 const add = async () => {
-  loading.value = true
+  const { parentId, parentNode } = formState
+  // 没有父节点或者父节点为第一级，则当前标签为目录
+  // 否则为标签
   const params: any = {
     name: formState.name,
     display_name: formState.display_name,
     type: formState.tag_type,
     desc: formState.desc,
-    isTag: formState.isTag,
-    isClassify: formState.isClassify
+    isTag: !parentId || parentNode.level == 0 ? false : true,
+    parentId: parentId ? parentNode.id : null
   }
   for (const key in params) {
     if (key === 'isTag' || key === 'desc') {
-      console.log(1)
+      console.log()
     } else {
       if (!params[key]) delete params[key]
     }
   }
   try {
+     loading.value = true
     isAdd ? await tagsApi.add({ ...params }) : await tagsApi.edit({ id, data: { ...params } })
     loading.value = false
     message.info(isAdd ? '创建成功' : '修改成功')
@@ -178,9 +170,9 @@ const getLookData = async () => {
     formState.name = res.name
     formState.display_name = res.display_name
     formState.desc = res.desc
-    formState.isTag = res.isTag
     formState.tag_type = res.tag_type
     formState.tag_type_name = res.tag_type_name
+    formState.parentNode = res.parentList
     formState.create_time = res.create_time
     formState.update_time = res.update_time
     formState.create_user = res.create_user
