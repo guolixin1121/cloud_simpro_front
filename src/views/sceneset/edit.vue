@@ -19,15 +19,15 @@
         </a-form-item>
         <a-form-item label="所属场景目录" name="parent" 
           :rules="[{ required: true && formState.isLeaf == '1', message: '请选择所属场景目录'}]">
-          <a-tree-select placeholder="请选择所属场景目录" 
+          <tree-select
+            placeholder="请选择所属场景目录"
+            allowClear
             v-model:value="formState.parent"
-            :treeData="parentScenesets" 
-            :filterTreeNode="filterTreeNode"
-            :not-found-content="'加载中...'"
-            label-in-value
-            treeDefaultExpandAll
-            showSearch>
-          </a-tree-select>
+            :api="baseApi.scenesets.getList"
+            :api-filter="(item: any) => !item.isLeaf"
+            :check-leaf="false"
+          >
+          </tree-select>
         </a-form-item>
         <a-form-item label="场景集路径" name="path">
           <span>{{ path }}</span>
@@ -35,7 +35,8 @@
         <a-form-item label="标签">
           <tree-transfer
             v-model:target-keys="formState.labels"
-            :api="getSceneTags"
+            :api="baseApi.tags.getList"
+            :query="{ tag_type: 2, tree: 1 }"
             :fieldNames="{ label: 'display_name', value: 'name' }"
             :titles="['可选标签', '选中标签']"
           ></tree-transfer>
@@ -56,9 +57,9 @@ const id = useRoute().params.id
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '场景集'
+
+const baseApi = api
 const currentApi = api.scenesets
-const getSceneSet = (args: object) => currentApi.getList({ tree: 1, ...args} )
-const getSceneTags = (args: object) => api.tags.getList({ tag_type: 2, tree: 1, ...args })
 
 const formState = reactive({
   name: '',
@@ -66,7 +67,7 @@ const formState = reactive({
   labels: [],
   isLeaf: '1'
 })
-const parentScenesets = ref([])
+
 const path = computed(() => {
   const scenesets = formState.parent as unknown as SelectOption
   return (scenesets?.label || '') + '/' + formState.name
@@ -98,37 +99,20 @@ const add = async () => {
   }
 }
 
-const filterTreeNode = (input: string, treeNode: any) => treeNode.title.indexOf(input) >-1
-const getParents = async () => {
-  const res = await getSceneSet({})
-
-  const treeTransfer = (data: any): [] => {
-    const parents = data.filter((item: any) => item.isLeaf === 0)
-    const options = parents.map((item: any) => ({
-      title: item.name,
-      value: item.baidu_id,
-      key: item.baidu_id,
-      children: treeTransfer(item.children || [])
-    }))
-    return options
-  }
-
-  parentScenesets.value = treeTransfer(res.results || res)
-}
-getParents()
-
 /****** 获取编辑数据 */
 const dataLoading = ref(false)
 const getEditData = async () => {
   if(id !== '0') {
-    dataLoading.value = true
-    const data = await currentApi.get(id)
-    dataLoading.value = false
-    formState.name = data.name
-    // formState.parentId = data.parentId === -1 ? undefined : data.parentId
-    formState.parent = { label: data.parentName, value: data.parentId }
-    formState.labels = data.labels_detail
-    formState.isLeaf = data.isLeaf.toString()
+    try {
+      dataLoading.value = true
+      const data = await currentApi.get(id)
+      formState.name = data.name
+      formState.parent = { label: data.parentName, value: data.parentId }
+      formState.labels = data.labels_detail
+      formState.isLeaf = data.isLeaf.toString()
+    } finally {
+      dataLoading.value = false
+    }
   }
 }
 getEditData()

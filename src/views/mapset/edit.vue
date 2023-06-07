@@ -18,14 +18,24 @@
             <a-select-option value="1">地图集</a-select-option>
           </a-select>
         </a-form-item>
-
+       
         <a-form-item label="所属地图目录" name="parentId">
-          <a-tree-select placeholder="请选择所属地图目录" 
+          <tree-select
+            :disabled="!isAdd"
+            placeholder="请选择所属场景目录"
+            allowClear
+            v-model:value="formState.parentId"
+            :api="currentApi.getList"
+            :api-filter="(item: any) => !item.isLeaf"
+            :check-leaf="false"
+          >
+          </tree-select>
+          <!-- <a-tree-select placeholder="请选择所属地图目录" 
             v-model:value="formState.parentId"
             :treeData="parentList" 
             treeDefaultExpandAll
             showSearch>
-          </a-tree-select>
+          </a-tree-select> -->
           <!-- <tree-select v-model:value="formState.parentId" :api="getSceneSet" :fieldNames="{label: 'name', value: 'baidu_id'}"></tree-select> -->
         </a-form-item>
 
@@ -47,14 +57,12 @@ const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '地图集'
 const currentApi = api.mapsets
-const getSceneSet = (args: object) => currentApi.getList({ tree: 1, ...args} )
 
 const formState = reactive({
   name: undefined,
   parentId: undefined,
   isLeaf: undefined
 })
-const parentList = ref([])
 
 const loading = ref(false)
 const router = useRouter()
@@ -73,24 +81,6 @@ const add = async () => {
     loading.value = false
   }
 }
-
-const getParents = async () => {
-  const res = await getSceneSet({})
-
-  const treeTransfer = (data: any): [] => {
-    const parents = data.filter((item: any) => item.isLeaf === 0)
-    const options = parents.map((item: any) => ({
-      title: item.name,
-      value: item.id,
-      key: item.id,
-      children: treeTransfer(item.children || [])
-    }))
-    return options
-  }
-
-  parentList.value = treeTransfer(res.results || res)
-}
-getParents()
 
 /****** 获取编辑数据 */
 const dataLoading = ref(false)

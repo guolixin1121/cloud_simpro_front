@@ -66,7 +66,7 @@ const props = defineProps({
     default: ()=> false
   }
 } as any)
-const emits = defineEmits(['onSearch'])
+const emits = defineEmits(['search'])
 
 // form state, and get default value from props
 const formState = reactive<Record<string, any>>({})
@@ -127,7 +127,7 @@ const emitSearch = () => {
       delete formValues[prop]
     }
   }
-  emits('onSearch', { ...formValues, start_date, end_date })
+  emits('search', { ...formValues, start_date, end_date })
   // 缓存搜索项
   SStorage.set(routeName, formState)
 }
@@ -176,7 +176,7 @@ const onSelectChange = (key: string, value: string | string[]) => {
     formState[key] = isAllSelected ? [''] : selectedValue.filter(v => v)
   }
 }
-/***** 组件外部按钮重置table *****/
+/***** 组件外部按钮重置table ? *****/
 watch(
   () => props.query,
   newVal => {

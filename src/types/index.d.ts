@@ -34,6 +34,8 @@ interface FieldNames {
   sublabel?: string // 其他额外的lable展示字段
 }
 
+type Query = Record<string, any>
+
 interface RObject {
   id: string,
   [key: string]: any

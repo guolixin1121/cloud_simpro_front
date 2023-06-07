@@ -1,5 +1,5 @@
 <template>
-  <search-form :items="formItems" @on-search="onSearch"></search-form>
+  <search-form :items="formItems" @search="onSearch"></search-form>
   <div class="main" style="height: calc(100% - 100px)">
     <div class="flex justify-between items-center">
       <span class="title">标签管理</span>
@@ -10,7 +10,7 @@
       <tree-table
         :query="query"
         :columns="columns"
-        :api="listApi"
+        :api="currentApi.getList"
         :tree-node="'display_name'"
         >
         <template #default="{ column, row }">
@@ -27,7 +27,6 @@
 /****** api */
 const user = store.user
 const currentApi = api.tags
-const listApi = (args: object) => currentApi.getList({tree: 1, ...args })
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
@@ -42,7 +41,9 @@ const formItems = ref<SearchFormItem[]>([
   },
 ])
 const query = ref<any>({})
-const onSearch = (params: RObject) => query.value = params
+const onSearch = (params: RObject) => {
+  query.value = { ...params, tree: 1}
+}
 
 /****** 表格区域 */
 const router = useRouter()

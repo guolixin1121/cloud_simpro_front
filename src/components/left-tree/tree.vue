@@ -206,3 +206,11 @@ const resetRender = (newVal: string) => {
 
 getData()
 </script>
+
+<style lang="less" scoped>
+.v-spin {
+  width: 100;
+  display: block;
+  margin-top: 10%
+}
+</style>

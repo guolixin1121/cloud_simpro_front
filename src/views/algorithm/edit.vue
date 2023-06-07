@@ -25,9 +25,6 @@
       <a-form-item label="所属用户："
         ><span>{{ formState.create_user }}</span></a-form-item
       >
-      <!-- <a-form-item class="ml-8" :wrapper-col="{ style: { paddingLeft: '80px' } }">
-        <a-button @click="goback" class="mr-2">取消</a-button>
-      </a-form-item> -->
     </a-form>
   </div>
 </template>
@@ -36,7 +33,6 @@
 import { formatDate } from '@/utils/tools'
 
 const id = useRoute().params.id
-const algorithmApi = api.algorithm
 
 const formState = reactive<any>({
   name: undefined,
@@ -52,7 +48,7 @@ const goback = () => router.go(-1)
 
 /****** 获取查看数据 */
 const getLookData = async () => {
-  const res = await algorithmApi.getList({ id })
+  const res = await api.algorithm.getList({ id })
   formState.name = res?.results[0].name
   formState.version = res?.results[0].version
   formState.docker_path = res?.results[0].docker_path

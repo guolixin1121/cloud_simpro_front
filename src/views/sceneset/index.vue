@@ -1,5 +1,5 @@
 <template>
-  <search-form :items="formItems" @on-search="onSearch"></search-form>
+  <search-form :items="formItems" @search="onSearch"></search-form>
 
   <div class="main" style="height: calc(100% - 100px)">
     <div class="flex justify-between items-center">
@@ -10,7 +10,7 @@
       <tree-table
         :query="query"
         :columns="columns"
-        :api="scenesetApi"
+        :api="currentApi.getList"
         >
         <template #default="{ column, row }">
           <template v-if="column.dataIndex == 'isLeaf'">
@@ -26,15 +26,12 @@
 /****** api */
 const user = store.user
 const currentApi = api.scenesets
-const scenesetApi = (args: object) => currentApi.getList({tree: 1, ...args })
-
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景集名称' }
 ])
 const query = ref({})
 const onSearch = (params: RObject) => query.value = params
-// watch(query, () => { query.value = query })
 
 /****** 表格区域 */
 const router = useRouter()

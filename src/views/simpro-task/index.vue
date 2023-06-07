@@ -1,5 +1,5 @@
 <template>
-  <search-form :items="formItems" @on-search="onSearch"></search-form>
+  <search-form :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
     <div class="flex justify-between items-center">
@@ -34,14 +34,13 @@ const user = store.user
 const currentApi = api.task
 
 /****** 搜素区域 */
-type Query = Record<string, any>
-const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入仿真任务名称或主车模型' },
   { label: '任务来源', key: 'source', type: 'select', options: TaskSourceOptions, defaultValue: '' },
   { label: '仿真算法', key: 'algorithm', type: 'select', api: api.algorithm.getList, defaultValue: '' },
   { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
+const query: Query = ref({})
 const onSearch = (data: Query) => (query.value = data)
 
 /****** 表格区域 */

@@ -1,5 +1,5 @@
 <template>
-  <search-form :items="formItems" :loading="loading" @on-search="onSearch"></search-form>
+  <search-form :items="formItems" :loading="loading" @search="onSearch"></search-form>
 </template>
 
 <script setup lang="ts">

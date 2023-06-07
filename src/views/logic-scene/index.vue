@@ -1,5 +1,5 @@
 <template>
-  <search-form :items="formItems" @on-search="onSearch"></search-form>
+  <search-form :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
     <div class="flex justify-between items-center">
@@ -7,7 +7,7 @@
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/logic-scene/edit/0')">上传逻辑场景</a-button>
     </div>
 
-    <Table ref="table" :api="listApi" :query="query" :columns="columns" :scroll="{ x: 1300, y: 'auto' }">
+    <Table ref="tableRef" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1300, y: 'auto' }">
       <template #bodyCell="{ record, column }">
         <template v-if="column.dataIndex == 'last_gen_scene_task'">
           <span>{{ getLogicSceneStatusOption(record.last_gen_scene_task.status) }}</span>
@@ -32,17 +32,13 @@
 </template>
 
 <script setup lang="ts">
-import {getLogicSceneStatusOption} from '@/utils/dict'
+import { getLogicSceneStatusOption } from '@/utils/dict'
 
 /****** api */
 const user = store.user
 const currentApi = api.logicScene
-const listApi = (args: any) => currentApi.getList({ source: 0, ...args})
-const tagsApi = (args: object) => api.tags.getList({ tag_type: 3, ...args })
 
 /****** 搜素区域 */
-type Query = Record<string, any>
-const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入逻辑场景名称' },
   {
@@ -50,17 +46,21 @@ const formItems = ref<SearchFormItem[]>([
     key: 'labels',
     type: 'select',
     mode: 'multiple',
-    api: tagsApi,
+    api: api.tags.getList,
+    query: { tag_type: 3 },
     fieldNames: { label: 'display_name', value: 'name' },
     defaultValue: ['']
   },
   { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
-const onSearch = (data: Query) => (query.value = data)
+type Query = Record<string, any>
+const query: Query = ref({})
+const onSearch = (data: Query) => (query.value = { ...data, source: 0 })
 
 /****** 表格区域 */
 const showRunConfirm = ref(false)
-const runScene = ref<any>()
+const tableRef = ref()
+const runScene = ref<any>() // 要运行的数据
 const router = useRouter()
 const columns = [
   { title: '场景ID', dataIndex: 'id', width: 90 },
@@ -87,8 +87,6 @@ const columns = [
     }
   }
 ]
-
-const table = ref()
 const closeRunConfirm = () => showRunConfirm.value = false
 const runConfirm = async () => {
   await currentApi.run({
@@ -97,9 +95,6 @@ const runConfirm = async () => {
       logic_scene_version_id: runScene.value.logic_scene_version_id
   }]})
   closeRunConfirm()
-  setTimeout(() => {
-    
-    table.value.refresh()
-  }, 500);
+  tableRef.value.refresh()
 }
 </script>

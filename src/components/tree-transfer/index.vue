@@ -45,6 +45,10 @@ const props = defineProps({
   api: {
     type: Function
   },
+  query: {
+    type: Object,
+    default: () => ({})
+  },
   targetKeys: {
     type: Array
   },
@@ -60,11 +64,10 @@ const checkedKeys = ref<TreeDataItem[]>([])
 
 const loading = ref(false)
 const getOptions = async (input = '') => {
-
   try {
     const { value } = props.fieldNames
     loading.value = true
-    const res = await props.api({ [value]: input })
+    const res = await props.api({ [value]: input, ...props.query })
     treeData.value = treeTransfer(res.results || res)
   } finally {
     loading.value = false

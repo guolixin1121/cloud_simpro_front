@@ -20,7 +20,8 @@
             @change="(val: string)=>{formState.adsName = val}"></ch-input>
         </a-form-item>
         <a-form-item label="所属场景集" name="scenesets" :rules="[{ required: true, message: '请选择场景集' }]">
-          <tree-select v-model:value="formState.scenesets" :api="getSceneSet" label-in-value
+          <tree-select v-model:value="formState.scenesets" 
+            :api="baseApi.scenesets.getList" label-in-value
             placeholder="请选择所属场景集"></tree-select>
         </a-form-item>
         <a-form-item v-if="!isAdd" label="关联地图" name="mapVersion">
@@ -30,7 +31,8 @@
           <a-form-item-rest>
             <div class="flex justify-between items-center">
               <div class="flex justify-between w-full">
-                <tree-select v-model:value="formState.mapCatalog" :api="getMapCatalog" 
+                <tree-select v-model:value="formState.mapCatalog" 
+                  :api="baseApi.maps.getMapCatalog" 
                   placeholder="请选择地图目录" @change="onMapCateogryChanged"
                   style="width: 33%;"></tree-select>
                 <scroll-select v-model:value="formState.map"
@@ -54,18 +56,11 @@
         <a-form-item v-if="!isAdd" label="场景文件地址" name="adsUrl">
           <span>{{ formState.adsUrl }}</span>
         </a-form-item>
-        <!-- <a-form-item label="标签">
-          <scroll-transfer
-            v-model:target-keys="formState.labels"
-            :api="getScennTags"
-            :fieldNames="{ label: 'display_name', value: 'name' }"
-            :titles="['可选标签', '选中标签']"
-          ></scroll-transfer>
-        </a-form-item> -->
         <a-form-item label="标签">
           <tree-transfer
             v-model:target-keys="formState.labels"
-            :api="getScennTagsTree"
+            :api="baseApi.tags.getList"
+            :query="{ tag_type: 3, tree: 1 }"
             :fieldNames="{ label: 'display_name', value: 'name' }"
             :titles="['可选标签', '选中标签']"
           ></tree-transfer>
@@ -88,12 +83,8 @@ const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '场景'
 
-const getMapCatalog = () => api.maps.getMapCatalog({ tree: 1 })
-const getMaps = ref()
-const getMapVersions = ref()
-const getSceneSet = (args: object) => api.scenesets.getList({ tree: 1, ...args })
-const getScennTagsTree = (args: object) => api.tags.getList({ tag_type: 3, tree: 1, ...args })
-const currentApi = api.scene
+const baseApi = api
+const currentApi = baseApi.scene
 const sceneCatalog = store.catalog.sceneCatalog as any
 
 const formState = reactive({
@@ -140,11 +131,14 @@ const add = async () => {
     loading.value = false
   }
 }
+
+const getMaps = ref()
 const onMapCateogryChanged = (value: string) => {
   formState.map = undefined
   formState.mapVersion = undefined
   getMaps.value = (args: any) => api.maps.getMaps({catalog: value, ...args})
 }
+const getMapVersions = ref()
 const onMapChanged = (item: any) => {
   formState.mapVersion = undefined
   getMapVersions.value = (args: any) => api.maps.getMapVersion({map: item.value, name: item.label, ...args})

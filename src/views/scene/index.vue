@@ -1,5 +1,5 @@
 <template>
-  <search-form :items="formItems" :manual="true" @on-search="onSearch"></search-form>
+  <search-form :items="formItems" :manual="true" @search="onSearch"></search-form>
 
   <div class="main main-bg">
     <left-tree
@@ -24,15 +24,11 @@ import { SceneSourceOptions, getSceneSourceName } from '@/utils/dict'
 const user = store.user
 const currentApi = api.scene
 const sceneApi = api.scenesets
-const tagsApi = (args: object) => api.tags.getList({ tag_type: 3, ...args })
 
 const route = useRoute()
 const treeSearchName = ref(route.query.name)
 const treeSelectId = ref(route.query.id)
 /****** 搜素区域 */
-type Query = Record<string, any>
-const query: Query = ref({})
-let catalog = store.catalog
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称' },
   { label: '场景来源', key: 'adsSource', type: 'select', options: SceneSourceOptions, placeholder: '请选择场景来源' },
@@ -41,11 +37,14 @@ const formItems = ref<SearchFormItem[]>([
     key: 'labels',
     type: 'select',
     mode: 'multiple',
-    api: tagsApi,
+    api: api.tags.getList,
+    query: { tag_type: 3 },
     placeholder: '请选择标签',
     fieldNames: { label: 'display_name', value: 'name' }
   }
 ])
+let catalog = store.catalog
+const query: Query = ref({})
 const onSearch = (data: Query) => {
   const sceneCatalog = catalog.sceneCatalog as any
   query.value = { ...data, scene_set: sceneCatalog?.id }

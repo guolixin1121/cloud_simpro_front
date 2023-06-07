@@ -11,7 +11,7 @@
         <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></a-input>
       </a-form-item> 
       <a-form-item label="控制在环" name="is_in_ring" :rules="[{ required: true, message: '请选择是否在环' }]">
-        <a-select v-model:value="formState.is_in_ring">
+        <a-select v-model:value="formState.is_in_ring" @change="onRingChanged">
           <a-select-option key="1" value="1">是</a-select-option>
           <a-select-option key="0" value="0">否</a-select-option>
         </a-select>
@@ -20,7 +20,9 @@
         <scroll-select v-model:value="formState.algorithm" :api="getAlgorithm" placeholder="请选择算法"></scroll-select>
       </a-form-item>
       <a-form-item label="车辆动力学" name="dynamic_vehicle" :rules="[{ required: true, message: '请选择主车模型' }]">
-        <scroll-select v-model:value="formState.dynamic_vehicle" :api="getVehicle" placeholder="请选择主车模型"></scroll-select>
+        <scroll-select v-model:value="formState.dynamic_vehicle" 
+          :api="baseApi.vehicle.getList"
+          :query="{is_share: 1}" placeholder="请选择主车模型"></scroll-select>
       </a-form-item>
      <a-form-item label="动力学横向控制方式" name="vehicle_horizontal" :rules="[{ required: true, message: '请选择横向控制方式' }]">
         <a-select v-model:value="formState.vehicle_horizontal" :options="HorizontalOptions" placeholder="请选择横向控制方式"></a-select>
@@ -32,15 +34,16 @@
         <a-input-number v-model:value="formState.batch" min="1" max="9999" placeholder="请输入任务执行次数"></a-input-number>
       </a-form-item>
       <a-form-item label="传感器" name="kpi" :rules="[{ required: true, message: '请选择传感器'}]">
-        <scroll-transfer v-model:target-keys="formState.sensors" :api="optionsApi.sensor.getList"
+        <scroll-transfer v-model:target-keys="formState.sensors" :api="baseApi.sensor.getList"
           :titles="['可选传感器', '选中传感器']"></scroll-transfer>
       </a-form-item>
       <a-form-item label="评测指标" name="kpi" :rules="[{ required: true, message: '请选择评测指标'}]">
-        <scroll-transfer v-model:target-keys="formState.kpi" :api="optionsApi.kpi.getList"
+        <scroll-transfer v-model:target-keys="formState.kpi" :api="baseApi.kpi.getList"
           :titles="['可选评测指标', '选中评测指标']"></scroll-transfer>
       </a-form-item>
       <a-form-item v-if="isAdd" label="所属场景集" name="scenesets" :rules="[{ required: isAdd, message: '请先选择场景集，再选择场景' }]">
-          <tree-select v-model:value="formState.scenesets" :api="getSceneSet"
+          <tree-select v-model:value="formState.scenesets" 
+            :api="baseApi.scenesets.getList"
             placeholder="请选择所属场景集"
             @change="onScenesetChanged"></tree-select>
         </a-form-item>
@@ -72,12 +75,8 @@ const id = useRoute().params.id
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '仿真任务'
-const optionsApi = api
+const baseApi = api
 const currentApi = api.task
-const getScenes = ref()
-const getSceneSet = (args: object) => api.scenesets.getList({ tree: 1, ...args })
-const getVehicle = (arg: any) => api.vehicle.getList({ is_share: 1, ...arg })
-const getAlgorithm = ref((args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args}))
 
 const formState = reactive({
   name: undefined,
@@ -126,21 +125,15 @@ const add = async () => {
   }
 }
 
+const getScenes = ref()
 const onScenesetChanged = () => {
   getScenes.value = (args: any)  => api.scene.getList({scene_set: formState.scenesets, ...args})
 }
 
-watch(
-  () => formState.is_in_ring,
-  () => {
-    formState.algorithm = undefined
-    getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
-  }
-)
-
-// const onRingChanged = () => {
-//   getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
-// }
+const getAlgorithm = ref((args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args}))
+const onRingChanged = () => {
+  getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
+}
 
 /****** 获取编辑数据 */
 const getEditData = async () => {

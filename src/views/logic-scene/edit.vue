@@ -22,9 +22,12 @@
         </a-form-item>
         <a-form-item label="关联地图" v-if="isAdd" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
           <div class="flex justify-between">
-            <tree-select v-model:value="formState.mapCatalog" :api="getMapCatalog" 
-              placeholder="请选择地图目录" @change="onMapCateogryChanged"
-              style="width: 33%;"></tree-select>
+            <tree-select 
+              style="width: 33%;"
+              v-model:value="formState.mapCatalog" 
+              :api="baseApi.maps.getMapCatalog" 
+              placeholder="请选择地图目录" 
+              @change="onMapCateogryChanged"></tree-select>
             <scroll-select v-model:value="formState.map"
               placeholder="请选择地图"
               label-in-value
@@ -53,7 +56,8 @@
          <a-form-item label="标签">
           <tree-transfer
             v-model:target-keys="formState.labels"
-            :api="getScennTags"
+            :api="baseApi.tags.getList"
+            :query="{tag_type: 3, tree: 1}"
             :fieldNames="{ label: 'display_name', value: 'name' }"
             :titles="['可选标签', '选中标签']"
           ></tree-transfer>
@@ -75,10 +79,7 @@ const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '逻辑场景'
 
-const getMapCatalog = () => api.maps.getMapCatalog({ tree: 1 })
-const getMaps = ref()
-const getMapVersions = ref()
-const getScennTags = (args: object) => api.tags.getList({ tag_type: 3, tree: 1, ...args })
+const baseApi = api
 const currentApi = api.logicScene
 
 const formState = reactive({
@@ -96,7 +97,7 @@ const formState = reactive({
 })
 const loading = ref(false)
 const router = useRouter()
-const goback = () => router.go(-1)
+const goback = () => router.push('/logic-scene')
 const add = async () => {
   loading.value = true
   
@@ -124,11 +125,14 @@ const add = async () => {
     loading.value = false
   }
 }
+
+const getMaps = ref()
 const onMapCateogryChanged = (value: string) => {
   formState.map = undefined
   formState.mapVersion = undefined
   getMaps.value = (args: any) => api.maps.getMaps({catalog: value, ...args})
 }
+const getMapVersions = ref()
 const onMapChanged = (item: any) => {
   formState.mapVersion = undefined
   getMapVersions.value = (args: any) => api.maps.getMapVersion({map: item.value, name: item.label, ...args})

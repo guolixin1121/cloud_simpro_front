@@ -132,7 +132,6 @@ onMounted(() => {
 const refresh = (option: any) => {
   // 判断是否还剩一条，剩一条删除成功后请求上一页
   const slient = option?.slient
-  console.log(slient)
   if (dataSource?.value?.length === 1) {
     run({ ...props.query, page: current.value > 1 ? current.value - 1 : current.value, size }, slient)
     return

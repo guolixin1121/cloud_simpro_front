@@ -1,5 +1,5 @@
 <template>
-  <search-form :items="formItems" :manual="true" @on-search="onSearch"></search-form>
+  <search-form :items="formItems" :manual="true" @search="onSearch"></search-form>
   <div class="main main-bg">
     <left-tree :title="'地图集'" :api="() => mapsApi.getMapCatalog({ tree: 1 })" :showCheckbox="false" @select="onSelect" />
     <div class="right-table">
@@ -31,17 +31,18 @@
 /****** api */
 const user = store.user
 const mapsApi = api.maps
-let catelog = store.catalog
 /****** 搜素区域 */
-type Query = Record<string, any>
-const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入地图名称或ID' }
 ])
+
+let catelog = store.catalog
+const query: Query = ref({})
 const onSearch = (data: Query) => {
   const mapCatalog = catelog.mapCatalog as any
   query.value = { ...data, catalog: mapCatalog?.id }
 }
+
 /****** 表格区域 */
 const router = useRouter()
 const preRoute = router.currentRoute.value.path

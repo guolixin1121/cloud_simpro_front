@@ -1,5 +1,5 @@
 <template>
-  <search-form :items="formItems" @on-search="onSearch"></search-form>
+  <search-form :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
     <div class="flex justify-between items-center">
@@ -17,8 +17,6 @@ const user = store.user
 const currentApi = api.kpi
 
 /****** 搜素区域 */
-type Query = Record<string, any>
-const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入评测指标名称' },
   {
@@ -32,6 +30,7 @@ const formItems = ref<SearchFormItem[]>([
   },
   { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
+const query = ref<Query>({})
 const onSearch = (data: Query) => (query.value = data)
 
 /****** 表格区域 */
@@ -51,11 +50,11 @@ const columns = [
     actions: {
       查看: (data: RObject) => router.push('/kpi/view/' + data.id),
       编辑: {
-        validator: (data: RObject) => data.custom != 0, // 内置指标不可编辑
+        validator: (data: RObject) => data.custom != 0,  // 内置指标不可编辑
         handler: (data: RObject) => router.push('/kpi/edit/' + data.id)
       },
       删除: {
-        validator: (data: RObject) => data.custom !== 0, // 内置指标不可删除
+        validator: (data: RObject) => data.custom !== 0,  // 内置指标不可删除
         handler: async ({ id }: RObject) => await currentApi.delete(id)
       }
     }

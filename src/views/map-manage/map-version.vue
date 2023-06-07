@@ -24,7 +24,7 @@ const type: any = { 0: '内置', 1: '真实', 2: '虚拟' }
 /****** api */
 const mapsApi = api.maps
 /****** 搜素区域 */
-type Query = Record<string, any>
+
 const query: Query = ref({ map: id, name })
 /****** 表格区域 */
 const router = useRouter()

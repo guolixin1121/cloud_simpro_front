@@ -15,8 +15,13 @@ const props = defineProps({
   api: {
     type: Function
   },
+  // api结果的过滤器
   apiFilter: {
     type: Function
+  },
+  query: {
+    type: Object,
+    default: () => ({})
   },
   fieldNames: {
     type: Object as PropType<FieldName>,
@@ -53,7 +58,7 @@ const getOptions = async () => {
   if (props.api) {
     try {
       loading.value = true
-      const res = await props.api()
+      const res = await props.api(props.query)
       const data = treeTransfer(res.results || res)
       treeData.value.push(...data)
     } finally {

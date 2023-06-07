@@ -21,6 +21,10 @@ const props = defineProps({
   api: {
     type: Function
   },
+  query: {
+    type: Object,
+    default: () => ({})
+  },
   fieldNames: {
     type: Object as PropType<FieldNames>,
     default: () => ({ label: 'name', value: 'id', apiField: '', sublabel: '' })
@@ -84,7 +88,10 @@ const getOptions = async (query: string = '') => {
   if (props.api) {
     try {
       loading.value = true
-      const res = await props.api({ page: currentPage.value, size: 10, [props.fieldNames.label]: query })
+      const res = await props.api({ 
+        ...props.query, 
+        page: currentPage.value, size: 10, 
+        [props.fieldNames.label]: query })
       options.value.push(...transformOption(res))
       isAllLoaded.value = options.value.length >= (res.count || res.length)
     } finally {

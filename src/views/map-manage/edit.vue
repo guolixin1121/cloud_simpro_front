@@ -58,14 +58,6 @@
       <a-form-item v-if="!isAdd" label="地图版本：" name="name">
         <span>{{ formState.latestVersion }}</span>
       </a-form-item>
-      <!-- <a-form-item label="标签">
-          <tree-transfer
-            v-model:target-keys="formState.labels"
-            :api="getTagsTree"
-            :fieldNames="{ label: 'display_name', value: 'name' }"
-            :titles="['可选标签', '选中标签']"
-          ></tree-transfer>
-        </a-form-item> -->
       <a-form-item label="描述" name="name">
         <a-textarea
           v-if="!isView"
@@ -110,7 +102,6 @@ const isView = type === '0' ? true : false // 查看
 const isAdd = id === '0'
 const title = isView ? '查看地图' : isAdd ? '上传地图' : '修改地图'
 const mapApi = api.maps
-// const getTagsTree = (args: object) => api.tags.getList({ tag_type: 4, tree: 1, ...args })
 
 const formState = reactive<any>({
   name: undefined,

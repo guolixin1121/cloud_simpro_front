@@ -1,5 +1,5 @@
 <template>
-  <search-form :items="formItems" @on-search="onSearch"></search-form>
+  <search-form :items="formItems" @search="onSearch"></search-form>
 
   <div class="main" style="height: calc(100% - 100px)">
     <div class="flex justify-between items-center">
@@ -11,7 +11,7 @@
       <tree-table
         :query="query"
         :columns="columns"
-        :api="listApi"
+        :api="currentApi.getList"
         >
         <template #default="{ column, row }">
           <template v-if="column.dataIndex == 'isLeaf'">
@@ -27,8 +27,6 @@
 /****** api */
 const user = store.user
 const currentApi = api.mapsets
-const listApi = (args: object) => currentApi.getList({tree: 1, ...args })
-const tagsApi = (args: object) => api.tags.getList({ tag_type: 2, ...args })
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
@@ -38,13 +36,14 @@ const formItems = ref<SearchFormItem[]>([
     key: 'labels',
     type: 'select',
     mode: 'multiple',
-    api: tagsApi,
+    api: api.tags.getList,
+    query: { tag_type: 2 },
     fieldNames: { label: 'display_name', value: 'name' },
     defaultValue: ['']
   }
 ])
 const query = ref({})
-const onSearch = (params: RObject) => query.value = params
+const onSearch = (params: Query) => query.value = params
 
 /****** 表格区域 */
 const router = useRouter()

@@ -1,5 +1,5 @@
 <template>
-  <search-form :items="formItems" @on-search="onSearch"></search-form>
+  <search-form :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
     <div class="flex justify-between items-center">
@@ -36,8 +36,6 @@
 import { SotifStatusOptions, getSotifStatus } from '@/utils/dict'
 const currentApi: any = api.sotif
 /****** 搜素区域 */
-type Query = Record<string, any>
-const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
   { label: '项目名称', key: 'projectName', type: 'input', maxlength: '100', placeholder: '请输入项目名称' },
   { label: '负责人', key: 'managerId', type: 'select', api: currentApi.getManagers , 
@@ -52,6 +50,7 @@ const formItems = ref<SearchFormItem[]>([
   },
   { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
+const query: Query = ref({})
 const onSearch = (data: Query) => {
   query.value = { ...data, startTime: data.start_date, endTime: data.end_date }
 }
