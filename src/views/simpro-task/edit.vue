@@ -9,9 +9,15 @@
       @finish="add">
       <a-form-item label="任务名称" name="name" :rules="[{ required: true, message: '请输入任务名称'}, { min: 2, max: 50, message: '场景名称长度为2到50位'}]">
         <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></a-input>
+      </a-form-item> 
+      <a-form-item label="控制在环" name="is_in_ring" :rules="[{ required: true, message: '请选择是否在环' }]">
+        <a-select v-model:value="formState.is_in_ring">
+          <a-select-option key="1" value="1">是</a-select-option>
+          <a-select-option key="0" value="0">否</a-select-option>
+        </a-select>
       </a-form-item>
      <a-form-item label="算法" name="algorithm" :rules="[{ required: true, message: '请选择算法' }]">
-        <scroll-select v-model:value="formState.algorithm" :api="optionsApi.algorithm.getList" placeholder="请选择算法"></scroll-select>
+        <scroll-select v-model:value="formState.algorithm" :api="getAlgorithm" placeholder="请选择算法"></scroll-select>
       </a-form-item>
       <a-form-item label="车辆动力学" name="dynamic_vehicle" :rules="[{ required: true, message: '请选择主车模型' }]">
         <scroll-select v-model:value="formState.dynamic_vehicle" :api="getVehicle" placeholder="请选择主车模型"></scroll-select>
@@ -71,6 +77,7 @@ const currentApi = api.task
 const getScenes = ref()
 const getSceneSet = (args: object) => api.scenesets.getList({ tree: 1, ...args })
 const getVehicle = (arg: any) => api.vehicle.getList({ is_share: 1, ...arg })
+const getAlgorithm = ref((args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args}))
 
 const formState = reactive({
   name: undefined,
@@ -79,6 +86,7 @@ const formState = reactive({
   vehicle_horizontal: 1,
   vehicle_vertical: 1,
   sensors: [],
+  is_in_ring: '0',
   algorithm: undefined,
   scenesets: undefined,
   scenes: [],
@@ -103,6 +111,7 @@ const add = async () => {
     sensors: formState.sensors.map((item:any) =>item.value),
     scenes: formState.scenes.map((item:any) =>item.value || item.baidu_id),
     kpi: formState.kpi.map((item:any) =>item.value),
+    is_in_ring: formState.is_in_ring
   }
 
   try {
@@ -120,6 +129,18 @@ const add = async () => {
 const onScenesetChanged = () => {
   getScenes.value = (args: any)  => api.scene.getList({scene_set: formState.scenesets, ...args})
 }
+
+watch(
+  () => formState.is_in_ring,
+  () => {
+    formState.algorithm = undefined
+    getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
+  }
+)
+
+// const onRingChanged = () => {
+//   getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
+// }
 
 /****** 获取编辑数据 */
 const getEditData = async () => {

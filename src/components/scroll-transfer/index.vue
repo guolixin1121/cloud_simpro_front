@@ -92,18 +92,21 @@ let isAllLoaded = ref(false)
 let loading = ref(false)
 const getOptions = async () => {
   if (props.api) {
-    loading.value = true
-    const { label, value, apiField } = props.fieldNames
-    const res = await props.api({ page, size: 10, [label]: leftSearchText })
-    const results = res.results ||  res[apiField] || res
-    const newOptions = results.map((item: any) => ({
-      label: item[label],
-      value: item[value]
-    }))
+    try {
+      loading.value = true
+      const { label, value, apiField } = props.fieldNames
+      const res = await props.api({ page, size: 10, [label]: leftSearchText })
+      const results = res.results ||  res[apiField] || res
+      const newOptions = results.map((item: any) => ({
+        label: item[label],
+        value: item[value]
+      }))
 
-    loading.value = false
-    allDataSource.value.push(...newOptions)
-    isAllLoaded.value = allDataSource.value.length >= (res.count || res.length)
+      allDataSource.value.push(...newOptions)
+      isAllLoaded.value = allDataSource.value.length >= (res.count || res.length)
+    } finally {
+      loading.value = false
+    }
   }
 }
 

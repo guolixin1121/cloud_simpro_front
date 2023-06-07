@@ -50,14 +50,6 @@
         <a-form-item v-if="!isAdd" label="配置文件地址" name="adsUrl">
           <span>{{ formState.config_url }}</span>
         </a-form-item>
-        <!-- <a-form-item label="标签">
-          <scroll-transfer
-            v-model:target-keys="formState.labels"
-            :api="getScennTags"
-            :fieldNames="{ label: 'display_name', value: 'name' }"
-            :titles="['可选标签', '选中标签']"
-          ></scroll-transfer>
-        </a-form-item> -->
          <a-form-item label="标签">
           <tree-transfer
             v-model:target-keys="formState.labels"

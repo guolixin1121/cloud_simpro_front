@@ -3,23 +3,19 @@
     <a-spin v-if="loading" class="v-spin"/>
     <VirTree
       ref="virTree"
-      :show-checkbox="showCheckbox"
       :source="list"
-      :default-checked-keys="defaultCheckedKeys"
       :default-expanded-keys="defaultExpandKeys"
       :render-node="renderNode"
       @expandChange="toggleExpand"
-      @checkChange="checkChange"
       @selectChange="selectChange"
     />
   </div>
 </template>
 <script setup lang="tsx">
-// const sceneApi = api.scenesets
 import { TreeNodeOptions, VirTree, NodeKey } from '@ysx-libs/vue-virtual-tree'
 import '../../../node_modules/@ysx-libs/vue-virtual-tree/dist/style.css'
-import { SStorage } from '@/utils/storage';
 import { useSessionStorage } from '@vueuse/core';
+
 const props = defineProps({
   searchValue: {
     type: String,
@@ -32,10 +28,6 @@ const props = defineProps({
   api: {
     type: Function
   },
-  showCheckbox: {
-    type: Boolean,
-    default: false
-  },
   onSelect: {
     type: Function
   }
@@ -44,32 +36,24 @@ const props = defineProps({
 const route = useRoute()
 const routeName = route.path.replaceAll('/', '')
 
-const list = useSessionStorage<any>( routeName + '-tree-catalog', [])
-const { showCheckbox } = toRefs(props)
+const list = useSessionStorage<any>( routeName + ': tree-catalog', [])
+const defaultSelectedKey = useSessionStorage<NodeKey>(routeName + ': left-tree-selected', '')
+const defaultExpandKeys = useSessionStorage<NodeKey[]>(routeName + ': left-tree-expand', [])
+
 const searchKey = ref('')
 const gData = ref([])
-const defaultCheckedKeys = ref<string[]>([])
-const defaultExpandKeys = ref<NodeKey[]>([])
 const loading = ref<boolean>(false)
 const virTree = ref<any>()
-let curData: any = {}
-let curCheckData: any = ''
-let selectedId = ''
 
 const setDefaultValue = () => {
-  defaultExpandKeys.value = SStorage.get(routeName + '-tree-catalog-expand') || []
-
-  const defaultSelected = SStorage.get(routeName + '-tree-catalog-selected')
-  if(defaultSelected) {
+  if(defaultSelectedKey.value) {
     const obj: any = {
       node: {
-        key: defaultSelected.id
+        key: defaultSelectedKey.value
       }
     }
     selectChange(obj)
   }
-
-  // resetRender(defaultSelected.name)
 }
 
 const getData = async () => {
@@ -78,7 +62,6 @@ const getData = async () => {
       loading.value = true
       const res = await props.api()
       gData.value = JSON.parse(JSON.stringify(res.results))
-      loading.value = false
       if (props.searchValue) {
         // 初始化状态 search  有数据
         resetRender(props.searchValue)
@@ -86,13 +69,13 @@ const getData = async () => {
         obj.node = {}
         obj.node.key = props.treeSelectId
         selectChange(obj)
-        selectedId = props.treeSelectId
+        defaultSelectedKey.value = props.treeSelectId
       } else {
         // 初始化状态 search  为空
         const data = recursion(res.results)
         list.value = data
       }
-    } catch {
+    } finally {
       loading.value = false
     }
   }
@@ -102,7 +85,7 @@ const recursion = (val: any[]) => {
   const nodes = [] as any[]
   val.forEach((item: any) => {
     let children = recursion(item.children || [])
-    if(item.isLeaf == 1 || children?.length) {
+    // if(item.isLeaf == 1 || children?.length) {
       nodes.push({
         ...item,
         nodeKey: item.id,
@@ -110,51 +93,34 @@ const recursion = (val: any[]) => {
         name: item.name + (item.count ? `（${item.count}）` : ''),
         children
       })
-    }
+    // }
   })
   return nodes
 }
 
 const renderNode = (node: any) => {
-  // console.log(node)
   const wrapValue = node.name.replace(searchKey.value, `<span class="node-highlight">${searchKey.value}</span>`)
   return (
     <div
-      class={`node-title ${+selectedId === +node.key ? 'selected' : ''}`}
+      class={`node-title ${+ defaultSelectedKey.value == +node.key ? 'selected' : ''}`}
       innerHTML={wrapValue}
       onClick={e => onclick(e, node)}
     ></div>
   )
 }
-const onclick = (e: any, node: any, data = list.value) => {
-  let cur: any = {}
-  // 单选
-  if (!showCheckbox.value) {
-    // 根据key 查出点击的数据
-    for (let i = 0; i < data.length; i++) {
-      if (node?.key === data[i].nodeKey) {
-        cur = data[i]
-        break
-      } else {
-        if (data[i].children && data[i].children.length > 0) {
-          onclick(e, node, data[i].children)
-        }
-      }
-    }
-    if (!cur.isLeaf) {
-      return
-    }
-    const d = document.getElementsByClassName('node-title selected')
-    if (d && d[0]) {
-      d[0].className = 'node-title'
-    }
-    selectedId = node?.key
-    if (e.target.className === 'node-highlight') {
-      e.target.parentNode.className = 'node-title selected'
-    } else {
-      e.target.className = 'node-title selected'
-    }
+
+// set selected node style
+const onclick = ({ target }: any, node: any, data = list.value) => {
+  const selectedData = getSelectedData(node.key, data)
+  if(!selectedData.isLeaf) return
+
+  const d = document.getElementsByClassName('node-title selected')
+  if (d && d[0]) {
+    d[0].className = 'node-title'
   }
+
+  const targetNode = target.className === 'node-highlight' ? target.parentNode : target
+  targetNode.className = 'node-title selected'
 }
 function searchData(origin: TreeNodeOptions[], keyword: string) {
   const loop = (data: TreeNodeOptions[]) => {
@@ -185,52 +151,47 @@ function searchData(origin: TreeNodeOptions[], keyword: string) {
   return loop(origin)
 }
 
-const toggleExpand = (EventParams: any) => {
-  const index = defaultExpandKeys.value.findIndex(item => item === EventParams.node.key)
-  if (index >= 0) {
-    const index = defaultExpandKeys.value.findIndex(item => item === EventParams.node.key)
-    defaultExpandKeys.value.splice(index, 1)
-    defaultExpandKeys.value = [...defaultExpandKeys.value]
+const toggleExpand = ({ node }: any) => {
+  const expandedValues = defaultExpandKeys.value
+  const isExpanded = expandedValues.find(item => item === node.key)
+  if(isExpanded) {
+    defaultExpandKeys.value = expandedValues.filter(item => item != node.key)
   } else {
-    defaultExpandKeys.value.push(EventParams.node.key)
-    defaultExpandKeys.value = [...new Set(defaultExpandKeys.value)]
+    defaultExpandKeys.value.push(node.key)
   }
-  SStorage.set(routeName + '-tree-catalog-expand', defaultExpandKeys.value)
 }
-// 多选
-const checkChange = () => {
-  if (!showCheckbox.value) return
-  curCheckData = ''
-  // console.log(val)
-  const getCheckedNodes = virTree.value.getCheckedNodes()
-  const getKeys = (data: string | any[]) => {
-    for (let i = 0; i < data.length; i++) {
-      curCheckData += data[i].key + ','
-    }
-  }
-  getKeys(getCheckedNodes)
-  if (props.onSelect) props.onSelect(curCheckData)
-}
+
 // 单选
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const selectChange = (val: any, data = list.value) => {
-  curData = {}
-  if (showCheckbox.value) return
   if (!val || !val.node) return
+
+  const selectedData = getSelectedData(val.node.key, data)  
+  if (selectedData.isLeaf) {
+    defaultSelectedKey.value = +selectedData.id
+    if (props.onSelect) props.onSelect(selectedData)
+  }
+}
+
+// 从树节点值获取源数据
+const getSelectedData = (key: string, data = list.value): any => {
+  let result = null
   for (let i = 0; i < data.length; i++) {
-    if (+val?.node?.key === +data[i].nodeKey) {
-      curData = data[i]
+    if (key == data[i].id) {
+      result = data[i]
       break
     } else {
       if (data[i].children && data[i].children.length > 0) {
-        selectChange(val, data[i].children)
+        result = getSelectedData(key, data[i].children)
+        if(result) {
+          break
+        }
       }
     }
   }
-  if (curData.isLeaf) {
-    SStorage.set(routeName + '-tree-catalog-selected', curData)
-    if (props.onSelect) props.onSelect(curData)
-  }
+  return result
 }
+
 watch(
   () => props.searchValue,
   newVal => resetRender(newVal)
@@ -245,37 +206,3 @@ const resetRender = (newVal: string) => {
 
 getData()
 </script>
-
-<style scoped lang="less">
-.v-tree-containter {
-  height: 100%;
-  position: relative;
-  .v-spin {
-    position: absolute;
-    left: 50%;
-    top: 50px;
-  }
-}
-/deep/.node-highlight {
-  color: #1890ff;
-}
-/deep/.vir-checkbox .inner {
-  margin-bottom: 2px;
-}
-.vir-tree {
-  width: auto;
-  min-width: 100%;
-}
-/deep/.vir-tree-node {
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-/deep/.vir-checkbox .content {
-  width: 0;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-// /deep/.vir-tree-node .node-content .node-title.selected {
-//   background-color: #1890ff;
-// }
-</style>

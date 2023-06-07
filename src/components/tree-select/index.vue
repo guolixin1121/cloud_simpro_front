@@ -5,7 +5,7 @@
     showSearch
     treeNodeFilterProp="title"
     :treeData="treeData"
-    :not-found-content="api? '数据加载中...' : ''"
+    :not-found-content=" loading ? '数据加载中...' : '暂无数据'"
     @select="onSelect"
   >
   </a-tree-select>
@@ -48,11 +48,17 @@ const initOptions = () => {
   hasAllOption && treeData.value.push(allOption)
 }
 
+const loading = ref(false)
 const getOptions = async () => {
   if (props.api) {
-    const res = await props.api()
-    const data = treeTransfer(res.results || res)
-    treeData.value.push(...data)
+    try {
+      loading.value = true
+      const res = await props.api()
+      const data = treeTransfer(res.results || res)
+      treeData.value.push(...data)
+    } finally {
+      loading.value = false
+    }
   }
 }
 

@@ -3,7 +3,7 @@
     :options="options"
     placeholder="请选择"
     showSearch
-    :not-found-content="api? '数据加载中...' :''"
+    :not-found-content="loading ? '数据加载中...' :'暂无数据'"
     :filter-option="filterOption"
     @search="onSearch"
     @focus="onFocus"
@@ -79,11 +79,17 @@ const onFocus = () => {
 // 值从父组件传过来时触发getDefaultOptions，内部的更改则不触发
 const onChange = () => hasDefaultValue.value = false
 
+const loading = ref(false)
 const getOptions = async (query: string = '') => {
   if (props.api) {
-    const res = await props.api({ page: currentPage.value, size: 10, [props.fieldNames.label]: query })
-    options.value.push(...transformOption(res))
-    isAllLoaded.value = options.value.length >= (res.count || res.length)
+    try {
+      loading.value = true
+      const res = await props.api({ page: currentPage.value, size: 10, [props.fieldNames.label]: query })
+      options.value.push(...transformOption(res))
+      isAllLoaded.value = options.value.length >= (res.count || res.length)
+    } finally {
+      loading.value = false
+    }
   }
 }
 

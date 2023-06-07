@@ -10,13 +10,14 @@
       @search="onSearch"
     />
     <div class="tree-container">
-      <tree :searchValue="val" :api="api" :showCheckbox="showCheckbox" :onSelect="onSelect" :treeSelectId="treeSelectId" />
+      <Tree :searchValue="val" :api="api" :treeSelectId="treeSelectId" :onSelect="onSelect" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useSessionStorage } from '@vueuse/core';
+import Tree from './tree.vue'
 
 const routeName = useRoute().path.replaceAll('/', '')
 const searchValue = useSessionStorage(routeName + '-tree-catalog-search', '')
@@ -30,14 +31,8 @@ const props = defineProps({
     type: String,
     default: '请输入名称搜索'
   },
-  select: {
-    type: Function
-  },
   api: {
     type: Function
-  },
-  showCheckbox: {
-    type: Boolean
   },
   onSelect: {
     type: Function

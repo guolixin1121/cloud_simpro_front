@@ -60,12 +60,15 @@ const checkedKeys = ref<TreeDataItem[]>([])
 
 const loading = ref(false)
 const getOptions = async (input = '') => {
-  loading.value = true
 
-  const { value } = props.fieldNames
-  const res = await props.api({ [value]: input })
-  loading.value = false
-  treeData.value = treeTransfer(res.results || res)
+  try {
+    const { value } = props.fieldNames
+    loading.value = true
+    const res = await props.api({ [value]: input })
+    treeData.value = treeTransfer(res.results || res)
+  } finally {
+    loading.value = false
+  }
 }
 
 const treeTransfer = (data: any): TreeDataItem[] => {
