@@ -121,8 +121,14 @@ class AxiosRequest {
           }
         })
         .catch(error => {
-          message.error(error.message || '请求错误，请稍后重试')
-          reject(error)
+          if (error.status === 401) {
+            // token过期跳到登录页
+            message.error('登录失效，请重新登录')
+            store.user.logout()
+          } else {
+            message.error(error.message || '请求错误，请稍后重试')
+            reject(error)
+          }
         })
     })
   }
