@@ -1,7 +1,6 @@
 <template>
   <a-tree-select
     placeholder="请选择"
-    treeDefaultExpandAll
     showSearch
     treeNodeFilterProp="title"
     :treeData="treeData"

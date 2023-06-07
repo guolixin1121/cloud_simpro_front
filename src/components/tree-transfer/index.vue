@@ -9,8 +9,9 @@
         @search="onSearch"
         @pressEnter="onSearch"
       ></a-input-search>
-      <div style="height: calc(100% - 40px); overflow: auto">
-        <a-tree checkable v-if="!loading" defaultExpandAll 
+      <div style="height: calc(100% - 40px); overflow: auto"
+        @scroll="onScroll">
+        <a-tree checkable
           :tree-data="treeData" 
           v-model:checkedKeys="checkedKeys" 
           @check="onChecked"></a-tree>
@@ -63,12 +64,16 @@ const selectedNodes = ref<TreeDataItem[]>([])
 const checkedKeys = ref<TreeDataItem[]>([])
 
 const loading = ref(false)
+let isAllLoaded = false
+let page = 1
 const getOptions = async (input = '') => {
   try {
     const { value } = props.fieldNames
     loading.value = true
-    const res = await props.api({ [value]: input, ...props.query })
-    treeData.value = treeTransfer(res.results || res)
+    const res = await props.api({ [value]: input, ...props.query, page, size: 20 })
+    const data = treeTransfer(res.results || res)
+    treeData.value.push(...data)
+    isAllLoaded = treeData.value.length >= res.count || res.length
   } finally {
     loading.value = false
   }
@@ -120,6 +125,16 @@ watchOnce(
       checkedKeys.value = selectedNodes.value?.map((data: any) => data.key)
     }
   })
+
+const onScroll = (e: any) => {
+  if (props.api && !isAllLoaded) {
+    const { target } = e
+    if (target.scrollTop + target.offsetHeight >= target.scrollHeight && !loading.value) {
+      page = page + 1
+      getOptions()
+    }
+  }
+}
 
 getOptions()
 </script>

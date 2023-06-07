@@ -156,7 +156,7 @@ watchEffect(() => {
 const onScroll = (e: any) => {
   if (props.api && !isAllLoaded.value) {
     const { target } = e
-    if (target.scrollTop + target.offsetHeight >= target.scrollHeight) {
+    if (target.scrollTop + target.offsetHeight >= target.scrollHeight && !loading.value) {
       page = page + 1
       getOptions()
     }

@@ -54,7 +54,7 @@ const filterOption = (input: string, option: any) => {
 const onScroll = (e: any) => {
   if (props.api && !isAllLoaded.value) {
     const { target } = e
-    if (target.scrollTop + target.offsetHeight === target.scrollHeight) {
+    if (target.scrollTop + target.offsetHeight === target.scrollHeight && !loading.value) {
       currentPage.value = currentPage.value + 1
       getOptions()
     }

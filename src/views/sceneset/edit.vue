@@ -22,6 +22,7 @@
           <tree-select
             placeholder="请选择所属场景目录"
             allowClear
+            label-in-value
             v-model:value="formState.parent"
             :api="baseApi.scenesets.getList"
             :api-filter="(item: any) => !item.isLeaf"
@@ -79,6 +80,7 @@ const goback = () => router.push('/sceneset/')
 const add = async () => {
   loading.value = true
 
+  debugger
   const params = {
     name: formState.name,
     parentId: formState.parent?.value,

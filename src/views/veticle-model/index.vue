@@ -113,7 +113,7 @@ const onSearch = (data: Query) => {
 }
 /****** 表格区域 */
 const columns = [
-  { title: '模型ID', dataIndex: 'id', width: 90 },
+  { title: '模型ID', dataIndex: 'vehicle_no', width: 200 },
   { title: '模型名称', dataIndex: 'name', width: 150, ellipsis: true },
   { title: '用户名', dataIndex: 'username', width: 130 },
   { title: '类型', dataIndex: 'type', width: 80, ellipsis: true },
