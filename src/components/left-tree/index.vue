@@ -5,7 +5,6 @@
       allowClear
       :value="searchValue"
       style="margin-bottom: 8px"
-      :placeholder="placeholder"
       @change="onChange"
       @search="onSearch"
     />
@@ -20,16 +19,12 @@ import { useSessionStorage } from '@vueuse/core';
 import Tree from './tree.vue'
 
 const routeName = useRoute().path.replaceAll('/', '')
-const searchValue = useSessionStorage(routeName + '-tree-catalog-search', '')
+const searchValue = useSessionStorage(routeName + ': tree-search', '')
 const val = ref('')
 const props = defineProps({
   title: {
     type: String,
     default: ''
-  },
-  placeholder: {
-    type: String,
-    default: '请输入名称搜索'
   },
   api: {
     type: Function
@@ -48,7 +43,7 @@ const props = defineProps({
 })
 
 const emits = defineEmits(['update:treeSearchName'])
-const { title, placeholder, treeSearchName } = toRefs(props)
+const { title, treeSearchName } = toRefs(props)
 searchValue.value = treeSearchName.value
 val.value = treeSearchName.value
 const onChange = (e: { target: { value: string } }) => {

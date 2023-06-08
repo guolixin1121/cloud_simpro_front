@@ -36,9 +36,9 @@ const props = defineProps({
 const route = useRoute()
 const routeName = route.path.replaceAll('/', '')
 
-const list = useSessionStorage<any>( routeName + ': tree-catalog', [])
-const defaultSelectedKey = useSessionStorage<NodeKey>(routeName + ': left-tree-selected', '')
-const defaultExpandKeys = useSessionStorage<NodeKey[]>(routeName + ': left-tree-expand', [])
+const list = useSessionStorage<any>( routeName + ': tree', [])
+const defaultSelectedKey = useSessionStorage<NodeKey>(routeName + ': tree-select', '')
+const defaultExpandKeys = useSessionStorage<NodeKey[]>(routeName + ': tree-expand', [])
 
 const searchKey = ref('')
 const gData = ref([])
@@ -85,7 +85,7 @@ const recursion = (val: any[]) => {
   const nodes = [] as any[]
   val.forEach((item: any) => {
     let children = recursion(item.children || [])
-    // if(item.isLeaf == 1 || children?.length) {
+    if(item.isLeaf == 1 || children?.length) {
       nodes.push({
         ...item,
         nodeKey: item.id,
@@ -93,7 +93,7 @@ const recursion = (val: any[]) => {
         name: item.name + (item.count ? `（${item.count}）` : ''),
         children
       })
-    // }
+    }
   })
   return nodes
 }
@@ -214,3 +214,11 @@ getData()
   margin-top: 10%
 }
 </style>
+<style>
+.vir-tree {
+  width: auto;
+  min-width: 100%;
+}
+</style>
+
+

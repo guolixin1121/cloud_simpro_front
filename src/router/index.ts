@@ -7,7 +7,7 @@ const routeFromViews = generateRouteFromViews()
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
-    redirect: '/scene/',
+    redirect: '/overview/',
     component: Layout,
     children: [
       ...routeFromViews,

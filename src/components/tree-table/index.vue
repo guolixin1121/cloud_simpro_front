@@ -42,7 +42,7 @@
   </vxe-table>
   <div class=" float-right mt-4 mr-4">
     <a-pagination
-      v-if="page.total > page.size"
+      v-if="page.total > tableData.length"
       :total="page.total"
       :show-total="(total: number) => `共 ${total} 条`"
       :page-size="page.size"
@@ -168,7 +168,6 @@ const onHandler = async (column: any, record: RObject, key: string) => {
 }
 
 onMounted(() => {
-  debugger
   let height = document.getElementsByClassName('top')?.[0]?.clientHeight
   height = isNaN(height) ? 0 : height + 20 // + 20的padding高度
   const tableScrollBody = document.getElementsByClassName('vxe-table--body-wrapper')?.[0] as HTMLElement

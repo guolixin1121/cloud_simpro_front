@@ -4,7 +4,7 @@
   <div class="main main-bg">
     <left-tree
       :title="'场景集'"
-      :api="() => sceneApi.getList({ tree: 1 })"
+      :api="sceneApi.getList"
       v-model:treeSearchName="treeSearchName"
       :treeSelectId="treeSelectId"
       @select="onSelect"

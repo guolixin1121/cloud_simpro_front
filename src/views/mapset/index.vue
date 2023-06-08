@@ -52,8 +52,14 @@ const columns = [
   { title: '类型', dataIndex: 'isLeaf', width: 150 },
   { title: '操作', dataIndex: 'operation', width: 150,
     actions: {
-      查看: ({id, name} : RObject) => router.push('/mapset/view/' + id + '?name=' + name),
-      编辑: ({id, name} : RObject) => router.push('/mapset/edit/' + id + '?name=' + name),
+      查看: {
+        validator: ({ isLeaf }: any) => isLeaf == 1,
+        handler: ({id, name} : RObject) => router.push('/mapset/view/' + id + '?name=' + name)
+      } ,
+      编辑: {
+        validator: ({ isLeaf }: any) => isLeaf == 1,
+        handler: ({id, name} : RObject) => router.push('/mapset/edit/' + id + '?name=' + name)
+      } ,
       删除: async ({ id }: { id: string }) => await currentApi.delete(id)
      }
   }
