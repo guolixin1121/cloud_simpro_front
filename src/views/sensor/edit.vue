@@ -35,7 +35,7 @@
         <single-upload
           v-if="!isView"
           class="inline-block"
-          accept=".csv"
+          accept=".json"
           v-model:value="formState.csv"
           :desc="'选择文件'"
         ></single-upload>
