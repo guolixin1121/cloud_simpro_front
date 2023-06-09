@@ -62,7 +62,6 @@
 
 <script setup lang="ts">
 import { formatDate } from '@/utils/tools'
-import { SStorage } from '@/utils/storage'
 const mapCategory = store.catalog.mapCatalog as any
 const id = useRoute().params.id
 const { type = '' } = useRoute().query || {}
@@ -92,8 +91,7 @@ const add = async () => {
 const getLookData = async () => {
   // 非上传
   if (id !== '0') {
-    const catalog = SStorage.get('catalog') || {}
-    const res = await mapApi.lookMapVersion({ id, data: { catalog: catalog?.id } })
+    const res = await mapApi.lookMapVersion({ id, data: { catalog: mapCategory?.id } })
     formState.mapName = res.mapName
     // formState.catalog = res.catalog
     // formState.catalogName = res.catalogName || catalog?.name

@@ -21,7 +21,7 @@
         </a-form-item>
         <a-form-item label="所属地图目录" name="parentId" :rules="[{ required: formState.isLeaf == '1', message: '请选择地图集类型'}]">
           <tree-select
-            placeholder="请选择所属场景目录"
+            placeholder="请选择所属地图目录"
             allowClear
             v-model:value="formState.parentId"
             v-model:selectNode="formState.parent"
@@ -56,7 +56,7 @@ const formState = reactive({
   parentId: undefined,
   parent: {level: -1},
   parentName: '',
-  isLeaf: '0'
+  isLeaf: '1'
 })
 
 const loading = ref(false)

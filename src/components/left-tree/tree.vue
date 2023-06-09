@@ -90,7 +90,7 @@ const recursion = (val: any[]) => {
         ...item,
         nodeKey: item.id,
         sourceName: item.name,
-        name: item.name + (item.count ? `（${item.count}）` : ''),
+        name: item.name + (item.count != undefined  ? `（${item.count}）` : ''),
         children
       })
     }

@@ -28,6 +28,8 @@
 </template>
 
 <script setup lang="ts">
+import { catalog } from '@/store';
+
 /****** api */
 const user = store.user
 const mapsApi = api.maps
@@ -37,6 +39,7 @@ const formItems = ref<SearchFormItem[]>([
 ])
 
 let catelog = store.catalog
+catalog.mapCatalog = {}
 const query: Query = ref({})
 const onSearch = (data: Query) => {
   const mapCatalog = catelog.mapCatalog as any

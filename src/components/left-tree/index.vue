@@ -39,19 +39,19 @@ const props = defineProps({
   }
 })
 
-// const emits = defineEmits(['update:treeSearchName'])
-// const { title, treeSearchName } = props
+const emits = defineEmits(['update:treeSearchName'])
+const { treeSearchName } = toRefs(props)
 
 const routeName = useRoute().path.replaceAll('/', '')
-const searchValue = useSessionStorage(routeName + ': tree-search', props.treeSearchName)
+const searchValue = useSessionStorage(routeName + ': tree-search', '')
 const val = ref('')
-// searchValue.value = treeSearchName.value
-// val.value = treeSearchName.value
+searchValue.value = treeSearchName.value
+val.value = treeSearchName.value
 const onChange = (e: { target: { value: string } }) => {
   searchValue.value = e.target.value
 }
 const onSearch = (value: any) => {
-  // emits('update:treeSearchName', value)
+  emits('update:treeSearchName', value)
   val.value = value
 }
 </script>

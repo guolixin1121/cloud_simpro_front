@@ -5,7 +5,8 @@
     :tree-config="{transform: true, reserve: true, accordion: true}"
     :loading="loading"
     :data="tableData"
-    @toggle-tree-expand="onTreeExpand">
+    @toggle-tree-expand="onTreeExpand"
+    @cell-click="onCellClick">
     <vxe-column
       v-for="column in columns"
       :key="column.dataIndex"
@@ -133,6 +134,13 @@ const onTreeExpand = ({ expanded, row }: any) => {
   // }
 }
 
+const onCellClick = ({ row }: any) => {
+  if(row.isLeaf) true
+  const expanded = expandRowKeys.value.find((item: any) => item.id = row.name) != undefined
+  expandRowKeys.value = expanded ? [] : [row]
+  table.value.setTreeExpand(row, !expanded)
+}
+
 const hasPermission = (column: RObject, row: RObject, key: string) => {
   const action = column.actions[key]
   const data = row
@@ -179,6 +187,7 @@ onMounted(() => {
     mainContent.style.height = 'calc(100% - ' + height + 'px)'
   }
 })
+
 
 // 分页
 const page = reactive({

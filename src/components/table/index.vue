@@ -72,7 +72,6 @@ const run = async (query: any, slient = false) => {
     if(!slient) {
       loading.value = true
     }
-    data.value = []
     const res = await props.api(query)
     data.value = res
   } finally {

@@ -21,13 +21,14 @@
 
 <script setup lang="ts">
 import { SceneSourceOptions, getSceneSourceName } from '@/utils/dict'
+import { SStorage } from '@/utils/storage';
 const user = store.user
 const currentApi = api.scene
 const sceneApi = api.scenesets
 
-const route = useRoute()
-const treeSearchName = ref(route.query.name)
-const treeSelectId = ref(route.query.id)
+const selectedSceneset = SStorage.get('logic-sceneset')
+const treeSearchName = selectedSceneset?.name
+const treeSelectId = selectedSceneset?.baidu_id
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称' },
@@ -43,7 +44,9 @@ const formItems = ref<SearchFormItem[]>([
     fieldNames: { label: 'display_name', value: 'name' }
   }
 ])
-let catalog = store.catalog
+let catalog = store.catalog // 缓存左侧树选中的场景集
+catalog.sceneCatalog = {}   // clear 
+
 const query: Query = ref({})
 const onSearch = (data: Query) => {
   const sceneCatalog = catalog.sceneCatalog as any

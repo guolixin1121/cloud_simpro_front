@@ -30,7 +30,7 @@ const currentApi = api.mapsets
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入名称' },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入地图集名称' },
   {
     label: '标签',
     key: 'labels',

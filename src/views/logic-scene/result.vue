@@ -20,10 +20,11 @@
           {{ record.result_scene_set.name }}
         </template>
          <template v-if="column.dataIndex == 'scene_count'">
-          <router-link class=" text-blue" 
+          <a class="text-blue" @click="() => gotoScene(record)">{{ text }}</a>
+          <!-- <router-link class=" text-blue" 
             :to="`/scene/?name=${record.result_scene_set.name}&id=${record.result_scene_set.baidu_id}`">
-            {{ text }}</router-link>
-        </template>
+            {{ text }}</router-link>-->
+        </template> 
       </template>
     </Table>
   </div>
@@ -31,9 +32,11 @@
 
 <script setup lang="ts">
 import {getLogicSceneStatusOption} from '@/utils/dict'
+import { SStorage } from '@/utils/storage';
 /****** api */
-const { id } = useRoute().params
-const { name } = useRoute().query
+const route = useRoute()
+const { id } = route.params
+const { name } = route.query
 const currentApi = api.logicScene
 const listApi = () => currentApi.getResultList({ source: 0, logic_scene_id: id })
 
@@ -54,4 +57,10 @@ onMounted(() => {
   table.value.refresh()
 })
 onUnmounted(() => clearInterval(interval))
+
+const router = useRouter()
+const gotoScene = (record: RObject) => {
+  SStorage.set('logic-sceneset', record.result_scene_set)
+  router.push('/scene')
+}
 </script>
