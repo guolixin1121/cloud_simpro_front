@@ -22,10 +22,10 @@ api.user.getTopMenu().then(data => topMenus.value = data)
       </a>
     </div>
     <div class="flex items-center justify-center">
-      <div class="alert mr-5">
+      <!-- <div class="alert mr-5">
         <i class="alert-icon"></i>
         <i class="alert-circle"></i>
-      </div>
+      </div> -->
       <a-dropdown>
         <div class="text-white opacity-80 cursor-pointer">
           <span>{{ user?.username || '管理员' }}</span>

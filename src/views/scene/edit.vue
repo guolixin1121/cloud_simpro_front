@@ -7,6 +7,11 @@
     <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading">
       <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 550px" @finish="add">
+        <a-form-item label="所属场景集" name="scenesets" :rules="[{ required: true, message: '请选择场景集' }]">
+          <tree-select v-model:value="formState.scenesets" 
+            :api="baseApi.scenesets.getList" label-in-value
+            placeholder="请选择所属场景集"></tree-select>
+        </a-form-item>
         <a-form-item
           label="场景名称"
           name="adsName"
@@ -15,14 +20,10 @@
             { min: 2, max: 160, message: '场景名称长度为2到160位' }
           ]"
         >
-          <ch-input v-model:value="formState.adsName" :maxlength="160" 
+          <ch-input v-model:value="formState.adsName" :maxlength="160" v-if="isAdd"
             placeholder="请输入场景名称"
             @change="(val: string)=>{formState.adsName = val}"></ch-input>
-        </a-form-item>
-        <a-form-item label="所属场景集" name="scenesets" :rules="[{ required: true, message: '请选择场景集' }]">
-          <tree-select v-model:value="formState.scenesets" 
-            :api="baseApi.scenesets.getList" label-in-value
-            placeholder="请选择所属场景集"></tree-select>
+          <span v-else>{{ formState.adsName }}</span>
         </a-form-item>
         <a-form-item v-if="!isAdd" label="关联地图" name="mapVersion">
           <span>{{ (formState.mapName || '') + '_' + (formState.mapVersion || '') }}</span>
@@ -51,9 +52,7 @@
           </a-form-item-rest>
         </a-form-item>
         <a-form-item label="场景文件" name="xosc" :rules="[{ required: isAdd, message: '请上传场景文件' }]">
-          <single-upload accept=".xosc" v-model:value="formState.xosc"></single-upload>
-        </a-form-item>
-        <a-form-item v-if="!isAdd" label="场景文件地址" name="adsUrl">
+          <single-upload v-if="isAdd" accept=".xosc" v-model:value="formState.xosc"></single-upload>
           <span>{{ formState.adsUrl }}</span>
         </a-form-item>
         <a-form-item label="标签">

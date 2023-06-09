@@ -8,85 +8,88 @@
       <svg-icon icon="back" class="mr-2"></svg-icon>返回
     </div>
     <span class="title mb-5 mt-3">{{ title }}</span>
-    <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px" @finish="add">
-      <a-form-item
-        label="地图名称："
-        name="name"
-        :rules="[
-          { required: isAdd ? true : false, message: '请输入地图名称!' },
-          { min: 2, max: 32, message: '地图名称长度为2到32位' }
-        ]"
-      >
-        <a-input v-if="isAdd" v-model:value="formState.name" maxlength="32" placeholder="请输入地图名称"></a-input>
-        <template v-else>{{ formState.name }}</template>
-      </a-form-item>
-      <a-form-item label="地图类型：" name="mapType" :rules="[{ required: isAdd ? true : false, message: '请选择地图类型!' }]">
-        <scroll-select
-          v-if="isAdd"
-          allowClear
-          v-model:value="formState.mapType"
-          :options="MapManageSourceOptions"
-          placeholder="请选择地图类型"
+    <a-spin :spinning="dataLoading"> 
+      <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px" @finish="add">
+        <a-form-item
+          label="地图名称："
+          name="name"
+          :rules="[
+            { required: isAdd ? true : false, message: '请输入地图名称!' },
+            { min: 2, max: 32, message: '地图名称长度为2到32位' }
+          ]"
         >
-        </scroll-select>
-        <template v-else>{{ formState.mapTypeName }}</template>
-      </a-form-item>
-      <a-form-item label="地图目录：" name="catalog" :rules="[{ required: isAdd ? true : false, message: '请选择地图目录!' }]">
-        <tree-select
-          v-if="isAdd"
-          allowClear
-          label-in-value
-          v-model:value="formState.catalog"
-          :api="() => mapApi.getMapCatalog({ tree: 1 })"
-          placeholder="请选择地图目录"
-        >
-        </tree-select>
-        <template v-else>{{ formState.catalog.label }}</template>
-      </a-form-item>
-      <a-form-item label="地图文件：" name="xodr" :rules="[{ required: isAdd, message: '请上传地图文件!' }]">
-        <single-upload
-          v-if="!isView"
-          accept=".xodr"
-          class="inline-block"
-          v-model:value="formState.xodr"
-          :desc="'选择文件'"
-        ></single-upload>
-        <template v-else>{{ formState.mapFileName }}</template>
-        <span class="ml-2" v-if="!isAdd && !isView && !formState.xodr">{{ formState.mapFileName }}</span>
-      </a-form-item>
-      <a-form-item v-if="!isAdd" label="地图文件地址：">{{ formState.latestVersionUrl }} </a-form-item>
-      <a-form-item v-if="!isAdd" label="地图版本：" name="name">
-        <span>{{ formState.latestVersion }}</span>
-      </a-form-item>
-      <a-form-item label="描述" name="name">
-        <a-textarea
-          v-if="!isView"
-          v-model:value="formState.desc"
-          placeholder="请输入描述"
-          rows="6"
-          style="resize: none"
-          maxlength="160"
-        />
-        <template v-else>{{ formState.desc }}</template>
-      </a-form-item>
-      <template v-if="isView">
-        <a-form-item label="创建时间："
-          ><span>{{ formState.create_time }}</span></a-form-item
-        >
-        <a-form-item label="修改时间："
-          ><span>{{ formState.create_time }}</span></a-form-item
-        >
-        <a-form-item label="所属用户："
-          ><span>{{ formState.create_user }}</span></a-form-item
-        >
-      </template>
-      <a-form-item v-if="!isView" class="ml-8" :wrapper-col="{ style: { paddingLeft: '80px' } }">
-        <a-button type="primary" html-type="submit" :loading="loading">
-          {{ isAdd ? '上传' : '修改' }}
-        </a-button>
-        <a-button @click="goback" class="ml-2">取消</a-button>
-      </a-form-item>
-    </a-form>
+          <ch-input v-model:value="formState.name" :maxlength="32" v-if="isAdd"
+              placeholder="请输入地图名称"
+              @change="(val: string)=>{formState.name = val}"></ch-input>
+          <template v-else>{{ formState.name }}</template>
+        </a-form-item>
+        <a-form-item label="地图类型：" name="mapType" :rules="[{ required: isAdd ? true : false, message: '请选择地图类型!' }]">
+          <scroll-select
+            v-if="isAdd"
+            allowClear
+            v-model:value="formState.mapType"
+            :options="MapManageSourceOptions"
+            placeholder="请选择地图类型"
+          >
+          </scroll-select>
+          <template v-else>{{ formState.mapTypeName }}</template>
+        </a-form-item>
+        <a-form-item label="地图目录：" name="catalog" :rules="[{ required: isAdd ? true : false, message: '请选择地图目录!' }]">
+          <tree-select
+            v-if="isAdd"
+            allowClear
+            label-in-value
+            v-model:value="formState.catalog"
+            :api="() => mapApi.getMapCatalog({ tree: 1 })"
+            placeholder="请选择地图目录"
+          >
+          </tree-select>
+          <template v-else>{{ formState.catalog.label }}</template>
+        </a-form-item>
+        <a-form-item label="地图文件：" name="xodr" :rules="[{ required: isAdd, message: '请上传地图文件!' }]">
+          <single-upload
+            v-if="!isView"
+            accept=".xodr"
+            class="inline-block pr-2"
+            v-model:value="formState.xodr"
+            :desc="'选择文件'"
+          ></single-upload>
+          <template v-if="!isView && !formState.xodr">{{ formState.mapFileName }}</template>
+        </a-form-item>
+        <a-form-item v-if="!isAdd" label="地图文件地址：">{{ formState.latestVersionUrl }} </a-form-item>
+        <a-form-item v-if="!isAdd" label="地图版本：" name="name">
+          <span>{{ formState.latestVersion }}</span>
+        </a-form-item>
+        <a-form-item label="描述" name="name">
+          <a-textarea
+            v-if="!isView"
+            v-model:value="formState.desc"
+            placeholder="请输入描述"
+            rows="6"
+            style="resize: none"
+            maxlength="160"
+          />
+          <template v-else>{{ formState.desc }}</template>
+        </a-form-item>
+        <template v-if="isView">
+          <a-form-item label="创建时间："
+            ><span>{{ formState.create_time }}</span></a-form-item
+          >
+          <a-form-item label="修改时间："
+            ><span>{{ formState.create_time }}</span></a-form-item
+          >
+          <a-form-item label="所属用户："
+            ><span>{{ formState.create_user }}</span></a-form-item
+          >
+        </template>
+        <a-form-item v-if="!isView" class="ml-8" :wrapper-col="{ style: { paddingLeft: '80px' } }">
+          <a-button type="primary" html-type="submit" :loading="loading">
+            {{ isAdd ? '上传' : '修改' }}
+          </a-button>
+          <a-button @click="goback" class="ml-2">取消</a-button>
+        </a-form-item>
+      </a-form>
+    </a-spin>
   </div>
 </template>
 
@@ -146,23 +149,29 @@ const add = async () => {
 }
 
 /****** 获取查看数据 */
+const dataLoading = ref(false)
 const getLookData = async () => {
   // 非上传
   if (id !== '0') {
-    const res = await mapApi.lookMaps({ id, data: { name } })
-    formState.name = res.name
-    formState.catalog = { label: mapCatalog?.name, value: mapCatalog?.id }
-    formState.xodr = null
-    formState.desc = res.desc
-    formState.latestVersion = res.latestVersion
-    formState.latestVersionUrl = res.latestVersionUrl
-    formState.create_time = formatDate(res.create_time)
-    formState.update_time = formatDate(res.update_time)
-    formState.create_user = res.create_user
-    formState.mapFileName = res.mapFileName
-    formState.mapType = res.mapType
-    formState.mapTypeName = res.mapTypeName
+    try{
+      dataLoading.value = true
+      const res = await mapApi.lookMaps({ id, data: { name } })
+      formState.name = res.name
+      formState.catalog = { label: mapCatalog?.name, value: mapCatalog?.id }
+      formState.xodr = null
+      formState.desc = res.desc
+      formState.latestVersion = res.latestVersion
+      formState.latestVersionUrl = res.latestVersionUrl
+      formState.create_time = formatDate(res.create_time)
+      formState.update_time = formatDate(res.update_time)
+      formState.create_user = res.create_user
+      formState.mapFileName = res.mapFileName
+      formState.mapType = res.mapType
+      formState.mapTypeName = res.mapTypeName
     // formState.labels = res.labels_detail
+    }finally {
+      dataLoading.value = false
+    }
   }
 }
 getLookData()

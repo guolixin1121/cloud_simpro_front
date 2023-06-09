@@ -7,7 +7,9 @@
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/logic-scene/edit/0')">上传逻辑场景</a-button>
     </div>
 
-    <Table ref="tableRef" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }">
+    <Table ref="tableRef" :api="currentApi.getList" :query="query" 
+      :columns="columns" :scroll="{ x: 1000, y: 'auto' }"
+      :isOnlyCreator="true">
       <template #bodyCell="{ record, column }">
         <template v-if="column.dataIndex == 'last_gen_scene_task'">
           <span>{{ getLogicSceneStatusOption(record.last_gen_scene_task.status) }}</span>

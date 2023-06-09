@@ -52,7 +52,7 @@ const columns = [
   { title: '标签英文名称', dataIndex: 'name'},
   { title: '类型', dataIndex: 'isTag', width: 100},
   { title: '创建时间', dataIndex: 'create_time', width: 200 },
-  { title: '修改时间', dataIndex: 'update_time', width: 200 },
+  { title: '所属用户', dataIndex: 'create_user', width: 200 },
   { title: '操作', dataIndex: 'operation', width: 150,
     actions: {
       查看: ({id} : RObject) => router.push('/tags/edit/' + id + '?type=0'),

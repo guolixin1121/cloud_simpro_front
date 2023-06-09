@@ -7,7 +7,9 @@
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/kpi/edit/0')">创建评测指标</a-button>
     </div>
 
-    <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1100, y: 'auto' }"> </Table>
+    <Table :api="currentApi.getList" :query="query" 
+      :columns="columns" :scroll="{ x: 1100, y: 'auto' }"
+      :isOnlyCreator="true"> </Table>
   </div>
 </template>
 

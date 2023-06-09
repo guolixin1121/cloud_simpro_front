@@ -16,6 +16,7 @@
       :query="query"
       :columns="columns"
       :scroll="{ x: 2100, y: 'auto' }"
+      :isOnlyCreator="true"
       :row-selection="{
         getCheckboxProps: (record: any) => ({
           disabled: ['运行', '等待'].indexOf(record.status) > -1

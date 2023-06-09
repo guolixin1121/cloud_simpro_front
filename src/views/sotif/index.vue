@@ -79,9 +79,7 @@ const columns = [
 
 const token = store.user.token
 const gotoSotif = (path: string = '') => {
-  console.log(process.env)
   const query = 'token=' + token
-  alert(path)
   if(path) {
     window.open(path + '&' + query )
   } else {

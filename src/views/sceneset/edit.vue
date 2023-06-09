@@ -8,7 +8,6 @@
     <a-spin :spinning="dataLoading">
       <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 550px;"
         @finish="add">
-
         <a-form-item label="场景集类型"  name="isLeaf" :rules="[{ required: true, message: '请选择场景集类型'}]">
           <a-select v-if="isAdd" v-model:value="formState.isLeaf">
             <a-select-option value="0">场景目录</a-select-option>
@@ -16,7 +15,6 @@
           </a-select>
           <div v-else>{{ formState.isLeaf ? "场景集" : '场景目录' }}</div>
         </a-form-item>
-
         <a-form-item label="场景集名称" name="name" :rules="[{ required: true, message: '请输入场景集名称'}, { min: 2, max: 50, message: '场景名称长度为2到50位'}]">
           <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景集名称"></a-input>
         </a-form-item>

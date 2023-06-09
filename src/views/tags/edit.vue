@@ -8,101 +8,101 @@
       <svg-icon icon="back" class="mr-2"></svg-icon>返回
     </div>
     <span class="title mb-5 mt-3">{{ title }}</span>
-    <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 550px" @finish="add">
-      <a-form-item v-if="isView" label="标签ID" name="id">
-        {{ formState.id }}
-      </a-form-item>
-      <a-form-item
-        label="标签中文名称："
-        name="display_name"
-        :rules="[
-          { required: isView ? false : true, message: '请输入标签名称!' },
-          { min: 1, max: 32, message: '标签名称长度为1到32位' }
-        ]"
-      >
-        <template v-if="!isView">
-          <chInput
-            :value="formState.display_name"
-            maxlength="32"
-            placeholder="请输入标签中文名称"
-            @change="(val: string)=>{formState.display_name=val}"
+    <a-spin :spinning="dataLoading">
+      <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 550px" @finish="add">
+        <a-form-item v-if="isView" label="标签ID" name="id">
+          {{ formState.id }}
+        </a-form-item>
+        <a-form-item label="标签类型：" name="tag_type" :rules="[{ required: isView ? false : true, message: '请选择标签类型!' }]">
+          <scroll-select
+            v-if="isAdd"
+            v-model:value="formState.tag_type"
+            :api="tagsApi.getType"
+            :fieldNames="{ label: 'value', value: 'key' }"
+            placeholder="请选择标签类型"
           />
+          <template v-else>{{ formState.tag_type_name }}</template>
+        </a-form-item>
+        <a-form-item
+          label="标签英文名称："
+          name="name"
+          :rules="[
+            { required: true, message: '请输入标签英文名称!' },
+            { min: 1, max: 64, message: '标签英文名称长度为1到64位' }
+          ]"
+        >
+          <a-input
+            v-if="isAdd"
+            :value="formState.name"
+            maxlength="64"
+            placeholder="请输入标签英文名称"
+            @change="onlyEnlishInput"
+          ></a-input>
+          <template v-else>{{ formState.name }}</template>
+        </a-form-item>
+        <a-form-item
+          label="标签中文名称："
+          name="display_name"
+          :rules="[
+            { required: isView ? false : true, message: '请输入标签名称!' },
+            { min: 1, max: 32, message: '标签名称长度为1到32位' }
+          ]"
+        >
+          <template v-if="!isView">
+            <chInput
+              :value="formState.display_name"
+              maxlength="32"
+              placeholder="请输入标签中文名称"
+              @change="(val: string)=>{formState.display_name=val}"
+            />
+          </template>
+          <template v-else>{{ formState.display_name }}</template>
+        </a-form-item>
+        <a-form-item v-if="isAdd" label="上级标签：" name="tag_type">
+          <tree-select
+            placeholder="请选择上级标签"
+            :disabled="isView"
+            allowClear
+            style="width: 245px"
+            v-model:value="formState.parentId"
+            v-model:selectNode="formState.parentNode"
+            :api="tagsList"
+            :api-filter="(item: any) => !item.isTag"
+            :check-leaf="false"
+            :fieldNames="{ label: 'display_name', value: 'name' }"
+          >
+          </tree-select>
+        </a-form-item>
+        <a-form-item label="描述" name="desc" :rules="[{required: !isView , message: '请输入标签描述' }]">
+          <a-textarea
+            v-if="!isView"
+            v-model:value="formState.desc"
+            placeholder="请输入描述"
+            rows="10"
+            style="resize: none"
+            maxlength="255"
+          />
+          <template v-else>{{ formState.desc }}</template>
+        </a-form-item>
+        <template v-if="isView">
+          <a-form-item label="创建时间"
+            ><span>{{ formState.create_time }}</span></a-form-item
+          >
+          <a-form-item label="修改时间"
+            ><span>{{ formState.update_time }}</span></a-form-item
+          >
+          <a-form-item label="所属用户"
+            ><span>{{ formState.create_user }}</span></a-form-item
+          >
         </template>
-        <template v-else>{{ formState.display_name }}</template>
-      </a-form-item>
-      <a-form-item
-        label="标签英文名称："
-        name="name"
-        :rules="[
-          { required: true, message: '请输入标签英文名称!' },
-          { min: 1, max: 64, message: '标签英文名称长度为1到64位' }
-        ]"
-      >
-        <a-input
-          v-if="isAdd"
-          :value="formState.name"
-          maxlength="64"
-          placeholder="请输入标签英文名称"
-          @change="onlyEnlishInput"
-        ></a-input>
-        <template v-else>{{ formState.name }}</template>
-      </a-form-item>
-      <a-form-item label="标签类型：" name="tag_type" :rules="[{ required: isView ? false : true, message: '请选择标签类型!' }]">
-        <scroll-select
-          v-if="isAdd"
-          allowClear
-          style="width: 245px"
-          v-model:value="formState.tag_type"
-          :api="tagsApi.getType"
-          :fieldNames="{ label: 'value', value: 'key' }"
-          placeholder="请选择标签类型"
-        />
-        <template v-else>{{ formState.tag_type_name }}</template>
-      </a-form-item>
-      <a-form-item v-if="isAdd" label="上级标签：" name="tag_type">
-        <tree-select
-          placeholder="请选择上级标签"
-          :disabled="isView"
-          allowClear
-          style="width: 245px"
-          v-model:value="formState.parentId"
-          v-model:selectNode="formState.parentNode"
-          :api="tagsList"
-          :api-filter="(item: any) => !item.isTag"
-          :check-leaf="false"
-          :fieldNames="{ label: 'display_name', value: 'name' }"
-        >
-        </tree-select>
-      </a-form-item>
-      <a-form-item label="描述" name="desc" :rules="[{required: !isView , message: '请输入标签描述' }]">
-        <a-textarea
-          v-if="!isView"
-          v-model:value="formState.desc"
-          placeholder="请输入描述"
-          rows="10"
-          style="resize: none"
-          maxlength="255"
-        />
-        <template v-else>{{ formState.desc }}</template>
-      </a-form-item>
-      <template v-if="isView">
-        <a-form-item label="创建时间"
-          ><span>{{ formState.create_time }}</span></a-form-item
-        >
-        <a-form-item label="修改时间"
-          ><span>{{ formState.update_time }}</span></a-form-item
-        >
-        <a-form-item label="所属用户"
-          ><span>{{ formState.create_user }}</span></a-form-item
-        >
-      </template>
-      <a-form-item v-if="!isView" class="ml-8" :wrapper-col="{ style: { paddingLeft: '80px' } }">
-        <a-button class="mr-2" type="primary" html-type="submit" :loading="loading">
-          {{ isAdd ? '创建' : '修改' }}
-        </a-button>
-        <a-button @click="goback">取消</a-button>
-      </a-form-item>
-    </a-form>
+        <a-form-item v-if="!isView" class="ml-8" :wrapper-col="{ style: { paddingLeft: '80px' } }">
+          <a-button class="mr-2" type="primary" html-type="submit" :loading="loading">
+            {{ isAdd ? '创建' : '修改' }}
+          </a-button>
+          <a-button @click="goback">取消</a-button>
+        </a-form-item>
+      </a-form>
+    </a-spin>
   </div>
 </template>
 
@@ -162,20 +162,26 @@ const add = async () => {
 }
 
 /****** 获取查看数据 */
+const dataLoading = ref(false)
 const getLookData = async () => {
   // 非上传
   if (id !== '0') {
-    const res = await tagsApi.get(id)
-    formState.id = res.id
-    formState.name = res.name
-    formState.display_name = res.display_name
-    formState.desc = res.desc
-    formState.tag_type = res.tag_type
-    formState.tag_type_name = res.tag_type_name
-    formState.parentNode = res.parentList
-    formState.create_time = res.create_time
-    formState.update_time = res.update_time
-    formState.create_user = res.create_user
+    try {
+      dataLoading.value = true
+      const res = await tagsApi.get(id)
+      formState.id = res.id
+      formState.name = res.name
+      formState.display_name = res.display_name
+      formState.desc = res.desc
+      formState.tag_type = res.tag_type
+      formState.tag_type_name = res.tag_type_name
+      formState.parentNode = res.parentList
+      formState.create_time = res.create_time
+      formState.update_time = res.update_time
+      formState.create_user = res.create_user
+    } finally {
+      dataLoading.value = false
+    }
   }
 }
 const onlyEnlishInput = (e: { target: { value: string } }) => {

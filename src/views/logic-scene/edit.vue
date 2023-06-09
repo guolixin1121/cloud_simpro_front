@@ -15,9 +15,10 @@
             { min: 2, max: 50, message: '场景名称长度为2到50位' }
           ]"
         >
-          <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></a-input>
+          <a-input v-if="isAdd" v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></a-input>
+          <span v-else>{{ formState.name }}</span>
         </a-form-item>
-        <a-form-item label="关联地图" v-if="!isAdd">
+        <a-form-item label="关联地图" v-if="!isAdd" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
           {{ formState.mapName + '_' + formState.mapVersion }}
         </a-form-item>
         <a-form-item label="关联地图" v-if="isAdd" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
@@ -42,15 +43,11 @@
           </div>
         </a-form-item>
         <a-form-item label="场景文件" name="xosc_scene" :rules="[{ required: isAdd, message: '请上传场景文件!' }]">
-          <single-upload accept=".xosc" v-model:value="formState.xosc_scene"></single-upload>
-        </a-form-item>
-        <a-form-item v-if="!isAdd" label="场景文件地址" name="adsUrl">
+          <single-upload v-if="isAdd" accept=".xosc" v-model:value="formState.xosc_scene"></single-upload>
           <span>{{ formState.scene_url }}</span>
         </a-form-item>
         <a-form-item label="配置文件" name="xosc_config" :rules="[{ required: isAdd, message: '请上传配置文件!' }]">
-          <single-upload accept=".xosc" v-model:value="formState.xosc_config"></single-upload>
-        </a-form-item>
-        <a-form-item v-if="!isAdd" label="配置文件地址" name="adsUrl">
+          <single-upload v-if="isAdd" accept=".xosc" v-model:value="formState.xosc_config"></single-upload>
           <span>{{ formState.config_url }}</span>
         </a-form-item>
          <a-form-item label="标签">
