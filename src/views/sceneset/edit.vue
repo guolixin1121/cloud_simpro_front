@@ -18,18 +18,19 @@
         <a-form-item label="场景集名称" name="name" :rules="[{ required: true, message: '请输入场景集名称'}, { min: 2, max: 50, message: '场景名称长度为2到50位'}]">
           <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景集名称"></a-input>
         </a-form-item>
-        <a-form-item label="所属场景目录" name="parent" 
+        <a-form-item label="所属场景目录" name="parentId" 
           :rules="[{ required: true && formState.isLeaf == '1', message: '请选择所属场景目录'}]">
           <tree-select
             placeholder="请选择所属场景目录"
             allowClear
-            label-in-value
-            v-model:value="formState.parent"
+            v-model:value="formState.parentId"
+            v-model:selectNode="formState.parent"
             :api="baseApi.scenesets.getList"
             :api-filter="(item: any) => !item.isLeaf"
             :check-leaf="false"
           >
           </tree-select>
+          <div v-if="error" class="ant-form-item-explain-error" style="">地图目录不能超过四级</div>
         </a-form-item>
         <a-form-item label="场景集路径" name="path">
           <span>{{ path }}</span>
@@ -65,25 +66,28 @@ const currentApi = api.scenesets
 
 const formState = reactive({
   name: '',
-  parent: undefined as any,
+  parentId: undefined,
+  parent: null as any,
   labels: [],
   isLeaf: '1'
 })
 
 const path = computed(() => {
-  const scenesets = formState.parent as unknown as SelectOption
-  return (scenesets?.label || '') + '/' + formState.name
+  // const scenesets = formState.parent as unknown as SelectOption
+  // return (scenesets?.label || '') + '/' + formState.name
+  return formState.parent?.title || '' + '/' + formState.name
 })
 
 const loading = ref(false)
 const router = useRouter()
 const goback = () => router.push('/sceneset/')
 const add = async () => {
+  if(error.value) return
   loading.value = true
 
   const params = {
     name: formState.name,
-    parentId: formState.parent?.value,
+    parentId: formState.parentId,
     labels: formState.labels?.map((item: any) => item.value),
     isLeaf:formState.isLeaf,
     path: path.value
@@ -101,6 +105,18 @@ const add = async () => {
   }
 }
 
+const error = ref(false)
+watch(
+  () => formState.parentId,
+  () => {
+    const { isLeaf, parent } = formState
+    error.value = false
+    if(isLeaf == '0' && parent?.level > 2) {
+      error.value = true
+    }
+  }
+)
+
 /****** 获取编辑数据 */
 const dataLoading = ref(false)
 const getEditData = async () => {
@@ -109,7 +125,8 @@ const getEditData = async () => {
       dataLoading.value = true
       const data = await currentApi.get(id)
       formState.name = data.name
-      formState.parent = { label: data.parentName, value: data.parentId }
+      formState.parentId = data.parentId
+      // formState.parent = { label: data.parentName, value: data.parentId }
       formState.labels = data.labels_detail
       formState.isLeaf = data.isLeaf.toString()
     } finally {

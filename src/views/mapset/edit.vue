@@ -30,6 +30,7 @@
             :check-leaf="false"
           >
           </tree-select>
+          <div v-if="error" class="ant-form-item-explain-error" style="">地图目录不能超过四级</div>
         </a-form-item>
         <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
           <a-button type="primary" html-type="submit" :loading="loading">
@@ -62,6 +63,8 @@ const loading = ref(false)
 const router = useRouter()
 const goback = () => router.push('/mapset/')
 const add = async () => {
+  if(error.value) return
+
   loading.value = true
   
   try {
@@ -75,6 +78,18 @@ const add = async () => {
     loading.value = false
   }
 }
+
+const error = ref(false)
+watch(
+  () => formState.parentId,
+  () => {
+    const { isLeaf, parent } = formState
+    error.value = false
+    if(isLeaf == '0' && parent.level > 2) {
+      error.value = true
+    }
+  }
+)
 
 /****** 获取编辑数据 */
 const dataLoading = ref(false)
