@@ -35,6 +35,7 @@ const currentPage = ref(1) // 分页load选项
 const isAllLoaded = ref(false)
 const hasDefaultValue = ref(true)
 const options = ref<OptionProps>([])
+let searchValue = ''
 
 // 根据defaultValue是否为空，判断是否需要加‘全部’的option
 // 一般在列表页搜索时需要加，在编辑页是不需要加
@@ -66,7 +67,11 @@ const onSearch = (input: string) => {
   if (props.api) {
     currentPage.value = 1
     options.value = []
-    getOptions(input)
+    searchValue = input
+    if(searchValue == '') {
+      initOptions()
+    }
+    getOptions()
   }
 }
 
@@ -84,14 +89,14 @@ const onFocus = () => {
 const onChange = () => hasDefaultValue.value = false
 
 const loading = ref(false)
-const getOptions = async (query: string = '') => {
+const getOptions = async () => {
   if (props.api) {
     try {
       loading.value = true
       const res = await props.api({ 
         ...props.query, 
         page: currentPage.value, size: 10, 
-        [props.fieldNames.label]: query })
+        [props.fieldNames.label]: searchValue })
       options.value.push(...transformOption(res))
       isAllLoaded.value = options.value.length >= (res.count || res.length)
     } finally {

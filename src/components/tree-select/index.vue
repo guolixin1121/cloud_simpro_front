@@ -26,6 +26,7 @@ const props = defineProps({
     type: Object as PropType<FieldName>,
     default: () => ({ label: 'name', value: 'id' })
   },
+  // 是否限定只能选择叶子节点
   checkLeaf: {
     type: Boolean,
     default: () => true

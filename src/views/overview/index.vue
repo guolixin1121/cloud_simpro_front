@@ -2,7 +2,7 @@
   <div class="overview">
     <overview />
 
-    <div class="flex justify-between mt-4" style="height: 286px">
+    <div class="flex justify-between mt-4" style="height: 300px">
       <entry style="width: 432px;"></entry>
       <task style="width: calc(100% - 432px); margin-left: 16px;"></task>
     </div>

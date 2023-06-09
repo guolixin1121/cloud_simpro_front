@@ -6,6 +6,10 @@
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 550px" @finish="add">
+      
+      <a-form-item label="评测指标类型" name="category" :rules="[{ required: true, message: '请选择评测指标类型!' }]">
+        <a-select v-model:value="formState.category" :options="typesOptions" placeholder="请选择评测指标类型"></a-select>
+      </a-form-item>
       <a-form-item
         label="评测指标名称"
         name="name"
@@ -14,12 +18,10 @@
           { min: 2, max: 50, message: '场景名称长度为2到50位' }
         ]"
       >
-        <ch-input v-model:value="formState.name" :maxlength="32" :disabled="!isAdd"
+        <ch-input v-model:value="formState.name" :maxlength="32" v-if="isAdd"
             placeholder="请输入评测指标名称"
             @change="(val: string)=>{formState.name = val}"></ch-input>
-      </a-form-item>
-      <a-form-item label="评测指标类型" name="category" :rules="[{ required: true, message: '请选择评测指标类型!' }]">
-        <a-select v-model:value="formState.category" :options="typesOptions" placeholder="请选择评测指标类型"></a-select>
+        <div v-else>{{ formState.name }}</div>
       </a-form-item>
       <a-form-item label="评测指标文件" name="pyfile" :rules="[{ required: isAdd, message: '请上传评测指标文件!' }]">
         <single-upload v-if="isAdd" accept=".py" v-model:value="formState.pyfile"></single-upload>

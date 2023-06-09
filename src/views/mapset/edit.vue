@@ -19,11 +19,12 @@
         <a-form-item label="地图集名称" name="name" :rules="[{ required: true, message: '请输入地图集名称'}, { min: 2, max: 50, message: '地图名称长度为2到50位'}]">
           <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入地图集名称"></a-input>
         </a-form-item>
-        <a-form-item label="所属地图目录" name="parentId" :rules="[{ required: formState.isLeaf == 1, message: '请选择地图集类型'}]">
+        <a-form-item label="所属地图目录" name="parentId" :rules="[{ required: formState.isLeaf == '1', message: '请选择地图集类型'}]">
           <tree-select
             placeholder="请选择所属场景目录"
             allowClear
             v-model:value="formState.parentId"
+            v-model:selectNode="formState.parent"
             :api="currentApi.getList"
             :api-filter="(item: any) => !item.isLeaf"
             :check-leaf="false"
@@ -52,8 +53,9 @@ const currentApi = api.mapsets
 const formState = reactive({
   name: undefined,
   parentId: undefined,
+  parent: {level: -1},
   parentName: '',
-  isLeaf: undefined
+  isLeaf: '0'
 })
 
 const loading = ref(false)
