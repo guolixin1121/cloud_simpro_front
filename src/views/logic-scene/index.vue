@@ -14,6 +14,10 @@
         <template v-if="column.dataIndex == 'last_gen_scene_task'">
           <span>{{ getLogicSceneStatusOption(record.last_gen_scene_task.status) }}</span>
         </template>
+        <template v-if="column.dataIndex == 'source'">
+          <span v-if="record.source == 0">云平台</span>
+          <span v-if="record.source == 1">SOTIF</span>
+        </template>
       </template>
     </Table>
 
@@ -53,11 +57,18 @@ const formItems = ref<SearchFormItem[]>([
     fieldNames: { label: 'display_name', value: 'name' },
     defaultValue: ['']
   },
+  {
+    label: '来源',
+    key: 'source',
+    type: 'select',
+    options: [{ label: '全部', value: ''}, { label: '云平台', value: 0}, { label: 'SOTIF', value: 1 }],
+    defaultValue: ''
+  },
   { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
 type Query = Record<string, any>
 const query: Query = ref({})
-const onSearch = (data: Query) => (query.value = { ...data, source: 0 })
+const onSearch = (data: Query) => (query.value = { ...data })
 
 /****** 表格区域 */
 const showRunConfirm = ref(false)
@@ -69,7 +80,7 @@ const columns = [
   { title: '逻辑场景名称', dataIndex: 'name', width: 150, ellipsis: true },
   { title: '关联场景数', dataIndex: 'result_scene_count', width: 120, ellipsis: true },
   { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
-  // { title: '状态', dataIndex: 'last_gen_scene_task', width: 100 },
+  { title: '来源', dataIndex: 'source', width: 100 },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
   {

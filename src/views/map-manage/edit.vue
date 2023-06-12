@@ -69,7 +69,9 @@
             style="resize: none"
             maxlength="160"
           />
-          <template v-else>{{ formState.desc }}</template>
+          <template v-else>
+            <span style="word-wrap: break-word;">{{ formState.desc }}</span>
+          </template>
         </a-form-item>
         <template v-if="isView">
           <a-form-item label="创建时间："

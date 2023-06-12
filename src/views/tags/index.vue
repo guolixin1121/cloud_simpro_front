@@ -1,6 +1,6 @@
 <template>
   <search-form :items="formItems" @search="onSearch"></search-form>
-  <div class="main" style="height: calc(100% - 100px)">
+  <div class="main" style="height: calc(100% - 80px)">
     <div class="flex justify-between items-center">
       <span class="title">标签管理</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/tags/edit/0?tag_type=' + query.tag_type)">创建标签</a-button>

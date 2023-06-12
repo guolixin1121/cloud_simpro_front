@@ -1,7 +1,7 @@
 <template>
   <search-form :items="formItems" @search="onSearch"></search-form>
 
-  <div class="main" style="height: calc(100% - 100px)">
+  <div class="main" style="height: calc(100% - 80px)">
     <div class="flex justify-between items-center">
       <span class="title">地图集管理</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/mapset/edit/0')">创建地图集</a-button>

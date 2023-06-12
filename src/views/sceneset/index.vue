@@ -8,6 +8,8 @@
     </div>
     <div style="height: calc(100% - 50px);" class="mt-4 overflow-auto">
       <tree-table
+        tree-node="groupName"
+        :lazy="true"
         :query="query"
         :columns="columns"
         :api="currentApi.getList"
@@ -31,12 +33,12 @@ const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景集名称' }
 ])
 const query = ref({})
-const onSearch = (params: RObject) => query.value = params
+const onSearch = (params: RObject) => query.value = { ...params, version: 2 }
 
 /****** 表格区域 */
 const router = useRouter()
 const columns = [
-  { title: '场景集名称', dataIndex: 'name', ellipsis: true },
+  { title: '场景集名称', dataIndex: 'groupName', ellipsis: true },
   { title: '路径', dataIndex: 'path', ellipsis: true },
   { title: '场景数量', dataIndex: 'count', width: 150 },
   { title: '类型', dataIndex: 'isLeaf', width: 150 },

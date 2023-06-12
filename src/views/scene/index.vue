@@ -2,11 +2,12 @@
   <search-form :items="formItems" :manual="true" @search="onSearch"></search-form>
 
   <div class="main main-bg">
-    <left-tree
+    <tree
       :title="'场景集'"
       :api="sceneApi.getList"
-      v-model:treeSearchName="treeSearchName"
-      :treeSelectId="treeSelectId"
+      :query="{...selectedSceneset, version: 2 }"
+      :lazy="true"
+      tree-node="groupName"
       @select="onSelect"
     />
     <div class="right-table">
@@ -27,8 +28,6 @@ const currentApi = api.scene
 const sceneApi = api.scenesets
 
 const selectedSceneset = SStorage.get('logic-sceneset')
-const treeSearchName = selectedSceneset?.name
-const treeSelectId = selectedSceneset?.baidu_id
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称' },

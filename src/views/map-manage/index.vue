@@ -1,7 +1,7 @@
 <template>
   <search-form :items="formItems" :manual="true" @search="onSearch"></search-form>
   <div class="main main-bg">
-    <left-tree :title="'地图集'" :api="mapsApi.getMapCatalog" @select="onSelect" />
+    <tree :title="'地图集'" :api="mapsApi.getMapCatalog" @select="onSelect" />
     <div class="right-table">
       <div class="flex justify-between items-center">
         <span class="title">地图管理</span>
