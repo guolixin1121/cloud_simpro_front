@@ -39,6 +39,7 @@ const formItems = ref<SearchFormItem[]>([
     fieldNames: { label: 'value', value: 'key' },
     defaultValue: 2
   },
+  { label: '创建时间', key: 'create_time', type: 'range-picker' },
 ])
 const query = ref<any>({})
 const onSearch = (params: RObject) => {

@@ -113,7 +113,6 @@ const isView = type === '0' ? true : false // 查看
 const isAdd = id === '0'
 const title = isView ? '查看标签' : isAdd ? '创建标签' : '修改标签'
 const tagsApi = api.tags
-const tagsList = () => tagsApi.getList({ tag_type,  tree: 1 })
 
 const formState = reactive<any>({
   id: null,
@@ -126,6 +125,12 @@ const formState = reactive<any>({
   create_time: '',
   update_time: '',
   create_user: ''
+})
+
+const tagsList = ref()
+watchEffect(() => {
+  const tag_type = formState.tag_type
+  tagsList.value = (args: any) => api.tags.getList({ tag_type: tag_type,  tree: 1, ...args })
 })
 
 const loading = ref(false)

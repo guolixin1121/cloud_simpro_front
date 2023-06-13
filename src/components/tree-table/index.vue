@@ -180,7 +180,8 @@ const onTreeExpand = () => {
 const emits = defineEmits(['select'])
 const onCellClick = ({ row, $event }: any) => {
  // 叶子节点和展开收起图标，不做处理
- if($event.target.nodeName == 'I') return
+ const nodeName = $event.target.nodeName
+ if(nodeName == 'I' || nodeName == 'A' ) return
   if(row.isLeaf) {
     emits('select', row)
   } else {
