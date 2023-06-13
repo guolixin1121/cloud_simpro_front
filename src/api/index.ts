@@ -117,7 +117,11 @@ export const sotif = defineApi({
 })()
 
 export const algorithm = defineApi({
-  getList: { url: '/alg/algorithm/', method: 'get' }
+  getList: { url: '/alg/algorithm/', method: 'get' },
+  get: { url: '/alg/algorithm/{sid}/', method: 'get' },
+  delete: { url: '/alg/algorithm/{sid}/', method: 'delete' },
+  edit: { url: '/alg/algorithm/{sid}/', method: 'put' },
+  add: { url: '/alg/algorithm/', method: 'post' },
 })()
 
 export const vehicle = defineApi({

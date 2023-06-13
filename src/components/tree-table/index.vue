@@ -4,7 +4,7 @@
    :border="isTree ? 'none' : 'full'"
    :show-header="isTree ? false : true"
    :row-config="{isHover: true, keyField: 'id'}"
-   :tree-config="{transform: true, reserve: true, lazy: lazy, loadMethod: loadMethod}"
+   :tree-config="{transform: true, reserve: true, rowField: 'id', lazy: lazy, loadMethod: loadMethod}"
    :loading="loading"
    :data="tableData"
    @toggle-tree-expand="onTreeExpand"
@@ -199,8 +199,7 @@ const onCellClick = ({ row, $event }: any) => {
   if(row.isLeaf) {
     emits('select', row)
   } else {
-    const expanded = expandRowKeys.value?.findIndex((item: any) => item.id == row.id) > -1
-    table.value.setTreeExpand(row, !expanded)
+    table.value.toggleTreeExpand(row)
     expandRowKeys.value = table.value.getTreeExpandRecords()
   }
 }
@@ -224,6 +223,7 @@ const loadMethod = async ({ row }: any) => {
   row.hasChild = false // 子节点为空
  }
  expandRowKeys.value.push(row)
+ console.log(data, 'loadMethod')
  return Promise.resolve(data)
 }
 

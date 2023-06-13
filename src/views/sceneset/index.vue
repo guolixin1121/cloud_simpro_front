@@ -16,7 +16,7 @@
         >
         <template #default="{ column, row }">
           <template v-if="column.dataIndex == 'isLeaf'">
-            {{ row.isLeaf ? '地图集' : '地图目录' }}
+            {{ row.isLeaf ? '场景集' : '场景目录' }}
           </template>
         </template>
       </tree-table>

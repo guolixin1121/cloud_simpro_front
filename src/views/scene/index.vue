@@ -2,12 +2,18 @@
   <search-form :items="formItems" :manual="true" @search="onSearch"></search-form>
 
   <div class="main main-bg">
-    <tree
+    <!-- <tree
       :title="'场景集'"
       :api="sceneApi.getList"
       :query="{...selectedSceneset, version: 2 }"
       :lazy="true"
       tree-node="groupName"
+      @select="onSelect"
+    /> -->
+    <tree
+      :title="'场景集'"
+      :api="sceneApi.getList"
+      :query="{...selectedSceneset}"
       @select="onSelect"
     />
     <div class="right-table">

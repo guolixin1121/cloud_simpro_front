@@ -9,6 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    2: typeof import('./src/components/tree-table -2/index.vue')['default']
     AButton: typeof import('ant-design-vue/es')['Button']
     ACheckbox: typeof import('ant-design-vue/es')['Checkbox']
     ACheckboxGroup: typeof import('ant-design-vue/es')['CheckboxGroup']
@@ -45,6 +46,7 @@ declare module '@vue/runtime-core' {
     AUpload: typeof import('ant-design-vue/es')['Upload']
     Chart: typeof import('./src/components/chart/index.vue')['default']
     ChInput: typeof import('./src/components/ch-input/index.vue')['default']
+    copy: typeof import('./src/components/tree-table copy/index.vue')['default']
     LeftTree: typeof import('./src/components/left-tree/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
@@ -57,6 +59,7 @@ declare module '@vue/runtime-core' {
     Tree: typeof import('./src/components/tree/index.vue')['default']
     TreeSelect: typeof import('./src/components/tree-select/index.vue')['default']
     TreeTable: typeof import('./src/components/tree-table/index.vue')['default']
+    TreeTable2: typeof import('./src/components/tree-table-2/index.vue')['default']
     TreeTransfer: typeof import('./src/components/tree-transfer/index.vue')['default']
   }
 }

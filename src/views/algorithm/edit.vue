@@ -1,30 +1,56 @@
 <template>
   <div class="breadcrumb">
     <router-link to="/algorithm/">算法管理</router-link>
-    <span class="breadcrumb--current">查看</span>
+    <span class="breadcrumb--current">{{ title }}</span>
   </div>
   <div class="min-main">
     <div class="cursor-pointer text-gray-400" @click="goback"><svg-icon icon="back" class="mr-2"></svg-icon>返回</div>
     <span class="title mb-5 mt-3">算法详情</span>
-    <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px">
-      <a-form-item label="算法名称：" name="name">
-        <span>{{ formState.name }}</span>
-      </a-form-item>
-      <a-form-item label="算法版本：" name="name">
-        <span>{{ formState.version }}</span>
-      </a-form-item>
-      <a-form-item label="算法镜像：" name="name">
-        <span>{{ formState.docker_path }}</span>
-      </a-form-item>
-      <a-form-item label="描述" name="name">
-        <span>{{ formState.desc }}</span>
-      </a-form-item>
-      <a-form-item label="创建时间："
-        ><span>{{ formState.create_time }}</span></a-form-item
+    <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px" @finish="add">
+      <a-form-item
+        label="算法名称"
+        name="name"
+        :rules="[
+          { required: true, message: '请输入算法名称' },
+          { min: 2, max: 50, message: '场景名称长度为2到50位' }
+        ]"
       >
-      <a-form-item label="所属用户："
-        ><span>{{ formState.create_user }}</span></a-form-item
+        <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入算法名称"></a-input>
+      </a-form-item>
+      <a-form-item
+        label="算法版本"
+        name="name"
+        :rules="[
+          { required: true, message: '请输入算法版本' }
+        ]"
       >
+        <a-input v-model:value="formState.version" placeholder="请输入算法版本"></a-input>
+      </a-form-item>
+      <a-form-item
+        label="镜像地址"
+        name="name"
+        :rules="[
+          { required: true, message: '请输入算法镜像地址' },
+          { min: 2, max: 50, message: '场景名称长度为2到50位' }
+        ]"
+      >
+        <a-input v-model:value="formState.docker_path" placeholder="请输入算法镜像"></a-input>
+      </a-form-item>
+      <a-form-item label="算法描述" name="desc">
+        <a-textarea
+            v-model:value="formState.desc"
+            placeholder="请输入描述"
+            rows="10"
+            style="resize: none"
+            maxlength="255"
+          />
+      </a-form-item>
+      <a-form-item class="ml-8" :wrapper-col="{ style: { paddingLeft: '80px' } }">
+          <a-button class="mr-2" type="primary" html-type="submit" :loading="loading">
+            {{ isAdd ? '创建' : '修改' }}
+          </a-button>
+          <a-button @click="goback">取消</a-button>
+        </a-form-item>
     </a-form>
   </div>
 </template>
@@ -33,6 +59,8 @@
 import { formatDate } from '@/utils/tools'
 
 const id = useRoute().params.id
+const isAdd = id === '0'
+const title = isAdd ? '创建算法' : '修改算法'
 
 const formState = reactive<any>({
   name: undefined,
@@ -44,7 +72,20 @@ const formState = reactive<any>({
 })
 
 const router = useRouter()
-const goback = () => router.go(-1)
+const goback = () => router.push('/algorithm')
+const currentApi = api.algorithm
+const loading = ref(false)
+const add = async () => {
+  try {
+     loading.value = true
+    isAdd ? await currentApi.add({ ...formState }) : await currentApi.edit({ id, data: { ...formState } })
+    loading.value = false
+    message.info(isAdd ? '创建成功' : '修改成功')
+    goback()
+  } catch {
+    loading.value = false
+  }
+}
 
 /****** 获取查看数据 */
 const getLookData = async () => {
