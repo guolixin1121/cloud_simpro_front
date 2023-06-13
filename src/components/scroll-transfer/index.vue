@@ -120,7 +120,6 @@ watchOnce(
         label: item[label],
         value: item[value]
       }))
-      console.log(props.targetKeys, 'rightalldatasource2')
       hasDefaultValue = false
     }
   }

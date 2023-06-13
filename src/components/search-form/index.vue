@@ -99,7 +99,9 @@ onMounted(() => {
     SStorage.clear()
   }
   
-  !props.manual && emitSearch()
+  if(!props.manual || storage) {
+    emitSearch()
+  }
 })
 
 // button events

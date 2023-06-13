@@ -11,11 +11,8 @@
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'versionCount'">
             <a-tooltip :title="record.versionCount">
-              <a
-                class="text-blue"
-                @click="
-                  () => router.push({ path: '/map-manage/map-version/' + record.id, query: { preRoute, name: record.name } })
-                "
+              <a class="text-blue inline-block w-full"
+                @click="() => router.push({ path: '/map-manage/version/' + record.id, query: { preRoute, name: record.name } })"
               >
                 {{ record.versionCount }}
               </a>
@@ -44,6 +41,7 @@ const query: Query = ref({})
 const onSearch = (data: Query) => {
   const mapCatalog = catelog.mapCatalog as any
   query.value = { ...data, catalog: mapCatalog?.id }
+  console.log(query.value, 'onSearch')
 }
 
 /****** 表格区域 */
@@ -59,8 +57,8 @@ const columns = [
     fixed: 'right',
     width: 60,
     actions: {
-      查看: (data: any) => router.push('/map-manage/edit/' + data.id + '?type=0&name=' + data.name),
-      编辑: (data: any) => router.push('/map-manage/edit/' + data.id + '?name=' + data.name),
+      查看: (data: any) => router.push('/map-manage/edit/' + data.id + '?type=0&name=' + data.name + '&maptype=' + data.mapType),
+      编辑: (data: any) => router.push('/map-manage/edit/' + data.id + '?name=' + data.name + '&maptype=' + data.mapType),
       删除: async ({ id, name }: any) => await mapsApi.deleteMaps({ id, data: { name } })
     }
   }
@@ -69,5 +67,7 @@ const columns = [
 const onSelect = (val: any) => {
   catelog.mapCatalog = val
   query.value = { ...query.value, catalog: val.id }
+
+  console.log(query.value, 'onSelect')
 }
 </script>

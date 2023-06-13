@@ -8,9 +8,16 @@
     <a-spin :spinning="dataLoading">
       <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 550px" @finish="add">
         <a-form-item label="所属场景集" name="scenesets" :rules="[{ required: true, message: '请选择场景集' }]">
-          <tree-select v-model:value="formState.scenesets" 
-            :api="baseApi.scenesets.getList" label-in-value
-            placeholder="请选择所属场景集"></tree-select>
+          <tree-select 
+            v-if="isAdd"
+            v-model:value="formState.scenesets" 
+            placeholder="请选择所属场景集"
+            :api="baseApi.scenesets.getList"
+            :query="{version: 2}"
+            :lazy="true"
+            :fieldNames="{label: 'groupName', value: 'id'}"
+            ></tree-select>
+            <span v-else>{{ formState.scenesetsName }}</span>
         </a-form-item>
         <a-form-item
           label="场景名称"
@@ -84,7 +91,7 @@ const title =  actionText + '场景'
 
 const baseApi = api
 const currentApi = baseApi.scene
-const sceneCatalog = store.catalog.sceneCatalog as any
+// const sceneCatalog = store.catalog.sceneCatalog as any  // 分级查询场景集，无法默认选中
 
 const formState = reactive({
   adsName: '',
@@ -93,7 +100,8 @@ const formState = reactive({
   mapVersionAdd: undefined,
   mapName: undefined,
   mapVersion: undefined,
-  scenesets: sceneCatalog ? { label: sceneCatalog.sourceName, value: sceneCatalog.id} : undefined,
+  scenesets: undefined, // sceneCatalog ? { label: sceneCatalog.sourceName, value: sceneCatalog.id} : undefined,
+  scenesetsName: '',
   xosc: undefined,
   labels: [],
   adsUrl: undefined,
@@ -106,7 +114,7 @@ const add = async () => {
   const params = {
     source: 0,
     adsName: formState.adsName,
-    baiduSceneSets: formState.scenesets?.value,
+    baiduSceneSets: formState.scenesets,
     mapName: formState.map ? (formState.map as unknown as SelectOption).label : formState.mapName,
     mapVersion: formState.mapVersionAdd || formState.mapVersion,
     xosc: formState.xosc,
@@ -155,7 +163,8 @@ const getEditData = async () => {
     formState.mapVersion = scene.mapVersion
     formState.mapName = scene.mapName
     formState.adsUrl = scene.adsUrl
-    formState.scenesets = { value: scene.baiduSceneSets, label: scene.sceneset_name }
+    formState.scenesets = scene.baiduSceneSets // { value: scene.baiduSceneSets, label: scene.sceneset_name }
+    formState.scenesetsName = scene.sceneset_name
   }
 }
 getEditData()

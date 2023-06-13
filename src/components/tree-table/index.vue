@@ -37,6 +37,9 @@
        </template>
        <template v-else >
          <slot :column="column" :row="row">
+           <svg-icon icon="folder" class="mr-1" 
+            v-if="!row.isLeaf && column.dataIndex == treeNode"
+           ></svg-icon>
            <span>{{ row[column.dataIndex] }}</span>
          </slot>
        </template>
@@ -45,7 +48,7 @@
  </vxe-table>
  <div class=" float-right mt-4 mr-4">
    <a-pagination
-     v-if="!isTree && page.total > tableData?.length"
+     v-if="page.hasPagination"
      :total="page.total"
      :show-total="(total: number) => `共 ${total} 条`"
      :page-size="page.size"
@@ -101,18 +104,28 @@ watch(() => props.query,
 
 const route = useRoute()
 const routeName = route.path.replaceAll('/', '')
-const expandRowKeys = useSessionStorage<number[]>(routeName + ': tree-table', [])
+const expandRowKeys = useSessionStorage<number[]>(routeName + ': tree-expand', [])
 const table = ref()
 const loading = ref(false)
 const tableData = ref([])
 
+// 分页
+const page = reactive({
+ size: 10,
+ current: 1,
+ total: 0,
+ hasPagination: false // 是否需要分页
+})
+
 const refresh = async () => {
  loading.value = true
+ page.hasPagination = false
  try {
    tableData.value = []
-   const data = await fetchTableData()
-   page.total = data.total
-   tableData.value = data.data
+   const { total, hasPagination, data} = await fetchTableData()
+   page.total = total
+   page.hasPagination = hasPagination
+   tableData.value = data
 
    const { query, lazy } = props
     if(!lazy ) {
@@ -130,7 +143,7 @@ const refresh = async () => {
 }
 
 const fetchTableData = async (params: any = {}) => {
- const results = { total: 0, data: []}
+ const results = { total: 0, data: [], hasPagination: false}
  const res = await props.api({
    ...props.query, 
    ...params,
@@ -139,6 +152,7 @@ const fetchTableData = async (params: any = {}) => {
  } )
  results.total = res.count
  results.data = (res.results || res).map((item: any) => ({ ...item, hasChild: !item.isLeaf}))
+ results.hasPagination = results.total > results.data.length
  results.data = props.lazy ? results.data : transformTreeToArray(results.data)
  return results
 }
@@ -205,20 +219,31 @@ const onHandler = async (column: any, record: RObject, key: string) => {
 }
 
 const loadMethod = async ({ row }: any) => {
- const data = await fetchTableData({ parent: row.id })
+ const { data } = await fetchTableData({ parent: row.id })
+ if(data.length == 0) {
+  row.hasChild = false // 子节点为空
+ }
  expandRowKeys.value.push(row)
- return Promise.resolve(data.data)
+ return Promise.resolve(data)
 }
 
 onMounted(() => {
- if(props.isTree) return
- let height = document.getElementsByClassName('top')?.[0]?.clientHeight
- height = isNaN(height) ? 0 : height + 20 // + 20的padding高度
- const tableScrollBody = document.getElementsByClassName('vxe-table--body-wrapper')?.[0] as HTMLElement
- if (tableScrollBody) {
-   tableScrollBody.style.maxHeight = 'calc(100vh - ' + (40 + height + 200) + 'px)'
- }
-})
+    if(props.isTree) return
+    
+    let height = document.getElementsByClassName('top')?.[0]?.clientHeight
+    height = isNaN(height) ? 0 : height + 20 // + 20的padding高度
+
+    const tableScrollBody = document.getElementsByClassName('vxe-table--body-wrapper')?.[0] as HTMLElement
+    if (tableScrollBody) {
+      tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + 260) + 'px)'
+    }
+    
+    const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
+    if (mainContent) {
+      mainContent.style.height = 'calc(100% - ' + height + 'px)'
+    }
+  }
+)
 
 const hasPermission = (column: RObject, row: RObject, key: string) => {
  const action = column.actions[key]
@@ -241,12 +266,6 @@ const hasPermission = (column: RObject, row: RObject, key: string) => {
  return permission
 }
 
-// 分页
-const page = reactive({
- size: 10,
- current: 1,
- total: 0
-})
 const onPageChange = (val: number) => {
  page.current = val
  refresh()

@@ -17,13 +17,10 @@
           {{ getLogicSceneStatusOption(record.status) }}
         </template>
         <template v-if="column.dataIndex == 'result_scene_set'">
-          {{ record.result_scene_set.name }}
+          {{ record.result_scene_set?.name }}
         </template>
          <template v-if="column.dataIndex == 'scene_count'">
-          <a class="text-blue" @click="() => gotoScene(record)">{{ text }}</a>
-          <!-- <router-link class=" text-blue" 
-            :to="`/scene/?name=${record.result_scene_set.name}&id=${record.result_scene_set.baidu_id}`">
-            {{ text }}</router-link>-->
+          <a class="text-blue inline-block w-full" @click="() => gotoScene(record)">{{ text }}</a>
         </template> 
       </template>
     </Table>

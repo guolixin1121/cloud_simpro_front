@@ -27,7 +27,7 @@
           label="标签英文名称："
           name="name"
           :rules="[
-            { required: true, message: '请输入标签英文名称!' },
+            { required: !isView, message: '请输入标签英文名称!' },
             { min: 1, max: 64, message: '标签英文名称长度为1到64位' }
           ]"
         >

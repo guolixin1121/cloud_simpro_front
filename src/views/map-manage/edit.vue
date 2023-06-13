@@ -34,14 +34,14 @@
           </scroll-select>
           <template v-else>{{ formState.mapTypeName }}</template>
         </a-form-item>
-        <a-form-item label="地图目录：" name="catalog" :rules="[{ required: isAdd ? true : false, message: '请选择地图目录!' }]">
+        <a-form-item label="所属地图集：" name="catalog" :rules="[{ required: isAdd ? true : false, message: '请选择地图目录!' }]">
           <tree-select
             v-if="isAdd"
             allowClear
             label-in-value
             v-model:value="formState.catalog"
-            :api="() => mapApi.getMapCatalog({ tree: 1 })"
-            placeholder="请选择地图目录"
+            :api="mapApi.getMapCatalog"
+            placeholder="请选择地图集"
           >
           </tree-select>
           <template v-else>{{ formState.catalog.label }}</template>
@@ -97,7 +97,8 @@
 
 <script setup lang="ts">
 import { formatDate } from '@/utils/tools'
-import { MapManageSourceOptions } from '@/utils/dict'
+import { MapManageSourceOptions, getMapManageSourceOptions } from '@/utils/dict'
+
 // import { SStorage } from '@/utils/storage'
 const mapCatalog = store.catalog.mapCatalog as any
 const route = useRoute()
@@ -168,8 +169,8 @@ const getLookData = async () => {
       formState.update_time = formatDate(res.update_time)
       formState.create_user = res.create_user
       formState.mapFileName = res.mapFileName
-      formState.mapType = res.mapType
-      formState.mapTypeName = res.mapTypeName
+      formState.mapType = route.query.maptype
+      formState.mapTypeName = getMapManageSourceOptions(formState.mapType)
     // formState.labels = res.labels_detail
     }finally {
       dataLoading.value = false

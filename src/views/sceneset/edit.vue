@@ -15,9 +15,6 @@
           </a-select>
           <div v-else>{{ formState.isLeaf ? "场景集" : '场景目录' }}</div>
         </a-form-item>
-        <a-form-item label="场景集名称" name="name" :rules="[{ required: true, message: '请输入场景集名称'}, { min: 2, max: 50, message: '场景名称长度为2到50位'}]">
-          <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景集名称"></a-input>
-        </a-form-item>
         <a-form-item label="所属场景目录" name="parentId" 
           :rules="[{ required: true && formState.isLeaf == '1', message: '请选择所属场景目录'}]">
           <!-- <tree-select
@@ -31,6 +28,7 @@
           >
           </tree-select> -->
           <tree-select 
+            v-if="isAdd"
             v-model:value="formState.parentId" 
             v-model:selectNode="formState.parent"
             placeholder="请选择所属场景目录"
@@ -41,7 +39,11 @@
             :check-leaf="false"
             :fieldNames="{label: 'groupName', value: 'id'}"
             ></tree-select>
+          <div v-else>{{ formState.parentName }}</div>
           <div v-if="error" class="ant-form-item-explain-error" style="">地图目录不能超过四级</div>
+        </a-form-item>
+        <a-form-item label="场景集名称" name="name" :rules="[{ required: true, message: '请输入场景集名称'}, { min: 2, max: 50, message: '场景名称长度为2到50位'}]">
+          <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景集名称"></a-input>
         </a-form-item>
         <a-form-item label="场景集路径" name="path">
           <span>{{ path }}</span>
@@ -79,14 +81,13 @@ const formState = reactive({
   name: '',
   parentId: undefined,
   parent: null as any,
+  parentName: '',
   labels: [],
   isLeaf: '1'
 })
 
 const path = computed(() => {
-  // const scenesets = formState.parent as unknown as SelectOption
-  // return (scenesets?.label || '') + '/' + formState.name
-  return formState.parent?.title || '' + '/' + formState.name
+  return (formState.parent?.title || '') + '/' + formState.name
 })
 
 const loading = ref(false)
@@ -99,7 +100,7 @@ const add = async () => {
   const params = {
     name: formState.name,
     parentId: formState.parentId,
-    labels: formState.labels?.map((item: any) => item.value),
+    labels: formState.labels?.map((item: any) => item.value || item.name),
     isLeaf:formState.isLeaf,
     path: path.value
   }
@@ -137,9 +138,10 @@ const getEditData = async () => {
       const data = await currentApi.get(id)
       formState.name = data.name
       formState.parentId = data.parentId
+      formState.parentName = data.parentName
       // formState.parent = { label: data.parentName, value: data.parentId }
       formState.labels = data.labels_detail
-      formState.isLeaf = data.isLeaf.toString()
+      formState.isLeaf = data.isLeaf?.toString()
     } finally {
       dataLoading.value = false
     }

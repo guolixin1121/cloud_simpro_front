@@ -16,11 +16,9 @@
           </a-select>
           <div v-else>{{ formState.isLeaf ? "地图集" : "地图目录" }}</div>
         </a-form-item>
-        <a-form-item label="地图集名称" name="name" :rules="[{ required: true, message: '请输入地图集名称'}, { min: 2, max: 50, message: '地图名称长度为2到50位'}]">
-          <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入地图集名称"></a-input>
-        </a-form-item>
         <a-form-item label="所属地图目录" name="parentId" :rules="[{ required: formState.isLeaf == '1', message: '请选择地图集类型'}]">
           <tree-select
+            v-if="isAdd"
             placeholder="请选择所属地图目录"
             allowClear
             v-model:value="formState.parentId"
@@ -31,6 +29,11 @@
           >
           </tree-select>
           <div v-if="error" class="ant-form-item-explain-error" style="">地图目录不能超过四级</div>
+          <span v-else>{{ formState.parentName }}</span>
+        </a-form-item>
+
+        <a-form-item label="地图集名称" name="name" :rules="[{ required: true, message: '请输入地图集名称'}, { min: 2, max: 50, message: '地图名称长度为2到50位'}]">
+          <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入地图集名称"></a-input>
         </a-form-item>
         <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
           <a-button type="primary" html-type="submit" :loading="loading">

@@ -3,11 +3,18 @@
     placeholder="请选择"
     showSearch
     tree-data-simple-mode
+    treeNodeFilterProp="title"
+    :dropdownMatchSelectWidth="false"
     :tree-data="treeData"
     :load-data="lazy ? onLoadData : null"
     :not-found-content=" loading ? '数据加载中...' : '暂无数据'"
+    :tree-icon="true"
     @select="onSelect"
   >
+  <template #title="data">
+    <svg-icon icon="folder" v-if="!data.selectable"></svg-icon>
+    {{ data.title  }}
+  </template>
   </a-tree-select>
 </template>
 <script setup lang="ts">
@@ -63,7 +70,7 @@ const refresh = async () => {
       loading.value = true
       const options = await getOptions()
       treeData.value.push(...options)
-      console.log(options)
+      console.log(treeData.value)
     } finally {
       loading.value = false
     }
@@ -93,7 +100,7 @@ const treeTransfer = (data: any): TreeItem[] => {
       level: item.level,
       id: item.nodeId || item.id,
       pId: item.parentId,
-      selectable: props.checkLeaf ? !!item.isLeaf : true,
+      selectable: props.checkLeaf ? (item.isLeaf == 1) : true,
       isLeaf: item.isLeaf
     } as any
     // lazy时在data中加children，多层时展示会报错
@@ -116,9 +123,7 @@ const onLoadData = async (treeNode: any) => {
 }
 
 const onSelect = (value: string, node: any) => {
-  if(node.isLeaf == 1) {
-    emits('update:selectNode', node)
-  }
+  emits('update:selectNode', node)
 }
 
 watch(

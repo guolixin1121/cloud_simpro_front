@@ -24,6 +24,7 @@ export const MapManageSourceOptions = [
   { label: '真实', value: 1 },
   { label: '虚拟', value: 2 }
 ]
+export const getMapManageSourceOptions = (value: number | string) => MapManageSourceOptions.find(v => v.value == value)?.label
 
 export const KpiTypeOptions = [
   { label: '全部', value: '' },
