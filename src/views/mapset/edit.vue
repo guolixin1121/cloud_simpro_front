@@ -32,8 +32,12 @@
           <span v-else>{{ formState.parentName }}</span>
         </a-form-item>
 
-        <a-form-item label="地图集名称" name="name" :rules="[{ required: true, message: '请输入地图集名称'}, { min: 2, max: 32, message: '地图名称长度为2到32位'}]">
-          <ch-input v-model:value="formState.name" :maxlength="32" v-if="isAdd"
+        <a-form-item label="地图集名称" name="name" 
+          :rules="[
+            { required: true, message: '请输入地图集名称'}, 
+            { validator: () => checkChName(formState.name), trigger: 'change' }
+          ]">
+          <ch-input v-model:value="formState.name" :maxlength="32"
             placeholder="请输入地图集名称"
             @change="(val: string)=>{formState.name = val}"></ch-input>
         </a-form-item>
@@ -49,6 +53,8 @@
 </template>
 
 <script setup lang="ts">
+import { checkChName } from '@/utils/tools';
+
 const { id } = useRoute().params
 const { name } = useRoute().query
 const isAdd = id === '0'

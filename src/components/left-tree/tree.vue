@@ -6,13 +6,14 @@
       :source="list"
       :default-expanded-keys="defaultExpandKeys"
       :render-node="renderNode"
+      :load-data="loadData"
       @expandChange="toggleExpand"
       @selectChange="selectChange"
     />
   </div>
 </template>
 <script setup lang="tsx">
-import { TreeNodeOptions, VirTree, NodeKey } from '@ysx-libs/vue-virtual-tree'
+import { TreeNodeOptions, BaseTreeNode, VirTree, NodeKey } from '@ysx-libs/vue-virtual-tree'
 import '../../../node_modules/@ysx-libs/vue-virtual-tree/dist/style.css'
 import { useSessionStorage } from '@vueuse/core';
 
@@ -36,9 +37,9 @@ const props = defineProps({
 const route = useRoute()
 const routeName = route.path.replaceAll('/', '')
 
-const list = useSessionStorage<any>( routeName + ': tree', [])
-const defaultSelectedKey = useSessionStorage<NodeKey>(routeName + ': tree-select', '')
-const defaultExpandKeys = useSessionStorage<NodeKey[]>(routeName + ': tree-expand', [])
+const list = useSessionStorage<any>( routeName + ': left-tree', [])
+const defaultSelectedKey = useSessionStorage<NodeKey>(routeName + ': left-tree-select', '')
+const defaultExpandKeys = useSessionStorage<NodeKey[]>(routeName + ': left-tree-expand', [])
 
 const searchKey = ref('')
 const gData = ref([])
@@ -60,6 +61,7 @@ const getData = async () => {
   if (props.api && list.value.length == 0) {
     try {
       loading.value = true
+
       const res = await props.api()
       gData.value = JSON.parse(JSON.stringify(res.results))
       if (props.searchValue) {
@@ -81,21 +83,31 @@ const getData = async () => {
   }
   setDefaultValue()
 }
+
 const recursion = (val: any[]) => {
   const nodes = [] as any[]
   val.forEach((item: any) => {
     let children = recursion(item.children || [])
-    if(item.isLeaf == 1 || children?.length) {
-      nodes.push({
-        ...item,
-        nodeKey: item.id,
-        sourceName: item.name,
-        name: item.name + (item.count != undefined  ? `（${item.count}）` : ''),
-        children
-      })
-    }
+    nodes.push({
+      ...item,
+      nodeKey: item.id,
+      name: item.groupName,
+      children,
+      hasChildren: item.isLeaf == 0
+    })
   })
   return nodes
+}
+
+function loadData(node: BaseTreeNode, callback: (children: TreeNodeOptions[]) => void) {
+  if(props.api) {
+    props.api({parent: node.key}).then((res: any) => {
+      console.log(node)
+      const results = recursion(res.results)
+      node.children = results
+      callback(results)
+    })
+  }
 }
 
 const renderNode = (node: any) => {

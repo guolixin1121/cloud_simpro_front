@@ -2,18 +2,26 @@
   <search-form :items="formItems" :manual="true" @search="onSearch"></search-form>
 
   <div class="main main-bg">
-    <tree2
+    <left-tree
+      :title="'场景集'"
+      :api="(arg: any) => sceneApi.getList({version: 2, ...arg})"
+      :treeSearchName="selectedSceneset?.name"
+      :treeSelectId="selectedSceneset?.id"
+      :filedNames="{label: 'groupName', value: 'id'}"
+      @select="onSelect"
+    />
+    <!-- <tree2
       :title="'场景集'"
       :api="sceneApi.getList"
       :query="{...selectedSceneset, version: 2 }"
       :lazy="true"
       :filedNames="{label: 'groupName', value: 'id'}"
       @select="onSelect"
-    />
+    /> -->
     <div class="right-table">
       <div class="flex justify-between items-center">
         <span class="title">场景管理</span>
-        <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
+        <a-button type="primary" @click="router.push('/scene/view/0')">上传场景</a-button>
       </div>
       <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1100, y: 'auto' }" />
     </div>
@@ -23,7 +31,6 @@
 <script setup lang="ts">
 import { SceneSourceOptions, getSceneSourceName } from '@/utils/dict'
 import { SStorage } from '@/utils/storage';
-const user = store.user
 const currentApi = api.scene
 const sceneApi = api.scenesets
 

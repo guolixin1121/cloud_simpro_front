@@ -31,7 +31,7 @@
           name="adsName"
           :rules="[
             { required: true, message: '请输入场景名称' },
-            { min: 2, max: 160, message: '场景名称长度为2到160位' }
+            { validator: () => checkChName(formState.adsName), trigger: 'change' }
           ]"
         >
           <ch-input v-model:value="formState.adsName" :maxlength="160" v-if="isAdd"
@@ -90,6 +90,8 @@
 </template>
 
 <script setup lang="ts">
+import { checkChName } from '@/utils/tools';
+
 const route = useRoute()
 const { id } = route.params
 const isAdd = id === '0'

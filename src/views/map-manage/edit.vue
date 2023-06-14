@@ -15,7 +15,7 @@
           name="name"
           :rules="[
             { required: isAdd ? true : false, message: '请输入地图名称!' },
-            { min: 2, max: 32, message: '地图名称长度为2到32位' }
+            { validator: () => checkChName(formState.name), trigger: 'change' }
           ]"
         >
           <ch-input v-model:value="formState.name" :maxlength="32" v-if="isAdd"
@@ -34,7 +34,8 @@
           </scroll-select>
           <template v-else>{{ formState.mapTypeName }}</template>
         </a-form-item>
-        <a-form-item label="所属地图集：" name="catalog" :rules="[{ required: isAdd ? true : false, message: '请选择地图集!' }]">
+        {{ formState.catalog }}
+        <a-form-item label="所属地图集：" name="catalog" :rules="[{ required: isAdd, message: '请选择地图集!' }]">
           <tree-select
             v-if="isAdd"
             allowClear
@@ -97,6 +98,7 @@
 <script setup lang="ts">
 import { formatDate } from '@/utils/tools'
 import { MapManageSourceOptions, getMapManageSourceOptions } from '@/utils/dict'
+import { checkChName, isEmpty } from '@/utils/tools';
 
 // import { SStorage } from '@/utils/storage'
 const mapCatalog = store.catalog.mapCatalog as any
@@ -110,7 +112,7 @@ const mapApi = api.maps
 
 const formState = reactive<any>({
   name: undefined,
-  catalog: mapCatalog ? { label: mapCatalog?.name, value: mapCatalog?.id} : null,
+  catalog: !isEmpty(mapCatalog) ? { label: mapCatalog?.name, value: mapCatalog?.id} : null,
   xodr: null,
   desc: '',
   latestVersion: '',

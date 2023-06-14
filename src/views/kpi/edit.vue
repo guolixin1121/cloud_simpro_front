@@ -15,7 +15,7 @@
         name="name"
         :rules="[
           { required: true, message: '请输入评测指标名称!' },
-          { min: 2, max: 50, message: '场景名称长度为2到50位' }
+          { validator: () => checkChName(formState.name), trigger: 'change' }
         ]"
       >
         <ch-input v-model:value="formState.name" :maxlength="32" v-if="isAdd"
@@ -41,6 +41,7 @@
 </template>
 
 <script setup lang="ts">
+import { checkChName } from '@/utils/tools';
 
 const id = useRoute().params.id
 const isAdd = id === '0'
@@ -77,6 +78,7 @@ const add = async () => {
     loading.value = false
   }
 }
+
 
 // 仅能用自定义的类别
 const getTypes = async () => {

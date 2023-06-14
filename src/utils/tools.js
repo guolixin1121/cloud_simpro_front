@@ -105,5 +105,15 @@ export function getCnWordTotal(str) {
       }
     }
   }
+
   return total
+}
+
+export const checkChName = (str) => {
+  const chLength = getCnWordTotal(str)
+  const length = chLength * 2 + (str.length - chLength)
+  if(length > 0 && length < 2) {
+    return Promise.reject('名称长度为2到32位')
+  } 
+  return Promise.resolve()
 }

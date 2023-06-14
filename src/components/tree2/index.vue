@@ -8,21 +8,21 @@
         @search="onSearch"
       />
     <div class="tree-container"> 
-      <a-spin :spinning="loading">
-        <a-tree
+      <a-spin :spinning="loading" class=" w-full"></a-spin>
+      <a-tree
+          v-if="!loading"
           :loading="loading"
-          :load-data="lazy ? loadData : null"
+          :load-data="loadData"
           :tree-data="treeData"
+          @expand="onExpand"
           @select="onSelect">
         </a-tree>
-      </a-spin>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { useSessionStorage } from '@vueuse/core';
-import { TreeDataItem } from 'ant-design-vue/lib/tree';
 import { isEmpty } from 'lodash';
 
 const props = defineProps({
@@ -47,35 +47,28 @@ const props = defineProps({
   }
 })
 const emites = defineEmits(['select'])
-const searchQuery = ref()
 
 const routeName = useRoute().path.replaceAll('/', '')
 const searchValue = useSessionStorage(routeName + ': tree-search', props.query.name || '') 
+const searchQuery = ref()
+
 const onSearch = () => {
-  searchQuery.value = {
-    ...props.query,
-    name: searchValue.value,
-  }
+  searchQuery.value = { ...props.query, name: searchValue.value,}
   delete searchQuery.value.baidu_id
 }
 
 onMounted(() => {
-  searchQuery.value = props.query
+  // if(treeData.value.length == 0) {
+    searchQuery.value = {...props.query, name: searchValue.value}
+  // }
   if(!isEmpty(selectedNode.value)) {
     emites('select', selectedNode.value)
   }
 })
 
-// 选中的树节点
-const selectedNode = useSessionStorage(routeName + ': tree-select', [] as any)
-const onSelect = (keys: string[], {selectedNodes}: any) => {
-  selectedNode.value = selectedNodes[0]
-  emites('select', selectedNodes[0])
-}
-
 /******* table ******/
 const loading = ref(false)
-const treeData = ref<TreeDataItem[]>([])
+const treeData = useSessionStorage(routeName + ': tree', [])
 
 const refresh = async () => {
   try{
@@ -88,9 +81,8 @@ const refresh = async () => {
 }
 
 const getOptions = async (query: any = {}) => {
-  console.log(props.query)
   const res = await props.api({
-    ...props.query, 
+    ...searchQuery.value, 
     ...query
   } )
   const { label, value } = props.filedNames
@@ -107,13 +99,36 @@ const getOptions = async (query: any = {}) => {
 
 const loadData = async (treeNode: any) => {
   return new Promise((resolve: (value?: unknown) => void) => {
+    if (treeNode.dataRef.children) {
+      resolve();
+      return;
+    }
     getOptions({parent: treeNode.key}).then((res) => {
       treeNode.dataRef.children = res 
-      treeData.value = [...treeData.value];
+      treeData.value = [...treeData.value]
       resolve()
     })
   })
 }
 
-refresh()
+// 选中的树节点
+const selectedNode = useSessionStorage(routeName + ': tree-select', {} as any)
+const selectedRowKeys = ref([selectedNode.value.id])
+const onSelect = (keys: string[], {selected, selectedNodes}: any) => {
+  if(!selected) return
+
+  const node = selectedNodes[0]
+  if(node.id == selectedNode.value.id) return
+
+  selectedNode.value = node
+  selectedRowKeys.value = [node.id]
+  emites('select', node)
+}
+
+const expandRowKeys = useSessionStorage<string[]>(routeName + ': tree-expand', [])
+const onExpand = (expandedKeys: string[]) => {
+  expandRowKeys.value = expandedKeys
+}
+
+watch(searchQuery, refresh)
 </script>

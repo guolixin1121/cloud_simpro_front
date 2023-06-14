@@ -1,6 +1,6 @@
 <template>
   <div class="breadcrumb">
-    <router-link to="/scene/">场景管理</router-link>
+    <router-link to="/scene/2">场景管理</router-link>
     <span class="breadcrumb--current">场景详情</span>
   </div>
   <div class="min-main">

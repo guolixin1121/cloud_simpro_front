@@ -24,7 +24,8 @@ const emits = defineEmits(['change'])
 const { value, maxlength } = toRefs(props)
 const inputChange = (e: { target: { value: any } }) => {
   const count = getCnWordTotal(e.target.value)
-  if (count * 2 + (e.target.value.length - count) <= +maxlength.value) {
+  const totalLength = count * 2 + (e.target.value.length - count)
+  if ( totalLength <= +maxlength.value) {
     emits('change', e.target.value)
   }
 }
