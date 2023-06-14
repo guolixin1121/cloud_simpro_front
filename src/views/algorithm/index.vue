@@ -22,8 +22,8 @@ const onSearch = (data: Query) => (query.value = data)
 const router = useRouter()
 const columns = [
   { title: '算法ID', dataIndex: 'id', width: 80 },
-  { title: '算法名称', dataIndex: 'name', width: 150, ellipsis: true },
-  { title: '算法版本', dataIndex: 'version', width: 100, ellipsis: true },
+  { title: '算法名称', dataIndex: 'name', width: 200, ellipsis: true },
+  // { title: '算法版本', dataIndex: 'version', width: 100, ellipsis: true },
   { title: '描述', dataIndex: 'desc', ellipsis: true },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '所属用户', dataIndex: 'create_user', width: 100, ellipsis: true },

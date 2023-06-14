@@ -20,9 +20,10 @@
     </div>
 
     <div class="ant-transfer-list ml-1">
-      <div class="ant-transfer-list-title mt-1 ml-2">{{ titles[1] }}</div>
+      <div class="ant-transfer-list-title mt-1">{{ titles[1] }}</div>
       <ul style="height: calc(100% - 40px); overflow: auto">
-        <li class="transfer-checked-item flex justify-between items-center" v-for="item in selectedNodes" :key="item.key">
+        <li class="transfer-checked-item flex justify-between items-center"
+          v-for="item in selectedNodes" :key="item.key">
           {{ item.title }}
           <svg-icon icon="close" class=" text-gray-400 cursor-pointer"
             @click="remove(item)"/>
@@ -145,9 +146,9 @@ getOptions()
   border-bottom: 1px solid #e6e7eb;
 }
 .transfer-checked-item {
-  height: 32px;
   line-height: 32px;
-  padding: 0px 12px;
+  padding: 0 2px;
+  word-break: break-all;
   &:hover {
     background: #f2f3f5;
   }

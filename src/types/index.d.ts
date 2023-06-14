@@ -49,5 +49,6 @@ interface FieldName {
 interface TreeItem {
   title: string
   value: string
-  children: TreeItem[]
+  key?: string
+  children?: TreeItem[]
 }

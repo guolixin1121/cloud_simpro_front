@@ -42,13 +42,17 @@
           :titles="['可选评测指标', '选中评测指标']"></scroll-transfer>
       </a-form-item>
       <a-form-item v-if="isAdd" label="所属场景集" name="scenesets" :rules="[{ required: isAdd, message: '请先选择场景集，再选择场景' }]">
-          <tree-select v-model:value="formState.scenesets" 
+        <tree-select v-model:value="formState.scenesets" 
+            :api="baseApi.scenesets.getList"
+            placeholder="请选择所属场景集"
+            @change="onScenesetChanged"></tree-select>  
+        <!-- <tree-select v-model:value="formState.scenesets" 
             :api="baseApi.scenesets.getList"
             :query="{version: 2}"
             :lazy="true"
             placeholder="请选择所属场景集"
             :fieldNames="{label: 'groupName', value: 'id'}"
-            @change="onScenesetChanged"></tree-select>
+            @change="onScenesetChanged"></tree-select> -->
         </a-form-item>
       <a-form-item v-if="isAdd" label="场景" name="scenes" :rules="[{ required: isAdd, message: '请选择场景'}]">
         <scroll-transfer v-model:target-keys="formState.scenes" :api="getScenes" 

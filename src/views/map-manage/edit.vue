@@ -34,7 +34,7 @@
           </scroll-select>
           <template v-else>{{ formState.mapTypeName }}</template>
         </a-form-item>
-        <a-form-item label="所属地图集：" name="catalog" :rules="[{ required: isAdd ? true : false, message: '请选择地图目录!' }]">
+        <a-form-item label="所属地图集：" name="catalog" :rules="[{ required: isAdd ? true : false, message: '请选择地图集!' }]">
           <tree-select
             v-if="isAdd"
             allowClear
@@ -46,17 +46,16 @@
           </tree-select>
           <template v-else>{{ formState.catalog.label }}</template>
         </a-form-item>
-        <a-form-item label="地图文件：" name="xodr" :rules="[{ required: isAdd, message: '请上传地图文件!' }]">
+        <a-form-item v-if="!isView" label="地图文件：" name="xodr" :rules="[{ required: isAdd, message: '请上传地图文件!' }]">
           <single-upload
-            v-if="!isView"
             accept=".xodr"
             class="inline-block pr-2"
             v-model:value="formState.xodr"
             :desc="'选择文件'"
           ></single-upload>
-          <template v-if="!isView && !formState.xodr">{{ formState.mapFileName }}</template>
+          <template v-if="!formState.xodr">{{ formState.mapFileName }}</template>
         </a-form-item>
-        <a-form-item v-if="!isAdd" label="地图文件地址：">{{ formState.latestVersionUrl }} </a-form-item>
+        <a-form-item v-if="!isAdd" label="地图文件：">{{ formState.latestVersionUrl }} </a-form-item>
         <a-form-item v-if="!isAdd" label="地图版本：" name="name">
           <span>{{ formState.latestVersion }}</span>
         </a-form-item>
@@ -169,7 +168,7 @@ const getLookData = async () => {
       formState.update_time = formatDate(res.update_time)
       formState.create_user = res.create_user
       formState.mapFileName = res.mapFileName
-      formState.mapType = route.query.maptype
+      formState.mapType = res.mapType
       formState.mapTypeName = getMapManageSourceOptions(formState.mapType)
     // formState.labels = res.labels_detail
     }finally {

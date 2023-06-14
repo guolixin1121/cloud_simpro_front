@@ -15,9 +15,10 @@
           { min: 2, max: 50, message: '场景名称长度为2到50位' }
         ]"
       >
-        <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入算法名称"></a-input>
+        <a-input v-if="isAdd" v-model:value="formState.name" :maxlength="50" placeholder="请输入算法名称"></a-input>
+        <span v-else>{{ formState.name }}</span>
       </a-form-item>
-      <a-form-item
+      <!-- <a-form-item
         label="算法版本"
         name="name"
         :rules="[
@@ -25,7 +26,7 @@
         ]"
       >
         <a-input v-model:value="formState.version" placeholder="请输入算法版本"></a-input>
-      </a-form-item>
+      </a-form-item> -->
       <a-form-item
         label="镜像地址"
         name="name"
@@ -64,7 +65,7 @@ const title = isAdd ? '创建算法' : '修改算法'
 
 const formState = reactive<any>({
   name: undefined,
-  version: undefined,
+  version: '1',
   docker_path: undefined,
   desc: undefined,
   create_time: undefined,
@@ -89,13 +90,15 @@ const add = async () => {
 
 /****** 获取查看数据 */
 const getLookData = async () => {
-  const res = await api.algorithm.getList({ id })
-  formState.name = res?.results[0].name
-  formState.version = res?.results[0].version
-  formState.docker_path = res?.results[0].docker_path
-  formState.desc = res?.results[0].desc
-  formState.create_time = formatDate(res?.results[0].create_time)
-  formState.create_user = res?.results[0].create_user
+  if(id != '0') {
+    const res = await api.algorithm.getList({ id })
+    formState.name = res?.results[0].name
+    formState.version = res?.results[0].version
+    formState.docker_path = res?.results[0].docker_path
+    formState.desc = res?.results[0].desc
+    formState.create_time = formatDate(res?.results[0].create_time)
+    formState.create_user = res?.results[0].create_user
+  }
 }
 getLookData()
 </script>

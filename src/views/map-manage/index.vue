@@ -57,8 +57,8 @@ const columns = [
     fixed: 'right',
     width: 60,
     actions: {
-      查看: (data: any) => router.push('/map-manage/edit/' + data.id + '?type=0&name=' + data.name + '&maptype=' + data.mapType),
-      编辑: (data: any) => router.push('/map-manage/edit/' + data.id + '?name=' + data.name + '&maptype=' + data.mapType),
+      查看: (data: any) => router.push('/map-manage/edit/' + data.id + '?type=0&name=' + data.name),
+      编辑: (data: any) => router.push('/map-manage/edit/' + data.id + '?name=' + data.name),
       删除: async ({ id, name }: any) => await mapsApi.deleteMaps({ id, data: { name } })
     }
   }

@@ -16,7 +16,7 @@
           </a-select>
           <div v-else>{{ formState.isLeaf ? "地图集" : "地图目录" }}</div>
         </a-form-item>
-        <a-form-item label="所属地图目录" name="parentId" :rules="[{ required: formState.isLeaf == '1', message: '请选择地图集类型'}]">
+        <a-form-item label="所属地图目录" name="parentId" :rules="[{ required: formState.isLeaf == '1', message: '请选择地图目录'}]">
           <tree-select
             v-if="isAdd"
             placeholder="请选择所属地图目录"
@@ -32,8 +32,10 @@
           <span v-else>{{ formState.parentName }}</span>
         </a-form-item>
 
-        <a-form-item label="地图集名称" name="name" :rules="[{ required: true, message: '请输入地图集名称'}, { min: 2, max: 50, message: '地图名称长度为2到50位'}]">
-          <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入地图集名称"></a-input>
+        <a-form-item label="地图集名称" name="name" :rules="[{ required: true, message: '请输入地图集名称'}, { min: 2, max: 32, message: '地图名称长度为2到32位'}]">
+          <ch-input v-model:value="formState.name" :maxlength="32" v-if="isAdd"
+            placeholder="请输入地图集名称"
+            @change="(val: string)=>{formState.name = val}"></ch-input>
         </a-form-item>
         <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
           <a-button type="primary" html-type="submit" :loading="loading">
@@ -55,7 +57,7 @@ const title =  actionText + '地图集'
 const currentApi = api.mapsets
 
 const formState = reactive({
-  name: undefined,
+  name: '',
   parentId: undefined,
   parent: {level: -1},
   parentName: '',

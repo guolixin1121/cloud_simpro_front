@@ -8,14 +8,21 @@
     <a-spin :spinning="dataLoading">
       <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 550px" @finish="add">
         <a-form-item label="所属场景集" name="scenesets" :rules="[{ required: true, message: '请选择场景集' }]">
-          <tree-select 
+          <!-- <tree-select 
             v-if="isAdd"
+            :show-search="false"
             v-model:value="formState.scenesets" 
             placeholder="请选择所属场景集"
             :api="baseApi.scenesets.getList"
             :query="{version: 2}"
             :lazy="true"
             :fieldNames="{label: 'groupName', value: 'id'}"
+            ></tree-select> -->
+            <tree-select 
+            v-if="isAdd"
+            v-model:value="formState.scenesets" 
+            placeholder="请选择所属场景集"
+            :api="baseApi.scenesets.getList"
             ></tree-select>
             <span v-else>{{ formState.scenesetsName }}</span>
         </a-form-item>

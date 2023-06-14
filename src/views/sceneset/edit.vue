@@ -17,7 +17,8 @@
         </a-form-item>
         <a-form-item label="所属场景目录" name="parentId" 
           :rules="[{ required: true && formState.isLeaf == '1', message: '请选择所属场景目录'}]">
-          <!-- <tree-select
+          <tree-select
+            v-if="isAdd"
             placeholder="请选择所属场景目录"
             allowClear
             v-model:value="formState.parentId"
@@ -26,19 +27,20 @@
             :api-filter="(item: any) => !item.isLeaf"
             :check-leaf="false"
           >
-          </tree-select> -->
-          <tree-select 
+          </tree-select>
+          <!-- <tree-select 
             v-if="isAdd"
             v-model:value="formState.parentId" 
             v-model:selectNode="formState.parent"
             placeholder="请选择所属场景目录"
+            :show-search="false"
             :api="baseApi.scenesets.getList"
             :api-filter="(item: any) => !item.isLeaf"
             :query="{version: 2}"
             :lazy="true"
             :check-leaf="false"
             :fieldNames="{label: 'groupName', value: 'id'}"
-            ></tree-select>
+            ></tree-select> -->
           <div v-else>{{ formState.parentName }}</div>
           <div v-if="error" class="ant-form-item-explain-error" style="">地图目录不能超过四级</div>
         </a-form-item>

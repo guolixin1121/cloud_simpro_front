@@ -170,6 +170,8 @@ const transformTreeToArray = (data: any[], parentId: string | number = '') => {
      if(!itemObj.id) {
        itemObj.id = '-1'
      }
+     // eslint-disable-next-line no-prototype-builtins
+     itemObj.isLeaf = item.hasOwnProperty('isLeaf') ? item.isLeaf == 1 : item.isTag
      const children = transformTreeToArray(itemObj.children, itemObj.id)
      results.push(itemObj)
      results.push(...children)
@@ -223,7 +225,6 @@ const loadMethod = async ({ row }: any) => {
   row.hasChild = false // 子节点为空
  }
  expandRowKeys.value.push(row)
- console.log(data, 'loadMethod')
  return Promise.resolve(data)
 }
 

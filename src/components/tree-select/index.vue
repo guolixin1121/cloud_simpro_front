@@ -1,20 +1,12 @@
 <template>
   <a-tree-select
     placeholder="请选择"
+    treeDefaultExpandAll
     showSearch
-    tree-data-simple-mode
     treeNodeFilterProp="title"
-    :dropdownMatchSelectWidth="false"
-    :tree-data="treeData"
-    :load-data="lazy ? onLoadData : null"
-    :not-found-content=" loading ? '数据加载中...' : '暂无数据'"
-    :tree-icon="true"
-    @select="onSelect"
+    :treeData="treeData"
+    :not-found-content="api? '数据加载中...' : ''"
   >
-  <template #title="data">
-    <svg-icon icon="folder" v-if="!data.selectable"></svg-icon>
-    {{ data.title  }}
-  </template>
   </a-tree-select>
 </template>
 <script setup lang="ts">
@@ -22,33 +14,18 @@ const props = defineProps({
   api: {
     type: Function
   },
-  lazy: {
-    type: Boolean,
-    default: () => false
-  },
-  // api结果的过滤器
-  apiFilter: {
-    type: Function
-  },
-  query: {
-    type: Object,
-    default: () => ({})
-  },
   fieldNames: {
     type: Object as PropType<FieldName>,
     default: () => ({ label: 'name', value: 'id' })
   },
-  // 是否限定只能选择叶子节点
   checkLeaf: {
     type: Boolean,
     default: () => true
   },
-  // 获取节点的源数据，包含了api返回的所有字段
-  selectNode: {
-    type: Object
+  select: {
+    type: Function
   }
 })
-const emits = defineEmits(['update:selectNode'])
 const attrs = useAttrs()
 const allOption: TreeItem = { title: '全部', value: '', children: [] }
 const treeData = ref<TreeItem[]>([])
@@ -63,77 +40,26 @@ const initOptions = () => {
   hasAllOption && treeData.value.push(allOption)
 }
 
-const loading = ref(false)
-const refresh = async () => {
+const getOptions = async () => {
   if (props.api) {
-    try {
-      loading.value = true
-      const options = await getOptions()
-      treeData.value.push(...options)
-      console.log(treeData.value)
-    } finally {
-      loading.value = false
-    }
-  }
-}
-const getOptions = async (query: any = {}) => {
-  if (props.api) {
-      const res = await props.api({ ...props.query, ...query})
-      return treeTransfer(res.results || res)
-  } else {
-    return []
+    const res = await props.api()
+    const data = treeTransfer(res.results || res)
+    treeData.value.push(...data)
   }
 }
 
 const treeTransfer = (data: any): TreeItem[] => {
-  let parents = data
-  const apiFilter = props.apiFilter
-  if(apiFilter) {
-    parents = parents.filter((item: any) => apiFilter(item))
-  }
   const { label, value } = props.fieldNames
-  const options = parents.map((item: any) => {
-    const data = {
-      title: item[label],
-      value: item[value],
-      key: item[value],
-      level: item.level,
-      id: item.nodeId || item.id,
-      pId: item.parentId,
-      selectable: props.checkLeaf ? (item.isLeaf == 1) : true,
-      isLeaf: item.isLeaf
-    } as any
-    // lazy时在data中加children，多层时展示会报错
-    if(!props.lazy) {
-      data.children = treeTransfer(item.children || [])
-    }
-    return data
-  })
+  const options = data.map((item: any) => ({
+    title: item[label],
+    value: item[value],
+    key: item[value],
+    selectable: props.checkLeaf ? !!item.isLeaf : true,
+    children: treeTransfer(item.children || [])
+  }))
   return options
 }
 
-const onLoadData = async (treeNode: any) => {
-  return new Promise((resolve: (value?: unknown) => void) => {
-    getOptions({parent: treeNode.id}).then((res) => {
-      treeNode.dataRef.children = res 
-      treeData.value.push(...res)
-      resolve()
-    })
-  })
-}
-
-const onSelect = (value: string, node: any) => {
-  emits('update:selectNode', node)
-}
-
-watch(
- ()=> props.api,
- () => {
-  treeData.value = []
-  refresh()
- }
-)
-
 initOptions()
-refresh()
+getOptions()
 </script>

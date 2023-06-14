@@ -10,9 +10,9 @@
       <a-form-item label="算法名称：" name="name">
         <span>{{ formState.name }}</span>
       </a-form-item>
-      <a-form-item label="算法版本：" name="name">
+      <!-- <a-form-item label="算法版本：" name="name">
         <span>{{ formState.version }}</span>
-      </a-form-item>
+      </a-form-item> -->
       <a-form-item label="算法镜像：" name="name">
         <span>{{ formState.docker_path }}</span>
       </a-form-item>
