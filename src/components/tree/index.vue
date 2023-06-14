@@ -2,35 +2,30 @@
   <div class="left-tree">
     <span class="sub-title">{{ title }}</span>
     <a-input-search
-        allowClear
-        v-model:value="searchValue"
-        style="margin-bottom: 8px"
-        @search="onSearch"
+      allowClear
+      v-model:value="searchValue"
+      style="margin-bottom: 8px"
+      @search="onSearch"
       />
-    <div class="tree-container">    
-      <tree-table
-        :query="searchQuery"
-        :api="api" 
-        :lazy="lazy"
-        :columns="columns"
-        :tree-node="treeNode"
-        :is-tree="true"
-        @select="onSelect" 
-      >
-      <template #default="{ row }">
-        <div style="white-space: nowrap;">
-            <svg-icon icon="folder" class="mr-1" v-if="!row.isLeaf"></svg-icon>
-            <span v-if="row.id == (selectedNode as any).id" class="text-blue">{{ row[treeNode] }}</span>
-            <span v-else>{{ row[treeNode] }}</span>
-          </div>
-        </template>
-    </tree-table>
+    <div class="tree-container"> 
+      <a-spin :spinning="loading" class=" w-full">
+      </a-spin>
+      <!-- 刷新数据需要重新渲染，否则展开节点会有bug -->
+      <a-tree
+        v-if="!loading"
+        :loading="loading"
+        :load-data="lazy ? loadData : null"
+        :tree-data="treeData"
+        :expandedKeys="expandRowKeys"
+        :selectedKeys="selectedRowKeys"
+        @expand="onExpand"
+        @select="onSelect">
+      </a-tree>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-// import tree from './tree.vue'
 import { useSessionStorage } from '@vueuse/core';
 import { isEmpty } from 'lodash';
 
@@ -46,9 +41,9 @@ const props = defineProps({
     type: Object,
     default: () => ({})
   },
-  treeNode: {
-    type: String,
-    default: () => 'name'
+  filedNames: {
+    type: Object,
+    default: () => ({ label: 'name', value: 'id'})
   },
   lazy: {
     type: Boolean,
@@ -56,33 +51,93 @@ const props = defineProps({
   }
 })
 const emites = defineEmits(['select'])
-const searchQuery = ref()
 
 const routeName = useRoute().path.replaceAll('/', '')
-// const searchValue = useSessionStorage(routeName + ': tree-search', '')
-
 const searchValue = useSessionStorage(routeName + ': tree-search', props.query.name || '') 
-const columns = [ { title: '', dataIndex: props.treeNode },]
+const searchQuery = ref()
 
 const onSearch = () => {
-  searchQuery.value = {
-    ...props.query,
-    name: searchValue.value,
-  }
+  searchQuery.value = { ...props.query, name: searchValue.value,}
   delete searchQuery.value.baidu_id
 }
 
-// 选中的树节点
-const selectedNode = useSessionStorage(routeName + ': tree-select', {})
-const onSelect = (data: any) => {
-  selectedNode.value = data
-  emites('select', data)
-}
-
 onMounted(() => {
-  searchQuery.value = props.query
+  // if(treeData.value.length == 0) {
+    searchQuery.value = {...props.query, name: searchValue.value}
+  // }
   if(!isEmpty(selectedNode.value)) {
     emites('select', selectedNode.value)
   }
 })
+
+/******* table ******/
+const loading = ref(false)
+const treeData = ref([])
+
+const refresh = async () => {
+  try{
+    loading.value = true
+    const data = await getOptions()
+    treeData.value = data
+  } finally {
+    loading.value = false
+  }
+}
+
+const getOptions = async (query: any = {}) => {
+  const res = await props.api({
+    ...searchQuery.value, 
+    ...query
+  } )
+  return transformData(res.results)
+}
+
+const transformData = (data: any = []) => {
+  const { label, value } = props.filedNames
+  return data.map((item: any) => ({
+    id: item[value],
+    key: item[value],
+    title: item[label],
+    name: item[label],
+    isLeaf: item.isLeaf === 1,
+    selectable: item.isLeaf == 1,
+    children: props.lazy ? null : transformData(item.children)
+  }))
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const loadData = async (treeNode: any) => {
+  return new Promise((resolve: (value?: unknown) => void) => {
+    if (treeNode.dataRef.children) {
+      resolve();
+      return;
+    }
+    getOptions({parent: treeNode.key}).then((res) => {
+      treeNode.dataRef.children = res 
+      treeData.value = [...treeData.value]
+      resolve()
+    })
+  })
+}
+
+// 选中的树节点
+const selectedNode = useSessionStorage(routeName + ': tree-select', {} as any)
+const selectedRowKeys = ref([selectedNode.value.id])
+const onSelect = (keys: string[], {selected, selectedNodes}: any) => {
+  if(!selected) return
+
+  const node = selectedNodes[0]
+  if(node.id == selectedNode.value.id) return
+
+  selectedNode.value = node
+  selectedRowKeys.value = [node.id]
+  emites('select', node)
+}
+
+const expandRowKeys = useSessionStorage<string[]>(routeName + ': tree-expand', [])
+const onExpand = (expandedKeys: string[]) => {
+  expandRowKeys.value = expandedKeys
+}
+
+watch(searchQuery, refresh)
 </script>

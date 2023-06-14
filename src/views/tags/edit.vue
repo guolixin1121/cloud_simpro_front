@@ -13,7 +13,7 @@
         <a-form-item v-if="isView" label="标签ID" name="id">
           {{ formState.id }}
         </a-form-item>
-        <a-form-item label="标签类型：" name="tag_type" :rules="[{ required: isView ? false : true, message: '请选择标签类型!' }]">
+        <a-form-item label="标签类型：" name="tag_type" :rules="[{ required: isView ? false : true, message: '请选择标签类型'}]">
           <scroll-select
             v-if="isAdd"
             v-model:value="formState.tag_type"
@@ -27,7 +27,7 @@
           label="标签英文名称："
           name="name"
           :rules="[
-            { required: !isView, message: '请输入标签英文名称!' },
+            { required: !isView, message: '请输入标签英文名称'},
             { min: 1, max: 64, message: '标签英文名称长度为1到64位' }
           ]"
         >
@@ -44,14 +44,14 @@
           label="标签中文名称："
           name="display_name"
           :rules="[
-            { required: isView ? false : true, message: '请输入标签名称!' },
-            { min: 1, max: 32, message: '标签名称长度为1到32位' }
+            { required: isView ? false : true, message: '请输入标签名称' },
+            { validator: () => checkChName(formState.name), trigger: 'change' }
           ]"
         >
           <template v-if="!isView">
             <chInput
               :value="formState.display_name"
-              maxlength="32"
+              maxlength="64"
               placeholder="请输入标签中文名称"
               @change="(val: string)=>{formState.display_name=val}"
             />
@@ -107,6 +107,8 @@
 </template>
 
 <script setup lang="ts">
+import { checkChName } from '@/utils/tools'
+
 const id = useRoute().params.id
 const { type = '', tag_type = '' } = useRoute().query || {}
 const isView = type === '0' ? true : false // 查看

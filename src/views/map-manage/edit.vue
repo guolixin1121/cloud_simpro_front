@@ -14,7 +14,7 @@
           label="地图名称："
           name="name"
           :rules="[
-            { required: isAdd ? true : false, message: '请输入地图名称!' },
+            { required: isAdd ? true : false, message: '请输入地图名称'},
             { validator: () => checkChName(formState.name), trigger: 'change' }
           ]"
         >
@@ -23,7 +23,7 @@
               @change="(val: string)=>{formState.name = val}"></ch-input>
           <template v-else>{{ formState.name }}</template>
         </a-form-item>
-        <a-form-item label="地图类型：" name="mapType" :rules="[{ required: isAdd ? true : false, message: '请选择地图类型!' }]">
+        <a-form-item label="地图类型：" name="mapType" :rules="[{ required: isAdd ? true : false, message: '请选择地图类型'}]">
           <scroll-select
             v-if="isAdd"
             allowClear
@@ -34,8 +34,7 @@
           </scroll-select>
           <template v-else>{{ formState.mapTypeName }}</template>
         </a-form-item>
-        {{ formState.catalog }}
-        <a-form-item label="所属地图集：" name="catalog" :rules="[{ required: isAdd, message: '请选择地图集!' }]">
+        <a-form-item label="所属地图集：" name="catalog" :rules="[{ required: isAdd, message: '请选择地图集'}]">
           <tree-select
             v-if="isAdd"
             allowClear
@@ -47,7 +46,7 @@
           </tree-select>
           <template v-else>{{ formState.catalog.label }}</template>
         </a-form-item>
-        <a-form-item v-if="!isView" label="地图文件：" name="xodr" :rules="[{ required: isAdd, message: '请上传地图文件!' }]">
+        <a-form-item v-if="!isView" label="地图文件：" name="xodr" :rules="[{ required: isAdd, message: '请上传地图文件'}]">
           <single-upload
             accept=".xodr"
             class="inline-block pr-2"

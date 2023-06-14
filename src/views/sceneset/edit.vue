@@ -17,30 +17,17 @@
         </a-form-item>
         <a-form-item label="所属场景目录" name="parentId" 
           :rules="[{ required: true && formState.isLeaf == '1', message: '请选择所属场景目录'}]">
-          <tree-select
+          <tree-select-async
             v-if="isAdd"
             placeholder="请选择所属场景目录"
-            allowClear
+            tree-node="groupName"
             v-model:value="formState.parentId"
             v-model:selectNode="formState.parent"
-            :api="baseApi.scenesets.getList"
-            :api-filter="(item: any) => !item.isLeaf"
-            :check-leaf="false"
-          >
-          </tree-select>
-          <!-- <tree-select 
-            v-if="isAdd"
-            v-model:value="formState.parentId" 
-            v-model:selectNode="formState.parent"
-            placeholder="请选择所属场景目录"
-            :show-search="false"
-            :api="baseApi.scenesets.getList"
+            :api="baseApi.scenesets.getList" 
             :api-filter="(item: any) => !item.isLeaf"
             :query="{version: 2}"
-            :lazy="true"
-            :check-leaf="false"
-            :fieldNames="{label: 'groupName', value: 'id'}"
-            ></tree-select> -->
+          >
+          </tree-select-async>
           <div v-else>{{ formState.parentName }}</div>
           <div v-if="error" class="ant-form-item-explain-error" style="">地图目录不能超过四级</div>
         </a-form-item>
@@ -48,7 +35,7 @@
           <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景集名称"></a-input>
         </a-form-item>
         <a-form-item label="场景集路径" name="path">
-          <span>{{ path }}</span>
+          <span>{{ isAdd ? path : formState.path }}</span>
         </a-form-item>
         <a-form-item label="标签">
           <tree-transfer
@@ -85,11 +72,12 @@ const formState = reactive({
   parent: null as any,
   parentName: '',
   labels: [],
-  isLeaf: '1'
+  isLeaf: '1',
+  path: ''
 })
 
 const path = computed(() => {
-  return (formState.parent?.title || '') + '/' + formState.name
+  return (formState.parent?.name || '') + '/' + formState.name
 })
 
 const loading = ref(false)
@@ -141,6 +129,7 @@ const getEditData = async () => {
       formState.name = data.name
       formState.parentId = data.parentId
       formState.parentName = data.parentName
+      formState.path = data.path
       // formState.parent = { label: data.parentName, value: data.parentId }
       formState.labels = data.labels_detail
       formState.isLeaf = data.isLeaf?.toString()

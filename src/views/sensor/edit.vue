@@ -13,14 +13,14 @@
         label="传感器名称："
         name="name"
         :rules="[
-          { required: isAdd ? true : false, message: '请输入传感器名称!' },
+          { required: isAdd ? true : false, message: '请输入传感器名称'},
           { min: 2, max: 50, message: '传感器名称长度为2到50位' }
         ]"
       >
         <a-input v-if="isAdd" v-model:value="formState.name" maxlength="50" placeholder="请输入传感器名称"></a-input>
         <template v-else>{{ formState.name }}</template>
       </a-form-item>
-      <a-form-item label="传感器类型：" name="type" :rules="[{ required: isAdd ? true : false, message: '请选择传感器类型!' }]">
+      <a-form-item label="传感器类型：" name="type" :rules="[{ required: isAdd ? true : false, message: '请选择传感器类型'}]">
         <scroll-select
           v-if="isAdd"
           allowClear
@@ -31,7 +31,7 @@
         </scroll-select>
         <template v-else>{{ formState.type_name }}</template>
       </a-form-item>
-      <a-form-item label="传感器文件：" name="csv" :rules="[{ required: isAdd, message: '请上传传感器文件!' }]">
+      <a-form-item label="传感器文件：" name="csv" :rules="[{ required: isAdd, message: '请上传传感器文件'}]">
         <single-upload
           v-if="isAdd"
           class="inline-block"

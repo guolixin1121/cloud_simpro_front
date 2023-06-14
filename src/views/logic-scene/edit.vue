@@ -11,7 +11,7 @@
           label="场景名称"
           name="name"
           :rules="[
-            { required: true, message: '请输入场景名称!' },
+            { required: true, message: '请输入场景名称'},
             { min: 2, max: 50, message: '场景名称长度为2到50位' }
           ]"
         >
@@ -42,11 +42,11 @@
               :fieldNames="{ label: 'mapVersion', value: 'mapId'}"></scroll-select>
           </div>
         </a-form-item>
-        <a-form-item label="场景文件" name="xosc_scene" :rules="[{ required: isAdd, message: '请上传场景文件!' }]">
+        <a-form-item label="场景文件" name="xosc_scene" :rules="[{ required: isAdd, message: '请上传场景文件'}]">
           <single-upload v-if="isAdd" accept=".xosc" v-model:value="formState.xosc_scene"></single-upload>
           <span>{{ formState.scene_url }}</span>
         </a-form-item>
-        <a-form-item label="配置文件" name="xosc_config" :rules="[{ required: isAdd, message: '请上传配置文件!' }]">
+        <a-form-item label="配置文件" name="xosc_config" :rules="[{ required: isAdd, message: '请上传配置文件'}]">
           <single-upload v-if="isAdd" accept=".xosc" v-model:value="formState.xosc_config"></single-upload>
           <span>{{ formState.config_url }}</span>
         </a-form-item>

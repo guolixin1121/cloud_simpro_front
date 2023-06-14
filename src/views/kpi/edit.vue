@@ -7,14 +7,14 @@
     <span class="title mb-5">{{ title }}</span>
     <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 550px" @finish="add">
       
-      <a-form-item label="评测指标类型" name="category" :rules="[{ required: true, message: '请选择评测指标类型!' }]">
+      <a-form-item label="评测指标类型" name="category" :rules="[{ required: true, message: '请选择评测指标类型'}]">
         <a-select v-model:value="formState.category" :options="typesOptions" placeholder="请选择评测指标类型"></a-select>
       </a-form-item>
       <a-form-item
         label="评测指标名称"
         name="name"
         :rules="[
-          { required: true, message: '请输入评测指标名称!' },
+          { required: true, message: '请输入评测指标名称'},
           { validator: () => checkChName(formState.name), trigger: 'change' }
         ]"
       >
@@ -23,7 +23,7 @@
             @change="(val: string)=>{formState.name = val}"></ch-input>
         <div v-else>{{ formState.name }}</div>
       </a-form-item>
-      <a-form-item label="评测指标文件" name="pyfile" :rules="[{ required: isAdd, message: '请上传评测指标文件!' }]">
+      <a-form-item label="评测指标文件" name="pyfile" :rules="[{ required: isAdd, message: '请上传评测指标文件'}]">
         <single-upload v-if="isAdd" accept=".py" v-model:value="formState.pyfile"></single-upload>
         {{ formState.py_url }}
       </a-form-item>

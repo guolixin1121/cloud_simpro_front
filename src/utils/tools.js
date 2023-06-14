@@ -96,6 +96,7 @@ export function formatDate(date, formatter) {
 
 // 判断字符串中中文个数
 export function getCnWordTotal(str) {
+  if(!str) return 0
   let total = 0
   if (str.length > 0) {
     for (let i = 0; i < str.length; i++) {
@@ -110,6 +111,8 @@ export function getCnWordTotal(str) {
 }
 
 export const checkChName = (str) => {
+  if(!str) return Promise.resolve()
+  
   const chLength = getCnWordTotal(str)
   const length = chLength * 2 + (str.length - chLength)
   if(length > 0 && length < 2) {

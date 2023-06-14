@@ -2,18 +2,12 @@
   <search-form :items="formItems" :manual="true" @search="onSearch"></search-form>
 
   <div class="main main-bg">
-    <!-- <tree
+    <tree
       :title="'场景集'"
       :api="sceneApi.getList"
       :query="{...selectedSceneset, version: 2 }"
       :lazy="true"
-      tree-node="groupName"
-      @select="onSelect"
-    /> -->
-    <tree
-      :title="'场景集'"
-      :api="sceneApi.getList"
-      :query="{...selectedSceneset}"
+      :filedNames="{label: 'groupName', value: 'id'}"
       @select="onSelect"
     />
     <div class="right-table">
@@ -29,10 +23,9 @@
 <script setup lang="ts">
 import { SceneSourceOptions, getSceneSourceName } from '@/utils/dict'
 import { SStorage } from '@/utils/storage';
-const user = store.user
 const currentApi = api.scene
 const sceneApi = api.scenesets
-
+const user = store.user
 const selectedSceneset = SStorage.get('logic-sceneset')
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
@@ -46,7 +39,8 @@ const formItems = ref<SearchFormItem[]>([
     api: api.tags.getList,
     query: { tag_type: 3 },
     placeholder: '请选择标签',
-    fieldNames: { label: 'display_name', value: 'name' }
+    fieldNames: { label: 'display_name', value: 'name' },
+    defaultValue: ['']
   }
 ])
 let catalog = store.catalog // 缓存左侧树选中的场景集
