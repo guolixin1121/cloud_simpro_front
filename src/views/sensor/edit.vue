@@ -14,10 +14,10 @@
         name="name"
         :rules="[
           { required: isAdd ? true : false, message: '请输入传感器名称'},
-          { min: 2, max: 50, message: '传感器名称长度为2到50位' }
+          { validator: () => checkChName(formState.name, 50) }
         ]"
       >
-        <a-input v-if="isAdd" v-model:value="formState.name" maxlength="50" placeholder="请输入传感器名称"></a-input>
+        <ch-input v-if="isAdd" v-model:value="formState.name" :maxlength="50" placeholder="请输入传感器名称"></ch-input>
         <template v-else>{{ formState.name }}</template>
       </a-form-item>
       <a-form-item label="传感器类型：" name="type" :rules="[{ required: isAdd ? true : false, message: '请选择传感器类型'}]">
@@ -76,6 +76,7 @@
 
 <script setup lang="ts">
 import { sensorType } from '@/utils/dict'
+import { checkChName } from '@/utils/tools';
 
 const id = useRoute().params.id
 const { type = '' } = useRoute().query || {}

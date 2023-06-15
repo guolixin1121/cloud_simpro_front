@@ -12,10 +12,10 @@
           name="name"
           :rules="[
             { required: true, message: '请输入场景名称'},
-            { min: 2, max: 50, message: '场景名称长度为2到50位' }
+            { validator: () => checkChName(formState.name, 50) }
           ]"
         >
-          <a-input v-if="isAdd" v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></a-input>
+          <ch-input v-if="isAdd" v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></ch-input>
           <span v-else>{{ formState.name }}</span>
         </a-form-item>
         <a-form-item label="关联地图" v-if="!isAdd" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
@@ -71,6 +71,8 @@
 </template>
 
 <script setup lang="ts">
+import { checkChName} from "@/utils/tools"
+
 const id = useRoute().params.id
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'

@@ -12,10 +12,10 @@
         name="name"
         :rules="[
           { required: true, message: '请输入算法名称' },
-          { min: 2, max: 50, message: '算法名称长度为2到50位' }
+          { validator: () => checkChName(formState.name, 50) }
         ]"
       >
-        <a-input v-if="isAdd" v-model:value="formState.name" :maxlength="50" placeholder="请输入算法名称"></a-input>
+        <ch-input v-if="isAdd" v-model:value="formState.name" :maxlength="50" placeholder="请输入算法名称"></ch-input>
         <span v-else>{{ formState.name }}</span>
       </a-form-item>
       <!-- <a-form-item
@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate } from '@/utils/tools'
+import { formatDate, checkChName } from '@/utils/tools'
 
 const id = useRoute().params.id
 const isAdd = id === '0'

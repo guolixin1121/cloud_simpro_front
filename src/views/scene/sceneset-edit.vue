@@ -31,8 +31,11 @@
           <div v-else>{{ formState.parentName }}</div>
           <div v-if="error" class="ant-form-item-explain-error" style="">地图目录不能超过四级</div>
         </a-form-item>
-        <a-form-item label="场景集名称" name="name" :rules="[{ required: true, message: '请输入场景集名称'}, { min: 2, max: 50, message: '场景名称长度为2到50位'}]">
-          <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景集名称"></a-input>
+        <a-form-item label="场景集名称" name="name" :rules="[
+          { required: true, message: '请输入场景集名称'}, 
+          { validator: () => checkChName(formState.name, 50) }
+          ]">
+          <ch-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景集名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景集路径" name="path">
           <span>{{ path }}</span>
@@ -58,6 +61,8 @@
 </template>
 
 <script setup lang="ts">
+import { checkChName } from '@/utils/tools';
+
 const id = useRoute().params.id
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'

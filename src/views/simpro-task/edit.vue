@@ -7,8 +7,10 @@
     <span class="title mb-5">{{ title }}</span>
     <a-form :model="formState" :labelCol ="{ style: { width: '150px' } }"  style="width: 55%"
       @finish="add">
-      <a-form-item label="任务名称" name="name" :rules="[{ required: true, message: '请输入任务名称'}, { min: 2, max: 50, message: '场景名称长度为2到50位'}]">
-        <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></a-input>
+      <a-form-item label="任务名称" name="name" :rules="[
+        { required: true, message: '请输入任务名称'}, 
+        { validator: () => checkChName(formState.name, 50)}]">
+        <ch-input v-model:value="formState.name" :maxlength="50" placeholder="请输入任务名称"></ch-input>
       </a-form-item> 
       <a-form-item label="控制在环" name="is_in_ring" :rules="[{ required: true, message: '请选择是否在环' }]">
         <a-select v-model:value="formState.is_in_ring" @change="onRingChanged">
@@ -83,6 +85,7 @@
 </template>
 
 <script setup lang="ts">
+import { checkChName } from '@/utils/tools';
 import { VerticalOptions, HorizontalOptions } from '@/utils/dict';
 const id = useRoute().params.id
 const isAdd = id === '0'
