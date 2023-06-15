@@ -32,6 +32,19 @@
         @click="onClick('delete')"></svg-icon>
     </div>
   </div>
+
+  <a-modal v-model:visible="showConfirm" 
+    :closable="false"
+    :footer="null">
+    <div>
+      <svg-icon style="color: #faad14" icon="alert"></svg-icon>
+      <span class="ml-4" style="font-size: 16px">你确定要删除吗？</span>
+    </div>
+    <div class=" text-right">
+      <a-button @click="closeConfirm">否</a-button>
+      <a-button @click="onConfirm" type="primary" class="ml-2">是</a-button>
+    </div>
+  </a-modal>
 </template>
 
 <script setup lang="ts">
@@ -77,9 +90,20 @@ onMounted(() => {
   }
 })
 
+const showConfirm = ref(false)
 const onClick = (type: string) => {
   if(type != 'add' && isEmpty(selectedNode.value)) return
-  emits('btn-click', { type, data: selectedNode.value })
+  if(type == 'delete') {
+    showConfirm.value = true
+  } else {
+    emits('btn-click', { type, data: selectedNode.value })
+  }
+}
+
+const closeConfirm = () => showConfirm.value = false
+const onConfirm = () => {
+  closeConfirm()
+  emits('btn-click', { type: 'delete', data: selectedNode.value })
 }
 
 /******* table ******/

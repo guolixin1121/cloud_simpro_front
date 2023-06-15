@@ -15,6 +15,9 @@
       :dataSource="dataSource"
       :pagination="false">
       <template #bodyCell="{ column, record }">
+        <template v-if="column.dataIndex == 'name'">
+          <router-link :to="`/simpro-result/view/${record.id}`" class="text-blue mr-2">{{ record.name }}</router-link>
+        </template>
         <template v-if="column.dataIndex == 'is_passed'">
           {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '不通过' }}
         </template>

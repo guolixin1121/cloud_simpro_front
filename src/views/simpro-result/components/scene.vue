@@ -1,5 +1,7 @@
 <template>
-  <Table :api="getScenes"
+  <Table
+    ref="tableRef" 
+    :api="getScenes"
     :columns="columns"
     :scroll="{ y: 'auto' }">
     <template #bodyCell="{column, record}">
@@ -44,7 +46,6 @@ const columns = [
   }
 ]
 
-
 const isModal = ref(false)
 const videoSrc = ref('')
 const showVideo = (record: RObject) => {
@@ -55,6 +56,11 @@ const showVideo = (record: RObject) => {
 const closeVideo = () => {
   isModal.value = false
 }
+
+const tableRef = ref()
+onMounted(() => {
+  tableRef.value.refresh()
+})
 </script>
 
 <style lang="less">

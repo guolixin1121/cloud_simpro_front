@@ -37,6 +37,12 @@
       >
         <a-input v-model:value="formState.docker_path" placeholder="请输入算法镜像"></a-input>
       </a-form-item>
+      <a-form-item label="控制在环" name="is_in_ring" :rules="[{ required: true, message: '请选择是否控制在环' }]">
+        <a-select v-model:value="formState.is_in_ring">
+          <a-select-option key="1" value="1">是</a-select-option>
+          <a-select-option key="0" value="0">否</a-select-option>
+        </a-select>
+      </a-form-item>
       <a-form-item label="算法描述" name="desc">
         <a-textarea
             v-model:value="formState.desc"
@@ -69,7 +75,8 @@ const formState = reactive<any>({
   docker_path: undefined,
   desc: undefined,
   create_time: undefined,
-  create_user: undefined
+  create_user: undefined,
+  is_in_ring: undefined
 })
 
 const router = useRouter()
@@ -92,12 +99,16 @@ const add = async () => {
 const getLookData = async () => {
   if(id != '0') {
     const res = await api.algorithm.getList({ id })
-    formState.name = res?.results[0].name
-    formState.version = res?.results[0].version
-    formState.docker_path = res?.results[0].docker_path
-    formState.desc = res?.results[0].desc
-    formState.create_time = formatDate(res?.results[0].create_time)
-    formState.create_user = res?.results[0].create_user
+    if(res.results?.length == 0 ) return 
+
+    const data = res.results[0]
+    formState.name = data.name
+    formState.version = data.version
+    formState.docker_path = data.docker_path
+    formState.desc = data.desc
+    formState.create_time = formatDate(data.create_time)
+    formState.create_user = data.create_user
+    formState.is_in_ring = data.is_in_ring ? '1' : '0'
   }
 }
 getLookData()

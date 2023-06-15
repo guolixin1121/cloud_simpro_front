@@ -44,9 +44,6 @@
           <a-form-item label="创建时间："
             ><span>{{ formState.importTime }}</span></a-form-item
           >
-          <a-form-item label="修改时间："
-            ><span>{{ formState.update_time }}</span></a-form-item
-          >
           <a-form-item label="所属用户："
             ><span>{{ formState.importUserName }}</span></a-form-item
           >

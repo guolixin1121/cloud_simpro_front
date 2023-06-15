@@ -33,13 +33,13 @@
       </a-form-item>
       <a-form-item label="传感器文件：" name="csv" :rules="[{ required: isAdd, message: '请上传传感器文件'}]">
         <single-upload
-          v-if="isAdd"
-          class="inline-block"
+          v-if="!isView"
+          class="inline-block pr-2"
           accept=".json"
           v-model:value="formState.csv"
           :desc="'选择文件'"
         ></single-upload>
-        <template v-else>{{ formState.csv_url }}</template>
+        <template v-if="!formState.csv">{{ formState.csv_url }}</template>
       </a-form-item>
       <!-- <a-form-item v-if="!isAdd" label="传感器文件地址：">{{ formState.latestVersionUrl }} </a-form-item> -->
       <a-form-item label="描述" name="name">

@@ -20,6 +20,7 @@
         :tree-data="treeData"
         :expandedKeys="expandRowKeys"
         :selectedKeys="selectedRowKeys"
+        v-bind="$attrs"
         @expand="onExpand"
         @select="onSelect">
       </a-tree>

@@ -31,6 +31,7 @@
       </ul>
     </div>
   </div>
+  <div v-if="hasExceedLimit" style="color: #ff4d4f">选中标签不能超过9个，请重新选择</div>
 </template>
 
 <script lang="ts" setup>
@@ -93,11 +94,17 @@ const treeTransfer = (data: any): TreeDataItem[] => {
   return options
 }
 
-
+const hasExceedLimit = ref(false)
 const onChecked = (_checkedKeys: any, e: any) => {
-  selectedNodes.value = e.checkedNodes.filter((item: any) => item.isTag)
-  hasDefaultValue = false
-  emits('update:targetKeys', selectedNodes.value)
+  const newCheckedKeys = e.checkedNodes.filter((item: any) => item.isTag)
+  if(newCheckedKeys.length > 9) {
+    hasExceedLimit.value = true
+  } else {
+    hasExceedLimit.value = false
+    selectedNodes.value = newCheckedKeys
+    hasDefaultValue = false
+    emits('update:targetKeys', selectedNodes.value)
+  }
 }
 
 const remove = (item: any) => {

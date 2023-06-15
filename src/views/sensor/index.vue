@@ -25,7 +25,8 @@ const formItems = ref<SearchFormItem[]>([
     key: 'type',
     type: 'select',
     options: sensorType,
-    placeholder: '请选择传感器类型'
+    placeholder: '请选择传感器类型',
+    defaultValue: ''
   },
   { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])

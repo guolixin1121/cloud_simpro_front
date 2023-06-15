@@ -16,6 +16,9 @@
       <a-form-item label="算法镜像：" name="name">
         <span>{{ formState.docker_path }}</span>
       </a-form-item>
+      <a-form-item label="控制在环" name="name">
+        <span>{{ formState ? '是' : '否' }}</span>
+      </a-form-item>
       <a-form-item label="描述" name="name">
         <span>{{ formState.desc }}</span>
       </a-form-item>
@@ -40,7 +43,8 @@ const formState = reactive<any>({
   docker_path: undefined,
   desc: undefined,
   create_time: undefined,
-  create_user: undefined
+  create_user: undefined,
+  is_in_ring: undefined
 })
 
 const router = useRouter()
@@ -49,12 +53,16 @@ const goback = () => router.go(-1)
 /****** 获取查看数据 */
 const getLookData = async () => {
   const res = await api.algorithm.getList({ id })
-  formState.name = res?.results[0].name
-  formState.version = res?.results[0].version
-  formState.docker_path = res?.results[0].docker_path
-  formState.desc = res?.results[0].desc
-  formState.create_time = formatDate(res?.results[0].create_time)
-  formState.create_user = res?.results[0].create_user
+  if(res.results?.length == 0 ) return 
+
+  const data = res.results[0]
+  formState.name = data.name
+  formState.version = data.version
+  formState.docker_path = data.docker_path
+  formState.desc = data.desc
+  formState.create_time = formatDate(data.create_time)
+  formState.create_user = data.create_user
+  formState.is_in_ring = data.is_in_ring
 }
 getLookData()
 </script>

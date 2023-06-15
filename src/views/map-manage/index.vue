@@ -1,7 +1,8 @@
 <template>
   <search-form :items="formItems" :manual="true" @search="onSearch"></search-form>
   <div class="main main-bg">
-    <tree :title="'地图集'" :api="mapsApi.getMapCatalog" @select="onSelect" />
+    <tree ref="treeRef" :title="'地图集'" :api="mapsApi.getMapCatalog" @select="onSelect" 
+      @btn-click="onClick"/>
     <div class="right-table">
       <div class="flex justify-between items-center">
         <span class="title">地图管理</span>
@@ -68,5 +69,25 @@ const onSelect = (val: any) => {
   query.value = { ...query.value, catalog: val.id }
 
   console.log(query.value, 'onSelect')
+}
+
+const onClick = (val: any) => {
+  const { type, data } = val
+  const id = type == 'add' ? 0 : data.id
+  if(type != 'delete') {
+    router.push('/map-manage/mapset-edit/' + id)
+  } else {
+    deleteData(id)
+  }
+}
+
+const treeRef = ref()
+const loading = ref(false)
+const deleteData = async (id: string) => {
+  loading.value = true
+  await api.mapsets.delete(id)
+  message.info('删除成功')
+  loading.value = false
+  treeRef.value.refresh()
 }
 </script>
