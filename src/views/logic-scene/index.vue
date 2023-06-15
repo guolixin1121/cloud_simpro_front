@@ -93,7 +93,7 @@ const columns = [
         showRunConfirm.value = true
         runScene.value = data
       },
-      泛化任务: (data: any) => router.push('/logic-scene/result/' + data.id +'?name=' + data.name),
+      泛化结果: (data: any) => router.push('/logic-scene/result/' + data.id +'?name=' + data.name),
       查看: (data: any) => router.push('/logic-scene/view/' + data.id),
       编辑: (data: any) => router.push('/logic-scene/edit/' + data.id),
       删除: async ({ id }: { id: string }) => await currentApi.delete(id)

@@ -22,7 +22,7 @@
           name="adsName"
           :rules="[
             { required: true, message: '请输入场景名称' },
-            { validator: () => checkChName(formState.adsName), trigger: 'change' }
+            { validator: () => checkChName(formState.adsName, 160), trigger: 'change' }
           ]"
         >
           <ch-input v-model:value="formState.adsName" :maxlength="160" v-if="isAdd"

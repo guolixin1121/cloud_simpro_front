@@ -59,16 +59,21 @@
         <a-form-item v-if="!isAdd" label="地图版本：" name="name">
           <span>{{ formState.latestVersion }}</span>
         </a-form-item>
-        <!-- <a-form-item label="标签">
-          <tree-transfer
+        <a-form-item label="标签">
+          <tree-transfer v-if="!isView"
             v-model:target-keys="formState.labels"
             :api="baseApi.tags.getList"
-            :query="{ tag_type: 3, tree: 1 }"
+            :query="{ tag_type: 4, tree: 1 }"
             :fieldNames="{ label: 'display_name', value: 'name' }"
             :titles="['可选标签', '选中标签']"
           ></tree-transfer>
-        </a-form-item> -->
-        <a-form-item label="描述" name="name">
+          <ul class="view-list" v-else>
+            <li class="mb-2" v-for="item in formState.labels as any" :key="item.name">
+              {{ item.display_name }}
+            </li>
+          </ul>
+        </a-form-item>
+        <a-form-item label="描述" name="desc">
           <a-textarea
             v-if="!isView"
             v-model:value="formState.desc"
@@ -120,7 +125,7 @@ const baseApi = api
 const mapApi = api.maps
 
 const formState = reactive<any>({
-  name: undefined,
+  name: '12',
   catalog: !isEmpty(mapCatalog) ? { label: mapCatalog?.name, value: mapCatalog?.id} : null,
   xodr: null,
   desc: '',
@@ -181,7 +186,7 @@ const getLookData = async () => {
       formState.mapFileName = res.mapFileName
       formState.mapType = res.mapType
       formState.mapTypeName = getMapManageSourceOptions(formState.mapType)
-      formState.labels = res.labels
+      formState.labels = res.labels_detail
     }finally {
       dataLoading.value = false
     }

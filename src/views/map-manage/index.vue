@@ -41,7 +41,6 @@ const query: Query = ref({})
 const onSearch = (data: Query) => {
   const mapCatalog = catelog.mapCatalog as any
   query.value = { ...data, catalog: mapCatalog?.id }
-  console.log(query.value, 'onSearch')
 }
 
 /****** 表格区域 */
