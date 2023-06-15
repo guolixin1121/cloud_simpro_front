@@ -22,12 +22,11 @@
           name="adsName"
           :rules="[
             { required: true, message: '请输入场景名称' },
-            { validator: () => checkChName(formState.adsName, 160), trigger: 'change' }
+            { validator: () => checkChName(formState.adsName, 160) }
           ]"
         >
           <ch-input v-model:value="formState.adsName" :maxlength="160" v-if="isAdd"
-            placeholder="请输入场景名称"
-            @change="(val: string)=>{formState.adsName = val}"></ch-input>
+            placeholder="请输入场景名称"></ch-input>
           <span v-else>{{ formState.adsName }}</span>
         </a-form-item>
         <a-form-item v-if="!isAdd" label="关联地图" name="mapVersion">

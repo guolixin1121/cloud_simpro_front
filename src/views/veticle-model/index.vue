@@ -10,7 +10,7 @@
       </div>
       <a-checkbox v-model:checked="checked" class="table_model" @change="() => selectModel(checked)">我的模型</a-checkbox>
     </div>
-    <Table :api="veticleModelApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
+    <Table :api="veticleModelApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }" :isOnlyCreator="true">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.dataIndex == 'type'">
           <span v-if="record.type === 1">导入</span><span v-else-if="record.type === 2">新建</span> <span v-else>全部</span>
@@ -106,7 +106,7 @@ const formItems = ref<SearchFormItem[]>([
     fieldNames: { label: 'name', value: 'key', apiField: 'power_type' },
     defaultValue: ''
   },
-  { label: '创建时间', key: 'create_time', type: 'range-picker' }
+  { label: '修改时间', key: 'create_time', type: 'range-picker' }
 ])
 const onSearch = (data: Query) => {
   query.value = { ...data, owner: checked.value ? 1 : 0 }
@@ -122,6 +122,7 @@ const columns = [
   { title: '是否共享', dataIndex: 'is_share', width: 90, ellipsis: true },
   { title: '创建时间', dataIndex: 'create_date', width: 180 },
   { title: '修改时间', dataIndex: 'update_date', width: 180, ellipsis: true },
+  { title: '所属用户', dataIndex: 'username', width: 180, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',

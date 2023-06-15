@@ -39,7 +39,8 @@ const hasPermission = (scope: RObject, key: string) => {
 
   // 是否只允许自己操作
   if (props.isOnlyCreator && ['编辑', '删除'].includes(key)) {
-    const isOwner = data.createUser === userStore.user.username || data.create_user === userStore.user.username
+    const owner = data.createUser || data.create_user || data.username
+    const isOwner = owner === userStore.user.username
     permission = permission && isOwner
   }
 

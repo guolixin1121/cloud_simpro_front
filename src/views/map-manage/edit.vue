@@ -15,12 +15,10 @@
           name="name"
           :rules="[
             { required: isAdd ? true : false, message: '请输入地图名称'},
-            { validator: () => checkChName(formState.name), trigger: 'change' }
+            { validator: () => checkChName(formState.name) }
           ]"
         >
-          <ch-input v-model:value="formState.name" :maxlength="32" v-if="isAdd"
-              placeholder="请输入地图名称"
-              @change="(val: string)=>{formState.name = val}"></ch-input>
+          <ch-input v-if="isAdd" v-model:value="formState.name" :maxlength="32" placeholder="请输入地图名称"></ch-input>
           <template v-else>{{ formState.name }}</template>
         </a-form-item>
         <a-form-item label="地图类型：" name="mapType" :rules="[{ required: isAdd ? true : false, message: '请选择地图类型'}]">
@@ -60,7 +58,7 @@
           <span>{{ formState.latestVersion }}</span>
         </a-form-item>
         <a-form-item label="标签">
-          <tree-transfer v-if="!isView"
+          <tree-transfer v-if="isAdd"
             v-model:target-keys="formState.labels"
             :api="baseApi.tags.getList"
             :query="{ tag_type: 4, tree: 1 }"
@@ -125,7 +123,7 @@ const baseApi = api
 const mapApi = api.maps
 
 const formState = reactive<any>({
-  name: '12',
+  name: '',
   catalog: !isEmpty(mapCatalog) ? { label: mapCatalog?.name, value: mapCatalog?.id} : null,
   xodr: null,
   desc: '',

@@ -1,7 +1,7 @@
 export default `
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>删除-n</title>
+    <title>删除</title>
     <g id="云仿真设计稿" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="云仿真-场景管理-场景集" transform="translate(-436, -920)" fill="currentColor" fill-rule="nonzero">
             <g id="树结构场景" transform="translate(248, 172)">

@@ -15,12 +15,11 @@
         name="name"
         :rules="[
           { required: true, message: '请输入评测指标名称'},
-          { validator: () => checkChName(formState.name), trigger: 'change' }
+          { validator: () => checkChName(formState.name) }
         ]"
       >
         <ch-input v-model:value="formState.name" :maxlength="32" v-if="isAdd"
-            placeholder="请输入评测指标名称"
-            @change="(val: string)=>{formState.name = val}"></ch-input>
+            placeholder="请输入评测指标名称"></ch-input>
         <div v-else>{{ formState.name }}</div>
       </a-form-item>
       <a-form-item label="评测指标文件" name="pyfile" :rules="[{ required: isAdd, message: '请上传评测指标文件'}]">

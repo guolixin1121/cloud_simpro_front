@@ -35,11 +35,10 @@
         <a-form-item label="地图集名称" name="name" 
           :rules="[
             { required: true, message: '请输入地图集名称'}, 
-            { validator: () => checkChName(formState.name), trigger: 'change' }
+            { validator: () => checkChName(formState.name) }
           ]">
           <ch-input v-model:value="formState.name" :maxlength="32"
-            placeholder="请输入地图集名称"
-            @change="(val: string)=>{formState.name = val}"></ch-input>
+            placeholder="请输入地图集名称"></ch-input>
         </a-form-item>
         <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
           <a-button type="primary" html-type="submit" :loading="loading">
