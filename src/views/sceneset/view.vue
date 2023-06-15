@@ -9,7 +9,7 @@
     </div>
     <span class="title mb-5 mt-3">场景集详情</span>
     <a-spin :spinning="loading">
-      <a-form :model="formState" :labelCol ="{ style: { width: '80px' } }"  style="width: 550px;">
+      <a-form :model="formState" :labelCol ="{ style: { width: '80px' } }"  style="width: 55%">
         <a-form-item label="场景集ID">
           {{ formState.id }}
         </a-form-item>

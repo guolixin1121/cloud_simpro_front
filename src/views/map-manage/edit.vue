@@ -9,7 +9,7 @@
     </div>
     <span class="title mb-5 mt-3">{{ title }}</span>
     <a-spin :spinning="dataLoading"> 
-      <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px" @finish="add">
+      <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 55%" @finish="add">
         <a-form-item
           label="地图名称："
           name="name"
@@ -40,7 +40,7 @@
             allowClear
             label-in-value
             v-model:value="formState.catalog"
-            :api="mapApi.getMapCatalog"
+            :api="baseApi.maps.getMapCatalog"
             placeholder="请选择地图集"
           >
           </tree-select>
@@ -59,6 +59,15 @@
         <a-form-item v-if="!isAdd" label="地图版本：" name="name">
           <span>{{ formState.latestVersion }}</span>
         </a-form-item>
+        <!-- <a-form-item label="标签">
+          <tree-transfer
+            v-model:target-keys="formState.labels"
+            :api="baseApi.tags.getList"
+            :query="{ tag_type: 3, tree: 1 }"
+            :fieldNames="{ label: 'display_name', value: 'name' }"
+            :titles="['可选标签', '选中标签']"
+          ></tree-transfer>
+        </a-form-item> -->
         <a-form-item label="描述" name="name">
           <a-textarea
             v-if="!isView"
@@ -107,6 +116,7 @@ const { type = '', name = ''} = route.query || {}
 const isView = type === '0' ? true : false // 查看
 const isAdd = id === '0'
 const title = isView ? '查看地图' : isAdd ? '上传地图' : '修改地图'
+const baseApi = api
 const mapApi = api.maps
 
 const formState = reactive<any>({
@@ -134,7 +144,7 @@ const add = async () => {
     xodr: formState.xodr,
     desc: formState.desc,
     mapType: formState.mapType,
-    // labels: formState.labels?.map((item: any) => item.name)
+    labels: formState.labels?.map((item: any) => item.name)
   }
   for (const key in params) {
     if (key !== 'desc') {
@@ -171,7 +181,7 @@ const getLookData = async () => {
       formState.mapFileName = res.mapFileName
       formState.mapType = res.mapType
       formState.mapTypeName = getMapManageSourceOptions(formState.mapType)
-    // formState.labels = res.labels_detail
+      formState.labels = res.labels
     }finally {
       dataLoading.value = false
     }

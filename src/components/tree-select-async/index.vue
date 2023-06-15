@@ -59,6 +59,7 @@ const emites = defineEmits(['update:selectNode', 'update:value', 'change'])
 const searchValue = ref() 
 const searchQuery = ref(props.query)
 const onSearch = () => {
+  expandRowKeys.value = []
   selectedRowKeys.value = []
   searchQuery.value = { ...props.query, name: searchValue.value}
   refresh()
@@ -110,7 +111,9 @@ const transformData = (data: any = []) => {
     id: item[value],
     key: item[value],
     title: item[label],
-    children: null
+    children: null,
+    selectable: apiFilter ? true : (item.isLeaf == 1),
+    isLeaf: item.isLeaf == 1
   }))
 }
 
@@ -121,6 +124,9 @@ const loadData = async (treeNode: any) => {
       return;
     }
     getOptions({parent: treeNode.key}).then((res) => {
+      if(res.length == 0) {
+        treeNode.dataRef.isLeaf = true
+      }
       treeNode.dataRef.children = res 
       treeData.value = [...treeData.value]
       resolve()

@@ -7,9 +7,21 @@
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/sceneset/edit/0')">创建场景集</a-button>
     </div>
     <div style="height: calc(100% - 50px);" class="mt-4 overflow-auto">
-      <!-- <tree-table
+      <tree-table
         tree-node="groupName"
         :lazy="true"
+        :query="query"
+        :columns="columns"
+        :api="currentApi.getList"
+        :fieldNames="{label: 'groupName', value: 'id'}"
+        >
+        <template #default="{ column, row }">
+          <template v-if="column.dataIndex == 'isLeaf'">
+            {{ row.isLeaf ? '场景集' : '场景目录' }}
+          </template>
+        </template>
+      </tree-table>
+      <!-- <tree-table
         :query="query"
         :columns="columns"
         :api="currentApi.getList"
@@ -20,17 +32,6 @@
           </template>
         </template>
       </tree-table> -->
-      <tree-table
-        :query="query"
-        :columns="columns"
-        :api="currentApi.getList"
-        >
-        <template #default="{ column, row }">
-          <template v-if="column.dataIndex == 'isLeaf'">
-            {{ row.isLeaf ? '场景集' : '场景目录' }}
-          </template>
-        </template>
-      </tree-table>
     </div>
   </div>
 </template>
@@ -44,8 +45,8 @@ const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景集名称' }
 ])
 const query = ref({})
-const onSearch = (params: RObject) => query.value = { ...params }
-// const onSearch = (params: RObject) => query.value = { ...params, version: 2 }
+// const onSearch = (params: RObject) => query.value = { ...params }
+const onSearch = (params: RObject) => query.value = { ...params, version: 2 }
 
 /****** 表格区域 */
 const router = useRouter()

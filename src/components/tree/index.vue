@@ -22,6 +22,15 @@
         @select="onSelect">
       </a-tree>
     </div>
+    <div class=" float-right mt-2">
+      <svg-icon icon="add" class="cursor-pointer mr-1" @click="onClick('add')"></svg-icon>
+      <svg-icon icon="edit" class="cursor-pointer mr-1"
+        :class="isEmptySelected || !selectedNode.isLeaf ? 'icon--disable' : ''"
+         @click="onClick('edit')"></svg-icon>
+      <svg-icon icon="delete" class="cursor-pointer mr-1" 
+        :class="isEmptySelected ? 'icon--disable' : ''"
+        @click="onClick('delete')"></svg-icon>
+    </div>
   </div>
 </template>
 
@@ -50,7 +59,7 @@ const props = defineProps({
     default: () => false
   }
 })
-const emites = defineEmits(['select'])
+const emits = defineEmits(['select', 'btn-click'])
 
 const routeName = useRoute().path.replaceAll('/', '')
 const searchValue = useSessionStorage(routeName + ': tree-search', props.query.name || '') 
@@ -62,13 +71,16 @@ const onSearch = () => {
 }
 
 onMounted(() => {
-  // if(treeData.value.length == 0) {
-    searchQuery.value = {...props.query, name: searchValue.value}
-  // }
+  searchQuery.value = {...props.query, name: searchValue.value}
   if(!isEmpty(selectedNode.value)) {
-    emites('select', selectedNode.value)
+    emits('select', selectedNode.value)
   }
 })
+
+const onClick = (type: string) => {
+  if(type != 'add' && isEmpty(selectedNode.value)) return
+  emits('btn-click', { type, data: selectedNode.value })
+}
 
 /******* table ******/
 const loading = ref(false)
@@ -100,7 +112,7 @@ const transformData = (data: any = []) => {
     title: item[label],
     name: item[label],
     isLeaf: item.isLeaf === 1,
-    selectable: item.isLeaf == 1,
+    // selectable: item.isLeaf == 1,
     children: props.lazy ? null : transformData(item.children)
   }))
 }
@@ -123,6 +135,8 @@ const loadData = async (treeNode: any) => {
 // 选中的树节点
 const selectedNode = useSessionStorage(routeName + ': tree-select', {} as any)
 const selectedRowKeys = ref([selectedNode.value.id])
+const isEmptySelected = ref(false)
+
 const onSelect = (keys: string[], {selected, selectedNodes}: any) => {
   if(!selected) return
 
@@ -131,7 +145,10 @@ const onSelect = (keys: string[], {selected, selectedNodes}: any) => {
 
   selectedNode.value = node
   selectedRowKeys.value = [node.id]
-  emites('select', node)
+
+  if(selectedNode.value.isLeaf == 1) {
+    emits('select', node)
+  }
 }
 
 const expandRowKeys = useSessionStorage<string[]>(routeName + ': tree-expand', [])
@@ -139,5 +156,21 @@ const onExpand = (expandedKeys: string[]) => {
   expandRowKeys.value = expandedKeys
 }
 
-watch(searchQuery, refresh)
+watch(searchQuery, () => {
+  // expandRowKeys.value = []
+  // selectedRowKeys.value = []
+  // selectedNode.value = {}
+  refresh()
+})
+watch(selectedNode, () => {
+  isEmptySelected.value = isEmpty(selectedNode.value)
+})
+
+defineExpose({ refresh })
 </script>
+
+<style lang="less" scoped>
+.icon--disable {
+  color: #d9d9d9
+}
+</style>

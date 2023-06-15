@@ -3,12 +3,14 @@
 
   <div class="main main-bg">
     <tree
+      ref="treeRef"
       :title="'场景集'"
       :api="sceneApi.getList"
       :query="{...selectedSceneset, version: 2 }"
       :lazy="true"
       :filedNames="{label: 'groupName', value: 'id'}"
       @select="onSelect"
+      @btn-click="onClick"
     />
     <div class="right-table">
       <div class="flex justify-between items-center">
@@ -23,6 +25,7 @@
 <script setup lang="ts">
 import { SceneSourceOptions, getSceneSourceName } from '@/utils/dict'
 import { SStorage } from '@/utils/storage';
+
 const currentApi = api.scene
 const sceneApi = api.scenesets
 const user = store.user
@@ -76,5 +79,24 @@ const columns = [
 const onSelect = (val: any) => {
   catalog.sceneCatalog = val
   query.value = { ...query.value, scene_set: val.id }
+}
+const onClick = (val: any) => {
+  const { type, data } = val
+  const id = type == 'add' ? 0 : data.id
+  if(type != 'delete') {
+    router.push('/scene/sceneset-edit/' + id)
+  } else {
+    deleteData(id)
+  }
+}
+
+const treeRef = ref()
+const loading = ref(false)
+const deleteData = async (id: string) => {
+  loading.value = true
+  await api.scenesets.delete(id)
+  message.info('删除成功')
+  loading.value = false
+  treeRef.value.refresh()
 }
 </script>

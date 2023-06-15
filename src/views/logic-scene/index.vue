@@ -89,7 +89,7 @@ const columns = [
     fixed: 'right',
     width: 250,
     actions: {
-      运行: (data: any) => {
+      泛化: (data: any) => {
         showRunConfirm.value = true
         runScene.value = data
       },

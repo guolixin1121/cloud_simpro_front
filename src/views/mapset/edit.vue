@@ -6,7 +6,7 @@
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading">
-      <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 550px;"
+      <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 55%"
         @finish="add">
         <a-form-item label="地图集类型" name="isLeaf" :rules="[{ required: true, message: '请选择地图集类型'}]">
           <a-select v-if="isAdd" v-model:value="formState.isLeaf" :disabled="!isAdd"

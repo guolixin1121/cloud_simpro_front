@@ -5,7 +5,7 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
-    <a-form :model="formState" :labelCol ="{ style: { width: '150px' } }"  style="width: 550px;"
+    <a-form :model="formState" :labelCol ="{ style: { width: '150px' } }"  style="width: 55%"
       @finish="add">
       <a-form-item label="任务名称" name="name" :rules="[{ required: true, message: '请输入任务名称'}, { min: 2, max: 50, message: '场景名称长度为2到50位'}]">
         <a-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></a-input>
@@ -161,6 +161,7 @@ const getEditData = async () => {
      formState.sensors = data.sensors_detail
      formState.scenes= data.scenes_detail
      formState.kpi = data.kpi_detail
+     formState.is_in_ring = data.is_in_ring
    }
 }
 getEditData()

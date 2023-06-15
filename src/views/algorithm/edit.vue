@@ -6,13 +6,13 @@
   <div class="min-main">
     <div class="cursor-pointer text-gray-400" @click="goback"><svg-icon icon="back" class="mr-2"></svg-icon>返回</div>
     <span class="title mb-5 mt-3">算法详情</span>
-    <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px" @finish="add">
+    <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 55%" @finish="add">
       <a-form-item
         label="算法名称"
         name="name"
         :rules="[
           { required: true, message: '请输入算法名称' },
-          { min: 2, max: 50, message: '场景名称长度为2到50位' }
+          { min: 2, max: 50, message: '算法名称长度为2到50位' }
         ]"
       >
         <a-input v-if="isAdd" v-model:value="formState.name" :maxlength="50" placeholder="请输入算法名称"></a-input>
@@ -29,10 +29,10 @@
       </a-form-item> -->
       <a-form-item
         label="镜像地址"
-        name="name"
+        name="docker_path"
         :rules="[
           { required: true, message: '请输入算法镜像地址' },
-          { min: 2, max: 50, message: '场景名称长度为2到50位' }
+          { min: 1, max: 256, message: '镜像地址长度为1到256位' }
         ]"
       >
         <a-input v-model:value="formState.docker_path" placeholder="请输入算法镜像"></a-input>

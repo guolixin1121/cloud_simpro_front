@@ -10,7 +10,7 @@
     </div>
     <span class="title mb-5 mt-3">{{ title }}</span>
     <a-spin :spinning="dataLoading">
-      <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px" @finish="add">
+      <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 55%" @finish="add">
         <a-form-item label="地图名称：" name="mapName">
           {{ formState.mapName }}
         </a-form-item>

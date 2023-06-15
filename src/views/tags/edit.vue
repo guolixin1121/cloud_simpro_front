@@ -9,7 +9,7 @@
     </div>
     <span class="title mb-5 mt-3">{{ title }}</span>
     <a-spin :spinning="dataLoading">
-      <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 550px" @finish="add">
+      <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 55%" @finish="add">
         <a-form-item v-if="isView" label="标签ID" name="id">
           {{ formState.id }}
         </a-form-item>

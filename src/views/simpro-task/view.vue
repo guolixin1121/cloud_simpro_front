@@ -8,7 +8,7 @@
       <svg-icon icon="back" class="mr-2"></svg-icon>返回
     </div>
     <span class="title mb-5 mt-3">仿真任务详情</span>
-    <a-form :model="formState" :labelCol ="{ style: { width: '150px' } }"  style="width: 550px;">
+    <a-form :model="formState" :labelCol ="{ style: { width: '150px' } }"  style="width: 55%">
       <a-form-item label="任务ID">
         {{ formState.id }}
       </a-form-item>
@@ -17,6 +17,9 @@
       </a-form-item>
       <a-form-item label="任务来源">
         {{ getTaskSourceName(formState.source) }}
+      </a-form-item>
+      <a-form-item label="是否控制在环">
+        {{ formState.is_in_ring ? '是' : '否' }}
       </a-form-item>
       <a-form-item label="算法">
         {{ formState.algorithm_detail?.name }}
@@ -74,6 +77,7 @@ const formState = reactive({
   id: '',
   name: '',
   source: '',
+  is_in_ring: '',
   vehicle_horizontal:'',
   vehicle_vertical:'',
   vehicle_detail: { name: '' },

@@ -6,7 +6,7 @@
   <div class="min-main">
     <div class="cursor-pointer text-gray-400" @click="goback"><svg-icon icon="back" class="mr-2"></svg-icon>返回</div>
     <span class="title mb-5 mt-3">算法详情</span>
-    <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 550px">
+    <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 55%">
       <a-form-item label="算法名称：" name="name">
         <span>{{ formState.name }}</span>
       </a-form-item>

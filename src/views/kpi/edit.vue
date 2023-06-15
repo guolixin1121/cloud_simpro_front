@@ -5,7 +5,7 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
-    <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 550px" @finish="add">
+    <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 55%" @finish="add">
       
       <a-form-item label="评测指标类型" name="category" :rules="[{ required: true, message: '请选择评测指标类型'}]">
         <a-select v-model:value="formState.category" :options="typesOptions" placeholder="请选择评测指标类型"></a-select>

@@ -110,13 +110,14 @@ export function getCnWordTotal(str) {
   return total
 }
 
-export const checkChName = (str) => {
+export const checkChName = (str, maxLength = 32, minLength = 2) => {
   if(!str) return Promise.resolve()
   
   const chLength = getCnWordTotal(str)
   const length = chLength * 2 + (str.length - chLength)
-  if(length > 0 && length < 2) {
-    return Promise.reject('名称长度为2到32位')
+
+  if(length < minLength || length > maxLength) {
+    return Promise.reject(`名称长度为${minLength}到${maxLength}位`)
   } 
   return Promise.resolve()
 }

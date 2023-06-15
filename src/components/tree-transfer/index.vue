@@ -146,8 +146,8 @@ getOptions()
   border-bottom: 1px solid #e6e7eb;
 }
 .transfer-checked-item {
-  line-height: 32px;
-  padding: 0 2px;
+  line-height: 20px;
+  padding: 6px 2px;
   word-break: break-all;
   &:hover {
     background: #f2f3f5;

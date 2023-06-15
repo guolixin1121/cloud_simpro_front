@@ -8,7 +8,7 @@
       <svg-icon icon="back" class="mr-2"></svg-icon>返回
     </div>
     <span class="title mb-5 mt-3">逻辑场景详情</span>
-    <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 550px;">
+    <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 55%">
       <a-form-item label="场景ID">
         {{ formState.id }}
       </a-form-item>
