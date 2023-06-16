@@ -106,7 +106,8 @@ const formState = reactive({
   scenesets: undefined,
   scenes: [],
   batch: 1,
-  kpi: []
+  kpi: [],
+  test: false
 })
 
 const loading = ref(false)

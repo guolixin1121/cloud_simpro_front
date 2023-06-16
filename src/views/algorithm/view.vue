@@ -14,7 +14,7 @@
         <span>{{ formState.version }}</span>
       </a-form-item> -->
       <a-form-item label="算法镜像：" name="name">
-        <span>{{ formState.docker_path }}</span>
+        <span style="word-break: break-all;">{{ formState.docker_path }}</span>
       </a-form-item>
       <a-form-item label="控制在环" name="name">
         <span>{{ formState ? '是' : '否' }}</span>

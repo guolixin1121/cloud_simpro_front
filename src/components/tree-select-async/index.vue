@@ -1,14 +1,28 @@
 <template>
   <div class="tree-select position" ref="treeRef">
-    <a-input v-model:value="searchValue"
+    <div class="ant-input-affix-wrapper">
+      <input v-model="searchValue" 
+        class="ant-input"
+        :placeholder="($attrs.placeholder as string)" 
+        :maxlength="showSearch ? 255 : 0"
+        @input="onSearch" 
+        @focus="onFocus" />
+      <div class="ant-input-suffix">
+        <svg-icon v-if="focused" icon="search" class="icon"></svg-icon>
+        <svg-icon v-else icon="arrow" class="icon"></svg-icon>
+      </div>
+    </div>
+    <!-- a-input里只要有手动输入，就会触发form的required验证失败，所以改为input -->
+    <!-- <a-input v-model:value="searchValue"
       :placeholder="$attrs.placeholder" 
+      :maxlength="showSearch ? 255 : 0"
       @change="onSearch" 
       @focus="onFocus">
       <template #suffix>
         <svg-icon v-if="focused" icon="search" class="icon"></svg-icon>
         <svg-icon v-else icon="arrow" class="icon"></svg-icon>
       </template>
-    </a-input>
+    </a-input> -->
     <div class="tree-container" v-if="isShowList"> 
       <a-spin :spinning="loading" class=" w-full">
       </a-spin>
@@ -24,6 +38,10 @@
         @expand="onExpand"
         @select="onSelect">
       </a-tree>
+      <div class=" text-center ant-empty-normal" v-if="!loading && treeData.length == 0">
+        <svg-icon icon="empty" style="width: 64px; height: 40px;"></svg-icon>
+        <div>暂无数据</div>
+      </div>
     </div>
   </div>
 </template>
@@ -52,6 +70,10 @@ const props = defineProps({
   },
   selectNode: {
     type: Object
+  },
+  showSearch: {
+    type: Boolean,
+    default: () => true
   }
 })
 const emites = defineEmits(['update:selectNode', 'update:value', 'change'])
@@ -60,6 +82,7 @@ const emites = defineEmits(['update:selectNode', 'update:value', 'change'])
 const searchValue = ref() 
 const searchQuery = ref(props.query)
 const onSearch = () => {
+  console.log(searchValue.value)
   expandRowKeys.value = []
   selectedRowKeys.value = []
   searchQuery.value = { ...props.query, name: searchValue.value}
@@ -147,7 +170,7 @@ const onSelect = (keys: string[], {selected, selectedNodes}: any) => {
   selectedNode.value = node
   selectedRowKeys.value = [node.id]
   searchValue.value = node.title
-
+  
   emites('change', node)
   emites('update:selectNode', node)
   emites('update:value', node.id)

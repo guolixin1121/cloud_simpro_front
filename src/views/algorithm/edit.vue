@@ -32,10 +32,10 @@
         name="docker_path"
         :rules="[
           { required: true, message: '请输入算法镜像地址' },
-          { min: 1, max: 256, message: '镜像地址长度为1到256位' }
+          { min: 1, max: 255, message: '镜像地址长度为1到255位' }
         ]"
       >
-        <a-input v-model:value="formState.docker_path" placeholder="请输入算法镜像"></a-input>
+        <a-input v-model:value="formState.docker_path" :maxlength="255" placeholder="请输入算法镜像"></a-input>
       </a-form-item>
       <a-form-item label="控制在环" name="is_in_ring" :rules="[{ required: true, message: '请选择是否控制在环' }]">
         <a-select v-model:value="formState.is_in_ring">

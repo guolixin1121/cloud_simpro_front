@@ -19,6 +19,7 @@
           :rules="[{ required: true && formState.isLeaf == '1', message: '请选择所属场景目录'}]">
           <tree-select-async
             v-if="isAdd"
+            :show-search="false"
             placeholder="请选择所属场景目录"
             tree-node="groupName"
             v-model:value="formState.parentId"

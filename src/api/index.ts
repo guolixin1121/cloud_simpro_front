@@ -171,3 +171,9 @@ export const overview = defineApi({
   scenes: { url: '/stats/scenes/count/', method: 'get' },
   status: { url: '/stats/simtask/status/', method: 'get' }
 })()
+
+// 在线仿真
+export const online = defineApi({
+  summary: { url: '/stats/simpro/summary/', method: 'get' },
+  executions: { url: '/stats/simtask/executions/', method: 'get' }
+})()

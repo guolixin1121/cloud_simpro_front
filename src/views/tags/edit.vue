@@ -44,13 +44,13 @@
           label="标签中文名称："
           name="display_name"
           :rules="[
-            { required: isView ? false : true, message: '请输入标签名称' },
+            { required: isView ? false : true, message: '请输入标签中文名称' },
             { validator: () => checkChName(formState.name), trigger: 'change' }
           ]"
         >
           <template v-if="!isView">
             <chInput
-              :value="formState.display_name"
+              v-model:value="formState.display_name"
               maxlength="64"
               placeholder="请输入标签中文名称"
               @change="(val: string)=>{formState.display_name=val}"

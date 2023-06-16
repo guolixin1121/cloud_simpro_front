@@ -85,10 +85,7 @@
           </template>
         </a-form-item>
         <template v-if="isView">
-          <a-form-item label="创建时间："
-            ><span>{{ formState.create_time }}</span></a-form-item
-          >
-          <a-form-item label="修改时间："
+          <a-form-item label="最新版本更新时间："
             ><span>{{ formState.create_time }}</span></a-form-item
           >
           <a-form-item label="所属用户："
