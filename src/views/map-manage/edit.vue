@@ -9,7 +9,7 @@
     </div>
     <span class="title mb-5 mt-3">{{ title }}</span>
     <a-spin :spinning="dataLoading"> 
-      <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 55%" @finish="add">
+      <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 55%" @finish="add">
         <a-form-item
           label="地图名称："
           name="name"
@@ -85,7 +85,7 @@
           </template>
         </a-form-item>
         <template v-if="isView">
-          <a-form-item label="最新版本更新时间："
+          <a-form-item label="最新上传时间："
             ><span>{{ formState.create_time }}</span></a-form-item
           >
           <a-form-item label="所属用户："

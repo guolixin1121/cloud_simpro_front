@@ -35,7 +35,7 @@
       <a-form-item label="任务执行次数" name="batch" :rules="[{ required: true, message: '请输入任务执行次数'}]">
         <a-input-number v-model:value="formState.batch" min="1" max="9999" placeholder="请输入任务执行次数"></a-input-number>
       </a-form-item>
-      <a-form-item label="传感器" name="kpi" :rules="[{ required: true, message: '请选择传感器'}]">
+      <a-form-item label="传感器" name="sensors" :rules="[{ required: true, message: '请选择传感器'}]">
         <scroll-transfer v-model:target-keys="formState.sensors" :api="baseApi.sensor.getList"
           :titles="['可选传感器', '选中传感器']"></scroll-transfer>
       </a-form-item>
@@ -150,6 +150,7 @@ const onScenesetChanged = () => {
 const getAlgorithm = ref((args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args}))
 const onRingChanged = () => {
   getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
+  formState.algorithm = undefined
 }
 
 /****** 获取编辑数据 */
@@ -165,7 +166,7 @@ const getEditData = async () => {
      formState.sensors = data.sensors_detail
      formState.scenes= data.scenes_detail
      formState.kpi = data.kpi_detail
-     formState.is_in_ring = data.is_in_ring
+     formState.is_in_ring = data.is_in_ring ? '1' : '0'
    }
 }
 getEditData()

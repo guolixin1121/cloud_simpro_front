@@ -1,7 +1,10 @@
 <template>
   <div class="flex ant-transfer">
     <div class="ant-transfer-list">
-      <div class="ant-transfer-list-title mt-1 ml-2">{{ titles[0] }}</div>
+      <div class="flex justify-between">
+        <span>{{ titles[0] }}</span>
+        <!-- <span class=" text-blue cursor-pointer" @click="onCheckedAll">全选</span> -->
+      </div>
       <a-input-search
         class="my-2"
         placeholder="请输入搜索内容"
@@ -20,18 +23,21 @@
     </div>
 
     <div class="ant-transfer-list ml-1">
-      <div class="ant-transfer-list-title mt-1">{{ titles[1] }}</div>
+      <div class="ant-transfer-list-title mt-1 flex justify-between">
+        <span>{{ titles[1] }}</span>
+        <span class=" text-blue cursor-pointer" @click="onRemoveAll">删除全部</span>
+      </div>
       <ul style="height: calc(100% - 40px); overflow: auto">
         <li class="transfer-checked-item flex justify-between items-center"
           v-for="item in selectedNodes" :key="item.key">
           {{ item.title }}
           <svg-icon icon="close" class=" text-gray-400 cursor-pointer"
-            @click="remove(item)"/>
+            @click="onRemove(item)"/>
         </li>
       </ul>
     </div>
   </div>
-  <div v-if="hasExceedLimit" style="color: #ff4d4f">选中标签不能超过9个，请重新选择</div>
+  <!-- <div v-if="hasExceedLimit" style="color: #ff4d4f">选中标签不能超过9个，请重新选择</div> -->
 </template>
 
 <script lang="ts" setup>
@@ -94,23 +100,52 @@ const treeTransfer = (data: any): TreeDataItem[] => {
   return options
 }
 
-const hasExceedLimit = ref(false)
+// const hasExceedLimit = ref(false)
 const onChecked = (_checkedKeys: any, e: any) => {
-  const newCheckedKeys = e.checkedNodes.filter((item: any) => item.isTag)
-  if(newCheckedKeys.length > 9) {
-    hasExceedLimit.value = true
-  } else {
-    hasExceedLimit.value = false
-    selectedNodes.value = newCheckedKeys
+  // const newCheckedKeys = e.checkedNodes.filter((item: any) => item.isTag)
+  // if(newCheckedKeys.length > 9) {
+  //   hasExceedLimit.value = true
+  // } else {
+  //   hasExceedLimit.value = false
+  console.log(111)
+    selectedNodes.value = e.checkedNodes.filter((item: any) => item.isTag)
     hasDefaultValue = false
     emits('update:targetKeys', selectedNodes.value)
-  }
+  // }
 }
 
-const remove = (item: any) => {
+const onRemove = (item: any) => {
+  // 过滤掉要删除的项
   selectedNodes.value = selectedNodes.value.filter((data: any) => data.key != item.key)
+  // 更新左侧的选中项
   checkedKeys.value = selectedNodes.value.map((data: any) => data.key)
   emits('update:targetKeys', selectedNodes.value)
+}
+
+const onRemoveAll = () => {
+  selectedNodes.value = []
+  checkedKeys.value = []
+  emits('update:targetKeys', [])
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const onCheckedAll = () => {
+  const allData = getTreeNode(treeData.value)
+  selectedNodes.value = allData.filter((item: any) => item.isTag)
+  checkedKeys.value = allData.map((item: any) => item.key)
+  emits('update:targetKeys', selectedNodes.value)
+}
+
+const getTreeNode = (root: any) => {
+  const results = [] as any
+  root.forEach((item: any) => {
+    results.push(item)
+    const children = getTreeNode(item.children || [])
+    if(children.length > 0) {
+      results.push(...children)
+    }
+  })
+  return results
 }
 
 const onSearch = (input: string) => {

@@ -41,9 +41,8 @@ const formItems = ref<SearchFormItem[]>([
     mode: 'multiple',
     api: api.tags.getList,
     query: { tag_type: 3 },
-    placeholder: '请选择标签',
-    fieldNames: { label: 'display_name', value: 'name' },
-    defaultValue: ['']
+    placeholder: '请选择标签，最多选择9个',
+    fieldNames: { label: 'display_name', value: 'name' }
   }
 ])
 let catalog = store.catalog // 缓存左侧树选中的场景集

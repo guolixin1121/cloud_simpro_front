@@ -21,7 +21,7 @@ const onSearch = (data: Query) => (query.value = data)
 /****** 表格区域 */
 const router = useRouter()
 const columns = [
-  { title: '算法ID', dataIndex: 'id', width: 80 },
+  { title: '算法ID', dataIndex: 'id', width: 100 },
   { title: '算法名称', dataIndex: 'name', width: 200, ellipsis: true },
   // { title: '算法版本', dataIndex: 'version', width: 100, ellipsis: true },
   { title: '描述', dataIndex: 'desc', ellipsis: true },

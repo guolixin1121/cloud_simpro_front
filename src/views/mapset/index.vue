@@ -39,7 +39,7 @@ const formItems = ref<SearchFormItem[]>([
     api: api.tags.getList,
     query: { tag_type: 2 },
     fieldNames: { label: 'display_name', value: 'name' },
-    defaultValue: ['']
+    placeholder: '请选择标签，最多选择9个'
   }
 ])
 const query = ref({})

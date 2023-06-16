@@ -20,7 +20,7 @@
         <span>{{ formState ? '是' : '否' }}</span>
       </a-form-item>
       <a-form-item label="描述" name="name">
-        <span>{{ formState.desc }}</span>
+        <span style="word-break: break-all;">{{ formState.desc }}</span>
       </a-form-item>
       <a-form-item label="创建时间："
         ><span>{{ formState.create_time }}</span></a-form-item

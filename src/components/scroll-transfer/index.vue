@@ -1,46 +1,50 @@
 <template>
   <div class="ant-transfer">
     <a-form-item-rest>
-      <list
-        ref="leftListRef"
-        :title="titles[0]"
-        :dataSource="leftDataSource"
-        :showAllChecked="false"
-        :loading="loading"
-        @select="onLeftSelect"
-        @search="onLeftSearch"
-        @scroll="onScroll"
-      ></list>
-
-      <div class="ant-transfer-operation">
-        <button
-          :disabled="!leftSelectedValues.length"
-          v-on:click.prevent="addToRight"
-          class="ant-btn ant-btn-primary ant-btn-sm ant-btn-icon-only"
-        >
-          >
-        </button>
-        <button
-          :disabled="!rightSelectedValues.length"
-          v-on:click.prevent="addToLeft"
-          class="ant-btn ant-btn-primary ant-btn-sm ant-btn-icon-only"
-        >
-          &lt;
-        </button>
+      <div class="ant-transfer-list">
+        <!-- <a-checkbox 
+          v-model:checked="leftState.allChecked" 
+          :indeterminate="leftState.indeterminate"
+          @change="onCheckAllChange">{{ titles[0] }}</a-checkbox> -->
+        <div class="flex justify-between">
+          <span>{{ titles[0] }}</span>
+          <span class=" text-blue cursor-pointer" @click="onCheckedAll">全选</span>
+        </div>
+        <a-input-search class="my-2" placeholder="请输入搜索内容" allowClear 
+          @search="onSearch"
+          @pressEnter="onSearch"></a-input-search>
+        <div style="height: calc(100% - 40px); overflow: auto" 
+          @scroll="(e: Event) => onScroll(e)">
+          <a-checkbox-group 
+            v-model:value="leftState.checkedKeys" 
+            :options="leftState.dataSource"
+            @change="onChecked">
+          </a-checkbox-group>
+          <a-spin v-if="loading" style="width: 100%; padding-top: 20px"></a-spin>
+        </div>
       </div>
-      <list
-        ref="rightListRef"
-        :title="titles[1]"
-        :dataSource="rightDataSource"
-        @search="onRightSearch"
-        @select="onRightSelect"
-      ></list>
+      <!-- 右侧 -->
+      <div class="ant-transfer-list ml-1">
+        <div class="ant-transfer-list-title mt-1 flex justify-between">
+          <span>{{ titles[1] }}</span>
+          <span class=" text-blue cursor-pointer" @click="onRemoveAll">删除全部</span>
+        </div>
+        <ul style="height: calc(100% - 40px); overflow: auto">
+          <li class="transfer-checked-item flex justify-between items-center"
+            v-for="item in selectedNodes" :key="item.value">
+            {{ item.label }}
+            <svg-icon icon="close" class=" text-gray-400 cursor-pointer"
+              @click="onRemove(item)"/>
+          </li>
+        </ul>
+      </div>
     </a-form-item-rest>
   </div>
 </template>
 <script setup lang="ts">
+import "ant-design-vue/es/transfer/style/index.css"
+
 import { watchOnce } from '@vueuse/core'
-import List from './list.vue'
 
 const emits = defineEmits(['update:targetKeys'])
 const props = defineProps({
@@ -60,31 +64,14 @@ const props = defineProps({
   }
 } as any)
 
-let leftSearchText = ''
-const leftListRef = ref()
-const leftDataSource = ref<SelectOption[]>([]) // 左侧列表展示数据
-const leftSelectedValues = ref<SelectOption[]>([]) // 左侧列表选中数据
-
-const rightListRef = ref()
-const rightDataSource = ref<SelectOption[]>([])
-const rightSelectedValues = ref<SelectOption[]>([])
-
-const rightAllDataSource = ref<SelectOption[]>([]) // 右侧全部数据
-const allDataSource = ref<SelectOption[]>([]) // 全部数据
-let hasDefaultValue = true // 是否是回写
-
-const onLeftSelect = (data: SelectOption[]) => (leftSelectedValues.value = data)
-const onRightSelect = (data: SelectOption[]) => (rightSelectedValues.value = data)
-
-const addToRight = () => {
-  rightAllDataSource.value = [...leftSelectedValues.value, ...rightAllDataSource.value]
-
-  // 右侧数据是用户手动添加的，不再需要反写
-  hasDefaultValue = false
-}
-const addToLeft = () => {
-  rightAllDataSource.value = rightAllDataSource.value.filter((item: SelectOption) => !rightSelectedValues.value.find(rItem => rItem.value === item.value))
-}
+const leftState = reactive({
+  // allChecked: false,
+  indeterminate: false,
+  searchText: '',
+  checkedKeys: [],
+  dataSource: [] as any
+})
+const selectedNodes = ref()
 
 // 分页获取数据
 let page = 1
@@ -95,62 +82,30 @@ const getOptions = async () => {
     try {
       loading.value = true
       const { label, value, apiField } = props.fieldNames
-      const res = await props.api({ page, size: 10, [label]: leftSearchText })
+      const res = await props.api({ page, size: 10, [label]: leftState.searchText })
       const results = res.results ||  res[apiField] || res
       const newOptions = results.map((item: any) => ({
         label: item[label],
         value: item[value]
       }))
 
-      allDataSource.value.push(...newOptions)
-      isAllLoaded.value = allDataSource.value.length >= (res.count || res.length)
+      leftState.dataSource.push(...newOptions)
+      isAllLoaded.value = leftState.dataSource.length >= (res.count || res.length)
     } finally {
       loading.value = false
     }
   }
 }
 
-// 仅用于编辑时的回写
-watchOnce(
-  () => props.targetKeys,
-  () => {
-    if(hasDefaultValue) {
-      const { label, value } = props.fieldNames
-      rightAllDataSource.value = props.targetKeys?.map((item: any) => ({
-        label: item[label],
-        value: item[value]
-      }))
-      hasDefaultValue = false
-    }
-  }
-)
-
-// 发送数据给父组件
-watch(rightAllDataSource, () => {
-  const newTargetKeys = rightAllDataSource.value // .map((v: SelectOption) => v.value)
-  emits('update:targetKeys', newTargetKeys)
-})
-
-// 左侧数据 = 从所有数据中过滤掉右侧数据
-watchEffect(() => {
-  rightDataSource.value = rightAllDataSource.value
-
-  const isInRightList = (item: SelectOption) => rightAllDataSource.value.find(rItem => rItem.value === item.value)
-  leftDataSource.value = allDataSource.value.filter((item: SelectOption) => !isInRightList(item))
-
-  // clear data
-  leftSelectedValues.value = []
-  rightSelectedValues.value = []
-  leftListRef.value?.clear()
-  rightListRef.value?.clear()
-
-  // 左侧数据不够一屏，继续加载数据，确保滚动条出现
-  const leftLength = leftDataSource.value.length
-  if (allDataSource.value.length > 0 && leftLength < 10 && !isAllLoaded.value) {
-    page++
+// 搜索查询数据
+const onSearch = (input: string) => {
+  if (props.api) {
+    leftState.searchText = input
+    leftState.dataSource = []
+    page = 1
     getOptions()
   }
-})
+}
 
 const onScroll = (e: any) => {
   if (props.api && !isAllLoaded.value) {
@@ -162,28 +117,82 @@ const onScroll = (e: any) => {
   }
 }
 
+const onChecked = (data: any) => {
+  hasDefaultValue = false
+  selectedNodes.value = data.map((val: any) => leftState.dataSource.find((d: any) => d.value == val))
+  emits('update:targetKeys', selectedNodes.value)
+}
+
+const onRemove = (data: any) => {
+  selectedNodes.value = selectedNodes.value.filter((item: any) => item.value != data.value)
+  leftState.checkedKeys = selectedNodes.value.map((item: any) => item.value)
+  emits('update:targetKeys', selectedNodes.value)
+}
+
+const onRemoveAll = () => {
+  selectedNodes.value = []
+  leftState.checkedKeys = []
+  emits('update:targetKeys', selectedNodes.value)
+}
+
+const onCheckedAll = () => {
+  selectedNodes.value = [...leftState.dataSource]
+  leftState.checkedKeys = selectedNodes.value.map((item: any) => item.value)
+  emits('update:targetKeys', selectedNodes.value)
+}
+
+// 仅用于编辑时的回写
+let hasDefaultValue = true
+watchOnce(
+  () => props.targetKeys,
+  () => {
+    if(hasDefaultValue) {
+      hasDefaultValue = false
+      const { label, value } = props.fieldNames
+      selectedNodes.value = props.targetKeys?.map((item: any) => ({
+        label: item[label],
+        value: item[value]
+      }))
+      leftState.checkedKeys = selectedNodes.value?.map((data: any) => data.value)
+      emits('update:targetKeys', selectedNodes.value) // 同步父组件数据，保持数据结构一致
+    }
+  })
+
 // 动态api
 watch(
   () => props.api,
   () => {
-    allDataSource.value = []
+    leftState.dataSource = []
+    page = 1
     getOptions()
   }
 )
 
-// 搜索查询数据
-const onLeftSearch = (input: string) => {
-  if (props.api) {
-    leftSearchText = input
-    page = 1
-    allDataSource.value = []
-    getOptions()
-  }
-}
-// 右侧仅查询
-const onRightSearch = (input: string) => {
-  rightDataSource.value = rightAllDataSource.value.filter((v: SelectOption) => v.label.indexOf(input) > -1)
-}
-
 getOptions()
 </script>
+<style lang="less">
+.ant-transfer-list {
+  padding: 8px 12px;
+}
+.ant-checkbox-wrapper {
+  display: flex;
+  margin-top: 4px;
+}
+</style>
+<style lang="less" scoped>
+.ant-transfer-list-title {
+  padding-bottom: 8px;
+  border-bottom: 1px solid #e6e7eb;
+}
+.transfer-checked-item {
+  line-height: 20px;
+  padding: 6px 2px;
+  word-break: break-all;
+  &:hover {
+    background: #f2f3f5;
+  }
+  .delete-icon {
+    cursor: pointer;
+  }
+}
+</style>

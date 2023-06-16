@@ -74,11 +74,9 @@ const onSelect = (val: any) => {
 const onClick = (val: any) => {
   const { type, data } = val
   const id = type == 'add' ? 0 : data.id
-  if(type != 'delete') {
-    router.push('/map-manage/mapset-edit/' + id)
-  } else {
-    deleteData(id)
-  }
+  if(type == 'add') router.push('/map-manage/mapset-edit/' + data.id)
+  if(type == 'edit') router.push('/map-manage/mapset-edit/' + data.id + '?name=' + encodeURIComponent(data.name))
+  if(type == 'delete') deleteData(id)
 }
 
 const treeRef = ref()

@@ -1,5 +1,6 @@
 <template>
   <a-select
+    v-model:value="innerValue"
     :options="options"
     placeholder="请选择"
     showSearch
@@ -18,6 +19,9 @@ import type { PropType } from 'vue'
 import { watchOnce } from '@vueuse/core'
 
 const props = defineProps({
+  value: {
+    type: Array<String> || String
+  },
   api: {
     type: Function
   },
@@ -28,8 +32,13 @@ const props = defineProps({
   fieldNames: {
     type: Object as PropType<FieldNames>,
     default: () => ({ label: 'name', value: 'id', apiField: '', sublabel: '' })
+  },
+  maxlength: {
+    type: Number,
+    default: () => null
   }
 })
+const emits = defineEmits(['update:value'])
 const attrs = useAttrs()
 const currentPage = ref(1) // 分页load选项
 const isAllLoaded = ref(false)
@@ -85,8 +94,18 @@ const onFocus = () => {
   // }
 }
 
-// 值从父组件传过来时触发getDefaultOptions，内部的更改则不触发
-const onChange = () => hasDefaultValue.value = false
+// 双向同步数据
+const innerValue = ref()
+watch(() => props.value,
+ () => {
+   innerValue.value = props.value
+ })
+const onChange = () => {
+  hasDefaultValue.value = false  // 值从父组件传过来时触发getDefaultOptions，内部的更改则不触发
+  if(!Array.isArray(innerValue.value) || innerValue.value.length < 10) {
+    emits('update:value', innerValue.value)
+  }
+}
 
 const loading = ref(false)
 const getOptions = async () => {
@@ -117,7 +136,6 @@ const getDefaultOptions = async () => {
         options.value.push(...transformOption(res))
       }
     })
-    // hasDefaultValue.value = false
   }
 }
 

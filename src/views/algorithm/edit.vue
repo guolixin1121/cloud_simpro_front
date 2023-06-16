@@ -37,8 +37,8 @@
       >
         <a-input v-model:value="formState.docker_path" :maxlength="255" placeholder="请输入算法镜像"></a-input>
       </a-form-item>
-      <a-form-item label="控制在环" name="is_in_ring" :rules="[{ required: true, message: '请选择是否控制在环' }]">
-        <a-select v-model:value="formState.is_in_ring">
+      <a-form-item label="控制在环" name="is_in_ring" :rules="[{ required: true, message: '请选择控制在环' }]">
+        <a-select v-model:value="formState.is_in_ring" placeholder="请选择控制在环">
           <a-select-option key="1" value="1">是</a-select-option>
           <a-select-option key="0" value="0">否</a-select-option>
         </a-select>
