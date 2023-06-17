@@ -59,7 +59,7 @@
           <single-upload v-if="isAdd" accept=".xosc" v-model:value="formState.xosc"></single-upload>
           <span>{{ formState.adsUrl }}</span>
         </a-form-item>
-        <a-form-item label="标签">
+        <a-form-item label="具体场景标签">
           <tree-transfer
             v-model:target-keys="formState.labels"
             :api="baseApi.tags.getList"

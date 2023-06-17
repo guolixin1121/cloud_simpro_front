@@ -137,7 +137,7 @@ watchEffect(() => {
 
 const loading = ref(false)
 const router = useRouter()
-const goback = () => router.go(-1)
+const goback = () => router.push('/tags/')
 const add = async () => {
   const { parentId, parentNode } = formState
   // 没有父节点或者父节点为第一级，则当前标签为目录

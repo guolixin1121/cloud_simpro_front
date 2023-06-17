@@ -5,7 +5,13 @@
       <span class="title">算法管理</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/algorithm/edit/0')">创建算法</a-button>
     </div>
-    <Table :api="algorithmApi.getList" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }"> </Table>
+    <Table :api="algorithmApi.getList" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }">
+      <template #bodyCell="{column, text}">
+        <template v-if="column.dataIndex == 'is_in_ring'">
+          {{ text ? '是' : '否' }}
+        </template>
+      </template>
+    </Table>
   </div>
 </template>
 
@@ -14,7 +20,13 @@
 const user = store.user
 const algorithmApi = api.algorithm
 /****** 搜素区域 */
-const formItems = ref<SearchFormItem[]>([{ label: '算法名称', key: 'name', type: 'input', placeholder: '请输入算法名称' }])
+const formItems = ref<SearchFormItem[]>([
+  { label: '算法名称', key: 'name', type: 'input', placeholder: '请输入算法名称' },
+  { label: '控制在环', key: 'is_in_ring', type: 'select', 
+    options: [{ label: '全部' , value: '' }, { label: '是' , value: 1 }, { label: '否', value: 0 }],
+    defaultValue: ''
+  }
+])
 const query: Query = ref({})
 const onSearch = (data: Query) => (query.value = data)
 
@@ -23,7 +35,7 @@ const router = useRouter()
 const columns = [
   { title: '算法ID', dataIndex: 'id', width: 100 },
   { title: '算法名称', dataIndex: 'name', width: 200, ellipsis: true },
-  // { title: '算法版本', dataIndex: 'version', width: 100, ellipsis: true },
+  { title: '控制在环', dataIndex: 'is_in_ring', width: 100 },
   { title: '描述', dataIndex: 'desc', ellipsis: true },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '所属用户', dataIndex: 'create_user', width: 100, ellipsis: true },

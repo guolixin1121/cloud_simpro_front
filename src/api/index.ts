@@ -108,7 +108,8 @@ export const task = defineApi({
 export const result = defineApi({
   getList: { url: '/simpro/simtask/', method: 'get' },
   getScenes: { url: '/simpro/simtask/result/', method: 'get' },
-  delete: { url: '/simpro/simtask/{sid}/', method: 'delete' }
+  delete: { url: '/simpro/simtask/{sid}/', method: 'delete' },
+  enter: { url: '/vnc/enter/', method: 'post' } // 进入vnc回放
 })()
 
 export const sotif = defineApi({
@@ -174,6 +175,4 @@ export const overview = defineApi({
 
 // 在线仿真
 export const online = defineApi({
-  summary: { url: '/stats/simpro/summary/', method: 'get' },
-  executions: { url: '/stats/simtask/executions/', method: 'get' }
 })()

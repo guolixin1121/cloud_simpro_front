@@ -8,7 +8,7 @@
           @change="onCheckAllChange">{{ titles[0] }}</a-checkbox> -->
         <div class="flex justify-between">
           <span>{{ titles[0] }}</span>
-          <span class=" text-blue cursor-pointer" @click="onCheckedAll">全选</span>
+          <!-- <span class=" text-blue cursor-pointer" @click="() => onCheckedAll()">全选</span> -->
         </div>
         <a-input-search class="my-2" placeholder="请输入搜索内容" allowClear 
           @search="onSearch"
@@ -71,7 +71,7 @@ const leftState = reactive({
   checkedKeys: [],
   dataSource: [] as any
 })
-const selectedNodes = ref()
+const selectedNodes = ref([] as any)
 
 // 分页获取数据
 let page = 1
@@ -91,6 +91,10 @@ const getOptions = async () => {
 
       leftState.dataSource.push(...newOptions)
       isAllLoaded.value = leftState.dataSource.length >= (res.count || res.length)
+
+      // if(isCheckedAll.value) {
+      //   onCheckedAll(newOptions)
+      // }
     } finally {
       loading.value = false
     }
@@ -135,11 +139,12 @@ const onRemoveAll = () => {
   emits('update:targetKeys', selectedNodes.value)
 }
 
-const onCheckedAll = () => {
-  selectedNodes.value = [...leftState.dataSource]
-  leftState.checkedKeys = selectedNodes.value.map((item: any) => item.value)
-  emits('update:targetKeys', selectedNodes.value)
-}
+// const onCheckedAll = (allData: any = leftState.dataSource) => {
+//   hasDefaultValue = false
+//   selectedNodes.value.push(...allData)
+//   leftState.checkedKeys = selectedNodes.value.map((item: any) => item.value)
+//   emits('update:targetKeys', selectedNodes.value)
+// }
 
 // 仅用于编辑时的回写
 let hasDefaultValue = true

@@ -23,6 +23,7 @@
 部署打包：`npm run build`
 提交git：`npm run commit` 或 `npx cz`
 本地服务：`npm run server`
+docker打包: `npm run docker`
 
 ## API
 + mock/data.js 可在本地模拟API接口

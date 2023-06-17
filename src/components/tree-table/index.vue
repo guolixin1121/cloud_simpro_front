@@ -37,7 +37,7 @@
        </template>
        <template v-else >
          <slot :column="column" :row="row">
-           <svg-icon icon="folder" class="mr-1" 
+           <svg-icon icon="folder-light" class="mr-1" 
             v-if="!row.isLeaf && column.dataIndex == treeNode"
            ></svg-icon>
            <span>{{ row[column.dataIndex] }}</span>

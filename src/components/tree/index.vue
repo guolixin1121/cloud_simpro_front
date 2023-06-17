@@ -13,6 +13,7 @@
       <!-- 刷新数据需要重新渲染，否则展开节点会有bug -->
       <a-tree
         v-if="!loading"
+        :show-icon="true"
         :loading="loading"
         :load-data="lazy ? loadData : null"
         :tree-data="treeData"
@@ -20,6 +21,9 @@
         :selectedKeys="selectedRowKeys"
         @expand="onExpand"
         @select="onSelect">
+        <template #icon="{ isLeaf }">
+          <svg-icon :icon="isLeaf ? 'leaf' : 'folder'"></svg-icon>
+        </template>
       </a-tree>
     </div>
     <div class=" float-right mt-2">
@@ -163,15 +167,26 @@ const isEmptySelected = ref(false)
 
 const onSelect = (keys: string[], {selected, selectedNodes}: any) => {
   if(!selected) return
-
   const node = selectedNodes[0]
-  if(node.id == selectedNode.value.id) return
 
-  selectedNode.value = node
-  selectedRowKeys.value = [node.id]
+  // toggle expand
+  const expanded = expandRowKeys.value.find((val: string) => val == node.id)
+  if(!expanded) {
+    expandRowKeys.value.push(node.id)
+  } else {
+    expandRowKeys.value = expandRowKeys.value.filter((val: any) => val != node.id)
+  }
 
-  if(selectedNode.value.isLeaf == 1) {
-    emits('select', node)
+  // trigger select
+  if(node.isLeaf) {
+    if(node.id == selectedNode.value.id) return
+
+    selectedNode.value = node
+    selectedRowKeys.value = [node.id]
+
+    if(selectedNode.value.isLeaf == 1) {
+      emits('select', node)
+    }
   }
 }
 

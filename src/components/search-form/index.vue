@@ -108,7 +108,8 @@ onMounted(() => {
 const form = ref()
 const search = () => emitSearch()
 const reset = () => {
-  form.value.resetFields()
+  // form.value.resetFields()
+  props.items.forEach((item: any) => (formState[item.key] = item.defaultValue))
   emitSearch()
 }
 

@@ -95,7 +95,7 @@ const formState = reactive<any>({
 
 const loading = ref(false)
 const router = useRouter()
-const goback = () => router.go(-1)
+const goback = () => router.push('/sensor')
 const add = async () => {
   loading.value = true
   const params: any = {

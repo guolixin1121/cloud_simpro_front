@@ -48,6 +48,7 @@
 
 <script setup lang="ts">
 import { onClickOutside } from '@vueuse/core'
+import { throttle } from 'lodash'
 
 const props = defineProps({
   title: {
@@ -81,13 +82,13 @@ const emites = defineEmits(['update:selectNode', 'update:value', 'change'])
 /******** input box */
 const searchValue = ref() 
 const searchQuery = ref(props.query)
-const onSearch = () => {
-  console.log(searchValue.value)
+const onSearch = throttle(() => {
   expandRowKeys.value = []
   selectedRowKeys.value = []
   searchQuery.value = { ...props.query, name: searchValue.value}
   refresh()
-}
+}, 800, { leading: false })
+
 const focused = ref(false)
 const onFocus = () => {
   isShowList.value = true

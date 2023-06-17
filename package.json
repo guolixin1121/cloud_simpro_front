@@ -16,7 +16,7 @@
     "pre-check": "vue-tsc && npx lint-staged",
     "commit": "cz",
     "server": "nodemon mock/index.js",
-    "docker": "docker build -t cloud_simpro_front . && docker save cloud_simpro_front > cloud_simpro_front.tar"
+    "docker": "sh docker.sh"
   },
   "dependencies": {
     "@vueuse/core": "^9.13.0",

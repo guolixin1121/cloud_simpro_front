@@ -17,6 +17,7 @@
 import { OptionProps } from 'ant-design-vue/lib/select'
 import type { PropType } from 'vue'
 import { watchOnce } from '@vueuse/core'
+import { throttle} from 'lodash'
 
 const props = defineProps({
   value: {
@@ -72,7 +73,7 @@ const onScroll = (e: any) => {
 }
 
 // 搜索查询数据
-const onSearch = (input: string) => {
+const onSearch = throttle((input: string) => {
   if (props.api) {
     currentPage.value = 1
     options.value = []
@@ -82,7 +83,7 @@ const onSearch = (input: string) => {
     }
     getOptions()
   }
-}
+}, 899, { leading: false})
 
 // 重新获取数据
 const onFocus = () => {

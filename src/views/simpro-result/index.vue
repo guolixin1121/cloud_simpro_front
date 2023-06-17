@@ -73,7 +73,7 @@ const columns = [
   { title: '任务状态', dataIndex: 'status', width: 80 },
   { title: '任务结果', dataIndex: 'is_passed', width: 80 },
   { title: '完成时间', dataIndex: 'finish_time', width: 150 },
-  { title: '所属用户', dataIndex: 'createUser', width: 100 },
+  { title: '所属用户', dataIndex: 'create_user', width: 100 },
   { title: '操作', dataIndex: 'actions', fixed: 'right', width: 150 }
 ]
 

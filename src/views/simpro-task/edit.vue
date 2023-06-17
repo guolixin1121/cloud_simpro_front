@@ -147,7 +147,7 @@ const onScenesetChanged = () => {
   getScenes.value = (args: any)  => api.scene.getList({scene_set: formState.scenesets, ...args})
 }
 
-const getAlgorithm = ref((args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args}))
+const getAlgorithm = ref()
 const onRingChanged = () => {
   getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
   formState.algorithm = undefined
@@ -161,13 +161,14 @@ const getEditData = async () => {
      formState.batch = data.batch
      formState.algorithm = data.algorithm_detail?.id
      formState.dynamic_vehicle = data.vehicle_detail.id
-     formState.vehicle_horizontal = data.vehicle_vertical
+     formState.vehicle_horizontal = data.vehicle_horizontal
      formState.vehicle_vertical = data.vehicle_vertical
      formState.sensors = data.sensors_detail
      formState.scenes= data.scenes_detail
      formState.kpi = data.kpi_detail
      formState.is_in_ring = data.is_in_ring ? '1' : '0'
    }
+   getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
 }
 getEditData()
 </script>

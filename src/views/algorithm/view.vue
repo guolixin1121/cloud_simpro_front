@@ -17,7 +17,7 @@
         <span style="word-break: break-all;">{{ formState.docker_path }}</span>
       </a-form-item>
       <a-form-item label="控制在环" name="name">
-        <span>{{ formState ? '是' : '否' }}</span>
+        <span>{{ formState.is_in_ring ? '是' : '否' }}</span>
       </a-form-item>
       <a-form-item label="描述" name="name">
         <span style="word-break: break-all;">{{ formState.desc }}</span>
@@ -48,7 +48,7 @@ const formState = reactive<any>({
 })
 
 const router = useRouter()
-const goback = () => router.go(-1)
+const goback = () => router.push('/algorithm')
 
 /****** 获取查看数据 */
 const getLookData = async () => {
@@ -62,7 +62,7 @@ const getLookData = async () => {
   formState.desc = data.desc
   formState.create_time = formatDate(data.create_time)
   formState.create_user = data.create_user
-  formState.is_in_ring = data.is_in_ring
+  formState.is_in_ring = data.is_in_ring 
 }
 getLookData()
 </script>

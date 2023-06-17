@@ -87,12 +87,12 @@ const dataSource: any = computed(() => {
   return results
 })
 const pagination = computed(() => ({
-  size: 10,
+  pageSize: 10,
   current: current.value,
   total: data.value?.count,
   'show-total': (total: number) => `共 ${total} 条`
 }))
-const size = pagination.value.size
+const size = pagination.value.pageSize
 
 // selection handler
 const selectedRowKeys = ref<string[]>([])

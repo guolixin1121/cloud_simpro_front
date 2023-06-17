@@ -37,7 +37,6 @@
       </ul>
     </div>
   </div>
-  <!-- <div v-if="hasExceedLimit" style="color: #ff4d4f">选中标签不能超过9个，请重新选择</div> -->
 </template>
 
 <script lang="ts" setup>
@@ -100,18 +99,10 @@ const treeTransfer = (data: any): TreeDataItem[] => {
   return options
 }
 
-// const hasExceedLimit = ref(false)
 const onChecked = (_checkedKeys: any, e: any) => {
-  // const newCheckedKeys = e.checkedNodes.filter((item: any) => item.isTag)
-  // if(newCheckedKeys.length > 9) {
-  //   hasExceedLimit.value = true
-  // } else {
-  //   hasExceedLimit.value = false
-  console.log(111)
-    selectedNodes.value = e.checkedNodes.filter((item: any) => item.isTag)
-    hasDefaultValue = false
-    emits('update:targetKeys', selectedNodes.value)
-  // }
+  hasDefaultValue = false
+  selectedNodes.value = e.checkedNodes.filter((item: any) => item.isTag)
+  emits('update:targetKeys', selectedNodes.value)
 }
 
 const onRemove = (item: any) => {
@@ -128,25 +119,25 @@ const onRemoveAll = () => {
   emits('update:targetKeys', [])
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const onCheckedAll = () => {
-  const allData = getTreeNode(treeData.value)
-  selectedNodes.value = allData.filter((item: any) => item.isTag)
-  checkedKeys.value = allData.map((item: any) => item.key)
-  emits('update:targetKeys', selectedNodes.value)
-}
+// const onCheckedAll = () => {
+//   hasDefaultValue = false
+//   const allData = getTreeNode(treeData.value)
+//   selectedNodes.value = allData.filter((item: any) => item.isTag)
+//   checkedKeys.value = allData.map((item: any) => item.key)
+//   emits('update:targetKeys', selectedNodes.value)
+// }
 
-const getTreeNode = (root: any) => {
-  const results = [] as any
-  root.forEach((item: any) => {
-    results.push(item)
-    const children = getTreeNode(item.children || [])
-    if(children.length > 0) {
-      results.push(...children)
-    }
-  })
-  return results
-}
+// const getTreeNode = (root: any) => {
+//   const results = [] as any
+//   root.forEach((item: any) => {
+//     results.push(item)
+//     const children = getTreeNode(item.children || [])
+//     if(children.length > 0) {
+//       results.push(...children)
+//     }
+//   })
+//   return results
+// }
 
 const onSearch = (input: string) => {
   treeData.value = []
