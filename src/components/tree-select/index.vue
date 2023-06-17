@@ -2,6 +2,7 @@
   <a-tree-select
     placeholder="请选择"
     showSearch
+    treeDefaultExpandAll
     treeNodeFilterProp="title"
     :treeData="treeData"
     :not-found-content=" loading ? '数据加载中...' : '暂无数据'"

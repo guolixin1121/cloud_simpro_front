@@ -40,7 +40,7 @@ const router = useRouter()
 const columns = [
   { title: '评测指标ID', dataIndex: 'id', width: 120 },
   { title: '评测指标名称', dataIndex: 'name', ellipsis: true },
-  { title: '指标类型', dataIndex: 'category_name', width: 150 },
+  { title: '指标类型', dataIndex: 'category_name', width: 250 },
   { title: '创建时间', dataIndex: 'create_date', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },
   { title: '所属用户', dataIndex: 'create_user', width: 100 },

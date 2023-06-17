@@ -8,7 +8,12 @@
     <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 55%" @finish="add">
       
       <a-form-item label="评测指标类型" name="category" :rules="[{ required: true, message: '请选择评测指标类型'}]">
-        <a-select v-model:value="formState.category" :options="typesOptions" placeholder="请选择评测指标类型"></a-select>
+        <tree-select 
+          v-model:value="formState.category" 
+          :api="currentApi.getTypes" 
+          :check-leaf="false"
+          :fieldNames="{ label: 'title', value: 'id' }"
+          placeholder="请选择评测指标类型"></tree-select>
       </a-form-item>
       <a-form-item
         label="评测指标名称"
@@ -48,8 +53,6 @@ const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '评测指标'
 const currentApi = api.kpi
 
-const typesOptions = ref([])
-// const fileList = ref()
 const formState = reactive({
   name: '',
   desc: '',
@@ -78,14 +81,14 @@ const add = async () => {
   }
 }
 
-
 // 仅能用自定义的类别
-const getTypes = async () => {
-  const res = await currentApi.getTypes()
-  const options = res.filter((d: RObject) => d.title === '自定义')
-  typesOptions.value = options?.[0].children?.map((d: RObject) => ({ label: d.title, value: d.id }))
-}
-getTypes()
+// const typesOptions = ref([])
+// const getTypes = async () => {
+//   const res = await currentApi.getTypes()
+//   const options = res.filter((d: RObject) => d.title === '自定义')
+//   typesOptions.value = options?.[0].children?.map((d: RObject) => ({ label: d.title, value: d.id }))
+// }
+// getTypes()
 
 /****** 获取编辑数据 */
 const getEditData = async () => {

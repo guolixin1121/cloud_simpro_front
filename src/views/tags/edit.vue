@@ -45,7 +45,7 @@
           name="display_name"
           :rules="[
             { required: isView ? false : true, message: '请输入标签中文名称' },
-            { validator: () => checkChName(formState.name), trigger: 'change' }
+            { validator: () => checkChName(formState.display_name) }
           ]"
         >
           <template v-if="!isView">
@@ -73,7 +73,7 @@
           >
           </tree-select>
         </a-form-item>
-        <a-form-item label="描述" name="desc" :rules="[{required: !isView , message: '请输入标签描述' }]">
+        <a-form-item label="描述" name="desc" :rules="[{required: false , message: '请输入标签描述' }]">
           <a-textarea
             v-if="!isView"
             v-model:value="formState.desc"
