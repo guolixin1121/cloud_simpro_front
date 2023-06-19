@@ -36,7 +36,7 @@ const props = defineProps({
   },
   maxlength: {
     type: Number,
-    default: () => null
+    default: () => 9
   }
 })
 const emits = defineEmits(['update:value'])
@@ -103,7 +103,8 @@ watch(() => props.value,
  })
 const onChange = () => {
   hasDefaultValue.value = false  // 值从父组件传过来时触发getDefaultOptions，内部的更改则不触发
-  if(!Array.isArray(innerValue.value) || innerValue.value.length < 10) {
+  // 最多选择多少个
+  if(!Array.isArray(innerValue.value) || innerValue.value.length <= props.maxlength) {
     emits('update:value', innerValue.value)
   }
 }
@@ -154,7 +155,7 @@ const transformOption = (response: RObject) => {
 
 // 仅仅初始化时回写数据
 watchOnce(
-  () => attrs.value, 
+  () => props.value, 
   () => {
     if(hasDefaultValue.value) {
       getDefaultOptions()

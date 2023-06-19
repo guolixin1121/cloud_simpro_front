@@ -32,7 +32,7 @@ const currentApi = api.tags
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入标签名称' },
   {
-    label: '标签类型',
+    label: '标签类别',
     key: 'tag_type',
     type: 'select',
     api: () => currentApi.getType({ tree: 1 }),
@@ -51,7 +51,7 @@ const router = useRouter()
 const columns = [
   { title: '标签名称', dataIndex: 'display_name' },
   { title: '标签英文名称', dataIndex: 'name'},
-  { title: '类型', dataIndex: 'isTag', width: 100},
+  { title: '标签类别', dataIndex: 'isTag', width: 100},
   { title: '创建时间', dataIndex: 'create_time', width: 200 },
   { title: '所属用户', dataIndex: 'create_user', width: 200 },
   { title: '操作', dataIndex: 'operation', width: 150,

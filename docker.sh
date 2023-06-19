@@ -1,4 +1,4 @@
-export VERSION='0.32' 
+export VERSION='0.34' 
 
 docker build -t cloud_simpro_front . 
 docker save cloud_simpro_front > cloud_simpro_front.tar

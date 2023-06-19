@@ -39,8 +39,8 @@ const columns = [
   { dataIndex: 'adsName', title: '场景名称'},
   { dataIndex: 'labels_detail', title: '场景标签'},
   { dataIndex: 'batch', title: '仿真轮次', width: 100},
-  { dataIndex: 'run-time', title: '开始时间', width: 150},
-  { dataIndex: 'funish-time', title: '完成时间', width: 150},
+  // { dataIndex: 'run-time', title: '开始时间', width: 150},
+  // { dataIndex: 'funish-time', title: '完成时间', width: 150},
   {
     dataIndex: 'actions', title: '操作', fixed: 'right', width: 150
   }

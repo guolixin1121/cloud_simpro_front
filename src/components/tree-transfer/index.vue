@@ -24,7 +24,7 @@
 
     <div class="ant-transfer-list ml-1">
       <div class="ant-transfer-list-title mt-1 flex justify-between">
-        <span>{{ titles[1] }}</span>
+        <span>{{ titles[1] }}({{ selectedNodes?.length }})</span>
         <span class=" text-blue cursor-pointer" @click="onRemoveAll">删除全部</span>
       </div>
       <ul style="height: calc(100% - 40px); overflow: auto">
@@ -37,6 +37,7 @@
       </ul>
     </div>
   </div>
+  <div v-if="isExceedLimit" style="color: #ff4d4f">最多选择9个</div>
 </template>
 
 <script lang="ts" setup>
@@ -69,6 +70,7 @@ const props = defineProps({
 const treeData = ref<TreeDataItem[]>([])
 const selectedNodes = ref<TreeDataItem[]>([])
 const checkedKeys = ref<TreeDataItem[]>([])
+const checkedKeysBackup = ref<TreeDataItem[]>([])
 
 const loading = ref(false)
 let isAllLoaded = false
@@ -99,13 +101,22 @@ const treeTransfer = (data: any): TreeDataItem[] => {
   return options
 }
 
+const isExceedLimit = ref(false)
 const onChecked = (_checkedKeys: any, e: any) => {
-  hasDefaultValue = false
-  selectedNodes.value = e.checkedNodes.filter((item: any) => item.isTag)
-  emits('update:targetKeys', selectedNodes.value)
+  isExceedLimit.value = false
+  const checked = e.checkedNodes.filter((item: any) => item.isTag)
+  if(checked.length > 9) {
+    isExceedLimit.value = true
+    checkedKeys.value = [...checkedKeysBackup.value]
+  } else {
+    hasDefaultValue = false
+    selectedNodes.value = checked //e.checkedNodes.filter((item: any) => item.isTag)
+    emits('update:targetKeys', selectedNodes.value)
+  }
 }
 
 const onRemove = (item: any) => {
+  isExceedLimit.value = false
   // 过滤掉要删除的项
   selectedNodes.value = selectedNodes.value.filter((data: any) => data.key != item.key)
   // 更新左侧的选中项
@@ -118,6 +129,8 @@ const onRemoveAll = () => {
   checkedKeys.value = []
   emits('update:targetKeys', [])
 }
+
+watch(checkedKeys, () => checkedKeysBackup.value = [...checkedKeys.value])
 
 // const onCheckedAll = () => {
 //   hasDefaultValue = false

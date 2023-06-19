@@ -58,8 +58,9 @@
           </template>
           <template v-else>{{ formState.display_name }}</template>
         </a-form-item>
-        <a-form-item v-if="isAdd" label="上级标签：" name="tag_type">
+        <a-form-item label="上级标签：" name="tag_type">
           <tree-select
+            v-if="isAdd" 
             placeholder="请选择上级标签"
             :disabled="isView"
             allowClear
@@ -72,6 +73,7 @@
             :fieldNames="{ label: 'display_name', value: 'name' }"
           >
           </tree-select>
+          <template v-else>{{ formState.parentNode?.display_name }}</template>
         </a-form-item>
         <a-form-item label="描述" name="desc" :rules="[{required: false , message: '请输入标签描述' }]">
           <a-textarea
@@ -121,7 +123,7 @@ const formState = reactive<any>({
   name: undefined,
   display_name: null,
   desc: '',
-  tag_type: parseInt(tag_type as string),
+  tag_type: undefined,
   parentId: null,
   parentNode: null,
   create_time: '',
@@ -140,14 +142,15 @@ const router = useRouter()
 const goback = () => router.push('/tags/')
 const add = async () => {
   const { parentId, parentNode } = formState
-  // 没有父节点或者父节点为第一级，则当前标签为目录
-  // 否则为标签
+  // isTag逻辑：
+  // 没有父节点或者父节点为第一级，则当前标签为目录, 否则为标签
+  // 编辑时不可以修改
   const params: any = {
     name: formState.name,
     display_name: formState.display_name,
     type: formState.tag_type,
     desc: formState.desc,
-    isTag: !parentId || parentNode.level == 0 ? false : true,
+    isTag: isAdd ? (!parentId || parentNode.level == 0 ? false : true) : formState.isTag,
     parentId: parentId ? parentNode.id : null
   }
   for (const key in params) {
@@ -176,13 +179,19 @@ const getLookData = async () => {
     try {
       dataLoading.value = true
       const res = await tagsApi.get(id)
+
+      let parent = res.parentList[0]
+      parent = !parent ? null : { id: parent.labelId, name: parent.labelName, display_name: parent.labelDisplayName }
+
       formState.id = res.id
       formState.name = res.name
       formState.display_name = res.display_name
       formState.desc = res.desc
       formState.tag_type = res.tag_type
       formState.tag_type_name = res.tag_type_name
-      formState.parentNode = res.parentList
+      formState.isTag = res.isTag
+      formState.parentId = parent?.id
+      formState.parentNode = parent
       formState.create_time = res.create_time
       formState.update_time = res.update_time
       formState.create_user = res.create_user
@@ -194,6 +203,8 @@ const getLookData = async () => {
 const onlyEnlishInput = (e: { target: { value: string } }) => {
   formState.name = e.target.value.replace(/[^a-z_]/g, '')
 }
+
+onMounted(() => formState.tag_type = parseInt(tag_type as string))
 
 getLookData()
 </script>

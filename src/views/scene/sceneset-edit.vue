@@ -30,7 +30,7 @@
           >
           </tree-select-async>
           <div v-else>{{ formState.parentName }}</div>
-          <div v-if="error" class="ant-form-item-explain-error" style="">地图目录不能超过四级</div>
+          <!-- <div v-if="error" class="ant-form-item-explain-error" style="">地图目录不能超过四级</div> -->
         </a-form-item>
         <a-form-item label="场景集名称" name="name" :rules="[
           { required: true, message: '请输入场景集名称'}, 
@@ -90,7 +90,7 @@ const loading = ref(false)
 const router = useRouter()
 const goback = () => router.push('/scene/')
 const add = async () => {
-  if(error.value) return
+  // if(error.value) return
   loading.value = true
 
   const params = {
@@ -113,17 +113,17 @@ const add = async () => {
   }
 }
 
-const error = ref(false)
-watch(
-  () => formState.parentId,
-  () => {
-    const { isLeaf, parent } = formState
-    error.value = false
-    if(isLeaf == '0' && parent?.level > 2) {
-      error.value = true
-    }
-  }
-)
+// const error = ref(false)
+// watch(
+//   () => formState.parentId,
+//   () => {
+//     const { isLeaf, parent } = formState
+//     error.value = false
+//     if(isLeaf == '0' && parent?.level > 6) {
+//       error.value = true
+//     }
+//   }
+// )
 
 /****** 获取编辑数据 */
 const dataLoading = ref(false)
