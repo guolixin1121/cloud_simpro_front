@@ -1,6 +1,6 @@
 // list页面使用，需要自己提供‘全部’选项
 export const SceneSourceOptions = [
-  // { label: '全部', value: '' },
+  { label: '全部', value: '' },
   { label: '编辑', value: 0 },
   { label: '泛化', value: 1 },
   { label: '导入', value: 2 }

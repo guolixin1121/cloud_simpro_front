@@ -85,12 +85,17 @@ fetchData()
   display: flex;
   justify-content: space-between;
   .item {
-    width: 32.5%;
+    width: 33.3%;
     height: 128px;
+    margin-right: 16px;
     display: flex;
     background-color: #fff;
     justify-content: space-between;
     padding: 24px;
+
+    &:last-child {
+      margin-right: 0px;
+    }
 
     .icon-rise {
       display: inline-block;

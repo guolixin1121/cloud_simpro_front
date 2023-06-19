@@ -7,7 +7,7 @@
     <Action :scope="scope" :is-only-creator="isOnlyCreator" @refresh="emits('refresh')"></Action>
   </template>
   <!-- 值为时间：格式化时间 -->
-  <template v-else-if="dataIndex?.toLowerCase().indexOf('time') > -1 || dataIndex?.toLowerCase().indexOf('date') > -1">
+  <template v-else-if="isDateColumn(dataIndex)">
     {{ dataValue ? dayjs(dataValue).format('YYYY-MM-DD HH:mm:ss') : '' }}
   </template>
   <!-- 值为对象：获取name -->
@@ -46,4 +46,8 @@ const emits = defineEmits(['refresh'])
 const column = computed(() => props.scope?.column)
 const dataIndex = computed(() => props.scope?.column.dataIndex)
 const dataValue = computed(() => props.scope?.record[dataIndex.value])
+
+const isDateColumn = (column: string) => {
+  return column.indexOf('_time') > -1 || column.indexOf('Time') > -1 || column.indexOf('_date') > -1 || column.indexOf('Date') > -1 
+}
 </script>

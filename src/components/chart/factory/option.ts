@@ -1,13 +1,16 @@
 import { merge, cloneDeep } from "lodash"
 const defaultOption = {
-  color: ['#1664FF', '#C5D8FF'],
+  color: ['#4080FF', '#C5D8FF'],
   title: {
     show: false
   },
   legend: {
     left: 0,
     top: 0,
-    itemWidth: 15
+    itemWidth: 15,
+    textStyle: {
+      color: '#60656E'
+    }
   },
   grid:{
     left: '2%',
@@ -46,14 +49,15 @@ const defaultOption = {
       },
     },
     axisLabel: {
-      textStyle: {
-        color: '#60656E',
-      },
+      color: '#60656E',
       interval: 0
     }
   },
   yAxis: {
-    type: 'value'
+    type: 'value',
+    axisLabel: {
+      color: '#60656E'
+    }
   },
   radar: {
     radius: "70%",
@@ -85,7 +89,8 @@ const seriesOptions = {
     barMinHeight:'5',
   },
   'line': {
-    smooth: true
+    // smooth: true
+    // symbol: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAAH6Nf8rAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAACqADAAQAAAABAAAACgAAAAA7eLj1AAAA10lEQVQYGVVQOwrCQBScBLG0EFMJWniFtAEv4HFs4q3iBWy00QMoWKhgBCMWlmLynNk1IS6878z77APaz8xSUOVS5rz1Xq4PEtos2B7N3h8gYFSyOhQvqSozIac7IwIhkfnlAYh6fbopykHsjJJTkjpRqkzlaiNAzW1zcDi6HSCe4ObrfQ5Rzzk79VuI/XtayT8mUorvWMPelsLE0pyMdnYumjV9NfWwD4wjFy41O5ZbvFziT7VysTrqXyveLNQBalALjwYcGaAiPm06qEBrUHQUiXx/HLK+6NzBHgInSS4AAAAASUVORK5CYII='
   },
   'pie': {
     radius: ['35%', '55%'],

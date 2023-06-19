@@ -1,5 +1,6 @@
 <template>
   <Table
+    :loading="loading"
     ref="tableRef" 
     :api="getScenes"
     :columns="columns"
@@ -31,6 +32,7 @@
 </template>
 
 <script setup lang="ts">
+
 const task = useRoute().params.id
 const getScenes = () => api.result.getScenes({ task })
 
@@ -58,28 +60,49 @@ const columns = [
 // }
 
 // const { u } = useRoute().query
+const loading = ref(false)
+let interval: any = -1
+let closeInterval: any = -1
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const replay = (record: RObject) => {
-  const interval = setInterval(async () => {
-    try {
-      const res = await api.result.enter({ 
-        action: 3,
-        value: JSON.stringify({ uuid: 'b199e9cb-ee14-4804-a951-50475bfe6109', baidu_id: '1603685404' })
-        // data: { uuid: u, baidu_id: record.baidu_id } 
-      })
-      console.log(res)
-      if(res.status == 1) {
+const replay = async (record: RObject) => {
+  try {
+    loading.value = true
+    let res = await api.result.enterVnc({ 
+      action: 3,
+      value: JSON.stringify({ uuid: 'b199e9cb-ee14-4804-a951-50475bfe6109', baidu_id: '1603685404' })
+      // value: JSON.stringify({ uuid: u, baidu_id: record.baidu_id })
+    })
+    const interval = setInterval(async () => {
+      try {
+        loading.value = true
+        res = await api.result.checkVnc(res.id)
+        if(res.status == 1 && res.address) {
+          const newWindow = window.open(res.address)
+          clearInterval(interval)
+
+          closeInterval = setInterval(async () => {    
+            if (newWindow && newWindow.closed) {
+              await api.result.quitVnc(res.id)
+              console.log('我被关闭了')
+              clearInterval(closeInterval); 
+            }
+          }, 500);
+        }
+      } finally {
+        loading.value = false
         clearInterval(interval)
       }
-    } catch {
-      clearInterval(interval)
-    }
-  }, 1000) 
+    }, 1000) 
+  } catch {
+    loading.value = false
+  }
 }
 
 const tableRef = ref()
-onMounted(() => {
-  tableRef.value.refresh()
+onMounted(() => tableRef.value.refresh())
+onUnmounted(() => {
+  clearInterval(interval)
+  clearInterval(closeInterval)
 })
 </script>
 

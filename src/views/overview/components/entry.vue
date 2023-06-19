@@ -2,12 +2,12 @@
   <div class="white-block entry">
      <div class="title-primary">快捷入口</div>
      <div class="item-list">
-        <router-link v-for="item in entries" :key="item.label"
+        <div v-for="item in entries" :key="item.label"
           class="item"
-          :to="item.router">
+          @click="gotoPage(item.router)">
           <img :src="item.icon" width="24">
           <p class="mt-1">{{ item.label }}</p>
-        </router-link>
+     </div>
      </div>
   </div>
 </template>
@@ -28,6 +28,9 @@ const entries = [
   { icon: icon_SOTIF, label: 'SOTIF分析', router: '/sotif'},
   { icon: icon_car, label: '车辆动力学', router: '/veticle-model'}
 ]
+
+const router = useRouter()
+const gotoPage = (url: string) => router.push(url)
 </script>
 <style lang="less" scoped>
 .entry {
@@ -35,6 +38,7 @@ const entries = [
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    cursor: pointer;
   }
   .item {
     width: 96px;

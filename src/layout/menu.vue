@@ -45,7 +45,7 @@ const props = defineProps({
     svg *[stroke="#60656E"] {
       stroke: #1664FF 
     }
-    svg path[fill="#60656E"] {
+    svg path[fill="#60656E"], svg rect[fill="#60656E"] {
       fill: #1664FF
     }
   }

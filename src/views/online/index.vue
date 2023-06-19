@@ -31,7 +31,6 @@ const list = [
 
 const gotoPage = (url: string) => {
   const newWindow = window.open(url)
-  console.log(newWindow)
   const loop = setInterval(() => {    
     if (newWindow && newWindow.closed) {
       console.log('我被关闭了')

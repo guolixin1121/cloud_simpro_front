@@ -25,7 +25,9 @@ function render () {
   chartInstance = echarts.init(chartElement.value)
   const option = produceOption(props.option)
   chartInstance.setOption(option, true)
-  window.addEventListener('resize', () => chartInstance?.resize)
+  window.addEventListener('resize', () => {
+    chartInstance?.resize()
+  })
 }
 
 const produceOption = (option: any) => {

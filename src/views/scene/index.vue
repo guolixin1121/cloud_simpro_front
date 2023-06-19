@@ -50,7 +50,7 @@ const selectedSceneset = SStorage.get('logic-sceneset')
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称' },
-  { label: '场景来源', key: 'adsSource', type: 'select', options: SceneSourceOptions, placeholder: '请选择场景来源' },
+  { label: '场景来源', key: 'adsSource', type: 'select', options: SceneSourceOptions, placeholder: '请选择场景来源', defaultValue: '' },
   {
     label: '标签',
     key: 'labels',
@@ -79,7 +79,9 @@ const columns = [
   { title: '场景来源', dataIndex: 'adsSource', formatter: getSceneSourceName, width: 90 },
   { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
   { title: '创建时间', dataIndex: 'createTime', width: 180 },
+  { title: '修改时间', dataIndex: 'updateTime', width: 180 },
   { title: '所属用户', dataIndex: 'createUser', width: 150, ellipsis: true },
+  { title: '修改者', dataIndex: 'updateUser', width: 150, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',

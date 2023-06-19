@@ -1,6 +1,6 @@
 import { merge, cloneDeep } from "lodash"
 const defaultOption = {
-  color: ['#1664FF', '#C5D8FF'],
+  color: ['#4080FF', '#C5D8FF'],
   title: {
     show: false
   },

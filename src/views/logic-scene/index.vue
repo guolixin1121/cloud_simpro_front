@@ -8,7 +8,7 @@
     </div>
 
     <Table ref="tableRef" :api="currentApi.getList" :query="query" 
-      :columns="columns" :scroll="{ x: 1000, y: 'auto' }"
+      :columns="columns" :scroll="{ x: 1300, y: 'auto' }"
       :isOnlyCreator="true">
       <template #bodyCell="{ record, column }">
         <template v-if="column.dataIndex == 'last_gen_scene_task'">

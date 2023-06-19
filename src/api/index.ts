@@ -110,7 +110,9 @@ export const result = defineApi({
   getList: { url: '/simpro/simtask/', method: 'get' },
   getScenes: { url: '/simpro/simtask/result/', method: 'get' },
   delete: { url: '/simpro/simtask/{sid}/', method: 'delete' },
-  enter: { url: '/vnc/enter/', method: 'post' } // 进入vnc回放
+  enterVnc: { url: '/vnc/enter/', method: 'post' }, // 申请vnc
+  checkVnc: { url: '/vnc/{vnc_id}/', method: 'get' }, // 进入vnc
+  quitVnc: { url: '/vnc/{vnc_id}/', method: 'delete' }, // 申请vnc
 })()
 
 export const sotif = defineApi({

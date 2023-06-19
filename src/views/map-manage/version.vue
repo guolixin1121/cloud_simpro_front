@@ -5,7 +5,7 @@
       <!-- <a>地图管理</a> -->
       <span class="breadcrumb--current">地图版本</span>
     </div>
-    <Table ref="table" :api="mapsApi.getMapVersion" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
+    <Table ref="table" :api="mapsApi.getMapVersion" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'mapType'">
           <a-tooltip :title="type[record.mapType]">
@@ -41,7 +41,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 150,
+    width: 100,
     actions: {
       查看: (data: any) => router.push('/map-manage/version-edit/' + data.id + '?type=0'),
       编辑: (data: any) => router.push('/map-manage/version-edit/' + data.id),

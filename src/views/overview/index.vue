@@ -182,7 +182,7 @@ const fetchStatus = async () => {
   const res = await api.overview.status()
   statusLoading.value = false
   statusOptions.value = {
-    color: ['#FFC371', '#32D0BF', '#5E89FF', '#FD706D', '#DADCE0'],
+    color: ['#FFC371', '#32D0BF', '#4080FF', '#FD706D', '#DADCE0'],
     xAxis: {
       show: false
     },

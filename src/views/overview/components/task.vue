@@ -3,11 +3,13 @@
     <div class="flex justify-between">
       <div class="title-primary">仿真结果</div>
       <router-link to="/simpro-result">
-        <a  style="color: #999ca3; cursor: pointer;">查看更多 ></a>
+        <a style="color: #999ca3; cursor: pointer; display: flex;">
+          查看更多
+          <img src="@/assets/images/icon_arrow.png" />
+        </a>
       </router-link>
     </div>
     <a-table
-      bordered
       class="small-table mt-2"
       :row-class-name="(_record: any, index: number) => (index % 2 === 1 ? 'table-striped' : null)"
       :loading="loading"
@@ -16,10 +18,10 @@
       :pagination="false">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'name'">
-          <router-link :to="`/simpro-result/view/${record.id}`" class="text-blue mr-2">{{ record.name }}</router-link>
+          <router-link :to="`/simpro-result/view/${record.id}`" class="name mr-2">{{ record.name }}</router-link>
         </template>
         <template v-if="column.dataIndex == 'is_passed'">
-          {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '不通过' }}
+          {{ record.is_passed === null ? '-' : record.is_passed ? '通过' : '不通过' }}
         </template>
         <template v-if="column.dataIndex == 'status'">
           <span :class="'task-status task-status--' + record.status">{{ getResultStatus(record.status) }}</span>
@@ -73,4 +75,7 @@ fetchData()
 }
 </style>
 <style lang="less" scoped>
+.name:hover {
+  color: #4080FF;
+}
 </style>
