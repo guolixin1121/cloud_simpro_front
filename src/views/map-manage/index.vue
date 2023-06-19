@@ -1,26 +1,35 @@
 <template>
-  <search-form :items="formItems" :manual="true" @search="onSearch"></search-form>
-  <div class="main main-bg">
+  <div class="main-tree">
     <tree ref="treeRef" :title="'地图集'" :api="mapsApi.getMapCatalog" @select="onSelect" 
       @btn-click="onClick"/>
-    <div class="right-table">
-      <div class="flex justify-between items-center">
-        <span class="title">地图管理</span>
-        <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')">上传地图</a-button>
-      </div>
-      <Table :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 300, y: 'auto' }">
-        <template #bodyCell="{ column, record }">
-          <template v-if="column.dataIndex == 'versionCount'">
-            <a-tooltip :title="record.versionCount">
-              <a class="text-blue inline-block w-full"
-                @click="() => router.push({ path: '/map-manage/version/' + record.id, query: { preRoute, name: record.name } })"
-              >
-                {{ record.versionCount }}
-              </a>
-            </a-tooltip>
+    <div class="main-right">
+      <a-spin :spinning="loading">
+        <div class="right-title">
+          <div class="title-item"><span class="label">地图集名称</span>{{ catalog.mapCatalog.name }}</div>
+        </div>
+      </a-spin>
+
+      <search-form :items="formItems" :manual="true" @search="onSearch"></search-form>
+
+      <div class="main">
+        <div class="flex justify-between items-center">
+          <span class="title">地图管理</span>
+          <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')">上传地图</a-button>
+        </div>
+        <Table :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 300, y: 'auto' }">
+          <template #bodyCell="{ column, record }">
+            <template v-if="column.dataIndex == 'versionCount'">
+              <a-tooltip :title="record.versionCount">
+                <a class="text-blue inline-block w-full"
+                  @click="() => router.push({ path: '/map-manage/version/' + record.id, query: { preRoute, name: record.name } })"
+                >
+                  {{ record.versionCount }}
+                </a>
+              </a-tooltip>
+            </template>
           </template>
-        </template>
-      </Table>
+        </Table>
+      </div>
     </div>
   </div>
 </template>
@@ -33,11 +42,11 @@ const user = store.user
 const mapsApi = api.maps
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入地图名称或ID' }
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入地图名称' }
 ])
 
 let catelog = store.catalog
-catalog.mapCatalog = {}
+catalog.mapCatalog = {} as any
 const query: Query = ref({})
 const onSearch = (data: Query) => {
   const mapCatalog = catelog.mapCatalog as any

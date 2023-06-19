@@ -1,7 +1,5 @@
 <template>
-  <search-form :items="formItems" :manual="true" @search="onSearch"></search-form>
-
-  <div class="main main-bg">
+  <div class="main-tree">
     <tree
       ref="treeRef"
       :title="'场景集'"
@@ -12,12 +10,31 @@
       @select="onSelect"
       @btn-click="onClick"
     />
-    <div class="right-table">
-      <div class="flex justify-between items-center">
-        <span class="title">场景管理</span>
-        <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
+    <div class="main-right">
+      <a-spin :spinning="loading">
+        <div class="right-title">
+          <div class="title-item"><span class="label">场景集名称</span>{{ catalog.sceneCatalog.name }}</div>
+          <div class="title-item"><span class="label">路径</span>{{ catalog.sceneCatalog.path }}</div>
+          <div class="title-item">
+            <span class="label">标签</span>
+            <ul style="flex: 1">
+              <li class="inline-block mr-4" v-for="item in catalog.sceneCatalog.labels_detail" :key="item.name">
+                {{ item.display_name  }}
+              </li>
+            </ul>
+          </div>
+        </div>
+      </a-spin>
+
+      <search-form :items="formItems" :manual="true" @search="onSearch"></search-form>
+        
+      <div class="main">
+        <div class="flex justify-between items-center">
+          <span class="title">场景管理</span>
+          <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
+        </div>
+        <Table :api="currentApi.getList" :query="query" :columns="columns" />
       </div>
-      <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1100, y: 'auto' }" />
     </div>
   </div>
 </template>
@@ -46,11 +63,11 @@ const formItems = ref<SearchFormItem[]>([
   }
 ])
 let catalog = store.catalog // 缓存左侧树选中的场景集
-catalog.sceneCatalog = {}   // clear 
+catalog.sceneCatalog = {} as any // clear 
 
 const query: Query = ref({})
 const onSearch = (data: Query) => {
-  const sceneCatalog = catalog.sceneCatalog as any
+  const sceneCatalog = catalog.sceneCatalog
   query.value = { ...data, scene_set: sceneCatalog?.id }
 }
 
@@ -75,9 +92,14 @@ const columns = [
     }
   }
 ]
-const onSelect = (val: any) => {
-  catalog.sceneCatalog = val
+
+// const loading = ref(false)
+const onSelect = async (val: any) => {
   query.value = { ...query.value, scene_set: val.id }
+  loading.value = true
+  const res = await api.scenesets.get(val.id)
+  catalog.sceneCatalog = res
+  loading.value = false
 }
 const onClick = (val: any) => {
   const { type, data } = val

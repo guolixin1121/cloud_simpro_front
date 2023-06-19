@@ -115,7 +115,6 @@ const onSearch = (data: Query) => {
 const columns = [
   { title: '模型ID', dataIndex: 'vehicle_no', width: 200 },
   { title: '模型名称', dataIndex: 'name', width: 150, ellipsis: true },
-  { title: '用户名', dataIndex: 'username', width: 130 },
   { title: '类型', dataIndex: 'type', width: 80, ellipsis: true },
   { title: '转向模型', dataIndex: 'direct', width: 120, ellipsis: true },
   { title: '动力形式', dataIndex: 'power', width: 90, ellipsis: true },

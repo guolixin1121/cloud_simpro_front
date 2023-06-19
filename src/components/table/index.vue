@@ -87,12 +87,12 @@ const dataSource: any = computed(() => {
   return results
 })
 const pagination = computed(() => ({
-  pageSize: 10,
+  size: 10,
   current: current.value,
   total: data.value?.count,
   'show-total': (total: number) => `共 ${total} 条`
 }))
-const size = pagination.value.pageSize
+const size = pagination.value.size
 
 // selection handler
 const selectedRowKeys = ref<string[]>([])
@@ -114,12 +114,20 @@ watch(current, newVal => run({ ...props.query, page: newVal, size }))
 
 // 动态计算表格父容器高度
 onMounted(() => {
+  // 搜索框高度
   let height = document.getElementsByClassName('top')?.[0]?.clientHeight
   height = isNaN(height) ? 0 : height + 20 // + 20的padding高度
+  // 场景集地图集标题区高度
+  let titleHeight = document.getElementsByClassName('right-title')?.[0]?.clientHeight
+  titleHeight = isNaN(titleHeight) ? 0 : height // + 20的padding高度
+  height += titleHeight
+
+  // 表格内容区域
   const tableScrollBody = document.getElementsByClassName('ant-table-body')?.[0] as HTMLElement
   if (tableScrollBody) {
     tableScrollBody.style.maxHeight = 'calc(100vh - ' + (40 + height + 230) + 'px)'
   }
+
   const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
   if (mainContent) {
     mainContent.style.height = 'calc(100% - ' + height + 'px)'

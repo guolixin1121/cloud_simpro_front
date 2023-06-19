@@ -5,7 +5,8 @@
       <span class="title">算法管理</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/algorithm/edit/0')">创建算法</a-button>
     </div>
-    <Table :api="algorithmApi.getList" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }">
+    <Table :api="algorithmApi.getList" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }"
+      :isOnlyCreator="true">
       <template #bodyCell="{column, text}">
         <template v-if="column.dataIndex == 'is_in_ring'">
           {{ text ? '是' : '否' }}
@@ -25,7 +26,8 @@ const formItems = ref<SearchFormItem[]>([
   { label: '控制在环', key: 'is_in_ring', type: 'select', 
     options: [{ label: '全部' , value: '' }, { label: '是' , value: 1 }, { label: '否', value: 0 }],
     defaultValue: ''
-  }
+  },
+  { label: '创建者', key: 'username', type: 'input', placeholder: '请输入创建者' },
 ])
 const query: Query = ref({})
 const onSearch = (data: Query) => (query.value = data)
@@ -33,12 +35,13 @@ const onSearch = (data: Query) => (query.value = data)
 /****** 表格区域 */
 const router = useRouter()
 const columns = [
+  { title: '序号', dataIndex: 'index', width: 80 },
   { title: '算法ID', dataIndex: 'id', width: 100 },
   { title: '算法名称', dataIndex: 'name', width: 200, ellipsis: true },
   { title: '控制在环', dataIndex: 'is_in_ring', width: 100 },
   { title: '描述', dataIndex: 'desc', ellipsis: true },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
-  { title: '所属用户', dataIndex: 'create_user', width: 100, ellipsis: true },
+  { title: '所属用户', dataIndex: 'create_user', width: 120, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',

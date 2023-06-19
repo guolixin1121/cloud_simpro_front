@@ -32,7 +32,7 @@ const currentApi = api.tags
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入标签名称' },
   {
-    label: '标签类别',
+    label: '标签类型',
     key: 'tag_type',
     type: 'select',
     api: () => currentApi.getType({ tree: 1 }),

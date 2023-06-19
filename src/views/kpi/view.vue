@@ -22,7 +22,7 @@
         {{ formState.py_url}}
       </a-form-item>
       <a-form-item label="描述">
-        {{ formState.desc }}
+        <span style="word-break: break-all;">{{ formState.desc }}</span>
       </a-form-item>
       <a-form-item label="创建时间">
         {{ formState.create_date }}

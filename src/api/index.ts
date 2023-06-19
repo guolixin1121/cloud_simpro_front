@@ -102,7 +102,8 @@ export const task = defineApi({
   delete: { url: '/simpro/simtask/template/{sid}/', method: 'delete' },
   edit: { url: '/simpro/simtask/template/{sid}/', method: 'put' },
   add: { url: '/simpro/simtask/template/', method: 'post' },
-  run: { url: '/simpro/simtask/run/', method: 'post' }
+  run: { url: '/simpro/simtask/run/', method: 'post' },
+  cancel: { url: '/simpro/simtask/cancel/', method: 'post' },
 })()
 
 export const result = defineApi({

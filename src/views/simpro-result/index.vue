@@ -20,9 +20,11 @@
           <span :class="'task-status task-status--' + record.status">{{ getResultStatus(record.status) }}</span>
         </template>
         <template v-if="column.dataIndex == 'actions'">
-          <span v-if="isRunning(record.status)">-</span>
+          <span v-if="isRunOrWait(record.status)">
+            <a class="text-blue mr-2" @click="onStop(record)">停止</a>
+          </span>
           <template v-if="isFinished(record.status)">
-            <router-link :to="`/simpro-result/view/${record.id}`" class="text-blue mr-2">查看结果</router-link>
+            <router-link :to="`/simpro-result/view/${record.id}?u=${record.uuid}`" class="text-blue mr-2">查看结果</router-link>
           </template>
           <a-popconfirm
             v-if="isNotRunning(record.status)"
@@ -46,7 +48,7 @@ const templateId = useRoute().query.templateId as string
 /****** api */
 const currentApi = api.result
 
-const isRunning = (status: number) => status === 2
+const isRunOrWait = (status: number) => status === 2 || status === 1
 const isFinished = (status: number) => status === 3
 const isNotRunning = (status: number) => status !== 2
 
@@ -80,6 +82,12 @@ const columns = [
 const onConfirmDelete = async (record: RObject) => {
   await currentApi.delete(record.id)
   message.info('删除成功')
+  table.value.refresh()
+}
+
+const onStop = async (record: RObject) => {
+  await api.task.cancel({sim_task_id: record.id})
+  message.info('停止成功')
   table.value.refresh()
 }
  </script>

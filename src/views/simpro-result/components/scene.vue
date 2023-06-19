@@ -13,13 +13,13 @@
           </a-tooltip>
         </template>
         <template v-if="column.dataIndex == 'actions'">
-          <a class="text-blue mr-2" @click="showVideo(record)">回放</a>
+          <a class="text-blue mr-2" @click="replay(record)">回放</a>
           <a class=" text-blue" 
             :href="'/api/simpro/resource/' + record.obs_report" target="_blank" >查看报告</a>
         </template>
     </template>
   </Table>
-  <a-modal class="video-player" 
+  <!-- <a-modal class="video-player" 
     style="width: 60%; height: 60%;"
     :visible="isModal"
     :footer="null"
@@ -27,7 +27,7 @@
     <video style="height: 100%; width: 100%;" autoplay loop>
       <source :src="videoSrc" type="video/mp4">
     </video>
-  </a-modal>
+  </a-modal> -->
 </template>
 
 <script setup lang="ts">
@@ -46,15 +46,35 @@ const columns = [
   }
 ]
 
-const isModal = ref(false)
-const videoSrc = ref('')
-const showVideo = (record: RObject) => {
-  isModal.value = true
-  videoSrc.value = '/api/simpro/resource/' + record.obs_video
-  // videoSrc.value = 'http://10.31.1.171/data1/fangzhenshare/cloud_simpro_server/files/video_downloads/115693_61835_1.mp4'
-}
-const closeVideo = () => {
-  isModal.value = false
+// const isModal = ref(false)
+// const videoSrc = ref('')
+// const showVideo = (record: RObject) => {
+//   isModal.value = true
+//   videoSrc.value = '/api/simpro/resource/' + record.obs_video
+//   // videoSrc.value = 'http://10.31.1.171/data1/fangzhenshare/cloud_simpro_server/files/video_downloads/115693_61835_1.mp4'
+// }
+// const closeVideo = () => {
+//   isModal.value = false
+// }
+
+// const { u } = useRoute().query
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const replay = (record: RObject) => {
+  const interval = setInterval(async () => {
+    try {
+      const res = await api.result.enter({ 
+        action: 3,
+        value: JSON.stringify({ uuid: 'b199e9cb-ee14-4804-a951-50475bfe6109', baidu_id: '1603685404' })
+        // data: { uuid: u, baidu_id: record.baidu_id } 
+      })
+      console.log(res)
+      if(res.status == 1) {
+        clearInterval(interval)
+      }
+    } catch {
+      clearInterval(interval)
+    }
+  }, 1000) 
 }
 
 const tableRef = ref()
