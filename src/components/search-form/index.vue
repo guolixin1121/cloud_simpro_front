@@ -36,7 +36,7 @@
         v-on="item"
       ></component>
     </a-form-item>
-    <a-form-item class="ml-8">
+    <a-form-item>
       <a-button type="primary" @click="search">搜索</a-button>
       <a-button @click="reset" class="ml-2">重置</a-button>
     </a-form-item>

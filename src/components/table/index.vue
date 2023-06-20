@@ -116,16 +116,17 @@ watch(current, newVal => run({ ...props.query, page: newVal, size }))
 onMounted(() => {
   // 搜索框高度
   let height = document.getElementsByClassName('top')?.[0]?.clientHeight
-  height = isNaN(height) ? 0 : height + 20 // + 20的padding高度
+  height = isNaN(height) ? 0 : height + 16// + 16的padding高度
+  
   // 场景集地图集标题区高度
   let titleHeight = document.getElementsByClassName('right-title')?.[0]?.clientHeight
-  titleHeight = isNaN(titleHeight) ? 0 : height // + 20的padding高度
+  titleHeight = isNaN(titleHeight) ? 0 : height
   height += titleHeight
 
   // 表格内容区域
   const tableScrollBody = document.getElementsByClassName('ant-table-body')?.[0] as HTMLElement
   if (tableScrollBody) {
-    tableScrollBody.style.maxHeight = 'calc(100vh - ' + (40 + height + 230) + 'px)'
+    tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + 280) + 'px)'
   }
 
   const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement

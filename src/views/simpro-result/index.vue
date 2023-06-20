@@ -3,7 +3,7 @@
 
   <div class="main">
     <div class="flex justify-between items-center">
-      <span class="title">仿真结果</span>
+      <span class="title">仿真结果列表</span>
     </div>
 
     <Table 
@@ -28,7 +28,7 @@
           </template>
           <a-popconfirm
             v-if="isNotRunning(record.status)"
-            title="你确定要删除吗？"
+            title="是否删除？"
             ok-text="是"
             cancel-text="否"
             @confirm="onConfirmDelete(record)"

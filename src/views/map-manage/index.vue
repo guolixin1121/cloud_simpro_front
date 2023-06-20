@@ -1,19 +1,20 @@
 <template>
   <div class="main-tree">
-    <tree ref="treeRef" :title="'地图集'" :api="mapsApi.getMapCatalog" @select="onSelect" 
-      @btn-click="onClick"/>
+    <tree 
+      :title="'地图集'" 
+      :api="mapsApi.getMapCatalog" 
+      :button-handlers="treeBtnHandlers"
+      @select="onTreeSelect" />
     <div class="main-right">
-      <a-spin :spinning="loading">
-        <div class="right-title">
-          <div class="title-item"><span class="label">地图集名称</span>{{ catalog.mapCatalog.name }}</div>
-        </div>
-      </a-spin>
+      <div class="right-title">
+        <div class="title-item"><span class="label">地图集名称</span>{{ selectedMapset?.name }}</div>
+      </div>
 
-      <search-form :items="formItems" :manual="true" @search="onSearch"></search-form>
+      <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
 
       <div class="main">
         <div class="flex justify-between items-center">
-          <span class="title">地图管理</span>
+          <span class="title">地图列表</span>
           <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')">上传地图</a-button>
         </div>
         <Table :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 300, y: 'auto' }">
@@ -35,8 +36,6 @@
 </template>
 
 <script setup lang="ts">
-import { catalog } from '@/store';
-
 /****** api */
 const user = store.user
 const mapsApi = api.maps
@@ -45,11 +44,10 @@ const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入地图名称' }
 ])
 
-let catelog = store.catalog
-catalog.mapCatalog = {} as any
+const selectedMapset = ref()
 const query: Query = ref({})
-const onSearch = (data: Query) => {
-  const mapCatalog = catelog.mapCatalog as any
+const onTableSearch = (data: Query) => {
+  const mapCatalog = selectedMapset.value
   query.value = { ...data, catalog: mapCatalog?.id }
 }
 
@@ -73,28 +71,14 @@ const columns = [
   }
 ]
 
-const onSelect = (val: any) => {
-  catelog.mapCatalog = val
+const onTreeSelect = (val: any) => {
+  selectedMapset.value = val
   query.value = { ...query.value, catalog: val.id }
-
-  console.log(query.value, 'onSelect')
 }
 
-const onClick = (val: any) => {
-  const { type, data } = val
-  const id = type == 'add' ? 0 : data.id
-  if(type == 'add') router.push('/map-manage/mapset-edit/0')
-  if(type == 'edit') router.push('/map-manage/mapset-edit/' + id + '?name=' + encodeURIComponent(data.name))
-  if(type == 'delete') deleteData(id)
-}
-
-const treeRef = ref()
-const loading = ref(false)
-const deleteData = async (id: string) => {
-  loading.value = true
-  await api.mapsets.delete(id)
-  message.info('删除成功')
-  loading.value = false
-  treeRef.value.refresh()
+const treeBtnHandlers = {
+  add: () => router.push('/map-manage/mapset-edit/0'),
+  edit: (data: any) => router.push('/map-manage/mapset-edit/' + data.id + '?name=' + encodeURIComponent(data.name)),
+  delete: api.mapsets.delete
 }
 </script>

@@ -48,52 +48,41 @@ const columns = [
   }
 ]
 
-// const isModal = ref(false)
-// const videoSrc = ref('')
-// const showVideo = (record: RObject) => {
-//   isModal.value = true
-//   videoSrc.value = '/api/simpro/resource/' + record.obs_video
-//   // videoSrc.value = 'http://10.31.1.171/data1/fangzhenshare/cloud_simpro_server/files/video_downloads/115693_61835_1.mp4'
-// }
-// const closeVideo = () => {
-//   isModal.value = false
-// }
-
-// const { u } = useRoute().query
+const { u } = useRoute().query
 const loading = ref(false)
 let interval: any = -1
 let closeInterval: any = -1
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const replay = async (record: RObject) => {
   try {
     loading.value = true
     let res = await api.result.enterVnc({ 
       action: 3,
-      value: JSON.stringify({ uuid: 'b199e9cb-ee14-4804-a951-50475bfe6109', baidu_id: '1603685404' })
-      // value: JSON.stringify({ uuid: u, baidu_id: record.baidu_id })
+      value: JSON.stringify({ uuid: u, baidu_id: record.baidu_id })
     })
-    const interval = setInterval(async () => {
-      try {
-        loading.value = true
-        res = await api.result.checkVnc(res.id)
-        if(res.status == 1 && res.address) {
-          const newWindow = window.open(res.address)
-          clearInterval(interval)
-
-          closeInterval = setInterval(async () => {    
-            if (newWindow && newWindow.closed) {
-              await api.result.quitVnc(res.id)
-              console.log('我被关闭了')
-              clearInterval(closeInterval); 
-            }
-          }, 500);
-        }
-      } finally {
-        loading.value = false
-        clearInterval(interval)
-      }
-    }, 1000) 
+    loopVnc(res.id)
   } catch {
+    loading.value = false
+  }
+}
+
+const loopVnc = async (id: String) => {
+  try {
+    loading.value = true
+    const res = await api.result.checkVnc(id)
+    if(res.status == 1 && res.address) {
+      const newWindow = window.open(res.address)
+
+      closeInterval = setInterval(async () => {    
+        if (newWindow && newWindow.closed) {
+          console.log('closed')
+          await api.result.quitVnc(id)
+          clearInterval(closeInterval); 
+        }
+      }, 500);
+    } else {
+      loopVnc(id)
+    }
+  } finally {
     loading.value = false
   }
 }

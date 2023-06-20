@@ -3,7 +3,7 @@
 
   <div class="main">
     <div class="flex justify-between items-center">
-      <span class="title">逻辑场景管理</span>
+      <span class="title">逻辑场景列表</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/logic-scene/edit/0')">上传逻辑场景</a-button>
     </div>
 

@@ -3,7 +3,7 @@
 
   <div class="main">
     <div class="flex justify-between items-center">
-      <span class="title">仿真任务</span>
+      <span class="title">仿真任务列表</span>
       <div>
         <!-- <a-button type="primary" class="mr-2" :disabled="!selectedRows.length" @click="batchRun">批量运行</a-button> -->
         <a-button type="primary" v-if="user.hasPermission('add')" @click=" router.push('/simpro-task/edit/0')">创建任务</a-button>

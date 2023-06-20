@@ -20,7 +20,7 @@
             <template v-if="hasPermission(column, row, action)">
               <a-popconfirm
                 v-if="action === '删除'"
-                title="你确定要删除吗？"
+                title="是否删除？"
                 ok-text="是"
                 cancel-text="否"
                 @confirm="onHandler(column, row, action)"

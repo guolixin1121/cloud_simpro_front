@@ -22,7 +22,7 @@
            <template v-if="hasPermission(column, row, action)">
              <a-popconfirm
                v-if="action === '删除'"
-               title="你确定要删除吗？"
+               title="是否删除？"
                ok-text="是"
                cancel-text="否"
                @confirm="onHandler(column, row, action)"
@@ -234,11 +234,11 @@ onMounted(() => {
     if(props.isTree) return
     
     let height = document.getElementsByClassName('top')?.[0]?.clientHeight
-    height = isNaN(height) ? 0 : height + 20 // + 20的padding高度
+    height = isNaN(height) ? 0 : height + 16 // + 16的padding高度
 
     const tableScrollBody = document.getElementsByClassName('vxe-table--body-wrapper')?.[0] as HTMLElement
     if (tableScrollBody) {
-      tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + 260) + 'px)'
+      tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + 280) + 'px)'
     }
     
     const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement

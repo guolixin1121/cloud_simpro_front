@@ -3,7 +3,7 @@
 
   <div class="main">
     <div class="flex justify-between items-center">
-      <span class="title">评测指标管理</span>
+      <span class="title">评测指标列表</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/kpi/edit/0')">创建评测指标</a-button>
     </div>
 

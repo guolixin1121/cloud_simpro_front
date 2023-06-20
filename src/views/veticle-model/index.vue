@@ -3,12 +3,14 @@
 
   <div class="main">
     <div class="flex justify-between items-center">
-      <!-- <span class="title">地图管理</span> -->
-      <div>
-        <a-button type="primary" class="mr-2" v-if="user.hasPermission('add')" @click="() => add('')">创建模型</a-button>
-        <a-button v-if="user.hasPermission('add')" @click="() => (importVisible = true)">导入外部模型</a-button>
+      <div class="flex items-center">
+        <span class="title mr-4">动力学模型列表</span>
+        <a-checkbox v-model:checked="checked" class="table_model" @change="() => selectModel(checked)">我的模型</a-checkbox>
       </div>
-      <a-checkbox v-model:checked="checked" class="table_model" @change="() => selectModel(checked)">我的模型</a-checkbox>
+      <div>
+        <a-button class="mr-2" v-if="user.hasPermission('add')" @click="() => (importVisible = true)">导入外部模型</a-button>
+        <a-button type="primary" v-if="user.hasPermission('add')" @click="() => add('')">创建模型</a-button>
+      </div>
     </div>
     <Table :api="veticleModelApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }" :isOnlyCreator="true">
       <template #bodyCell="{ column, record, index }">

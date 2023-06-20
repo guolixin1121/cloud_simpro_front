@@ -3,7 +3,7 @@
 
   <div class="main" style="height: calc(100% - 80px)">
     <div class="flex justify-between items-center">
-      <span class="title">场景集管理</span>
+      <span class="title">场景集列表</span>
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/sceneset/edit/0')">创建场景集</a-button>
     </div>
     <div style="height: calc(100% - 50px);" class="mt-4 overflow-auto">

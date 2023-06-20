@@ -4,7 +4,7 @@
       <!-- 删除列 -->
       <a-popconfirm
         v-if="key === '删除'"
-        title="你确定要删除吗？"
+        title="是否删除？"
         ok-text="是"
         cancel-text="否"
         @confirm="onHandler(scope, key)"
