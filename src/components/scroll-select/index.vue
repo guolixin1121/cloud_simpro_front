@@ -167,6 +167,7 @@ watch(
   () => props.api,
   () => {
     options.value = []
+    currentPage.value = 1
     getOptions()
   }
 )

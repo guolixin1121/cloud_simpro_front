@@ -25,13 +25,14 @@
     <div class="flex justify-between">
       <chart 
         :loading="executionsLoading" 
-        class="mr-4 white-block" 
-        style="width: 65%"
+        class="white-block" 
+        style="width: 65%; margin-right: 16px;"
         title="近7日仿真任务执行情况" 
         :option="executionsOptions">
       </chart>
       <chart 
-        class="w-1/3 white-block"
+        class="white-block"
+        style="width: 35%"
         title="近7日仿真任务统计"
         :option="statusOptions">
       </chart>
@@ -227,8 +228,11 @@ fetchScenes()
   overflow: auto;
 
   .chart {
-    width: 49.3%;
-    margin-right: 16px;
+    width: calc(50% - 8px);
+
+    &:first-child {
+      margin-right: 16px;
+    }
   }
 }
 </style>

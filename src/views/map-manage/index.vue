@@ -73,6 +73,7 @@ const columns = [
 
 const onTreeSelect = (val: any) => {
   selectedMapset.value = val
+  store.catalog.mapCatalog = val
   query.value = { ...query.value, catalog: val.id }
 }
 

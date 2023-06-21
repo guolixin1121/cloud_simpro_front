@@ -1,4 +1,6 @@
 import { merge, cloneDeep } from "lodash"
+import circle from '@/assets/images/circle.png'
+
 const defaultOption = {
   color: ['#4080FF', '#C5D8FF'],
   title: {
@@ -89,8 +91,8 @@ const seriesOptions = {
     barMinHeight:'5',
   },
   'line': {
-    // smooth: true
-    // symbol: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAAH6Nf8rAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAACqADAAQAAAABAAAACgAAAAA7eLj1AAAA10lEQVQYGVVQOwrCQBScBLG0EFMJWniFtAEv4HFs4q3iBWy00QMoWKhgBCMWlmLynNk1IS6878z77APaz8xSUOVS5rz1Xq4PEtos2B7N3h8gYFSyOhQvqSozIac7IwIhkfnlAYh6fbopykHsjJJTkjpRqkzlaiNAzW1zcDi6HSCe4ObrfQ5Rzzk79VuI/XtayT8mUorvWMPelsLE0pyMdnYumjV9NfWwD4wjFy41O5ZbvFziT7VysTrqXyveLNQBalALjwYcGaAiPm06qEBrUHQUiXx/HLK+6NzBHgInSS4AAAAASUVORK5CYII='
+    symbol: 'image://' + circle,
+    symbolSize: 10
   },
   'pie': {
     radius: ['35%', '55%'],

@@ -73,7 +73,7 @@ function getParentKeys(list: Permission[], keys: string[] = []): string[] | bool
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
-  width: 210px;
+  width: 240px;
   height: 40px;
 }
 </style>

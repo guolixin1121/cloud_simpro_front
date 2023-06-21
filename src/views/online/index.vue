@@ -6,7 +6,7 @@
         <li v-for="item in list" class="item" 
           :key="item.name" 
           :style="item.status ? 'cursor: default' : 'cursor: pointer'"
-          @click="gotoVnc">
+          @click="() => gotoVnc(item)">
             <div class="item-header">{{ item.name }}</div>
             <div class="item-title">
               <span style="font-weight: 600;">{{ item.username }}</span>
@@ -14,7 +14,7 @@
                 <i class="circle"></i>
                 {{ item.status == 0 ? '空闲' : '使用中' }}</span>
             </div>
-            <div class="item-logo"><img style="width: 150px" src="@/assets/images/logo-small.png" /></div>
+            <div class="item-logo"><img style="width: 150px" src="@/assets/images/logo-big.png" /></div>
             <div class="item-name">{{ item.name }}</div>
         </li>
       </ul>
@@ -38,7 +38,8 @@ const list = [
 ]
 
 const loading = ref(false)
-const gotoVnc = async () => {
+const gotoVnc = async ({status} : any) => {
+  if(status == 1) return 
   try {
     loading.value = true
     let res = await api.result.enterVnc({ action: 0 })

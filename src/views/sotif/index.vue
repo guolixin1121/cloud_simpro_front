@@ -62,7 +62,7 @@ const columns = [
   { title: '项目状态', dataIndex: 'projectStatus', width: 100},
   { title: '参与成员', dataIndex: 'collaborationList', ellipsis: true },
   { title: '分析项(整车级功能)', dataIndex: 'vehicleNameList', ellipsis: true },
-  { title: '创建时间', dataIndex: 'createTime', width: 200 },
+  { title: '创建时间', dataIndex: 'createTime', width: 150 },
   {
     title: '操作',
     dataIndex: 'actions',

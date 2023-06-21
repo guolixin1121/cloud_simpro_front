@@ -8,7 +8,7 @@
   </template>
   <!-- 值为时间：格式化时间 -->
   <template v-else-if="isDateColumn(dataIndex)">
-    {{ dataValue ? dayjs(dataValue).format('YYYY-MM-DD HH:mm:ss') : '' }}
+    {{ dataValue ? dayjs(dataValue).format(dataValue.length < 11 ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm:ss') : '' }}
   </template>
   <!-- 值为对象：获取name -->
   <template v-else-if="isObject(dataValue)">
