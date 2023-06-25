@@ -1,7 +1,8 @@
 import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
-import mdPlugin from 'vite-plugin-markdown'
-import { Mode } from 'vite-plugin-markdown'
+import vueJsx from '@vitejs/plugin-vue-jsx' // 配置vue使用jsx
+import svgLoader from 'vite-svg-loader'
+import markdown, { Mode } from 'vite-plugin-markdown'
 import eslintPlugin from 'vite-plugin-eslint'
 import { createHtmlPlugin } from 'vite-plugin-html'
 // import viteCompression from 'vite-plugin-compression'
@@ -13,7 +14,6 @@ import Components from 'unplugin-vue-components/vite'
 import { AntDesignVueResolver } from 'unplugin-vue-components/resolvers'
 // import {Plugin as importToCDN} from 'vite-plugin-cdn-import'    // 配置 cdn 加速  暂不需要
 import { resolve } from 'path'
-import vueJsx from '@vitejs/plugin-vue-jsx' // 配置vue使用jsx
 
 export default defineConfig(({ mode }) => {
   // 根据当前工作目录中的 `mode` 加载 .env 文件 设置第三个参数为 '' 来加载所有环境变量，而不管是否有 `VITE_` 前缀。
@@ -32,7 +32,8 @@ export default defineConfig(({ mode }) => {
     plugins: [
       vue({ reactivityTransform: true }),
       vueJsx(),
-      mdPlugin({ mode: [Mode.VUE] }),
+      svgLoader(),
+      markdown({ mode: [Mode.VUE] }),
       createHtmlPlugin({
         inject: {
           data: {

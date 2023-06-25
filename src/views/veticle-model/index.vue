@@ -15,7 +15,7 @@
     <Table :api="veticleModelApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }" :isOnlyCreator="true">
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.dataIndex == 'type'">
-          <span v-if="record.type === 1">导入</span><span v-else-if="record.type === 2">新建</span> <span v-else>全部</span>
+          <span v-if="record.type === 1">导入</span><span v-else-if="record.type === 2">创建</span> <span v-else>全部</span>
         </template>
         <template v-if="column.dataIndex == 'direct'">
           <span v-if="record.direct === 1">简单转向模型</span>
@@ -43,14 +43,17 @@
       v-model:visible="importVisible"
       class="importOutModel-containter"
       title="导入外部模型"
-      @cancel="cancleMadol"
-      @ok="sureMadol"
+      :footer="null"
     >
       <span class="select-doc">选择模型文件</span>
       <single-upload class="ml-2" accept=".par" v-model:value="fileList" :desc="'点击上传'"></single-upload>
       <div class="desc mt-2">支持格式：.par，单个文件不能超过50MB。</div>
+      <div class=" text-right mt-4">
+        <a-button @click="cancelModal">取消</a-button>
+        <a-button @click="confirmModal" :loading="loading" type="primary" class="ml-2">确定</a-button>
+      </div>
     </a-modal>
-    <a-modal v-model:visible="visible" title="复制模型" :mask-closable="false" @ok="handleOk">
+    <a-modal v-model:visible="visible" title="复制模型" :footer="null" :mask-closable="false">
       <p>
         模型名称：
         <a-input
@@ -62,6 +65,10 @@
         />
         <span v-if="copyVal.name === '' && showTip" class="error">模型名称不能为空</span>
       </p>
+      <div class=" text-right mt-4">
+        <a-button @click="visible = false">取消</a-button>
+        <a-button @click="confirmCopy" :loading="loading" type="primary" class="ml-2">确定</a-button>
+      </div>
     </a-modal>
   </div>
 </template>
@@ -158,29 +165,36 @@ const add = async (template_id = '') => {
 const gotoVeticlePro = (id: string | number, params?: string) => {
   window.open('/vehicle_front/model/carBody/' + id + params, '_blank')
 }
-const cancleMadol = () => {
-  fileList.value = []
-  importVisible.value = false
-}
-const sureMadol = async () => {
+
+const loading = ref(false)
+const confirmModal = async () => {
   if (!fileList.value) {
     message.warning('请先选择文件再上传')
     return
   }
-  importVisible.value = false
+  loading.value = true
   await veticleModelApi.upload({ file: fileList.value })
   message.success('上传成功')
+  importVisible.value = false
+  loading.value = false
   fileList.value = []
   onSearch({})
 }
-const copy = (record: string) => {
-  visible.value = true
-  copyVal.value = record
+const cancelModal = () => {
+  fileList.value = []
+  importVisible.value = false
 }
-const handleOk = async () => {
+
+const copy = (record: RObject) => {
+  visible.value = true
+  copyVal.value = { ...record }
+}
+const confirmCopy = async () => {
   if (copyVal.value.name !== '') {
+    loading.value = true
     await veticleModelApi.add({ template_id: copyVal.value.id, name: copyVal.value.name })
     visible.value = false
+    loading.value = false
     onSearch({ ...query.value, page: 1 })
   } else {
     showTip.value = true

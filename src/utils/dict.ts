@@ -52,7 +52,7 @@ export const IsTag = [
 export const typeList = [
   { label: '全部', value: '' },
   { label: '导入', value: 1 },
-  { label: '新建', value: 2 }
+  { label: '创建', value: 2 }
 ]
 
 export const sensorType = [

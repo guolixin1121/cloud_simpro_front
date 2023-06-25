@@ -1,5 +1,4 @@
-export default `
-  <svg width="16px" height="16px" viewBox="0 0 16 16" >
+<svg width="16px" height="16px" viewBox="0 0 16 16" >
     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
       <g transform="translate(-25.000000, -145.000000)">
           <g transform="translate(0.000000, 60.000000)">
@@ -16,4 +15,3 @@ export default `
       </g>
   </g>
   </svg>
-`

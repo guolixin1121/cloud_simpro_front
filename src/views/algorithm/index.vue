@@ -40,7 +40,7 @@ const columns = [
   { title: '控制在环', dataIndex: 'is_in_ring', width: 100 },
   { title: '描述', dataIndex: 'desc', ellipsis: true },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
-  { title: '所属用户', dataIndex: 'create_user', width: 120, ellipsis: true },
+  { title: '创建者', dataIndex: 'create_user', width: 120, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',

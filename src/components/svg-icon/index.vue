@@ -1,27 +1,24 @@
 <template>
-  <i class="icon" v-html="icon"></i>
+  <div class="icon">
+    <component :is="component" />
+  </div>
 </template>
 <script setup lang="ts">
+import iconFiles from  '@/assets/icons/index'
 const props = defineProps({
   icon: {
     type: String,
     required: true
   }
 })
-
+let component = ref()
 const getIcon = async () => {
-  const iconFiles = import.meta.glob('../../assets/icons/*.ts')
-  const iconFile = iconFiles?.['../../assets/icons/' + props.icon + '.ts']
-
+  const iconFile = iconFiles[props.icon]
   if(iconFile) {
-    const iconModule = (await iconFile()) as { default: string }
-    return iconModule?.default
+    component.value = await iconFile()
   }
-  return ''
 }
-
-let icon = ref(props.icon)
-getIcon().then(i => icon.value = i)
+getIcon()
 </script>
 
 <style lang="less">
