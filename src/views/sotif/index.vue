@@ -5,7 +5,7 @@
     <div class="flex justify-between items-center">
       <span class="title">SOTIF</span>
       <div>
-        <a-button type="primary" class="mr-2" @click="()=> gotoSotif()">进入预期功能安全</a-button>
+        <a-button type="primary" class="mr-2" @click="()=> gotoSotif()">进入SOTIF分析工具</a-button>
       </div>
     </div>
     <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
@@ -70,7 +70,7 @@ const columns = [
     width: 100,
     actions: {
       查看: {
-        vadidator: (data:any) => !data.url,
+        vadidator: (data:any) => data.url,
         handler: (data: any) => gotoSotif(data.url)
       }
     }

@@ -97,7 +97,8 @@ const props = defineProps({
 
 watch(() => props.query, 
  () => {
-   refresh()
+    page.current = 1
+    refresh()
  }, {
   deep: true
 })

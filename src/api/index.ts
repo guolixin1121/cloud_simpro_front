@@ -129,7 +129,8 @@ export const algorithm = defineApi({
 })()
 
 export const vehicle = defineApi({
-  getList: { url: '/vehicle/dynamic_vehicle/', method: 'get' }
+  getList: { url: '/vehicle/dynamic_vehicle/', method: 'get' },
+  getDrivers: { url: '/vehicle/drivers/', method: 'get' }
 })()
 
 export const kpi = defineApi({

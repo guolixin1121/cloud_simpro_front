@@ -27,6 +27,9 @@
       <a-form-item label="车辆动力学">
         {{ formState.vehicle_detail?.name }}
       </a-form-item>
+      <a-form-item label="驾驶员模型">
+        {{ formState.driver_detail?.name }}
+      </a-form-item>
       <a-form-item label="动力学横向控制方式">
         {{ getHorizontalOptions(formState.vehicle_horizontal) }}
       </a-form-item>
@@ -78,6 +81,7 @@ const formState = reactive({
   name: '',
   source: '',
   is_in_ring: '',
+  driver_detail: { name: '' },
   vehicle_horizontal:'',
   vehicle_vertical:'',
   vehicle_detail: { name: '' },

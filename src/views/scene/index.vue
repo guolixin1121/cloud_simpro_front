@@ -32,7 +32,7 @@
           <span class="title">场景列表</span>
           <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
         </div>
-        <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }"/>
+        <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }"/>
       </div>
     </div>
   </div>

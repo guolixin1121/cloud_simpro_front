@@ -26,6 +26,12 @@
           :api="baseApi.vehicle.getList"
           :query="{is_share: 1}" placeholder="请选择主车模型"></scroll-select>
       </a-form-item>
+      <a-form-item label="驾驶员模型" name="driver">
+        <scroll-select v-model:value="formState.driver"
+          :disabled="formState.is_in_ring === '0'"
+          :api="baseApi.vehicle.getDrivers"
+          placeholder="请选择驾驶员模型"></scroll-select>
+      </a-form-item>
      <a-form-item label="动力学横向控制方式" name="vehicle_horizontal" :rules="[{ required: true, message: '请选择横向控制方式' }]">
         <a-select v-model:value="formState.vehicle_horizontal" :options="HorizontalOptions" placeholder="请选择横向控制方式"></a-select>
       </a-form-item>
@@ -102,6 +108,7 @@ const formState = reactive({
   vehicle_vertical: 1,
   sensors: [],
   is_in_ring: '0',
+  driver: undefined,
   algorithm: undefined,
   scenesets: undefined,
   scenes: [],
@@ -127,7 +134,8 @@ const add = async () => {
     sensors: formState.sensors.map((item:any) =>item.value),
     scenes: formState.scenes.map((item:any) =>item.value || item.baidu_id),
     kpi: formState.kpi.map((item:any) =>item.value),
-    is_in_ring: formState.is_in_ring
+    is_in_ring: formState.is_in_ring,
+    driver: formState.driver
   }
 
   try {
@@ -151,6 +159,9 @@ const getAlgorithm = ref()
 const onRingChanged = () => {
   getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
   formState.algorithm = undefined
+  if(formState.is_in_ring == '0') {
+    formState.driver = '' as any
+  }
 }
 
 /****** 获取编辑数据 */
@@ -166,7 +177,8 @@ const getEditData = async () => {
      formState.sensors = data.sensors_detail
      formState.scenes= data.scenes_detail
      formState.kpi = data.kpi_detail
-     formState.is_in_ring = data.is_in_ring ? '1' : '0'
+     formState.is_in_ring = data.is_in_ring ? '1' : '0',
+     formState.driver = data.driver_detail.id
    }
    getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
 }

@@ -45,14 +45,16 @@ const gotoVnc = async ({status} : any) => {
     let res = await api.result.enterVnc({ action: 0 })
     loopVnc(res.id)
   } catch {
-    loading.value = false
+    // loading.value = false
   }
 }
 
 const loopVnc = async (id: String) => {
   try {
     loading.value = true
+    console.log(loading.value)
     const res = await api.result.checkVnc(id)
+    loading.value = false
     if(res.status == 1 && res.address) {
       const newWindow = window.open(res.address)
 
@@ -67,7 +69,7 @@ const loopVnc = async (id: String) => {
       loopVnc(id)
     }
   } finally {
-    loading.value = false
+    // loading.value = false
   }
 }
 
