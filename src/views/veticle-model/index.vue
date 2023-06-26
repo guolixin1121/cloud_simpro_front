@@ -12,7 +12,13 @@
         <a-button type="primary" v-if="user.hasPermission('add')" @click="() => add('')">创建模型</a-button>
       </div>
     </div>
-    <Table :api="veticleModelApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }" :isOnlyCreator="true">
+    <Table
+      :api="veticleModelApi.getList"
+      :query="query"
+      :columns="columns"
+      :scroll="{ x: 1200, y: 'auto' }"
+      :isOnlyCreator="true"
+    >
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.dataIndex == 'type'">
           <span v-if="record.type === 1">导入</span><span v-else-if="record.type === 2">创建</span> <span v-else>全部</span>
@@ -44,11 +50,12 @@
       class="importOutModel-containter"
       title="导入外部模型"
       :footer="null"
+      @cancel="cancelModal"
     >
       <span class="select-doc">选择模型文件</span>
       <single-upload class="ml-2" accept=".par" v-model:value="fileList" :desc="'点击上传'"></single-upload>
       <div class="desc mt-2">支持格式：.par，单个文件不能超过50MB。</div>
-      <div class=" text-right mt-4">
+      <div class="text-right mt-4">
         <a-button @click="cancelModal">取消</a-button>
         <a-button @click="confirmModal" :loading="loading" type="primary" class="ml-2">确定</a-button>
       </div>
@@ -65,7 +72,7 @@
         />
         <span v-if="copyVal.name === '' && showTip" class="error">模型名称不能为空</span>
       </p>
-      <div class=" text-right mt-4">
+      <div class="text-right mt-4">
         <a-button @click="visible = false">取消</a-button>
         <a-button @click="confirmCopy" :loading="loading" type="primary" class="ml-2">确定</a-button>
       </div>
@@ -125,8 +132,8 @@ const columns = [
   { title: '模型ID', dataIndex: 'vehicle_no', width: 200 },
   { title: '模型名称', dataIndex: 'name', width: 150, ellipsis: true },
   { title: '类型', dataIndex: 'type', width: 80, ellipsis: true },
-  { title: '转向模型', dataIndex: 'direct', width: 120, ellipsis: true },
-  { title: '动力形式', dataIndex: 'power', width: 90, ellipsis: true },
+  { title: '转向模型', dataIndex: 'direct_name', width: 120, ellipsis: true },
+  { title: '动力形式', dataIndex: 'power_name', width: 90, ellipsis: true },
   { title: '是否共享', dataIndex: 'is_share', width: 90, ellipsis: true },
   { title: '创建时间', dataIndex: 'create_date', width: 180 },
   { title: '修改时间', dataIndex: 'update_date', width: 180, ellipsis: true },
