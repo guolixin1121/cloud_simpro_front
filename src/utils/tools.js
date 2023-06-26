@@ -121,3 +121,12 @@ export const checkChName = (str, maxLength = 32, minLength = 2) => {
   } 
   return Promise.resolve()
 }
+
+export const openLink = (url) => {
+  let tempALink = document.createElement("a")
+  tempALink.setAttribute("target", "vnc")
+  tempALink.setAttribute("href", url)
+  document.body.appendChild(tempALink)
+  tempALink.click()
+  document.body.removeChild(tempALink)
+}

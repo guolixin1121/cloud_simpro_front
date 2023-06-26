@@ -34,9 +34,9 @@
         </a-form-item>
         <a-form-item label="场景集名称" name="name" :rules="[
           { required: true, message: '请输入场景集名称'}, 
-          { validator: () => checkChName(formState.name, 160) }
+          { validator: () => checkChName(formState.name, formState.isLeaf == '0' ? 32 : 160) }
           ]">
-          <ch-input v-model:value="formState.name" :maxlength="160" placeholder="请输入场景集名称"></ch-input>
+          <ch-input v-model:value="formState.name" :maxlength="formState.isLeaf == '0' ? 32 : 160" placeholder="请输入场景集名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景集路径" name="path">
           <span>{{ path }}</span>

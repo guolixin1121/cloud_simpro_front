@@ -123,14 +123,14 @@ const onSearch = (data: Query) => {
 /****** 表格区域 */
 const columns = [
   { title: '模型ID', dataIndex: 'vehicle_no', width: 200 },
-  { title: '模型名称', dataIndex: 'name', width: 150, ellipsis: true },
+  { title: '模型名称', dataIndex: 'name', width: 200, ellipsis: true },
   { title: '类型', dataIndex: 'type', width: 80, ellipsis: true },
   { title: '转向模型', dataIndex: 'direct', width: 120, ellipsis: true },
   { title: '动力形式', dataIndex: 'power', width: 90, ellipsis: true },
   { title: '是否共享', dataIndex: 'is_share', width: 90, ellipsis: true },
   { title: '创建时间', dataIndex: 'create_date', width: 180 },
   { title: '修改时间', dataIndex: 'update_date', width: 180, ellipsis: true },
-  { title: '所属用户', dataIndex: 'username', width: 180, ellipsis: true },
+  { title: '所属用户', dataIndex: 'username', width: 150, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',
@@ -172,13 +172,17 @@ const confirmModal = async () => {
     message.warning('请先选择文件再上传')
     return
   }
-  loading.value = true
-  await veticleModelApi.upload({ file: fileList.value })
-  message.success('上传成功')
-  importVisible.value = false
-  loading.value = false
-  fileList.value = []
-  onSearch({})
+  try{
+    loading.value = true
+    await veticleModelApi.upload({ file: fileList.value, name: fileList.value.name })
+    message.success('上传成功')
+    importVisible.value = false
+    loading.value = false
+    fileList.value = []
+    onSearch({})
+  } finally {
+    loading.value = false
+  }
 }
 const cancelModal = () => {
   fileList.value = []
@@ -191,11 +195,15 @@ const copy = (record: RObject) => {
 }
 const confirmCopy = async () => {
   if (copyVal.value.name !== '') {
-    loading.value = true
-    await veticleModelApi.add({ template_id: copyVal.value.id, name: copyVal.value.name })
-    visible.value = false
-    loading.value = false
-    onSearch({ ...query.value, page: 1 })
+    try {
+      loading.value = true
+      await veticleModelApi.add({ template_id: copyVal.value.id, name: copyVal.value.name })
+      visible.value = false
+      loading.value = false
+      onSearch({ ...query.value, page: 1 })
+    } finally {
+      loading.value = false
+    }
   } else {
     showTip.value = true
   }

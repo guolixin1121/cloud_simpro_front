@@ -8,11 +8,11 @@
       @search="onSearch"
       />
     <div class="tree-container"> 
-      <a-spin :spinning="loading" class=" w-full">
-        <!-- 刷新数据需要重新渲染，否则展开节点会有bug -->
+      <a-spin :spinning="loading" style="min-height: 50px;">
+        <!-- 视觉占位 -->
         <a-tree
+          v-if="loading"
           :show-icon="true"
-          :loading="loading"
           :load-data="lazy ? loadData : null"
           :tree-data="treeData"
           :expandedKeys="expandRowKeys"
@@ -23,8 +23,21 @@
             <svg-icon :icon="isLeaf ? 'leaf' : 'folder'"></svg-icon>
           </template>
         </a-tree>
-
-      </a-spin>
+      </a-spin> 
+      <!-- 刷新数据需要重新渲染，否则展开节点会有bug -->
+      <a-tree
+          v-if="!loading"
+          :show-icon="true"
+          :load-data="lazy ? loadData : null"
+          :tree-data="treeData"
+          :expandedKeys="expandRowKeys"
+          :selectedKeys="selectedRowKeys"
+          @expand="onExpand"
+          @select="onSelect">
+          <template #icon="{ isLeaf }">
+            <svg-icon :icon="isLeaf ? 'leaf' : 'folder'"></svg-icon>
+          </template>
+        </a-tree>
     </div>
     <div class=" float-right mt-2">
       <svg-icon icon="add" class="cursor-pointer mr-1" @click="onClick('add')"></svg-icon>
@@ -120,6 +133,7 @@ const onDeleteConfirm = async () => {
     loading.value = false
 
     // clear and reset
+    expandRowKeys.value = expandRowKeys.value.filter((key: string) => key != selectedNode.value.id)
     if(selectedNode.value.isLeaf) {
       emits('select', {})
     }
@@ -194,7 +208,7 @@ const onSelect = (keys: string[], {selected, selectedNodes}: any) => {
   }
 
   // 触发叶子结点
-  if(node.isLeaf && node.id != selectedNode.value.id) {
+  if(node.isLeaf && node.id != selectedNode.value?.id) {
     emits('select', node)
   }
 

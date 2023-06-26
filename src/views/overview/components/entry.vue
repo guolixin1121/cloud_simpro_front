@@ -51,6 +51,10 @@ const gotoPage = (url: string) => router.push(url)
     justify-content: center;
     align-items: center;
 
+    p {
+      color: #60656E;
+    }
+
     &:hover {
       background: #F2F3F5;
       border-radius: 2px;

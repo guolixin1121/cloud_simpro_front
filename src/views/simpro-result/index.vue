@@ -8,9 +8,11 @@
 
     <Table 
       ref="table"
+      :loading="loading"
       :api="currentApi.getList" 
       :query="query" 
       :columns="columns"
+      :isOnlyCreator="true"
       :scroll="{ x: 1800, y: 'auto' }">
       <template #bodyCell="{column, record}">
         <template v-if="column.dataIndex == 'is_passed'">
@@ -19,29 +21,30 @@
         <template v-if="column.dataIndex == 'status'">
           <span :class="'task-status task-status--' + record.status">{{ getResultStatus(record.status) }}</span>
         </template>
-        <template v-if="column.dataIndex == 'actions'">
-          <span v-if="isRunOrWait(record.status)">
+        <!-- <template v-if="column.dataIndex == 'actions'"> -->
+          <!-- <span v-if="isRunOrWait(record.status)">
             <a class="text-blue mr-2" @click="onStop(record)">停止</a>
           </span>
           <template v-if="isFinished(record.status)">
             <router-link :to="`/simpro-result/view/${record.id}?u=${record.uuid}`" class="text-blue mr-2">查看结果</router-link>
-          </template>
-          <a-popconfirm
-            v-if="isNotRunning(record.status)"
+          </template> -->
+          <!-- <a-popconfirm
+            v-if="isNotRunning(record.status) && (record.create_user == user.username)"
             title="是否删除？"
             ok-text="是"
             cancel-text="否"
             @confirm="onConfirmDelete(record)"
           >
             <a class="text-blue mr-2">删除</a>
-          </a-popconfirm>
-        </template>
+          </a-popconfirm> -->
+        <!-- </template> -->
       </template>
     </Table>
   </div>
 </template>
 
 <script setup lang="ts">
+import router from '@/router';
 import { TaskSourceOptions, getTaskSourceName, getResultStatus } from '@/utils/dict'
 
 const templateId = useRoute().query.templateId as string
@@ -76,19 +79,40 @@ const columns = [
   { title: '任务结果', dataIndex: 'is_passed', width: 80 },
   { title: '完成时间', dataIndex: 'finish_time', width: 150 },
   { title: '所属用户', dataIndex: 'create_user', width: 100 },
-  { title: '操作', dataIndex: 'actions', fixed: 'right', width: 150 }
+  { title: '操作', dataIndex: 'actions', fixed: 'right', width: 150, 
+    actions: {
+      停止: {
+        validator: (data: any) => isRunOrWait(data.status),
+        handler: (data: any) => onStop(data)
+      },
+      查看结果: {
+        validator: (data: any) => isFinished(data.status),
+        handler: (data: any) => router.push(`/simpro-result/view/${data.id}?u=${data.uuid}`)
+      },
+      删除:  {
+        validator: (data: any) => isNotRunning(data.status),
+        handler: async (data: any) => await currentApi.delete(data.id)
+      }
+    }
+  }
 ]
 
-const onConfirmDelete = async (record: RObject) => {
-  await currentApi.delete(record.id)
-  message.info('删除成功')
-  table.value.refresh()
-}
+// const onConfirmDelete = async (record: RObject) => {
+//   await currentApi.delete(record.id)
+//   message.info('删除成功')
+//   table.value.refresh()
+// }
 
+const loading = ref(false)
 const onStop = async (record: RObject) => {
-  await api.task.cancel({sim_task_id: record.id})
-  message.info('停止成功')
-  table.value.refresh()
+  try {
+    loading.value = true
+    await api.task.cancel({sim_task_id: record.id})
+    message.info('停止成功')
+    table.value.refresh()
+  } finally {
+    loading.value = false
+  }
 }
  </script>
  

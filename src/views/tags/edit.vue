@@ -76,14 +76,7 @@
           <template v-else>{{ formState.parentNode?.display_name }}</template>
         </a-form-item>
         <a-form-item label="描述" name="desc" :rules="[{required: false , message: '请输入标签描述' }]">
-          <a-textarea
-            v-if="!isView"
-            v-model:value="formState.desc"
-            placeholder="请输入描述"
-            rows="10"
-            style="resize: none"
-            maxlength="255"
-          />
+          <ch-input v-if="!isView" type="textarea" v-model:value="formState.desc" placeholder="请输入描述" :maxlength="255" rows="10"></ch-input>
           <template v-else>{{ formState.desc }}</template>
         </a-form-item>
         <template v-if="isView">

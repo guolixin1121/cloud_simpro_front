@@ -1,5 +1,5 @@
 pipeline {
-    agent {label "agent04"}
+    agent any
     environment {
         VERSION='0.1'
         OCI_URI='registry-vecps-ns.gaccloud.com.cn/tenant-eaws'
@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                 withCredentials([usernamePassword(credentialsId: '6cc081dc-8d75-357f-19da-b6374219496f', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                 withCredentials([usernamePassword(credentialsId: 'oci-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh '''docker login -u=${USERNAME} -p=${PASSWORD} registry-vecps-ns.gaccloud.com.cn
 docker build -t ${OCI_URI}/cloud_simpro_front:${VERSION} .
 '''
@@ -28,7 +28,7 @@ docker system prune -f
         }
         stage('Deploy') {
             steps {
-                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'fangzhen02_config', namespace:'',restrictKubeConfigAccess: false, serverUrl: ''){
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kube-config', namespace:'',restrictKubeConfigAccess: false, serverUrl: ''){
                     sh '''kubectl get pod -owide
 envsubst < cicd/cloud-simpro-front.yaml | kubectl apply -f -
 '''

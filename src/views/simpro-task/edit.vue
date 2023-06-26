@@ -39,7 +39,7 @@
         <a-select v-model:value="formState.vehicle_vertical" :options="VerticalOptions" placeholder="请选择纵向控制方式"></a-select>
       </a-form-item>
       <a-form-item label="任务执行次数" name="batch" :rules="[{ required: true, message: '请输入任务执行次数'}]">
-        <a-input-number v-model:value="formState.batch" min="1" max="9999" placeholder="请输入任务执行次数"></a-input-number>
+        <a-input-number readonly v-model:value="formState.batch" min="1" max="9999" placeholder="请输入任务执行次数"></a-input-number>
       </a-form-item>
       <a-form-item label="传感器" name="sensors" :rules="[{ required: true, message: '请选择传感器'}]">
         <scroll-transfer v-model:target-keys="formState.sensors" :api="baseApi.sensor.getList"

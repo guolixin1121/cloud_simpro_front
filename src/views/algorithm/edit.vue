@@ -35,7 +35,7 @@
           { min: 1, max: 255, message: '镜像地址长度为1到255位' }
         ]"
       >
-        <a-input v-model:value="formState.docker_path" :maxlength="255" placeholder="请输入算法镜像"></a-input>
+      <ch-input v-model:value="formState.docker_path" placeholder="请输入算法镜像" :maxlength="255"></ch-input>
       </a-form-item>
       <a-form-item label="控制在环" name="is_in_ring" :rules="[{ required: true, message: '请选择控制在环' }]">
         <a-select v-model:value="formState.is_in_ring" placeholder="请选择控制在环">
@@ -44,13 +44,7 @@
         </a-select>
       </a-form-item>
       <a-form-item label="算法描述" name="desc">
-        <a-textarea
-            v-model:value="formState.desc"
-            placeholder="请输入描述"
-            rows="10"
-            style="resize: none"
-            maxlength="255"
-          />
+        <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入描述" :maxlength="255" rows="10"></ch-input>
       </a-form-item>
       <a-form-item class="ml-8" :wrapper-col="{ style: { paddingLeft: '80px' } }">
           <a-button class="mr-2" type="primary" html-type="submit" :loading="loading">

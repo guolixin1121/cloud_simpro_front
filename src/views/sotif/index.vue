@@ -70,7 +70,7 @@ const columns = [
     width: 100,
     actions: {
       查看: {
-        vadidator: (data:any) => data.url,
+        validator: (data:any) => data.url,
         handler: (data: any) => gotoSotif(data.url)
       }
     }

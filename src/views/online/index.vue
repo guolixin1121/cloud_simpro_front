@@ -16,6 +16,10 @@
             </div>
             <div class="item-logo"><img style="width: 150px" src="@/assets/images/logo-big.png" /></div>
             <div class="item-name">{{ item.name }}</div>
+            <div class="item-button text-center" style="display: none;">
+              <a-button type="primary" class="mr-2" @click="enter">进入</a-button>
+              <a-button type="primary" @click="quit">释放</a-button>
+            </div>
         </li>
       </ul>
     </a-spin>
@@ -23,6 +27,8 @@
 </template>
 
 <script lang="ts" setup>
+import { openLink } from '@/utils/tools';
+
 const list = [
   { name: 'GuangQi - 1', username: '', status: 0, link: '' },
   { name: 'GuangQi - 2', username: 'test1', status: 1, link: '' },
@@ -38,50 +44,51 @@ const list = [
 ]
 
 const loading = ref(false)
+let taskid = ''
+let count = 0
 const gotoVnc = async ({status} : any) => {
   if(status == 1) return 
   try {
+    count = 0
     loading.value = true
     let res = await api.result.enterVnc({ action: 0 })
+    taskid = res.id
     loopVnc(res.id)
   } catch {
-    // loading.value = false
+    loading.value = false
   }
 }
 
 const loopVnc = async (id: String) => {
-  try {
-    loading.value = true
-    console.log(loading.value)
-    const res = await api.result.checkVnc(id)
+  if(count >= 16) {
     loading.value = false
+    message.info('连接服务器失败')
+    return
+  }
+  try {
+    count++
+    loading.value = true
+    const res = await api.result.checkVnc(id)
     if(res.status == 1 && res.address) {
-      const newWindow = window.open(res.address)
-
-      const closeInterval = setInterval(async () => {    
-        if (newWindow && newWindow.closed) {
-          console.log('closed')
-          await api.result.quitVnc(id)
-          clearInterval(closeInterval); 
-        }
-      }, 500);
+      loading.value = false
+      openLink(res.address)
+      // window.open(res.address, '_vnc')
     } else {
       loopVnc(id)
     }
-  } finally {
-    // loading.value = false
+  } catch {
+    setTimeout(() => loopVnc(id), 500)
   }
 }
 
-// const gotoPage = (url: string) => {
-//   const newWindow = window.open(url)
-//   const loop = setInterval(() => {    
-//     if (newWindow && newWindow.closed) {
-//       console.log('我被关闭了')
-//       clearInterval(loop); 
-//     }
-//   }, 500);
-// }
+const enter = () => {
+  taskid && loopVnc(taskid)
+}
+const quit = async () => {
+  if(taskid) {
+    await api.result.quitVnc(taskid)
+  }
+}
 </script>
 
 <style lang="less" scoped>

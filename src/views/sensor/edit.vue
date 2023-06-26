@@ -43,14 +43,8 @@
       </a-form-item>
       <!-- <a-form-item v-if="!isAdd" label="传感器文件地址：">{{ formState.latestVersionUrl }} </a-form-item> -->
       <a-form-item label="描述" name="name">
-        <a-textarea
-          v-if="!isView"
-          v-model:value="formState.desc"
-          placeholder="请输入描述"
-          rows="10"
-          style="resize: none"
-          maxlength="255"
-        />
+        <ch-input v-if="!isView" type="textarea" v-model:value="formState.desc" placeholder="请输入描述" :maxlength="255" rows="10"></ch-input>
+          
         <template v-else>{{ formState.desc }}</template>
       </a-form-item>
       <!-- <template v-if="isView">

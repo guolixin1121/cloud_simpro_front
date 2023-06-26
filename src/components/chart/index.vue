@@ -1,6 +1,6 @@
 <template>
   <div class="h-80">
-    <div class="name mb-3">{{ title }}</div>
+    <div class="name">{{ title }}</div>
     <div
       :style="title ? 'height:90%' : 'height:100%'"
       style="width: 100%;"
@@ -50,6 +50,7 @@ onUnmounted(() => window.removeEventListener('resize', () => chartInstance?.resi
 .name {
   font-size: 16px;
   font-weight: 600;
+  margin-bottom: 8px;
   color: #1E2229;
 }
 </style>

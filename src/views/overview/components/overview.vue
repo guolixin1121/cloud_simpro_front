@@ -87,11 +87,17 @@ fetchData()
   .item {
     width: 33.3%;
     height: 128px;
+    border-radius: 4px;
     margin-right: 16px;
     display: flex;
     background-color: #fff;
     justify-content: space-between;
     padding: 24px;
+
+    p {
+      color: #60656E;
+      font-weight: 600;
+    }
 
     &:last-child {
       margin-right: 0px;

@@ -67,7 +67,7 @@ const columns = [
     width: 180,
     actions: {
       运行: {
-        validator: (data: RObject) => ['运行', '等待'].indexOf(data.status) === -1,
+        validator: (data: RObject) => (['运行', '等待'].indexOf(data.status) === -1 && user.user.username == data.create_user),
         handler: async (data: RObject) => await currentApi.run({ template_id: data.id })
       },
       仿真结果: (data: RObject) => router.push('/simpro-result/?templateId=' + data.id),

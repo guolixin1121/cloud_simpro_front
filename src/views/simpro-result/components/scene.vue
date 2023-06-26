@@ -32,6 +32,7 @@
 </template>
 
 <script setup lang="ts">
+import { openLink } from '@/utils/tools'
 
 const task = useRoute().params.id
 const getScenes = () => api.result.getScenes({ task })
@@ -41,8 +42,6 @@ const columns = [
   { dataIndex: 'adsName', title: '场景名称'},
   { dataIndex: 'labels_detail', title: '场景标签'},
   { dataIndex: 'batch', title: '仿真轮次', width: 100},
-  // { dataIndex: 'run-time', title: '开始时间', width: 150},
-  // { dataIndex: 'funish-time', title: '完成时间', width: 150},
   {
     dataIndex: 'actions', title: '操作', fixed: 'right', width: 150
   }
@@ -50,10 +49,10 @@ const columns = [
 
 const { u } = useRoute().query
 const loading = ref(false)
-let interval: any = -1
-let closeInterval: any = -1
+let count = 0
 const replay = async (record: RObject) => {
   try {
+    count = 0
     loading.value = true
     let res = await api.result.enterVnc({ 
       action: 3,
@@ -66,33 +65,42 @@ const replay = async (record: RObject) => {
 }
 
 const loopVnc = async (id: String) => {
+  if(count >= 16) {
+    loading.value = false
+    message.info('连接服务器失败')
+    return
+  }
   try {
+    count++
     loading.value = true
     const res = await api.result.checkVnc(id)
     if(res.status == 1 && res.address) {
-      const newWindow = window.open(res.address)
+      loading.value = false
+      openLink(res.address)
+      // window.open(res.address, '_vnc')
+      // const newWindow = window.open(res.address)
 
-      closeInterval = setInterval(async () => {    
-        if (newWindow && newWindow.closed) {
-          console.log('closed')
-          await api.result.quitVnc(id)
-          clearInterval(closeInterval); 
-        }
-      }, 500);
+      // closeInterval = setInterval(async () => {    
+      //   if (newWindow && newWindow.closed) {
+      //     console.log('closed')
+      //     await api.result.quitVnc(id)
+      //     clearInterval(closeInterval); 
+      //   }
+      // }, 500);
     } else {
-      loopVnc(id)
+      setTimeout(() => loopVnc(id), 500)
     }
-  } finally {
+  } catch {
     loading.value = false
   }
 }
 
 const tableRef = ref()
 onMounted(() => tableRef.value.refresh())
-onUnmounted(() => {
-  clearInterval(interval)
-  clearInterval(closeInterval)
-})
+// onUnmounted(() => {
+//   clearInterval(interval)
+//   clearInterval(closeInterval)
+// })
 </script>
 
 <style lang="less">

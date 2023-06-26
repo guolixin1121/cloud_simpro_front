@@ -32,7 +32,7 @@
         {{ formState.py_url }}
       </a-form-item>
       <a-form-item label="描述">
-        <a-textarea v-model:value="formState.desc" :maxLength="255" rows="10" style="resize: none" ></a-textarea>
+        <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入描述" :maxlength="255" rows="10"></ch-input>
       </a-form-item>
       <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
         <a-button type="primary" html-type="submit" :loading="loading">

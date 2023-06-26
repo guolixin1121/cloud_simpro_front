@@ -92,7 +92,10 @@ const seriesOptions = {
   },
   'line': {
     symbol: 'image://' + circle,
-    symbolSize: 10
+    symbolSize: 10,
+    lineStyle: {
+      width: 3
+    }
   },
   'pie': {
     radius: ['35%', '55%'],
