@@ -29,6 +29,29 @@ export default defineConfig(({ mode }) => {
         '@': resolve(__dirname, 'src')
       }
     },
+    css: {
+      preprocessorOptions: {
+        less: {
+          modifyVars: {
+            'primary-color': '#1664ff',
+            'link-color': '#1664ff',
+          },
+          javascriptEnabled: true,
+        }
+      }
+      // loaderOptions: {
+      //   less: {
+      //     lessOptions: {
+      //       modifyVars: {
+      //         'primary-color': '#1664ff',
+      //         'link-color': '#1664ff',
+      //         'border-radius-base': '4px',
+      //       },
+      //       javascriptEnabled: true,
+      //     },
+      //   },
+      // },
+    },
     plugins: [
       vue({ reactivityTransform: true }),
       vueJsx(),

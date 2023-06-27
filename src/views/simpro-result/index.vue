@@ -59,9 +59,18 @@ const isNotRunning = (status: number) => status !== 2
 type Query = Record<string, any>
 const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入仿真任务名称或主车模型' },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入仿真任务名称或任务ID', defaultValue: templateId },
   { label: '任务来源', key: 'source', type: 'select', options: TaskSourceOptions, defaultValue: '' },
-  { label: '仿真任务', key: 'template_id', type: 'select', api: api.task.getList, defaultValue: parseInt(templateId) || '', placeholder: '请选择仿真任务' },
+  { label: '仿真结果', key: 'is_passed', type: 'select', 
+    options: [
+      {label: '全部', value: ''},
+      {label: '不通过', value: '0'},
+      {label: '通过', value: '1'},
+      {label: '--', value: '2'}
+    ],
+    placeholder: '请选择仿真结果',
+    defaultValue: '' 
+  },
   { label: '仿真算法', key: 'algorithm', type: 'select', api: api.algorithm.getList, defaultValue: '' },
   { label: '完成时间', key: 'create_time', type: 'range-picker' }])
 const onSearch = (data: Query) => (query.value = data)

@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-import { openLink } from '@/utils/tools';
+// import { openLink } from '@/utils/tools';
 
 const list = [
   { name: 'GuangQi - 1', username: '', status: 0, link: '' },
@@ -46,21 +46,22 @@ const list = [
 const loading = ref(false)
 let taskid = ''
 let count = 0
+let interval: any
 const gotoVnc = async ({status} : any) => {
   if(status == 1) return 
-  // try {
-  //   count = 0
-  //   loading.value = true
-  //   let res = await api.result.enterVnc({ action: 0 })
-  //   taskid = res.id
-  //   loopVnc(res.id)
-  // } catch {
-  //   loading.value = false
-  // }
+  try {
+    count = 0
+    loading.value = true
+    let res = await api.result.enterVnc({ action: 0 })
+    taskid = res.id
+    loopVnc(res.id)
+  } catch {
+    loading.value = false
+  }
 }
 
 const loopVnc = async (id: String) => {
-  if(count >= 16) {
+  if(count >= 8) {
     loading.value = false
     message.info('连接服务器失败')
     return
@@ -71,9 +72,18 @@ const loopVnc = async (id: String) => {
     const res = await api.result.checkVnc(id)
     if(res.status == 1 && res.address) {
       loading.value = false
-      openLink(res.address)
+      // openLink(res.address)
+      const newWindow = window.open(res.address, 'vnc')
+
+      interval = setInterval(async () => {    
+        if (newWindow && newWindow.closed) {
+          console.log('closed')
+          await api.result.quitVnc(id)
+          clearInterval(interval); 
+        }
+      }, 1000);
     } else {
-      loopVnc(id)
+      setTimeout(() => loopVnc(id), 1000)
     }
   } catch {
     setTimeout(() => loopVnc(id), 500)
@@ -88,6 +98,9 @@ const quit = async () => {
     await api.result.quitVnc(taskid)
   }
 }
+onUnmounted(() => {
+  clearInterval(interval)
+})
 </script>
 
 <style lang="less" scoped>

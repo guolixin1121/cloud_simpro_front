@@ -37,10 +37,11 @@ const props = defineProps({
     margin-right: 3px
   }
 }
-.ant-menu-item:hover, 
-.ant-menu-submenu-title:hover, 
-.ant-menu-submenu-selected .ant-menu-submenu-title, 
-.ant-menu-item-selected {
+.ant-menu-item:hover,
+.ant-menu-item-selected,
+// .ant-menu-submenu-title:hover, 
+.ant-menu-submenu-active,
+.ant-menu-submenu-selected .ant-menu-submenu-title {
   .icon {
     svg *[stroke="#60656E"] {
       stroke: #1664FF 

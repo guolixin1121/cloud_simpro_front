@@ -14,8 +14,11 @@
           </a-tooltip>
         </template>
         <template v-if="column.dataIndex == 'actions'">
-          <a class="text-blue mr-2" @click="replay(record)">回放</a>
+          <a class="text-blue mr-2"
+            v-if="record.b_file" 
+            @click="replay(record)">回放</a>
           <a class=" text-blue" 
+            v-if="record.obs_report"
             :href="'/api/simpro/resource/' + record.obs_report" target="_blank" >查看报告</a>
         </template>
     </template>

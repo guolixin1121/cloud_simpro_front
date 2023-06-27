@@ -17,6 +17,7 @@ api.user.getTopMenu().then(data => topMenus.value = data)
         :key="index"
         :href="menu.path"
         class=" ml-16"
+        style="display: none;"
         target="_blank">
         {{ menu.title }} 
       </a>

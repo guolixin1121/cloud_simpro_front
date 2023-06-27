@@ -1,7 +1,7 @@
 <template>
   <div class="white-block entry">
     <div class="flex justify-between">
-      <div class="title-primary">仿真结果</div>
+      <div class="title--noborder">仿真结果</div>
       <router-link to="/simpro-result">
         <a style="color: #999ca3; cursor: pointer; display: flex;">
           查看更多

@@ -1,9 +1,9 @@
 @import './reset.less';
 @import './antd.less';
 @import './tailwind.css';
+@import './variable.less';
 
-.title-primary {
-  color: #1e2229;
+.title--noborder {
   font-weight: 600;
   font-size: 16px;
   display: flex;
@@ -11,7 +11,6 @@
 }
 
 .title {
-  color: #1e2229;
   font-weight: 600;
   font-size: 16px;
   display: flex;
@@ -22,7 +21,7 @@
     display: inline-block;
     width: 3px;
     height: 16px;
-    background: #1664ff;
+    background: @blue-color;
     border-radius: 2px;
     margin-right: 8px;
   }
@@ -31,38 +30,33 @@
 .sub-title {
   font-size: 14px;
   font-weight: 600;
-  color: #1e2229;
   margin-bottom: 8px;
   display: inline-block;
 }
 
 .text-blue {
-  color: #1664ff;
+  color: @blue-color;
 }
 
 .text-gray {
-  color: #999CA3;
+  color: @gray-color;
  }
+
 .breadcrumb {
   margin-bottom: 10px;
-  color: #999ca3;
   font-size: 14px;
 
   &--current {
-    color: #1e2229;
+    color: @text-main-color;
 
     &:before {
       content: '/';
-      color: #999ca3;
-      display: inline-block;
+      color: @gray-color;
       padding: 0px 10px;
     }
   }
-  .breadcrumb-title {
-    color: #999ca3;
-    &:hover {
-      color: #188fffc1;
-    }
+  .breadcrumb-title, a {
+    color: @gray-color;
   }
 }
 
@@ -120,7 +114,7 @@
         display: flex;
 
         .label {
-          color: #60656E; 
+          color: @text-gray-color; 
           padding-right: 8px;
           display: block;
           width: 90px;
@@ -191,7 +185,7 @@ main {
 .sign {
   width: 3px;
   height: 14px;
-  background: #1664ff;
+  background: @blue-color;
   border-radius: 2px;
   margin-top: 5px;
   margin-right: 5px;
@@ -232,19 +226,19 @@ main {
   }
 }
 
-.vir-tree {
-  .vir-tree-node {
-    white-space: nowrap;
-    .node-content .node-title.selected {
-      background-color: #eaf1ff !important;
-      padding: 2px 10px;
-      color: #1890ff;
-      font-weight: 600;
-      left: -4px;
-      position: relative;
-    }
-  }
-}
+// .vir-tree {
+//   .vir-tree-node {
+//     white-space: nowrap;
+//     .node-content .node-title.selected {
+//       background-color: #eaf1ff !important;
+//       padding: 2px 10px;
+//       color: #1890ff;
+//       font-weight: 600;
+//       left: -4px;
+//       position: relative;
+//     }
+//   }
+// }
 
 .vxe-table {
   .vxe-table--body {

@@ -85,7 +85,7 @@ import { checkChName } from '@/utils/tools';
 const route = useRoute()
 const { id } = route.params
 const isAdd = id === '0'
-const actionText = isAdd ? '创建' : '修改'
+const actionText = isAdd ? '上传' : '修改'
 const title =  actionText + '场景'
 
 const baseApi = api

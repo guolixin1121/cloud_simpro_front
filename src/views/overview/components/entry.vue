@@ -1,6 +1,6 @@
 <template>
   <div class="white-block entry">
-     <div class="title-primary">快捷入口</div>
+     <div class="title--noborder">快捷入口</div>
      <div class="item-list">
         <div v-for="item in entries" :key="item.label"
           class="item"

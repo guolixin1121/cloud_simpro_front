@@ -70,7 +70,7 @@ const columns = [
         validator: (data: RObject) => (['运行', '等待'].indexOf(data.status) === -1 && user.user.username == data.create_user),
         handler: async (data: RObject) => await currentApi.run({ template_id: data.id })
       },
-      仿真结果: (data: RObject) => router.push('/simpro-result/?templateId=' + data.id),
+      仿真结果: (data: RObject) => router.push('/simpro-result/?templateId=' + data.number),
       查看: (data: RObject) => router.push('/simpro-task/view/' + data.id),
       编辑: (data: RObject) => router.push('/simpro-task/edit/' + data.id),
       删除: async ({ id }: RObject) => await currentApi.delete(id)

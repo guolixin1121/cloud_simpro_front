@@ -2,7 +2,7 @@
   <div class="white-block">
     <div class="flex justify-between">
       <div>
-        <p class="title-primary">TFS车辆运行报告</p>
+        <p class="title--noborder">TFS车辆运行报告</p>
         <p class="text-gray">生成时间：<span>2023年12月2日</span></p>
       </div>
       <div class=" text-right text-gray">
