@@ -20,19 +20,10 @@
         </template>
     </template>
   </Table>
-  <!-- <a-modal class="video-player" 
-    style="width: 60%; height: 60%;"
-    :visible="isModal"
-    :footer="null"
-    @cancel="closeVideo" >
-    <video style="height: 100%; width: 100%;" autoplay loop>
-      <source :src="videoSrc" type="video/mp4">
-    </video>
-  </a-modal> -->
 </template>
 
 <script setup lang="ts">
-import { openLink } from '@/utils/tools'
+// import { openLink } from '@/utils/tools'
 
 const task = useRoute().params.id
 const getScenes = () => api.result.getScenes({ task })
@@ -50,6 +41,7 @@ const columns = [
 const { u } = useRoute().query
 const loading = ref(false)
 let count = 0
+let interval: any
 const replay = async (record: RObject) => {
   try {
     count = 0
@@ -65,7 +57,7 @@ const replay = async (record: RObject) => {
 }
 
 const loopVnc = async (id: String) => {
-  if(count >= 16) {
+  if(count >= 8) {
     loading.value = false
     message.info('连接服务器失败')
     return
@@ -76,19 +68,18 @@ const loopVnc = async (id: String) => {
     const res = await api.result.checkVnc(id)
     if(res.status == 1 && res.address) {
       loading.value = false
-      openLink(res.address)
-      // window.open(res.address, '_vnc')
-      // const newWindow = window.open(res.address)
+      // openLink(res.address)
+      const newWindow = window.open(res.address, 'vnc')
 
-      // closeInterval = setInterval(async () => {    
-      //   if (newWindow && newWindow.closed) {
-      //     console.log('closed')
-      //     await api.result.quitVnc(id)
-      //     clearInterval(closeInterval); 
-      //   }
-      // }, 500);
+      interval = setInterval(async () => {    
+        if (newWindow && newWindow.closed) {
+          console.log('closed')
+          await api.result.quitVnc(id)
+          clearInterval(interval); 
+        }
+      }, 1000);
     } else {
-      setTimeout(() => loopVnc(id), 500)
+      setTimeout(() => loopVnc(id), 1000)
     }
   } catch {
     loading.value = false
@@ -97,10 +88,9 @@ const loopVnc = async (id: String) => {
 
 const tableRef = ref()
 onMounted(() => tableRef.value.refresh())
-// onUnmounted(() => {
-//   clearInterval(interval)
-//   clearInterval(closeInterval)
-// })
+onUnmounted(() => {
+  clearInterval(interval)
+})
 </script>
 
 <style lang="less">

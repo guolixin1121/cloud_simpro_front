@@ -48,15 +48,15 @@ let taskid = ''
 let count = 0
 const gotoVnc = async ({status} : any) => {
   if(status == 1) return 
-  try {
-    count = 0
-    loading.value = true
-    let res = await api.result.enterVnc({ action: 0 })
-    taskid = res.id
-    loopVnc(res.id)
-  } catch {
-    loading.value = false
-  }
+  // try {
+  //   count = 0
+  //   loading.value = true
+  //   let res = await api.result.enterVnc({ action: 0 })
+  //   taskid = res.id
+  //   loopVnc(res.id)
+  // } catch {
+  //   loading.value = false
+  // }
 }
 
 const loopVnc = async (id: String) => {
@@ -72,7 +72,6 @@ const loopVnc = async (id: String) => {
     if(res.status == 1 && res.address) {
       loading.value = false
       openLink(res.address)
-      // window.open(res.address, '_vnc')
     } else {
       loopVnc(id)
     }

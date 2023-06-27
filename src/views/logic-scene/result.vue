@@ -57,6 +57,7 @@ onUnmounted(() => clearInterval(interval))
 
 const router = useRouter()
 const gotoScene = (record: RObject) => {
+  SStorage.clear()
   SStorage.set('logic-sceneset', record.result_scene_set)
   router.push('/scene')
 }

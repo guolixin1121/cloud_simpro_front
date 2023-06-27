@@ -95,8 +95,13 @@ const props = defineProps({
 const emits = defineEmits(['select', 'btn-click'])
 
 const routeName = useRoute().path.replaceAll('/', '')
-const searchValue = useSessionStorage(routeName + ': tree-search', props.query.name || '') 
+const searchValue = useSessionStorage(routeName + ': tree-search', '') 
 const searchQuery = ref()
+
+const { query }: any = toRefs(props)
+if(query.value?.name) {
+  searchValue.value = query.value.name
+}
 
 const onSearch = () => {
   searchQuery.value = { ...props.query, name: searchValue.value,}

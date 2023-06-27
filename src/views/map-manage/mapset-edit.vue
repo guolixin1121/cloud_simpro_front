@@ -28,7 +28,7 @@
             :check-leaf="false"
           >
           </tree-select>
-          <div v-if="error" class="ant-form-item-explain-error" style="">地图目录不能超过四级</div>
+          <div v-if="error" class="ant-form-item-explain-error" style="">地图目录不能超过二级</div>
           <span v-else>{{ formState.parentName }}</span>
         </a-form-item>
 
@@ -95,7 +95,7 @@ watch(
   () => {
     const { isLeaf, parent } = formState
     error.value = false
-    if(isLeaf == '0' && parent.level > 2) {
+    if(isLeaf == '0' && parent.level > 0) {
       error.value = true
     }
   }
