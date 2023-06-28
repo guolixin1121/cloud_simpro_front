@@ -22,6 +22,7 @@
     </Table>
 
     <a-modal v-model:visible="showRunConfirm" 
+      title="泛化"
       :closable="false"
       :footer="null">
       <div>
@@ -29,7 +30,7 @@
         <span class="ml-4" style="font-size: 16px">是否要对此逻辑场景进行泛化？</span>
       </div>
       <p class="ml-8 mt-2">泛化结果为{{ runScene.config_result_count }}个具体场景</p>
-      <div class=" text-right">
+      <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
         <a-button @click="closeRunConfirm">否</a-button>
         <a-button @click="runConfirm" type="primary" class="ml-2">是</a-button>
       </div>

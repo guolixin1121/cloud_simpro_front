@@ -1,7 +1,7 @@
 <template>
    <div class="main">
     <span class="title">在线仿真</span>
-    <a-spin :spinning="loading">
+    <a-spin :spinning="loading" style="min-height: 100px;">
       <ul class="list">
         <li v-for="item in list" class="item" 
           :key="item.name" 
@@ -14,11 +14,11 @@
                 <i class="circle"></i>
                 {{ item.status == 0 ? '空闲' : '使用中' }}</span>
             </div>
-            <div class="item-logo"><img style="width: 150px" src="@/assets/images/logo-big.png" /></div>
+            <div class="item-logo"><img style="width: 140px" src="@/assets/images/logo-big.png" /></div>
             <div class="item-name">{{ item.name }}</div>
-            <div class="item-button text-center" style="display: none;">
-              <a-button type="primary" class="mr-2" @click="enter">进入</a-button>
-              <a-button type="primary" @click="quit">释放</a-button>
+            <div class="item-button text-right mt-2 mr-4" v-if="user.username === item.username">
+              <a-button class="mr-2"  @click="quitVnc">释放</a-button>
+              <a-button type="primary" @click="enterVnc">进入</a-button>
             </div>
         </li>
       </ul>
@@ -27,43 +27,52 @@
 </template>
 
 <script lang="ts" setup>
-// import { openLink } from '@/utils/tools';
-const list = ref([
-  { name: 'GuangQi - 1', username: '', status: 0 },
-  { name: 'GuangQi - 2', username: 'test1', status: 1 },
-  { name: 'GuangQi - 3', username: 'test7', status: 1 },
-  { name: 'GuangQi - 4', username: '', status: 0 },
-  { name: 'GuangQi - 5', username: '', status: 0 },
-  { name: 'GuangQi - 6', username: 'test1', status: 1 },
-  { name: 'GuangQi - 6', username: '', status: 0 },
-  { name: 'GuangQi - 7', username: '', status: 0 },
-  { name: 'GuangQi - 8', username: '', status: 0 },
-  { name: 'GuangQi - 9', username: '', status: 0 },
-  { name: 'GuangQi - 10', username: '', status: 0 },
-])
+const user = store.user.user
+const list = ref(
+  // [
+  // { name: 'GuangQi - 1', username: '', status: 0 },
+  // { name: 'GuangQi - 2', username: 'test1', status: 1 },
+  // { name: 'GuangQi - 3', username: 'test7', status: 1 },
+  // { name: 'GuangQi - 4', username: '', status: 0 },
+  // { name: 'GuangQi - 5', username: '', status: 0 },
+  // { name: 'GuangQi - 6', username: 'test1', status: 1 },
+  // { name: 'GuangQi - 6', username: '', status: 0 },
+  // { name: 'GuangQi - 7', username: '', status: 0 },
+  // { name: 'GuangQi - 8', username: '', status: 0 },
+  // { name: 'GuangQi - 9', username: '', status: 0 },
+  // { name: 'GuangQi - 10', username: '', status: 0 },
+// ]
+)
 
 const loading = ref(false)
-// const loadList = async () => {
-//   const res = await api.vnc.getList()
-//   list.value = res.map((item: any, index: number) => ({
-//     name: 'GuangQi - ' + (index + 1),
-//     username: item.username,
-//     status: item.status == 'free' ? 0 : 1
-//   }))
-// }
+const loadList = async () => {
+  try {
+    loading.value = true
+    const res = await api.vnc.getList()
+    loading.value = false
+    list.value = res.map((item: any, index: number) => ({
+      name: 'GuangQi - ' + (index + 1),
+      username: item.username,
+      status: item.status == 'free' ? 0 : 1
+    }))
+  } finally {
+    loading.value = false
+  }
+}
+loadList()
 
-// loadList()
-
-let vncId = '' // 当前连接的id
-let count = 0 // 当前连接次数，>8次时断开连接
-let interval: any
-const gotoVnc = async ({status} : any) => {
+// let newWindow: any
+const gotoVnc = ({status} : any) => {
   if(status == 1) return 
+  enterVnc()
+}
+
+let count = 0 // 当前连接次数，>8次时断开连接
+const enterVnc = async () => {
   try {
     count = 0
     loading.value = true
     let res = await api.vnc.enterVnc({ action: 0 })
-    vncId = res.id
     loopVnc(res.id)
   } catch {
     loading.value = false
@@ -82,16 +91,9 @@ const loopVnc = async (id: String) => {
     const res = await api.vnc.checkVnc(id)
     if(res.status == 1 && res.address) {
       loading.value = false
-      // openLink(res.address)
-      const newWindow = window.open(res.address, 'vnc')
-
-      interval = setInterval(async () => {    
-        if (newWindow && newWindow.closed) {
-          console.log('closed')
-          await api.vnc.quitVnc(id)
-          clearInterval(interval); 
-        }
-      }, 1000);
+      window.open(res.address, 'vnc')
+      // newWindow = window.open(res.address, 'vnc')
+      loadList()
     } else {
       setTimeout(() => loopVnc(id), 1000)
     }
@@ -100,19 +102,15 @@ const loopVnc = async (id: String) => {
   }
 }
 
-const enter = () => {
-  if(vncId) {
-    loopVnc(vncId)
+const quitVnc = async () => {
+  try {
+    loading.value = true
+    await api.vnc.exitVnc()
+    setTimeout(loadList, 1000)
+  } catch {
+    loading.value = false
   }
 }
-const quit = async () => {
-  if(vncId) {
-    await api.vnc.quitVnc(vncId)
-  }
-}
-onUnmounted(() => {
-  clearInterval(interval)
-})
 </script>
 
 <style lang="less" scoped>
@@ -157,13 +155,13 @@ onUnmounted(() => {
         height: 6px;
         border-radius: 3px;
       }
-      .status--0 {
+      .status--1 {
         color: #FA2F30;
         .circle {
           background-color: #FA2F30;
         }
       }
-      .status--1 {
+      .status--0 {
         color: #00B54E;
         .circle {
           background-color: #00B54E;

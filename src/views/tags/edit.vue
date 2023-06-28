@@ -4,10 +4,7 @@
     <span class="breadcrumb--current">{{ title }}</span>
   </div>
   <div class="min-main">
-    <div v-if="isView" class="cursor-pointer text-gray-400" @click="goback">
-      <svg-icon icon="back" class="mr-2"></svg-icon>返回
-    </div>
-    <span class="title mb-5 mt-3">{{ title }}</span>
+    <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading">
       <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 55%" @finish="add">
         <a-form-item v-if="isView" label="标签ID" name="id">
@@ -90,7 +87,7 @@
             ><span>{{ formState.create_user }}</span></a-form-item
           >
         </template>
-        <a-form-item v-if="!isView" class="ml-8" :wrapper-col="{ style: { paddingLeft: '80px' } }">
+        <a-form-item v-if="!isView" class="ml-8" :wrapper-col="{ style: { paddingLeft: '100px' } }">
           <a-button class="mr-2" type="primary" html-type="submit" :loading="loading">
             {{ isAdd ? '创建' : '修改' }}
           </a-button>

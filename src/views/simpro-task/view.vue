@@ -4,10 +4,7 @@
     <span class="breadcrumb--current">仿真任务详情</span>
   </div>
   <div class="min-main">
-    <div class="cursor-pointer text-gray-400" @click="goback">
-      <svg-icon icon="back" class="mr-2"></svg-icon>返回
-    </div>
-    <span class="title mb-5 mt-3">仿真任务详情</span>
+    <span class="title mb-5">仿真任务详情</span>
     <a-form :model="formState" :labelCol ="{ style: { width: '150px' } }"  style="width: 55%">
       <a-form-item label="任务ID">
         {{ formState.id }}
@@ -93,9 +90,6 @@ const formState = reactive({
   createTime: '',
   create_user: ''
 })
-
-const router = useRouter()
-const goback = () => router.push('/simpro-task')
 
 const getEditData = async () => {
    if(id !== '0') {

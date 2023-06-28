@@ -2,7 +2,6 @@
 <!-- tree table默认展开只支持首次赋值，所以增加v-if="$attrs['tree-default-expand-all'] != '' || dataSource?.length" -->
 <template>
   <a-table
-    bordered
     class="ant-table-striped mt-2"
     v-bind="$attrs"
     v-on="$attrs"
@@ -167,8 +166,11 @@ defineExpose({ refresh })
 .ant-table-striped :deep(.ant-table-pagination.ant-pagination) {
   margin: 16px 0 0 0 !important;
 }
-.ant-table-striped :deep(.table-striped) td,
-.ant-table-thead > tr > th {
+.ant-table-striped :deep(.table-striped) td {
   background: #f7f8fa;
+}
+
+.ant-table-striped :deep(.ant-table) {
+  border: 1px solid #f0f0f0;
 }
 </style>

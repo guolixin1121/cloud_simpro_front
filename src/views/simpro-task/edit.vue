@@ -80,7 +80,7 @@
           </li>
         </ul>
       </a-form-item>
-      <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
+      <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '150px' }}">
         <a-button type="primary" html-type="submit" :loading="loading">
           {{ isAdd ? '创建' : '修改' }}
         </a-button>

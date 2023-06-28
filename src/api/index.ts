@@ -115,8 +115,9 @@ export const result = defineApi({
 export const vnc = defineApi({
   getList: { url: '/vnc/list/', method: 'get' },
   enterVnc: { url: '/vnc/enter/', method: 'post' }, // 申请vnc
+  exitVnc: { url: '/vnc/exit/', method: 'post' }, // 退出vnc
   checkVnc: { url: '/vnc/{vnc_id}/', method: 'get' }, // 进入vnc
-  quitVnc: { url: '/vnc/{vnc_id}/', method: 'delete' }, // 申请vnc
+  quitVnc: { url: '/vnc/{vnc_id}/', method: 'delete' }, // 退出vnc
 })()
 
 export const sotif = defineApi({

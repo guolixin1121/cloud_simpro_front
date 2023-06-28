@@ -26,8 +26,6 @@
 </template>
 
 <script setup lang="ts">
-// import { openLink } from '@/utils/tools'
-
 const task = useRoute().params.id
 const getScenes = () => api.result.getScenes({ task })
 
@@ -41,17 +39,16 @@ const columns = [
   }
 ]
 
-const { u } = useRoute().query
 const loading = ref(false)
 let count = 0
-let interval: any
+const uuid = useRoute().query.u
 const replay = async (record: RObject) => {
   try {
     count = 0
     loading.value = true
     let res = await api.vnc.enterVnc({ 
       action: 3,
-      value: JSON.stringify({ uuid: u, baidu_id: record.baidu_id })
+      value: JSON.stringify({ uuid: uuid, baidu_id: record.baidu_id })
     })
     loopVnc(res.id)
   } catch {
@@ -71,16 +68,14 @@ const loopVnc = async (id: String) => {
     const res = await api.vnc.checkVnc(id)
     if(res.status == 1 && res.address) {
       loading.value = false
-      // openLink(res.address)
-      const newWindow = window.open(res.address, 'vnc')
-
-      interval = setInterval(async () => {    
-        if (newWindow && newWindow.closed) {
-          console.log('closed')
-          await api.vnc.quitVnc(id)
-          clearInterval(interval); 
-        }
-      }, 1000);
+      window.open(res.address, 'vnc')
+      // interval = setInterval(async () => {    
+      //   if (newWindow && newWindow.closed) {
+      //     console.log('closed')
+      //     await api.vnc.quitVnc(id)
+      //     clearInterval(interval); 
+      //   }
+      // }, 1000);
     } else {
       setTimeout(() => loopVnc(id), 1000)
     }
@@ -91,9 +86,9 @@ const loopVnc = async (id: String) => {
 
 const tableRef = ref()
 onMounted(() => tableRef.value.refresh())
-onUnmounted(() => {
-  clearInterval(interval)
-})
+// onUnmounted(() => {
+//   clearInterval(interval)
+// })
 </script>
 
 <style lang="less">

@@ -1,13 +1,10 @@
 <template>
   <div class="breadcrumb">
-    <router-link to="/scene/2">场景管理</router-link>
+    <router-link to="/scene/">场景管理</router-link>
     <span class="breadcrumb--current">场景详情</span>
   </div>
   <div class="min-main">
-    <div class="cursor-pointer text-gray-400" @click="goback">
-      <svg-icon icon="back" class="mr-2"></svg-icon>返回
-    </div>
-    <span class="title mb-5 mt-3">场景详情</span>
+    <span class="title mb-5">场景详情</span>
     <a-spin :spinning="loading">
       <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 55%">
         <a-form-item label="场景ID">
@@ -70,9 +67,6 @@ const formState = reactive({
   updateTime: '',
   createUser: ''
 })
-
-const router = useRouter()
-const goback = () => router.push('/scene/')
 
 const loading = ref(false)
 const getEditData = async () => {

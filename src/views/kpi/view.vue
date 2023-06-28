@@ -4,10 +4,7 @@
     <span class="breadcrumb--current">评测指标详情</span>
   </div>
   <div class="min-main">
-    <div class="cursor-pointer text-gray-400" @click="goback">
-      <svg-icon icon="back" class="mr-2"></svg-icon>返回
-    </div>
-    <span class="title mb-5 mt-3">评测指标详情</span>
+    <span class="title mb-5">评测指标详情</span>
     <a-form :model="formState" :labelCol ="{ style: { width: '120px' } }"  style="width: 55%">
       <a-form-item label="评测指标ID">
         {{ formState.id }}
@@ -51,9 +48,6 @@ const formState = reactive({
   update_date: '',
   create_user: ''
 })
-
-const router = useRouter()
-const goback = () => router.push('/kpi')
 
 const getEditData = async () => {
    if(id !== '0') {

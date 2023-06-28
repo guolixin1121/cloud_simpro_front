@@ -4,10 +4,7 @@
     <span class="breadcrumb--current">逻辑场景详情</span>
   </div>
   <div class="min-main">
-    <div class="cursor-pointer text-gray-400" @click="goback">
-      <svg-icon icon="back" class="mr-2"></svg-icon>返回
-    </div>
-    <span class="title mb-5 mt-3">逻辑场景详情</span>
+    <span class="title mb-5">逻辑场景详情</span>
     <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 55%">
       <a-form-item label="场景ID">
         {{ formState.id }}
@@ -56,9 +53,6 @@ const formState = reactive({
   create_time: '',
   create_user: ''
 })
-
-const router = useRouter()
-const goback = () => router.push('/logic-scene')
 
 const getEditData = async () => {
    if(id !== '0') {

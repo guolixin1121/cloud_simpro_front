@@ -5,10 +5,7 @@
     <span class="breadcrumb--current">{{ title }}</span>
   </div>
   <div class="min-main">
-    <div v-if="isView" class="cursor-pointer text-gray-400" @click="goback">
-      <svg-icon icon="back" class="mr-2"></svg-icon>返回
-    </div>
-    <span class="title mb-5 mt-3">{{ title }}</span>
+    <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading">
       <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 55%" @finish="add">
         <a-form-item label="地图名称：" name="mapName">

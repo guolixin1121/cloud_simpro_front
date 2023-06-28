@@ -55,7 +55,7 @@
       <span class="select-doc">选择模型文件</span>
       <single-upload class="ml-2" accept=".par" v-model:value="fileList" :desc="'点击上传'"></single-upload>
       <div class="desc mt-2">支持格式：.par，单个文件不能超过50MB。</div>
-      <div class="text-right mt-4">
+      <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
         <a-button @click="cancelModal">取消</a-button>
         <a-button @click="confirmModal" :loading="loading" type="primary" class="ml-2">确定</a-button>
       </div>
@@ -72,7 +72,7 @@
         />
         <span v-if="copyVal.name === '' && showTip" class="error">模型名称不能为空</span>
       </p>
-      <div class="text-right mt-4">
+      <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
         <a-button @click="visible = false">取消</a-button>
         <a-button @click="confirmCopy" :loading="loading" type="primary" class="ml-2">确定</a-button>
       </div>
