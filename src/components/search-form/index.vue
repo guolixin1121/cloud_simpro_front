@@ -109,7 +109,7 @@ const form = ref()
 const search = () => emitSearch()
 const reset = () => {
   // form.value.resetFields()
-  props.items.forEach((item: any) => (formState[item.key] = item.defaultValue))
+  props.items.forEach((item: any) => (formState[item.key] = item.resetValue != undefined ? item.resetValue : item.defaultValue))
   emitSearch()
 }
 

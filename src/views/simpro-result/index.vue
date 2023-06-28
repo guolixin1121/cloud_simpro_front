@@ -6,40 +6,24 @@
       <span class="title">仿真结果列表</span>
     </div>
 
-    <Table 
-      ref="table"
-      :loading="loading"
-      :api="currentApi.getList" 
-      :query="query" 
-      :columns="columns"
-      :isOnlyCreator="true"
-      :scroll="{ x: 1800, y: 'auto' }">
-      <template #bodyCell="{column, record}">
-        <template v-if="column.dataIndex == 'is_passed'">
-          {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '不通过' }}
+    <a-spin :spinning="loading">
+      <Table 
+        ref="table"
+        :api="currentApi.getList" 
+        :query="query" 
+        :columns="columns"
+        :isOnlyCreator="true"
+        :scroll="{ x: 1800, y: 'auto' }">
+        <template #bodyCell="{column, record}">
+          <template v-if="column.dataIndex == 'is_passed'">
+            {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '不通过' }}
+          </template>
+          <template v-if="column.dataIndex == 'status'">
+            <span :class="'task-status task-status--' + record.status">{{ getResultStatus(record.status) }}</span>
+          </template>
         </template>
-        <template v-if="column.dataIndex == 'status'">
-          <span :class="'task-status task-status--' + record.status">{{ getResultStatus(record.status) }}</span>
-        </template>
-        <!-- <template v-if="column.dataIndex == 'actions'"> -->
-          <!-- <span v-if="isRunOrWait(record.status)">
-            <a class="text-blue mr-2" @click="onStop(record)">停止</a>
-          </span>
-          <template v-if="isFinished(record.status)">
-            <router-link :to="`/simpro-result/view/${record.id}?u=${record.uuid}`" class="text-blue mr-2">查看结果</router-link>
-          </template> -->
-          <!-- <a-popconfirm
-            v-if="isNotRunning(record.status) && (record.create_user == user.username)"
-            title="是否删除？"
-            ok-text="是"
-            cancel-text="否"
-            @confirm="onConfirmDelete(record)"
-          >
-            <a class="text-blue mr-2">删除</a>
-          </a-popconfirm> -->
-        <!-- </template> -->
-      </template>
-    </Table>
+      </Table>
+    </a-spin>
   </div>
 </template>
 
@@ -59,7 +43,7 @@ const isNotRunning = (status: number) => status !== 2
 type Query = Record<string, any>
 const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入仿真任务名称或任务ID', defaultValue: templateId },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入仿真任务名称或任务ID', defaultValue: templateId, resetValue: '' },
   { label: '任务来源', key: 'source', type: 'select', options: TaskSourceOptions, defaultValue: '' },
   { label: '仿真结果', key: 'is_passed', type: 'select', 
     options: [
@@ -78,7 +62,7 @@ const onSearch = (data: Query) => (query.value = data)
 /****** 表格区域 */
 const table = ref()
 const columns = [
-  { title: '任务ID', dataIndex: 'id', width: 80 },
+  { title: '任务ID', dataIndex: 'template_number', width: 150 },
   { title: '仿真任务名称', dataIndex: 'name', width: 150, ellipsis: true },
   { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90 },
   { title: '主车模型', dataIndex: 'vehicle_detail', width: 150, ellipsis: true },
@@ -105,12 +89,6 @@ const columns = [
     }
   }
 ]
-
-// const onConfirmDelete = async (record: RObject) => {
-//   await currentApi.delete(record.id)
-//   message.info('删除成功')
-//   table.value.refresh()
-// }
 
 const loading = ref(false)
 const onStop = async (record: RObject) => {

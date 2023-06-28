@@ -109,7 +109,11 @@ export const task = defineApi({
 export const result = defineApi({
   getList: { url: '/simpro/simtask/', method: 'get' },
   getScenes: { url: '/simpro/simtask/result/', method: 'get' },
-  delete: { url: '/simpro/simtask/{sid}/', method: 'delete' },
+  delete: { url: '/simpro/simtask/{sid}/', method: 'delete' }
+})()
+
+export const vnc = defineApi({
+  getList: { url: '/vnc/list/', method: 'get' },
   enterVnc: { url: '/vnc/enter/', method: 'post' }, // 申请vnc
   checkVnc: { url: '/vnc/{vnc_id}/', method: 'get' }, // 进入vnc
   quitVnc: { url: '/vnc/{vnc_id}/', method: 'delete' }, // 申请vnc
@@ -175,8 +179,4 @@ export const overview = defineApi({
   reports: { url: '/stats/simresults/reports/', method: 'get' },
   scenes: { url: '/stats/scenes/count/', method: 'get' },
   status: { url: '/stats/simtask/status/', method: 'get' }
-})()
-
-// 在线仿真
-export const online = defineApi({
 })()

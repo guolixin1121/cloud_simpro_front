@@ -32,7 +32,7 @@ const task = useRoute().params.id
 const getScenes = () => api.result.getScenes({ task })
 
 const columns = [
-  { dataIndex: 'id', title: '场景ID', width: 100},
+  { dataIndex: 'scene_id', title: '场景ID', width: 100},
   { dataIndex: 'adsName', title: '场景名称'},
   { dataIndex: 'labels_detail', title: '场景标签'},
   { dataIndex: 'batch', title: '仿真轮次', width: 100},
@@ -49,7 +49,7 @@ const replay = async (record: RObject) => {
   try {
     count = 0
     loading.value = true
-    let res = await api.result.enterVnc({ 
+    let res = await api.vnc.enterVnc({ 
       action: 3,
       value: JSON.stringify({ uuid: u, baidu_id: record.baidu_id })
     })
@@ -68,7 +68,7 @@ const loopVnc = async (id: String) => {
   try {
     count++
     loading.value = true
-    const res = await api.result.checkVnc(id)
+    const res = await api.vnc.checkVnc(id)
     if(res.status == 1 && res.address) {
       loading.value = false
       // openLink(res.address)
@@ -77,7 +77,7 @@ const loopVnc = async (id: String) => {
       interval = setInterval(async () => {    
         if (newWindow && newWindow.closed) {
           console.log('closed')
-          await api.result.quitVnc(id)
+          await api.vnc.quitVnc(id)
           clearInterval(interval); 
         }
       }, 1000);

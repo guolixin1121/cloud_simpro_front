@@ -164,9 +164,6 @@ defineExpose({ refresh })
 </script>
 
 <style scoped>
-/* .ant-table-striped :deep(.ant-table-body) {
-  max-height: calc(100vh - 360px) !important;
-} */
 .ant-table-striped :deep(.ant-table-pagination.ant-pagination) {
   margin: 16px 0 0 0 !important;
 }
