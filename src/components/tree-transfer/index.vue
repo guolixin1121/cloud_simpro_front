@@ -104,13 +104,15 @@ const treeTransfer = (data: any): TreeDataItem[] => {
 const isExceedLimit = ref(false)
 const onChecked = (_checkedKeys: any, e: any) => {
   isExceedLimit.value = false
-  const checked = e.checkedNodes.filter((item: any) => item.isTag)
-  if(checked.length > 9) {
+  let checkedNodes = e.checkedNodes.filter((item: any) => item.isTag)
+  checkedNodes = getSelectedNode(checkedNodes)
+  if(checkedNodes.length > 9) {
     isExceedLimit.value = true
     checkedKeys.value = [...checkedKeysBackup.value]
   } else {
     hasDefaultValue = false
-    selectedNodes.value = checked //e.checkedNodes.filter((item: any) => item.isTag)
+    selectedNodes.value = checkedNodes
+    checkedKeys.value = selectedNodes.value.map((d: any) => d.value)
     emits('update:targetKeys', selectedNodes.value)
   }
 }
@@ -128,6 +130,48 @@ const onRemoveAll = () => {
   selectedNodes.value = []
   checkedKeys.value = []
   emits('update:targetKeys', [])
+}
+
+
+// 有数据筛选，所以要保留筛选前选中的数据
+const getSelectedNode = (currentCheckedNodes: any[]) => {  
+  // const currentCheckedNodes = currentCheckedKeys.map((key: string) => treeData.value.find((d: any) => d.value == key))
+  // 合并前后选中的数据
+  const allCheckedNodes = [...selectedNodes.value]
+  currentCheckedNodes.forEach((node: any) => {
+    const isExist = allCheckedNodes.find((d: any) => d.value === node.value)
+    if(!isExist)  {
+      allCheckedNodes.push(node)
+    }
+  })
+  // 计算最终选中的数据
+  const checkedNodes = [] as any
+  allCheckedNodes.forEach((node: any) => {
+    const inLeftDataSource = isInTree(node.value)
+    const inCurrentCheckedNodes = currentCheckedNodes.find((d: any) => d.value === node.value)
+    if(!inLeftDataSource) {     // 不在左侧数据源中，则为旧的选中数据，需要保留
+      checkedNodes.push(node)
+    } else if(inCurrentCheckedNodes) { // 在当前选中数据中
+      console.log(2)
+      checkedNodes.push(node)
+    }
+  })
+  console.log(checkedNodes.length, 'length')
+  return checkedNodes
+}
+
+const isInTree = (value: string, dataSource: any [] = treeData.value): boolean => {
+  let isExist = false
+  for(let i = 0; i < dataSource.length; i++) {
+    const item = dataSource[i]
+    if(item.value === value) {
+      isExist = true
+    } else {
+      isExist = isInTree(value, item.children)
+    }
+    if(isExist) break
+  }
+  return isExist
 }
 
 watch(checkedKeys, () => checkedKeysBackup.value = [...checkedKeys.value])
@@ -176,7 +220,7 @@ watchOnce(
 const onScroll = (e: any) => {
   if (props.api && !isAllLoaded) {
     const { target } = e
-    if (target.scrollTop + target.offsetHeight >= target.scrollHeight && !loading.value) {
+    if (target.scrollTop + target.offsetHeight >= (target.scrollHeight - 50) && !loading.value) {
       page = page + 1
       getOptions()
     }

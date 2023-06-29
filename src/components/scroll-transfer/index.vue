@@ -2,10 +2,6 @@
   <div class="ant-transfer">
     <a-form-item-rest>
       <div class="ant-transfer-list">
-        <!-- <a-checkbox 
-          v-model:checked="leftState.allChecked" 
-          :indeterminate="leftState.indeterminate"
-          @change="onCheckAllChange">{{ titles[0] }}</a-checkbox> -->
         <div class="flex justify-between">
           <span>{{ titles[0] }}</span>
           <!-- <span class=" text-blue cursor-pointer" @click="() => onCheckedAll()">全选</span> -->
@@ -43,7 +39,6 @@
 </template>
 <script setup lang="ts">
 import "ant-design-vue/es/transfer/style/index.css"
-
 import { watchOnce } from '@vueuse/core'
 
 const emits = defineEmits(['update:targetKeys'])
@@ -66,7 +61,6 @@ const props = defineProps({
 
 const leftState = reactive({
   // allChecked: false,
-  indeterminate: false,
   searchText: '',
   checkedKeys: [],
   dataSource: [] as any
@@ -114,16 +108,18 @@ const onSearch = (input: string) => {
 const onScroll = (e: any) => {
   if (props.api && !isAllLoaded.value) {
     const { target } = e
-    if (target.scrollTop + target.offsetHeight >= target.scrollHeight && !loading.value) {
+    if (target.scrollTop + target.offsetHeight >= (target.scrollHeight - 50) && !loading.value) {
       page = page + 1
       getOptions()
     }
   }
 }
 
-const onChecked = (data: any) => {
+const onChecked = (checkedKeys: any) => {
   hasDefaultValue = false
-  selectedNodes.value = data.map((val: any) => leftState.dataSource.find((d: any) => d.value == val))
+  selectedNodes.value = getSelectedNode(checkedKeys)
+  leftState.checkedKeys = selectedNodes.value.map((item: any) => item.value)
+  // selectedNodes.value = checkedKeys.map((val: any) => leftState.dataSource.find((d: any) => d.value == val))
   emits('update:targetKeys', selectedNodes.value)
 }
 
@@ -145,6 +141,31 @@ const onRemoveAll = () => {
 //   leftState.checkedKeys = selectedNodes.value.map((item: any) => item.value)
 //   emits('update:targetKeys', selectedNodes.value)
 // }
+
+// 有数据筛选，所以要保留筛选前选中的数据
+const getSelectedNode = (currentCheckedKeys: string[]) => {  
+  const currentCheckedNodes = currentCheckedKeys.map((key: string) => leftState.dataSource.find((d: any) => d.value == key))
+  // 合并前后选中的数据
+  const allCheckedNodes = [...selectedNodes.value]
+  currentCheckedNodes.forEach((node: any) => {
+    const isExist = allCheckedNodes.find((d: any) => d.value === node.value)
+    if(!isExist)  {
+      allCheckedNodes.push(node)
+    }
+  })
+  // 计算最终选中的数据
+  const checkedNodes = [] as any
+  allCheckedNodes.forEach((node: any) => {
+    const inLeftDataSource = leftState.dataSource.find((d: any) => d.value === node.value)
+    const inCurrentCheckedNodes = currentCheckedNodes.find((d: any) => d.value === node.value)
+    if(!inLeftDataSource) {     // 不在左侧数据源中，则为旧的选中数据，需要保留
+      checkedNodes.push(node)
+    } else if(inCurrentCheckedNodes) { // 在当前选中数据中
+      checkedNodes.push(node)
+    }
+  })
+  return checkedNodes
+}
 
 // 仅用于编辑时的回写
 let hasDefaultValue = true
