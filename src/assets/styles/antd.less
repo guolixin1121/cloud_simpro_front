@@ -2,6 +2,7 @@
   height: 100%;
 
   .ant-layout-header {
+    height: 60px;
     padding-left: 20px;
     padding-right: 30px;
   }
@@ -43,10 +44,9 @@
     .ant-menu-title-content {
       height: 100%;
     }
-  }
-  
-  .ant-menu-submenu-title {
-    margin: 0;
+    .ant-menu-submenu-title {
+      margin: 0;
+    }
   }
 
   .ant-menu-item-selected {
@@ -78,10 +78,6 @@
 }
 
 .ant-table {
-//   .ant-table-body {
-//     overflow-y:hidden !important;
-//   }
-
   .ant-table-thead > tr > th {
     background: #f2f3f5;
   }
@@ -142,6 +138,12 @@
       // position: relative;
       // left: -12px;
     }
+  }
+}
+
+.ant-modal {
+  .ant-modal-body {
+    color: @text-gray-color
   }
 }
 

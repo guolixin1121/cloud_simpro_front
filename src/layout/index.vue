@@ -74,6 +74,6 @@ function getParentKeys(list: Permission[], keys: string[] = []): string[] | bool
   background-size: contain;
   background-position: center;
   width: 240px;
-  height: 40px;
+  height: 36px;
 }
 </style>

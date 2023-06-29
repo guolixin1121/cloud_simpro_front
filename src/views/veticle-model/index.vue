@@ -8,7 +8,7 @@
         <a-checkbox v-model:checked="checked" class="table_model" @change="() => selectModel(checked)">我的模型</a-checkbox>
       </div>
       <div>
-        <a-button class="mr-2" v-if="user.hasPermission('add')" @click="() => (importVisible = true)">导入外部模型</a-button>
+        <a-button style="margin-right: 16px" v-if="user.hasPermission('add')" @click="() => (importVisible = true)">导入外部模型</a-button>
         <a-button type="primary" v-if="user.hasPermission('add')" @click="() => add('')">创建模型</a-button>
       </div>
     </div>

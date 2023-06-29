@@ -20,7 +20,7 @@
         </div>
       </div>
       <!-- 右侧 -->
-      <div class="ant-transfer-list ml-1">
+      <div class="ant-transfer-list">
         <div class="ant-transfer-list-title mt-1 flex justify-between">
           <span>{{ titles[1] }}</span>
           <span class=" text-blue cursor-pointer" @click="onRemoveAll">删除全部</span>
@@ -212,7 +212,7 @@ getOptions()
 }
 .transfer-checked-item {
   line-height: 20px;
-  padding: 6px 2px;
+  padding: 6px 12px;
   word-break: break-all;
   &:hover {
     background: #f2f3f5;

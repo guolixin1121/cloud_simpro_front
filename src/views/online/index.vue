@@ -129,6 +129,7 @@ const quitVnc = async () => {
       line-height: 30px;
       background: #E6E7EB;
       text-align: center;
+      color: #60656E
     }
     &-logo {
       text-align: center;

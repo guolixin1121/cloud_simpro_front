@@ -37,8 +37,8 @@
       ></component>
     </a-form-item>
     <a-form-item>
-      <a-button type="primary" @click="search">搜索</a-button>
-      <a-button @click="reset" class="ml-2">重置</a-button>
+      <a-button @click="reset" class="mr-2">重置</a-button>
+      <a-button type="primary" @click="search">查询</a-button>
     </a-form-item>
   </a-form>
 </template>

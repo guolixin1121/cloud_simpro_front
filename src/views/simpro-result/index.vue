@@ -16,7 +16,7 @@
         :scroll="{ x: 1800, y: 'auto' }">
         <template #bodyCell="{column, record}">
           <template v-if="column.dataIndex == 'is_passed'">
-            {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '不通过' }}
+            {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '未通过' }}
           </template>
           <template v-if="column.dataIndex == 'status'">
             <span :class="'task-status task-status--' + record.status">{{ getResultStatus(record.status) }}</span>

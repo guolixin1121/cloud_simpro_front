@@ -1,7 +1,7 @@
 <template>
   <div class="flex ant-transfer">
     <div class="ant-transfer-list">
-      <div class="flex justify-between">
+      <div class="flex justify-between ant-transfer-list-title">
         <span>{{ titles[0] }}</span>
         <!-- <span class=" text-blue cursor-pointer" @click="onCheckedAll">全选</span> -->
       </div>
@@ -22,15 +22,15 @@
       </div>
     </div>
 
-    <div class="ant-transfer-list ml-1">
+    <div class="ant-transfer-list">
       <div class="ant-transfer-list-title mt-1 flex justify-between">
         <span>{{ titles[1] }}({{ selectedNodes?.length }})</span>
         <span class=" text-blue cursor-pointer" @click="onRemoveAll">删除全部</span>
       </div>
-      <ul style="height: calc(100% - 40px); overflow: auto">
+      <ul style="height: calc(100% - 40px); overflow: auto;">
         <li class="transfer-checked-item flex justify-between items-center"
           v-for="item in selectedNodes" :key="item.key">
-          {{ item.title }}
+          <span class="label">{{ item.title }}</span>
           <svg-icon icon="close" class=" text-gray-400 cursor-pointer"
             @click="onRemove(item)"/>
         </li>
@@ -156,7 +156,6 @@ const getSelectedNode = (currentCheckedNodes: any[]) => {
       checkedNodes.push(node)
     }
   })
-  console.log(checkedNodes.length, 'length')
   return checkedNodes
 }
 
@@ -237,8 +236,11 @@ getOptions()
 }
 .transfer-checked-item {
   line-height: 20px;
-  padding: 6px 2px;
-  word-break: break-all;
+  padding: 6px 12px;
+  // word-break: break-all;
+  .label {
+    white-space: break-spaces;
+  }
   &:hover {
     background: #f2f3f5;
   }
