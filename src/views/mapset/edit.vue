@@ -40,7 +40,7 @@
           <ch-input v-model:value="formState.name" :maxlength="32"
             placeholder="请输入地图集名称"></ch-input>
         </a-form-item>
-        <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
+        <a-form-item :wrapper-col="{ style: { paddingLeft: '100px' }}">
           <a-button type="primary" html-type="submit" :loading="loading">
             {{ actionText }}
           </a-button>

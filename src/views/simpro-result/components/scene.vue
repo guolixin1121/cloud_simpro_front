@@ -8,10 +8,10 @@
       <template #bodyCell="{column, record}">
         <template v-if="column.dataIndex == 'actions'">
           <a class="text-blue mr-2"
-            v-if="record.b_file" 
+            v-if="record.b_file && record.baidu_id" 
             @click="replay(record)">回放</a>
           <a class="text-blue"
-            v-if="record.obs_report"
+            v-if="record.obs_report && record.baidu_id"
             :href="'/api/simpro/resource/' + record.obs_report" target="_blank" >查看报告</a>
         </template>
       </template>

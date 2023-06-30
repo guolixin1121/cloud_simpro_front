@@ -48,7 +48,7 @@
             :titles="['可选标签', '选中标签']"
           ></tree-transfer>
         </a-form-item>
-        <a-form-item class=" ml-8" :wrapper-col="{ style: { paddingLeft: '100px' }}">
+        <a-form-item :wrapper-col="{ style: { paddingLeft: '100px' }}">
           <a-button type="primary" html-type="submit" :loading="loading">
             {{ actionText }}
           </a-button>

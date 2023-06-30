@@ -45,7 +45,7 @@
       <a-form-item label="算法描述" name="desc">
         <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入描述" :maxlength="255" rows="10"></ch-input>
       </a-form-item>
-      <a-form-item class="ml-8" :wrapper-col="{ style: { paddingLeft: '90px' } }">
+      <a-form-item :wrapper-col="{ style: { paddingLeft: '90px' } }">
           <a-button class="mr-2" type="primary" html-type="submit" :loading="loading">
             {{ isAdd ? '创建' : '修改' }}
           </a-button>
