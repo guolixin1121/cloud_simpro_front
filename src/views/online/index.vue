@@ -55,7 +55,7 @@ const loadList = async () => {
       username: item.username,
       status: item.status == 'free' ? 0 : 1
     }))
-  } finally {
+  } catch {
     loading.value = false
   }
 }
@@ -123,6 +123,7 @@ const quitVnc = async () => {
     height: 308px;
     margin-right: 28px;
     margin-top: 18px;
+    border-radius: 4px;
     border: 1px solid #E8EAEC;
     &-header {
       height: 30px;

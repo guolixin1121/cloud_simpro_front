@@ -16,7 +16,15 @@
         :scroll="{ x: 1800, y: 'auto' }">
         <template #bodyCell="{column, record}">
           <template v-if="column.dataIndex == 'is_passed'">
-            {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '未通过' }}
+            <div class="flex items-center">
+              {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '未通过' }}
+              <a-popover title="" trigger="hover" v-if="record.is_passed == false">
+                <template #content>
+                  {{ record.errmsg }}
+                </template>
+                <img class="ml-1 cursor-pointer" src="../../assets/images/tip.png" />
+              </a-popover>
+            </div>
           </template>
           <template v-if="column.dataIndex == 'status'">
             <span :class="'task-status task-status--' + record.status">{{ getResultStatus(record.status) }}</span>
@@ -49,7 +57,7 @@ const formItems = ref<SearchFormItem[]>([
   { label: '仿真结果', key: 'is_passed', type: 'select', 
     options: [
       {label: '全部', value: ''},
-      {label: '不通过', value: '0'},
+      {label: '未通过', value: '0'},
       {label: '通过', value: '1'},
       {label: '--', value: '2'}
     ],
