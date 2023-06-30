@@ -199,11 +199,10 @@ const onCellClick = ({ row, $event }: any) => {
  // 叶子节点和展开收起图标，不做处理
  const nodeName = $event.target.nodeName
  if(nodeName == 'I' || nodeName == 'A' ) return
+ table.value.toggleTreeExpand(row)
+ expandRowKeys.value = table.value.getTreeExpandRecords()
   if(row.isLeaf) {
     emits('select', row)
-  } else {
-    table.value.toggleTreeExpand(row)
-    expandRowKeys.value = table.value.getTreeExpandRecords()
   }
 }
 
@@ -239,7 +238,7 @@ onMounted(() => {
 
     const tableScrollBody = document.getElementsByClassName('vxe-table--body-wrapper')?.[0] as HTMLElement
     if (tableScrollBody) {
-      tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + 280) + 'px)'
+      tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + 290) + 'px)'
     }
     
     const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement

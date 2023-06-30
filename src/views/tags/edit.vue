@@ -87,7 +87,7 @@
             ><span>{{ formState.create_user }}</span></a-form-item
           >
         </template>
-        <a-form-item v-if="!isView" class="ml-8" :wrapper-col="{ style: { paddingLeft: '100px' } }">
+        <a-form-item v-if="!isView" :wrapper-col="{ style: { paddingLeft: '100px' } }">
           <a-button class="mr-2" type="primary" html-type="submit" :loading="loading">
             {{ isAdd ? '创建' : '修改' }}
           </a-button>

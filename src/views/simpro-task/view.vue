@@ -38,21 +38,21 @@
       </a-form-item>
 
       <a-form-item label="传感器">
-        <ul class="view-list">
+        <ul class="view-list"  v-if="formState.sensors_detail?.length > 0">
           <li class="mb-2" v-for="item in formState.sensors_detail as any" :key="item">
             {{ item.name }}
           </li>
         </ul>
       </a-form-item>
       <a-form-item label="评测指标">
-        <ul class="view-list">
+        <ul class="view-list"  v-if="formState.kpi_detail?.length > 0">
           <li class="mb-2" v-for="item in formState.kpi_detail as any" :key="item">
             {{ item.name }}
           </li>
         </ul>
       </a-form-item>
       <a-form-item label="场景">
-        <ul class="view-list">
+        <ul class="view-list"  v-if="formState.scenes_detail?.length > 0">
           <li class="mb-2" v-for="item in formState.scenes_detail as any" :key="item">
             {{ item.adsName }}
           </li>

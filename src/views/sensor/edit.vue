@@ -55,9 +55,9 @@
           ><span>{{ formState.create_user }}</span></a-form-item
         >
       </template> -->
-      <a-form-item v-if="!isView" class="ml-8" :wrapper-col="{ style: { paddingLeft: '90px' } }">
+      <a-form-item v-if="!isView" :wrapper-col="{ style: { paddingLeft: '90px' } }">
         <a-button type="primary" html-type="submit" :loading="loading">
-          {{ isAdd ? '新建' : '修改' }}
+          {{ isAdd ? '上传' : '修改' }}
         </a-button>
         <a-button @click="goback" class="ml-2">取消</a-button>
       </a-form-item>

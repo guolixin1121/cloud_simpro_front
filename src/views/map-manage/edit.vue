@@ -66,11 +66,14 @@
             :fieldNames="{ label: 'display_name', value: 'name' }"
             :titles="['可选标签', '选中标签']"
           ></tree-transfer>
-          <ul class="view-list" v-else>
-            <li class="mb-2" v-for="item in formState.labels as any" :key="item.name">
-              {{ item.display_name }}
-            </li>
-          </ul>
+          <template v-else>
+            <ul class="view-list" v-if="formState.labels?.length > 0">
+              <li class="mb-2" v-for="item in formState.labels as any" :key="item.name">
+                {{ item.display_name }}
+              </li>
+            </ul>
+            <span v-else>无</span>
+          </template>
         </a-form-item>
         <a-form-item label="描述" name="desc">
           <ch-input v-if="!isView" type="textarea" v-model:value="formState.desc" placeholder="请输入描述" :maxlength="255" rows="10"></ch-input>
@@ -86,7 +89,7 @@
             ><span>{{ formState.create_user }}</span></a-form-item
           >
         </template>
-        <a-form-item v-if="!isView" class="ml-8" :wrapper-col="{ style: { paddingLeft: '100px' } }">
+        <a-form-item v-if="!isView" :wrapper-col="{ style: { paddingLeft: '100px' } }">
           <a-button type="primary" html-type="submit" :loading="loading">
             {{ isAdd ? '上传' : '修改' }}
           </a-button>

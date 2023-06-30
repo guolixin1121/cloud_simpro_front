@@ -27,7 +27,7 @@
         <span>{{ titles[1] }}({{ selectedNodes?.length }})</span>
         <span class=" text-blue cursor-pointer" @click="onRemoveAll">删除全部</span>
       </div>
-      <ul style="height: calc(100% - 40px); overflow: auto;">
+      <ul class="scroll-box" style="height: calc(100% - 40px); overflow: auto;">
         <li class="transfer-checked-item flex justify-between items-center"
           v-for="item in selectedNodes" :key="item.key">
           <span class="label">{{ item.title }}</span>
@@ -236,7 +236,9 @@ getOptions()
 .transfer-checked-item {
   line-height: 20px;
   padding: 6px 12px;
-  // word-break: break-all;
+  word-break: break-all;
+  white-space:break-spaces;
+  margin-top: 2px;
   .label {
     white-space: break-spaces;
   }

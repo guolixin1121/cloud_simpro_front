@@ -26,12 +26,12 @@
           :api="baseApi.vehicle.getList"
           :query="{is_share: 1}" placeholder="请选择主车模型"></scroll-select>
       </a-form-item>
-      <a-form-item label="驾驶员模型" name="driver">
+      <!-- <a-form-item label="驾驶员模型" name="driver">
         <scroll-select v-model:value="formState.driver"
           :disabled="formState.is_in_ring === '0'"
           :api="baseApi.vehicle.getDrivers"
           placeholder="请选择驾驶员模型"></scroll-select>
-      </a-form-item>
+      </a-form-item> -->
      <a-form-item label="动力学横向控制方式" name="vehicle_horizontal" :rules="[{ required: true, message: '请选择横向控制方式' }]">
         <a-select v-model:value="formState.vehicle_horizontal" :options="HorizontalOptions" placeholder="请选择横向控制方式"></a-select>
       </a-form-item>
@@ -74,7 +74,7 @@
           :titles="['可选场景', '选中场景']"></scroll-transfer>
       </a-form-item> 
        <a-form-item label="场景" v-if="!isAdd">
-        <ul class="view-list">
+        <ul class="view-list" v-if="formState.scenes?.length > 0">
           <li class="mb-2" v-for="item in formState.scenes as any" :key="item">
             {{ item.adsName }}
           </li>

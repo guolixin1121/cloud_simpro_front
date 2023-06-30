@@ -22,11 +22,12 @@
         {{ formState.map_name + '_' + formState.map_version_num }}
       </a-form-item>
       <a-form-item label="标签">
-        <ul class="view-list">
+        <ul class="view-list" v-if="formState.labels_detail?.length > 0">
           <li class="mb-2" v-for="item in formState.labels_detail as any" :key="item">
             {{ item.display_name }}
           </li>
         </ul>
+        <span v-else>无</span>
       </a-form-item>
       <a-form-item label="创建时间">
         {{ formState.create_time }}

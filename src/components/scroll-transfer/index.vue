@@ -9,7 +9,7 @@
         <a-input-search class="my-2" placeholder="请输入搜索内容" allowClear 
           @search="onSearch"
           @pressEnter="onSearch"></a-input-search>
-        <div style="height: calc(100% - 40px); overflow: auto" 
+        <div class="scroll-box" style="height: calc(100% - 40px); overflow: auto" 
           @scroll="(e: Event) => onScroll(e)">
           <a-checkbox-group 
             v-model:value="leftState.checkedKeys" 
@@ -25,7 +25,7 @@
           <span>{{ titles[1] }}</span>
           <span class=" text-blue cursor-pointer" @click="onRemoveAll">删除全部</span>
         </div>
-        <ul style="height: calc(100% - 40px); overflow: auto">
+        <ul class="scroll-box" style="height: calc(100% - 40px); overflow: auto">
           <li class="transfer-checked-item flex justify-between items-center"
             v-for="item in selectedNodes" :key="item.value">
             {{ item.label }}
@@ -214,6 +214,8 @@ getOptions()
   line-height: 20px;
   padding: 6px 12px;
   word-break: break-all;
+  white-space:break-spaces;
+  margin-top: 2px;
   &:hover {
     background: #f2f3f5;
   }
