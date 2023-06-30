@@ -30,6 +30,7 @@
 
 <script setup lang="ts">
 import { TaskSourceOptions, getTaskSourceName } from '@/utils/dict'
+import { SStorage } from '@/utils/storage';
 /****** api */
 const user = store.user
 const currentApi = api.task
@@ -64,13 +65,16 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 180,
+    width: 150,
     actions: {
       运行: {
         validator: (data: RObject) => (['运行', '等待'].indexOf(data.status) === -1 && user.user.username == data.create_user),
         handler: async (data: RObject) => await currentApi.run({ template_id: data.id })
       },
-      仿真结果: (data: RObject) => router.push('/simpro-result/?templateId=' + data.number),
+      仿真结果: (data: RObject) => {
+        SStorage.remove('simpro-result')
+        router.push('/simpro-result/?templateId=' + data.number)
+      },
       查看: (data: RObject) => router.push('/simpro-task/view/' + data.id),
       编辑: (data: RObject) => router.push('/simpro-task/edit/' + data.id),
       删除: async ({ id }: RObject) => await currentApi.delete(id)

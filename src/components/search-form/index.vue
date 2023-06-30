@@ -70,7 +70,9 @@ const emits = defineEmits(['search'])
 
 // form state, and get default value from props
 const formState = reactive<Record<string, any>>({})
-props.items.forEach((item: any) => (formState[item.key] = item.defaultValue))
+props.items.forEach((item: any) => {
+  formState[item.key] = item.defaultValue
+})
 
 // 获取缓存的搜索项
 // 从菜单进入时设置?menu来清空缓存

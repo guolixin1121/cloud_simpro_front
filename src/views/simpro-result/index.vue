@@ -28,10 +28,11 @@
 </template>
 
 <script setup lang="ts">
-import router from '@/router';
 import { TaskSourceOptions, getTaskSourceName, getResultStatus } from '@/utils/dict'
 
 const templateId = useRoute().query.templateId as string
+console.log(templateId, 'templateid')
+const router = useRouter()
 /****** api */
 const currentApi = api.result
 
@@ -62,8 +63,8 @@ const onSearch = (data: Query) => (query.value = data)
 /****** 表格区域 */
 const table = ref()
 const columns = [
-  { title: '任务ID', dataIndex: 'template_number', width: 150 },
-  { title: '仿真任务名称', dataIndex: 'name', width: 150, ellipsis: true },
+  { title: '任务ID', dataIndex: 'template_number', width: 130 },
+  { title: '仿真任务名称', dataIndex: 'name', width: 200, ellipsis: true },
   { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90 },
   { title: '主车模型', dataIndex: 'vehicle_detail', width: 150, ellipsis: true },
   { title: '仿真算法', dataIndex: 'algorithm_detail', width: 150, ellipsis: true },

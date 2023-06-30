@@ -32,7 +32,9 @@
           <span class="title">场景列表</span>
           <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
         </div>
-        <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }"/>
+        <a-spin :spinning="loading">
+          <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }"/>
+        </a-spin>
       </div>
     </div>
   </div>
@@ -41,6 +43,7 @@
 <script setup lang="ts">
 import { SceneSourceOptions, getSceneSourceName } from '@/utils/dict'
 import { SStorage } from '@/utils/storage'
+import { gotoVnc } from '@/utils/vnc';
 
 const currentApi = api.scene
 const sceneApi = api.scenesets
@@ -71,6 +74,7 @@ const onTableSearch = (data: Query) => {
 }
 
 /****** 表格区域 */
+const loading = ref(false)
 const router = useRouter()
 const columns = [
   { title: '场景ID', dataIndex: 'id', width: 150 },
@@ -85,10 +89,11 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 150,
+    width: 200,
     actions: {
       查看: (data: any) => router.push('/scene/view/' + data.id),
       编辑: (data: any) => router.push('/scene/edit/' + data.id),
+      编辑场景: (data: any) => gotoVnc({ action: 1, value: data.id }, loading),
       删除: async ({ id }: { id: string }) => await currentApi.delete(id)
     }
   }

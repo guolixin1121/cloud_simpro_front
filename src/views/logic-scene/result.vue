@@ -39,8 +39,8 @@ const listApi = () => currentApi.getResultList({ source: 0, logic_scene_id: id }
 
 /****** 表格区域 */
 const columns = [
-  { title: '逻辑场景名称', dataIndex: 'name', width: 200, ellipsis: true },
-  { title: '场景集名称', dataIndex: 'result_scene_set' },
+  { title: '逻辑场景名称', dataIndex: 'name', width: 180, ellipsis: true },
+  { title: '场景集名称', dataIndex: 'result_scene_set', width: 250, ellipsis: true  },
   { title: '关联场景数', dataIndex: 'scene_count', width: 150, ellipsis: true },
   { title: '开始时间', dataIndex: 'running_time' },
   { title: '结束时间', dataIndex: 'finish_time' },

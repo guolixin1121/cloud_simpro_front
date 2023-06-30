@@ -130,7 +130,7 @@ onMounted(() => {
   // 表格内容区域
   const tableScrollBody = document.getElementsByClassName('ant-table-body')?.[0] as HTMLElement
   if (tableScrollBody) {
-    tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + 280) + 'px)'
+    tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + 300) + 'px)'
   }
 
   const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement

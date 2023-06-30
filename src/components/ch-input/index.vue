@@ -35,7 +35,6 @@ const { value, maxlength } = toRefs(props)
 const inputChange = (e: { target: { value: any } }) => {
   const count = getCnWordTotal(e.target.value)
   const totalLength = count * 2 + (e.target.value.length - count)
-  console.log(totalLength)
   if ( totalLength <= +maxlength.value) {
     emits('update:value', e.target.value)
   }

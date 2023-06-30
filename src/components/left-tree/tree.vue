@@ -102,7 +102,6 @@ const recursion = (val: any[]) => {
 function loadData(node: BaseTreeNode, callback: (children: TreeNodeOptions[]) => void) {
   if(props.api) {
     props.api({parent: node.key}).then((res: any) => {
-      console.log(node)
       const results = recursion(res.results)
       node.children = results
       callback(results)

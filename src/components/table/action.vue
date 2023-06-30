@@ -1,5 +1,5 @@
 <template>
-  <template v-for="key in Object.keys(scope.column.actions)" :key="key">
+  <template v-for="key in Object.keys(scope.column.actions || [])" :key="key">
     <template v-if="hasPermission(scope, key)">
       <!-- 删除列 -->
       <a-popconfirm
@@ -48,7 +48,7 @@ const hasPermission = (scope: RObject, key: string) => {
   if(action.validator) {
     permission = permission && action.validator(data)
   }
-
+  
   return permission
 }
 const onHandler = async ({column, record}: RObject, key: string) => {

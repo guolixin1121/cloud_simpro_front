@@ -152,7 +152,6 @@ const getSelectedNode = (currentCheckedNodes: any[]) => {
     if(!inLeftDataSource) {     // 不在左侧数据源中，则为旧的选中数据，需要保留
       checkedNodes.push(node)
     } else if(inCurrentCheckedNodes) { // 在当前选中数据中
-      console.log(2)
       checkedNodes.push(node)
     }
   })
