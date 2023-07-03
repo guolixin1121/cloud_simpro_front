@@ -1,9 +1,11 @@
 
 let count = 0
-export const gotoVnc = async (data: any, loading: any) => {
+let callback: Function | undefined = undefined
+export const gotoVnc = async (data: any, loading: any, cb?: Function) => {
   try {
     count = 0
     loading.value = true
+    callback = cb
     const res = await api.vnc.enterVnc(data)
     loopVnc(res.id, loading)
   } catch {
@@ -23,6 +25,7 @@ const loopVnc = async (id: String, loading: any) => {
     if(res.status == 1 && res.address) {
       loading.value = false
       window.open(res.address, 'vnc')
+      callback && callback()
     } else {
       setTimeout(() => loopVnc(id, loading), 1000)
     }

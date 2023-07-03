@@ -29,9 +29,10 @@
   <!-- 默认列 -->
   <!-- hover时加tooltip -->
   <template v-else-if="dataIndex != 'actions'">
-    <a-tooltip :title="dataValue">
+    <a-tooltip v-if="column.ellipsis" :title="dataValue" placement="topLeft">
       {{ dataValue }}
     </a-tooltip>
+    <span v-else>{{ dataValue }}</span>
   </template>
 </template>
 

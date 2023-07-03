@@ -6,7 +6,7 @@
         <li v-for="item in list" class="item" 
           :key="item.name" 
           :style="item.status ? 'cursor: default' : 'cursor: pointer'"
-          @click="() => gotoVnc(item)">
+          @click="() => enterVnc(item)">
             <div class="item-header">{{ item.name }}</div>
             <div class="item-title">
               <span style="font-weight: 600;">{{ item.username }}</span>
@@ -27,6 +27,8 @@
 </template>
 
 <script lang="ts" setup>
+import { gotoVnc } from '@/utils/vnc'
+
 const user = store.user.user
 const list = ref(
   // [
@@ -62,51 +64,29 @@ const loadList = async () => {
 loadList()
 
 // let newWindow: any
-const gotoVnc = ({status} : any) => {
+const enterVnc = ({status} : any) => {
   if(status == 1) return 
-  enterVnc()
-}
-
-let count = 0 // 当前连接次数，>8次时断开连接
-const enterVnc = async () => {
-  try {
-    count = 0
-    loading.value = true
-    let res = await api.vnc.enterVnc({ action: 0 })
-    loopVnc(res.id)
-  } catch {
-    loading.value = false
-  }
-}
-
-const loopVnc = async (id: String) => {
-  if(count >= 8) {
-    loading.value = false
-    message.info('连接服务器失败')
-    return
-  }
-  try {
-    count++
-    loading.value = true
-    const res = await api.vnc.checkVnc(id)
-    if(res.status == 1 && res.address) {
-      loading.value = false
-      window.open(res.address, 'vnc')
-      // newWindow = window.open(res.address, 'vnc')
-      loadList()
-    } else {
-      setTimeout(() => loopVnc(id), 1000)
-    }
-  } catch {
-    loading.value = false
-  }
+  gotoVnc({ action: 0 }, loading, loadList)
 }
 
 const quitVnc = async () => {
   try {
     loading.value = true
-    await api.vnc.exitVnc()
-    setTimeout(loadList, 1000)
+    const res = await api.vnc.exitVnc()
+    loopVncStatus(res.id)
+  } catch {
+    loading.value = false
+  }
+}
+
+const loopVncStatus = async (id: String) => {
+  try {
+    const res = await api.vnc.checkVnc(id)
+    if(res.status == 2) {
+      loadList()
+    } else {
+      setTimeout(() => loopVncStatus(id), 1000)
+    }
   } catch {
     loading.value = false
   }
