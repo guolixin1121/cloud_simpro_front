@@ -43,6 +43,7 @@
 <script setup lang="ts">
 import { isEmpty } from 'lodash'
 import Column from './column.vue'
+import { useSessionStorage } from '@vueuse/core';
 const props = defineProps({
   api: {
     type: Function,
@@ -68,7 +69,7 @@ const props = defineProps({
 const emits = defineEmits(['select'])
 const rowSelection: any = useAttrs()['row-selection'] || {}
 
-const current = ref(1)
+const current = useSessionStorage('table-page', 1)
 const loading = ref(false)
 const data = ref()
 const run = async (query: any, slient = false) => {
@@ -106,15 +107,20 @@ const onSelectChange = (selectedKeys: string[]) => {
 }
 
 // 页面切换 event handler
-const onChange = (params: any) => (current.value = params.current)
+const onChange = (params: any) => {
+  current.value = params.current
+  run({ ...props.query, page: current.value, size })
+}
 watch(
   () => props.query,
   newVal => {
-    current.value = 1
-    run({ ...newVal, page: 1, size })
+    if(props.query?.page) {
+      current.value = props.query.page
+    }
+    run({ ...newVal, page: current.value, size })
   }
 )
-watch(current, newVal => run({ ...props.query, page: newVal, size }))
+// watch(current, newVal => run({ ...props.query, page: newVal, size }))
 
 // 动态计算表格父容器高度
 onMounted(() => {

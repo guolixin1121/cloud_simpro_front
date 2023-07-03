@@ -102,7 +102,7 @@ onMounted(() => {
   }
   
   if(!props.manual || storage) {
-    emitSearch()
+    emitSearch(false)
   }
 })
 
@@ -115,7 +115,8 @@ const reset = () => {
   emitSearch()
 }
 
-const emitSearch = () => {
+// fromFirstPage: 初始化时从缓存中取查询参数, 点击按钮查询时从首页开始
+const emitSearch = (fromFirstPage: boolean = true) => {
   const formValues = { ...formState }
   // '创建时间'字段转化
   let start_date = formatDate(formValues.create_time?.[0], 'YYYY-MM-DD')
@@ -132,7 +133,11 @@ const emitSearch = () => {
       delete formValues[prop]
     }
   }
-  emits('search', { ...formValues, start_date, end_date })
+  const query = { ...formValues, start_date, end_date, page: null }
+  if(fromFirstPage) {
+    query.page = 1 as any
+  }
+  emits('search', query)
   // 缓存搜索项
   SStorage.set(routeName, formState)
 }

@@ -16,7 +16,7 @@
             </div>
             <div class="item-logo"><img style="width: 140px" src="@/assets/images/logo-big.png" /></div>
             <div class="item-name">{{ item.name }}</div>
-            <div class="item-button text-right mt-2 mr-4" v-if="user.username === item.username">
+            <div class="item-button text-center mt-2" v-if="user.username === item.username">
               <a-button class="mr-2"  @click="quitVnc">释放</a-button>
               <a-button type="primary" @click="enterVnc">进入</a-button>
             </div>
@@ -134,7 +134,7 @@ const quitVnc = async () => {
     }
     &-logo {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 10px;
       margin-bottom: 20px;
     }
     &-name {
