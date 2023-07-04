@@ -39,15 +39,17 @@
           </template>
         </a-tree>
     </div>
-    <div class=" float-right mt-2">
-      <svg-icon icon="add" class="cursor-pointer mr-1" @click="onClick('add')"></svg-icon>
+    <div class="float-right mt-2">
+      <svg-icon icon="add" class="cursor-pointer mr-1" @click="onButtonClick('add')"></svg-icon>
       <svg-icon icon="edit" class="cursor-pointer mr-1"
         :class="isEmpty(selectedNode) || !selectedNode.isLeaf ? 'icon--disable' : ''"
-         @click="onClick('edit')"></svg-icon>
+         @click="onButtonClick('edit')"></svg-icon>
       <svg-icon icon="delete" class="cursor-pointer mr-1" 
         :class="isEmpty(selectedNode) ? 'icon--disable' : ''"
-        @click="onClick('delete')"></svg-icon>
+        @click="onButtonClick('delete')"></svg-icon>
     </div>
+
+    <div class="resize-handler" @mousedown="onResizeStart"></div>
   </div>
 
   <a-modal v-model:visible="showDeleteConfirm" 
@@ -103,21 +105,44 @@ if(query.value?.name) {
   searchValue.value = query.value.name
 }
 
-const onSearch = () => {
-  searchQuery.value = { ...props.query, name: searchValue.value,}
-  delete searchQuery.value.baidu_id
-}
-
 onMounted(() => {
   searchQuery.value = {...props.query, name: searchValue.value}
   selectedRowKeys.value = [selectedNode.value?.id]
   if(!isEmpty(selectedNode.value) && selectedNode.value.isLeaf) {
     emits('select', selectedNode.value)
   }
+  document.addEventListener('mouseup', onResizeEnd)
+  document.addEventListener('mousemove', onResize)
 })
 
+// 更改树宽度
+let startX = 0
+let startSize = 0
+let isMouseDown = false
+const onResizeStart = (event: any) => {
+  const treeDom = document.querySelector('.left-tree') as HTMLElement
+  startSize = treeDom.clientWidth
+  startX = event.clientX
+  isMouseDown = true
+}
+const onResize = (event: any) => {
+  if(!isMouseDown) return
+
+  const minWidth = 235
+  const maxWidth = 600 
+  let newWidth = startSize + ( event.clientX - startX)
+  if(newWidth < minWidth || newWidth > maxWidth) return
+
+  const treeDom = document.querySelector('.left-tree') as HTMLElement
+  const rightDom = document.querySelector('.main-right') as HTMLElement
+  treeDom.style.width = newWidth + 'px'
+  rightDom.style.width = `calc(100% - ${newWidth}px - 16px)`
+}
+const onResizeEnd = () => isMouseDown = false
+
+// 底部按钮的click
 const showDeleteConfirm = ref(false)
-const onClick = (type: string) => {
+const onButtonClick = (type: string) => {
   if(type != 'add' && isEmpty(selectedNode.value)) return
 
   const { buttonHandlers } = props
@@ -196,7 +221,14 @@ const loadData = async (treeNode: any) => {
   })
 }
 
-// 选中的树节点
+const onSearch = () => {
+  searchQuery.value = { ...props.query, name: searchValue.value,}
+  delete searchQuery.value.baidu_id
+}
+
+watch(searchQuery, refresh)
+
+// 节点选中：展开或触发外部选中事件
 const selectedNode = useSessionStorage(routeName + ': tree-select', {} as any)
 const selectedRowKeys = ref()
 
@@ -221,18 +253,31 @@ const onSelect = (keys: string[], {selected, selectedNodes}: any) => {
   selectedRowKeys.value = [node.id]
 }
 
+// 节点展开
 const expandRowKeys = useSessionStorage<string[]>(routeName + ': tree-expand', [])
-const onExpand = (expandedKeys: string[]) => {
-  expandRowKeys.value = expandedKeys
-}
-
-watch(searchQuery, () => {
-  refresh()
-})
+const onExpand = (expandedKeys: string[]) => expandRowKeys.value = expandedKeys
 </script>
 
 <style lang="less" scoped>
-.icon--disable {
-  color: #d9d9d9
+@import "../../assets/styles/variable.less";
+.left-tree {
+  position: relative;
+
+  .icon--disable {
+    color: #d9d9d9
+  }
+
+  .resize-handler {
+    cursor: e-resize;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 16px;
+    height: 100%;
+    // &:hover {
+    //   background-color: @blue-color;
+    //   opacity: 0.5;
+    // }
+  }
 }
 </style>
