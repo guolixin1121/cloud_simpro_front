@@ -102,8 +102,8 @@ const columns = [
 const scenesetLoading = ref(false)
 const onTreeSelect = async (sceneset: any) => {
   selectedSceneset.value = sceneset
-  // table
-  query.value = { ...query.value, scene_set: sceneset?.id }
+  // 切换地图集，地图列表page重置为1
+  query.value = { ...query.value, scene_set: sceneset?.id, page: 1 }
   // 场景集信息
   if(sceneset?.isLeaf) {
     scenesetLoading.value = true

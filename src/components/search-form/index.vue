@@ -79,9 +79,9 @@ props.items.forEach((item: any) => {
 const route = useRoute()
 const routeName = route.path.replaceAll('/', '')
 onMounted(() => {
-  const storage = SStorage.get(routeName)
   const clear = route.query.clear === null
   if (!clear) {
+    const storage = SStorage.get(routeName)
     if(storage) {
       props.items.forEach((item: any) => {
         const key = item.key
@@ -97,12 +97,10 @@ onMounted(() => {
         }
       })
     }
+    emitSearch(false)
   } else {
     SStorage.clear()
-  }
-  
-  if(!props.manual || storage) {
-    emitSearch(false)
+    !props.manual && emitSearch()
   }
 })
 

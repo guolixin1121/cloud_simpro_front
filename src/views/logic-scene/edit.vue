@@ -22,25 +22,27 @@
           {{ formState.mapName + '_' + formState.mapVersion }}
         </a-form-item>
         <a-form-item label="关联地图" v-if="isAdd" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
-          <div class="flex justify-between">
-            <tree-select 
-              style="width: 33%;"
-              v-model:value="formState.mapCatalog" 
-              :api="baseApi.maps.getMapCatalog" 
-              placeholder="请选择地图目录" 
-              @change="onMapCateogryChanged"></tree-select>
-            <scroll-select v-model:value="formState.map"
-              placeholder="请选择地图"
-              label-in-value
-              :api="getMaps"
-              style="width: 33%;"
-              @change="onMapChanged"></scroll-select>
-            <scroll-select v-model:value="formState.mapVersion" 
-              placeholder="请选择地图版本"
-              :api="getMapVersions"
-              style="width: 33%;"
-              :fieldNames="{ label: 'mapVersion', value: 'mapId'}"></scroll-select>
-          </div>
+          <a-form-item-rest>
+            <div class="flex justify-between">
+              <tree-select 
+                style="width: 33%;"
+                v-model:value="formState.mapCatalog" 
+                :api="baseApi.maps.getMapCatalog" 
+                placeholder="请选择地图目录" 
+                @change="onMapCateogryChanged"></tree-select>
+              <scroll-select v-model:value="formState.map"
+                placeholder="请选择地图"
+                label-in-value
+                :api="getMaps"
+                style="width: 33%;"
+                @change="onMapChanged"></scroll-select>
+              <scroll-select v-model:value="formState.mapVersion" 
+                placeholder="请选择地图版本"
+                :api="getMapVersions"
+                style="width: 33%;"
+                :fieldNames="{ label: 'mapVersion', value: 'mapId'}"></scroll-select>
+            </div>
+          </a-form-item-rest>
         </a-form-item>
         <a-form-item label="场景文件" name="xosc_scene" :rules="[{ required: isAdd, message: '请上传场景文件'}]">
           <single-upload v-if="isAdd" accept=".xosc" v-model:value="formState.xosc_scene"></single-upload>
