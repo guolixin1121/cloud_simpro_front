@@ -95,7 +95,7 @@ export function formatDate(date, formatter) {
 }
 
 // 判断字符串中中文个数
-export function getCnWordTotal(str) {
+export function getWordLength(str) {
   if(!str) return 0
   let total = 0
   if (str.length > 0) {
@@ -106,15 +106,16 @@ export function getCnWordTotal(str) {
       }
     }
   }
-
-  return total
+  
+  return total * 2 + (str.length - total)
 }
 
 export const checkChName = (str, maxLength = 32, minLength = 2) => {
   if(!str) return Promise.resolve()
   
-  const chLength = getCnWordTotal(str)
-  const length = chLength * 2 + (str.length - chLength)
+  // const chLength = getCnWordTotal(str)
+  // const length = chLength * 2 + (str.length - chLength)
+  const length = getWordLength(str)
 
   if(length < minLength || length > maxLength) {
     return Promise.reject(`名称长度为${minLength}到${maxLength}位`)

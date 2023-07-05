@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCnWordTotal } from '@/utils/tools'
+import { getWordLength } from '@/utils/tools'
 const props = defineProps({
   value: {
     type: String,
@@ -33,8 +33,9 @@ const props = defineProps({
 const emits = defineEmits(['change', 'update:value'])
 const { value, maxlength } = toRefs(props)
 const inputChange = (e: { target: { value: any } }) => {
-  const count = getCnWordTotal(e.target.value)
-  const totalLength = count * 2 + (e.target.value.length - count)
+  // const count = getCnWordTotal(e.target.value)
+  // const totalLength = count * 2 + (e.target.value.length - count)
+  const totalLength = getWordLength(e.target.value)
   if ( totalLength <= +maxlength.value) {
     emits('update:value', e.target.value)
   }

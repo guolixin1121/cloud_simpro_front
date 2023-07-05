@@ -144,10 +144,12 @@ const onResizeEnd = () => isMouseDown = false
 const showDeleteConfirm = ref(false)
 const onButtonClick = (type: string) => {
   if(type != 'add' && isEmpty(selectedNode.value)) return
-
+  
   const { buttonHandlers } = props
-  if(type == 'add') buttonHandlers?.add()
-  if(type == 'edit') buttonHandlers?.edit(selectedNode.value)
+  if(!buttonHandlers) return
+
+  if(type == 'add') buttonHandlers.add()
+  if(type == 'edit' && selectedNode.value.isLeaf) buttonHandlers.edit(selectedNode.value)
   if(type == 'delete') showDeleteConfirm.value = true
 }
 
