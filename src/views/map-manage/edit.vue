@@ -103,7 +103,7 @@
 <script setup lang="ts">
 import { formatDate } from '@/utils/tools'
 import { MapManageSourceOptions, getMapManageSourceOptions } from '@/utils/dict'
-import { checkChName, isEmpty } from '@/utils/tools';
+import { checkChName } from '@/utils/tools';
 
 // import { SStorage } from '@/utils/storage'
 const mapCatalog = store.catalog.mapCatalog as any
@@ -119,7 +119,7 @@ const mapApi = api.maps
 const formState = reactive<any>({
   id: '',
   name: '',
-  catalog: !isEmpty(mapCatalog) ? { label: mapCatalog?.name, value: mapCatalog?.id} : null,
+  catalog: mapCatalog.id != '' ? { label: mapCatalog?.name, value: mapCatalog?.id} : null,
   xodr: null,
   desc: '',
   latestVersion: '',

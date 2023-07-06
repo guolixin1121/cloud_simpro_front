@@ -69,9 +69,12 @@ const props = defineProps({
 const emits = defineEmits(['select'])
 const rowSelection: any = useAttrs()['row-selection'] || {}
 
-const current = useSessionStorage('table-page', 1)
+const route = useRoute()
+// const routeName = route.path.replaceAll('/', '')
+const current = useSessionStorage( route.path + ':table-page', 1)
 const loading = ref(false)
 const data = ref()
+
 const run = async (query: any, slient = false) => {
   try {  
     if(!slient) {
@@ -83,9 +86,6 @@ const run = async (query: any, slient = false) => {
     loading.value = false
   }
 }
-// const { data, loading, run } = useRequest(props.api as Service<{ results: []; count: number; datalist: [] }, any>, {
-//   manual: true
-// })
 const dataSource: any = computed(() => {
   const results = data.value?.results || data.value?.datalist
   addKeysToData(results)
@@ -151,7 +151,8 @@ const refresh = (option: any) => {
   // 判断是否还剩一条，剩一条删除成功后请求上一页
   const slient = option?.slient
   if (dataSource?.value?.length === 1) {
-    run({ ...props.query, page: current.value > 1 ? current.value - 1 : current.value, size }, slient)
+    const page = current.value > 1 ? current.value - 1 : current.value
+    run({ ...props.query, page, size }, slient)
     return
   }
   run({ ...props.query, page: current.value, size }, slient)
@@ -169,7 +170,6 @@ const addKeysToData = (data: any) => {
     }
   })
 }
-// refresh()
 defineExpose({ refresh })
 </script>
 

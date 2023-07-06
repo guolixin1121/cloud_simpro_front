@@ -29,29 +29,37 @@
             placeholder="请输入场景名称"></ch-input>
           <span v-else>{{ formState.adsName }}</span>
         </a-form-item>
+        <!-- <a-form-item
+          label="场景名称"
+          name="adsNameList"
+          :rules="[
+            { required: true, message: '请输入场景名称' }
+          ]"
+        >
+          <multi-select v-if="isAdd" v-model:value="formState.adsNameList"></multi-select>
+          <span v-else>{{ formState.adsName }}</span>
+        </a-form-item>
         <a-form-item v-if="!isAdd" label="关联地图" name="mapVersion">
           <span>{{ (formState.mapName || '') + '_' + (formState.mapVersion || '') }}</span>
-        </a-form-item>
+        </a-form-item> -->
         <a-form-item v-if="isAdd" label="关联地图" name="mapVersionAdd" :rules="[{ required: isAdd, message: '请选择关联地图' }]">
           <a-form-item-rest>
-            <div class="flex justify-between items-center">
-              <div class="flex justify-between w-full">
-                <tree-select v-model:value="formState.mapCatalog" 
-                  :api="baseApi.maps.getMapCatalog" 
-                  placeholder="请选择地图目录" @change="onMapCateogryChanged"
-                  style="width: 33%;"></tree-select>
-                <scroll-select v-model:value="formState.map"
-                  placeholder="请选择地图"
-                  label-in-value
-                  :api="getMaps"
-                  style="width: 33%;"
-                  @change="onMapChanged"></scroll-select>
-                <scroll-select v-model:value="formState.mapVersionAdd" 
-                  placeholder="请选择地图版本"
-                  :api="getMapVersions"
-                  style="width: 33%;"
-                  :fieldNames="{ label: 'mapVersion', value: 'mapVersion'}"></scroll-select>
-              </div>
+            <div class="flex justify-between w-full">
+              <tree-select v-model:value="formState.mapCatalog" 
+                :api="baseApi.maps.getMapCatalog" 
+                placeholder="请选择地图目录" @change="onMapCateogryChanged"
+                style="width: 33%;"></tree-select>
+              <scroll-select v-model:value="formState.map"
+                placeholder="请选择地图"
+                label-in-value
+                :api="getMaps"
+                style="width: 33%;"
+                @change="onMapChanged"></scroll-select>
+              <scroll-select v-model:value="formState.mapVersionAdd" 
+                placeholder="请选择地图版本"
+                :api="getMapVersions"
+                style="width: 33%;"
+                :fieldNames="{ label: 'mapVersion', value: 'mapVersion'}"></scroll-select>
             </div>
           </a-form-item-rest>
         </a-form-item>
@@ -94,6 +102,7 @@ const currentApi = baseApi.scene
 
 const formState = reactive({
   adsName: '',
+  // adsNameList: '', // 多级目录
   mapCatalog: undefined,
   map: undefined,
   mapVersionAdd: undefined,

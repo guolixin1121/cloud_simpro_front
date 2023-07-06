@@ -270,7 +270,7 @@ const onExpand = (expandedKeys: string[]) => expandRowKeys.value = expandedKeys
   }
 
   .resize-handler {
-    cursor: e-resize;
+    cursor: col-resize;
     position: absolute;
     right: 0;
     top: 0;

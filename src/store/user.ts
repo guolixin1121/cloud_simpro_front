@@ -3,7 +3,7 @@ import { LStorage } from '@/utils/storage'
 import router from '../router'
 import { getQueryParmas } from '@/utils/tools'
 
-export const useUserStore = defineStore('use', () => {
+export const useUserStore = defineStore('user', () => {
   const user = ref()
   const token = ref()
   const userApi = api.user

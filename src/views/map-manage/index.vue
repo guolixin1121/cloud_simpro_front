@@ -22,7 +22,7 @@
             <template v-if="column.dataIndex == 'versionCount'">
               <a-tooltip :title="record.versionCount">
                 <a class="text-blue inline-block w-full"
-                  @click="() => router.push({ path: '/map-manage/version/' + record.id, query: { preRoute, name: record.name } })"
+                  @click="gotoVersion(record)"
                 >
                   {{ record.versionCount }}
                 </a>
@@ -36,6 +36,8 @@
 </template>
 
 <script setup lang="ts">
+import { SStorage } from '@/utils/storage';
+
 /****** api */
 const user = store.user
 const mapsApi = api.maps
@@ -53,7 +55,6 @@ const onTableSearch = (data: Query) => {
 
 /****** 表格区域 */
 const router = useRouter()
-const preRoute = router.currentRoute.value.path
 const columns = [
   { title: '地图ID', dataIndex: 'id', width: 60 },
   { title: '地图名称', dataIndex: 'name', width: 150 },
@@ -70,6 +71,13 @@ const columns = [
     }
   }
 ]
+
+const preRoute = router.currentRoute.value.path
+const gotoVersion = (record: any) => {
+  const versionUrlPath = '/map-manage/version/' + record.id
+  SStorage.remove(versionUrlPath + ':table-page')
+  router.push({ path: versionUrlPath, query: { preRoute, name: record.name } })
+}
 
 const onTreeSelect = (val: any) => {
   selectedMapset.value = val

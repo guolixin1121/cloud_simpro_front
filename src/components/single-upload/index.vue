@@ -24,14 +24,17 @@ const onFileChange = (info: UploadChangeParam) => {
   const fileType: any = file.name.replace(/.+\./, '')
   if (props.accept?.indexOf(fileType) === -1) {
     message.error(`仅支持${props.accept}格式文件`)
+    fileList.value = fileList.value ? fileList.value : null
     return
   }
   if(getWordLength(file.name) > 160) {
-    message.warning('文件名长度不能超过160')
+    message.warning('文件名加后缀，总长度不能超过160')
+    fileList.value = fileList.value ? fileList.value : null
     return
   }
   if(file.size && (file.size / 1024 / 1024 > 100)) {
     message.warning('文件不能大于100M')
+    fileList.value = fileList.value ? fileList.value : null
     return
   }
   // 限定只上传一个文件

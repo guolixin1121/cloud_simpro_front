@@ -27,24 +27,22 @@ const props = defineProps({
   type: {
     type: String, // 'input' | 'textarea',
     default: 'input'
+  },
+  filter: {
+    type: RegExp
   }
 } as any)
 
 const emits = defineEmits(['change', 'update:value'])
 const { value, maxlength } = toRefs(props)
 const inputChange = (e: { target: { value: any } }) => {
-  // const count = getCnWordTotal(e.target.value)
-  // const totalLength = count * 2 + (e.target.value.length - count)
-  const totalLength = getWordLength(e.target.value)
+  let value = e.target.value
+  if(props.filter) {
+    value = value.replace(props.filter, '')
+  }
+  const totalLength = getWordLength(value)
   if ( totalLength <= +maxlength.value) {
-    emits('update:value', e.target.value)
+    emits('update:value', value)
   }
 }
-
-// watch(
-//   () => value,
-//   newVal => {
-//     value.value = newVal
-//   }
-// )
 </script>

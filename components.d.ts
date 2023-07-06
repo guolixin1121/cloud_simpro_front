@@ -47,6 +47,8 @@ declare module '@vue/runtime-core' {
     Chart: typeof import('./src/components/chart/index.vue')['default']
     ChInput: typeof import('./src/components/ch-input/index.vue')['default']
     LeftTree: typeof import('./src/components/left-tree/index.vue')['default']
+    MultiName: typeof import('./src/components/multi-name/index.vue')['default']
+    MultiSelect: typeof import('./src/components/multi-select/index.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     ScrollSelect: typeof import('./src/components/scroll-select/index.vue')['default']
