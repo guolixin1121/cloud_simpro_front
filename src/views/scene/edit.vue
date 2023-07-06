@@ -42,8 +42,8 @@
         <a-form-item v-if="!isAdd" label="关联地图" name="mapVersion">
           <span>{{ (formState.mapName || '') + '_' + (formState.mapVersion || '') }}</span>
         </a-form-item> -->
-        <a-form-item v-if="isAdd" label="关联地图" name="mapVersionAdd" :rules="[{ required: isAdd, message: '请选择关联地图' }]">
-          <a-form-item-rest>
+        <a-form-item label="关联地图" name="mapVersionAdd" :rules="[{ required: isAdd, message: '请选择关联地图' }]">
+          <a-form-item-rest v-if="isAdd" >
             <div class="flex justify-between w-full">
               <tree-select v-model:value="formState.mapCatalog" 
                 :api="baseApi.maps.getMapCatalog" 
@@ -62,6 +62,9 @@
                 :fieldNames="{ label: 'mapVersion', value: 'mapVersion'}"></scroll-select>
             </div>
           </a-form-item-rest>
+          <div v-else>
+            {{ formState.mapName + '_' + formState.mapVersion }}
+          </div>
         </a-form-item>
         <a-form-item label="场景文件" name="xosc" :rules="[{ required: isAdd, message: '请上传场景文件' }]">
           <single-upload v-if="isAdd" accept=".xosc" v-model:value="formState.xosc"></single-upload>

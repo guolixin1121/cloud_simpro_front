@@ -203,7 +203,7 @@ let hasDefaultValue = true
 watchOnce(
   () => props.targetKeys,
   () => {
-    if(hasDefaultValue) {
+    if(hasDefaultValue && props.targetKeys) {
       hasDefaultValue = false
       const { label, value } = props.fieldNames
       selectedNodes.value = props.targetKeys?.map((item: any) => ({

@@ -18,6 +18,7 @@ import { OptionProps } from 'ant-design-vue/lib/select'
 import type { PropType } from 'vue'
 import { watchOnce } from '@vueuse/core'
 import { throttle} from 'lodash'
+import { isEmpty } from '@/utils/tools'
 
 const props = defineProps({
   value: {
@@ -32,7 +33,7 @@ const props = defineProps({
   },
   fieldNames: {
     type: Object as PropType<FieldNames>,
-    default: () => ({ label: 'name', value: 'id', apiField: '', sublabel: '' })
+    default: () => ({ label: 'name', value: 'id', apiField: ''})
   },
   maxlength: {
     type: Number,
@@ -95,12 +96,20 @@ const onFocus = () => {
   // }
 }
 
-// 双向同步数据
+// 为了实现选中个数的限制
+// 双向同步数据, 
 const innerValue = ref()
 watch(() => props.value,
  () => {
    innerValue.value = props.value
+   if(isEmpty(props.value)) {
+    // 重置时清空数据并初始化下拉选项
+    searchValue = ''
+    initOptions()
+    getOptions()
+   }
  })
+
 const onChange = () => {
   hasDefaultValue.value = false  // 值从父组件传过来时触发getDefaultOptions，内部的更改则不触发
   // 最多选择多少个
@@ -130,11 +139,11 @@ const getOptions = async () => {
 const getDefaultOptions = async () => {
   if (props.api) {
     // 统一转换成多选，方便处理
-    const values = Array.isArray(attrs.value) ? attrs.value : [attrs.value || '']
-    values.forEach(async (data: string) => {
-      const isExistInOptions = options.value.find((item: any) => item.value == data)
+    const values = Array.isArray(props.value) ? props.value : [props.value || '']
+    values.forEach(async (value: String) => {
+      const isExistInOptions = options.value.find((item: any) => item.value == value)
       if (props.api && !isExistInOptions) {
-        const res = await props.api({ [props.fieldNames.value]: data })
+        const res = await props.api({ [props.fieldNames.value]: value })
         options.value.push(...transformOption(res))
       }
     })
@@ -142,10 +151,10 @@ const getDefaultOptions = async () => {
 }
 
 const transformOption = (response: RObject) => {
-  const { label, value, sublabel, apiField = '' } = props.fieldNames
+  const { label, value, apiField = '' } = props.fieldNames
   const results = response.results || response.datalist || response[apiField] || response
   let newOptions = results.map((item: any) => ({
-    label: item[label] + (sublabel ? ('_' + item[sublabel]) : ''),
+    label: item[label],
     value: item[value]
   }))
   // 过滤掉列表中已存在的项
@@ -157,7 +166,7 @@ const transformOption = (response: RObject) => {
 watchOnce(
   () => props.value, 
   () => {
-    if(hasDefaultValue.value) {
+    if(hasDefaultValue.value && props.value) {
       getDefaultOptions()
     }
   }

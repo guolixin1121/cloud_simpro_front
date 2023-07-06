@@ -114,6 +114,8 @@ const onChange = (params: any) => {
 watch(
   () => props.query,
   newVal => {
+    // page默认使用session里缓存的数据，
+    // 除非明确指定 
     if(props.query?.page) {
       current.value = props.query.page
     }

@@ -109,6 +109,7 @@ const form = ref()
 const search = () => emitSearch()
 const reset = () => {
   // form.value.resetFields()
+  // 页面跳转带默认参数的查询，重置时希望能置空而非默认参数，通过resetValue来设置
   props.items.forEach((item: any) => (formState[item.key] = item.resetValue != undefined ? item.resetValue : item.defaultValue))
   emitSearch()
 }

@@ -52,7 +52,7 @@
      :total="page.total"
      :show-total="(total: number) => `共 ${total} 条`"
      :page-size="page.size"
-     v-model:current="page.current"
+     v-model:current="current"
      @change="onPageChange"
    />
  </div>
@@ -97,7 +97,11 @@ const props = defineProps({
 
 watch(() => props.query, 
  () => {
-    page.current = 1
+    // page默认使用session里缓存的数据，
+    // 除非明确指定 
+    if(props.query?.page) {
+      current.value = props.query.page
+    }
     refresh()
  }, {
   deep: true
@@ -105,7 +109,8 @@ watch(() => props.query,
 
 const route = useRoute()
 const routeName = route.path.replaceAll('/', '')
-const expandRowKeys = useSessionStorage<number[]>(routeName + ': tree-expand', [])
+const expandRowKeys = useSessionStorage<number[]>(routeName + ':tree-expand', [])
+const current = useSessionStorage(routeName + ':table-page', 1)
 const table = ref()
 const loading = ref(false)
 const tableData = ref([])
@@ -113,7 +118,7 @@ const tableData = ref([])
 // 分页
 const page = reactive({
  size: 10,
- current: 1,
+ current: current.value,
  total: 0,
  hasPagination: false // 是否需要分页
 })
@@ -148,7 +153,7 @@ const fetchTableData = async (params: any = {}) => {
  const res = await props.api({
    ...props.query, 
    ...params,
-   page: page.current, 
+   page: current.value, 
    size: page.size
  } )
  results.total = res.count
@@ -270,7 +275,7 @@ const hasPermission = (column: RObject, row: RObject, key: string) => {
 }
 
 const onPageChange = (val: number) => {
- page.current = val
+ current.value = val
  refresh()
 }
 
