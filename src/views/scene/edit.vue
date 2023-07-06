@@ -17,7 +17,7 @@
             ></tree-select-async>
             <span v-else>{{ formState.scenesetsName }}</span>
         </a-form-item>
-        <a-form-item
+        <!-- <a-form-item
           label="场景名称"
           name="adsName"
           :rules="[
@@ -28,20 +28,20 @@
           <ch-input v-model:value="formState.adsName" :maxlength="160" v-if="isAdd"
             placeholder="请输入场景名称"></ch-input>
           <span v-else>{{ formState.adsName }}</span>
-        </a-form-item>
-        <!-- <a-form-item
+        </a-form-item> -->
+        <a-form-item
           label="场景名称"
-          name="adsNameList"
+          name="adsName"
           :rules="[
             { required: true, message: '请输入场景名称' }
           ]"
         >
-          <multi-select v-if="isAdd" v-model:value="formState.adsNameList"></multi-select>
+          <multi-select v-if="isAdd" v-model:value="formState.adsName"></multi-select>
           <span v-else>{{ formState.adsName }}</span>
         </a-form-item>
         <a-form-item v-if="!isAdd" label="关联地图" name="mapVersion">
           <span>{{ (formState.mapName || '') + '_' + (formState.mapVersion || '') }}</span>
-        </a-form-item> -->
+        </a-form-item>
         <a-form-item label="关联地图" name="mapVersionAdd" :rules="[{ required: isAdd, message: '请选择关联地图' }]">
           <a-form-item-rest v-if="isAdd" >
             <div class="flex justify-between w-full">
@@ -91,7 +91,7 @@
 </template>
 
 <script setup lang="ts">
-import { checkChName } from '@/utils/tools';
+// import { checkChName } from '@/utils/tools';
 
 const route = useRoute()
 const { id } = route.params
@@ -105,7 +105,7 @@ const currentApi = baseApi.scene
 
 const formState = reactive({
   adsName: '',
-  // adsNameList: '', // 多级目录
+  adsNameList: '', // 多级目录
   mapCatalog: undefined,
   map: undefined,
   mapVersionAdd: undefined,

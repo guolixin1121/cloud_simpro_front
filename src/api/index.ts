@@ -41,6 +41,7 @@ export const scene = defineApi({
 })()
 
 export const logicScene = defineApi({
+  getCatalog: { url: '/simpro/logic_scenes/catalog/', method: 'get'},
   getList: { url: '/simpro/logic_scenes/', method: 'get' },
   get: { url: '/simpro/logic_scenes/{sid}/', method: 'get' },
   delete: { url: '/simpro/logic_scenes/{sid}/', method: 'delete' },

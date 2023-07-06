@@ -80,7 +80,8 @@ const route = useRoute()
 const routeName = route.path.replaceAll('/', '')
 onMounted(() => {
   const clear = route.query.clear === null
-  if (!clear) {
+  const isBrowserBack = window.history.state.forward // 是否是浏览器回退
+  if (!clear || isBrowserBack) {
     const storage = SStorage.get(routeName)
     if(storage) {
       props.items.forEach((item: any) => {

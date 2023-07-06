@@ -8,7 +8,7 @@
         :options="options[index-1]"
         @change="(value: string) => handleSelectChange(index - 1, value)"></scroll-select>
     </div>
-    <ch-input v-model:value="inputName" :maxlength="20" :filter="'_'" placeholder="场景名最多16位，不包含下划线"></ch-input>
+    <ch-input v-model:value="inputName" :maxlength="20" :filter="'_'" placeholder="场景名最多16位，不支持下划线"></ch-input>
   </a-form-item-rest>
 </template>
 
@@ -31,29 +31,40 @@ const handleSelectChange = async (index: number, value: string) => {
   for(let i = index + 1; i < count; i++) {
     names.value[i] = null as any
   }
+  // 更新下一级下拉数据
   if(index < count - 1) {
-    // 更新下一级下拉数据
-    options.value[index+1] = await getChildOptions(value)
-  } else {
-    // 最后一个下拉时emits
-    emitsFullName()
+    options.value[index+1] = await getChildOptions(value, index)
+  }
+  emitsFullName()
+}
+const init = async () => {
+  try {
+  options.value[0] = await getChildOptions()
+  } catch {
+    console.log('error')
   }
 }
-const init = async () => options.value[0] = await getChildOptions('')
 
-const getChildOptions = async (parent: string) => {
-  const res = await api.scenesets.getList({version: 2, parent})
-  return res.results.map((item: any) => ({
-    label: item.id,
-    value: item.id
+const getChildOptions = async (parent?: string, pLevel?: number) => {
+  const params = pLevel == undefined ? null : {
+    first_catalog_value: names.value[0],
+    pre_level: pLevel,
+    pre_option: parent
+  }
+  const res = await api.logicScene.getCatalog(params)
+  return res.map((item: any) => ({
+    label: item.option_value,
+    value: item.option_value
   }))
 }
 
 const emitsFullName = () => {
   let isAllNameSelected = true
-  names.value.forEach((value: string) => isAllNameSelected = isAllNameSelected && !value )
-  if(isAllNameSelected && inputName) {
+  names.value.forEach((value: string) => isAllNameSelected = isAllNameSelected && (value != null) )
+  if(isAllNameSelected && inputName.value) {
     emits('update:value', names.value.join('_') + '_' + inputName.value)
+  } else {
+    emits('update:value', '')
   }
 }
 

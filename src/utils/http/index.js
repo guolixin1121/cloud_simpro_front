@@ -109,7 +109,7 @@ class AxiosRequest {
         })
         .then(res => {
           const { code, data = {}, msg, err } = res.data
-          if (code === 0) {
+          if (code === 0 || code === 200) {
             resolve(data)
           } else if (code === 100) {
             // token过期跳到登录页
