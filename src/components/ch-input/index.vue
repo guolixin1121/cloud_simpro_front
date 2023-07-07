@@ -3,6 +3,7 @@
   <a-input v-if="type == 'input'" 
     v-bind="$attrs"
     :value="value" 
+    allowClear
     @input="inputChange"
 ></a-input>
   <a-textarea v-if="type == 'textarea'" 

@@ -1,14 +1,20 @@
 <template>
   <a-form-item-rest>
-    <div class="mb-2">
-      <span>GAC</span>
-      <scroll-select 
-        v-for="index in count" :key="index"
-        v-model:value="names[index - 1]"
-        :options="options[index-1]"
-        @change="(value: string) => handleSelectChange(index - 1, value)"></scroll-select>
+    <div style="height: 22px; margin-top: 4px">{{ fullName }}</div>
+    <div class="select-list" v-for="row in 2" :key="row">
+      <div class="select-item"
+        v-for="col in count/2" :key="col">
+        <span class="select-item-label" :class="'label--' + col">{{ labels[index(row, col)] }}</span>
+        <scroll-select 
+          v-model:value="names[index(row, col)]"
+          :options="options[index(row, col)]"
+          @change="(value: string) => handleSelectChange(index(row, col), value)"></scroll-select>
+      </div> 
     </div>
-    <ch-input v-model:value="inputName" :maxlength="20" :filter="'_'" placeholder="场景名最多16位，不支持下划线"></ch-input>
+    <div class="input">
+      <span class="select-item-label label--1">自定义</span>
+      <ch-input style="width: 365px;" v-model:value="inputName" :maxlength="20" :filter="'_'" placeholder="最多16位，不支持下划线"></ch-input>
+    </div>
   </a-form-item-rest>
 </template>
 
@@ -22,7 +28,11 @@ defineProps({
 const emits = defineEmits(['update:value'])
 
 const count = 10
-const inputName = ref()
+const index = (row: number, col: number) => (row - 1 ) * (count / 2) + col - 1
+
+const labels = ['场景来源', '功能类型', '区域', '道路类型', '车道', '主车行为', '交通参与者类型', '交通参与行为', '环境', '其他']
+const inputName = ref('')
+const fullName = ref('GAC_')
 const names = ref<string[]>([])
 const options = ref<Record<string, string>[]>([])
 
@@ -39,7 +49,7 @@ const handleSelectChange = async (index: number, value: string) => {
 }
 const init = async () => {
   try {
-  options.value[0] = await getChildOptions()
+    options.value[0] = await getChildOptions()
   } catch {
     console.log('error')
   }
@@ -59,10 +69,12 @@ const getChildOptions = async (parent?: string, pLevel?: number) => {
 }
 
 const emitsFullName = () => {
+  const namesString = names.value.reduce((sum, name) => sum += name ? (name + '_') : '', '')
+  fullName.value = 'GAC_' + namesString + inputName.value
   let isAllNameSelected = true
   names.value.forEach((value: string) => isAllNameSelected = isAllNameSelected && (value != null) )
   if(isAllNameSelected && inputName.value) {
-    emits('update:value', names.value.join('_') + '_' + inputName.value)
+    emits('update:value', fullName.value)
   } else {
     emits('update:value', '')
   }
@@ -74,8 +86,41 @@ init()
 </script>
 
 <style lang="less" scoped>
-.ant-select {
-  width: 18%; 
-  margin-left: 4px
+.select-list {
+  display: flex;
+  margin-top: 16px;
+}
+.input {
+  margin-top: 16px;
+}
+.select-list, .input {
+  margin-left: -70px;
+}
+.select-item {
+  // width: 20%;
+  &-label {
+    color: #60656E;
+    margin-right: 8px;
+    display: inline-block;
+    text-align: right;
+  }
+
+  .ant-select {
+    width: 120px;
+    margin-right: 16px;
+  }
+}
+
+.label--1 {
+  width: 60px;
+}
+.label--2 {
+  width: 100px;
+}
+.label--3 {
+  width: 90px;
+}
+.label--4 {
+  width: 60px;
 }
 </style>

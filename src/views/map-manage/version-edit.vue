@@ -38,7 +38,7 @@
             ><span>{{ formState.importUserName }}</span></a-form-item
           >
         </template>
-        <a-form-item v-if="!isView" :wrapper-col="{ style: { paddingLeft: '80px' } }">
+        <a-form-item v-if="!isView" :wrapper-col="{ style: { paddingLeft: '90px' } }">
           <a-button class="mr-2" type="primary" html-type="submit" :loading="loading">
             {{ '修改' }}
           </a-button>

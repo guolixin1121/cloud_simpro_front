@@ -6,8 +6,8 @@
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading">
-      <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 55%" @finish="add">
-        <a-form-item
+      <a-form :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 55%" @finish="add">
+        <!-- <a-form-item
           label="场景名称"
           name="name"
           :rules="[
@@ -17,8 +17,8 @@
         >
           <ch-input v-if="isAdd" v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></ch-input>
           <span v-else>{{ formState.name }}</span>
-        </a-form-item>
-        <!-- <a-form-item
+        </a-form-item> -->
+        <a-form-item
           label="场景名称"
           name="name"
           :rules="[
@@ -27,7 +27,7 @@
         >
           <multi-select v-if="isAdd" v-model:value="formState.name"></multi-select>
           <span v-else>{{ formState.name }}</span>
-        </a-form-item> -->
+        </a-form-item>
         <a-form-item label="关联地图" v-if="!isAdd" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
           {{ formState.mapName + '_' + formState.mapVersion }}
         </a-form-item>
@@ -71,7 +71,7 @@
             :titles="['可选标签', '选中标签']"
           ></tree-transfer>
         </a-form-item>
-        <a-form-item :wrapper-col="{ style: { paddingLeft: '100px' }}">
+        <a-form-item :wrapper-col="{ style: { paddingLeft: '80px' }}">
           <a-button type="primary" html-type="submit" :loading="loading">
             {{ actionText }}
           </a-button>
@@ -83,11 +83,12 @@
 </template>
 
 <script setup lang="ts">
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { checkChName} from "@/utils/tools"
 
 const id = useRoute().params.id
 const isAdd = id === '0'
-const actionText = isAdd ? '创建' : '修改'
+const actionText = isAdd ? '上传' : '修改'
 const title =  actionText + '逻辑场景'
 
 const baseApi = api

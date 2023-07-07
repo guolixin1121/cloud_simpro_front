@@ -5,7 +5,7 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">算法详情</span>
-    <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 55%">
+    <a-form :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 55%">
       <a-form-item label="算法名称：" name="name">
         <span>{{ formState.name }}</span>
       </a-form-item>

@@ -5,7 +5,7 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">算法详情</span>
-    <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 55%" @finish="add">
+    <a-form :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 55%" @finish="add">
       <a-form-item
         label="算法名称"
         name="name"
@@ -45,7 +45,7 @@
       <a-form-item label="算法描述" name="desc">
         <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入描述" :maxlength="255" rows="10"></ch-input>
       </a-form-item>
-      <a-form-item :wrapper-col="{ style: { paddingLeft: '90px' } }">
+      <a-form-item :wrapper-col="{ style: { paddingLeft: '80px' } }">
           <a-button class="mr-2" type="primary" html-type="submit" :loading="loading">
             {{ isAdd ? '创建' : '修改' }}
           </a-button>
