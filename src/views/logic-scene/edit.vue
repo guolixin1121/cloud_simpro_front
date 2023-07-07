@@ -7,7 +7,7 @@
     <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading">
       <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 55%" @finish="add">
-        <!-- <a-form-item
+        <a-form-item
           label="场景名称"
           name="name"
           :rules="[
@@ -17,8 +17,8 @@
         >
           <ch-input v-if="isAdd" v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></ch-input>
           <span v-else>{{ formState.name }}</span>
-        </a-form-item> -->
-        <a-form-item
+        </a-form-item>
+        <!-- <a-form-item
           label="场景名称"
           name="name"
           :rules="[
@@ -27,7 +27,7 @@
         >
           <multi-select v-if="isAdd" v-model:value="formState.name"></multi-select>
           <span v-else>{{ formState.name }}</span>
-        </a-form-item>
+        </a-form-item> -->
         <a-form-item label="关联地图" v-if="!isAdd" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
           {{ formState.mapName + '_' + formState.mapVersion }}
         </a-form-item>
@@ -83,7 +83,7 @@
 </template>
 
 <script setup lang="ts">
-// import { checkChName} from "@/utils/tools"
+import { checkChName} from "@/utils/tools"
 
 const id = useRoute().params.id
 const isAdd = id === '0'

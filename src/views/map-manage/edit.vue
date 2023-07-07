@@ -76,7 +76,7 @@
           </template>
         </a-form-item>
         <a-form-item label="描述" name="desc">
-          <ch-input v-if="!isView" type="textarea" v-model:value="formState.desc" placeholder="请输入描述" :maxlength="255" rows="10"></ch-input>
+          <ch-input v-if="!isView" type="textarea" v-model:value="formState.desc" placeholder="请输入描述" :maxlength="160" rows="10"></ch-input>
           <template v-else>
             <span style="word-wrap: break-word;">{{ formState.desc }}</span>
           </template>

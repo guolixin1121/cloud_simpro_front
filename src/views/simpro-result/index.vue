@@ -18,16 +18,17 @@
           <template v-if="column.dataIndex == 'is_passed'">
             <div class="flex items-center">
               {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '未通过' }}
-              <a-popover title="" trigger="hover" v-if="record.is_passed == false">
-                <template #content>
-                  {{ record.errmsg }}
-                </template>
-                <img class="ml-1 cursor-pointer" src="../../assets/images/tip.png" />
-              </a-popover>
             </div>
           </template>
           <template v-if="column.dataIndex == 'status'">
             <span :class="'task-status task-status--' + record.status">{{ getResultStatus(record.status) }}</span>
+            <a-popover title="" trigger="hover" v-if="record.status == 4 && record.errmsg">
+              <!-- 异常时显示错误信息 -->
+              <template #content>
+                {{ record.errmsg }}
+              </template>
+              <img class="ml-1 cursor-pointer" src="../../assets/images/tip.png" />
+            </a-popover>
           </template>
         </template>
       </Table>
@@ -77,7 +78,7 @@ const columns = [
   { title: '主车模型', dataIndex: 'vehicle_detail', width: 150, ellipsis: true },
   { title: '仿真算法', dataIndex: 'algorithm_detail', width: 150, ellipsis: true },
   { title: '评测指标', dataIndex: 'kpi_detail', width: 180, ellipsis: true },
-  { title: '任务状态', dataIndex: 'status', width: 80 },
+  { title: '任务状态', dataIndex: 'status', width: 100 },
   { title: '任务结果', dataIndex: 'is_passed', width: 80 },
   { title: '完成时间', dataIndex: 'finish_time', width: 150 },
   { title: '所属用户', dataIndex: 'create_user', width: 100 },
