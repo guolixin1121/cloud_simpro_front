@@ -7,14 +7,15 @@
     </div>
 
     <a-spin :spinning="loading">
-      <Table 
+      <Table
         ref="table"
-        :api="currentApi.getList" 
-        :query="query" 
+        :api="currentApi.getList"
+        :query="query"
         :columns="columns"
         :isOnlyCreator="true"
-        :scroll="{ x: 1800, y: 'auto' }">
-        <template #bodyCell="{column, record}">
+        :scroll="{ x: 1800, y: 'auto' }"
+      >
+        <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'is_passed'">
             <div class="flex items-center">
               {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '未通过' }}
@@ -25,7 +26,7 @@
             <a-popover title="" trigger="hover" v-if="record.status == 4 && record.errmsg">
               <!-- 异常时显示错误信息 -->
               <template #content>
-                {{ record.errmsg }}
+                <span v-html="record.errmsg"></span>
               </template>
               <img class="ml-1 cursor-pointer" src="../../assets/images/tip.png" />
             </a-popover>
@@ -53,20 +54,31 @@ const isNotRunning = (status: number) => status !== 2
 type Query = Record<string, any>
 const query: Query = ref({})
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入仿真任务名称或任务ID', defaultValue: templateId, resetValue: '' },
+  {
+    label: '名称',
+    key: 'name',
+    type: 'input',
+    placeholder: '请输入仿真任务名称或任务ID',
+    defaultValue: templateId,
+    resetValue: ''
+  },
   { label: '任务来源', key: 'source', type: 'select', options: TaskSourceOptions, defaultValue: '' },
-  { label: '仿真结果', key: 'is_passed', type: 'select', 
+  {
+    label: '仿真结果',
+    key: 'is_passed',
+    type: 'select',
     options: [
-      {label: '全部', value: ''},
-      {label: '未通过', value: '0'},
-      {label: '通过', value: '1'},
-      {label: '--', value: '2'}
+      { label: '全部', value: '' },
+      { label: '未通过', value: '0' },
+      { label: '通过', value: '1' },
+      { label: '--', value: '2' }
     ],
     placeholder: '请选择仿真结果',
-    defaultValue: '' 
+    defaultValue: ''
   },
   { label: '仿真算法', key: 'algorithm', type: 'select', api: api.algorithm.getList, defaultValue: '' },
-  { label: '完成时间', key: 'create_time', type: 'range-picker' }])
+  { label: '完成时间', key: 'create_time', type: 'range-picker' }
+])
 const onSearch = (data: Query) => (query.value = data)
 
 /****** 表格区域 */
@@ -82,7 +94,11 @@ const columns = [
   { title: '任务结果', dataIndex: 'is_passed', width: 80 },
   { title: '完成时间', dataIndex: 'finish_time', width: 150 },
   { title: '所属用户', dataIndex: 'create_user', width: 100 },
-  { title: '操作', dataIndex: 'actions', fixed: 'right', width: 150, 
+  {
+    title: '操作',
+    dataIndex: 'actions',
+    fixed: 'right',
+    width: 150,
     actions: {
       停止: {
         validator: (data: any) => isRunOrWait(data.status),
@@ -92,7 +108,7 @@ const columns = [
         validator: (data: any) => isFinished(data.status),
         handler: (data: any) => router.push(`/simpro-result/view/${data.id}?u=${data.uuid}`)
       },
-      删除:  {
+      删除: {
         validator: (data: any) => isNotRunning(data.status),
         handler: async (data: any) => await currentApi.delete(data.id)
       }
@@ -104,12 +120,11 @@ const loading = ref(false)
 const onStop = async (record: RObject) => {
   try {
     loading.value = true
-    await api.task.cancel({sim_task_id: record.id})
+    await api.task.cancel({ sim_task_id: record.id })
     message.info('停止成功')
     table.value.refresh()
   } finally {
     loading.value = false
   }
 }
- </script>
- 
+</script>
