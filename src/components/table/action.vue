@@ -2,13 +2,7 @@
   <template v-for="key in Object.keys(scope.column.actions || [])" :key="key">
     <template v-if="hasPermission(scope, key)">
       <!-- 删除列 -->
-      <a-popconfirm
-        v-if="key === '删除'"
-        title="是否删除？"
-        ok-text="是"
-        cancel-text="否"
-        @confirm="onHandler(scope, key)"
-      >
+      <a-popconfirm v-if="key === '删除'" title="是否删除？" ok-text="是" cancel-text="否" @confirm="onHandler(scope, key)">
         <a class="text-blue mr-2">{{ key }}</a>
       </a-popconfirm>
       <!-- 其他列 -->
@@ -45,17 +39,17 @@ const hasPermission = (scope: RObject, key: string) => {
   }
 
   // 自定义的验证
-  if(action.validator) {
+  if (action.validator) {
     permission = permission && action.validator(data)
   }
-  
+
   return permission
 }
-const onHandler = async ({column, record}: RObject, key: string) => {
+const onHandler = async ({ column, record }: RObject, key: string) => {
   const action = column.actions[key]
   const handler = action.handler || action
   const isAync = handler.constructor.name === 'AsyncFunction'
-  if(isAync) {
+  if (isAync) {
     await handler(record)
     message.info(key + '成功')
     emits('refresh')

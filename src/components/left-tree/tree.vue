@@ -1,6 +1,6 @@
 <template>
   <div class="v-tree-containter">
-    <a-spin v-if="loading" class="v-spin"/>
+    <a-spin v-if="loading" class="v-spin" />
     <VirTree
       ref="virTree"
       :source="list"
@@ -15,7 +15,7 @@
 <script setup lang="tsx">
 import { TreeNodeOptions, BaseTreeNode, VirTree, NodeKey } from '@ysx-libs/vue-virtual-tree'
 import '../../../node_modules/@ysx-libs/vue-virtual-tree/dist/style.css'
-import { useSessionStorage } from '@vueuse/core';
+import { useSessionStorage } from '@vueuse/core'
 
 const props = defineProps({
   searchValue: {
@@ -37,7 +37,7 @@ const props = defineProps({
 const route = useRoute()
 const routeName = route.path.replaceAll('/', '')
 
-const list = useSessionStorage<any>( routeName + ': left-tree', [])
+const list = useSessionStorage<any>(routeName + ': left-tree', [])
 const defaultSelectedKey = useSessionStorage<NodeKey>(routeName + ': left-tree-select', '')
 const defaultExpandKeys = useSessionStorage<NodeKey[]>(routeName + ': left-tree-expand', [])
 
@@ -47,7 +47,7 @@ const loading = ref<boolean>(false)
 const virTree = ref<any>()
 
 const setDefaultValue = () => {
-  if(defaultSelectedKey.value) {
+  if (defaultSelectedKey.value) {
     const obj: any = {
       node: {
         key: defaultSelectedKey.value
@@ -100,8 +100,8 @@ const recursion = (val: any[]) => {
 }
 
 function loadData(node: BaseTreeNode, callback: (children: TreeNodeOptions[]) => void) {
-  if(props.api) {
-    props.api({parent: node.key}).then((res: any) => {
+  if (props.api) {
+    props.api({ parent: node.key }).then((res: any) => {
       const results = recursion(res.results)
       node.children = results
       callback(results)
@@ -113,7 +113,7 @@ const renderNode = (node: any) => {
   const wrapValue = node.name.replace(searchKey.value, `<span class="node-highlight">${searchKey.value}</span>`)
   return (
     <div
-      class={`node-title ${+ defaultSelectedKey.value == +node.key ? 'selected' : ''}`}
+      class={`node-title ${+defaultSelectedKey.value == +node.key ? 'selected' : ''}`}
       innerHTML={wrapValue}
       onClick={e => onclick(e, node)}
     ></div>
@@ -123,7 +123,7 @@ const renderNode = (node: any) => {
 // set selected node style
 const onclick = ({ target }: any, node: any, data = list.value) => {
   const selectedData = getSelectedData(node.key, data)
-  if(!selectedData.isLeaf) return
+  if (!selectedData.isLeaf) return
 
   const d = document.getElementsByClassName('node-title selected')
   if (d && d[0]) {
@@ -165,7 +165,7 @@ function searchData(origin: TreeNodeOptions[], keyword: string) {
 const toggleExpand = ({ node }: any) => {
   const expandedValues = defaultExpandKeys.value
   const isExpanded = expandedValues.find(item => item === node.key)
-  if(isExpanded) {
+  if (isExpanded) {
     defaultExpandKeys.value = expandedValues.filter(item => item != node.key)
   } else {
     defaultExpandKeys.value.push(node.key)
@@ -177,7 +177,7 @@ const toggleExpand = ({ node }: any) => {
 const selectChange = (val: any, data = list.value) => {
   if (!val || !val.node) return
 
-  const selectedData = getSelectedData(val.node.key, data)  
+  const selectedData = getSelectedData(val.node.key, data)
   if (selectedData.isLeaf) {
     defaultSelectedKey.value = +selectedData.id
     if (props.onSelect) props.onSelect(selectedData)
@@ -194,7 +194,7 @@ const getSelectedData = (key: string, data = list.value): any => {
     } else {
       if (data[i].children && data[i].children.length > 0) {
         result = getSelectedData(key, data[i].children)
-        if(result) {
+        if (result) {
           break
         }
       }
@@ -222,7 +222,7 @@ getData()
 .v-spin {
   width: 100;
   display: block;
-  margin-top: 10%
+  margin-top: 10%;
 }
 </style>
 <style>
@@ -231,5 +231,3 @@ getData()
   min-width: 100%;
 }
 </style>
-
-

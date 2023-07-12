@@ -6,7 +6,7 @@
       <span class="title">仿真任务列表</span>
       <div>
         <!-- <a-button type="primary" class="mr-2" :disabled="!selectedRows.length" @click="batchRun">批量运行</a-button> -->
-        <a-button type="primary" v-if="user.hasPermission('add')" @click=" router.push('/simpro-task/edit/0')">创建任务</a-button>
+        <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/simpro-task/edit/0')">创建任务</a-button>
       </div>
     </div>
 
@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { TaskSourceOptions, getTaskSourceName } from '@/utils/dict'
-import { SStorage } from '@/utils/storage';
+import { SStorage } from '@/utils/storage'
 /****** api */
 const user = store.user
 const currentApi = api.task
@@ -68,7 +68,7 @@ const columns = [
     width: 150,
     actions: {
       运行: {
-        validator: (data: RObject) => (['运行', '等待'].indexOf(data.status) === -1 && user.user.username == data.create_user),
+        validator: (data: RObject) => ['运行', '等待'].indexOf(data.status) === -1 && user.user.username == data.create_user,
         handler: async (data: RObject) => await currentApi.run({ template_id: data.id })
       },
       仿真结果: (data: RObject) => {
@@ -83,7 +83,7 @@ const columns = [
 ]
 
 const selectedRows = ref([])
-const onSelect = (data: any) => selectedRows.value = data 
+const onSelect = (data: any) => (selectedRows.value = data)
 // const batchRun = async () =>{
 //   console.log(selectedRows.value)
 //   // await currentApi.run({ template_id: data.id })
