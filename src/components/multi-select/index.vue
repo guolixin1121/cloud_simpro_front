@@ -40,7 +40,7 @@ const isVisible = (row: number, col: number) => {
   return lastOptions && lastOptions.length && lastOptions[0].value != "None"
 }
 
-const labels = ['场景来源', '功能类型', '区域', '道路类型', '车道', '主车行为', '交通参与者类型', '交通参与行为', '天气', '其他']
+const labels = ['场景来源', '功能类型', '区域', '道路类型', '车道', '主车行为', '交通参与者类型', '交通参与行为', '环境', '其他']
 const inputName = ref('')
 const fullName = ref('GAC_')
 const names = ref<string[]>([])
