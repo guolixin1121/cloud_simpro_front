@@ -1,10 +1,6 @@
 <template>
   <div class="main-tree">
-    <tree 
-      :title="'地图集'" 
-      :api="mapsApi.getMapCatalog" 
-      :button-handlers="treeBtnHandlers"
-      @select="onTreeSelect" />
+    <tree :title="'地图集'" :api="mapsApi.getMapCatalog" :button-handlers="treeBtnHandlers" @select="onTreeSelect" />
     <div class="main-right">
       <div class="right-title">
         <div class="title-item"><span class="label">地图集名称</span>{{ selectedMapset?.name }}</div>
@@ -15,15 +11,18 @@
       <div class="main">
         <div class="flex justify-between items-center">
           <span class="title">地图列表</span>
-          <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')">上传地图</a-button>
+          <div>
+            <a-button class="mr-2" @click="delClick">批量删除</a-button>
+            <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')"
+              >上传地图</a-button
+            >
+          </div>
         </div>
-        <Table :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 300, y: 'auto' }">
+        <Table :api="mapsApi.getMaps" @select="getSelectData" :query="query" :columns="columns" :scroll="{ x: 300, y: 'auto' }">
           <template #bodyCell="{ column, record }">
             <template v-if="column.dataIndex == 'versionCount'">
               <a-tooltip :title="record.versionCount">
-                <a class="text-blue inline-block w-full"
-                  @click="gotoVersion(record)"
-                >
+                <a class="text-blue inline-block w-full" @click="gotoVersion(record)">
                   {{ record.versionCount }}
                 </a>
               </a-tooltip>
@@ -36,21 +35,20 @@
 </template>
 
 <script setup lang="ts">
-import { SStorage } from '@/utils/storage';
+import { SStorage } from '@/utils/storage'
 
 /****** api */
 const user = store.user
 const mapsApi = api.maps
 /****** 搜素区域 */
-const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入地图名称' }
-])
+const formItems = ref<SearchFormItem[]>([{ label: '名称', key: 'name', type: 'input', placeholder: '请输入地图名称' }])
 
 const selectedMapset = ref()
 const query: Query = ref({})
 const onTableSearch = (data: Query) => {
   const mapCatalog = selectedMapset.value
   query.value = { ...data, catalog: mapCatalog?.id }
+  console.log(query.value)
 }
 
 /****** 表格区域 */
@@ -90,5 +88,12 @@ const treeBtnHandlers = {
   add: () => router.push('/map-manage/mapset-edit/0'),
   edit: (data: any) => router.push('/map-manage/mapset-edit/' + data.id + '?name=' + encodeURIComponent(data.name)),
   delete: api.mapsets.delete
+}
+const getSelectData = (selectedKeys: string[], selectedRows: any) => {
+  console.log(selectedKeys, selectedRows, 'del')
+}
+const delClick = () => {
+  console.log(1111, 'del')
+  onTableSearch(query.value)
 }
 </script>

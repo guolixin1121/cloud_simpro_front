@@ -57,7 +57,7 @@ export function isEmpty(val) {
 
 // 是否为日期类属性
 export function isDateProp(prop) {
-  if(!prop) return false
+  if (!prop) return false
   const propLowercase = prop.toLocaleLowerCase()
   return propLowercase.indexOf('date') > -1 || propLowercase.indexOf('time') > -1
 }
@@ -96,7 +96,7 @@ export function formatDate(date, formatter) {
 
 // 判断字符串中中文个数
 export function getWordLength(str) {
-  if(!str) return 0
+  if (!str) return 0
   let total = 0
   if (str.length > 0) {
     for (let i = 0; i < str.length; i++) {
@@ -106,28 +106,42 @@ export function getWordLength(str) {
       }
     }
   }
-  
+
   return total * 2 + (str.length - total)
 }
 
 export const checkChName = (str, maxLength = 32, minLength = 2) => {
-  if(!str) return Promise.resolve()
-  
+  if (!str) return Promise.resolve()
+
   // const chLength = getCnWordTotal(str)
   // const length = chLength * 2 + (str.length - chLength)
   const length = getWordLength(str)
 
-  if(length < minLength || length > maxLength) {
+  if (length < minLength || length > maxLength) {
     return Promise.reject(`名称长度为${minLength}到${maxLength}位`)
-  } 
+  }
   return Promise.resolve()
 }
 
-export const openLink = (url) => {
-  let tempALink = document.createElement("a")
-  tempALink.setAttribute("target", "vnc")
-  tempALink.setAttribute("href", url)
+export const openLink = url => {
+  let tempALink = document.createElement('a')
+  tempALink.setAttribute('target', 'vnc')
+  tempALink.setAttribute('href', url)
   document.body.appendChild(tempALink)
   tempALink.click()
   document.body.removeChild(tempALink)
+}
+
+// 自定义节流操作
+export const preventReClick = {
+  mounted(el, binding) {
+    el.addEventListener('click', () => {
+      if (!el.disabled) {
+        el.disabled = true
+        setTimeout(() => {
+          el.disabled = false
+        }, binding.value || 2000)
+      }
+    })
+  }
 }

@@ -3,9 +3,9 @@
     <tree
       :title="'场景集'"
       :api="sceneApi.getList"
-      :query="{...selectedSceneset, version: 2 }"
+      :query="{ ...selectedSceneset, version: 2 }"
       :lazy="true"
-      :filedNames="{label: 'groupName', value: 'id'}"
+      :filedNames="{ label: 'groupName', value: 'id' }"
       :button-handlers="treeBtnHandlers"
       @select="onTreeSelect"
     />
@@ -18,7 +18,7 @@
             <span class="label">标签</span>
             <ul style="flex: 1">
               <li class="inline-block mr-4" v-for="item in selectedSceneset?.labels_detail" :key="item.name">
-                {{ item.display_name  }}
+                {{ item.display_name }}
               </li>
             </ul>
           </div>
@@ -26,14 +26,14 @@
       </a-spin>
 
       <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
-        
+
       <div class="main">
         <div class="flex justify-between items-center">
           <span class="title">场景列表</span>
           <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
         </div>
         <a-spin :spinning="loading">
-          <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }"/>
+          <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" />
         </a-spin>
       </div>
     </div>
@@ -43,7 +43,7 @@
 <script setup lang="ts">
 import { SceneSourceOptions, getSceneSourceName } from '@/utils/dict'
 import { SStorage } from '@/utils/storage'
-import { gotoVnc } from '@/utils/vnc';
+import { gotoVnc } from '@/utils/vnc'
 
 const currentApi = api.scene
 const sceneApi = api.scenesets
@@ -53,7 +53,14 @@ const selectedSceneset = ref(SStorage.get('logic-sceneset')) // 逻辑场景跳�
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称' },
-  { label: '场景来源', key: 'adsSource', type: 'select', options: SceneSourceOptions, placeholder: '请选择场景来源', defaultValue: '' },
+  {
+    label: '场景来源',
+    key: 'adsSource',
+    type: 'select',
+    options: SceneSourceOptions,
+    placeholder: '请选择场景来源',
+    defaultValue: ''
+  },
   {
     label: '标签',
     key: 'labels',
@@ -105,7 +112,7 @@ const onTreeSelect = async (sceneset: any) => {
   // 切换地图集，地图列表page重置为1
   query.value = { ...query.value, scene_set: sceneset?.id, page: 1 }
   // 场景集信息
-  if(sceneset?.isLeaf) {
+  if (sceneset?.isLeaf) {
     scenesetLoading.value = true
     const res = await api.scenesets.get(sceneset?.id)
     selectedSceneset.value = res

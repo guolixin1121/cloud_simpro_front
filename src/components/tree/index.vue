@@ -1,14 +1,9 @@
 <template>
   <div class="left-tree">
     <span class="sub-title">{{ title }}</span>
-    <a-input-search
-      allowClear
-      v-model:value="searchValue"
-      style="margin-bottom: 8px"
-      @search="onSearch"
-      />
-    <div class="tree-container"> 
-      <a-spin :spinning="loading" style="min-height: 50px;">
+    <a-input-search allowClear v-model:value="searchValue" style="margin-bottom: 8px" @search="onSearch" />
+    <div class="tree-container">
+      <a-spin :spinning="loading" style="min-height: 50px">
         <!-- 视觉占位 -->
         <a-tree
           v-if="loading"
@@ -18,43 +13,49 @@
           :expandedKeys="expandRowKeys"
           :selectedKeys="selectedRowKeys"
           @expand="onExpand"
-          @select="onSelect">
+          @select="onSelect"
+        >
           <template #icon="{ isLeaf }">
             <svg-icon :icon="isLeaf ? 'leaf' : 'folder'"></svg-icon>
           </template>
         </a-tree>
-      </a-spin> 
+      </a-spin>
       <!-- 刷新数据需要重新渲染，否则展开节点会有bug -->
       <a-tree
-          v-if="!loading"
-          :show-icon="true"
-          :load-data="lazy ? loadData : null"
-          :tree-data="treeData"
-          :expandedKeys="expandRowKeys"
-          :selectedKeys="selectedRowKeys"
-          @expand="onExpand"
-          @select="onSelect">
-          <template #icon="{ isLeaf }">
-            <svg-icon :icon="isLeaf ? 'leaf' : 'folder'"></svg-icon>
-          </template>
-        </a-tree>
+        v-if="!loading"
+        :show-icon="true"
+        :load-data="lazy ? loadData : null"
+        :tree-data="treeData"
+        :expandedKeys="expandRowKeys"
+        :selectedKeys="selectedRowKeys"
+        @expand="onExpand"
+        @select="onSelect"
+      >
+        <template #icon="{ isLeaf }">
+          <svg-icon :icon="isLeaf ? 'leaf' : 'folder'"></svg-icon>
+        </template>
+      </a-tree>
     </div>
     <div class="float-right mt-2">
       <svg-icon icon="add" class="cursor-pointer mr-1" @click="onButtonClick('add')"></svg-icon>
-      <svg-icon icon="edit" class="cursor-pointer mr-1"
+      <svg-icon
+        icon="edit"
+        class="cursor-pointer mr-1"
         :class="isEmpty(selectedNode) || !selectedNode.isLeaf ? 'icon--disable' : ''"
-         @click="onButtonClick('edit')"></svg-icon>
-      <svg-icon icon="delete" class="cursor-pointer mr-1" 
+        @click="onButtonClick('edit')"
+      ></svg-icon>
+      <svg-icon
+        icon="delete"
+        class="cursor-pointer mr-1"
         :class="isEmpty(selectedNode) ? 'icon--disable' : ''"
-        @click="onButtonClick('delete')"></svg-icon>
+        @click="onButtonClick('delete')"
+      ></svg-icon>
     </div>
 
     <div class="resize-handler" @mousedown="onResizeStart"></div>
   </div>
 
-  <a-modal v-model:visible="showDeleteConfirm" 
-    :closable="false"
-    :footer="null">
+  <a-modal v-model:visible="showDeleteConfirm" :closable="false" :footer="null">
     <div>
       <svg-icon style="color: #faad14" icon="alert"></svg-icon>
       <span class="ml-4" style="font-size: 16px">是否删除？</span>
@@ -67,8 +68,8 @@
 </template>
 
 <script setup lang="ts">
-import { useSessionStorage } from '@vueuse/core';
-import { isEmpty } from 'lodash';
+import { useSessionStorage } from '@vueuse/core'
+import { isEmpty } from 'lodash'
 
 const props = defineProps({
   title: {
@@ -84,7 +85,7 @@ const props = defineProps({
   },
   filedNames: {
     type: Object,
-    default: () => ({ label: 'name', value: 'id'})
+    default: () => ({ label: 'name', value: 'id' })
   },
   lazy: {
     type: Boolean,
@@ -97,18 +98,18 @@ const props = defineProps({
 const emits = defineEmits(['select', 'btn-click'])
 
 const routeName = useRoute().path.replaceAll('/', '')
-const searchValue = useSessionStorage(routeName + ': tree-search', '') 
+const searchValue = useSessionStorage(routeName + ': tree-search', '')
 const searchQuery = ref()
 
 const { query }: any = toRefs(props)
-if(query.value?.name) {
+if (query.value?.name) {
   searchValue.value = query.value.name
 }
 
 onMounted(() => {
-  searchQuery.value = {...props.query, name: searchValue.value}
+  searchQuery.value = { ...props.query, name: searchValue.value }
   selectedRowKeys.value = [selectedNode.value?.id]
-  if(!isEmpty(selectedNode.value) && selectedNode.value.isLeaf) {
+  if (!isEmpty(selectedNode.value) && selectedNode.value.isLeaf) {
     emits('select', selectedNode.value)
   }
   document.addEventListener('mouseup', onResizeEnd)
@@ -126,39 +127,39 @@ const onResizeStart = (event: any) => {
   isMouseDown = true
 }
 const onResize = (event: any) => {
-  if(!isMouseDown) return
+  if (!isMouseDown) return
 
   const minWidth = 235
-  const maxWidth = 600 
-  let newWidth = startSize + ( event.clientX - startX)
-  if(newWidth < minWidth || newWidth > maxWidth) return
+  const maxWidth = 600
+  let newWidth = startSize + (event.clientX - startX)
+  if (newWidth < minWidth || newWidth > maxWidth) return
 
   const treeDom = document.querySelector('.left-tree') as HTMLElement
   const rightDom = document.querySelector('.main-right') as HTMLElement
   treeDom.style.width = newWidth + 'px'
   rightDom.style.width = `calc(100% - ${newWidth}px - 16px)`
 }
-const onResizeEnd = () => isMouseDown = false
+const onResizeEnd = () => (isMouseDown = false)
 
 // 底部按钮的click
 const showDeleteConfirm = ref(false)
 const onButtonClick = (type: string) => {
-  if(type != 'add' && isEmpty(selectedNode.value)) return
-  
-  const { buttonHandlers } = props
-  if(!buttonHandlers) return
+  if (type != 'add' && isEmpty(selectedNode.value)) return
 
-  if(type == 'add') buttonHandlers.add()
-  if(type == 'edit' && selectedNode.value.isLeaf) buttonHandlers.edit(selectedNode.value)
-  if(type == 'delete') showDeleteConfirm.value = true
+  const { buttonHandlers } = props
+  if (!buttonHandlers) return
+
+  if (type == 'add') buttonHandlers.add()
+  if (type == 'edit' && selectedNode.value.isLeaf) buttonHandlers.edit(selectedNode.value)
+  if (type == 'delete') showDeleteConfirm.value = true
 }
 
-const closeDeleteConfirm = () => showDeleteConfirm.value = false
+const closeDeleteConfirm = () => (showDeleteConfirm.value = false)
 const onDeleteConfirm = async () => {
   closeDeleteConfirm()
 
   const handler = props.buttonHandlers?.delete
-  if(handler) {
+  if (handler) {
     // delete
     loading.value = true
     await handler(selectedNode.value.id)
@@ -166,12 +167,12 @@ const onDeleteConfirm = async () => {
 
     // clear and reset
     expandRowKeys.value = expandRowKeys.value.filter((key: string) => key != selectedNode.value.id)
-    if(selectedNode.value.isLeaf) {
+    if (selectedNode.value.isLeaf) {
       emits('select', {})
     }
     expandRowKeys.value = expandRowKeys.value.filter((item: any) => item.id != selectedNode.value?.id)
     selectedNode.value = null
-    refresh() 
+    refresh()
   }
 }
 
@@ -180,7 +181,7 @@ const loading = ref(false)
 const treeData = ref([])
 
 const refresh = async () => {
-  try{
+  try {
     loading.value = true
     const data = await getOptions()
     treeData.value = data
@@ -191,9 +192,9 @@ const refresh = async () => {
 
 const getOptions = async (query: any = {}) => {
   const res = await props.api({
-    ...searchQuery.value, 
+    ...searchQuery.value,
     ...query
-  } )
+  })
   return transformData(res.results)
 }
 
@@ -212,11 +213,11 @@ const transformData = (data: any = []) => {
 const loadData = async (treeNode: any) => {
   return new Promise((resolve: (value?: unknown) => void) => {
     if (treeNode.dataRef.children) {
-      resolve();
-      return;
+      resolve()
+      return
     }
-    getOptions({parent: treeNode.key}).then((res) => {
-      treeNode.dataRef.children = res 
+    getOptions({ parent: treeNode.key }).then(res => {
+      treeNode.dataRef.children = res
       treeData.value = [...treeData.value]
       resolve()
     })
@@ -224,7 +225,7 @@ const loadData = async (treeNode: any) => {
 }
 
 const onSearch = () => {
-  searchQuery.value = { ...props.query, name: searchValue.value,}
+  searchQuery.value = { ...props.query, name: searchValue.value }
   delete searchQuery.value.baidu_id
 }
 
@@ -234,20 +235,20 @@ watch(searchQuery, refresh)
 const selectedNode = useSessionStorage(routeName + ': tree-select', {} as any)
 const selectedRowKeys = ref()
 
-const onSelect = (keys: string[], {selected, selectedNodes}: any) => {
+const onSelect = (keys: string[], { selected, selectedNodes }: any) => {
   const node = selected ? selectedNodes[0] : selectedNode.value
-  if(!node) return
+  if (!node) return
 
   // toggle expand
   const expanded = expandRowKeys.value.find((val: string) => val == node.id)
-  if(!expanded) {
+  if (!expanded) {
     expandRowKeys.value.push(node.id)
   } else {
     expandRowKeys.value = expandRowKeys.value.filter((val: any) => val != node.id)
   }
 
   // 触发叶子结点
-  if(node.isLeaf && node.id != selectedNode.value?.id) {
+  if (node.isLeaf && node.id != selectedNode.value?.id) {
     emits('select', node)
   }
 
@@ -257,16 +258,16 @@ const onSelect = (keys: string[], {selected, selectedNodes}: any) => {
 
 // 节点展开
 const expandRowKeys = useSessionStorage<string[]>(routeName + ': tree-expand', [])
-const onExpand = (expandedKeys: string[]) => expandRowKeys.value = expandedKeys
+const onExpand = (expandedKeys: string[]) => (expandRowKeys.value = expandedKeys)
 </script>
 
 <style lang="less" scoped>
-@import "../../assets/styles/variable.less";
+@import '../../assets/styles/variable.less';
 .left-tree {
   position: relative;
 
   .icon--disable {
-    color: #d9d9d9
+    color: #d9d9d9;
   }
 
   .resize-handler {
