@@ -4,16 +4,18 @@
     <div class="select-list" v-for="row in 2" :key="row">
       <div class="select-item"
         v-for="col in count/2" :key="col">
-        <span class="select-item-label" :class="'label--' + col">{{ labels[index(row, col)] }}</span>
-        <scroll-select 
-          v-model:value="names[index(row, col)]"
-          :options="options[index(row, col)]"
-          @change="(value: string) => handleSelectChange(index(row, col), value)"></scroll-select>
+        <template v-if="isVisible(row, col)">
+          <span class="select-item-label" :class="'label--' + col">{{ labels[index(row, col)] }}</span>
+          <scroll-select 
+            v-model:value="names[index(row, col)]"
+            :options="options[index(row, col)]"
+            @change="(value: string) => handleSelectChange(index(row, col), value)"></scroll-select>
+        </template>
       </div> 
     </div>
     <div class="input">
       <span class="select-item-label label--1">自定义</span>
-      <ch-input style="width: 365px;" v-model:value="inputName" :maxlength="20" :filter="'_'" placeholder="最多16位，不支持下划线"></ch-input>
+      <ch-input style="width: 365px;" v-model:value="inputName" :maxlength="16" :filter="'_'" placeholder="最多16位，不支持下划线"></ch-input>
     </div>
   </a-form-item-rest>
 </template>
@@ -29,17 +31,26 @@ const emits = defineEmits(['update:value'])
 
 const count = 10
 const index = (row: number, col: number) => (row - 1 ) * (count / 2) + col - 1
+const isVisible = (row: number, col: number) => {
+  const indexNo = index(row, col)
+  if(indexNo < count - 1) return true
 
-const labels = ['场景来源', '功能类型', '区域', '道路类型', '车道', '主车行为', '交通参与者类型', '交通参与行为', '环境', '其他']
+  // 控制最后一个级别是否显示
+  const lastOptions = options.value[count - 1]
+  return lastOptions && lastOptions.length && lastOptions[0].value != "None"
+}
+
+const labels = ['场景来源', '功能类型', '区域', '道路类型', '车道', '主车行为', '交通参与者类型', '交通参与行为', '天气', '其他']
 const inputName = ref('')
 const fullName = ref('GAC_')
 const names = ref<string[]>([])
-const options = ref<Record<string, string>[]>([])
+const options = ref<Record<string, string>[][]>([])
 
 const handleSelectChange = async (index: number, value: string) => {
   // 清空后续所有值
   for(let i = index + 1; i < count; i++) {
     names.value[i] = null as any
+    options.value[i] = [] as any
   }
   // 更新下一级下拉数据
   if(index < count - 1) {
