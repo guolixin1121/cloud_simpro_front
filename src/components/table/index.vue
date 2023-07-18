@@ -1,5 +1,4 @@
 <!-- 封装了 - 日期格式化、操作列（有操作权限时才展示操作按钮） -->
-<!-- tree table默认展开只支持首次赋值，所以增加v-if="$attrs['tree-default-expand-all'] != '' || dataSource?.length" -->
 <template>
   <a-table
     class="ant-table-striped"
@@ -9,15 +8,6 @@
     :dataSource="dataSource"
     :columns="columns"
     :row-class-name="(_record: any, index: number) => (index % 2 === 1 ? 'table-striped' : null)"
-    :rowSelection="
-      isSelectable
-        ? {
-            selectedRowKeys: selectedRowKeys,
-            onChange: onSelectChange,
-            ...rowSelection
-          }
-        : null
-    "
     :defaultExpandAllRows="true"
     :pagination="pagination"
     @change="onChange"
@@ -48,20 +38,30 @@
       </div>
     </template>
     <template v-slot:[item]="scope" v-for="item in Object.keys($slots)">
-      <slot v-if="item !== 'bodyCell'" :name="item" :scope="scope" v-bind="scope || {}"></slot>
+      <slot v-if="item !== 'bodyCell'" :name="item" :scope="scope" v-bind="scope || {}">
+      </slot>
       <slot v-else :name="item" :scope="scope" v-bind="scope || {}">
-        <column :scope="scope" :pagination="pagination" :is-only-creator="isOnlyCreator" @refresh="refresh" />
+        <column :scope="scope" :pagination="pagination" :checkedAll="isCheckedAll" :is-only-creator="isOnlyCreator" @refresh="refresh" @select="onSelect"/>
       </slot>
     </template>
     <!-- 父组件中没有指定bodyCell时使用此模板 -->
     <template #bodyCell="scope">
-      <column :scope="scope" :pagination="pagination" :is-only-creator="isOnlyCreator" @refresh="refresh" />
+      <column :scope="scope" :pagination="pagination" :checkedAll="isCheckedAll" :is-only-creator="isOnlyCreator" @refresh="refresh" @select="onSelect"/>
+    </template>
+    <template #headerCell="{column}">
+      <template v-if="column.dataIndex == 'checkbox'">
+        <a-checkbox v-model:checked="checkedAll" :indeterminate="indeterminate"
+         @change="onCheckAllChanged"></a-checkbox>
+      </template>
+      <template v-else>
+        {{ column.title }}
+      </template>
     </template>
   </a-table>
 </template>
 
 <script setup lang="ts">
-import { isEmpty } from 'lodash'
+// import { isEmpty } from 'lodash'
 import Column from './column.vue'
 import { useSessionStorage } from '@vueuse/core'
 const props = defineProps({
@@ -87,8 +87,6 @@ const props = defineProps({
   }
 })
 const emits = defineEmits(['select'])
-const rowSelection: any = useAttrs()['row-selection'] || {}
-
 const route = useRoute()
 // const routeName = route.path.replaceAll('/', '')
 const current = useSessionStorage(route.path + ':table-page', 1)
@@ -102,15 +100,14 @@ const run = async (query: any, slient = false) => {
     }
     const res = await props.api(query)
     data.value = res
+    const results = data.value?.results || data.value?.datalist
+    // addKeysToData(results)
+    dataSource.value = results
   } finally {
     loading.value = false
   }
 }
-const dataSource: any = computed(() => {
-  const results = data.value?.results || data.value?.datalist
-  addKeysToData(results)
-  return results
-})
+const dataSource = ref([])
 const pagination = computed(() => ({
   size: 10,
   current: current.value,
@@ -120,17 +117,55 @@ const pagination = computed(() => ({
 const size = pagination.value.size
 
 // selection handler
-const selectedRowKeys = ref<string[]>([])
-const onSelectChange = (selectedKeys: string[], selectedRows: any) => {
-  selectedRowKeys.value = selectedKeys
-  emits('select', selectedKeys, selectedRows)
+const indeterminate = ref(false)
+const checkedAll = ref(false)   // 控制header的checkbox
+const isCheckedAll = ref(false) // 仅用于传给子组件
+const selectedRows = ref<any[]>([])
+const onCheckAllChanged = (e: any) => {
+  indeterminate.value = false
+
+  // 部分选中到全选中的trick
+  isCheckedAll.value = !isCheckedAll.value
+  nextTick(()=> {
+    isCheckedAll.value = e.target.checked
+    checkedAll.value = e.target.checked
+  }) 
+}
+const onSelect = (isChecked: boolean, row: any) => {
+  const existRow = selectedRows.value.find((item: any) => item.id == row.id)
+  
+  if(isChecked) {
+    !existRow && selectedRows.value.push(row)
+  } else {
+    checkedAll.value = false
+    if(existRow) {
+      selectedRows.value = selectedRows.value.filter((item: any) => item.id != row.id)
+    }
+  }
+  indeterminate.value = checkedAll.value ? false : selectedRows.value.length > 0
+  const selectedKeys = selectedRows.value.map((item: any) => item.id)
+  emits('select', selectedKeys, selectedRows.value)
+}
+const clearCheckbox = () => {
+  checkedAll.value = false
+  indeterminate.value = false
+
+  // column组件中checkbox会被缓存，通过这个trick强迫checkbox刷新状态
+  isCheckedAll.value = !isCheckedAll.value
+  nextTick(()=> {
+    isCheckedAll.value = false
+  }) 
 }
 
 // 页面切换 event handler
 const onChange = (params: any) => {
+  clearCheckbox()
   current.value = params.current
   run({ ...props.query, page: current.value, size })
+  emits('select', [], [])
 }
+
+// 查询
 watch(
   () => props.query,
   newVal => {
@@ -170,6 +205,7 @@ onMounted(() => {
 // 用于删除等操作后，重新加载table
 // slient: 是否显示loading
 const refresh = (option: any) => {
+  clearCheckbox()
   // 判断是否还剩一条，剩一条删除成功后请求上一页
   const slient = option?.slient
   if (dataSource?.value?.length === 1) {
@@ -181,17 +217,17 @@ const refresh = (option: any) => {
 }
 
 // 为了兼容树状的table，为每个数据增加key
-const addKeysToData = (data: any) => {
-  if (!Array.isArray(data)) return
-  data.forEach(item => {
-    item.key = item.id
-    if (isEmpty(item.children)) {
-      delete item.children
-    } else {
-      addKeysToData(item.children)
-    }
-  })
-}
+// const addKeysToData = (data: any) => {
+//   if (!Array.isArray(data)) return
+//   data.forEach(item => {
+//     item.key = item.id
+//     if (isEmpty(item.children)) {
+//       delete item.children
+//     } else {
+//       addKeysToData(item.children)
+//     }
+//   })
+// }
 defineExpose({ refresh })
 </script>
 

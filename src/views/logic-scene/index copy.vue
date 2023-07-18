@@ -12,7 +12,7 @@
 
     <Table ref="tableRef" :api="currentApi.getList" :query="query" 
       :columns="columns" :scroll="{ x: 1300, y: 'auto' }"
-      :isOnlyCreator="true" @select="onSelect">
+      :isOnlyCreator="true" :isSelectable="true" @select="onSelect">
       <template #bodyCell="{ record, column }">
         <template v-if="column.dataIndex == 'last_gen_scene_task'">
           <span>{{ getLogicSceneStatusOption(record.last_gen_scene_task.status) }}</span>
@@ -94,7 +94,6 @@ const tableRef = ref()
 const runScene = ref<any>() // 要运行的数据
 const router = useRouter()
 const columns = [
-  { dataIndex: 'checkbox', width: 50 },
   { title: '场景ID', dataIndex: 'id', width: 90 },
   { title: '逻辑场景名称', dataIndex: 'name', width: 150, ellipsis: true },
   { title: '关联场景数', dataIndex: 'result_scene_count', width: 120, ellipsis: true },

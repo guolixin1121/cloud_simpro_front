@@ -28,6 +28,7 @@ export const scene = defineApi({
   getList: { url: '/scene/scenes/', method: 'get' },
   get: { url: '/scene/scenes/{sid}/', method: 'get' },
   delete: { url: '/scene/scenes/{sid}/', method: 'delete' },
+  batchDelete: { url: '/scene/scenes/delete/', method: 'delete' },
   edit: {
     url: '/scene/scenes/{sid}/',
     method: 'put',
@@ -45,6 +46,7 @@ export const logicScene = defineApi({
   getList: { url: '/simpro/logic_scenes/', method: 'get' },
   get: { url: '/simpro/logic_scenes/{sid}/', method: 'get' },
   delete: { url: '/simpro/logic_scenes/{sid}/', method: 'delete' },
+  batchDelete: { url: '/simpro/logic_scenes/batch/delete/', method: 'post' },
   edit: {
     url: '/simpro/logic_scenes/{sid}/',
     method: 'put',
@@ -79,6 +81,7 @@ export const maps = defineApi({
   getMaps: { url: '/baidu_map/map/', method: 'get' },
   getMapCatalog: { url: '/baidu_map/catalog/', method: 'get' },
   deleteMaps: { url: '/baidu_map/map/{sid}', method: 'delete' },
+  batchDeleteMaps: { url: '/baidu_map/map/delete/', method: 'delete' },
   getMapVersion: { url: '/baidu_map/map_version/', method: 'get' },
   addMaps: { url: '/baidu_map/map/', method: 'post', headers: { 'content-type': 'multipart/form-data' } },
   editMaps: { url: '/baidu_map/map/{sid}/', method: 'put', headers: { 'content-type': 'multipart/form-data' } },

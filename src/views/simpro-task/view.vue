@@ -24,9 +24,9 @@
       <a-form-item label="车辆动力学">
         {{ formState.vehicle_detail?.name }}
       </a-form-item>
-      <a-form-item label="驾驶员模型">
+      <!-- <a-form-item label="驾驶员模型">
         {{ formState.driver_detail?.name }}
-      </a-form-item>
+      </a-form-item> -->
       <a-form-item label="动力学横向控制方式">
         {{ getHorizontalOptions(formState.vehicle_horizontal) }}
       </a-form-item>
@@ -35,6 +35,9 @@
       </a-form-item>
       <a-form-item label="仿真执行次数" >
         {{ formState.batch }}
+      </a-form-item>
+      <a-form-item label="仿真频率" >
+        {{ formState.frequency }}
       </a-form-item>
 
       <a-form-item label="传感器">
@@ -87,6 +90,7 @@ const formState = reactive({
   scenes_detail: [],
   sensors_detail: [],
   batch: '',
+  frequency: '',
   createTime: '',
   create_user: ''
 })

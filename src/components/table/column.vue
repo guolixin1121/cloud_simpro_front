@@ -2,6 +2,16 @@
   <template v-if="dataIndex == 'index'">
     {{ (pagination.current -1) * pagination.size + scope.index + 1}}
   </template>
+  <template v-if="dataIndex == 'checkbox'">
+    <div :class="'checkbox-wrapper--' + (isChecked ? 'checked' : 'unchecked')">
+      <a-checkbox 
+        v-model:checked="isChecked" 
+        :disabled="disabled()" ></a-checkbox>
+      <span class="checkbox-label">
+        {{ (pagination.current -1) * pagination.size + scope.index + 1}}
+      </span>
+    </div>
+  </template>
   <!-- 封装操作列 -->
   <template v-if="dataIndex == 'actions'">
     <Action :scope="scope" :is-only-creator="isOnlyCreator" @refresh="emits('refresh')"></Action>
@@ -41,15 +51,53 @@ import dayjs from 'dayjs'
 import { isObject } from '@/utils/validate'
 import Action from './action.vue'
 
-const props = defineProps(['scope', 'isOnlyCreator', 'pagination'])
-const emits = defineEmits(['refresh'])
+const user = store.user.user
+const props = defineProps(['scope', 'isOnlyCreator', 'pagination', 'checkedAll'])
+const emits = defineEmits(['refresh', 'select'])
 
 const column = computed(() => props.scope?.column)
 const dataIndex = computed(() => props.scope?.column.dataIndex)
+const record = computed(() => props.scope?.record)
 const dataValue = computed(() => props.scope?.record[dataIndex.value])
 
 const isDateColumn = (column: string) => {
   if(!column) return ''
   return column.indexOf('_time') > -1 || column.indexOf('Time') > -1 || column.indexOf('_date') > -1 || column.indexOf('Date') > -1 
 }
+
+// checkbox
+// 注意：checkbox的状态（checked， disabled）分页或刷新时会被缓存下来
+// 所以disable改为函数，checked由父组件强行重置
+const disabled = () => props.isOnlyCreator && (record.value.createUser || record.value.create_user || record.value.username) !== user.username
+const isChecked = ref(false)
+// 监控全选按钮的触发
+watch(() => props.checkedAll, (val: boolean) => {
+  if(disabled()) return
+  isChecked.value = val
+})
+watch(isChecked, () => emits('select', isChecked.value, props.scope?.record) )
 </script>
+
+<style lang="less" scoped>
+.checkbox-wrapper--unchecked {
+  text-align: center;
+  .ant-checkbox-wrapper {
+    display: none;
+  }
+
+  &:hover {
+    .checkbox-label {
+      display: none;
+    }
+    .ant-checkbox-wrapper {
+      display: inline-flex;
+    }
+  }
+}
+.checkbox-wrapper--checked {
+  text-align: center;
+  .checkbox-label {
+    display: none;
+  }
+}
+</style>

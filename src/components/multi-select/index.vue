@@ -82,8 +82,12 @@ const getChildOptions = async (parent?: string, pLevel?: number) => {
 const emitsFullName = () => {
   const namesString = names.value.reduce((sum, name) => sum += name ? (name + '_') : '', '')
   fullName.value = 'GAC_' + namesString + inputName.value
+  // 判断是9级还是10级
+  const lastOptions = options.value[count - 1]
+  const namesList = lastOptions.length && lastOptions[0].value == 'None' ? names.value.slice(0, count - 1) : names.value
+  // 是否所有级别有数据
   let isAllNameSelected = true
-  names.value.forEach((value: string) => isAllNameSelected = isAllNameSelected && (value != null) )
+  namesList.forEach((value: string) => isAllNameSelected = isAllNameSelected && (value != null) )
   if(isAllNameSelected && inputName.value) {
     emits('update:value', fullName.value)
   } else {

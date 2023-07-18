@@ -41,6 +41,9 @@
       <a-form-item label="任务执行次数" name="batch" :rules="[{ required: true, message: '请输入任务执行次数'}]">
         <a-input-number readonly v-model:value="formState.batch" min="1" max="9999" placeholder="请输入任务执行次数"></a-input-number>
       </a-form-item>
+      <a-form-item label="仿真频率" name="frequency" :rules="[{ required: true, message: '请输入仿真频率'}]">
+        <a-input-number v-model:value="formState.frequency" min="10" max="200" placeholder="请输入仿真频率"></a-input-number>
+      </a-form-item>
       <a-form-item label="传感器" name="sensors" :rules="[{ required: true, message: '请选择传感器'}]">
         <scroll-transfer v-model:target-keys="formState.sensors" :api="baseApi.sensor.getList"
           :titles="['可选传感器', '选中传感器']"></scroll-transfer>
@@ -113,6 +116,7 @@ const formState = reactive({
   scenesets: undefined,
   scenes: [],
   batch: 1,
+  frequency: 60,
   kpi: [],
   test: false
 })
@@ -135,7 +139,8 @@ const add = async () => {
     scenes: formState.scenes.map((item:any) =>item.value || item.baidu_id),
     kpi: formState.kpi.map((item:any) =>item.value),
     is_in_ring: formState.is_in_ring,
-    driver: formState.driver
+    driver: formState.driver,
+    frequency: formState.frequency
   }
 
   try {

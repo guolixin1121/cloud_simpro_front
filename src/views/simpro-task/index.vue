@@ -16,12 +16,6 @@
       :query="query"
       :columns="columns"
       :scroll="{ x: 2100, y: 'auto' }"
-      :isOnlyCreator="true"
-      :row-selection="{
-        getCheckboxProps: (record: any) => ({
-          disabled: ['运行', '等待'].indexOf(record.status) > -1
-        }),
-      }"
       @select="onSelect"
     >
     </Table>
@@ -65,7 +59,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 150,
+    width: 180,
     actions: {
       运行: {
         validator: (data: RObject) => ['运行', '等待'].indexOf(data.status) === -1 && user.user.username == data.create_user,
