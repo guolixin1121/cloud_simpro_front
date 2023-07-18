@@ -100,7 +100,7 @@ const onTableSearch = (data: Query) => {
 const loading = ref(false)
 const router = useRouter()
 const columns = [
-  { dataIndex: 'checkbox', width: 50 },
+  { dataIndex: 'checkbox', width: 60 },
   { title: '场景ID', dataIndex: 'id', width: 150 },
   { title: '场景名称', dataIndex: 'adsName', width: 200, ellipsis: true },
   { title: '场景来源', dataIndex: 'adsSource', formatter: getSceneSourceName, width: 90 },

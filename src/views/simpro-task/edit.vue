@@ -42,7 +42,7 @@
         <a-input-number readonly v-model:value="formState.batch" min="1" max="9999" placeholder="请输入任务执行次数"></a-input-number>
       </a-form-item>
       <a-form-item label="仿真频率" name="frequency" :rules="[{ required: true, message: '请输入仿真频率'}]">
-        <a-input-number v-model:value="formState.frequency" min="10" max="200" placeholder="请输入仿真频率"></a-input-number>
+        <a-input-number v-model:value="formState.frequency" :precision="0" min="10" max="200" placeholder="请输入仿真频率"></a-input-number>
       </a-form-item>
       <a-form-item label="传感器" name="sensors" :rules="[{ required: true, message: '请选择传感器'}]">
         <scroll-transfer v-model:target-keys="formState.sensors" :api="baseApi.sensor.getList"
@@ -116,7 +116,7 @@ const formState = reactive({
   scenesets: undefined,
   scenes: [],
   batch: 1,
-  frequency: 60,
+  frequency: 50,
   kpi: [],
   test: false
 })
