@@ -142,7 +142,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 200,
+    width: 180,
     actions: {
       查看: (data: any) => gotoVeticlePro(data.id, '?type=look'),
       编辑: (data: any) => gotoVeticlePro(data.id, '?type=edit'),
