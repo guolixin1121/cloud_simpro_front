@@ -91,6 +91,7 @@ const gotoVersion = (record: any) => {
   router.push({ path: versionUrlPath, query: { preRoute, name: record.name } })
 }
 
+store.catalog.mapCatalog = {}
 const onTreeSelect = (val: any) => {
   selectedMapset.value = val
   store.catalog.mapCatalog = val

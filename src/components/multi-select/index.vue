@@ -6,10 +6,12 @@
         v-for="col in count/2" :key="col">
         <template v-if="isVisible(row, col)">
           <span class="select-item-label" :class="'label--' + col">{{ labels[index(row, col)] }}</span>
-          <scroll-select 
+          <a-select 
+            placeholder="请选择"
             v-model:value="names[index(row, col)]"
             :options="options[index(row, col)]"
-            @change="(value: string) => handleSelectChange(index(row, col), value)"></scroll-select>
+            @change="(value: string) => handleSelectChange(index(row, col), value)">
+          </a-select>
         </template>
       </div> 
     </div>
@@ -33,11 +35,16 @@ const count = 10
 const index = (row: number, col: number) => (row - 1 ) * (count / 2) + col - 1
 const isVisible = (row: number, col: number) => {
   const indexNo = index(row, col)
-  if(indexNo < count - 1) return true
+  return (indexNo < count - 1) ? true : isLastVisible()
+  // if(indexNo < count - 1) return true
 
   // 控制最后一个级别是否显示
-  const lastOptions = options.value[count - 1]
-  return lastOptions && lastOptions.length && lastOptions[0].value != "None"
+  // const lastOptions = options.value[count - 1]
+  // return lastOptions && lastOptions.length && lastOptions[0].value != "None"
+}
+const isLastVisible = () => {
+  const firstName = names.value[0]
+  return firstName && (['Natural', 'Accident', 'Exp'].indexOf(firstName) == -1)
 }
 
 const labels = ['场景来源', '功能类型', '区域', '道路类型', '车道', '主车行为', '交通参与者类型', '交通参与行为', '环境', '其他']
@@ -74,8 +81,9 @@ const getChildOptions = async (parent?: string, pLevel?: number) => {
   }
   const res = await api.logicScene.getCatalog(params)
   return res.map((item: any) => ({
-    label: item.option_value,
-    value: item.option_value
+    label: item.option_name,
+    value: item.option_value,
+    title: item.option_value
   }))
 }
 
@@ -83,8 +91,9 @@ const emitsFullName = () => {
   const namesString = names.value.reduce((sum, name) => sum += name ? (name + '_') : '', '')
   fullName.value = 'GAC_' + namesString + inputName.value
   // 判断是9级还是10级
-  const lastOptions = options.value[count - 1]
-  const namesList = lastOptions.length && lastOptions[0].value == 'None' ? names.value.slice(0, count - 1) : names.value
+  const namesList = isLastVisible() ? names.value : names.value.slice(0, count - 1)
+  // const lastOptions = options.value[count - 1]
+  // const namesList = lastOptions.length && lastOptions[0].value == 'None' ? names.value.slice(0, count - 1) : names.value
   // 是否所有级别有数据
   let isAllNameSelected = true
   namesList.forEach((value: string) => isAllNameSelected = isAllNameSelected && (value != null) )

@@ -83,7 +83,7 @@ const gotoSotif = (path: string = '') => {
   if(path) {
     window.open(path + '&' + query )
   } else {
-    window.open(process.env.VITE_SOTIF_URL + '?' + query )
+    window.open('/sotif_front/' + '?' + query )
   }
 }
 </script>
