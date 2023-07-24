@@ -43,7 +43,7 @@
     </div>
     <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
       <a-button @click="showDeleteConfirm = false">否</a-button>
-      <a-button @click="onBatchDelete" type="primary" class="ml-2">是</a-button>
+      <a-button @click="onBatchDelete" v-loading="isDeleting" type="primary" class="ml-2">是</a-button>
     </div>
   </a-modal>
 </template>
@@ -108,13 +108,20 @@ const treeBtnHandlers = {
 
 const tableRef = ref()
 const showDeleteConfirm = ref(false)
+const isDeleting = ref(false)
 const selectedItems = ref([])
 const onSelect = (selectedKeys: any, selectedRows: any) => selectedItems.value = selectedRows.map((item: any) => item.name)
 const onBatchDelete = async () => {
   if(selectedItems.value.length == 0) return
-  await api.maps.batchDeleteMaps({maps_name: selectedItems.value})
-  message.info('批量删除成功')
-  showDeleteConfirm.value = false
-  tableRef.value.refresh()
+
+  try {
+    isDeleting.value = true
+    await api.maps.batchDeleteMaps({maps_name: selectedItems.value})
+    message.info('批量删除成功')
+    showDeleteConfirm.value = false
+    tableRef.value.refresh()
+  } finally {
+    isDeleting.value = false
+  }
 }
 </script>

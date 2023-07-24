@@ -48,7 +48,7 @@
       </div>
       <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
         <a-button @click="showDeleteConfirm = false">否</a-button>
-        <a-button @click="onBatchDelete" type="primary" class="ml-2">是</a-button>
+        <a-button @click="onBatchDelete" v-loading:loading="isDeleting" type="primary" class="ml-2">是</a-button>
       </div>
     </a-modal>
   </div>
@@ -131,14 +131,20 @@ const runConfirm = async () => {
 }
 
 const showDeleteConfirm = ref(false)
+const isDeleting = ref(false)
 const selectedItems = ref([])
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const onSelect = (data: any) => selectedItems.value = data
 const onBatchDelete = async () => {
   if(selectedItems.value.length == 0) return
-  await currentApi.batchDelete({logic_scene_ids: selectedItems.value})
-  message.info('批量删除成功')
-  showDeleteConfirm.value = false
-  tableRef.value.refresh()
+  try {
+    isDeleting.value = true
+    await currentApi.batchDelete({logic_scene_ids: selectedItems.value})
+    message.info('批量删除成功')
+    showDeleteConfirm.value = false
+    tableRef.value.refresh()
+  } finally {
+    isDeleting.value = false
+  }
 }
 </script>
