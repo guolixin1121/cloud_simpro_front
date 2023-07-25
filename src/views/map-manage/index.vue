@@ -13,7 +13,7 @@
           <span class="title">地图列表</span>
           <div>
             <a-button :disabled="selectedItems.length == 0" @click="showDeleteConfirm = true" class="mr-2">删除</a-button>
-            <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')"
+            <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')"
               >上传地图</a-button
             >
           </div>

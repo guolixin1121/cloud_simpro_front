@@ -7,7 +7,7 @@
       <div>
         <a-button type="primary" class="mr-2" :disabled="!selectedRunRows.length" @click="batchRun">运行</a-button>
         <a-button type="primary" class="mr-2" :disabled="!selectedDeleteRows.length" @click="showDeleteConfirm = true">删除</a-button>
-        <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/simpro-task/edit/0')">创建任务</a-button>
+        <a-button type="primary" :disabled="selectedRunRows.length || selectedDeleteRows.length" v-if="user.hasPermission('add')" @click="router.push('/simpro-task/edit/0')">创建任务</a-button>
       </div>
     </div>
 

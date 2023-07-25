@@ -32,7 +32,7 @@
           <span class="title">场景列表</span>
           <div>
             <a-button :disabled="selectedItems.length == 0" @click="showDeleteConfirm = true" class="mr-2">删除</a-button>  
-            <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
+            <a-button type="primary" :disabled="selectedItems.length > 0"  v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
           </div>
         </div>
         <a-spin :spinning="loading">
