@@ -6,10 +6,10 @@
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading">
-      <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 55%" @finish="add">
+      <a-form ref="form" :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 55%" @finish="add">
         <a-form-item label="所属场景集" name="scenesets" :rules="[{ required: true, message: '请选择场景集' }]">
           <tree-select-async
-            v-if="isAdd"
+            v-if="isEmpty(sceneCatalog)"
             v-model:value="formState.scenesets" 
             placeholder="请选择所属场景集"
             :api="baseApi.scenesets.getList"
@@ -17,18 +17,6 @@
             ></tree-select-async>
             <span v-else>{{ formState.scenesetsName }}</span>
         </a-form-item>
-        <!-- <a-form-item
-          label="场景名称"
-          name="adsName"
-          :rules="[
-            { required: true, message: '请输入场景名称' },
-            { validator: () => checkChName(formState.adsName, 160) }
-          ]"
-        >
-          <ch-input v-model:value="formState.adsName" :maxlength="160" v-if="isAdd"
-            placeholder="请输入场景名称"></ch-input>
-          <span v-else>{{ formState.adsName }}</span>
-        </a-form-item> -->
         <a-form-item
           label="场景名称"
           name="adsName"
@@ -39,10 +27,7 @@
           <multi-select v-if="isAdd" v-model:value="formState.adsName"></multi-select>
           <span v-else>{{ formState.adsName }}</span>
         </a-form-item>
-        <a-form-item v-if="!isAdd" label="关联地图" name="mapVersion">
-          <span>{{ (formState.mapName || '') + '_' + (formState.mapVersion || '') }}</span>
-        </a-form-item>
-        <a-form-item label="关联地图" name="mapVersionAdd" :rules="[{ required: isAdd, message: '请选择关联地图' }]">
+        <a-form-item label="关联地图" name="mapVersion" :rules="[{ required: isAdd, message: '请选择关联地图' }]">
           <a-form-item-rest v-if="isAdd" >
             <div class="flex justify-between w-full">
               <tree-select v-model:value="formState.mapCatalog" 
@@ -55,7 +40,7 @@
                 :api="getMaps"
                 style="width: 33%;"
                 @change="onMapChanged"></scroll-select>
-              <scroll-select v-model:value="formState.mapVersionAdd" 
+              <scroll-select v-model:value="formState.mapVersion" 
                 placeholder="请选择地图版本"
                 :api="getMapVersions"
                 style="width: 33%;"
@@ -91,9 +76,7 @@
 </template>
 
 <script setup lang="ts">
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { checkChName } from '@/utils/tools';
-
+import { isEmpty } from '@/utils/tools'
 const route = useRoute()
 const { id } = route.params
 const isAdd = id === '0'
@@ -102,22 +85,24 @@ const title =  actionText + '场景'
 
 const baseApi = api
 const currentApi = baseApi.scene
-// const sceneCatalog = store.catalog.sceneCatalog as any  // 分级查询场景集，无法默认选中
+const sceneCatalog = store.catalog.sceneCatalog
 
 const formState = reactive({
   adsName: '',
   adsNameList: '', // 多级目录
   mapCatalog: undefined,
   map: undefined,
-  mapVersionAdd: undefined,
+  // mapVersionAdd: undefined,
   mapName: undefined,
   mapVersion: undefined,
-  scenesets: undefined, // sceneCatalog ? { label: sceneCatalog.sourceName, value: sceneCatalog.id} : undefined,
-  scenesetsName: '',
+  scenesets: sceneCatalog ? sceneCatalog.id : '',
+  scenesetsName: sceneCatalog ? sceneCatalog.name : '',
   xosc: undefined,
   labels: [],
   adsUrl: undefined,
 })
+const form = ref()
+
 const loading = ref(false)
 const router = useRouter()
 const goback = () => router.push('/scene')
@@ -128,7 +113,7 @@ const add = async () => {
     adsName: formState.adsName,
     baiduSceneSets: formState.scenesets,
     mapName: formState.map ? (formState.map as unknown as SelectOption).label : formState.mapName,
-    mapVersion: formState.mapVersionAdd || formState.mapVersion,
+    mapVersion: formState.mapVersion,
     xosc: formState.xosc,
     labels: labels ? labels.map((item: any) => item.name || item.key) : []
   }
@@ -171,13 +156,15 @@ const getEditData = async () => {
     const scene = await currentApi.get(id)
     dataLoading.value = false
     formState.adsName = scene.adsName
-    formState.labels = scene.labels_detail //?.map((item: any) => item.name)
+    formState.labels = scene.labels_detail
     formState.mapVersion = scene.mapVersion
     formState.mapName = scene.mapName
     formState.adsUrl = scene.adsUrl
-    formState.scenesets = scene.baiduSceneSets // { value: scene.baiduSceneSets, label: scene.sceneset_name }
+    formState.scenesets = scene.baiduSceneSets
     formState.scenesetsName = scene.sceneset_name
   }
 }
 getEditData()
+
+watch(formState, () => form.value.validate())
 </script>

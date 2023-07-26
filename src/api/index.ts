@@ -114,7 +114,8 @@ export const task = defineApi({
 export const result = defineApi({
   getList: { url: '/simpro/simtask/', method: 'get' },
   getScenes: { url: '/simpro/simtask/result/', method: 'get' },
-  delete: { url: '/simpro/simtask/{sid}/', method: 'delete' }
+  delete: { url: '/simpro/simtask/{sid}/', method: 'delete' },
+  batchDelete: { url: '/simpro/simtask/delete/', method: 'delete' },
 })()
 
 export const vnc = defineApi({
@@ -134,6 +135,7 @@ export const algorithm = defineApi({
   getList: { url: '/alg/algorithm/', method: 'get' },
   get: { url: '/alg/algorithm/{sid}/', method: 'get' },
   delete: { url: '/alg/algorithm/{sid}/', method: 'delete' },
+  batchDelete: { url: '/alg/algorithm/delete/', method: 'delete' },
   edit: { url: '/alg/algorithm/{sid}/', method: 'put' },
   add: { url: '/alg/algorithm/', method: 'post' },
 })()

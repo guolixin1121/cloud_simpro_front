@@ -56,12 +56,12 @@ const formState = reactive({
 })
 
 const getEditData = async () => {
-   if(id !== '0') {
-      const data = await api.logicScene.get(id)
-      for(const prop in formState) {
-        formState[prop as keyof typeof formState] = isDateProp(prop) ? formatDate(data[prop]) : data[prop]
-      }
-   }
+  if(id !== '0') {
+    const data = await api.logicScene.get(id)
+    for(const prop in formState) {
+      formState[prop as keyof typeof formState] = isDateProp(prop) ? formatDate(data[prop]) : data[prop]
+    }
+  }
 }
 getEditData()
 </script>

@@ -5,7 +5,7 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
-    <a-form :model="formState" :labelCol ="{ style: { width: '150px' } }"  style="width: 55%"
+    <a-form ref="form" :model="formState" :labelCol ="{ style: { width: '150px' } }"  style="width: 55%"
       @finish="add">
       <a-form-item label="任务名称" name="name" :rules="[
         { required: true, message: '请输入任务名称'}, 
@@ -49,9 +49,9 @@
           <a-select v-model:value="formState.vehicle_vertical" :options="VerticalOptions" placeholder="请选择纵向控制方式"></a-select>
         </a-form-item>
       </div>
-      <a-form-item label="任务执行次数" name="batch" :rules="[{ required: true, message: '请输入任务执行次数'}]">
+      <!-- <a-form-item label="任务执行次数" name="batch" :rules="[{ required: true, message: '请输入任务执行次数'}]">
         <a-input-number readonly v-model:value="formState.batch" min="1" max="9999" placeholder="请输入任务执行次数"></a-input-number>
-      </a-form-item>
+      </a-form-item> -->
       <a-form-item label="仿真频率" name="frequency" :rules="[{ required: true, message: '请输入仿真频率'}]">
         <a-input-number v-model:value="formState.frequency" :precision="0" min="10" max="200" placeholder="请输入仿真频率"></a-input-number>
       </a-form-item>
@@ -209,4 +209,7 @@ const getEditData = async () => {
    getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
 }
 getEditData()
+
+const form = ref()
+watch(formState, () => form.value.validate())
 </script>

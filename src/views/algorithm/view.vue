@@ -13,16 +13,16 @@
         <span>{{ formState.version }}</span>
       </a-form-item> -->
       <a-form-item label="算法镜像：">
-        <span style="word-break: break-all;">{{ formState.docker_path }}</span>
+        <span style="word-break: break-all; white-space: break-spaces;">{{ formState.docker_path }}</span>
       </a-form-item>
       <a-form-item label="启动命令">
-        <span style="word-break: break-all;">{{ formState.cmd }}</span>
+        <span style="word-break: break-all; white-space: break-spaces;">{{ formState.cmd }}</span>
       </a-form-item>
       <a-form-item label="控制在环">
-        <span>{{ formState.is_in_ring ? '是' : '否' }}</span>
+        <span>{{ formState.is_in_ring }}</span>
       </a-form-item>
       <a-form-item label="描述">
-        <span style="word-break: break-all;">{{ formState.desc }}</span>
+        <span style="word-break: break-all; white-space: break-spaces;">{{ formState.desc }}</span>
       </a-form-item>
       <a-form-item label="创建时间："
         ><span>{{ formState.create_time }}</span></a-form-item
@@ -60,6 +60,7 @@ const getLookData = async () => {
     formState[prop as keyof typeof formState] = data[prop]
   }
   formState.create_time = formatDate(data.create_time)
+  formState.is_in_ring = data.is_in_ring ? '是' : '否'
 }
 getLookData()
 </script>

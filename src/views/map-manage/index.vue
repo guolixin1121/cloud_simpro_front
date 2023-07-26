@@ -12,10 +12,8 @@
         <div class="flex justify-between items-center">
           <span class="title">地图列表</span>
           <div>
-            <a-button :disabled="selectedItems.length == 0" @click="showDeleteConfirm = true" class="mr-2">删除</a-button>
-            <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')"
-              >上传地图</a-button
-            >
+            <batch-button :disabled="!selectedItems.length" :api="onBatchDelete"></batch-button>
+            <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')">上传地图</a-button>
           </div>
         </div>
         <Table ref="tableRef" :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 800, y: 'auto' }"
@@ -33,19 +31,6 @@
       </div>
     </div>
   </div>
-
-  <a-modal v-model:visible="showDeleteConfirm" 
-    :closable="false"
-    :footer="null">
-    <div>
-      <svg-icon style="color: #faad14" icon="alert"></svg-icon>
-      <span class="ml-4" style="font-size: 16px">是否删除？</span>
-    </div>
-    <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
-      <a-button @click="showDeleteConfirm = false">否</a-button>
-      <a-button @click="onBatchDelete" v-loading="isDeleting" type="primary" class="ml-2">是</a-button>
-    </div>
-  </a-modal>
 </template>
 
 <script setup lang="ts">
@@ -105,23 +90,12 @@ const treeBtnHandlers = {
   delete: api.mapsets.delete
 }
 
-
 const tableRef = ref()
-const showDeleteConfirm = ref(false)
-const isDeleting = ref(false)
 const selectedItems = ref([])
 const onSelect = (selectedKeys: any, selectedRows: any) => selectedItems.value = selectedRows.map((item: any) => item.name)
 const onBatchDelete = async () => {
-  if(selectedItems.value.length == 0) return
+  await api.maps.batchDeleteMaps({maps_name: selectedItems.value})
+  tableRef.value.refresh()
 
-  try {
-    isDeleting.value = true
-    await api.maps.batchDeleteMaps({maps_name: selectedItems.value})
-    message.info('批量删除成功')
-    showDeleteConfirm.value = false
-    tableRef.value.refresh()
-  } finally {
-    isDeleting.value = false
-  }
 }
 </script>

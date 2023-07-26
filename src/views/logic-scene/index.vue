@@ -2,26 +2,19 @@
   <search-form :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
-    <div class="flex justify-between items-center">
-      <span class="title">逻辑场景列表</span>
-      <div>
-        <a-button :disabled="selectedItems.length == 0" @click="showDeleteConfirm = true" class="mr-2">删除</a-button>
-        <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add')" @click="router.push('/logic-scene/edit/0')">上传逻辑场景</a-button>
-      </div>
-    </div>
+    <page-title title="逻辑场景列表">
+      <batch-button :disabled="!selectedItems.length" :api="onBatchDelete"></batch-button>
+      <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add')" @click="router.push('/logic-scene/edit/0')">上传逻辑场景</a-button>
+    </page-title>
 
-    <Table ref="tableRef" :api="currentApi.getList" :query="query" 
-      :columns="columns" :scroll="{ x: 1300, y: 'auto' }"
-      :isOnlyCreator="true" @select="onSelect">
-      <template #bodyCell="{ record, column }">
-        <template v-if="column.dataIndex == 'last_gen_scene_task'">
-          <span>{{ getLogicSceneStatusOption(record.last_gen_scene_task.status) }}</span>
-        </template>
-        <template v-if="column.dataIndex == 'source'">
-          <span v-if="record.source == 0">云平台</span>
-          <span v-if="record.source == 1">SOTIF</span>
-        </template>
-      </template>
+    <Table 
+      ref="tableRef" 
+      :api="currentApi.getList" 
+      :query="query" 
+      :columns="columns" 
+      :scroll="{ x: 1300, y: 'auto' }"
+      :isOnlyCreator="true" 
+      @select="onSelect">
     </Table>
 
     <a-modal v-model:visible="showRunConfirm" 
@@ -38,26 +31,10 @@
         <a-button @click="runConfirm" type="primary" class="ml-2">是</a-button>
       </div>
     </a-modal>
-
-    <a-modal v-model:visible="showDeleteConfirm"
-      :closable="false"
-      :footer="null">
-      <div>
-        <svg-icon style="color: #faad14" icon="alert"></svg-icon>
-        <span class="ml-4" style="font-size: 16px">是否删除？</span>
-      </div>
-      <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
-        <a-button @click="showDeleteConfirm = false">否</a-button>
-        <a-button @click="onBatchDelete" v-loading:loading="isDeleting" type="primary" class="ml-2">是</a-button>
-      </div>
-    </a-modal>
   </div>
 </template>
 
 <script setup lang="ts">
-import { getLogicSceneStatusOption } from '@/utils/dict'
-
-/****** api */
 const user = store.user
 const currentApi = api.logicScene
 
@@ -84,14 +61,14 @@ const formItems = ref<SearchFormItem[]>([
   },
   { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
-type Query = Record<string, any>
+
 const query: Query = ref({})
 const onSearch = (data: Query) => (query.value = { ...data })
 
 /****** 表格区域 */
 const showRunConfirm = ref(false)
-const tableRef = ref()
 const runScene = ref<any>() // 要运行的数据
+const tableRef = ref()
 const router = useRouter()
 const columns = [
   { dataIndex: 'checkbox', width: 60 },
@@ -99,7 +76,7 @@ const columns = [
   { title: '逻辑场景名称', dataIndex: 'name', width: 150, ellipsis: true },
   { title: '关联场景数', dataIndex: 'result_scene_count', width: 120, ellipsis: true },
   { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
-  { title: '来源', dataIndex: 'source', width: 100 },
+  { title: '来源', dataIndex: 'source', width: 100, formatter: (source: number) => source == 0 ? '云平台' : 'SOTIF' },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
   {
@@ -130,21 +107,11 @@ const runConfirm = async () => {
   tableRef.value.refresh()
 }
 
-const showDeleteConfirm = ref(false)
-const isDeleting = ref(false)
+// table checkbox
 const selectedItems = ref([])
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const onSelect = (data: any) => selectedItems.value = data
 const onBatchDelete = async () => {
-  if(selectedItems.value.length == 0) return
-  try {
-    isDeleting.value = true
-    await currentApi.batchDelete({logic_scene_ids: selectedItems.value})
-    message.info('批量删除成功')
-    showDeleteConfirm.value = false
-    tableRef.value.refresh()
-  } finally {
-    isDeleting.value = false
-  }
+  await currentApi.batchDelete({logic_scene_ids: selectedItems.value})
+  tableRef.value.refresh()
 }
 </script>

@@ -51,3 +51,6 @@ interface TreeItem {
   key?: string
   children?: TreeItem[]
 }
+
+// 查询
+type Query = Record<string, any>

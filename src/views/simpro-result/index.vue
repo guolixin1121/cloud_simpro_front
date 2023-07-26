@@ -2,9 +2,9 @@
   <search-form :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
-    <div class="flex justify-between items-center">
-      <span class="title">仿真结果列表</span>
-    </div>
+    <page-title title="仿真结果列表">
+      <batch-button :disabled="!selectedRows.length" :api="batchDelete"></batch-button>
+    </page-title>
 
     <a-spin :spinning="loading">
       <Table
@@ -13,7 +13,8 @@
         :query="query"
         :columns="columns"
         :isOnlyCreator="true"
-        :scroll="{ x: 1800, y: 'auto' }"
+        :scroll="{ x: 1900, y: 'auto' }"
+        @select="onSelect"
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'is_passed'">
@@ -41,7 +42,6 @@
 import { TaskSourceOptions, getTaskSourceName, getResultStatus } from '@/utils/dict'
 
 const templateId = useRoute().query.templateId as string
-console.log(templateId, 'templateid')
 const router = useRouter()
 /****** api */
 const currentApi = api.result
@@ -84,6 +84,7 @@ const onSearch = (data: Query) => (query.value = data)
 /****** 表格区域 */
 const table = ref()
 const columns = [
+  { dataIndex: 'checkbox', width: 40 },
   { title: '任务ID', dataIndex: 'template_number', width: 130 },
   { title: '仿真任务名称', dataIndex: 'name', width: 200, ellipsis: true },
   { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90 },
@@ -126,5 +127,11 @@ const onStop = async (record: RObject) => {
   } finally {
     loading.value = false
   }
+}
+const selectedRows = ref([])
+const onSelect = (keys: any) => (selectedRows.value = keys)
+const batchDelete = async () => {
+  await currentApi.batchDelete({ tasks: selectedRows.value })
+  table.value.refresh()
 }
 </script>

@@ -1,17 +1,18 @@
 <template>
   <search-form :items="formItems" @search="onSearch"></search-form>
   <div class="main">
-    <div class="flex justify-between items-center">
-      <span class="title">算法列表</span>
+    <page-title title="算法列表">
+      <batch-button :disabled="!selectedRows.length" :api="batchDelete"></batch-button>
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/algorithm/edit/0')">创建算法</a-button>
-    </div>
-    <Table :api="algorithmApi.getList" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }"
-      :isOnlyCreator="true">
-      <template #bodyCell="{column, text}">
-        <template v-if="column.dataIndex == 'is_in_ring'">
-          {{ text ? '是' : '否' }}
-        </template>
-      </template>
+    </page-title>
+    <Table 
+      ref="tableRef"
+      :api="algorithmApi.getList" 
+      :query="query" 
+      :columns="columns" 
+      :scroll="{ x: 1000, y: 'auto' }"
+      :isOnlyCreator="true"
+      @select="onSelect">
     </Table>
   </div>
 </template>
@@ -35,9 +36,10 @@ const onSearch = (data: Query) => (query.value = data)
 /****** 表格区域 */
 const router = useRouter()
 const columns = [
+  { dataIndex: 'checkbox', width: 40 }, 
   { title: '算法ID', dataIndex: 'id', width: 100 },
   { title: '算法名称', dataIndex: 'name', width: 200, ellipsis: true },
-  { title: '控制在环', dataIndex: 'is_in_ring', width: 100 },
+  { title: '控制在环', dataIndex: 'is_in_ring', width: 100, formatter: (value: string) => value ? '是' : '否' },
   { title: '描述', dataIndex: 'desc', ellipsis: true },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '创建者', dataIndex: 'create_user', width: 120, ellipsis: true },
@@ -53,4 +55,12 @@ const columns = [
     }
   }
 ]
+
+const tableRef = ref()
+const selectedRows = ref([])
+const onSelect = (keys: any) => (selectedRows.value = keys)
+const batchDelete = async () => {
+  await algorithmApi.batchDelete({ algorithms: selectedRows.value })
+  tableRef.value.refresh()
+}
 </script>

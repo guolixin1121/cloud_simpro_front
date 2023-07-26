@@ -5,8 +5,8 @@
     <div class="flex justify-between items-center">
       <span class="title">仿真任务列表</span>
       <div>
-        <a-button type="primary" class="mr-2" :disabled="!selectedRunRows.length" @click="batchRun">运行</a-button>
-        <a-button type="primary" class="mr-2" :disabled="!selectedDeleteRows.length" @click="showDeleteConfirm = true">删除</a-button>
+        <batch-button :disabled="!selectedRunRows.length" :api="batchRun" :double-confirm="false" label="运行"></batch-button>
+        <batch-button :disabled="!selectedDeleteRows.length" :api="batchDelete"></batch-button>
         <a-button type="primary" :disabled="selectedRunRows.length || selectedDeleteRows.length" v-if="user.hasPermission('add')" @click="router.push('/simpro-task/edit/0')">创建任务</a-button>
       </div>
     </div>
@@ -21,19 +21,6 @@
       @select="onSelect"
     >
     </Table>
-
-    <a-modal v-model:visible="showDeleteConfirm"
-      :closable="false"
-      :footer="null">
-      <div>
-        <svg-icon style="color: #faad14" icon="alert"></svg-icon>
-        <span class="ml-4" style="font-size: 16px">是否删除？</span>
-      </div>
-      <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
-        <a-button @click="showDeleteConfirm = false">否</a-button>
-        <a-button @click="batchDelete" v-model:loading="isDeleting" type="primary" class="ml-2">是</a-button>
-      </div>
-    </a-modal>
   </div>
 </template>
 
@@ -105,22 +92,11 @@ const onSelect = (_keys: any, data: any) => (selectedRows.value = data)
 const batchRun = async () => {
   const templateids = selectedRunRows.value.map((item: any) => item.id)
   await currentApi.run({ template_id: templateids })
-  message.info('批量运行成功')
   tableRef.value.refresh()
 }
-
-const showDeleteConfirm = ref(false)
-const isDeleting = ref(false)
-const batchDelete = async () =>{
-  try {
-    const templateids = selectedDeleteRows.value.map((item: any) => item.id)
-    isDeleting.value = true
-    await currentApi.batchDelete({ template_id: templateids })
-    message.info('批量删除成功')
-    showDeleteConfirm.value = false
-    tableRef.value.refresh()
-  } finally {
-    isDeleting.value = false
-  }
+const batchDelete = async () => {
+  const templateids = selectedDeleteRows.value.map((item: any) => item.id)
+  await currentApi.batchDelete({ template_id: templateids })
+  tableRef.value.refresh()
 }
 </script>

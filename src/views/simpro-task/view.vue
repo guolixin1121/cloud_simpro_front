@@ -36,9 +36,9 @@
       <a-form-item label="动力学纵向控制方式"  v-if="formState.mount == '1'">
         {{ getVerticalOptions(formState.vehicle_vertical) }}
       </a-form-item>
-      <a-form-item label="仿真执行次数" >
+      <!-- <a-form-item label="仿真执行次数" >
         {{ formState.batch }}
-      </a-form-item>
+      </a-form-item> -->
       <a-form-item label="仿真频率" >
         {{ formState.frequency }}
       </a-form-item>

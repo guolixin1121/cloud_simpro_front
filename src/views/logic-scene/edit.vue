@@ -6,7 +6,7 @@
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading">
-      <a-form :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 55%" @finish="add">
+      <a-form ref="form" :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 55%" @finish="add">
         <!-- <a-form-item
           label="场景名称"
           name="name"
@@ -166,4 +166,7 @@ const getEditData = async () => {
   }
 }
 getEditData()
+
+const form = ref()
+watch(formState, () => form.value.validate())
 </script>

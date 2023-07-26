@@ -31,7 +31,7 @@
         <div class="flex justify-between items-center">
           <span class="title">场景列表</span>
           <div>
-            <a-button :disabled="selectedItems.length == 0" @click="showDeleteConfirm = true" class="mr-2">删除</a-button>  
+            <batch-button :disabled="!selectedItems.length" :api="onBatchDelete"></batch-button>
             <a-button type="primary" :disabled="selectedItems.length > 0"  v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
           </div>
         </div>
@@ -42,18 +42,6 @@
       </div>
     </div>
   </div>
-  <a-modal v-model:visible="showDeleteConfirm" 
-    :closable="false"
-    :footer="null">
-    <div>
-      <svg-icon style="color: #faad14" icon="alert"></svg-icon>
-      <span class="ml-4" style="font-size: 16px">是否删除？</span>
-    </div>
-    <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
-      <a-button @click="showDeleteConfirm = false">否</a-button>
-      <a-button @click="onBatchDelete" v-loading="isDeleting" type="primary" class="ml-2">是</a-button>
-    </div>
-  </a-modal>
 </template>
 
 <script setup lang="ts">
@@ -122,10 +110,12 @@ const columns = [
     }
   }
 ]
-
+store.catalog.sceneCatalog = {}
 const scenesetLoading = ref(false)
 const onTreeSelect = async (sceneset: any) => {
   selectedSceneset.value = sceneset
+  store.catalog.sceneCatalog = sceneset
+
   // 切换地图集，地图列表page重置为1
   query.value = { ...query.value, scene_set: sceneset?.id, page: 1 }
   // 场景集信息
@@ -147,20 +137,10 @@ const treeBtnHandlers = {
 }
 
 const tableRef = ref()
-const showDeleteConfirm = ref(false)
-const isDeleting = ref(false)
 const selectedItems = ref([])
 const onSelect = (data: any) => selectedItems.value = data
 const onBatchDelete = async () => {
-  if(selectedItems.value.length == 0) return
-  try {
-    isDeleting.value = true
-    await currentApi.batchDelete({scenes_id: selectedItems.value})
-    message.info('批量删除成功')
-    showDeleteConfirm.value = false
-    tableRef.value.refresh()
-  } finally {
-    isDeleting.value = false
-  }
+  await currentApi.batchDelete({scenes_id: selectedItems.value})
+  tableRef.value.refresh()
 }
 </script>

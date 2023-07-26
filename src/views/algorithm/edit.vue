@@ -106,13 +106,10 @@ const getLookData = async () => {
     if(res.results?.length == 0 ) return 
 
     const data = res.results[0]
-    formState.name = data.name
-    formState.version = data.version
-    formState.docker_path = data.docker_path
-    formState.desc = data.desc
-    formState.cmd = data.cmd
+    for(const prop in formState) {
+      formState[prop as keyof typeof formState] = data[prop]
+    }
     formState.create_time = formatDate(data.create_time)
-    formState.create_user = data.create_user
     formState.is_in_ring = data.is_in_ring ? '1' : '0'
   }
 }

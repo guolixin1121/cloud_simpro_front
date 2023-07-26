@@ -7,6 +7,18 @@
     <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading"> 
       <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 55%" @finish="add">
+        <a-form-item label="所属地图集：" name="catalog" :rules="[{ required: isAdd, message: '请选择地图集'}]">
+          <tree-select
+            v-if="isAdd"
+            allowClear
+            label-in-value
+            v-model:value="formState.catalog"
+            :api="baseApi.maps.getMapCatalog"
+            placeholder="请选择地图集"
+          >
+          </tree-select>
+          <template v-else>{{ formState.catalog.label }}</template>
+        </a-form-item>
         <a-form-item v-if="isView"
           label="地图ID：" >
           {{ formState.id }}
@@ -32,18 +44,6 @@
           >
           </scroll-select>
           <template v-else>{{ formState.mapTypeName }}</template>
-        </a-form-item>
-        <a-form-item label="所属地图集：" name="catalog" :rules="[{ required: isAdd, message: '请选择地图集'}]">
-          <tree-select
-            v-if="isAdd"
-            allowClear
-            label-in-value
-            v-model:value="formState.catalog"
-            :api="baseApi.maps.getMapCatalog"
-            placeholder="请选择地图集"
-          >
-          </tree-select>
-          <template v-else>{{ formState.catalog.label }}</template>
         </a-form-item>
         <a-form-item v-if="!isView" label="地图文件：" name="xodr" :rules="[{ required: isAdd, message: '请上传地图文件'}]">
           <single-upload
