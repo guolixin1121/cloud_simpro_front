@@ -36,6 +36,16 @@
       >
       <ch-input v-model:value="formState.docker_path" placeholder="请输入算法镜像" :maxlength="255"></ch-input>
       </a-form-item>
+      <a-form-item
+        label="启动命令"
+        name="cmd"
+        :rules="[
+          { required: true, message: '请输入启动命令' },
+          { min: 1, max: 255, message: '镜像地址长度为1到255位' }
+        ]"
+      >
+      <ch-input v-model:value="formState.cmd" placeholder="请输入启动命令" :maxlength="255"></ch-input>
+      </a-form-item>
       <a-form-item label="控制在环" name="is_in_ring" :rules="[{ required: true, message: '请选择控制在环' }]">
         <a-select v-model:value="formState.is_in_ring" placeholder="请选择控制在环">
           <a-select-option key="1" value="1">是</a-select-option>
@@ -66,6 +76,7 @@ const formState = reactive<any>({
   name: undefined,
   version: '1',
   docker_path: undefined,
+  cmd: undefined,
   desc: undefined,
   create_time: undefined,
   create_user: undefined,
@@ -99,6 +110,7 @@ const getLookData = async () => {
     formState.version = data.version
     formState.docker_path = data.docker_path
     formState.desc = data.desc
+    formState.cmd = data.cmd
     formState.create_time = formatDate(data.create_time)
     formState.create_user = data.create_user
     formState.is_in_ring = data.is_in_ring ? '1' : '0'

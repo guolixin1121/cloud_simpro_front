@@ -21,16 +21,19 @@
       <a-form-item label="算法">
         {{ formState.algorithm_detail?.name }}
       </a-form-item>
-      <a-form-item label="车辆动力学">
+      <a-form-item label="动力学挂载" v-if="formState.is_in_ring">
+        {{ formState.mount == '1' ? '内部' : '外部' }}
+      </a-form-item>
+      <a-form-item label="车辆动力学"  v-if="formState.mount == '1'">
         {{ formState.vehicle_detail?.name }}
       </a-form-item>
       <!-- <a-form-item label="驾驶员模型">
         {{ formState.driver_detail?.name }}
       </a-form-item> -->
-      <a-form-item label="动力学横向控制方式">
+      <a-form-item label="动力学横向控制方式" v-if="formState.mount == '1'">
         {{ getHorizontalOptions(formState.vehicle_horizontal) }}
       </a-form-item>
-      <a-form-item label="动力学纵向控制方式">
+      <a-form-item label="动力学纵向控制方式"  v-if="formState.mount == '1'">
         {{ getVerticalOptions(formState.vehicle_vertical) }}
       </a-form-item>
       <a-form-item label="仿真执行次数" >
@@ -40,8 +43,8 @@
         {{ formState.frequency }}
       </a-form-item>
 
-      <a-form-item label="传感器">
-        <ul class="view-list"  v-if="formState.sensors_detail?.length > 0">
+      <a-form-item label="传感器" v-if="formState.sensors_detail?.length > 0">
+        <ul class="view-list">
           <li class="mb-2" v-for="item in formState.sensors_detail as any" :key="item">
             {{ item.name }}
           </li>
@@ -92,22 +95,13 @@ const formState = reactive({
   batch: '',
   frequency: '',
   createTime: '',
-  create_user: ''
+  create_user: '',
+  mount: ''
 })
 
 const getEditData = async () => {
    if(id !== '0') {
      const data = await api.task.get(id)
-    //  formState.id = data.id
-    //  formState.name = data.name
-    //  formState.batch = data.batch
-    //  formState.source = data.source
-    //  formState.algorithm_detail = data.algorithm_detail
-    //  formState.kpi_detail = data.kpi_detail
-    //  formState.vehicle_detail = data.vehicle_detail
-    //  formState.scenes_detail = data.scenes_detail
-    //  formState.createTime = formatDate(data.create_time)
-    //  formState.create_user = data.create_user
 
     for(const prop in formState) {
       formState[prop as keyof typeof formState] = data[prop]

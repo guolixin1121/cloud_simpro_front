@@ -21,30 +21,41 @@
      <a-form-item label="算法" name="algorithm" :rules="[{ required: true, message: '请选择算法' }]">
         <scroll-select v-model:value="formState.algorithm" :api="getAlgorithm" placeholder="请选择算法"></scroll-select>
       </a-form-item>
-      <a-form-item label="车辆动力学" name="dynamic_vehicle" :rules="[{ required: true, message: '请选择主车模型' }]">
-        <scroll-select v-model:value="formState.dynamic_vehicle" 
-          :api="baseApi.vehicle.getList"
-          :query="{is_share: 1}" placeholder="请选择主车模型"></scroll-select>
+      <a-form-item label="动力学挂载" name="mount" v-if="formState.is_in_ring == '1'" :rules="[{ required: true, message: '请选择是否动力学挂载' }]">
+        <a-select v-model:value="formState.mount" @change="onMountChanged">
+          <a-select-option key="1" value="1">内部</a-select-option>
+          <a-select-option key="0" value="0">外部</a-select-option>
+        </a-select>
       </a-form-item>
-      <!-- <a-form-item label="驾驶员模型" name="driver">
-        <scroll-select v-model:value="formState.driver"
-          :disabled="formState.is_in_ring === '0'"
-          :api="baseApi.vehicle.getDrivers"
-          placeholder="请选择驾驶员模型"></scroll-select>
-      </a-form-item> -->
-     <a-form-item label="动力学横向控制方式" name="vehicle_horizontal" :rules="[{ required: true, message: '请选择横向控制方式' }]">
-        <a-select v-model:value="formState.vehicle_horizontal" :options="HorizontalOptions" placeholder="请选择横向控制方式"></a-select>
-      </a-form-item>
-     <a-form-item label="动力学纵向控制方式" name="vehicle_vertical" :rules="[{ required: true, message: '请选择纵向控制方式' }]">
-        <a-select v-model:value="formState.vehicle_vertical" :options="VerticalOptions" placeholder="请选择纵向控制方式"></a-select>
-      </a-form-item>
+      <div v-show="formState.mount == '1'">
+        <a-form-item label="车辆动力学" name="dynamic_vehicle"
+          :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择主车模型' }]">
+          <scroll-select v-model:value="formState.dynamic_vehicle" 
+            :api="baseApi.vehicle.getList"
+            :query="{is_share: 1}" placeholder="请选择主车模型"></scroll-select>
+        </a-form-item>
+        <!-- <a-form-item label="驾驶员模型" name="driver">
+          <scroll-select v-model:value="formState.driver"
+            :disabled="formState.is_in_ring === '0'"
+            :api="baseApi.vehicle.getDrivers"
+            placeholder="请选择驾驶员模型"></scroll-select>
+        </a-form-item> -->
+      <a-form-item label="动力学横向控制方式" name="vehicle_horizontal" 
+        :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择横向控制方式' }]">
+          <a-select v-model:value="formState.vehicle_horizontal" :options="HorizontalOptions" placeholder="请选择横向控制方式"></a-select>
+        </a-form-item>
+      <a-form-item label="动力学纵向控制方式" name="vehicle_vertical" 
+        :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择纵向控制方式' }]">
+          <a-select v-model:value="formState.vehicle_vertical" :options="VerticalOptions" placeholder="请选择纵向控制方式"></a-select>
+        </a-form-item>
+      </div>
       <a-form-item label="任务执行次数" name="batch" :rules="[{ required: true, message: '请输入任务执行次数'}]">
         <a-input-number readonly v-model:value="formState.batch" min="1" max="9999" placeholder="请输入任务执行次数"></a-input-number>
       </a-form-item>
       <a-form-item label="仿真频率" name="frequency" :rules="[{ required: true, message: '请输入仿真频率'}]">
         <a-input-number v-model:value="formState.frequency" :precision="0" min="10" max="200" placeholder="请输入仿真频率"></a-input-number>
       </a-form-item>
-      <a-form-item label="传感器" name="sensors" :rules="[{ required: true, message: '请选择传感器'}]">
+      <a-form-item label="传感器" name="sensors">
         <scroll-transfer v-model:target-keys="formState.sensors" :api="baseApi.sensor.getList"
           :titles="['可选传感器', '选中传感器']"></scroll-transfer>
       </a-form-item>
@@ -105,12 +116,12 @@ const currentApi = api.task
 
 const formState = reactive({
   name: undefined,
-  dynamic_vehicle: undefined,
-  vehicle_detail: undefined,
+  dynamic_vehicle: '',
   vehicle_horizontal: 1,
   vehicle_vertical: 1,
   sensors: [],
   is_in_ring: '0',
+  mount: '',
   driver: undefined,
   algorithm: undefined,
   scenesets: undefined,
@@ -131,10 +142,11 @@ const add = async () => {
     source: 0,
     name: formState.name,
     algorithm: formState.algorithm,
-    dynamic_vehicle:formState.dynamic_vehicle,
+    dynamic_vehicle: formState.dynamic_vehicle,
     vehicle_horizontal: formState.vehicle_horizontal,
     vehicle_vertical: formState.vehicle_vertical,
     batch: formState.batch,
+    mount: formState.mount,
     sensors: formState.sensors.map((item:any) =>item.value),
     scenes: formState.scenes.map((item:any) =>item.value || item.baidu_id),
     kpi: formState.kpi.map((item:any) =>item.value),
@@ -162,10 +174,18 @@ const onScenesetChanged = () => {
 
 const getAlgorithm = ref()
 const onRingChanged = () => {
+  formState.mount = formState.is_in_ring == '0' ? '' : '1'
   getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
   formState.algorithm = undefined
   if(formState.is_in_ring == '0') {
     formState.driver = '' as any
+  }
+}
+const onMountChanged = () => {
+  if(formState.mount == '0') {
+    formState.vehicle_horizontal = 1
+    formState.vehicle_vertical = 1
+    formState.dynamic_vehicle = ''
   }
 }
 
@@ -176,7 +196,7 @@ const getEditData = async () => {
      formState.name = data.name
      formState.batch = data.batch
      formState.algorithm = data.algorithm_detail?.id
-     formState.dynamic_vehicle = data.vehicle_detail.id
+     formState.dynamic_vehicle = data.vehicle_detail?.id
      formState.vehicle_horizontal = data.vehicle_horizontal
      formState.vehicle_vertical = data.vehicle_vertical
      formState.sensors = data.sensors_detail
@@ -184,6 +204,7 @@ const getEditData = async () => {
      formState.kpi = data.kpi_detail
      formState.is_in_ring = data.is_in_ring ? '1' : '0',
      formState.driver = data.driver_detail.id
+     formState.mount = data.mount.toString()
    }
    getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
 }

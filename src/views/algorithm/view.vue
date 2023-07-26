@@ -6,19 +6,22 @@
   <div class="min-main">
     <span class="title mb-5">算法详情</span>
     <a-form :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 55%">
-      <a-form-item label="算法名称：" name="name">
+      <a-form-item label="算法名称：">
         <span>{{ formState.name }}</span>
       </a-form-item>
-      <!-- <a-form-item label="算法版本：" name="name">
+      <!-- <a-form-item label="算法版本：">
         <span>{{ formState.version }}</span>
       </a-form-item> -->
-      <a-form-item label="算法镜像：" name="name">
+      <a-form-item label="算法镜像：">
         <span style="word-break: break-all;">{{ formState.docker_path }}</span>
       </a-form-item>
-      <a-form-item label="控制在环" name="name">
+      <a-form-item label="启动命令">
+        <span style="word-break: break-all;">{{ formState.cmd }}</span>
+      </a-form-item>
+      <a-form-item label="控制在环">
         <span>{{ formState.is_in_ring ? '是' : '否' }}</span>
       </a-form-item>
-      <a-form-item label="描述" name="name">
+      <a-form-item label="描述">
         <span style="word-break: break-all;">{{ formState.desc }}</span>
       </a-form-item>
       <a-form-item label="创建时间："
@@ -40,6 +43,7 @@ const formState = reactive<any>({
   name: undefined,
   version: undefined,
   docker_path: undefined,
+  cmd: '',
   desc: undefined,
   create_time: undefined,
   create_user: undefined,
@@ -52,13 +56,10 @@ const getLookData = async () => {
   if(res.results?.length == 0 ) return 
 
   const data = res.results[0]
-  formState.name = data.name
-  formState.version = data.version
-  formState.docker_path = data.docker_path
-  formState.desc = data.desc
+  for(const prop in formState) {
+    formState[prop as keyof typeof formState] = data[prop]
+  }
   formState.create_time = formatDate(data.create_time)
-  formState.create_user = data.create_user
-  formState.is_in_ring = data.is_in_ring 
 }
 getLookData()
 </script>
