@@ -166,5 +166,7 @@ const getEditData = async () => {
 }
 getEditData()
 
-watch(formState, () => form.value.validate())
+watch(() => formState.scenesets, () => form.value.validateFields('scenesets'))
+watch(() => formState.adsName, () => form.value.validateFields('adsName'))
+watch(() => formState.mapVersion, () => form.value.validateFields('mapVersion'))
 </script>

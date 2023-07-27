@@ -1,66 +1,28 @@
 <template>
-  <div class="breadcrumb">
+  <form-view title="逻辑场景详情" :items="formItems" :loading="loading">
     <router-link to="/logic-scene/">逻辑场景管理</router-link>
-    <span class="breadcrumb--current">逻辑场景详情</span>
-  </div>
-  <div class="min-main">
-    <span class="title mb-5">逻辑场景详情</span>
-    <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 55%">
-      <a-form-item label="场景ID">
-        {{ formState.id }}
-      </a-form-item>
-      <a-form-item label="场景名称">
-        {{ formState.name }}
-      </a-form-item>
-      <a-form-item label="场景文件地址" >
-        {{ formState.scene_url }}
-      </a-form-item>
-      <a-form-item label="配置文件地址" >
-        {{ formState.config_url }}
-      </a-form-item>
-      <a-form-item label="关联地图">
-        {{ formState.map_name + '_' + formState.map_version_num }}
-      </a-form-item>
-      <a-form-item label="标签">
-        <ul class="view-list" v-if="formState.labels_detail?.length > 0">
-          <li class="mb-2" v-for="item in formState.labels_detail as any" :key="item">
-            {{ item.display_name }}
-          </li>
-        </ul>
-        <span v-else>无</span>
-      </a-form-item>
-      <a-form-item label="创建时间">
-        {{ formState.create_time }}
-      </a-form-item>
-      <a-form-item label="所属用户">
-        {{ formState.create_user }}
-      </a-form-item>
-    </a-form>
-  </div>
+  </form-view>\
 </template>
 
 <script setup lang="ts">
-import { formatDate, isDateProp } from '@/utils/tools';
-const id = useRoute().params.id
-
-const formState = reactive({
-  id: '',
-  name: '',
-  map_name: '',
-  map_version_num: '',
-  config_url: '',
-  scene_url: '',
-  labels_detail: [],
-  create_time: '',
-  create_user: ''
-})
-
+const formItems = ref<FormItem[]>([])
+const loading = ref(false)
 const getEditData = async () => {
-  if(id !== '0') {
-    const data = await api.logicScene.get(id)
-    for(const prop in formState) {
-      formState[prop as keyof typeof formState] = isDateProp(prop) ? formatDate(data[prop]) : data[prop]
-    }
+  try {
+    loading.value = true
+    const data = await api.logicScene.get(useRoute().params.id)
+    formItems.value = [
+      { label: '场景ID', value: data.id },
+      { label: '场景名称', value: data.name },
+      { label: '场景文件地址', value: data.scene_url },
+      { label: '配置文件地址', value: data.config_url ? '是' : '否' },
+      { label: '关联地图', value: data.map_name + '_' + data.map_version_num},
+      { label: '标签', value: data.labels_detail?.map((item: any) => item.display_name) },
+      { label: '创建时间', value: data.create_time },
+      { label: '所属用户', value: data.create_user },
+    ]
+  } finally {
+    loading.value = false
   }
 }
 getEditData()

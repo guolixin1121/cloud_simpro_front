@@ -48,6 +48,7 @@ declare module '@vue/runtime-core' {
     BatchDelete: typeof import('./src/components/batch-delete/index.vue')['default']
     Chart: typeof import('./src/components/chart/index.vue')['default']
     ChInput: typeof import('./src/components/ch-input/index.vue')['default']
+    FormView: typeof import('./src/components/form-view/index.vue')['default']
     LeftTree: typeof import('./src/components/left-tree/index.vue')['default']
     MultiName: typeof import('./src/components/multi-name/index.vue')['default']
     MultiSelect: typeof import('./src/components/multi-select/index.vue')['default']

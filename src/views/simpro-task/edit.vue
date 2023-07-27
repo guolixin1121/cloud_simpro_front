@@ -211,5 +211,7 @@ const getEditData = async () => {
 getEditData()
 
 const form = ref()
-watch(formState, () => form.value.validate())
+watch(() => formState.scenesets, () => form.value.validateFields('scenesets'))
+watch(() => formState.scenes, () => form.value.validateFields('scenes'))
+watch(() => formState.kpi, () => form.value.validateFields('kpi'))
 </script>

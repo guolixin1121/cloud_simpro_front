@@ -49,8 +49,7 @@ export const logicScene = defineApi({
   batchDelete: { url: '/simpro/logic_scenes/batch/delete/', method: 'post' },
   edit: {
     url: '/simpro/logic_scenes/{sid}/',
-    method: 'put',
-    headers: { 'content-type': 'multipart/form-data' }
+    method: 'put'
   },
   add: {
     url: '/simpro/logic_scenes/',

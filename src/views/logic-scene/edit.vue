@@ -168,5 +168,6 @@ const getEditData = async () => {
 getEditData()
 
 const form = ref()
-watch(formState, () => form.value.validate())
+watch(() => formState.name, () => form.value.validateFields('name'))
+watch(() => formState.mapVersion, () => form.value.validateFields('mapVersion'))
 </script>

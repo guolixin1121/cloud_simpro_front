@@ -1,67 +1,31 @@
 <template>
-  <div class="breadcrumb">
+  <form-view title="评测指标详情" :items="formItems" :loading="loading">
     <router-link to="/kpi/">评测指标管理</router-link>
-    <span class="breadcrumb--current">评测指标详情</span>
-  </div>
-  <div class="min-main">
-    <span class="title mb-5">评测指标详情</span>
-    <a-form :model="formState" :labelCol ="{ style: { width: '120px' } }"  style="width: 55%">
-      <a-form-item label="评测指标ID">
-        {{ formState.id }}
-      </a-form-item>
-      <a-form-item label="评测指标名称">
-        {{ formState.name }}
-      </a-form-item>
-      <a-form-item label="评测指标类型" >
-        {{ formState.kpi_type_name}}
-      </a-form-item>
-      <a-form-item label="指标文件地址" >
-        {{ formState.py_url}}
-      </a-form-item>
-      <a-form-item label="描述">
-        <span style="word-break: break-all; white-space: break-spaces;">{{ formState.desc }}</span>
-      </a-form-item>
-      <a-form-item label="创建时间">
-        {{ formState.create_date }}
-      </a-form-item>
-      <a-form-item label="修改时间">
-        {{ formState.update_date }}
-      </a-form-item>
-      <a-form-item label="所属用户">
-        {{ formState.create_user }}
-      </a-form-item>
-    </a-form>
-  </div>
+  </form-view>
 </template>
 
 <script setup lang="ts">
-import { formatDate } from '@/utils/tools';
-const id = useRoute().params.id
-
-const formState = reactive({
-  id: '',
-  name: undefined,
-  desc: '',
-  kpi_type_name: '',
-  py_url: '',
-  create_date: '',
-  update_date: '',
-  create_user: ''
-})
+const formItems = ref<FormItem[]>([])
+const loading = ref(false)
 
 const getEditData = async () => {
-   if(id !== '0') {
-     const res = await api.kpi.getList({id})
-     const data = res.results?.[0]
-     formState.id = data.id
-     formState.name = data.name
-     formState.py_url = data.py_url
-     formState.desc = data.desc
-     formState.kpi_type_name = data.category_name
-     formState.create_date = formatDate(data.create_date)
-     formState.update_date = formatDate(data.update_time)
-     formState.create_user = data.create_user
-   }
+  try {
+    loading.value = true
+    const res = await api.kpi.getList({id: useRoute().params.id})
+    const data = res.results?.[0]
+    formItems.value = [
+      { label: '评测指标ID', value: data.id },
+      { label: '评测指标名称', value: data.name },
+      { label: '评测指标类型', value: data.category_name },
+      { label: '指标文件地址', value: data.py_url },
+      { label: '描述', value: data.desc },
+      { label: '创建时间', value: data.create_date },
+      { label: '修改时间', value: data.update_time },
+      { label: '所属用户', value: data.create_user },
+    ]
+  } finally {
+    loading.value = false
+  }
 }
 getEditData()
 </script>

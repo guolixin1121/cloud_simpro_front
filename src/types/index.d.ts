@@ -52,5 +52,7 @@ interface TreeItem {
   children?: TreeItem[]
 }
 
-// 查询
+// 表单查询
 type Query = Record<string, any>
+// 查看页表格数据项: filter - 是否显示的过滤条件， break - 值过长时是否换行
+type FormItem = { label: string, value: any, isShow?: any, isBreak?: boolean}

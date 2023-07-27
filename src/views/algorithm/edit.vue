@@ -17,15 +17,6 @@
         <ch-input v-if="isAdd" v-model:value="formState.name" :maxlength="50" placeholder="请输入算法名称"></ch-input>
         <span v-else>{{ formState.name }}</span>
       </a-form-item>
-      <!-- <a-form-item
-        label="算法版本"
-        name="name"
-        :rules="[
-          { required: true, message: '请输入算法版本' }
-        ]"
-      >
-        <a-input v-model:value="formState.version" placeholder="请输入算法版本"></a-input>
-      </a-form-item> -->
       <a-form-item
         label="镜像地址"
         name="docker_path"
@@ -56,11 +47,11 @@
         <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入描述" :maxlength="255" rows="10"></ch-input>
       </a-form-item>
       <a-form-item :wrapper-col="{ style: { paddingLeft: '80px' } }">
-          <a-button class="mr-2" type="primary" html-type="submit" :loading="loading">
-            {{ isAdd ? '创建' : '修改' }}
-          </a-button>
-          <a-button @click="goback">取消</a-button>
-        </a-form-item>
+        <a-button class="mr-2" type="primary" html-type="submit" :loading="loading">
+          {{ isAdd ? '创建' : '修改' }}
+        </a-button>
+        <a-button @click="goback">取消</a-button>
+      </a-form-item>
     </a-form>
   </div>
 </template>
@@ -89,7 +80,7 @@ const currentApi = api.algorithm
 const loading = ref(false)
 const add = async () => {
   try {
-     loading.value = true
+    loading.value = true
     isAdd ? await currentApi.add({ ...formState }) : await currentApi.edit({ id, data: { ...formState } })
     loading.value = false
     message.info(isAdd ? '创建成功' : '修改成功')

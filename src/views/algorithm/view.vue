@@ -1,66 +1,32 @@
 <template>
-  <div class="breadcrumb">
+  <form-view title="算法详情" :items="formItems" :loading="loading">
     <router-link to="/algorithm/">算法管理</router-link>
-    <span class="breadcrumb--current">查看</span>
-  </div>
-  <div class="min-main">
-    <span class="title mb-5">算法详情</span>
-    <a-form :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 55%">
-      <a-form-item label="算法名称：">
-        <span>{{ formState.name }}</span>
-      </a-form-item>
-      <!-- <a-form-item label="算法版本：">
-        <span>{{ formState.version }}</span>
-      </a-form-item> -->
-      <a-form-item label="算法镜像：">
-        <span style="word-break: break-all; white-space: break-spaces;">{{ formState.docker_path }}</span>
-      </a-form-item>
-      <a-form-item label="启动命令">
-        <span style="word-break: break-all; white-space: break-spaces;">{{ formState.cmd }}</span>
-      </a-form-item>
-      <a-form-item label="控制在环">
-        <span>{{ formState.is_in_ring }}</span>
-      </a-form-item>
-      <a-form-item label="描述">
-        <span style="word-break: break-all; white-space: break-spaces;">{{ formState.desc }}</span>
-      </a-form-item>
-      <a-form-item label="创建时间："
-        ><span>{{ formState.create_time }}</span></a-form-item
-      >
-      <a-form-item label="所属用户："
-        ><span>{{ formState.create_user }}</span></a-form-item
-      >
-    </a-form>
-  </div>
+  </form-view>
 </template>
 
 <script setup lang="ts">
-import { formatDate } from '@/utils/tools'
+const formItems = ref<FormItem[]>([])
+const loading = ref(false)
 
-const id = useRoute().params.id
-
-const formState = reactive<any>({
-  name: undefined,
-  version: undefined,
-  docker_path: undefined,
-  cmd: '',
-  desc: undefined,
-  create_time: undefined,
-  create_user: undefined,
-  is_in_ring: undefined
-})
-
-/****** 获取查看数据 */
 const getLookData = async () => {
-  const res = await api.algorithm.getList({ id })
-  if(res.results?.length == 0 ) return 
+  try {
+    loading.value = true
+    const res = await api.algorithm.getList({ id: useRoute().params.id })
+    if(res.results?.length == 0 ) return 
 
-  const data = res.results[0]
-  for(const prop in formState) {
-    formState[prop as keyof typeof formState] = data[prop]
+    const data = res.results[0]
+    formItems.value = [
+      { label: '算法名称', value: data.name },
+      { label: '算法镜像', value: data.docker_path, isBreak: true },
+      { label: '启动命令', value: data.cmd, isBreak: true },
+      { label: '控制在环', value: data.is_in_ring ? '是' : '否' },
+      { label: '描述', value: data.desc ? '是' : '否' },
+      { label: '创建时间', value: data.create_time },
+      { label: '所属用户', value: data.create_user },
+    ]
+  } finally {
+    loading.value = false
   }
-  formState.create_time = formatDate(data.create_time)
-  formState.is_in_ring = data.is_in_ring ? '是' : '否'
 }
 getLookData()
 </script>
