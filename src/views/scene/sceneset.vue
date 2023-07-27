@@ -137,7 +137,7 @@ const getEditData = async () => {
       formState.parentName = data.parentName
       formState.parent = { title: data.parentName, value: data.parentId }
       formState.labels = data.labels_detail
-      formState.isLeaf = data.isLeaf?.toString()
+      formState.isLeaf = '1' // 只能编辑场景集 data.isLeaf?.toString()
     } finally {
       dataLoading.value = false
     }

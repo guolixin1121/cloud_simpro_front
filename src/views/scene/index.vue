@@ -131,8 +131,8 @@ const onTreeSelect = async (sceneset: any) => {
 }
 
 const treeBtnHandlers = {
-  add: () => router.push('/scene/sceneset-edit/0'),
-  edit: (data: any) => router.push('/scene/sceneset-edit/' + data.id),
+  add: () => router.push('/scene/sceneset/0'),
+  edit: (data: any) => router.push('/scene/sceneset/' + data.id),
   delete: api.scenesets.delete
 }
 

@@ -56,7 +56,7 @@ const columns = [
   { title: '所属用户', dataIndex: 'create_user', width: 200 },
   { title: '操作', dataIndex: 'operation', width: 150,
     actions: {
-      查看: ({id} : RObject) => router.push('/tags/edit/' + id + '?type=0'),
+      查看: ({id} : RObject) => router.push('/tags/view/' + id),
       编辑: ({id} : RObject) => router.push('/tags/edit/' + id + '?tag_type=' + query.value.tag_type),
       删除: async ({ id }: { id: string }) => await currentApi.delete(id)
      }
