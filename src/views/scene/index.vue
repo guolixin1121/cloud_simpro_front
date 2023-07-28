@@ -31,7 +31,7 @@
         <div class="flex justify-between items-center">
           <span class="title">场景列表</span>
           <div>
-            <batch-button :disabled="!selectedItems.length" :api="onBatchDelete"></batch-button>
+            <batch-button :disabled="!selectedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
             <a-button type="primary" :disabled="selectedItems.length > 0"  v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
           </div>
         </div>

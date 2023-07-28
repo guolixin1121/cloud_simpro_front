@@ -3,7 +3,7 @@
 
   <div class="main">
     <page-title title="仿真结果列表">
-      <batch-button :disabled="!selectedRows.length" :api="batchDelete"></batch-button>
+      <batch-button :disabled="!selectedRows.length" v-if="user.hasPermission('delete')" :api="batchDelete"></batch-button>
     </page-title>
 
     <a-spin :spinning="loading">
@@ -43,7 +43,7 @@ import { TaskSourceOptions, getTaskSourceName, getResultStatus } from '@/utils/d
 
 const templateId = useRoute().query.templateId as string
 const router = useRouter()
-/****** api */
+const user = store.user
 const currentApi = api.result
 
 const isRunOrWait = (status: number) => status === 2 || status === 1

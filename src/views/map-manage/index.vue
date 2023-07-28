@@ -12,7 +12,7 @@
         <div class="flex justify-between items-center">
           <span class="title">地图列表</span>
           <div>
-            <batch-button :disabled="!selectedItems.length" :api="onBatchDelete"></batch-button>
+            <batch-button :disabled="!selectedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
             <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')">上传地图</a-button>
           </div>
         </div>

@@ -13,6 +13,11 @@
   }
 }
 
+button:focus {
+  background-color: @blue-color !important;
+  border-color: @blue-color !important;
+}
+
 .ant-form {
   .ant-form-item-label,
   .ant-form-item-label label {
@@ -101,6 +106,12 @@
   }
   .ant-table-tbody > tr.ant-table-row-selected > td{
     background-color: #e6f7ff;
+  }
+  .ant-table-cell-scrollbar {
+    box-shadow: none !important;
+  }
+  .ant-table-thead .ant-table-cell-fix-right-first:before {
+    display: none;
   }
 }
 

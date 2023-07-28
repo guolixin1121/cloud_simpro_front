@@ -10,15 +10,14 @@
 let icons = ref<string[]>()
 
 const getIcon = async () => {
-  const iconFiles = import.meta.glob('../../assets/icons/*.ts')
-
-  const list = []
-  for(const path in iconFiles) {
-    const paths = path.split('/')
-    const fileName = paths[paths.length - 1].split('.')[0]
-    list.push(fileName)
+  const iconFiles = import.meta.glob('../../assets/icons/*.svg')
+  const results = []
+  for(const icon in iconFiles) {
+    const iconName = icon.replace('../../assets/icons/', '').replace(/\/|.svg/g,'')
+    results.push(iconName)
   }
-  icons.value = list
+  console.log(results)
+  icons.value = results
 }
 
 getIcon()

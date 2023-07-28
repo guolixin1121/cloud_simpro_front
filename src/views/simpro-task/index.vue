@@ -6,7 +6,7 @@
       <span class="title">仿真任务列表</span>
       <div>
         <batch-button :disabled="!selectedRunRows.length" :api="batchRun" :double-confirm="false" label="运行"></batch-button>
-        <batch-button :disabled="!selectedDeleteRows.length" :api="batchDelete"></batch-button>
+        <batch-button :disabled="!selectedDeleteRows.length" v-if="user.hasPermission('add')" :api="batchDelete"></batch-button>
         <a-button type="primary" :disabled="selectedRunRows.length || selectedDeleteRows.length" v-if="user.hasPermission('add')" @click="router.push('/simpro-task/edit/0')">创建任务</a-button>
       </div>
     </div>

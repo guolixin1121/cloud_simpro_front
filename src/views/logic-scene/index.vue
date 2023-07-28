@@ -3,7 +3,7 @@
 
   <div class="main">
     <page-title title="逻辑场景列表">
-      <batch-button :disabled="!selectedItems.length" :api="onBatchDelete"></batch-button>
+      <batch-button :disabled="!selectedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
       <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add')" @click="router.push('/logic-scene/edit/0')">上传逻辑场景</a-button>
     </page-title>
 
