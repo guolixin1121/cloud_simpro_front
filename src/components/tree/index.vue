@@ -95,6 +95,10 @@ const props = defineProps({
   },
   buttonHandlers: {
     type: Object
+  },
+  recurse: {
+    type: Boolean,
+    default: () => false
   }
 })
 const emits = defineEmits(['select', 'btn-click'])
@@ -197,6 +201,7 @@ const getOptions = async (query: any = {}) => {
     ...searchQuery.value,
     ...query
   })
+  recurse(res.results)
   return transformData(res.results)
 }
 
@@ -210,6 +215,20 @@ const transformData = (data: any = []) => {
     isLeaf: item.isLeaf === 1,
     children: props.lazy ? null : transformData(item.children)
   }))
+}
+
+// 含id的精确搜索，自动循环展开各级
+const isRecurse = ref(props.recurse)
+const recurse = (results: any) => {
+  if(isRecurse.value && searchValue.value && results.length) {
+    const firstChild = results[0]
+    expandRowKeys.value.push(firstChild.id)
+    if(firstChild.isLeaf) {
+      selectedRowKeys.value = [firstChild.id]
+      selectedNode.value = firstChild
+      emits('select', selectedNode.value)
+    }
+  }
 }
 
 const loadData = async (treeNode: any) => {
@@ -227,8 +246,12 @@ const loadData = async (treeNode: any) => {
 }
 
 const onSearch = () => {
+  // clear tree 
+  expandRowKeys.value = []
+  isRecurse.value = false
+  // reset query
   searchQuery.value = { ...props.query, name: searchValue.value }
-  delete searchQuery.value.baidu_id
+  delete searchQuery.value.baidu_id // 仅跳转过来时支持紧缺搜索，手动搜索时需要删掉
 }
 
 watch(searchQuery, refresh)

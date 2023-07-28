@@ -96,7 +96,7 @@ const formState = reactive({
   mapName: undefined,
   mapVersion: undefined,
   scenesets: sceneCatalog ? sceneCatalog.id : '',
-  scenesetsName: sceneCatalog ? sceneCatalog.name : '',
+  scenesetsName: sceneCatalog ? (sceneCatalog.name || sceneCatalog.groupName) : '',
   xosc: undefined,
   labels: [],
   adsUrl: undefined,

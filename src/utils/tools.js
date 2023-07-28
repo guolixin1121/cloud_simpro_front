@@ -96,18 +96,21 @@ export function formatDate(date, formatter) {
 
 // 判断字符串中中文个数
 export function getWordLength(str) {
-  if (!str) return 0
-  let total = 0
-  if (str.length > 0) {
-    for (let i = 0; i < str.length; i++) {
-      let c = str.charAt(i)
-      if (c.match(/[\u4E00-\u9FFF]/)) {
-        total++
-      }
-    }
-  }
+  // eslint-disable-next-line no-control-regex
+  return str.replace(/[^\x00-\xff]/g,"**").length
+  // if (!str) return 0
+  // let total = 0
 
-  return total * 2 + (str.length - total)
+  // if (str.length > 0) {
+  //   for (let i = 0; i < str.length; i++) {
+  //     let c = str.charAt(i)
+  //     if (c.match(/[\u4E00-\u9FFF]/)) {
+  //       total++
+  //     }
+  //   }
+  // }
+
+  // return total * 2 + (str.length - total)
 }
 
 export const checkChName = (str, maxLength = 32, minLength = 2) => {

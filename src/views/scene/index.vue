@@ -5,6 +5,7 @@
       :api="sceneApi.getList"
       :query="{ ...selectedSceneset, version: 2 }"
       :lazy="true"
+      :recurse="scenesetFromLogic != null"
       :filedNames="{ label: 'groupName', value: 'id' }"
       :button-handlers="treeBtnHandlers"
       @select="onTreeSelect"
@@ -48,11 +49,12 @@
 import { SceneSourceOptions, getSceneSourceName } from '@/utils/dict'
 import { SStorage } from '@/utils/storage'
 import { gotoVnc } from '@/utils/vnc'
+const scenesetFromLogic = SStorage.get('logic-sceneset')
 
 const currentApi = api.scene
 const sceneApi = api.scenesets
 const user = store.user
-const selectedSceneset = ref(SStorage.get('logic-sceneset')) // 逻辑场景跳转的默认场景集
+const selectedSceneset = ref(scenesetFromLogic) // 逻辑场景跳转的默认场景集
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
