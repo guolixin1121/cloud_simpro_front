@@ -51,9 +51,6 @@ import { onClickOutside } from '@vueuse/core'
 import { throttle } from 'lodash'
 
 const props = defineProps({
-  title: {
-    type: String
-  },
   api: {
     type: Function,
     required: true

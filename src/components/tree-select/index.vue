@@ -60,7 +60,6 @@ const getOptions = async () => {
     try {
       loading.value = true
       const res = await props.api(props.query)
-      console.log(res)
       const data = treeTransfer(res.results || res)
       treeData.value.push(...data)
     } finally {

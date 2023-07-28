@@ -6,7 +6,7 @@
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading">
-      <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 55%"
+      <a-form ref="form" :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 55%"
         @finish="add">
         <a-form-item label="场景集类型"  name="isLeaf" :rules="[{ required: true, message: '请选择场景集类型'}]">
           <a-select v-if="isAdd" v-model:value="formState.isLeaf">
@@ -21,7 +21,6 @@
             v-if="isAdd"
             :show-search="false"
             placeholder="请选择所属场景目录"
-            tree-node="groupName"
             v-model:value="formState.parentId"
             v-model:selectNode="formState.parent"
             :api="baseApi.scenesets.getList" 
@@ -144,4 +143,7 @@ const getEditData = async () => {
   }
 }
 getEditData()
+
+const form = ref()
+watch(() => formState.parentId, () => form.value.validateFields('parentId'))
 </script>

@@ -20,7 +20,6 @@
           <tree-select-async
             v-if="isAdd"
             placeholder="请选择所属场景目录"
-            tree-node="groupName"
             v-model:value="formState.parentId"
             v-model:selectNode="formState.parent"
             :api="baseApi.scenesets.getList" 
