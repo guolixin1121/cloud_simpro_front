@@ -12,6 +12,7 @@
         :columns="columns"
         :api="currentApi.getList"
         :tree-node="'display_name'"
+        :isOnlyCreator="true"
         >
         <template #default="{ column, row }">
           <template v-if="column.dataIndex == 'isTag'">
@@ -53,7 +54,7 @@ const columns = [
   { title: '标签英文名称', dataIndex: 'name'},
   { title: '标签类别', dataIndex: 'isTag', width: 100},
   { title: '创建时间', dataIndex: 'create_time', width: 200 },
-  { title: '所属用户', dataIndex: 'create_user', width: 200 },
+  { title: '所属用户', dataIndex: 'create_user', width: 150 },
   { title: '操作', dataIndex: 'operation', width: 150,
     actions: {
       查看: ({id} : RObject) => router.push('/tags/view/' + id),

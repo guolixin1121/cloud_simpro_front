@@ -15,16 +15,16 @@ export const useUserStore = defineStore('user', () => {
     token.value = null
     LStorage.remove('token')
     location.href = import.meta.env.VITE_LOGIN_URL
-    // const host = location.hostname
-    // if(host.indexOf('.com')) {
-    //   if(host.indexOf('pre-')) {
-    //     location.href = 'http://pre-ad-data.gacicv.com/auth/realms/gacicv/protocol/openid-connect/auth?redirect_url=http://pre-ad-sim-safety.gacicv.com/&client_id=safety-simulation&response_type=code'
-    //   } else {
-    //     location.href = 'http://ad-data.gacicv.com/auth/realms/gacicv/protocol/openid-connect/auth?redirect_uri=http://ad-sim-safety.gacicv.com/&client_id=safety-simulation&response_type=code'
-    //   }
-    // } else {
-    //   location.href = '#/login'
-    // }
+    const host = location.hostname
+    if(host.indexOf('.com')) {
+      if(host.indexOf('pre-') > -1) {
+        location.href = 'http://pre-ad-data.gacicv.com/auth/realms/gacicv/protocol/openid-connect/auth?redirect_uri=http://pre-ad-sim-safety.gacicv.com/&client_id=safety-simulation&response_type=code'
+      } else {
+        location.href = 'http://ad-data.gacicv.com/auth/realms/gacicv/protocol/openid-connect/auth?redirect_uri=http://ad-sim-safety.gacicv.com/&client_id=safety-simulation&response_type=code'
+      }
+    } else {
+      location.href = '#/login'
+    }
   }
 
   const hasToken = () => {
