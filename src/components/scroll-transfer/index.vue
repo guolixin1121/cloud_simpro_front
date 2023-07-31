@@ -213,7 +213,7 @@ getOptions()
 .transfer-checked-item {
   line-height: 20px;
   padding: 6px 12px;
-  word-break: break-all;
+  word-break: break-word;
   white-space:break-spaces;
   margin-top: 2px;
   &:hover {

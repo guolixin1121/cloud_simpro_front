@@ -53,11 +53,11 @@
               v-model:value="formState.xodr"
               :desc="'选择文件'"
             ></single-upload>
-            <span style="white-space: break-spaces; word-break: break-all;" v-if="!formState.xodr">{{ formState.mapFileName }}</span>
+            <span style="white-space: break-spaces; word-break: break-word;" v-if="!formState.xodr">{{ formState.mapFileName }}</span>
           </div>
         </a-form-item>
         <a-form-item v-if="!isAdd" label="地图文件：">
-          <div style="white-space: break-spaces; word-break: break-all;">{{ formState.latestVersionUrl }}</div>
+          <div style="white-space: break-spaces; word-break: break-word;">{{ formState.latestVersionUrl }}</div>
         </a-form-item>
         <a-form-item v-if="!isAdd" label="地图版本：" name="name">
           <span>{{ formState.latestVersion }}</span>

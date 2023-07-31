@@ -14,7 +14,9 @@ export const useUserStore = defineStore('user', () => {
     user.value = null
     token.value = null
     LStorage.remove('token')
-    location.href = import.meta.env.VITE_LOGIN_URL
+    // location.href = import.meta.env.VITE_LOGIN_URL
+    const host = location.hostname
+    location.href = `http://${host}/auth/realms/gacicv/protocol/openid-connect/auth?redirect_url=http://${host}/&client_id=safety-simulation&response_type=code`
   }
 
   const hasToken = () => {
