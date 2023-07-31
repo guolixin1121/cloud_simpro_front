@@ -36,7 +36,7 @@ const onSearch = (data: Query) => (query.value = data)
 /****** 表格区域 */
 const router = useRouter()
 const columns = [
-  { dataIndex: 'checkbox', width: 40 }, 
+  { dataIndex: 'checkbox', width: 60 }, 
   { title: '算法ID', dataIndex: 'id', width: 100 },
   { title: '算法名称', dataIndex: 'name', width: 200, ellipsis: true },
   { title: '控制在环', dataIndex: 'is_in_ring', width: 100, formatter: (value: string) => value ? '是' : '否' },

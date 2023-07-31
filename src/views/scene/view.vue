@@ -15,7 +15,7 @@ const getEditData = async () => {
     const data = await api.scene.get(useRoute().params.id)
     formItems.value = [
       { label: '场景ID', value: data.id },
-      { label: '场景名称', value: data.adsName },
+      { label: '场景名称', value: data.adsName, isBreak: false },
       { label: '场景来源', value: getSceneSourceName(data.adsSource) },
       { label: '所属场景集', value: data.sceneset_name },
       { label: '关联地图', value: data.mapName + '_' + data.mapVersion },

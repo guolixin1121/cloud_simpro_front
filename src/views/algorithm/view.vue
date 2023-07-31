@@ -17,8 +17,8 @@ const getLookData = async () => {
     const data = res.results[0]
     formItems.value = [
       { label: '算法名称', value: data.name },
-      { label: '算法镜像', value: data.docker_path, isBreak: true },
-      { label: '启动命令', value: data.cmd, isBreak: true },
+      { label: '算法镜像', value: data.docker_path },
+      { label: '启动命令', value: data.cmd },
       { label: '控制在环', value: data.is_in_ring ? '是' : '否' },
       { label: '描述', value: data.desc },
       { label: '创建时间', value: data.create_time },

@@ -46,15 +46,19 @@
           <template v-else>{{ formState.mapTypeName }}</template>
         </a-form-item>
         <a-form-item v-if="!isView" label="地图文件：" name="xodr" :rules="[{ required: isAdd, message: '请上传地图文件'}]">
-          <single-upload
-            accept=".xodr"
-            class="inline-block pr-2"
-            v-model:value="formState.xodr"
-            :desc="'选择文件'"
-          ></single-upload>
-          <template v-if="!formState.xodr">{{ formState.mapFileName }}</template>
+          <div class="flex">
+            <single-upload
+              accept=".xodr"
+              class="inline-block pr-2"
+              v-model:value="formState.xodr"
+              :desc="'选择文件'"
+            ></single-upload>
+            <span style="white-space: break-spaces; word-break: break-all;" v-if="!formState.xodr">{{ formState.mapFileName }}</span>
+          </div>
         </a-form-item>
-        <a-form-item v-if="!isAdd" label="地图文件：">{{ formState.latestVersionUrl }} </a-form-item>
+        <a-form-item v-if="!isAdd" label="地图文件：">
+          <div style="white-space: break-spaces; word-break: break-all;">{{ formState.latestVersionUrl }}</div>
+        </a-form-item>
         <a-form-item v-if="!isAdd" label="地图版本：" name="name">
           <span>{{ formState.latestVersion }}</span>
         </a-form-item>

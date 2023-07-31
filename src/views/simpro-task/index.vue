@@ -45,7 +45,7 @@ const onSearch = (data: Query) => (query.value = data)
 const tableRef = ref()
 const router = useRouter()
 const columns = [
-  { dataIndex: 'checkbox', width: 40, 
+  { dataIndex: 'checkbox', width: 50, 
     validator: (data: RObject) => ['运行', '等待'].indexOf(data.status) === -1 && user.user.username == data.create_user
   },
   { title: '任务ID', dataIndex: 'number', width: 120 },
