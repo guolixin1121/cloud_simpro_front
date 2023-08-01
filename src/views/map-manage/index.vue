@@ -1,6 +1,8 @@
 <template>
   <div class="main-tree">
-    <tree :title="'地图集'" :api="mapsApi.getMapCatalog" :button-handlers="treeBtnHandlers" @select="onTreeSelect" />
+    <tree :title="'地图集'" :api="mapsApi.getMapCatalog" :button-handlers="treeBtnHandlers" 
+      @select="onTreeSelect"
+      :refreshSelected="getMapSet"/>
 
     <div class="main-right">
       <a-spin :spinning="catalogLoading">
@@ -86,16 +88,16 @@ const onTreeSelect = async (val: any) => {
   store.catalog.mapCatalog = val
   // 切换地图集，地图列表page重置为1
   query.value = { ...query.value, catalog: val.id, page: 1 }
-  if (val?.isLeaf) {
-    try {
-      catalogLoading.value = true
-      const res = await api.mapsets.getList()
-      selectedMapset.value = getMapSet(res.results, val.id)
-      store.catalog.mapCatalog = selectedMapset.value
-    } finally {
-      catalogLoading.value = false
-    }
-  }
+  // if (val?.isLeaf) {
+  //   try {
+  //     catalogLoading.value = true
+  //     const res = await api.mapsets.getList()
+  //     selectedMapset.value = getMapSet(res.results, val.id)
+  //     store.catalog.mapCatalog = selectedMapset.value
+  //   } finally {
+  //     catalogLoading.value = false
+  //   }
+  // }
 }
 
 const treeBtnHandlers = {
@@ -114,14 +116,18 @@ const onBatchDelete = async () => {
 }
 
 // 遍历地图目录树查找
-const getMapSet = (data: any, id: string): Object => {
+const getMapSet = async (id: string, data?: any) => {
+  if(!data) {
+    const res = await api.mapsets.getList()
+    data = res.results
+  }
   let result = {}
   for(let i = 0; i < data.length; i++) {
     const item = data[i]
     if(item.id == id) {
       result = item
     } else {
-      result = getMapSet(item.children, id)
+      result = await getMapSet(id, item.children)
     }
     if(!isEmpty(result)) {
       break

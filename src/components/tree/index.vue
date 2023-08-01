@@ -99,6 +99,9 @@ const props = defineProps({
   recurse: {
     type: Boolean,
     default: () => false
+  },
+  refreshSelected: {
+    type: Function
   }
 })
 const emits = defineEmits(['select', 'btn-click'])
@@ -112,8 +115,12 @@ if (query.value?.name) {
   searchValue.value = query.value.name
 }
 
-onMounted(() => {
+onMounted(async () => {
   searchQuery.value = { ...props.query, name: searchValue.value }
+  // just for map
+  if(props.refreshSelected) {
+    selectedNode.value = await props.refreshSelected(selectedNode.value.id)
+  }
   selectedRowKeys.value = [selectedNode.value?.id]
   if (!isEmpty(selectedNode.value) && selectedNode.value.isLeaf) {
     emits('select', selectedNode.value)
