@@ -16,7 +16,7 @@
           <div v-else>{{ formState.isLeaf ? "场景集" : '场景目录' }}</div>
         </a-form-item>
         <a-form-item label="所属场景目录" name="parentId" 
-          :rules="[{ required: true, message: '请选择所属场景目录'}]">
+          :rules="[{ required: isAdd ? true : false, message: '请选择所属场景目录'}]">
           <tree-select-async
             v-if="isAdd"
             :show-search="false"
@@ -82,7 +82,7 @@ const formState = reactive({
 })
 
 const path = computed(() => {
-  return (formState.parent?.title || '') + '/' + formState.name
+  return isAdd ? ((formState.parent?.title || '') + '/' + formState.name) : ''
 })
 
 const loading = ref(false)
@@ -97,8 +97,10 @@ const add = async () => {
     parentId: formState.parentId,
     labels: formState.labels?.map((item: any) => item.value || item.name),
     isLeaf:formState.isLeaf,
-    path: path.value
+    // path: path.value
   }
+
+  // if(!params.path) delete params.path
   
   try {
     isAdd 

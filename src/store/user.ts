@@ -16,7 +16,7 @@ export const useUserStore = defineStore('user', () => {
     LStorage.remove('token')
     location.href = import.meta.env.VITE_LOGIN_URL
     const host = location.hostname
-    if(host.indexOf('.com')) {
+    if(host.indexOf('.com') > -1) {
       if(host.indexOf('pre-') > -1) {
         location.href = 'http://pre-ad-data.gacicv.com/auth/realms/gacicv/protocol/openid-connect/auth?redirect_uri=http://pre-ad-sim-safety.gacicv.com/&client_id=safety-simulation&response_type=code'
       } else {

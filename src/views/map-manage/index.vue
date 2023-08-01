@@ -3,9 +3,11 @@
     <tree :title="'地图集'" :api="mapsApi.getMapCatalog" :button-handlers="treeBtnHandlers" @select="onTreeSelect" />
 
     <div class="main-right">
-      <div class="right-title">
-        <div class="title-item"><span class="label">地图集名称</span>{{ selectedMapset?.name }}</div>
-      </div>
+      <a-spin :spinning="catalogLoading">
+        <div class="right-title">
+          <div class="title-item"><span class="label">地图集名称</span>{{ selectedMapset?.name }}</div>
+        </div>
+      </a-spin>
       <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
 
       <div class="main">
@@ -35,6 +37,7 @@
 
 <script setup lang="ts">
 import { SStorage } from '@/utils/storage'
+import { isEmpty } from '@/utils/tools'
 
 /****** api */
 const user = store.user
@@ -76,12 +79,23 @@ const gotoVersion = (record: any) => {
   router.push({ path: versionUrlPath, query: { preRoute, name: record.name } })
 }
 
+const catalogLoading = ref(false)
 store.catalog.mapCatalog = {}
-const onTreeSelect = (val: any) => {
+const onTreeSelect = async (val: any) => {
   selectedMapset.value = val
   store.catalog.mapCatalog = val
   // 切换地图集，地图列表page重置为1
   query.value = { ...query.value, catalog: val.id, page: 1 }
+  if (val?.isLeaf) {
+    try {
+      catalogLoading.value = true
+      const res = await api.mapsets.getList()
+      selectedMapset.value = getMapSet(res.results, val.id)
+      store.catalog.mapCatalog = selectedMapset.value
+    } finally {
+      catalogLoading.value = false
+    }
+  }
 }
 
 const treeBtnHandlers = {
@@ -97,5 +111,22 @@ const onBatchDelete = async () => {
   await api.maps.batchDeleteMaps({maps_name: selectedItems.value})
   tableRef.value.refresh()
 
+}
+
+// 遍历地图目录树查找
+const getMapSet = (data: any, id: string): Object => {
+  let result = {}
+  for(let i = 0; i < data.length; i++) {
+    const item = data[i]
+    if(item.id == id) {
+      result = item
+    } else {
+      result = getMapSet(item.children, id)
+    }
+    if(!isEmpty(result)) {
+      break
+    }
+  }
+  return result
 }
 </script>

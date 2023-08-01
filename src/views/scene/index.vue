@@ -117,7 +117,6 @@ const scenesetLoading = ref(false)
 const onTreeSelect = async (sceneset: any) => {
   selectedSceneset.value = sceneset
   store.catalog.sceneCatalog = sceneset
-
   // 切换地图集，地图列表page重置为1
   query.value = { ...query.value, scene_set: sceneset?.id, page: 1 }
   // 场景集信息

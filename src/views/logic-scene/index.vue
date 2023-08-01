@@ -28,7 +28,7 @@
       <p class="ml-8 mt-2">泛化结果为{{ runScene.config_result_count }}个具体场景</p>
       <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
         <a-button @click="closeRunConfirm">否</a-button>
-        <a-button @click="runConfirm" type="primary" class="ml-2">是</a-button>
+        <a-button @click="runConfirm" :loading="isSubmitting" type="primary" class="ml-2">是</a-button>
       </div>
     </a-modal>
   </div>
@@ -96,15 +96,21 @@ const columns = [
     }
   }
 ]
+const isSubmitting = ref(false)
 const closeRunConfirm = () => showRunConfirm.value = false
 const runConfirm = async () => {
-  await currentApi.run({
-    source: 0,
-    data: [{
-      logic_scene_version_id: runScene.value.logic_scene_version_id
-  }]})
-  closeRunConfirm()
-  tableRef.value.refresh()
+  try {
+    isSubmitting.value = true
+    await currentApi.run({
+      source: 0,
+      data: [{
+        logic_scene_version_id: runScene.value.logic_scene_version_id
+    }]})
+    closeRunConfirm()
+    tableRef.value.refresh()
+  } finally {
+    isSubmitting.value = false
+  }
 }
 
 // table checkbox
