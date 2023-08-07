@@ -6,7 +6,7 @@
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading">
-      <a-form ref="form" :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 55%" @finish="add">
+      <Form :model="formState" @finish="add">
         <a-form-item label="所属场景集" name="scenesets" :rules="[{ required: true, message: '请选择场景集' }]">
           <tree-select-async
             v-if="isEmpty(sceneCatalog)"
@@ -15,9 +15,9 @@
             :api="baseApi.scenesets.getList"
             :query="{version: 2}"
             ></tree-select-async>
-            <span v-else>{{ formState.scenesetsName }}</span>
-        </a-form-item>
-        <a-form-item
+            <span v-else>{{ formState.scenesetsName }}</span>       
+           </a-form-item>
+          <a-form-item
           label="场景名称"
           name="adsName"
           :rules="[
@@ -70,7 +70,7 @@
           </a-button>
           <a-button @click="goback" class="ml-2">取消</a-button>
         </a-form-item>
-      </a-form>
+      </Form>
     </a-spin>
   </div>
 </template>
@@ -101,8 +101,6 @@ const formState = reactive({
   labels: [],
   adsUrl: undefined,
 })
-const form = ref()
-
 const loading = ref(false)
 const router = useRouter()
 const goback = () => router.push('/scene')
@@ -165,8 +163,4 @@ const getEditData = async () => {
   }
 }
 getEditData()
-
-watch(() => formState.scenesets, () => form.value.validateFields('scenesets'))
-watch(() => formState.adsName, () => form.value.validateFields('adsName'))
-watch(() => formState.mapVersion, () => form.value.validateFields('mapVersion'))
 </script>

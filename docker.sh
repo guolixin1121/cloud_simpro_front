@@ -1,5 +1,5 @@
-export VERSION='0.125'
-
+export VERSION='0.128'
+docker rmi $(docker images | grep "/tenant-eaws/cloud_simpro_front" | awk '{print $3}') -f
 docker build -t cloud_simpro_front .
 # docker save cloud_simpro_front > cloud_simpro_front.tar
 docker login -u guohuang@saimo.ai@151 -p Gh19850506 registry-vecps-ns.gaccloud.com.cn

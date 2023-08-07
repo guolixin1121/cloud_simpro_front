@@ -29,17 +29,17 @@ const props = defineProps({
     type: String, // 'input' | 'textarea',
     default: 'input'
   },
-  filter: {
+  exclude: {
     type: RegExp
   }
 } as any)
 
-const emits = defineEmits(['change', 'update:value'])
+const emits = defineEmits(['update:value'])
 const { value, maxlength } = toRefs(props)
 const inputChange = (e: { target: { value: any } }) => {
   let value = e.target.value
-  if(props.filter) {
-    value = value.replace(props.filter, '')
+  if(props.exclude) {
+    value = value.replace(props.exclude, '')
   }
   const totalLength = getWordLength(value)
   if ( totalLength <= +maxlength.value) {

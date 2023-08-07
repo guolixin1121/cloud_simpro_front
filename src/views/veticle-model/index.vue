@@ -13,6 +13,7 @@
       </div>
     </div>
     <Table
+      ref="table"
       :api="veticleModelApi.getList"
       :query="query"
       :columns="columns"
@@ -169,8 +170,16 @@ const add = async (template_id = '') => {
   const res = await veticleModelApi.add({ template_id })
   gotoVeticlePro(res.id, '?type=add')
 }
+
+const table = ref()
 const gotoVeticlePro = (id: string | number, params?: string) => {
-  window.open('/vehicle_front/model/carBody/' + id + params, '_blank')
+  const modelWindow = window.open('/vehicle_front/model/carBody/' + id + params, '_model')
+  const timer = setInterval(() => {
+    if(modelWindow?.closed) {
+      clearInterval(timer)
+      table?.value.refresh()
+    }
+  }, 500)
 }
 
 const loading = ref(false)

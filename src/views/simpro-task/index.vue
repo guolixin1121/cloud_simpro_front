@@ -3,7 +3,10 @@
 
   <div class="main">
     <div class="flex justify-between items-center">
-      <span class="title">仿真任务列表</span>
+      <div class="flex items-center">
+        <span class="title mr-4">仿真任务列表</span>
+        <a-checkbox v-model:checked="isOwner" class="table_model" @change="onChecked">我的任务</a-checkbox>
+      </div>
       <div>
         <batch-button :disabled="!selectedRunRows.length" :api="batchRun" :double-confirm="false" label="运行"></batch-button>
         <batch-button :disabled="!selectedDeleteRows.length" v-if="user.hasPermission('add')" :api="batchDelete"></batch-button>
@@ -25,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { TaskSourceOptions, getTaskSourceName } from '@/utils/dict'
+import { TaskSourceOptions, getTaskSourceName, resultStatus } from '@/utils/dict'
 import { SStorage } from '@/utils/storage'
 /****** api */
 const user = store.user
@@ -35,11 +38,16 @@ const currentApi = api.task
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入仿真任务名称或主车模型' },
   { label: '任务来源', key: 'source', type: 'select', options: TaskSourceOptions, defaultValue: '' },
+  { label: '运行状态', key: 'status', type: 'select', options: resultStatus, defaultValue: '' },
   { label: '仿真算法', key: 'algorithm', type: 'select', api: api.algorithm.getList, defaultValue: '' },
+  { label: '所属用户', key: 'user', type: 'input', placeholder: '请输入所属用户' },
   { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
 const query: Query = ref({})
-const onSearch = (data: Query) => (query.value = data)
+const onSearch = (data: Query) => (query.value = { ...data, owner: isOwner.value ? 1 : 0 })
+
+const isOwner = ref(false)
+const onChecked = () => query.value = {...query.value, owner: isOwner.value ? 1 : 0}
 
 /****** 表格区域 */
 const tableRef = ref()

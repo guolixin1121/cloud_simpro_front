@@ -12,6 +12,15 @@
             >查看报告</a
           >
         </template>
+        <template v-if="column.dataIndex == 'status'">
+          <div class="flex items-center">
+            <span>{{ record.obs_report ? '正常' : '异常'}}</span>
+            <a-tooltip placement="topLeft" :title="record.errmsg" v-if="!record.obs_report">
+              <!-- 异常时显示错误信息 -->
+              <img class="ml-1 cursor-pointer" style="height: 16px;" src="../../../assets/images/tip.png" />
+            </a-tooltip>
+          </div>
+        </template>
       </template>
     </Table>
   </a-spin>
@@ -27,6 +36,7 @@ const columns = [
   { dataIndex: 'adsName', title: '场景名称' },
   { dataIndex: 'labels_detail', title: '场景标签', apiField: 'display_name' },
   { dataIndex: 'batch', title: '仿真轮次', width: 100 },
+  { dataIndex: 'status', title: '状态', width: 100 },
   {
     dataIndex: 'actions',
     title: '操作',

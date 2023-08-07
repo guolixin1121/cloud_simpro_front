@@ -117,8 +117,8 @@ const currentApi = api.task
 const formState = reactive({
   name: undefined,
   dynamic_vehicle: '',
-  vehicle_horizontal: 1,
-  vehicle_vertical: 1,
+  vehicle_horizontal: 0,
+  vehicle_vertical: 0,
   sensors: [],
   is_in_ring: '0',
   mount: '',

@@ -46,7 +46,8 @@ const formItems = ref<SearchFormItem[]>([
     key: 'projectStatus',
     type: 'select',
     options: SotifStatusOptions,
-    placeholder: '请选择项目状态'
+    placeholder: '请选择项目状态',
+    defaultValue: ''
   },
   { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])

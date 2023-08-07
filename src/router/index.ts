@@ -3,25 +3,22 @@ import Layout from '../layout/index.vue'
 import { generateRouteFromViews } from './route'
 import { getQueryParmas } from '@/utils/tools'
 
-const routeFromViews = generateRouteFromViews()
 const routes: RouteRecordRaw[] = [
   {
     path: '/',
     redirect: '/overview/',
     component: Layout,
-    children: [
-      ...routeFromViews,
-      {
-        path: '/demo',
-        name: 'demo',
-        component: async () => await import(/* webpackChunkName: "default" */ '@/components/demo.vue')
-      }
-    ]
+    children: generateRouteFromViews()
+  },
+  {
+    path: '/demo',
+    name: 'demo',
+    component: async () => await import(/* webpackChunkName: "demo" */ '@/components/index.vue')
   },
   {
     name: 'login',
     path: '/login',
-    component: async () => await import(/* webpackChunkName: "default" */ '@/views/login/index.vue')
+    component: async () => await import(/* webpackChunkName: "login" */ '@/views/login/index.vue')
   }
 ]
 

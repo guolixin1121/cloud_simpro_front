@@ -24,3 +24,9 @@ options中`label、value`在api返回值中对应的字段，默认为`name、id
   }
 ```
 
+### query: Object
+api接口的查询条件
+
+### maxlength: number
+多选时最多选择的个数，默认：9
+

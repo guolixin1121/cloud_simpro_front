@@ -1,13 +1,11 @@
 # 封装了搜索项表单
 通过简单配置就可以得到搜索项表单   
-**特性**
-+ 支持ant design组件原有的所有属性
+支持ant design组件原有的所有属性
 
-## 属性
-1. items
+### items
 表单项数组，记录每个项的组件类型、标签名称、数据props等      
-组件类型为antdesign的a-xx中的xx，目前支持`input，select，range-picker`   
-key为`date`时默认会返回`start_date, end_date`
+组件类型为`ant design`的`a-xx`中的**xx**   
+key为`create_time`时默认会返回`start_date, end_date`
 ``` javascript
 // 列表搜索项
 interface SearchFormItem {
@@ -21,9 +19,30 @@ interface SearchFormItem {
   [key: string]: any // 支持和antd组件一样的属性
 ```
 
-2. loading
-当前页面是否正在加载数据，加载数据时按钮不可触发。用于避免多次频繁触发搜索按钮
+### query: Object
 
-## 事件
-1. on-search
+### manual: Boolean
+是否手动触发首次搜索，默认 false
+
+### search： Event
 点击搜索按钮时触发
+
+```
+<search-form :items="formItems" @search="onSearch"></search-form>
+const formItems = ref<SearchFormItem[]>([
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入算法名称' },
+  { label: '控制在环', key: 'is_in_ring', type: 'select', 
+    options: [{ label: '是' , value: 1 }, { label: '否', value: 0 }],
+    defaultValue: ''
+  },
+  {
+    label: '类别',
+    key: 'category',
+    type: 'tree-select',
+    api: currentApi.getTypes,
+    fieldNames: { label: 'title', value: 'id' },
+    defaultValue: ''
+  },
+  { label: '创建者', key: 'username', type: 'input', placeholder: '请输入创建者' },
+])
+```

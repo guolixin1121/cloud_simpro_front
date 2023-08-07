@@ -21,15 +21,23 @@
       title="泛化"
       :closable="false"
       :footer="null">
-      <div>
-        <svg-icon style="color: #faad14" icon="alert"></svg-icon>
-        <span class="ml-4" style="font-size: 16px">是否要对此逻辑场景进行泛化？</span>
-      </div>
-      <p class="ml-8 mt-2">泛化结果为{{ runScene.config_result_count }}个具体场景</p>
-      <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
-        <a-button @click="closeRunConfirm">否</a-button>
-        <a-button @click="runConfirm" :loading="isSubmitting" type="primary" class="ml-2">是</a-button>
-      </div>
+        <template v-if="runScene.config_result_count <= 10000">
+          <div>
+            <svg-icon style="color: #faad14" icon="alert"></svg-icon>
+            <span class="ml-4" style="font-size: 16px">是否要对此逻辑场景进行泛化？</span>
+          </div>
+          <p class="ml-8 mt-2">泛化结果为{{ runScene.config_result_count }}个具体场景</p>
+          <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
+            <a-button @click="closeRunConfirm">否</a-button>
+            <a-button @click="runConfirm" :loading="isSubmitting" type="primary" class="ml-2">是</a-button>
+          </div>
+        </template>
+      <template v-else>
+        <div>
+          <svg-icon style="color: #faad14" icon="alert"></svg-icon>
+          <span class="ml-4" style="font-size: 16px">泛化数量超过上限（10000）</span>
+        </div>
+      </template>
     </a-modal>
   </div>
 </template>
@@ -56,7 +64,7 @@ const formItems = ref<SearchFormItem[]>([
     label: '来源',
     key: 'source',
     type: 'select',
-    options: [{ label: '全部', value: ''}, { label: '云平台', value: 0}, { label: 'SOTIF', value: 1 }],
+    options: [{ label: '云平台', value: 0}, { label: 'SOTIF', value: 1 }],
     defaultValue: ''
   },
   { label: '创建时间', key: 'create_time', type: 'range-picker' }

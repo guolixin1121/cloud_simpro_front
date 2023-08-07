@@ -17,7 +17,7 @@
     </div>
     <div class="input">
       <span class="select-item-label label--1">自定义</span>
-      <ch-input style="width: 365px;" v-model:value="inputName" :maxlength="16" :filter="'_'" placeholder="最多16位，不支持下划线"></ch-input>
+      <ch-input style="width: 365px;" v-model:value="inputName" :maxlength="16" :exclude="'_'" placeholder="最多16位，不支持下划线"></ch-input>
     </div>
   </a-form-item-rest>
 </template>
@@ -56,8 +56,10 @@ const options = ref<Record<string, string>[][]>([])
 const handleSelectChange = async (index: number, value: string) => {
   // 清空后续所有值
   for(let i = index + 1; i < count; i++) {
-    names.value[i] = null as any
     options.value[i] = [] as any
+    if(names.value[i]) {
+      names.value[i] = null as any
+    }
   }
   // 更新下一级下拉数据
   if(index < count - 1) {
@@ -65,14 +67,6 @@ const handleSelectChange = async (index: number, value: string) => {
   }
   emitsFullName()
 }
-const init = async () => {
-  try {
-    options.value[0] = await getChildOptions()
-  } catch {
-    console.log('error')
-  }
-}
-
 const getChildOptions = async (parent?: string, pLevel?: number) => {
   const params = pLevel == undefined ? null : {
     first_catalog_value: names.value[0],
@@ -90,22 +84,26 @@ const getChildOptions = async (parent?: string, pLevel?: number) => {
 const emitsFullName = () => {
   const namesString = names.value.reduce((sum, name) => sum += name ? (name + '_') : '', '')
   fullName.value = 'GAC_' + namesString + inputName.value
-  // 判断是9级还是10级
-  const namesList = isLastVisible() ? names.value : names.value.slice(0, count - 1)
-  // const lastOptions = options.value[count - 1]
-  // const namesList = lastOptions.length && lastOptions[0].value == 'None' ? names.value.slice(0, count - 1) : names.value
-  // 是否所有级别有数据
-  let isAllNameSelected = true
-  namesList.forEach((value: string) => isAllNameSelected = isAllNameSelected && (value != null) )
+
+  // 判断是9级还是10级, 是否所有级别有数据
+  const levels = isLastVisible() ? 10 : 9
+  const isAllNameSelected = names.value.length == levels
+
   if(isAllNameSelected && inputName.value) {
     emits('update:value', fullName.value)
   } else {
     emits('update:value', '')
   }
 }
-
 watch(inputName, emitsFullName)
 
+const init = async () => {
+  try {
+    options.value[0] = await getChildOptions()
+  } catch {
+    console.log('error')
+  }
+}
 init()
 </script>
 

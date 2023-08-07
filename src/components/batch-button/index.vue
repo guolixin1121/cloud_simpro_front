@@ -17,6 +17,7 @@
 
 <script setup lang="ts">
 const props = defineProps({
+  // 按钮label
   label: {
     type: String,
     default: () => '删除'
@@ -25,6 +26,7 @@ const props = defineProps({
     type: Function,
     required: true
   },
+  // 是否需要二次确认
   doubleConfirm: {
     type: Boolean,
     default: () => true

@@ -2,10 +2,15 @@
   <search-form :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
-    <page-title title="仿真结果列表">
-      <batch-button :disabled="!selectedRows.length" v-if="user.hasPermission('delete')" :api="batchDelete"></batch-button>
-    </page-title>
-
+    <div class="flex justify-between items-center">
+      <div class="flex items-center">
+        <span class="title mr-4">仿真结果列表</span>
+        <a-checkbox v-model:checked="isOwner" class="table_model" @change="onChecked">我的结果</a-checkbox>
+      </div>
+      <div>
+        <batch-button :disabled="!selectedRows.length" v-if="user.hasPermission('delete')" :api="batchDelete"></batch-button>
+      </div>
+    </div>
     <a-spin :spinning="loading">
       <Table
         ref="table"
@@ -24,13 +29,6 @@
           </template>
           <template v-if="column.dataIndex == 'status'">
             <span :class="'task-status task-status--' + record.status">{{ getResultStatus(record.status) }}</span>
-            <a-popover title="" trigger="hover" v-if="record.status == 4 && record.errmsg">
-              <!-- 异常时显示错误信息 -->
-              <template #content>
-                <span v-html="record.errmsg"></span>
-              </template>
-              <img class="ml-1 cursor-pointer" src="../../assets/images/tip.png" />
-            </a-popover>
           </template>
         </template>
       </Table>
@@ -39,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { TaskSourceOptions, getTaskSourceName, getResultStatus } from '@/utils/dict'
+import { TaskSourceOptions, getTaskSourceName, resultStatus, getResultStatus } from '@/utils/dict'
 
 const templateId = useRoute().query.templateId as string
 const router = useRouter()
@@ -47,36 +45,34 @@ const user = store.user
 const currentApi = api.result
 
 const isRunOrWait = (status: number) => status === 2 || status === 1
-const isFinished = (status: number) => status === 3
+const isFinished = (status: number) => status === 3 || status === 4
 const isNotRunning = (status: number) => status !== 2
 
 /****** 搜素区域 */
 type Query = Record<string, any>
 const query: Query = ref({})
+
+const isOwner = ref(false)
+const onChecked = () => query.value = {...query.value, owner: isOwner.value ? 1 : 0}
+
 const formItems = ref<SearchFormItem[]>([
   {
-    label: '名称',
-    key: 'name',
-    type: 'input',
-    placeholder: '请输入仿真任务名称或任务ID',
+    label: '名称', key: 'name', type: 'input', placeholder: '请输入仿真任务名称或任务ID',
     defaultValue: templateId,
     resetValue: ''
   },
   { label: '任务来源', key: 'source', type: 'select', options: TaskSourceOptions, defaultValue: '' },
+  { label: '运行状态', key: 'status', type: 'select', options: resultStatus, defaultValue: '' },
+  { label: '仿真算法', key: 'algorithm', type: 'select', api: api.algorithm.getList, defaultValue: '' },
   {
-    label: '仿真结果',
-    key: 'is_passed',
-    type: 'select',
+    label: '仿真结果', key: 'is_passed', type: 'select', placeholder: '请选择仿真结果', defaultValue: '',
     options: [
-      { label: '全部', value: '' },
       { label: '未通过', value: '0' },
       { label: '通过', value: '1' },
       { label: '--', value: '2' }
-    ],
-    placeholder: '请选择仿真结果',
-    defaultValue: ''
+    ]
   },
-  { label: '仿真算法', key: 'algorithm', type: 'select', api: api.algorithm.getList, defaultValue: '' },
+  { label: '所属用户', key: 'user', type: 'input', placeholder: '请输入所属用户' },
   { label: '完成时间', key: 'create_time', type: 'range-picker' }
 ])
 const onSearch = (data: Query) => (query.value = data)
@@ -91,7 +87,7 @@ const columns = [
   { title: '主车模型', dataIndex: 'vehicle_detail', width: 150, ellipsis: true },
   { title: '仿真算法', dataIndex: 'algorithm_detail', width: 150, ellipsis: true },
   { title: '评测指标', dataIndex: 'kpi_detail', width: 180, ellipsis: true },
-  { title: '任务状态', dataIndex: 'status', width: 100 },
+  { title: '运行状态', dataIndex: 'status', width: 100 },
   { title: '任务结果', dataIndex: 'is_passed', width: 80 },
   { title: '完成时间', dataIndex: 'finish_time', width: 150 },
   { title: '所属用户', dataIndex: 'create_user', width: 100 },

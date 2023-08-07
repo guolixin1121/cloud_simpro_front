@@ -1,5 +1,6 @@
 <template>
   <a-select
+    ref="self"
     v-model:value="innerValue"
     :options="options"
     placeholder="请选择"
@@ -50,12 +51,23 @@ let searchValue = ''
 
 // 根据defaultValue是否为空，判断是否需要加‘全部’的option
 // 一般在列表页搜索时需要加，在编辑页是不需要加
+const self = ref()
 const initOptions = () => {
   options.value = []
 
   const defaultValue = attrs.defaultValue
   const hasAllOption = defaultValue === '' || (Array.isArray(defaultValue) && defaultValue.toString() === '')
-  hasAllOption && options.value.push({ label: '全部', value: '' })
+ 
+  if(hasAllOption) {
+    if(props.api) {
+      options.value.push({ label: '全部', value: '' })
+    } else {
+      const attrsOptions = useAttrs().options as any
+      if(!attrsOptions.find((item: any) => item.label === '全部')) {
+        attrsOptions.unshift({ label: '全部', value: '' })
+      }
+    }
+  }
 }
 
 const filterOption = (input: string, option: any) => {
@@ -84,7 +96,7 @@ const onSearch = throttle((input: string) => {
     }
     getOptions()
   }
-}, 899, { leading: false})
+}, 800, { leading: false})
 
 // 重新获取数据
 const onFocus = () => {
@@ -180,7 +192,6 @@ watch(
     getOptions()
   }
 )
-
 initOptions()
 getOptions()
 </script>
