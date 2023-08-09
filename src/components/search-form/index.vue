@@ -98,7 +98,7 @@ onMounted(() => {
         }
       })
     }
-    emitSearch(false)
+    !props.manual && emitSearch(false)
   } else {
     SStorage.clear()
     !props.manual && emitSearch()
