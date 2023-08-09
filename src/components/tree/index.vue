@@ -34,6 +34,9 @@
         <template #icon="{ isLeaf }">
           <svg-icon :icon="isLeaf ? 'leaf' : 'folder'"></svg-icon>
         </template>
+        <template #switcherIcon="{ switcherCls }">
+          <down-outlined :class="switcherCls" />
+        </template>
       </a-tree>
     </div>
     <div class="float-right mt-2">
@@ -70,6 +73,7 @@
 </template>
 
 <script setup lang="ts">
+import { DownOutlined } from '@ant-design/icons-vue'
 import { useSessionStorage } from '@vueuse/core'
 import { isEmpty } from 'lodash'
 

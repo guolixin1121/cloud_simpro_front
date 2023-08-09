@@ -177,6 +177,14 @@ export const sensor = defineApi({
   add: { url: '/sensor/', method: 'post', headers: { 'content-type': 'multipart/form-data' } },
   delete: { url: '/sensor/{sid}', method: 'delete' }
 })()
+// 动态库
+export const dll = defineApi({
+  getList: { url: '/dll/', method: 'get' },
+  get: { url: '/dll/{sid}', method: 'get' },
+  edit: { url: '/dll/{sid}', method: 'put', headers: { 'content-type': 'multipart/form-data' } },
+  add: { url: '/dll/', method: 'post', headers: { 'content-type': 'multipart/form-data' } },
+  delete: { url: '/dll/{sid}', method: 'delete' }
+})()
 
 export const overview = defineApi({
   summary: { url: '/stats/simpro/summary/', method: 'get' },
