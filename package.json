@@ -19,6 +19,7 @@
     "docker": "sh docker.sh"
   },
   "dependencies": {
+    "@ant-design/icons-vue": "^6.1.0",
     "@vueuse/core": "^9.13.0",
     "@ysx-libs/vue-virtual-tree": "^0.0.3",
     "ant-design-vue": "^3.2.16",
