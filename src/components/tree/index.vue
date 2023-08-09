@@ -40,17 +40,17 @@
       </a-tree>
     </div>
     <div class="float-right mt-2">
-      <svg-icon title="创建场景集" icon="add" class="cursor-pointer mr-1" @click="onButtonClick('add')"></svg-icon>
+      <svg-icon title="创建" icon="add" class="cursor-pointer mr-1" @click="onButtonClick('add')"></svg-icon>
       <svg-icon
         icon="edit"
-        title="编辑场景集"
+        title="编辑"
         class="cursor-pointer mr-1"
         :class="isEmpty(selectedNode) || !selectedNode.isLeaf ? 'icon--disable' : ''"
         @click="onButtonClick('edit')"
       ></svg-icon>
       <svg-icon
         icon="delete"
-        title="删除场景集"
+        title="删除"
         class="cursor-pointer mr-1"
         :class="isEmpty(selectedNode) ? 'icon--disable' : ''"
         @click="onButtonClick('delete')"
