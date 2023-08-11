@@ -1,4 +1,5 @@
 export const SceneSourceOptions = [
+  { label: '全部', value: '' },
   { label: '编辑', value: 0 },
   { label: '泛化', value: 1 },
   { label: '导入', value: 2 }
@@ -7,6 +8,7 @@ export const SceneSourceOptions = [
 export const getSceneSourceName = (value: number | string) => SceneSourceOptions.find(v => v.value === value)?.label
 
 export const TaskSourceOptions = [
+  { label: '全部', value: '' },
   { label: '云平台', value: 0 },
   { label: 'SOTIF', value: 1 },
   { label: 'CICD', value: 2 }
@@ -44,11 +46,13 @@ export const IsTag = [
 // }
 // 车辆模型数
 export const typeList = [
+  { label: '全部', value: '' },
   { label: '导入', value: 1 },
   { label: '创建', value: 2 }
 ]
 
 export const sensorType = [
+  { label: '全部', value: '' },
   { label: '激光雷达', value: 1 },
   { label: '毫米波雷达', value: 2 },
   { label: '超声波雷达', value: 3 },
@@ -57,6 +61,7 @@ export const sensorType = [
 
 // 仿真结果状态
 export const resultStatus = [
+  { label: '全部', value: '' },
   { label: '等待', value: 1 },
   { label: '运行', value: 2 },
   { label: '结束', value: 3 },

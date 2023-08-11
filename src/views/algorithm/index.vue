@@ -25,7 +25,7 @@ const algorithmApi = api.algorithm
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入算法名称' },
   { label: '控制在环', key: 'is_in_ring', type: 'select', 
-    options: [{ label: '是' , value: 1 }, { label: '否', value: 0 }],
+    options: [{ label: '全部' , value: '' }, { label: '是' , value: 1 }, { label: '否', value: 0 }],
     defaultValue: ''
   },
   { label: '创建者', key: 'username', type: 'input', placeholder: '请输入创建者' },

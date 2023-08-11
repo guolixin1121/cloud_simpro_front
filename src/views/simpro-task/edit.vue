@@ -28,11 +28,16 @@
         </a-select>
       </a-form-item>
       <div v-show="formState.mount == '1'">
+        <a-form-item label="动力学动态库" name="dynamic_lib"
+          :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择动力学动态库' }]">
+          <scroll-select v-model:value="formState.dynamic_lib" 
+            :api="baseApi.dll.getList" :is-set-default="true" placeholder="请选择动力学动态库"></scroll-select>
+        </a-form-item>
         <a-form-item label="车辆动力学" name="dynamic_vehicle"
-          :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择主车模型' }]">
+          :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择车辆动力学' }]">
           <scroll-select v-model:value="formState.dynamic_vehicle" 
             :api="baseApi.vehicle.getList"
-            :query="{is_share: 1}" placeholder="请选择主车模型"></scroll-select>
+            :query="{is_share: 1}" placeholder="请选择车辆动力学"></scroll-select>
         </a-form-item>
         <!-- <a-form-item label="驾驶员模型" name="driver">
           <scroll-select v-model:value="formState.driver"
@@ -55,7 +60,13 @@
       <a-form-item label="仿真频率" name="frequency" :rules="[{ required: true, message: '请输入仿真频率'}]">
         <a-input-number v-model:value="formState.frequency" :precision="0" min="10" max="200" placeholder="请输入仿真频率"></a-input-number>
       </a-form-item>
-      <a-form-item label="传感器" name="sensors">
+      <a-form-item label="感知在环" name="is_sensor" :rules="[{ required: true, message: '请选择感知在环' }]">
+        <a-select v-model:value="formState.is_sensor">
+          <a-select-option key="1" value="1">是</a-select-option>
+          <a-select-option key="0" value="0">否</a-select-option>
+        </a-select>
+      </a-form-item>
+      <a-form-item label="传感器" name="sensors" v-if="formState.is_sensor == '1'" :rules="[{ required: formState.is_sensor == '1' ? true :false, message: '请选择传感器'}]"> 
         <scroll-transfer v-model:target-keys="formState.sensors" :api="baseApi.sensor.getList"
           :titles="['可选传感器', '选中传感器']"></scroll-transfer>
       </a-form-item>
@@ -64,23 +75,12 @@
           :titles="['可选评测指标', '选中评测指标']"></scroll-transfer>
       </a-form-item>
       <a-form-item v-if="isAdd" label="所属场景集" name="scenesets" :rules="[{ required: isAdd, message: '请先选择场景集，再选择场景' }]">
-        <!-- <tree-select v-model:value="formState.scenesets" 
-            :api="baseApi.scenesets.getList"
-            placeholder="请选择所属场景集"
-            @change="onScenesetChanged"></tree-select>   -->
         <tree-select-async
             v-model:value="formState.scenesets" 
             placeholder="请选择所属场景集"
             :api="baseApi.scenesets.getList"
             :query="{version: 2}"
             @change="onScenesetChanged"></tree-select-async>
-        <!-- <tree-select v-model:value="formState.scenesets" 
-            :api="baseApi.scenesets.getList"
-            :query="{version: 2}"
-            :lazy="true"
-            placeholder="请选择所属场景集"
-            :fieldNames="{label: 'groupName', value: 'id'}"
-            @change="onScenesetChanged"></tree-select> -->
         </a-form-item>
       <a-form-item v-if="isAdd" label="场景" name="scenes" :rules="[{ required: isAdd, message: '请选择场景'}]">
         <scroll-transfer v-model:target-keys="formState.scenes" :api="getScenes" 
@@ -116,11 +116,13 @@ const currentApi = api.task
 
 const formState = reactive({
   name: undefined,
+  dynamic_lib: '',
   dynamic_vehicle: '',
   vehicle_horizontal: 0,
   vehicle_vertical: 0,
   sensors: [],
   is_in_ring: '0',
+  is_sensor: '1',
   mount: '',
   driver: undefined,
   algorithm: undefined,
@@ -142,12 +144,13 @@ const add = async () => {
     source: 0,
     name: formState.name,
     algorithm: formState.algorithm,
+    dynamic_lib: formState.dynamic_lib,
     dynamic_vehicle: formState.dynamic_vehicle,
     vehicle_horizontal: formState.vehicle_horizontal,
     vehicle_vertical: formState.vehicle_vertical,
     batch: formState.batch,
     mount: formState.mount,
-    sensors: formState.sensors.map((item:any) =>item.value),
+    sensors: formState.is_sensor == '1' ? formState.sensors.map((item:any) =>item.value) : [],
     scenes: formState.scenes.map((item:any) =>item.value || item.baidu_id),
     kpi: formState.kpi.map((item:any) =>item.value),
     is_in_ring: formState.is_in_ring,
@@ -174,18 +177,23 @@ const onScenesetChanged = () => {
 
 const getAlgorithm = ref()
 const onRingChanged = () => {
-  formState.mount = formState.is_in_ring == '0' ? '' : '1'
+  formState.mount = formState.is_in_ring == '0' ? '0' : '1'
   getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
   formState.algorithm = undefined
   if(formState.is_in_ring == '0') {
     formState.driver = '' as any
+    formState.vehicle_horizontal = 0
+    formState.vehicle_vertical = 0
+    formState.dynamic_vehicle = ''
+    formState.dynamic_lib = ''
   }
 }
 const onMountChanged = () => {
   if(formState.mount == '0') {
-    formState.vehicle_horizontal = 1
-    formState.vehicle_vertical = 1
+    formState.vehicle_horizontal = 0
+    formState.vehicle_vertical = 0
     formState.dynamic_vehicle = ''
+    formState.dynamic_lib = ''
   }
 }
 
@@ -195,15 +203,17 @@ const getEditData = async () => {
      const data = await currentApi.get(id)
      formState.name = data.name
      formState.batch = data.batch
-     formState.algorithm = data.algorithm_detail?.id
+     formState.algorithm = data.algorithm_detail.id
+     formState.dynamic_lib = data.dynamic_lib_detail?.id
      formState.dynamic_vehicle = data.vehicle_detail?.id
      formState.vehicle_horizontal = data.vehicle_horizontal
      formState.vehicle_vertical = data.vehicle_vertical
+     formState.is_sensor = data.sensors_detail.length ? '1' : '0'
      formState.sensors = data.sensors_detail
      formState.scenes= data.scenes_detail
      formState.kpi = data.kpi_detail
      formState.is_in_ring = data.is_in_ring ? '1' : '0',
-     formState.driver = data.driver_detail.id
+     formState.driver = data.driver_detail?.id
      formState.mount = data.mount.toString()
    }
    getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})

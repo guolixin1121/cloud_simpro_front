@@ -10,20 +10,21 @@
         label="动态库名称："
         name="name"
         :rules="[
-          { required: isAdd ? true : false, message: '请输入动态库名称'},
+          { required: true, message: '请输入动态库名称'},
           { validator: () => checkChName(formState.name, 50) }
         ]"
       >
         <ch-input v-if="isAdd" v-model:value="formState.name" :maxlength="50" placeholder="请输入动态库名称"></ch-input>
         <template v-else>{{ formState.name }}</template>
       </a-form-item>
-      <a-form-item label="动态库文件：" name="csv" :rules="[{ required: isAdd, message: '请上传动态库文件'}]">
+      <a-form-item label="动态库文件：" name="file" :rules="[{ required: isAdd, message: '请上传动态库文件'}]">
         <single-upload
           class="inline-block pr-2"
-          accept=".json"
-          v-model:value="formState.csv"
+          accept=".so"
+          v-model:value="formState.file"
           :desc="'选择文件'"
         ></single-upload>
+        <template v-if="!formState.file">{{ formState.so_url }}</template>
       </a-form-item>
      <a-form-item label="描述" name="name">
         <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入描述" :maxlength="255" rows="10"></ch-input>
@@ -41,27 +42,30 @@
 <script setup lang="ts">
 import { checkChName } from '@/utils/tools';
 
-const id = useRoute().params.isAdd
+const id = useRoute().params.id
 const isAdd = id === '0'
 const title = isAdd ? '上传动态库' : '修改动态库'
 const dllApi = api.dll
 
 const formState = reactive<any>({
   name: undefined,
-  csv: null,
+  file: null,
+  so_url: '',
   desc: ''
 })
 
 const loading = ref(false)
 const router = useRouter()
-const goback = () => router.push('/sensor')
+const goback = () => router.push('/dll')
 const add = async () => {
   loading.value = true
   const params: any = {
     name: formState.name,
-    csv: formState.csv,
+    file: formState.file,
     desc: formState.desc
   }
+
+  if(!params.file) delete params.file
 
   try {
     isAdd ? await dllApi.add({ ...params }) : await dllApi.edit({ id, data: { ...params } })
@@ -79,9 +83,8 @@ const getLookData = async () => {
   if (id !== '0') {
     const res = await dllApi.get(id)
     formState.name = res.name
-    formState.csv = null
     formState.desc = res.desc
-    formState.csv_url = res.csv_url
+    formState.so_url = res.so_url
   }
 }
 getLookData()

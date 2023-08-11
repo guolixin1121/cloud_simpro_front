@@ -64,7 +64,7 @@ const formItems = ref<SearchFormItem[]>([
     label: '来源',
     key: 'source',
     type: 'select',
-    options: [{ label: '云平台', value: 0}, { label: 'SOTIF', value: 1 }],
+    options: [{ label: '全部', value: ''}, { label: '云平台', value: 0}, { label: 'SOTIF', value: 1 }],
     defaultValue: ''
   },
   { label: '创建时间', key: 'create_time', type: 'range-picker' }

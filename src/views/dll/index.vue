@@ -19,7 +19,7 @@ const dllApi = api.dll
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入动态库名称或所属用户' },
-  { label: '创建时间', key: 'create_time', type: 'range-picker' }
+  { label: '修改时间', key: 'create_time', type: 'range-picker' }
 ])
 const query: Query = ref({})
 const onSearch = (data: Query) => {
@@ -29,8 +29,8 @@ const onSearch = (data: Query) => {
 const router = useRouter()
 // const preRoute = router.currentRoute.value.path
 const columns = [
-  { title: '动态库ID', dataIndex: 'id', width: 110 },
-  { title: '动态库名称', dataIndex: 'name', width: 150, ellipsis: true },
+  { title: '动态库ID', dataIndex: 'id', width: 150 },
+  { title: '动态库名称', dataIndex: 'name' },
   { title: '描述', dataIndex: 'desc' },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },

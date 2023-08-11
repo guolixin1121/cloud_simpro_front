@@ -100,7 +100,7 @@ const props = defineProps({
   buttonHandlers: {
     type: Object
   },
-  recurse: {
+  isRecurse: {
     type: Boolean,
     default: () => false
   },
@@ -229,7 +229,7 @@ const transformData = (data: any = []) => {
 }
 
 // 含id的精确搜索，自动循环展开各级
-const isRecurse = ref(props.recurse)
+const isRecurse = ref(props.isRecurse)
 const recurse = (results: any) => {
   if(isRecurse.value && searchValue.value && results.length) {
     const firstChild = results[0]

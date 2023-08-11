@@ -5,7 +5,7 @@
       :api="sceneApi.getList"
       :query="{ ...selectedSceneset, version: 2 }"
       :lazy="true"
-      :recurse="scenesetFromLogic != null"
+      :is-recurse="scenesetFromLogic != null"
       :filedNames="{ label: 'groupName', value: 'id' }"
       :button-handlers="treeBtnHandlers"
       @select="onTreeSelect"

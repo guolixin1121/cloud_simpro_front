@@ -42,7 +42,7 @@ const activeKey = ref('1')
 const { id } = route.params
 const { name } = route.query
 const currentApi = api.logicScene
-const listApi = () => currentApi.getResultList({ source: activeKey.value === '1' ? 0 : 1, logic_scene_id: id })
+const listApi = (args:any) => currentApi.getResultList({ ...args， source: activeKey.value === '1' ? 0 : 1, logic_scene_id: id })
 
 /****** 表格区域 */
 const columns = [

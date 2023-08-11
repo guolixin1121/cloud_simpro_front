@@ -39,14 +39,18 @@ const props = defineProps({
   maxlength: {
     type: Number,
     default: () => 9
+  },
+  isSetDefault: {
+    type: Boolean,
+    default:()=>false
   }
 })
 const emits = defineEmits(['update:value'])
 const attrs = useAttrs()
 const currentPage = ref(1) // 分页load选项
 const isAllLoaded = ref(false)
-const hasDefaultValue = ref(true)
 const options = ref<OptionProps>([])
+let hasDefaultValue = true
 let searchValue = ''
 
 // 根据defaultValue是否为空，判断是否需要加‘全部’的option
@@ -62,10 +66,11 @@ const initOptions = () => {
     if(props.api) {
       options.value.push({ label: '全部', value: '' })
     } else {
-      const attrsOptions = useAttrs().options as any
-      if(!attrsOptions.find((item: any) => item.label === '全部')) {
-        attrsOptions.unshift({ label: '全部', value: '' })
-      }
+      // has bug
+      // const attrsOptions = useAttrs().options as any
+      // if(!attrsOptions.find((item: any) => item.label === '全部')) {
+      //   attrsOptions.unshift({ label: '全部', value: '' })
+      // }
     }
   }
 }
@@ -123,7 +128,7 @@ watch(() => props.value,
  })
 
 const onChange = () => {
-  hasDefaultValue.value = false  // 值从父组件传过来时触发getDefaultOptions，内部的更改则不触发
+  hasDefaultValue = false  // 值从父组件传过来时触发getDefaultOptions，内部的更改则不触发
   // 最多选择多少个
   if(!Array.isArray(innerValue.value) || innerValue.value.length <= props.maxlength) {
     emits('update:value', innerValue.value)
@@ -141,6 +146,13 @@ const getOptions = async () => {
         [props.fieldNames.label]: searchValue })
       options.value.push(...transformOption(res))
       isAllLoaded.value = options.value.length >= (res.count || res.length)
+
+      if(currentPage.value == 1 && props.isSetDefault) {
+        const firstOption = options.value[0]
+        if(firstOption) {
+          emits('update:value', firstOption.value)
+        }
+      }
     } finally {
       loading.value = false
     }
@@ -178,7 +190,7 @@ const transformOption = (response: RObject) => {
 watchOnce(
   () => props.value, 
   () => {
-    if(hasDefaultValue.value && props.value) {
+    if(hasDefaultValue && props.value) {
       getDefaultOptions()
     }
   }

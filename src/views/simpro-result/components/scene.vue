@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { gotoVnc } from '@/utils/vnc'
 const task = useRoute().params.id
-const getScenes = () => api.result.getScenes({ task })
+const getScenes = (args: any) => api.result.getScenes({ ...args, task })
 
 const columns = [
   { dataIndex: 'scene_id', title: '场景ID', width: 150 },

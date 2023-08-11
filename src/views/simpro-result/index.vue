@@ -29,6 +29,10 @@
           </template>
           <template v-if="column.dataIndex == 'status'">
             <span :class="'task-status task-status--' + record.status">{{ getResultStatus(record.status) }}</span>
+            <a-tooltip placement="topLeft" :title="record.errmsg" v-if="record.status == 4 && record.errmsg">
+              <!-- 异常时显示错误信息 -->
+              <img class="ml-1 cursor-pointer" style="height: 16px;" src="../../assets/images/tip.png" />
+            </a-tooltip>
           </template>
         </template>
       </Table>
@@ -67,6 +71,7 @@ const formItems = ref<SearchFormItem[]>([
   {
     label: '仿真结果', key: 'is_passed', type: 'select', placeholder: '请选择仿真结果', defaultValue: '',
     options: [
+      { label: '全部', value: '' },
       { label: '未通过', value: '0' },
       { label: '通过', value: '1' },
       { label: '--', value: '2' }
