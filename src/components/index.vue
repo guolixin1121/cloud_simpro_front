@@ -36,7 +36,7 @@ const getComponents = async () => {
     const component = await readmes[readme]()
     demoComponents.value.push({
       name: path,
-      readme: (component as any).VueComponent,
+      readme: (component as any).default,
       demo: (demo?.demo as any)?.default
     })
   }

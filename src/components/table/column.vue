@@ -6,7 +6,7 @@
     <div :class="'checkbox-wrapper--' + (isChecked ? 'checked' : 'unchecked')">
       <a-checkbox 
         v-model:checked="isChecked" 
-        :disabled="disabled()" ></a-checkbox>
+        :disabled="disabled" ></a-checkbox>
       <span class="checkbox-label">
         {{ (pagination.current -1) * pagination.size + scope.index + 1}}
       </span>
@@ -68,11 +68,18 @@ const isDateColumn = (column: string) => {
 // checkbox
 // 注意：checkbox的状态（checked， disabled）分页或刷新时会被缓存下来
 // 所以disable改为函数，checked由父组件强行重置
-const disabled = () => props.isOnlyCreator && (record.value.createUser || record.value.create_user || record.value.username) !== user.username
+const disabled = computed(() => {
+  let isDisabled = props.isOnlyCreator && (record.value.createUser || record.value.create_user || record.value.username) !== user.username
+  const validator = props.scope.column.validator
+  if( validator ) {
+    isDisabled = isDisabled || validator(props.scope.record)
+  }
+  return isDisabled
+})
 const isChecked = ref(false)
 // 监控全选按钮的触发
 watch(() => props.checkedAll, (val: boolean) => {
-  if(disabled()) return
+  if(disabled.value) return
   isChecked.value = val
 })
 watch(isChecked, () => emits('select', isChecked.value, props.scope?.record) )

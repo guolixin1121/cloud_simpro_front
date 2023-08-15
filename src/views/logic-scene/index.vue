@@ -37,6 +37,9 @@
           <svg-icon style="color: #faad14" icon="alert"></svg-icon>
           <span class="ml-4" style="font-size: 16px">泛化数量超过上限（10000）</span>
         </div>
+        <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
+            <a-button @click="closeRunConfirm">取消</a-button>
+          </div>
       </template>
     </a-modal>
   </div>

@@ -13,7 +13,7 @@ const routes: RouteRecordRaw[] = [
   {
     path: '/demo',
     name: 'demo',
-    component: async () => await import(/* webpackChunkName: "demo" */ '@/components/index.vue')
+    component: async () => await import(/* webpackChunkName: "demo" */ '@/components/index.vue'),
   },
   {
     name: 'login',

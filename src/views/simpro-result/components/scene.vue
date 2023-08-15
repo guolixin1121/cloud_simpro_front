@@ -3,7 +3,7 @@
     <Table ref="tableRef" :api="getScenes" :columns="columns" :scroll="{ y: 'auto' }">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'actions'">
-          <a class="text-blue mr-2" v-if="record.b_file && record.baidu_id" @click="replay(record)">回放</a>
+          <a class="text-blue mr-2" v-if="record.obs_report && record.b_file && record.baidu_id" @click="replay(record)">回放</a>
           <a
             class="text-blue"
             v-if="record.obs_report && record.baidu_id"

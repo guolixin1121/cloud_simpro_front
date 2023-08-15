@@ -2,14 +2,20 @@
   <search-form :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
-    <div class="flex justify-between items-center">
-      <span class="title">评测指标列表</span>
-      <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/kpi/edit/0')">创建评测指标</a-button>
-    </div>
+    <page-title title="算法列表">
+      <batch-button :disabled="!selectedRows.length" v-if="user.hasPermission('delete')" :api="batchDelete"></batch-button>
+      <a-button type="primary" :disabled="selectedRows.length" v-if="user.hasPermission('add')" @click="router.push('/kpi/edit/0')">创建评测指标</a-button>
+    </page-title>
 
-    <Table :api="currentApi.getList" :query="query" 
-      :columns="columns" :scroll="{ x: 1100, y: 'auto' }"
-      :isOnlyCreator="true"> </Table>
+    <Table 
+      ref="tableRef"
+      :api="currentApi.getList" 
+      :query="query" 
+      :columns="columns" 
+      :scroll="{ x: 1000, y: 'auto' }"
+      :isOnlyCreator="true"
+      @select="onSelect">
+    </Table>
   </div>
 </template>
 
@@ -38,6 +44,7 @@ const onSearch = (data: Query) => (query.value = data)
 /****** 表格区域 */
 const router = useRouter()
 const columns = [
+  { dataIndex: 'checkbox', width: 60, validator: (data: RObject) => data.custom == 0 }, 
   { title: '评测指标ID', dataIndex: 'id', width: 120 },
   { title: '评测指标名称', dataIndex: 'name', ellipsis: true },
   { title: '指标类型', dataIndex: 'category_name', width: 180 },
@@ -62,4 +69,12 @@ const columns = [
     }
   }
 ]
+
+const tableRef = ref()
+const selectedRows = ref([])
+const onSelect = (keys: any) => (selectedRows.value = keys)
+const batchDelete = async () => {
+  await currentApi.batchDelete({ kpi_id: selectedRows.value })
+  tableRef.value.refresh()
+}
 </script>

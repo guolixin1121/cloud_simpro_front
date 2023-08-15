@@ -2,7 +2,7 @@ import { defineConfig, loadEnv } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx' // 配置vue使用jsx
 import svgLoader from 'vite-svg-loader'
-import markdown, { Mode } from 'vite-plugin-markdown'
+import Markdown from 'vite-plugin-vue-markdown'
 import eslintPlugin from 'vite-plugin-eslint'
 import { createHtmlPlugin } from 'vite-plugin-html'
 // import viteCompression from 'vite-plugin-compression'
@@ -53,10 +53,11 @@ export default defineConfig(({ mode }) => {
       // },
     },
     plugins: [
-      vue({ reactivityTransform: true }),
+      vue({ include: [/\.vue$/, /\.md$/], reactivityTransform: true }),
       vueJsx(),
       svgLoader(),
-      markdown({ mode: [Mode.VUE] }),
+      Markdown(),
+      // markdown({ mode: [Mode.VUE] }),
       createHtmlPlugin({
         inject: {
           data: {

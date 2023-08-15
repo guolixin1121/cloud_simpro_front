@@ -149,6 +149,7 @@ export const kpi = defineApi({
   getTypes: { url: '/simpro/kpi/type/', method: 'get' },
   get: { url: '/simpro/kpi/{sid}/', method: 'get' },
   delete: { url: '/simpro/kpi/{sid}/', method: 'delete' },
+  batchDelete: { url: '/simpro/kpi/delete/', method: 'delete' },
   edit: {
     url: '/simpro/kpi/{sid}/',
     method: 'put',
