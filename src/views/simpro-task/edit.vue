@@ -224,4 +224,5 @@ const form = ref()
 watch(() => formState.scenesets, () => form.value.validateFields('scenesets'))
 watch(() => formState.scenes, () => form.value.validateFields('scenes'))
 watch(() => formState.kpi, () => form.value.validateFields('kpi'))
+watch(() => formState.sensors, () => form.value.validateFields('sensors'))
 </script>

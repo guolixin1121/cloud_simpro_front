@@ -4,7 +4,7 @@
   </template>
   <template v-if="dataIndex == 'checkbox'">
     <div :class="'checkbox-wrapper--' + (isChecked ? 'checked' : 'unchecked')">
-      <a-checkbox 
+      <a-checkbox
         v-model:checked="isChecked" 
         :disabled="disabled" ></a-checkbox>
       <span class="checkbox-label">
@@ -70,9 +70,10 @@ const isDateColumn = (column: string) => {
 // 所以disable改为函数，checked由父组件强行重置
 const disabled = computed(() => {
   let isDisabled = props.isOnlyCreator && (record.value.createUser || record.value.create_user || record.value.username) !== user.username
+
   const validator = props.scope.column.validator
-  if( validator ) {
-    isDisabled = isDisabled || validator(props.scope.record)
+  if(validator) {
+    isDisabled = isDisabled || !validator(props.scope.record)
   }
   return isDisabled
 })

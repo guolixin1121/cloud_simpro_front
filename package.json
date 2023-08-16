@@ -9,14 +9,15 @@
   },
   "scripts": {
     "dev": "vue-tsc && vite",
+    "docker": "sh docker.sh",
+    "archive": "git archive -o cloud-simpro-front.zip HEAD",
     "build": "vue-tsc --noEmit && vite build",
     "build:docker": "vue-tsc --noEmit && vite build --mode docker",
     "preview": "vite preview",
     "eslint": "eslint --max-warnings=0",
     "pre-check": "vue-tsc && npx lint-staged",
     "commit": "cz",
-    "server": "nodemon mock/index.js",
-    "docker": "sh docker.sh"
+    "server": "nodemon mock/index.js"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",

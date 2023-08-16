@@ -44,7 +44,7 @@ const onSearch = (data: Query) => (query.value = data)
 /****** 表格区域 */
 const router = useRouter()
 const columns = [
-  { dataIndex: 'checkbox', width: 60, validator: (data: RObject) => data.custom == 0 }, 
+  { dataIndex: 'checkbox', width: 60, validator: (data: RObject) => data.custom !== 0 }, 
   { title: '评测指标ID', dataIndex: 'id', width: 120 },
   { title: '评测指标名称', dataIndex: 'name', ellipsis: true },
   { title: '指标类型', dataIndex: 'category_name', width: 180 },

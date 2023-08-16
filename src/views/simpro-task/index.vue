@@ -54,7 +54,7 @@ const tableRef = ref()
 const router = useRouter()
 const columns = [
   { dataIndex: 'checkbox', width: 50, 
-    validator: (data: RObject) => ['运行', '等待'].indexOf(data.status) === -1 && user.user.username == data.create_user
+    validator: (data: RObject) => ['等待', '运行'].indexOf(data.status) == -1
   },
   { title: '任务ID', dataIndex: 'number', width: 120 },
   { title: '仿真任务名称', dataIndex: 'name', width: 150, ellipsis: true },

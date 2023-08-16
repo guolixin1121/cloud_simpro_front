@@ -38,7 +38,7 @@
           <span class="ml-4" style="font-size: 16px">泛化数量超过上限（10000）</span>
         </div>
         <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
-            <a-button @click="closeRunConfirm">取消</a-button>
+            <a-button @click="closeRunConfirm">确定</a-button>
           </div>
       </template>
     </a-modal>
@@ -46,6 +46,8 @@
 </template>
 
 <script setup lang="ts">
+import { SStorage } from '@/utils/storage'
+
 const user = store.user
 const currentApi = api.logicScene
 
@@ -100,7 +102,11 @@ const columns = [
         showRunConfirm.value = true
         runScene.value = data
       },
-      泛化结果: (data: any) => router.push('/logic-scene/result/' + data.id +'?name=' + data.name),
+      泛化结果: (data: any) => {
+        const versionUrlPath = '/logic-scene/result/' + data.id
+        SStorage.remove(versionUrlPath + ':table-page')
+        router.push('/logic-scene/result/' + data.id +'?name=' + data.name)
+      },
       查看: (data: any) => router.push('/logic-scene/view/' + data.id),
       编辑: (data: any) => router.push('/logic-scene/edit/' + data.id),
       删除: async ({ id }: { id: string }) => await currentApi.delete(id)

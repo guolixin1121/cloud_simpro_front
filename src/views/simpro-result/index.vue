@@ -42,6 +42,7 @@
 
 <script setup lang="ts">
 import { TaskSourceOptions, getTaskSourceName, resultStatus, getResultStatus } from '@/utils/dict'
+import { SStorage } from '@/utils/storage'
 
 const templateId = useRoute().query.templateId as string
 const router = useRouter()
@@ -108,7 +109,11 @@ const columns = [
       },
       查看结果: {
         validator: (data: any) => isFinished(data.status),
-        handler: (data: any) => router.push(`/simpro-result/view/${data.id}?u=${data.uuid}`)
+        handler: (data: any) => {
+          const versionUrlPath = '/simpro-result/view/' + data.id
+          SStorage.remove(versionUrlPath + ':table-page')
+          router.push(`/simpro-result/view/${data.id}?u=${data.uuid}`)
+        }
       },
       删除: {
         validator: (data: any) => isNotRunning(data.status),
