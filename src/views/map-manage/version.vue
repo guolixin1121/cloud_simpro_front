@@ -55,6 +55,7 @@ const columns = [
           value: JSON.stringify({
             map_name: data.mapName,
             version: data.mapVersion,
+            map_id: data.id,
             catalog: store.catalog.mapCatalog?.id
           })
         }, loading),
