@@ -5,8 +5,7 @@ pipeline {
             steps {
                 script {
                     TAG=sh(returnStdout: true ,script: "git tag --sort=taggerdate| tail -1").trim()
-                }
-                withCredentials([usernamePassword(credentialsId: 'oci-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    withCredentials([usernamePassword(credentialsId: 'oci-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh '''docker login -u=${USERNAME} -p=${PASSWORD} http://${OCI_HOST}
 docker pull ${OCI_URI}/nginx:1.21-alpine
 docker pull ${OCI_URI}/node:18
@@ -14,7 +13,9 @@ docker tag ${OCI_URI}/node:18 node:18
 docker tag ${OCI_URI}/nginx:1.21-alpine nginx:1.21-alpine
 docker build -t ${OCI_URI}/cloud_simpro_front:${TAG} .
 '''
+                    }
                 }
+                
             }
         }
         stage('Check') {
