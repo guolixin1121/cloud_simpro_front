@@ -59,7 +59,3 @@ spec:
         - name: cloud-simpro-front
           imagePullPolicy: Always
           image: ${OCI_URI}/cloud_simpro_front:${VERSION}
-          resources:
-            limits:
-              cpu: "1"
-              memory: 2Gi
