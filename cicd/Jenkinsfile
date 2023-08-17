@@ -34,9 +34,7 @@ docker system prune -f
         stage('Deploy') {
             steps {
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kube-config', namespace:'',restrictKubeConfigAccess: false, serverUrl: ''){
-                    sh '''kubectl get pod -owide
-envsubst < cicd/cloud-simpro-front.yml | kubectl apply -f -
-'''
+                    sh '''envsubst < cicd/cloud-simpro-front.yml | kubectl apply -f -'''
                 }
             }
         }
