@@ -35,7 +35,7 @@ const columns = [
   { dataIndex: 'scene_id', title: '场景ID', width: 150 },
   { dataIndex: 'adsName', title: '场景名称' },
   { dataIndex: 'labels_detail', title: '场景标签', apiField: 'display_name' },
-  { dataIndex: 'batch', title: '仿真轮次', width: 100 },
+  // { dataIndex: 'batch', title: '仿真轮次', width: 100 },
   { dataIndex: 'status', title: '状态', width: 100 },
   {
     dataIndex: 'actions',

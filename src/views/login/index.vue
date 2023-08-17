@@ -27,7 +27,6 @@
 <script setup lang="ts">
 import { useLocalStorage } from '@vueuse/core'
 
-const router = useRouter()
 const loading = ref<any>(false)
 const checked = useLocalStorage('remind_psd', false)
 const formData = useLocalStorage('auth', { username: '', password: ''})
@@ -38,7 +37,7 @@ const login = async () => {
     const { username, password } = formData.value
     const res = await api.user.login({ username, password })
     handleChange()
-    router.push('/?token=' + res.token)
+    location.href = '/?token=' + res.token
   } finally {
     loading.value = false
   }

@@ -59,25 +59,6 @@
 import Entry from './components/entry.vue'
 import Task from './components/task.vue'
 import Overview from './components/overview.vue'
-// import Report from './components/report.vue'
-
-// const radarOptions =  {
-//   series: [{
-//     type: 'radar',
-//     data: [
-//       { name: '2020', value: [ 90, 25, 0.5, 200, 2] }
-//     ]
-//   }],
-//   radar: {
-//     indicator: [
-//       { name: '指标1', max: 100, unit: '个'},
-//       { name: '指标2', max: 50, unit: '米'},
-//       { name: '指标3', max: 1, unit: '元'},
-//       { name: '指标4', max: 200, unit: '个'},
-//       { name: '指标5', max: 10, unit: '个'},
-//     ]
-//   }
-// }
 
 const getXData = (source: []) => source.map((item: any) => item.time)
 const getLineYData = (source: []) => source.map((item: any) => item.value)
@@ -125,7 +106,7 @@ const fetchRunningtime = async () => {
       {
         data: res.map((item: any) => item.value),
         type: 'line',
-        name: '耗时'
+        name: '耗时（小时）'
       }
     ]
   }
@@ -147,7 +128,7 @@ const fetchTasks = async () => {
       {
         data: getBarYData(res),
         type: 'bar',
-        name: '任务数',
+        name: '任务数（个）',
       }
     ]
   }
@@ -169,7 +150,7 @@ const fetchReports = async () => {
       {
         data: getBarYData(res),
         type: 'bar',
-        name: '仿真报告数量',
+        name: '仿真报告数量（个）',
       }
     ]
   }
@@ -214,7 +195,7 @@ const fetchScenes = async () => {
       {
         data: getLineYData(res),
         type: 'line',
-        name: '场景数量'
+        name: '场景数量（个）'
       }
     ]
   }
