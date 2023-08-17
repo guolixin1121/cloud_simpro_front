@@ -1,0 +1,18 @@
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon_sotif_n</title>
+    <g id="云仿真设计稿" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="云仿真-场景管理-地图详情" transform="translate(-25.000000, -625.000000)">
+            <g id="左侧导航栏" transform="translate(0.000000, 60.000000)">
+                <g id="Group-6" transform="translate(8.000000, 17.000000)">
+                    <g id="侧边导航/亮色-二级菜单-收起" transform="translate(0.000000, 536.000000)">
+                        <g id="Group" transform="translate(17.000000, 12.000000)">
+                            <polygon id="路径" points="0 0 16 0 16 16 0 16"></polygon>
+                            <path d="M2.5,2 L13.5,2 L13.5,7.69450364 C13.5,10.1026599 12.0602039,12.2774893 9.84329908,13.2179943 L8,14 L8,14 L6.15670092,13.2179943 C3.93979614,12.2774893 2.5,10.1026599 2.5,7.69450364 L2.5,2 L2.5,2 Z" id="Rectangle" stroke="#60656E" stroke-width="1.5"></path>
+                            <polyline id="Path-3" stroke="#60656E" stroke-width="1.5" points="7.7 4.3 6.7 6.8 9.2 6.8 7.7 10.3"></polyline>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

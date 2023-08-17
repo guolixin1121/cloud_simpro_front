@@ -1,0 +1,235 @@
+.ant-layout {
+  height: 100%;
+
+  .ant-layout-header {
+    height: 60px;
+    padding-left: 20px;
+    padding-right: 30px;
+    background-color: #1e2229;
+  }
+
+  .ant-layout-content {
+    padding: 16px;
+  }
+}
+
+button.ant-btn-primary:focus {
+  background-color: @blue-color !important;
+  border-color: @blue-color !important;
+}
+
+.ant-form {
+  .ant-form-item-label,
+  .ant-form-item-label label {
+    color: @text-gray-color;
+
+    &::after {
+      content: '' !important;
+    }
+  }
+
+  .ant-form-item-control-input-content {
+    color: @text-main-color;
+    white-space: nowrap;
+  }
+}
+
+.ant-input-number {
+  width: 100% !important;
+}
+
+.ant-menu:not(.ant-menu-horizontal) {
+  background-color: rgba(255, 255, 255, 0.08);
+  padding: 0 8px;
+  color: @text-main-color;
+
+  .ant-menu-submenu {
+    min-height: 40px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+
+    .ant-menu-sub {
+      background-color: #fff;
+      padding: 0px;
+    }
+
+    .ant-menu-item {
+      padding-left: 40px !important;
+    }
+
+    .ant-menu-title-content {
+      height: 100%;
+    }
+    .ant-menu-submenu-title {
+      margin: 0;
+    }
+  }
+
+  .ant-menu-item-selected {
+    background: #e6f2ff;
+    border-radius: 2px;
+
+    &:after {
+      display: none;
+    }
+  }
+
+  .ant-menu-submenu-arrow {
+    // color: #B1B6C3;
+    color: @gray-color;
+  }
+
+  // .ant-menu-item-selected  {
+  //   font-weight: 600;
+  // }
+}
+
+.ant-popover-inner {
+  width: 226px;
+  border-radius: 4px !important;
+}
+
+.ant-pagination-options {
+  display: none !important;
+}
+
+.ant-table {
+  .ant-table-thead > tr > th {
+    background: #f2f3f5;
+  }
+
+  .ant-switch-checked {
+    background-color: #00b54e;
+  }
+  .ant-table-body {
+    overflow: auto !important;
+  }
+  .ant-table-tbody > tr.ant-table-row-selected > td{
+    background-color: #e6f7ff;
+  }
+  .ant-table-cell-scrollbar {
+    box-shadow: none !important;
+  }
+  .ant-table-thead .ant-table-cell-fix-right-first:before {
+    display: none;
+  }
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: @blue-color !important;
+  border-color: @blue-color !important;
+}
+
+.ant-transfer {
+  .ant-transfer-list {
+    width: 50%;
+    height: 280px;
+    overflow: auto;
+    padding: 8px 12px;
+  }
+  .ant-transfer-list-header-selected {
+    span:first-child {
+      display: none;
+    }
+  }
+
+  .ant-transfer-list-header-dropdown {
+    display: none;
+  }
+}
+
+.ant-upload-list {
+  display: inline-block;
+  margin-left: 16px;
+  .ant-upload-list-item-card-actions,
+  .ant-upload-list-item-name {
+    word-wrap: break-word;
+    white-space: break-spaces;
+  }
+}
+.ant-tabs {
+  .ant-tabs-content-holder {
+    overflow: auto;
+  }
+}
+
+.ant-tree {
+  .ant-tree-node-content-wrapper {
+    white-space: nowrap;
+    padding: 0px 4px !important;
+    margin-left: -6px !important;
+    width: 98%;
+    .ant-tree-title {
+      white-space: nowrap;
+    }
+    &.ant-tree-node-selected {
+      background-color: #e6f2ff !important;
+      color: @blue-color;
+    }
+  }
+}
+
+.left-tree .ant-tree {
+  .ant-tree-switcher {
+    position: absolute;
+    right: 5px;
+    color: #999CA3;
+    transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)
+  }
+  .ant-tree-switcher_close {
+    transform: rotate(-90deg);
+  }
+  .ant-tree-treenode {
+    padding: 8px 12px !important;
+    width: 100%;
+  }
+  .ant-tree-indent-unit {
+    width: 16px;
+  }
+  .ant-tree-treenode-selected {
+    background-color: #e6f2ff;
+  }
+  .ant-tree-node-content-wrapper {
+    white-space: nowrap;
+    padding: 0px !important;
+    margin-left: -6px !important;
+    width: 98%;
+    .ant-tree-title {
+      white-space: nowrap;
+    }
+    &.ant-tree-node-selected {
+      background-color: #e6f2ff !important;
+      color: @blue-color;
+    }
+    &:hover {
+      background-color: transparent !important;
+      color: @blue-color
+    }
+  }
+}
+.ant-modal-wrap {
+  display: flex;
+  align-items: center;
+  .ant-modal {
+    top: 0px !important;
+
+    .ant-modal-body {
+      color: @text-gray-color;
+    }
+  }
+}
+
+.min-main {
+  .ant-select-disabled.ant-select:not(.ant-select-customize-input) .ant-select-selector,
+  .ant-input[disabled],
+  .ant-transfer-list-content-item-disabled,
+  .ant-input-affix-wrapper-disabled,
+  .ant-transfer-disabled .ant-transfer-list {
+    color: rgba(0, 0, 0, 0.85);
+    background-color: #fff;
+  }
+}
+
+.ant-popover-inner-content {
+  word-break: break-word;
+}

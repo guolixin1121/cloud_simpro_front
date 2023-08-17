@@ -1,0 +1,19 @@
+
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon_modal_n</title>
+    <g id="云仿真设计稿" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="云仿真-场景管理-地图详情" transform="translate(-25.000000, -481.000000)">
+            <g id="左侧导航栏" transform="translate(0.000000, 60.000000)">
+                <g id="Group-6" transform="translate(8.000000, 17.000000)">
+                    <g id="侧边导航/亮色-二级菜单-收起" transform="translate(0.000000, 392.000000)">
+                        <g id="Group" transform="translate(17.000000, 12.000000)">
+                            <polygon id="路径" points="0 0 16 0 16 16 0 16"></polygon>
+                            <polygon id="Polygon" stroke="#60656E" stroke-width="1.5" points="8 1 14.0621778 4.5 14.0621778 11.5 8 15 1.93782217 11.5 1.93782217 4.5"></polygon>
+                            <circle id="Oval" stroke="#60656E" stroke-width="1.5" cx="8" cy="8" r="2"></circle>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
