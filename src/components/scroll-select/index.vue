@@ -105,12 +105,13 @@ const onSearch = throttle((input: string) => {
 
 // 重新获取数据
 const onFocus = () => {
-  // if (props.api) {
-  //   currentPage.value = 1
-  //   options.value = []
-  //   initOptions()
-  //   getOptions()
-  // }
+  if (props.api) {
+    currentPage.value = 1
+    options.value = []
+    searchValue = ''
+    initOptions()
+    getOptions()
+  }
 }
 
 // 为了实现选中个数的限制

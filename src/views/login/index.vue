@@ -37,7 +37,7 @@ const login = async () => {
     const { username, password } = formData.value
     const res = await api.user.login({ username, password })
     handleChange()
-    location.href = '/?token=' + res.token
+    location.href = './?token=' + res.token
   } finally {
     loading.value = false
   }
