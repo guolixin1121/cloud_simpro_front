@@ -43,6 +43,12 @@
           <a-select-option key="0" value="0">否</a-select-option>
         </a-select>
       </a-form-item>
+      <a-form-item label="感知在环" name="perception" :rules="[{ required: true, message: '请选择感知在环' }]">
+        <a-select v-model:value="formState.perception" placeholder="请选择感知在环">
+          <a-select-option key="1" value="1">是</a-select-option>
+          <a-select-option key="0" value="0">否</a-select-option>
+        </a-select>
+      </a-form-item>
       <a-form-item label="算法描述" name="desc">
         <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入描述" :maxlength="255" rows="10"></ch-input>
       </a-form-item>
@@ -69,6 +75,7 @@ const formState = reactive<any>({
   docker_path: undefined,
   cmd: undefined,
   desc: undefined,
+  perception: undefined,
   create_time: undefined,
   create_user: undefined,
   is_in_ring: undefined
@@ -102,6 +109,7 @@ const getLookData = async () => {
     }
     formState.create_time = formatDate(data.create_time)
     formState.is_in_ring = data.is_in_ring ? '1' : '0'
+    formState.perception = data.perception ? '1' : '0'
   }
 }
 getLookData()

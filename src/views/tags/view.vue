@@ -18,7 +18,7 @@ const getEditData = async () => {
       { label: '标签类型：', value: data.tag_type_name },
       { label: '标签英文名称', value: data.name },
       { label: '标签中文名称：', value: data.display_name },
-      { label: '上级标签：', value: data.parentList[0]?.labelDisplayName },
+      { label: '上级标签：', value: data.parentList?.[0]?.labelDisplayName },
       { label: '描述', value: data.desc },
       { label: '创建时间', value: data.create_time },
       { label: '修改时间', value: data.update_time },

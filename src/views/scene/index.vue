@@ -14,7 +14,7 @@
       <a-spin :spinning="scenesetLoading">
         <div class="right-title">
           <div class="title-item"><span class="label">场景集名称</span>{{ selectedSceneset?.name }}</div>
-          <div class="title-item"><span class="label">路径</span>{{ selectedSceneset?.path }}</div>
+          <!-- <div class="title-item"><span class="label">路径</span>{{ selectedSceneset?.path }}</div> -->
           <div class="title-item">
             <span class="label">标签</span>
             <ul style="flex: 1">

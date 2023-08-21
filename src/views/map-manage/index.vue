@@ -116,6 +116,7 @@ const onBatchDelete = async () => {
 }
 
 // 遍历地图目录树查找
+// 修复更新地图集后无法同步获取新数据的问题
 const getMapSet = async (id: string, data?: any) => {
   if(!data) {
     const res = await api.mapsets.getList()
@@ -126,8 +127,8 @@ const getMapSet = async (id: string, data?: any) => {
     const item = data[i]
     if(item.id == id) {
       result = item
-    } else {
-      result = await getMapSet(id, item.children)
+    } else if(item.children) {
+      result = getMapSet(id, item.children)
     }
     if(!isEmpty(result)) {
       break

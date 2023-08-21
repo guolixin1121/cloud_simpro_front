@@ -121,7 +121,7 @@ if (query.value?.name) {
 
 onMounted(async () => {
   searchQuery.value = { ...props.query, name: searchValue.value }
-  // just for map
+  // just for map, 修复更新地图集后无法同步新数据的问题
   if(props.refreshSelected) {
     selectedNode.value = await props.refreshSelected(selectedNode.value.id)
   }
@@ -223,7 +223,7 @@ const transformData = (data: any = []) => {
     key: item[value],
     title: item[label],
     name: item[label],
-    isLeaf: item.isLeaf === 1,
+    isLeaf: item.isLeaf == 1,
     children: props.lazy ? null : transformData(item.children)
   }))
 }
