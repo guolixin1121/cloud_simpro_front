@@ -2,6 +2,7 @@
 import { LStorage } from '@/utils/storage'
 import router from '../router'
 import { getQueryParmas } from '@/utils/tools'
+import { Operations } from '@/utils/dict'
 
 export const useUserStore = defineStore('user', () => {
   const user = ref()
@@ -14,11 +15,13 @@ export const useUserStore = defineStore('user', () => {
     user.value = null
     token.value = null
     LStorage.remove('token')
-    location.href = import.meta.env.VITE_LOGIN_URL
-    // test site
-    if(location.hostname.indexOf('pre-') > -1) {
-      location.href = import.meta.env.VITE_LOGIN_Test_URL
-    }
+    setTimeout(() => {
+      location.href = import.meta.env.VITE_LOGIN_URL
+      // test site
+      if(location.hostname.indexOf('pre-') > -1) {
+        location.href = import.meta.env.VITE_LOGIN_Test_URL
+      }
+    }, 1000)
   }
 
   const hasToken = () => {
@@ -46,20 +49,19 @@ export const useUserStore = defineStore('user', () => {
 
   /**
    * 当前用户是否有增删改的权限，其他操作不做限制
-   * @param action 要验证的操作：'add' | 'edit' | 'delete'
+   * @param action 要验证的操作：'编辑' | '新增'等
    * @param currentRoute（可选） 要验证的页面路由path
    * @returns boolean  是否有权限
    */
   const hasPermission = (action: DataAction, currentRoute: string = router.currentRoute.value.path): boolean => {
-    const ActionMap = {
-      编辑: 'edit',
-      删除: 'delete'
-    }
     const curRoute = (router.currentRoute.value?.query?.preRoute || currentRoute) as string
-    const newAction = ActionMap[action as keyof typeof ActionMap] || action
-    if (!['add', 'edit', 'delete'].includes(newAction)) return true
 
-    const index = getPermissionIndex(newAction as DataAction, curRoute, user.value?.permissions)
+    // 获取action对应的英文
+    const actionValue = Operations[action as keyof typeof Operations] || action
+    const operationValues = Object.values(Operations)
+    if (!operationValues.includes(actionValue)) return true
+
+    const index = getPermissionIndex(actionValue as DataAction, curRoute, user.value?.permissions)
     return index > -1
   }
 

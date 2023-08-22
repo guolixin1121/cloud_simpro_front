@@ -1,3 +1,12 @@
+// 数据操作权限的label，value对应关系
+export const Operations = {
+  编辑地图: 'edit',
+  编辑场景: 'edit',
+  编辑: 'edit',
+  删除: 'delete',
+  // 查看: 'view'
+}
+
 export const SceneSourceOptions = [
   { label: '全部', value: '' },
   { label: '编辑', value: 0 },

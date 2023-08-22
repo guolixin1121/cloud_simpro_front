@@ -20,6 +20,7 @@ const getLookData = async () => {
       { label: '算法镜像', value: data.docker_path },
       { label: '启动命令', value: data.cmd },
       { label: '控制在环', value: data.is_in_ring ? '是' : '否' },
+      { label: '感知在环', value: data.perception ? '是' : '否' },
       { label: '描述', value: data.desc },
       { label: '创建时间', value: data.create_time },
       { label: '所属用户', value: data.create_user },
