@@ -14,6 +14,7 @@
 </template>
 
 <script setup lang="ts">
+import { Operations } from '@/utils/dict'
 const props = defineProps(['scope', 'isOnlyCreator'])
 const emits = defineEmits(['refresh'])
 /**
@@ -32,7 +33,8 @@ const hasPermission = (scope: RObject, key: string) => {
   let permission = userStore.hasPermission(key as DataAction)
 
   // 是否只允许自己操作
-  if (props.isOnlyCreator && ['编辑', '删除'].includes(key)) {
+  const operationKeys = Object.keys(Operations)
+  if (props.isOnlyCreator && operationKeys.includes(key)) {
     const owner = data.createUser || data.create_user || data.username
     const isOwner = owner === userStore.user.username
     permission = permission && isOwner
