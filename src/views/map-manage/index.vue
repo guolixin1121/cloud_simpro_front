@@ -11,7 +11,6 @@
         </div>
       </a-spin>
       <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
-
       <div class="main">
         <div class="flex justify-between items-center">
           <span class="title">地图列表</span>
@@ -39,7 +38,7 @@
 
 <script setup lang="ts">
 import { SStorage } from '@/utils/storage'
-import { isEmpty } from '@/utils/tools'
+// import { isEmpty } from '@/utils/tools'
 
 /****** api */
 const user = store.user
@@ -84,25 +83,16 @@ const gotoVersion = (record: any) => {
 const catalogLoading = ref(false)
 store.catalog.mapCatalog = {}
 const onTreeSelect = async (val: any) => {
+  console.log('111', val)
   selectedMapset.value = val
   store.catalog.mapCatalog = val
   // 切换地图集，地图列表page重置为1
   query.value = { ...query.value, catalog: val.id, page: 1 }
-  // if (val?.isLeaf) {
-  //   try {
-  //     catalogLoading.value = true
-  //     const res = await api.mapsets.getList()
-  //     selectedMapset.value = getMapSet(res.results, val.id)
-  //     store.catalog.mapCatalog = selectedMapset.value
-  //   } finally {
-  //     catalogLoading.value = false
-  //   }
-  // }
 }
 
 const treeBtnHandlers = {
-  add: () => router.push('/map-manage/mapset-edit/0'),
-  edit: (data: any) => router.push('/map-manage/mapset-edit/' + data.id + '?name=' + encodeURIComponent(data.name)),
+  add: () => router.push('/map-manage/mapset/0'),
+  edit: (data: any) => router.push('/map-manage/mapset/' + data.id + '?name=' + encodeURIComponent(data.name) + '&isLeaf=' + data.isLeaf),
   delete: api.mapsets.delete
 }
 
@@ -117,23 +107,28 @@ const onBatchDelete = async () => {
 
 // 遍历地图目录树查找
 // 修复更新地图集后无法同步获取新数据的问题
-const getMapSet = async (id: string, data?: any) => {
-  if(!data) {
-    const res = await api.mapsets.getList()
-    data = res.results
-  }
-  let result = {}
-  for(let i = 0; i < data.length; i++) {
-    const item = data[i]
-    if(item.id == id) {
-      result = item
-    } else if(item.children) {
-      result = getMapSet(id, item.children)
-    }
-    if(!isEmpty(result)) {
-      break
-    }
-  }
-  return result
-}
+const getMapSet = (data: any) => ({
+  ...data,
+  name: useRoute().query?.mapsetname
+})
+// const getMapSet = async (id: string, data?: any) => 
+// {
+//   if(!data) {
+//     const res = await api.mapsets.getList()
+//     data = res.results
+//   }
+//   let result = {}
+//   for(let i = 0; i < data.length; i++) {
+//     const item = data[i]
+//     if(item.id == id) {
+//       result = item
+//     } else if(item.children) {
+//       result = getMapSet(id, item.children)
+//     }
+//     if(!isEmpty(result)) {
+//       break
+//     }
+//   }
+//   return result
+// }
 </script>

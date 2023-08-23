@@ -45,7 +45,7 @@
         icon="edit"
         title="编辑"
         class="cursor-pointer mr-1"
-        :class="isEmpty(selectedNode) || !selectedNode.isLeaf ? 'icon--disable' : ''"
+        :class="isEmpty(selectedNode) ? 'icon--disable' : ''"
         @click="onButtonClick('edit')"
       ></svg-icon>
       <svg-icon
@@ -121,9 +121,9 @@ if (query.value?.name) {
 
 onMounted(async () => {
   searchQuery.value = { ...props.query, name: searchValue.value }
-  // just for map, 修复更新地图集后无法同步新数据的问题
+  // 修复更新数据后无法同步新数据的问题
   if(props.refreshSelected) {
-    selectedNode.value = await props.refreshSelected(selectedNode.value.id)
+    selectedNode.value = props.refreshSelected(selectedNode.value)
   }
   selectedRowKeys.value = [selectedNode.value?.id]
   if (!isEmpty(selectedNode.value) && selectedNode.value.isLeaf) {
@@ -167,7 +167,7 @@ const onButtonClick = (type: string) => {
   if (!buttonHandlers) return
 
   if (type == 'add') buttonHandlers.add()
-  if (type == 'edit' && selectedNode.value.isLeaf) buttonHandlers.edit(selectedNode.value)
+  if (type == 'edit') buttonHandlers.edit(selectedNode.value)
   if (type == 'delete') showDeleteConfirm.value = true
 }
 

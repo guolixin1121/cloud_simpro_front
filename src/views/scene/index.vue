@@ -8,6 +8,7 @@
       :is-recurse="scenesetFromLogic != null"
       :filedNames="{ label: 'groupName', value: 'id' }"
       :button-handlers="treeBtnHandlers"
+      :refreshSelected="refreshSelected"
       @select="onTreeSelect"
     />
     <div class="main-right">
@@ -131,9 +132,14 @@ const onTreeSelect = async (sceneset: any) => {
   }
 }
 
+const refreshSelected = (data: any) => ({
+  ...data,
+  name: useRoute().query?.scenesetname
+})
+
 const treeBtnHandlers = {
   add: () => router.push('/scene/sceneset/0'),
-  edit: (data: any) => router.push('/scene/sceneset/' + data.id),
+  edit: (data: any) => router.push('/scene/sceneset/' + data.id + (data.isLeaf ? '' : '?name=' + encodeURIComponent(data.name))),
   delete: api.scenesets.delete
 }
 

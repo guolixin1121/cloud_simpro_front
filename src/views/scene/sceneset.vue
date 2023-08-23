@@ -13,9 +13,9 @@
             <a-select-option value="0">场景目录</a-select-option>
             <a-select-option value="1">场景集</a-select-option>
           </a-select>
-          <div v-else>{{ formState.isLeaf ? "场景集" : '场景目录' }}</div>
+          <div v-else>{{ formState.isLeaf == '1' ? "场景集" : '场景目录' }}</div>
         </a-form-item>
-        <a-form-item label="所属场景目录" name="parentId" 
+        <a-form-item v-if="isAdd" label="所属场景目录" name="parentId" 
           :rules="[{ required: isAdd ? true : false, message: '请选择所属场景目录'}]">
           <tree-select-async
             v-if="isAdd"
@@ -33,14 +33,14 @@
         </a-form-item>
         <a-form-item label="场景集名称" name="name" :rules="[
           { required: true, message: '请输入场景集名称'}, 
-          { validator: () => checkChName(formState.name, formState.isLeaf == '0' ? 32 : 160) }
+          { validator: () => checkChName(formState.name, formState.isLeaf == '1' ? 160 : 32) }
           ]">
-          <ch-input v-model:value="formState.name" :maxlength="formState.isLeaf == '0' ? 32 : 160" placeholder="请输入场景集名称"></ch-input>
+          <ch-input v-model:value="formState.name" :maxlength="formState.isLeaf == '1' ? 160: 32 " placeholder="请输入场景集名称"></ch-input>
         </a-form-item>
-        <a-form-item label="场景集路径" name="path">
+        <a-form-item v-if="isAdd" label="场景集路径" name="path">
           <span>{{ path }}</span>
         </a-form-item>
-        <a-form-item label="标签">
+        <a-form-item label="标签" v-if="isAdd || formState.isLeaf == '1'">
           <tree-transfer
             v-model:target-keys="formState.labels"
             :api="baseApi.tags.getList"
@@ -64,6 +64,8 @@
 import { checkChName } from '@/utils/tools';
 
 const id = useRoute().params.id
+const name = useRoute().query.name
+
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '场景集'
@@ -87,7 +89,8 @@ const path = computed(() => {
 
 const loading = ref(false)
 const router = useRouter()
-const goback = () => router.push('/scene/')
+// scenesetname为了弥补修改数据后tree的selected缓存数据无法同步问题
+const goback = () => router.push('/scene/?scenesetname=' + formState.name)
 const add = async () => {
   // if(error.value) return
   loading.value = true
@@ -130,17 +133,22 @@ const add = async () => {
 const dataLoading = ref(false)
 const getEditData = async () => {
   if(id !== '0') {
-    try {
-      dataLoading.value = true
-      const data = await currentApi.get(id)
-      formState.name = data.name
-      formState.parentId = data.parentId
-      formState.parentName = data.parentName
-      formState.parent = { title: data.parentName, value: data.parentId }
-      formState.labels = data.labels_detail
-      formState.isLeaf = '1' // 只能编辑场景集 data.isLeaf?.toString()
-    } finally {
-      dataLoading.value = false
+    if(name) {
+      formState.name = name as string
+      formState.isLeaf = '0'
+    } else {
+      try {
+        dataLoading.value = true
+        const data = await currentApi.get(id)
+        formState.name = data.name
+        formState.parentId = data.parentId
+        formState.parentName = data.parentName
+        formState.parent = { title: data.parentName, value: data.parentId }
+        formState.labels = data.labels_detail
+        formState.isLeaf = '1' // 只能编辑场景集 data.isLeaf?.toString()
+      } finally {
+        dataLoading.value = false
+      }
     }
   }
 }

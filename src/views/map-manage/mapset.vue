@@ -14,9 +14,9 @@
             <a-select-option value="0">地图目录</a-select-option>
             <a-select-option value="1">地图集</a-select-option>
           </a-select>
-          <div v-else>{{ formState.isLeaf ? "地图集" : "地图目录" }}</div>
+          <div v-else>{{ formState.isLeaf == '1' ? "地图集" : "地图目录" }}</div>
         </a-form-item>
-        <a-form-item label="所属地图目录" name="parentId" :rules="[{ required: formState.isLeaf == '1', message: '请选择地图目录'}]">
+        <a-form-item v-if="formState.isLeaf == '1'" label="所属地图目录" name="parentId" :rules="[{ required: formState.isLeaf == '1', message: '请选择地图目录'}]">
           <tree-select
             v-if="isAdd"
             placeholder="请选择所属地图目录"
@@ -55,7 +55,7 @@
 import { checkChName } from '@/utils/tools';
 
 const { id } = useRoute().params
-const { name } = useRoute().query
+const { name, isLeaf } = useRoute().query
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '地图集'
@@ -71,7 +71,7 @@ const formState = reactive({
 
 const loading = ref(false)
 const router = useRouter()
-const goback = () => router.push('/map-manage/')
+const goback = () => router.push('/map-manage/?mapsetname=' + formState.name)
 const add = async () => {
   if(error.value) return
 
@@ -105,13 +105,18 @@ watch(
 const dataLoading = ref(false)
 const getEditData = async () => {
   if(id !== '0') {
-    dataLoading.value = true
-    const data = await currentApi.get({ id, data:{ name }})
-    dataLoading.value = false
-    formState.name = data.name
-    formState.parentName = data.parentName
-    formState.parentId = data.parentId === -1 ? undefined : data.parentId
-    formState.isLeaf = data.isLeaf.toString()
+    if(isLeaf == 'false') {
+      formState.name = name as string
+      formState.isLeaf = '0'
+    } else {
+      dataLoading.value = true
+      const data = await currentApi.get({ id, data:{ name }})
+      dataLoading.value = false
+      formState.name = data.name
+      formState.parentName = data.parentName
+      formState.parentId = data.parentId === -1 ? undefined : data.parentId
+      formState.isLeaf = data.isLeaf.toString()
+    }
   }
 }
 getEditData()
