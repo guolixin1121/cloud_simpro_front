@@ -54,7 +54,13 @@ export const useUserStore = defineStore('user', () => {
    * @returns boolean  是否有权限
    */
   const hasPermission = (action: DataAction, currentRoute: string = router.currentRoute.value.path): boolean => {
-    const curRoute = (router.currentRoute.value?.query?.preRoute || currentRoute) as string
+    let curRoute = (router.currentRoute.value?.query?.preRoute || currentRoute) as string
+
+    // 非一级页面的，依据一级页面
+    const routePaths = curRoute.split('/')
+    if(routePaths.length > 3) {
+      curRoute = routePaths[1]
+    }
 
     // 获取action对应的英文
     const actionValue = Operations[action as keyof typeof Operations] || action

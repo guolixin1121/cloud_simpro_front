@@ -7,7 +7,7 @@ declare type Permission = {
   actions?: DataAction[]
 }
 // 数据的操作权限
-type DataAction = 'add' | 'delete' | 'edit'
+type DataAction = 'add' | 'delete' | 'edit' | 'view'
 
 // 列表搜索项
 interface SearchFormItem {

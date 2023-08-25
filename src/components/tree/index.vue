@@ -40,11 +40,14 @@
       </a-tree>
     </div>
     <div class="float-right mt-2">
-      <svg-icon title="创建" icon="add" class="cursor-pointer mr-1" @click="onButtonClick('add')"></svg-icon>
+      <svg-icon title="创建" icon="add" class="cursor-pointer mr-1" 
+        v-if="user.hasPermission('add')"
+        @click="onButtonClick('add')"></svg-icon>
       <svg-icon
         icon="edit"
         title="编辑"
         class="cursor-pointer mr-1"
+        v-if="user.hasPermission('edit')"
         :class="isEmpty(selectedNode) ? 'icon--disable' : ''"
         @click="onButtonClick('edit')"
       ></svg-icon>
@@ -52,6 +55,7 @@
         icon="delete"
         title="删除"
         class="cursor-pointer mr-1"
+        v-if="user.hasPermission('delete')"
         :class="isEmpty(selectedNode) ? 'icon--disable' : ''"
         @click="onButtonClick('delete')"
       ></svg-icon>
@@ -76,6 +80,8 @@
 import { DownOutlined } from '@ant-design/icons-vue'
 import { useSessionStorage } from '@vueuse/core'
 import { isEmpty } from 'lodash'
+
+const user = store.user
 
 const props = defineProps({
   title: {

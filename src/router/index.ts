@@ -34,7 +34,11 @@ router.beforeEach(async (to, from, next) => {
     const user = store.user
     if (await user.hasToken()) {
       await user.getUserInfo()
-      next()
+      if(user.hasPermission('view', to.path)) {
+        next()
+      } else {
+        next('/')
+      }
     } else {
       // message.info('无效身份，请先登录!')
       // user.logout()
