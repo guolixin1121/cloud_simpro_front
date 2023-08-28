@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css' // 必须引用
-import { LStorage } from '@/utils/storage'
+import { getToken } from '@/utils/storage'
 import AxiosCanceler from './cancelCancel'
 
 // 处理错误信息
@@ -82,7 +82,7 @@ class AxiosRequest {
       const { url, data = {}, method = 'POST', headers = {} } = params || {}
       const type = headers['content-type']
       Object.assign(headers, {
-        Authorization: `JWT ${LStorage.storage.token}`,
+        Authorization: `JWT ${getToken()}`,
         'content-type': type || 'application/json'
       })
       let postData = data
@@ -113,7 +113,7 @@ class AxiosRequest {
             resolve(data)
           } else if (code === 100) {
             // token过期跳到登录页
-            message.error('登录失效，请重新登录')
+            // message.error('登录失效，请重新登录')
             store.user.logout()
           } else {
             message.error(typeof msg === 'string' ? msg : err)
@@ -123,7 +123,7 @@ class AxiosRequest {
         .catch(error => {
           if (error.status === 401) {
             // token过期跳到登录页
-            message.error('登录失效，请重新登录')
+            message.error('无效身份，请重新登录')
             store.user.logout()
           } else {
             message.error(error.message || '请求错误，请稍后重试')

@@ -86,7 +86,10 @@ const onSearch = (data: Query) => (query.value = data)
 /****** 表格区域 */
 const table = ref()
 const columns = [
-  { dataIndex: 'checkbox', width: 50 },
+  { 
+    dataIndex: 'checkbox', width: 50,
+    validator: (data: RObject) => isNotRunning(data.status)
+  },
   { title: '任务ID', dataIndex: 'template_number', width: 130 },
   { title: '仿真任务名称', dataIndex: 'name', width: 200, ellipsis: true },
   { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90 },
