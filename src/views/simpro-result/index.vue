@@ -81,7 +81,7 @@ const formItems = ref<SearchFormItem[]>([
   { label: '所属用户', key: 'user', type: 'input', placeholder: '请输入所属用户' },
   { label: '完成时间', key: 'create_time', type: 'range-picker' }
 ])
-const onSearch = (data: Query) => (query.value = data)
+const onSearch = (data: Query) => (query.value =  { ...data, owner: isOwner.value ? 1 : 0 })
 
 /****** 表格区域 */
 const table = ref()

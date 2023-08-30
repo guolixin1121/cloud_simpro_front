@@ -14,17 +14,20 @@ export const useUserStore = defineStore('user', () => {
   const logout = async () => {
     user.value = null
     token.value = null
+    await api.user.logout()
     removeToken()
-    
-    // await api.user.logout()
     // LStorage.remove('token')
     setTimeout(() => {
-      location.href = import.meta.env.VITE_LOGIN_URL
-      // test site
-      if(location.hostname.indexOf('pre-') > -1) {
-        location.href = import.meta.env.VITE_LOGIN_Test_URL
-      }
+      gotoLogin()
     }, 1000)
+  }
+
+  const gotoLogin = () => {
+    location.href = import.meta.env.VITE_LOGIN_URL
+    // test site
+    if(location.hostname.indexOf('pre-') > -1) {
+      location.href = import.meta.env.VITE_LOGIN_Test_URL
+    }
   }
 
   const hasToken = () => {
@@ -91,5 +94,5 @@ export const useUserStore = defineStore('user', () => {
     return -1
   }
 
-  return { user, token, hasToken, logout, hasPermission, getUserInfo }
+  return { user, token, hasToken, gotoLogin, logout, hasPermission, getUserInfo }
 })

@@ -53,7 +53,7 @@ router.beforeEach(async (to, from, next) => {
         location.href = process.env.VITE_BASE_STATIC_URL || '/'
       } else {
         message.info('无效身份，请先登录!')
-        user.logout()
+        user.gotoLogin()
       }
     }
   }

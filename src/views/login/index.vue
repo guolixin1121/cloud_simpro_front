@@ -25,6 +25,7 @@
 </template>
 
 <script setup lang="ts">
+import { setToken } from '@/utils/storage'
 import { useLocalStorage } from '@vueuse/core'
 
 const loading = ref<any>(false)
@@ -37,7 +38,8 @@ const login = async () => {
     const { username, password } = formData.value
     const res = await api.user.login({ username, password })
     handleChange()
-    location.href = './?token=' + res.token
+    setToken(res.token)
+    location.href = './'
   } finally {
     loading.value = false
   }

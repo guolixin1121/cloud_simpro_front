@@ -173,7 +173,7 @@ const add = async (template_id = '') => {
 
 const table = ref()
 const gotoVeticlePro = (id: string | number, params?: string) => {
-  const modelWindow = window.open('/vehicle_front/model/carBody/' + id + params, '_model')
+  const modelWindow = window.open('/vehicle_front/model/carBody/' + id + params)
   const timer = setInterval(() => {
     if(modelWindow?.closed) {
       clearInterval(timer)

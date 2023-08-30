@@ -114,7 +114,7 @@ class AxiosRequest {
           } else if (code === 100) {
             // token过期跳到登录页
             // message.error('登录失效，请重新登录')
-            store.user.logout()
+            store.user.gotoLogin()
           } else {
             message.error(typeof msg === 'string' ? msg : err)
             reject(typeof msg === 'string' ? msg : err)
@@ -124,7 +124,7 @@ class AxiosRequest {
           if (error.status === 401) {
             // token过期跳到登录页
             message.error('无效身份，请重新登录')
-            store.user.logout()
+            store.user.gotoLogin()
           } else {
             message.error(error.message || '请求错误，请稍后重试')
             reject(error)
