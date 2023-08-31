@@ -28,7 +28,7 @@ const currentApi = api.kpi
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入评测指标名称' },
   {
-    label: '类别',
+    label: '指标类型',
     key: 'category',
     type: 'tree-select',
     checkLeaf: false,

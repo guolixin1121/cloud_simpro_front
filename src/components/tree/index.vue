@@ -40,18 +40,22 @@
       </a-tree>
     </div>
     <div class="float-right mt-2">
-      <svg-icon title="创建" icon="add" class="cursor-pointer mr-1" @click="onButtonClick('add')"></svg-icon>
+      <svg-icon title="创建" icon="add" class="cursor-pointer mr-1" 
+        v-if="user.hasPermission('add')"
+        @click="onButtonClick('add')"></svg-icon>
       <svg-icon
         icon="edit"
         title="编辑"
         class="cursor-pointer mr-1"
-        :class="isEmpty(selectedNode) || !selectedNode.isLeaf ? 'icon--disable' : ''"
+        v-if="user.hasPermission('edit')"
+        :class="isEmpty(selectedNode) ? 'icon--disable' : ''"
         @click="onButtonClick('edit')"
       ></svg-icon>
       <svg-icon
         icon="delete"
         title="删除"
         class="cursor-pointer mr-1"
+        v-if="user.hasPermission('delete')"
         :class="isEmpty(selectedNode) ? 'icon--disable' : ''"
         @click="onButtonClick('delete')"
       ></svg-icon>
@@ -76,6 +80,8 @@
 import { DownOutlined } from '@ant-design/icons-vue'
 import { useSessionStorage } from '@vueuse/core'
 import { isEmpty } from 'lodash'
+
+const user = store.user
 
 const props = defineProps({
   title: {
@@ -121,9 +127,9 @@ if (query.value?.name) {
 
 onMounted(async () => {
   searchQuery.value = { ...props.query, name: searchValue.value }
-  // just for map, 修复更新地图集后无法同步新数据的问题
+  // 修复更新数据后无法同步新数据的问题
   if(props.refreshSelected) {
-    selectedNode.value = await props.refreshSelected(selectedNode.value.id)
+    selectedNode.value = props.refreshSelected(selectedNode.value)
   }
   selectedRowKeys.value = [selectedNode.value?.id]
   if (!isEmpty(selectedNode.value) && selectedNode.value.isLeaf) {
@@ -167,7 +173,7 @@ const onButtonClick = (type: string) => {
   if (!buttonHandlers) return
 
   if (type == 'add') buttonHandlers.add()
-  if (type == 'edit' && selectedNode.value.isLeaf) buttonHandlers.edit(selectedNode.value)
+  if (type == 'edit') buttonHandlers.edit(selectedNode.value)
   if (type == 'delete') showDeleteConfirm.value = true
 }
 

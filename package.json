@@ -11,13 +11,13 @@
     "dev": "vue-tsc && vite",
     "docker": "sh docker.sh",
     "archive": "git archive -o cloud-simpro-front.zip HEAD",
+    "server": "nodemon mock/index.js",
     "build": "vue-tsc --noEmit && vite build",
     "build:docker": "vue-tsc --noEmit && vite build --mode docker",
     "preview": "vite preview",
     "eslint": "eslint --max-warnings=0",
     "pre-check": "vue-tsc && npx lint-staged",
-    "commit": "cz",
-    "server": "nodemon mock/index.js"
+    "commit": "cz"
   },
   "dependencies": {
     "@ant-design/icons-vue": "^6.1.0",

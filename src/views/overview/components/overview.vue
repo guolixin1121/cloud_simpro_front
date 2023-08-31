@@ -17,7 +17,7 @@
       </div>
       <div class="item">
         <div class="flex flex-col">
-          <p>仿真运行次数</p>
+          <p>仿真任务运行次数</p>
           <span class="mt-4"><span class="value">{{executions.total}}</span>次</span>
         </div>
         <div class="flex flex-col items-center justify-center">

@@ -1,5 +1,5 @@
 // import { useLocalStorage } from '@vueuse/core'
-import { LStorage } from '@/utils/storage'
+import { getToken, removeToken, setToken } from '@/utils/storage'
 import router from '../router'
 import { getQueryParmas } from '@/utils/tools'
 import { Operations } from '@/utils/dict'
@@ -11,26 +11,32 @@ export const useUserStore = defineStore('user', () => {
   /**
    * 退出当前登录
    */
-  const logout = () => {
+  const logout = async () => {
     user.value = null
     token.value = null
-    LStorage.remove('token')
+    await api.user.logout()
+    removeToken()
+    // LStorage.remove('token')
     setTimeout(() => {
-      location.href = import.meta.env.VITE_LOGIN_URL
-      // test site
-      if(location.hostname.indexOf('pre-') > -1) {
-        location.href = import.meta.env.VITE_LOGIN_Test_URL
-      }
+      gotoLogin()
     }, 1000)
+  }
+
+  const gotoLogin = () => {
+    location.href = import.meta.env.VITE_LOGIN_URL
+    // test site
+    if(location.hostname.indexOf('pre-') > -1) {
+      location.href = import.meta.env.VITE_LOGIN_Test_URL
+    }
   }
 
   const hasToken = () => {
     if (token.value) return true
     const code = getQueryParmas('code')
     if (!code) {
-      const value = getQueryParmas('token') || localStorage.getItem('token')
+      const value = getQueryParmas('token') || getToken() // localStorage.getItem('token')
       token.value = value
-      LStorage.set('token', value)
+      setToken(value)
       return token.value
     }
   }
@@ -54,7 +60,13 @@ export const useUserStore = defineStore('user', () => {
    * @returns boolean  是否有权限
    */
   const hasPermission = (action: DataAction, currentRoute: string = router.currentRoute.value.path): boolean => {
-    const curRoute = (router.currentRoute.value?.query?.preRoute || currentRoute) as string
+    let curRoute = (router.currentRoute.value?.query?.preRoute || currentRoute) as string
+
+    // 非一级页面的，依据一级页面
+    const routePaths = curRoute.split('/')
+    if(routePaths.length > 3) {
+      curRoute = routePaths[1]
+    }
 
     // 获取action对应的英文
     const actionValue = Operations[action as keyof typeof Operations] || action
@@ -82,5 +94,5 @@ export const useUserStore = defineStore('user', () => {
     return -1
   }
 
-  return { user, token, hasToken, logout, hasPermission, getUserInfo }
+  return { user, token, hasToken, gotoLogin, logout, hasPermission, getUserInfo }
 })
