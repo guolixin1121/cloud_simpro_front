@@ -69,8 +69,8 @@
           :maxlength="100"
           :style="{ width: '176px' }"
           placeholder="模型名称"
-          onkeyup="value=value.replace(/[^\w\u4E00-\u9FA5,]/g, '').replaceAll('_','')"
         />
+          <!-- onkeyup="value=value.replace(/[^\w\u4E00-\u9FA5,]/g, '').replaceAll('_','')" -->
         <span v-if="copyVal.name === '' && showTip" class="error">模型名称不能为空</span>
       </p>
       <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
@@ -173,7 +173,7 @@ const add = async (template_id = '') => {
 
 const table = ref()
 const gotoVeticlePro = (id: string | number, params?: string) => {
-  const modelWindow = window.open('/vehicle_front/model/carBody/' + id + params, '_model')
+  const modelWindow = window.open('/vehicle_front/model/carBody/' + id + params)
   const timer = setInterval(() => {
     if(modelWindow?.closed) {
       clearInterval(timer)

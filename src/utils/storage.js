@@ -1,4 +1,4 @@
-const TOKEN_KEY = 'saimo_sotif_data_token'
+const TOKEN_KEY = 'cloud_saimo_token'
 export const getToken = () => {
   return localStorage?.getItem(TOKEN_KEY) || ''
 }

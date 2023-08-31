@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router'
 import Layout from '../layout/index.vue'
 import { generateRouteFromViews } from './route'
 import { getQueryParmas } from '@/utils/tools'
+import { setToken } from '@/utils/storage'
 
 const routes: RouteRecordRaw[] = [
   {
@@ -34,7 +35,11 @@ router.beforeEach(async (to, from, next) => {
     const user = store.user
     if (await user.hasToken()) {
       await user.getUserInfo()
-      next()
+      if(user.hasPermission('view', to.path)) {
+        next()
+      } else {
+        next('/')
+      }
     } else {
       // message.info('无效身份，请先登录!')
       // user.logout()
@@ -43,11 +48,12 @@ router.beforeEach(async (to, from, next) => {
       if (code) {
         const userApi = api.user
         const res = await userApi.getToken({ code })
-        localStorage.setItem('token', res.token)
+        // localStorage.setItem('token', res.token)
+        setToken(res.token)
         location.href = process.env.VITE_BASE_STATIC_URL || '/'
       } else {
         message.info('无效身份，请先登录!')
-        user.logout()
+        user.gotoLogin()
       }
     }
   }

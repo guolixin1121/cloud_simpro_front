@@ -4,7 +4,8 @@ export const Operations = {
   编辑场景: 'edit',
   编辑: 'edit',
   删除: 'delete',
-  // 查看: 'view'
+  新增: 'add',
+  查看: 'view'
 }
 
 export const SceneSourceOptions = [

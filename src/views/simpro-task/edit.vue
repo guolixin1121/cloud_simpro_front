@@ -212,6 +212,7 @@ const getEditData = async () => {
      formState.sensors = data.sensors_detail
      formState.scenes= data.scenes_detail
      formState.kpi = data.kpi_detail
+     formState.frequency = data.frequency
      formState.is_in_ring = data.is_in_ring ? '1' : '0',
      formState.driver = data.driver_detail?.id
      formState.mount = data.mount.toString()

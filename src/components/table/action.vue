@@ -34,7 +34,8 @@ const hasPermission = (scope: RObject, key: string) => {
 
   // 是否只允许自己操作
   const operationKeys = Object.keys(Operations)
-  if (props.isOnlyCreator && operationKeys.includes(key)) {
+  // 跳过查看的权限检查，所有用户都可以查看
+  if (props.isOnlyCreator && key != '查看' && operationKeys.includes(key)) {
     const owner = data.createUser || data.create_user || data.username
     const isOwner = owner === userStore.user.username
     permission = permission && isOwner

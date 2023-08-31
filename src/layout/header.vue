@@ -7,7 +7,7 @@ const user = store.user.user
 let topMenus = ref<MenuItem[]>([])
 api.user.getTopMenu().then(data => topMenus.value = data)
 
-// const logout = store.user.logout
+const logout = store.user.logout
 </script>
 
 <template>
@@ -31,13 +31,13 @@ api.user.getTopMenu().then(data => topMenus.value = data)
         <div class="text-white opacity-80 cursor-pointer">
           <span>{{ user?.username || '管理员' }}</span>
         </div>
-        <!-- <template #overlay>
+        <template #overlay>
           <a-menu>
             <a-menu-item>
               <a @click="logout">退出登录</a>
             </a-menu-item>
           </a-menu>
-        </template> -->
+        </template>
       </a-dropdown>
     </div>
   </div>
