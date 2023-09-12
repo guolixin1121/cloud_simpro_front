@@ -18,7 +18,7 @@
             <div class="item-name">{{ item.name }}</div>
             <div class="item-button text-center mt-2" v-if="user.username === item.username">
               <a-button class="mr-2"  @click="quitVnc">释放</a-button>
-              <a-button type="primary" @click="enterVnc">进入</a-button>
+              <a-button type="primary" @click="enterVnc(item)">进入</a-button>
             </div>
         </li>
       </ul>
@@ -53,8 +53,8 @@ const loadList = async () => {
     const res = await api.vnc.getList()
     loading.value = false
     list.value = res.map((item: any, index: number) => ({
+      ...item,
       name: 'GuangQi - ' + (index + 1),
-      username: item.username,
       status: item.status == 'free' ? 0 : 1
     }))
   } catch {
@@ -64,9 +64,10 @@ const loadList = async () => {
 loadList()
 
 // let newWindow: any
-const enterVnc = ({status} : any) => {
-  if(status == 1) return 
-  gotoVnc({ action: 0 }, loading, loadList)
+const enterVnc = ({status, address, username} : any) => {
+  if(status == 0 || user.username === username) { 
+    gotoVnc({ action: 0, address }, loading, loadList)
+  }
 }
 
 const quitVnc = async () => {
