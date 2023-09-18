@@ -2,12 +2,14 @@
   <div class="white-block entry">
      <div class="title--noborder">快捷入口</div>
      <div class="item-list">
-        <div v-for="item in entries" :key="item.label"
-          class="item"
-          @click="gotoPage(item.router)">
-          <img :src="item.icon" width="24">
-          <p class="mt-1">{{ item.label }}</p>
-     </div>
+        <template v-for="item in entries" :key="item.label">
+          <div v-if="hasPermission(item)" 
+            class="item"
+            @click="gotoPage(item.router)">
+            <img :src="item.icon" width="24">
+            <span class="mt-1">{{ item.label }}</span>
+         </div>
+      </template>
      </div>
   </div>
 </template>
@@ -31,19 +33,24 @@ const entries = [
 
 const router = useRouter()
 const gotoPage = (url: string) => router.push(url)
+
+const hasPermission = ({router, label} : any) => {
+ return store.user.hasPermission( label == '新增任务' ? 'add' : 'view', router) 
+}
 </script>
 <style lang="less" scoped>
 .entry {
   .item-list {
     display: flex;
-    justify-content: space-between;
+    // justify-content: space-between;
     flex-wrap: wrap;
     cursor: pointer;
   }
   .item {
-    width: 96px;
-    height: 78px;
-    margin-right: 5px;
+    // width: 96px;
+    width: 33%;
+    height: 85px;
+    // margin-right: 5px;
     margin-top: 20px;
     display: inline-block;
     display: flex;

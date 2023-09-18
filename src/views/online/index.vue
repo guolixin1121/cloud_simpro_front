@@ -5,20 +5,21 @@
       <ul class="list">
         <li v-for="item in list" class="item" 
           :key="item.name" 
-          :style="item.status ? 'cursor: default' : 'cursor: pointer'"
-          @click="() => enterVnc(item)">
-            <div class="item-header">{{ item.name }}</div>
-            <div class="item-title">
-              <span style="font-weight: 600;">{{ item.username }}</span>
-              <span :class="'status status--' + item.status">
-                <i class="circle"></i>
-                {{ item.status == 0 ? '空闲' : '使用中' }}</span>
+          :style="item.status ? 'cursor: default' : 'cursor: pointer'">
+            <div @click="() => enterVnc(item)">
+              <div class="item-header">{{ item.name }}</div>
+              <div class="item-title">
+                <span style="font-weight: 600;">{{ item.username }}</span>
+                <span :class="'status status--' + item.status">
+                  <i class="circle"></i>
+                  {{ item.status == 0 ? '空闲' : '使用中' }}</span>
+              </div>
+              <div class="item-logo"><img style="width: 140px" src="@/assets/images/logo-big.png" /></div>
+              <div class="item-name">{{ item.name }}</div>
             </div>
-            <div class="item-logo"><img style="width: 140px" src="@/assets/images/logo-big.png" /></div>
-            <div class="item-name">{{ item.name }}</div>
             <div class="item-button text-center mt-2" v-if="user.username === item.username">
-              <a-button class="mr-2"  @click="quitVnc">释放</a-button>
-              <a-button type="primary" @click="enterVnc">进入</a-button>
+              <a-button class="mr-2"  @click="quitVnc(item)">释放</a-button>
+              <a-button type="primary" @click="enterVnc(item)">进入</a-button>
             </div>
         </li>
       </ul>
@@ -53,8 +54,8 @@ const loadList = async () => {
     const res = await api.vnc.getList()
     loading.value = false
     list.value = res.map((item: any, index: number) => ({
+      ...item,
       name: 'GuangQi - ' + (index + 1),
-      username: item.username,
       status: item.status == 'free' ? 0 : 1
     }))
   } catch {
@@ -64,15 +65,16 @@ const loadList = async () => {
 loadList()
 
 // let newWindow: any
-const enterVnc = ({status} : any) => {
-  if(status == 1) return 
-  gotoVnc({ action: 0 }, loading, loadList)
+const enterVnc = ({status, address, username} : any) => {
+  if(status == 0 || user.username === username) { 
+    gotoVnc({ action: 0, address }, loading, loadList)
+  }
 }
 
-const quitVnc = async () => {
+const quitVnc = async ({address} : any) => {
   try {
     loading.value = true
-    const res = await api.vnc.exitVnc()
+    const res = await api.vnc.exitVnc({address})
     loopVncStatus(res.id)
   } catch {
     loading.value = false

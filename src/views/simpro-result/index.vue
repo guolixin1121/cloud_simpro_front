@@ -23,7 +23,7 @@
       >
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'is_passed'">
-            <div class="flex items-center">
+            <div class="flex items-center" :class="'task-passed--' + record.is_passed">
               {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '未通过' }}
             </div>
           </template>
@@ -67,10 +67,10 @@ const formItems = ref<SearchFormItem[]>([
     resetValue: ''
   },
   { label: '任务来源', key: 'source', type: 'select', options: TaskSourceOptions, defaultValue: '' },
-  { label: '运行状态', key: 'status', type: 'select', options: resultStatus, defaultValue: '' },
   { label: '仿真算法', key: 'algorithm', type: 'select', api: api.algorithm.getList, defaultValue: '' },
+  { label: '运行状态', key: 'status', type: 'select', options: resultStatus, defaultValue: '' },
   {
-    label: '仿真结果', key: 'is_passed', type: 'select', placeholder: '请选择仿真结果', defaultValue: '',
+    label: '任务结果', key: 'is_passed', type: 'select', placeholder: '请选择仿真结果', defaultValue: '',
     options: [
       { label: '全部', value: '' },
       { label: '未通过', value: '0' },
@@ -144,3 +144,12 @@ const batchDelete = async () => {
   table.value.refresh()
 }
 </script>
+
+<style lang="less" scope>
+.task-passed--true {
+  color: #00B54E;
+}
+.task-passed--false{
+  color: #FA2F30
+}
+</style>
