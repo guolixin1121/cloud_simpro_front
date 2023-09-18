@@ -16,7 +16,7 @@ const getEditData = async () => {
     loading.value = true
     const data = await api.task.get(useRoute().params.id)
     formItems.value = [
-      { label: '任务ID', value: data.id },
+      { label: '任务ID', value: data.number },
       { label: '任务名称', value: data.name },
       { label: '任务来源', value: getTaskSourceName(data.source) },
       { label: '控制在环', value: data.is_in_ring ? '是' : '否'  },

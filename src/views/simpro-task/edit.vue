@@ -31,7 +31,7 @@
         <a-form-item label="动力学动态库" name="dynamic_lib"
           :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择动力学动态库' }]">
           <scroll-select v-model:value="formState.dynamic_lib" 
-            :api="baseApi.dll.getList" :is-set-default="true" placeholder="请选择动力学动态库"></scroll-select>
+            :api="baseApi.dll.getList" :is-set-default="isAdd" placeholder="请选择动力学动态库"></scroll-select>
         </a-form-item>
         <a-form-item label="车辆动力学" name="dynamic_vehicle"
           :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择车辆动力学' }]">
