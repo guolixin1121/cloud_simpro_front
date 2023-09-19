@@ -14,7 +14,7 @@
                   <i class="circle"></i>
                   {{ item.status == 0 ? '空闲' : '使用中' }}</span>
               </div>
-              <div class="item-logo"><img style="width: 140px" src="@/assets/images/logo-big.png" /></div>
+              <div class="item-logo"><img src="@/assets/images/logo-big.png" /></div>
               <div class="item-name">{{ item.name }}</div>
             </div>
             <div class="item-button text-center mt-2" v-if="user.username === item.username">
@@ -32,18 +32,13 @@ import { gotoVnc } from '@/utils/vnc'
 
 const user = store.user.user
 const list = ref(
-  // [
-  // { name: 'GuangQi - 1', username: '', status: 0 },
-  // { name: 'GuangQi - 2', username: 'test1', status: 1 },
-  // { name: 'GuangQi - 3', username: 'test7', status: 1 },
-  // { name: 'GuangQi - 4', username: '', status: 0 },
-  // { name: 'GuangQi - 5', username: '', status: 0 },
-  // { name: 'GuangQi - 6', username: 'test1', status: 1 },
-  // { name: 'GuangQi - 6', username: '', status: 0 },
-  // { name: 'GuangQi - 7', username: '', status: 0 },
-  // { name: 'GuangQi - 8', username: '', status: 0 },
-  // { name: 'GuangQi - 9', username: '', status: 0 },
-  // { name: 'GuangQi - 10', username: '', status: 0 },
+//   [
+//   { name: 'GuangQi - 1', username: '', status: 0 },
+//   { name: 'GuangQi - 2', username: 'test1', status: 1 },
+//   { name: 'GuangQi - 3', username: 'test7', status: 1 },
+//   { name: 'GuangQi - 4', username: '', status: 0 },
+//   { name: 'GuangQi - 5', username: '', status: 0 },
+//   { name: 'GuangQi - 6', username: 'test1', status: 1 }
 // ]
 )
 
@@ -116,8 +111,8 @@ const loopVncStatus = async (id: String) => {
     }
     &-logo {
       text-align: center;
-      margin-top: 10px;
-      margin-bottom: 20px;
+      margin-top: 40px;
+      margin-bottom: 30px;
     }
     &-name {
       font-size: 22px;
