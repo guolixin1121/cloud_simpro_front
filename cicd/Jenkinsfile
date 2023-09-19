@@ -30,6 +30,11 @@ docker system prune -f
                 '''
             }
         }
+        stage('Clean Image') {
+            steps {
+                sh '''docker rmi ${OCI_URI}/cloud_simpro_front:${VERSION}'''
+            }
+        }
         stage('Deploy') {
             steps {
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kube-config', namespace:'',restrictKubeConfigAccess: false, serverUrl: ''){
@@ -45,9 +50,7 @@ envsubst < cicd/cloud-simpro-front.yml | kubectl apply -f -
             cleanWs(cleanWhenNotBuilt: false,
                     deleteDirs: true,
                     disableDeferredWipeout: true,
-                    notFailBuild: true,
-                    patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
-                               [pattern: '.propsfile', type: 'EXCLUDE']])
+                    notFailBuild: true)
         }
         success {
             echo 'success'
