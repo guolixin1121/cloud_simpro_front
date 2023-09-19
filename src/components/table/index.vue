@@ -41,12 +41,12 @@
       <slot v-if="item !== 'bodyCell'" :name="item" :scope="scope" v-bind="scope || {}">
       </slot>
       <slot v-else :name="item" :scope="scope" v-bind="scope || {}">
-        <column :scope="scope" :pagination="pagination" :checkedAll="isCheckedAll" :is-only-creator="isOnlyCreator" @refresh="refresh" @select="onSelect"/>
+        <column :scope="scope" :pagination="pagination" :checkedAll="isCheckedAll" :is-only-creator="isOnlyCreator" @refresh="refresh" @before-handle="onBeforeHandle" @select="onSelect"/>
       </slot>
     </template>
     <!-- 父组件中没有指定bodyCell时使用此模板 -->
     <template #bodyCell="scope">
-      <column :scope="scope" :pagination="pagination" :checkedAll="isCheckedAll" :is-only-creator="isOnlyCreator" @refresh="refresh" @select="onSelect"/>
+      <column :scope="scope" :pagination="pagination" :checkedAll="isCheckedAll" :is-only-creator="isOnlyCreator" @refresh="refresh" @before-handle="onBeforeHandle"  @select="onSelect"/>
     </template>
     <template #headerCell="{column}">
       <template v-if="column.dataIndex == 'checkbox'">
@@ -206,6 +206,7 @@ onMounted(() => {
 // 用于删除等操作后，重新加载table
 // slient: 是否显示loading
 const refresh = (option: any) => {
+  loading.value = false
   clearCheckbox()
   // 判断是否还剩一条，剩一条删除成功后请求上一页
   const slient = option?.slient
@@ -217,6 +218,7 @@ const refresh = (option: any) => {
   run({ ...props.query, page: current.value, size }, slient)
 }
 
+const onBeforeHandle = () => loading.value = true
 // 为了兼容树状的table，为每个数据增加key
 // const addKeysToData = (data: any) => {
 //   if (!Array.isArray(data)) return
