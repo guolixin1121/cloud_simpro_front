@@ -111,7 +111,7 @@ const loopVncStatus = async (id: String) => {
     }
     &-logo {
       text-align: center;
-      margin-top: 40px;
+      margin-top: 30px;
       margin-bottom: 30px;
     }
     &-name {
