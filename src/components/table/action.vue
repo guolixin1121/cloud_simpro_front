@@ -16,7 +16,7 @@
 <script setup lang="ts">
 import { Operations } from '@/utils/dict'
 const props = defineProps(['scope', 'isOnlyCreator'])
-const emits = defineEmits(['refresh'])
+const emits = defineEmits(['refresh', 'before-handler'])
 /**
  * 判断用户是否有某个操作的权限，目前只检查’删除‘、’编辑‘
  * 1. 是否配置了该页面的操作权限
@@ -53,9 +53,13 @@ const onHandler = async ({ column, record }: RObject, key: string) => {
   const handler = action.handler || action
   const isAync = handler.constructor.name === 'AsyncFunction'
   if (isAync) {
-    await handler(record)
-    message.info(key + '成功')
-    emits('refresh')
+    try {
+      key != '删除' && emits('before-handler') // 操作时将table设置为loading，避免重复操作
+      await handler(record)
+      message.info(key + '成功')
+    } finally {
+      emits('refresh')
+    }
   } else {
     handler(record)
   }
