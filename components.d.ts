@@ -65,5 +65,6 @@ declare module '@vue/runtime-core' {
     TreeSelectAsync: typeof import('./src/components/tree-select-async/index.vue')['default']
     TreeTable: typeof import('./src/components/tree-table/index.vue')['default']
     TreeTransfer: typeof import('./src/components/tree-transfer/index.vue')['default']
+    VncModal: typeof import('./src/components/vnc-modal/index.vue')['default']
   }
 }

@@ -17,7 +17,6 @@
         :api="currentApi.getList"
         :query="query"
         :columns="columns"
-        :isOnlyCreator="true"
         :scroll="{ x: 1900, y: 'auto' }"
         @select="onSelect"
       >

@@ -12,7 +12,6 @@
         :columns="columns"
         :api="currentApi.getList"
         :tree-node="'display_name'"
-        :isOnlyCreator="true"
         >
         <template #default="{ column, row }">
           <template v-if="column.dataIndex == 'isTag'">

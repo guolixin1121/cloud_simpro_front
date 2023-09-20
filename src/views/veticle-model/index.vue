@@ -18,7 +18,6 @@
       :query="query"
       :columns="columns"
       :scroll="{ x: 1000, y: 'auto' }"
-      :isOnlyCreator="true"
     >
       <template #bodyCell="{ column, record, index }">
         <template v-if="column.dataIndex == 'type'">

@@ -24,10 +24,14 @@
       </template>
     </Table>
   </a-spin>
+
+  <VncModal ref="vncModal" title="回放"></VncModal>
 </template>
 
 <script setup lang="ts">
 import { gotoVnc } from '@/utils/vnc'
+import VncModal from '@/components/vnc-modal/index.vue'
+const vncModal = ref()
 const task = useRoute().params.id
 const getScenes = (args: any) => api.result.getScenes({ ...args, task })
 
@@ -52,12 +56,17 @@ const replay = (record: any) => {
       action: 3,
       value: JSON.stringify({ uuid: uuid, baidu_id: record.baidu_id })
     },
-    loading
+    loading,
+    null,
+    () => vncModal.value.show()
   )
 }
 
 const tableRef = ref()
-onMounted(() => tableRef.value.refresh())
+onMounted(() => {
+  tableRef.value.refresh()
+  // vncModal.value.show()
+})
 </script>
 
 <style lang="less">

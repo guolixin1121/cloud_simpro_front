@@ -2,7 +2,8 @@
   <template v-for="key in Object.keys(scope.column.actions || [])" :key="key">
     <template v-if="hasPermission(scope, key)">
       <!-- 删除列 -->
-      <a-popconfirm v-if="key === '删除'" title="是否删除？" ok-text="是" cancel-text="否" @confirm="onHandler(scope, key)">
+      <a-popconfirm v-if="key === '删除'"
+        :title="getDeleteTip(scope, key)" ok-text="是" cancel-text="否" @confirm="onHandler(scope, key)">
         <a class="text-blue mr-2">{{ key }}</a>
       </a-popconfirm>
       <!-- 其他列 -->
@@ -17,6 +18,7 @@
 import { Operations } from '@/utils/dict'
 const props = defineProps(['scope', 'isOnlyCreator'])
 const emits = defineEmits(['refresh', 'before-handler'])
+
 /**
  * 判断用户是否有某个操作的权限，目前只检查’删除‘、’编辑‘
  * 1. 是否配置了该页面的操作权限
@@ -47,6 +49,10 @@ const hasPermission = (scope: RObject, key: string) => {
   }
 
   return permission
+}
+const getDeleteTip = ({ column }: RObject, key: string) => {
+  const action = column.actions[key]
+  return action.tip ? action.tip : '是否删除'
 }
 const onHandler = async ({ column, record }: RObject, key: string) => {
   const action = column.actions[key]
