@@ -7,8 +7,7 @@
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/sensor/edit/0')">创建传感器</a-button>
     </div>
     <Table :api="sensorApi.getList" :query="query" 
-      :columns="columns" :scroll="{ x: 1000, y: 'auto' }"
-      :isOnlyCreator="true"> </Table>
+      :columns="columns" :scroll="{ x: 1000, y: 'auto' }"> </Table>
   </div>
 </template>
 

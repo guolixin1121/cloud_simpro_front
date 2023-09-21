@@ -7,8 +7,7 @@
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/dll/edit/0')">创建动态库</a-button>
     </div>
     <Table :api="dllApi.getList" :query="query" 
-      :columns="columns" :scroll="{ x: 1000, y: 'auto' }"
-      :isOnlyCreator="true"> </Table>
+      :columns="columns" :scroll="{ x: 1000, y: 'auto' }"> </Table>
   </div>
 </template>
 

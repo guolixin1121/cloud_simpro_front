@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        VERSION='0.7'
+        VERSION='0.8'
         OCI_HOST='harbor.saimo.com:20080'
         OCI_URI='harbor.saimo.com:20080/cloud-simpro'
     }
@@ -51,10 +51,82 @@ docker build -t ${OCI_URI}/cloud_simpro_front:${VERSION} .
                     notFailBuild: true)
         }
         success {
-            echo 'success'
+            sh '''
+curl -X POST -H "Content-Type: application/json" \
+-d "{
+\\"msg_type\\": \\"interactive\\",
+\\"card\\": {
+    \\"config\\": {
+        \\"wide_screen_mode\\": true,
+        \\"enable_forward\\": true
+    },
+    \\"elements\\": [{
+        \\"tag\\": \\"div\\",
+        \\"text\\": {
+            \\"content\\": \\"commit_id: ${GIT_COMMIT}\\",
+            \\"tag\\": \\"lark_md\\"
+        }
+    }, {
+        \\"tag\\": \\"action\\",
+        \\"actions\\": [{
+            \\"tag\\": \\"button\\",
+            \\"text\\": {
+                    \\"content\\": \\"详情\\",
+                    \\"tag\\": \\"plain_text\\"
+            },
+            \\"url\\": \\"${BUILD_URL}\\",
+            \\"type\\": \\"default\\",
+            \\"value\\": {}
+        }]
+    }],
+    \\"header\\": {
+        \\"title\\": {
+            \\"content\\": \\"${JOB_NAME} <${GIT_BRANCH}> 打包 成功\\",
+            \\"tag\\": \\"plain_text\\"
+        }
+    }
+}
+}" \
+https://open.feishu.cn/open-apis/bot/v2/hook/1eb94fef-744f-43c4-82f1-672b55f83a45'''
         }
         failure {
-            echo 'failure'
+            sh '''
+curl -X POST -H "Content-Type: application/json" \
+-d "{
+\\"msg_type\\": \\"interactive\\",
+\\"card\\": {
+    \\"config\\": {
+        \\"wide_screen_mode\\": true,
+        \\"enable_forward\\": true
+    },
+    \\"elements\\": [{
+        \\"tag\\": \\"div\\",
+        \\"text\\": {
+            \\"content\\": \\"commit_id: ${GIT_COMMIT}\\",
+            \\"tag\\": \\"lark_md\\"
+        }
+    }, {
+        \\"tag\\": \\"action\\",
+        \\"actions\\": [{
+            \\"tag\\": \\"button\\",
+            \\"text\\": {
+                    \\"content\\": \\"详情\\",
+                    \\"tag\\": \\"plain_text\\"
+            },
+            \\"url\\": \\"${BUILD_URL}\\",
+            \\"type\\": \\"default\\",
+            \\"value\\": {}
+        }]
+    }],
+    \\"header\\": {
+        \\"title\\": {
+            \\"content\\": \\"${JOB_NAME} <${GIT_BRANCH}> 打包 失败\\",
+            \\"tag\\": \\"plain_text\\"
+        }
+    }
+}
+}" \
+https://open.feishu.cn/open-apis/bot/v2/hook/1eb94fef-744f-43c4-82f1-672b55f83a45'''
         }
     }
 }

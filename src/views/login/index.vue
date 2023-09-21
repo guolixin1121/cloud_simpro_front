@@ -61,7 +61,7 @@ const handleChange = () => {
 .pro-name {
   position: absolute;
   left: 43%;
-  top: 45%;
+  top: 43%;
   transform: translate(-50%, -50%);
   color: #fff;
   font-size: 60px;

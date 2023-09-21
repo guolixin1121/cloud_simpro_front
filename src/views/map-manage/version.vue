@@ -17,11 +17,13 @@
       </Table>
     </a-spin>
   </div>
+  <VncModal ref="vncModal"></VncModal>
 </template>
 
 <script setup lang="ts">
 import { gotoVnc} from '@/utils/vnc'
-
+import VncModal from '@/components/vnc-modal/index.vue'
+const vncModal = ref()
 const { id } = useRoute().params
 const { name } = useRoute().query
 const type: any = { 0: '内置', 1: '真实', 2: '虚拟' }
@@ -58,7 +60,10 @@ const columns = [
             map_id: data.id,
             catalog: store.catalog.mapCatalog?.id
           })
-        }, loading),
+        }, 
+        loading,
+        null,
+        () => vncModal.value.show()),
       删除: async ({ id }: { id: string }) => await mapsApi.deleteMapVersion(id)
     }
   }

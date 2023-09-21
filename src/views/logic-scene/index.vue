@@ -13,7 +13,6 @@
       :query="query" 
       :columns="columns" 
       :scroll="{ x: 1300, y: 'auto' }"
-      :isOnlyCreator="true" 
       @select="onSelect">
     </Table>
 
