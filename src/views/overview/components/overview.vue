@@ -4,7 +4,7 @@
       <div class="item">
         <div class="flex flex-col">
           <p>仿真任务总数</p>
-          <p class="mt-4"><span class="value">{{ tasks.total }}</span>个</p>
+          <span class="mt-4"><span class="value">{{ tasks.total }}</span>个</span>
         </div>
         <div class="flex flex-col items-center justify-center">
           <!-- <span class="text-gray flex items-center mb-2">月环比 
@@ -17,7 +17,7 @@
       </div>
       <div class="item">
         <div class="flex flex-col">
-          <p>仿真任务运行次数</p>
+          <p>仿真运行次数</p>
           <span class="mt-4"><span class="value">{{executions.total}}</span>次</span>
         </div>
         <div class="flex flex-col items-center justify-center">
@@ -33,11 +33,11 @@
           <img src="@/assets/images/icon_todaytaskdo.png">
         </div>
       </div>
-    </div>
-    <!-- <div class="item-list mt-4">
+    <!-- </div>
+    <div class="item-list mt-4"> -->
       <div class="item">
         <div class="flex flex-col">
-          <p>仿真任务运行总时长</p>
+          <p>仿真总时长</p>
           <span class="mt-4"><span class="value">{{hours.total}}</span>小时</span>
         </div>
         <div class="flex flex-col items-center justify-center">
@@ -46,15 +46,15 @@
       </div>
       <div class="item">
         <div class="flex flex-col">
-          <p>仿真任务总里程</p>
+          <p>仿真总里程</p>
           <span class="mt-4"><span class="value">{{miles.total}}</span>米</span>
         </div>
         <div class="flex flex-col items-center justify-center">
           <img src="@/assets/images/icon_todaytaskdo.png">
         </div>
       </div>
-      <div class="item"></div>
-    </div> -->
+      <!-- <div class="item" style="background-color: transparent;"></div> -->
+    </div>
   </a-spin>
 </template>
 
@@ -106,7 +106,7 @@ fetchData()
   display: flex;
   // justify-content: space-between;
   .item {
-    width: 33.3%;
+    width: 20%;
     height: 128px;
     border-radius: 4px;
     margin-right: 16px;
@@ -139,10 +139,14 @@ fetchData()
 
     .value {
       // @apply flex bg-white p-6
-      font-size: 32px;
+      font-size: 28px;
       font-weight: 600;
       color: #1F1F1F;
       margin-right: 4px;
+    }
+
+    span {
+      color: #999CA3;
     }
   }
 }
