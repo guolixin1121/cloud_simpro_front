@@ -87,7 +87,7 @@ curl -X POST -H "Content-Type: application/json" \
     }
 }
 }" \
-https://open.feishu.cn/open-apis/bot/v2/hook/1eb94fef-744f-43c4-82f1-672b55f83a45'''
+https://open.feishu.cn/open-apis/bot/v2/hook/f8078a48-edbb-4aa7-b2fc-3daf3bd8b6fa'''
         }
         failure {
             sh '''
@@ -126,7 +126,7 @@ curl -X POST -H "Content-Type: application/json" \
     }
 }
 }" \
-https://open.feishu.cn/open-apis/bot/v2/hook/1eb94fef-744f-43c4-82f1-672b55f83a45'''
+https://open.feishu.cn/open-apis/bot/v2/hook/f8078a48-edbb-4aa7-b2fc-3daf3bd8b6fa'''
         }
     }
 }
