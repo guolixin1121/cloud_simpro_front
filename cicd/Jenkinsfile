@@ -1,14 +1,15 @@
 pipeline {
     agent any
     environment {
-        VERSION='0.10'
-        OCI_URI='registry-vecps-ns.gaccloud.com.cn/tenant-eaws'
+        VERSION='0.8'
+        OCI_HOST='harbor.saimo.com:20080'
+        OCI_URI='harbor.saimo.com:20080/cloud-simpro'
     }
     stages {
         stage('Build') {
             steps {
                  withCredentials([usernamePassword(credentialsId: 'oci-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                    sh '''docker login -u=${USERNAME} -p=${PASSWORD} registry-vecps-ns.gaccloud.com.cn
+                    sh '''docker login -u=${USERNAME} -p=${PASSWORD} http://${OCI_HOST}
 docker pull ${OCI_URI}/nginx:1.21-alpine
 docker pull ${OCI_URI}/node:18
 docker tag ${OCI_URI}/node:18 node:18
@@ -26,7 +27,6 @@ docker build -t ${OCI_URI}/cloud_simpro_front:${VERSION} .
         stage('Image Push') {
             steps {
                 sh '''docker push ${OCI_URI}/cloud_simpro_front:${VERSION}
-docker system prune -f
                 '''
             }
         }
@@ -38,9 +38,7 @@ docker system prune -f
         stage('Deploy') {
             steps {
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kube-config', namespace:'',restrictKubeConfigAccess: false, serverUrl: ''){
-                    sh '''kubectl get pod -owide
-envsubst < cicd/cloud-simpro-front.yml | kubectl apply -f -
-'''
+                    sh '''envsubst < cicd/cloud-simpro-front.yml | kubectl apply -f -'''
                 }
             }
         }
@@ -53,10 +51,82 @@ envsubst < cicd/cloud-simpro-front.yml | kubectl apply -f -
                     notFailBuild: true)
         }
         success {
-            echo 'success'
+            sh '''
+curl -X POST -H "Content-Type: application/json" \
+-d "{
+\\"msg_type\\": \\"interactive\\",
+\\"card\\": {
+    \\"config\\": {
+        \\"wide_screen_mode\\": true,
+        \\"enable_forward\\": true
+    },
+    \\"elements\\": [{
+        \\"tag\\": \\"div\\",
+        \\"text\\": {
+            \\"content\\": \\"commit_id: ${GIT_COMMIT}\\",
+            \\"tag\\": \\"lark_md\\"
+        }
+    }, {
+        \\"tag\\": \\"action\\",
+        \\"actions\\": [{
+            \\"tag\\": \\"button\\",
+            \\"text\\": {
+                    \\"content\\": \\"详情\\",
+                    \\"tag\\": \\"plain_text\\"
+            },
+            \\"url\\": \\"${BUILD_URL}\\",
+            \\"type\\": \\"default\\",
+            \\"value\\": {}
+        }]
+    }],
+    \\"header\\": {
+        \\"title\\": {
+            \\"content\\": \\"${JOB_NAME} <${GIT_BRANCH}> 打包 成功\\",
+            \\"tag\\": \\"plain_text\\"
+        }
+    }
+}
+}" \
+https://open.feishu.cn/open-apis/bot/v2/hook/f8078a48-edbb-4aa7-b2fc-3daf3bd8b6fa'''
         }
         failure {
-            echo 'failure'
+            sh '''
+curl -X POST -H "Content-Type: application/json" \
+-d "{
+\\"msg_type\\": \\"interactive\\",
+\\"card\\": {
+    \\"config\\": {
+        \\"wide_screen_mode\\": true,
+        \\"enable_forward\\": true
+    },
+    \\"elements\\": [{
+        \\"tag\\": \\"div\\",
+        \\"text\\": {
+            \\"content\\": \\"commit_id: ${GIT_COMMIT}\\",
+            \\"tag\\": \\"lark_md\\"
+        }
+    }, {
+        \\"tag\\": \\"action\\",
+        \\"actions\\": [{
+            \\"tag\\": \\"button\\",
+            \\"text\\": {
+                    \\"content\\": \\"详情\\",
+                    \\"tag\\": \\"plain_text\\"
+            },
+            \\"url\\": \\"${BUILD_URL}\\",
+            \\"type\\": \\"default\\",
+            \\"value\\": {}
+        }]
+    }],
+    \\"header\\": {
+        \\"title\\": {
+            \\"content\\": \\"${JOB_NAME} <${GIT_BRANCH}> 打包 失败\\",
+            \\"tag\\": \\"plain_text\\"
+        }
+    }
+}
+}" \
+https://open.feishu.cn/open-apis/bot/v2/hook/f8078a48-edbb-4aa7-b2fc-3daf3bd8b6fa'''
         }
     }
 }
