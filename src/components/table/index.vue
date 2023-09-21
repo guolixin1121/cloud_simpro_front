@@ -41,12 +41,12 @@
       <slot v-if="item !== 'bodyCell'" :name="item" :scope="scope" v-bind="scope || {}">
       </slot>
       <slot v-else :name="item" :scope="scope" v-bind="scope || {}">
-        <column :scope="scope" :pagination="pagination" :checkedAll="isCheckedAll" :is-only-creator="isOnlyCreator" @refresh="refresh" @before-handle="onBeforeHandle" @select="onSelect"/>
+        <column :scope="scope" :pagination="pagination" :checkedAll="isCheckedAll" :is-only-creator="isOnlyCreator" @refresh="refresh" @select="onSelect" @before-handler="onBeforeHandler"/>
       </slot>
     </template>
     <!-- 父组件中没有指定bodyCell时使用此模板 -->
     <template #bodyCell="scope">
-      <column :scope="scope" :pagination="pagination" :checkedAll="isCheckedAll" :is-only-creator="isOnlyCreator" @refresh="refresh" @before-handle="onBeforeHandle"  @select="onSelect"/>
+      <column :scope="scope" :pagination="pagination" :checkedAll="isCheckedAll" :is-only-creator="isOnlyCreator" @refresh="refresh" @select="onSelect"  @before-handler="onBeforeHandler"/>
     </template>
     <template #headerCell="{column}">
       <template v-if="column.dataIndex == 'checkbox'">
@@ -218,7 +218,9 @@ const refresh = (option: any) => {
   run({ ...props.query, page: current.value, size }, slient)
 }
 
-const onBeforeHandle = () => loading.value = true
+// 操作时将table设置为loading，避免重复操作
+const onBeforeHandler = () => loading.value = true
+
 // 为了兼容树状的table，为每个数据增加key
 // const addKeysToData = (data: any) => {
 //   if (!Array.isArray(data)) return

@@ -44,14 +44,16 @@
       </div>
     </div>
   </div>
+  <VncModal ref="vncModal"></VncModal>
 </template>
 
 <script setup lang="ts">
 import { SceneSourceOptions, getSceneSourceName } from '@/utils/dict'
 import { SStorage } from '@/utils/storage'
 import { gotoVnc } from '@/utils/vnc'
+import VncModal from '@/components/vnc-modal/index.vue'
+const vncModal = ref()
 const scenesetFromLogic = SStorage.get('logic-sceneset')
-
 const currentApi = api.scene
 const sceneApi = api.scenesets
 const user = store.user
@@ -108,7 +110,10 @@ const columns = [
     actions: {
       查看: (data: any) => router.push('/scene/view/' + data.id),
       编辑: (data: any) => router.push('/scene/edit/' + data.id),
-      编辑场景: (data: any) => gotoVnc({ action: 1, value: data.id }, loading),
+      编辑场景: (data: any) => gotoVnc({ action: 1, value: data.id }, 
+        loading,
+        null,
+        () => vncModal.value.show()),
       删除: async ({ id }: { id: string }) => await currentApi.delete(id)
     }
   }

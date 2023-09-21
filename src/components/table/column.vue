@@ -14,7 +14,7 @@
   </template>
   <!-- 封装操作列 -->
   <template v-if="dataIndex == 'actions'">
-    <Action :scope="scope" :is-only-creator="isOnlyCreator" @before-handle="emits('before-handle')" @refresh="emits('refresh')"></Action>
+    <Action :scope="scope" :is-only-creator="isOnlyCreator" @refresh="emits('refresh')" @before-handler="emits('before-handler')"></Action>
   </template>
   <!-- 值为时间：格式化时间 -->
   <template v-else-if="isDateColumn(dataIndex)">
@@ -53,7 +53,7 @@ import Action from './action.vue'
 
 const user = store.user.user
 const props = defineProps(['scope', 'isOnlyCreator', 'pagination', 'checkedAll'])
-const emits = defineEmits(['refresh', 'select', 'before-handle'])
+const emits = defineEmits(['refresh', 'select', 'before-handler'])
 
 const column = computed(() => props.scope?.column)
 const dataIndex = computed(() => props.scope?.column.dataIndex)

@@ -2,7 +2,8 @@
   <template v-for="key in Object.keys(scope.column.actions || [])" :key="key">
     <template v-if="hasPermission(scope, key)">
       <!-- 删除列 -->
-      <a-popconfirm v-if="key === '删除'" title="是否删除？" ok-text="是" cancel-text="否" @confirm="onHandler(scope, key)">
+      <a-popconfirm v-if="key === '删除'"
+        :title="getDeleteTip(scope, key)" ok-text="是" cancel-text="否" @confirm="onHandler(scope, key)">
         <a class="text-blue mr-2">{{ key }}</a>
       </a-popconfirm>
       <!-- 其他列 -->
@@ -16,7 +17,8 @@
 <script setup lang="ts">
 import { Operations } from '@/utils/dict'
 const props = defineProps(['scope', 'isOnlyCreator'])
-const emits = defineEmits(['refresh', 'before-handle'])
+const emits = defineEmits(['refresh', 'before-handler'])
+
 /**
  * 判断用户是否有某个操作的权限，目前只检查’删除‘、’编辑‘
  * 1. 是否配置了该页面的操作权限
@@ -48,13 +50,17 @@ const hasPermission = (scope: RObject, key: string) => {
 
   return permission
 }
+const getDeleteTip = ({ column }: RObject, key: string) => {
+  const action = column.actions[key]
+  return action.tip ? action.tip : '是否删除'
+}
 const onHandler = async ({ column, record }: RObject, key: string) => {
   const action = column.actions[key]
   const handler = action.handler || action
   const isAync = handler.constructor.name === 'AsyncFunction'
   if (isAync) {
     try {
-      key != '删除' && emits('before-handle') // 响应操作时table至于loading状态，避免重复点击
+      key != '删除' && emits('before-handler') // 操作时将table设置为loading，避免重复操作
       await handler(record)
       message.info(key + '成功')
     } finally {

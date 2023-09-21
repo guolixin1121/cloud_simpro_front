@@ -68,7 +68,10 @@ const columns = [
     actions: {
       查看: (data: any) => router.push('/map-manage/edit/' + data.id + '?type=0&name=' + encodeURIComponent(data.name)),
       编辑: (data: any) => router.push('/map-manage/edit/' + data.id + '?name=' + encodeURIComponent(data.name)),
-      删除: async ({ id, name }: any) => await mapsApi.deleteMaps({ id, data: { name } })
+      删除: {
+        tip: '删除后，关联数据(场景、地图等)将会一起删除，是否删除？',
+        handler: async ({ id, name }: any) => await mapsApi.deleteMaps({ id, data: { name } })
+      }
     }
   }
 ]

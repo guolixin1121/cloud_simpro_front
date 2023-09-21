@@ -19,7 +19,6 @@
       :api="currentApi.getList"
       :query="query"
       :columns="columns"
-      :isOnlyCreator="true"
       :scroll="{ x: 2000, y: 'auto' }"
       @select="onSelect"
     >
@@ -90,8 +89,8 @@ const columns = [
   }
 ]
 
-const canBeRun = (data: RObject) => ['运行', '等待'].indexOf(data.status) === -1 && user.user.username == data.create_user
-const canBeDelete = (data: RObject) => data.status !== '运行' && user.user.username == data.create_user
+const canBeRun = (data: RObject) => ['运行', '等待'].indexOf(data.status) === -1 // && user.user.username == data.create_user
+const canBeDelete = (data: RObject) => data.status !== '运行' // && user.user.username == data.create_user
 
 const selectedRows = ref([])
 const selectedRunRows = computed(() => selectedRows.value.filter((item: any) => canBeRun(item)))
