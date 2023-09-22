@@ -1,7 +1,18 @@
 # cloud_simpro_front 云仿真
 
 ## 分支说明
-主分支
+1. master 开发分支
+执行archive生成zip后手动部署
+2. production: 生产分支
+3. yizhuang_dev 亦庄分支  
+在独立的git上   
+```
+// 代码推到此git后，代码自动打包
+git remote add yizhuang http://10.9.0.167:22080/cloud-simpro1/cloud_simpro_front   
+账号: cloud-simpro   
+密码: Da*hF4ig
+git push yizhuang yizhuang_dev // 提交代码   
+```
 
 ## 自动import
 + `components`下所有组件的`index.vue`已在vite中配置了自动引用，组件名为目录名。使用时无需`import`

@@ -2,58 +2,52 @@
   <a-spin :spinning="loading" >
     <div class="item-list">
       <div class="item">
-        <div class="flex flex-col">
+        <div class="flex justify-between">
           <p>仿真任务总数</p>
-          <span class="mt-4"><span class="value">{{ tasks.total }}</span>个</span>
-        </div>
-        <div class="flex flex-col items-center justify-center">
-          <!-- <span class="text-gray flex items-center mb-2">月环比 
-            <i class="icon-rise" v-if="tasks.monthGrowth > 0"></i>
-            <i class="icon-down" v-if="tasks.monthGrowth < 0"></i>
-            {{ tasks.monthGrowth }}%
-          </span> -->
           <img src="@/assets/images/icon_taskcreate.png">
         </div>
+        <div>
+          <span class="mt-4"><span class="value">{{ valueFormater(tasks.total) }}</span>个</span>
+        </div>
       </div>
       <div class="item">
-        <div class="flex flex-col">
+        <div class="flex justify-between">
           <p>仿真运行次数</p>
-          <span class="mt-4"><span class="value">{{executions.total}}</span>次</span>
-        </div>
-        <div class="flex flex-col items-center justify-center">
           <img src="@/assets/images/icon_taskdo.png">
         </div>
+        <div>
+          <span class="mt-4"><span class="value">{{ valueFormater(executions.total) }}</span>次</span>
+        </div>
       </div>
       <div class="item">
-        <div class="flex flex-col">
+        <div class="flex justify-between">
           <p>仿真报告</p>
-          <span class="mt-4"><span class="value">{{reports.total}}</span>个</span>
-        </div>
-        <div class="flex flex-col items-center justify-center">
           <img src="@/assets/images/icon_todaytaskdo.png">
+        </div>
+        <div>
+          <span class="mt-4"><span class="value">{{ valueFormater(reports.total) }}</span>个</span>
         </div>
       </div>
     <!-- </div>
     <div class="item-list mt-4"> -->
       <div class="item">
-        <div class="flex flex-col">
+        <div class="flex justify-between">
           <p>仿真总时长</p>
-          <span class="mt-4"><span class="value">{{hours.total}}</span>小时</span>
+          <img src="@/assets/images/icon_sotiftime.png">
         </div>
-        <div class="flex flex-col items-center justify-center">
-          <img src="@/assets/images/icon_todaytaskdo.png">
+        <div>
+          <span class="mt-4"><span class="value">{{ valueFormater(hours.total) }}</span>小时</span>
         </div>
       </div>
       <div class="item">
-        <div class="flex flex-col">
+        <div class="flex justify-between">
           <p>仿真总里程</p>
-          <span class="mt-4"><span class="value">{{miles.total}}</span>米</span>
+          <img src="@/assets/images/icon_all.png">
         </div>
-        <div class="flex flex-col items-center justify-center">
-          <img src="@/assets/images/icon_todaytaskdo.png">
+        <div>
+          <span class="mt-4"><span class="value">{{ valueFormater(miles.total) }}</span>米</span>
         </div>
       </div>
-      <!-- <div class="item" style="background-color: transparent;"></div> -->
     </div>
   </a-spin>
 </template>
@@ -98,6 +92,22 @@ const fetchData = async () => {
   }
 }
 
+const valueFormater = (value: number) => {
+  const valueStr = value.toString().split('.')
+  const dot = valueStr.length > 1 ? ('.' + valueStr[1]) : ''
+  const integer = valueStr[0].split('').reverse().join('')
+
+  // 整数部分加逗号
+  const length = Math.floor(integer.length / 4)
+  let integerStr = ''
+  for(let i = length; i >= 0; i--) {
+    integerStr = integer.substring(i * 4, i * 4 + 4 ) + (integerStr.length ? (',' + integerStr) : integerStr)
+  }
+  integerStr = integerStr.split('').reverse().join('')
+
+  return integerStr + dot
+}
+
 fetchData()
 </script>
 
@@ -110,14 +120,21 @@ fetchData()
     height: 128px;
     border-radius: 4px;
     margin-right: 16px;
-    display: flex;
+    // display: flex;
     background-color: #fff;
-    justify-content: space-between;
+    // justify-content: space-between;
     padding: 24px;
+    padding-right: 16px;
 
     p {
       color: #60656E;
       font-weight: 600;
+    }
+
+    img {
+      width: 48px;
+      position: relative;
+      top: -10px;
     }
 
     &:last-child {
@@ -139,7 +156,7 @@ fetchData()
 
     .value {
       // @apply flex bg-white p-6
-      font-size: 28px;
+      font-size: 26px;
       font-weight: 600;
       color: #1F1F1F;
       margin-right: 4px;
