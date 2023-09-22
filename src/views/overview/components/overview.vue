@@ -4,7 +4,7 @@
       <div class="item">
         <div class="flex justify-between">
           <p>仿真任务总数</p>
-          <img src="@/assets/images/icon_taskcreate.png">
+          <img src="@/assets/images/icon_taskdo.png">
         </div>
         <div>
           <span class="mt-4"><span class="value">{{ valueFormater(tasks.total) }}</span>个</span>
@@ -13,7 +13,7 @@
       <div class="item">
         <div class="flex justify-between">
           <p>仿真运行次数</p>
-          <img src="@/assets/images/icon_taskdo.png">
+          <img src="@/assets/images/icon_running.png">
         </div>
         <div>
           <span class="mt-4"><span class="value">{{ valueFormater(executions.total) }}</span>次</span>
@@ -22,7 +22,7 @@
       <div class="item">
         <div class="flex justify-between">
           <p>仿真报告</p>
-          <img src="@/assets/images/icon_todaytaskdo.png">
+          <img src="@/assets/images/icon_sotifpercent.png">
         </div>
         <div>
           <span class="mt-4"><span class="value">{{ valueFormater(reports.total) }}</span>个</span>
