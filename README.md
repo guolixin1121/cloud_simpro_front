@@ -7,11 +7,14 @@
 3. yizhuang_dev 亦庄分支  
 在独立的git上   
 ```
-// 代码推到此git后，代码自动打包
 git remote add yizhuang http://10.9.0.167:22080/cloud-simpro1/cloud_simpro_front   
 账号: cloud-simpro   
 密码: Da*hF4ig
-git push yizhuang yizhuang_dev // 提交代码   
+```
+代码推到此git后，代码自动打包
+```
+1. 更改jenkinfile里的版本号
+2. 提交代码：git push yizhuang yizhuang_dev  
 ```
 
 ## 自动import
