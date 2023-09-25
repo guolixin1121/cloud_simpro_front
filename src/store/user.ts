@@ -24,10 +24,6 @@ export const useUserStore = defineStore('user', () => {
 
   const gotoLogin = () => {
     location.href = import.meta.env.VITE_LOGIN_URL
-    // test site
-    if(location.hostname.indexOf('pre-') > -1) {
-      location.href = import.meta.env.VITE_LOGIN_Test_URL
-    }
   }
 
   const hasToken = () => {

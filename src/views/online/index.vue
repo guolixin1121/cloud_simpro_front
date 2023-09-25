@@ -32,14 +32,14 @@ import { gotoVnc } from '@/utils/vnc'
 
 const user = store.user.user
 const list = ref(
-  [
-  { name: 'GuangQi - 1', username: '', status: 0 },
-  { name: 'GuangQi - 2', username: 'test1', status: 1 },
-  { name: 'GuangQi - 3', username: 'test7', status: 1 },
-  { name: 'GuangQi - 4', username: '', status: 0 },
-  { name: 'GuangQi - 5', username: '', status: 0 },
-  { name: 'GuangQi - 6', username: 'test1', status: 1 }
-]
+//   [
+//   { name: 'GuangQi - 1', username: '', status: 0 },
+//   { name: 'GuangQi - 2', username: 'test1', status: 1 },
+//   { name: 'GuangQi - 3', username: 'test7', status: 1 },
+//   { name: 'GuangQi - 4', username: '', status: 0 },
+//   { name: 'GuangQi - 5', username: '', status: 0 },
+//   { name: 'GuangQi - 6', username: 'test1', status: 1 }
+// ]
 )
 
 const loading = ref(false)
@@ -50,7 +50,7 @@ const loadList = async () => {
     loading.value = false
     list.value = res.map((item: any, index: number) => ({
       ...item,
-      name: 'GuangQi - ' + (index + 1),
+      name: 'SAIMO - ' + (index + 1),
       status: item.status == 'free' ? 0 : 1
     }))
   } catch {
