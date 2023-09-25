@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        VERSION='0.9'
+        VERSION='0.10'
         OCI_HOST='harbor.saimo.com:20080'
         OCI_URI='harbor.saimo.com:20080/cloud-simpro'
     }

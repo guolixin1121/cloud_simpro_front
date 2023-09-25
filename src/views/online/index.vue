@@ -57,7 +57,7 @@ const loadList = async () => {
     loading.value = false
   }
 }
-// loadList()
+loadList()
 
 // let newWindow: any
 const enterVnc = ({status, address, username} : any) => {
