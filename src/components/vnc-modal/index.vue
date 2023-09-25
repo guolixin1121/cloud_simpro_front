@@ -43,7 +43,7 @@
          const res = await api.vnc.getList()
          dataSource.value = res.map((item: any, index: number) => ({
              ...item,
-             name: 'GuangQi - ' + (index + 1),
+             name: 'SAIMO - ' + (index + 1),
          }))
      } finally {
          loading.value = false
