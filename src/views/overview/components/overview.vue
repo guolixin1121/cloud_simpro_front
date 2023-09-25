@@ -45,7 +45,7 @@
           <img src="@/assets/images/icon_all.png">
         </div>
         <div>
-          <span class="mt-4"><span class="value">{{ valueFormater(miles.total) }}</span>米</span>
+          <span class="mt-4"><span class="value">{{ valueFormater(miles.total) }}</span>公里</span>
         </div>
       </div>
     </div>
@@ -98,10 +98,11 @@ const valueFormater = (value: number) => {
   const integer = valueStr[0].split('').reverse().join('')
 
   // 整数部分加逗号
-  const length = Math.floor(integer.length / 4)
+  const step = 3
+  const length = Math.floor(integer.length / step)
   let integerStr = ''
   for(let i = length; i >= 0; i--) {
-    integerStr = integer.substring(i * 4, i * 4 + 4 ) + (integerStr.length ? (',' + integerStr) : integerStr)
+    integerStr = integer.substring(i * step, i * step + step ) + (integerStr.length ? (',' + integerStr) : integerStr)
   }
   integerStr = integerStr.split('').reverse().join('')
 
