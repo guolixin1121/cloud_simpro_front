@@ -208,6 +208,9 @@ const refresh = async () => {
     loading.value = true
     const data = await getOptions()
     treeData.value = data
+    if(data.length == 1) {
+      expandRowKeys.value = [data[0].id]
+    }
   } finally {
     loading.value = false
   }

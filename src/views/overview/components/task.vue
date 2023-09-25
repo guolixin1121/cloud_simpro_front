@@ -40,7 +40,7 @@
 import { getResultStatus } from '@/utils/dict'
 const columns = [
   {
-    dataIndex: 'id',
+    dataIndex: 'template_number',
     title: '任务ID'
   },
   {

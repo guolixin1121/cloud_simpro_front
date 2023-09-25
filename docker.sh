@@ -1,4 +1,4 @@
-export VERSION='0.181'
+export VERSION='0.182'
 docker rmi $(docker images | grep "/tenant-eaws/cloud_simpro_front" | awk '{print $3}') -f
 docker build -t cloud_simpro_front .
 # docker save cloud_simpro_front > cloud_simpro_front.tar
