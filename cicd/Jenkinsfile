@@ -1,13 +1,29 @@
 pipeline {
     agent any
     environment {
-        VERSION='0.10'
-        OCI_URI='registry-vecps-ns.gaccloud.com.cn/tenant-eaws'
+        VERSION='0.24'
     }
     stages {
+        stage('Prepare env') {
+            steps {
+                script {
+                    env.BRANCH_NAME = 'master'
+                    if (env.gitlabSourceBranch != null) {
+                        env.BRANCH_NAME = "${env.gitlabSourceBranch}" 
+                    }
+                    if (env.BRANCH_NAME == 'master') {
+                        env.OCI_URI = 'registry-vecps-ns.gaccloud.com.cn/tenant-cgzo'
+                    } else {
+                        env.OCI_URI = 'registry-vecps-ns.gaccloud.com.cn/tenant-eaws'
+                    }
+                }
+                sh 'echo ${BRANCH_NAME}'
+                sh 'echo ${OCI_URI}'
+            }
+        }
         stage('Build') {
             steps {
-                 withCredentials([usernamePassword(credentialsId: 'oci-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                 withCredentials([usernamePassword(credentialsId: 'oci-credentials-prod', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                     sh '''docker login -u=${USERNAME} -p=${PASSWORD} registry-vecps-ns.gaccloud.com.cn
 docker pull ${OCI_URI}/nginx:1.21-alpine
 docker pull ${OCI_URI}/node:18
@@ -16,11 +32,6 @@ docker tag ${OCI_URI}/nginx:1.21-alpine nginx:1.21-alpine
 docker build -t ${OCI_URI}/cloud_simpro_front:${VERSION} .
 '''
                 }
-            }
-        }
-        stage('Check') {
-            steps {
-                echo "Check"
             }
         }
         stage('Image Push') {
@@ -35,9 +46,32 @@ docker system prune -f
                 sh '''docker rmi ${OCI_URI}/cloud_simpro_front:${VERSION}'''
             }
         }
-        stage('Deploy') {
+        stage('Deploy test') {
+            when {
+                branch 'develop'
+            }
             steps {
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kube-config', namespace:'',restrictKubeConfigAccess: false, serverUrl: ''){
+                    sh '''kubectl get pod -owide
+envsubst < cicd/cloud-simpro-front.yml | kubectl apply -f -
+'''
+                }
+            }
+        }
+        stage('Deploy prod') {
+            when {
+                branch 'master'
+                beforeInput true
+            }
+            options {
+                timeout(time:1, unit:'MINUTES')
+            }
+            input {
+                message "是否部署到集群?"
+                ok  "是"
+            }
+            steps {
+                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kube-config-prod', namespace:'',restrictKubeConfigAccess: false, serverUrl: ''){
                     sh '''kubectl get pod -owide
 envsubst < cicd/cloud-simpro-front.yml | kubectl apply -f -
 '''
