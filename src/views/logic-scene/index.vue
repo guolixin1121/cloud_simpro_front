@@ -56,10 +56,10 @@ const formItems = ref<SearchFormItem[]>([
   {
     label: '标签',
     key: 'labels',
-    type: 'select',
+    type: 'tree-select',
     mode: 'multiple',
     api: api.tags.getList,
-    query: { tag_type: 3, isTag: true },
+    query: { tree: 1, tag_type: 3, isTag: true },
     fieldNames: { label: 'display_name', value: 'name' },
     placeholder: '请选择标签，最多选择9个',
     defaultValue: ['']

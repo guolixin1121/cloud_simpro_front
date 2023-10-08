@@ -2,10 +2,9 @@
   <a-tree-select
     placeholder="请选择"
     showSearch
-    treeDefaultExpandAll
-    treeNodeFilterProp="title"
+    :treeNodeFilterProp="'title'"
     :treeData="treeData"
-    :not-found-content=" loading ? '数据加载中...' : '暂无数据'"
+    :not-found-content="loading ? '数据加载中...' : '暂无数据'"
     @select="onSelect"
   >
   </a-tree-select>
@@ -35,6 +34,7 @@ const props = defineProps({
   select: {
     type: Function
   },
+  // 默认只返回节点的值，该属性返回节点的对象
   selectNode: {
     type: Object
   }
@@ -81,7 +81,7 @@ const treeTransfer = (data: any, level: number = 0): TreeItem[] => {
     key: item[value],
     level,
     id: item.nodeId || item.id,
-    selectable: props.checkLeaf ? !!item.isLeaf : true,
+    selectable: props.checkLeaf ? (!!item.isLeaf || !!item.isTag) : true,
     children: treeTransfer(item.children || [], level + 1)
   }))
   return options
