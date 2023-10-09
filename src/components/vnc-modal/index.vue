@@ -21,7 +21,11 @@
  
  const show = () => {
      visible.value = true
-     nextTick(() => table.value?.refresh())
+     getData()
+     nextTick(() => {
+        console.log(table.value.refresh)
+        table.value?.refresh()
+     })
  }
  defineExpose({ show })
  
@@ -37,7 +41,7 @@
      router.push('/online')
  }
  
- onMounted(async () => {
+const getData = async () => {
      try {
          loading.value = true
          const res = await api.vnc.getList()
@@ -48,5 +52,5 @@
      } finally {
          loading.value = false
      }
- })
+ }
  </script>

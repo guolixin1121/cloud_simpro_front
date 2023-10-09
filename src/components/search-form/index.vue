@@ -24,6 +24,7 @@
         v-model:value="formState[item.key]"
         v-bind="{ ...item, ...getDefaultStyle(item.type) }"
         v-on="item"
+        @change="(value: string|string[]) => onTreeSelectChange(item.key, value)"
       >
       </tree-select>
       <component
@@ -183,6 +184,15 @@ const onSelectChange = (key: string, value: string | string[]) => {
   const isMultiple = Array.isArray(selectedValue)
   if (isMultiple) {
     const isAllSelected = value == ''
+    formState[key] = isAllSelected ? [''] : selectedValue.filter(v => v)
+  }
+}
+
+const onTreeSelectChange = (key: string, value: string | string[]) => {
+  const selectedValue = formState[key]
+  const isMultiple = Array.isArray(selectedValue)
+  if (isMultiple) {
+    const isAllSelected = value.length == 0 || value.indexOf('') > 0
     formState[key] = isAllSelected ? [''] : selectedValue.filter(v => v)
   }
 }
