@@ -1,28 +1,11 @@
 pipeline {
     agent any
     environment {
-        VERSION='0.11'
+        VERSION='0.12'
         OCI_HOST='harbor.saimo.com:20080'
         OCI_URI='harbor.saimo.com:20080/cloud-simpro'
     }
     stages {
-        stage('Prepare env') {
-            steps {
-                script {
-                    env.BRANCH_NAME = 'master'
-                    if (env.gitlabSourceBranch != null) {
-                        env.BRANCH_NAME = "${env.gitlabSourceBranch}" 
-                    }
-                    if (env.BRANCH_NAME == 'master') {
-                        env.OCI_URI = 'registry-vecps-ns.gaccloud.com.cn/tenant-cgzo'
-                    } else {
-                        env.OCI_URI = 'registry-vecps-ns.gaccloud.com.cn/tenant-eaws'
-                    }
-                }
-                sh 'echo ${BRANCH_NAME}'
-                sh 'echo ${OCI_URI}'
-            }
-        }
         stage('Build') {
             steps {
                  withCredentials([usernamePassword(credentialsId: 'oci-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -36,6 +19,11 @@ docker build -t ${OCI_URI}/cloud_simpro_front:${VERSION} .
                 }
             }
         }
+        stage('Check') {
+            steps {
+                echo "Check"
+            }
+        }
         stage('Image Push') {
             steps {
                 sh '''docker push ${OCI_URI}/cloud_simpro_front:${VERSION}
@@ -47,33 +35,10 @@ docker build -t ${OCI_URI}/cloud_simpro_front:${VERSION} .
                 sh '''docker rmi ${OCI_URI}/cloud_simpro_front:${VERSION}'''
             }
         }
-        stage('Deploy test') {
-            when {
-                branch 'develop'
-            }
+        stage('Deploy') {
             steps {
                 withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kube-config', namespace:'',restrictKubeConfigAccess: false, serverUrl: ''){
                     sh '''envsubst < cicd/cloud-simpro-front.yml | kubectl apply -f -'''
-                }
-            }
-        }
-        stage('Deploy prod') {
-            when {
-                branch 'master'
-                beforeInput true
-            }
-            options {
-                timeout(time:1, unit:'MINUTES')
-            }
-            input {
-                message "是否部署到集群?"
-                ok  "是"
-            }
-            steps {
-                withKubeConfig(caCertificate: '', clusterName: '', contextName: '', credentialsId: 'kube-config-prod', namespace:'',restrictKubeConfigAccess: false, serverUrl: ''){
-                    sh '''kubectl get pod -owide
-envsubst < cicd/cloud-simpro-front.yml | kubectl apply -f -
-'''
                 }
             }
         }
