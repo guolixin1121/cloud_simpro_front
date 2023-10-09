@@ -76,7 +76,7 @@ const formItems = ref<SearchFormItem[]>([
     type: 'tree-select',
     mode: 'multiple',
     api: api.tags.getList,
-    query: { tree: 1, tag_type: 3, isTag: true },
+    query: { tree: 1, tag_type: 3, size: 100 }, // tree无法分页，一次性获取所有
     placeholder: '请选择标签，最多选择9个',
     fieldNames: { label: 'display_name', value: 'name' },
     defaultValue: [''],
