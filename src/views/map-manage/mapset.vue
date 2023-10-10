@@ -16,7 +16,7 @@
           </a-select>
           <div v-else>{{ formState.isLeaf == '1' ? "地图集" : "地图目录" }}</div>
         </a-form-item>
-        <a-form-item label="所属地图目录" name="parentId" :rules="[{ required: true, message: '请选择地图目录'}]">
+        <a-form-item label="所属地图目录" name="parentId" :rules="[{ required: formState.isLeaf == '1', message: '请选择地图目录'}]">
           <tree-select
             v-if="isAdd"
             placeholder="请选择所属地图目录"
