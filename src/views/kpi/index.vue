@@ -2,7 +2,7 @@
   <search-form :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
-    <page-title title="评价指标列表">
+    <page-title title="评测指标列表">
       <batch-button :disabled="!selectedRows.length" v-if="user.hasPermission('delete')" :api="batchDelete"></batch-button>
       <a-button type="primary" :disabled="selectedRows.length" v-if="user.hasPermission('add')" @click="router.push('/kpi/edit/0')">创建评测指标</a-button>
     </page-title>
