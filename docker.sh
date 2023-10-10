@@ -1,4 +1,6 @@
-export VERSION='0.184'
+export CURRENT_TIME="`date '+%Y%m%d%H%M%S'`"
+export BUILD_ID=0
+export VERSION="build-${BUILD_ID}-${CURRENT_TIME}"
 docker rmi $(docker images | grep "/tenant-eaws/cloud_simpro_front" | awk '{print $3}') -f
 docker build -t cloud_simpro_front .
 # docker save cloud_simpro_front > cloud_simpro_front.tar

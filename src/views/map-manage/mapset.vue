@@ -16,7 +16,7 @@
           </a-select>
           <div v-else>{{ formState.isLeaf == '1' ? "地图集" : "地图目录" }}</div>
         </a-form-item>
-        <a-form-item v-if="formState.isLeaf == '1'" label="所属地图目录" name="parentId" :rules="[{ required: formState.isLeaf == '1', message: '请选择地图目录'}]">
+        <a-form-item label="所属地图目录" name="parentId" :rules="[{ required: true, message: '请选择地图目录'}]">
           <tree-select
             v-if="isAdd"
             placeholder="请选择所属地图目录"
@@ -28,7 +28,7 @@
             :check-leaf="false"
           >
           </tree-select>
-          <div v-if="error" class="ant-form-item-explain-error" style="">地图目录不能超过二级</div>
+          <div v-if="error" class="ant-form-item-explain-error" style="">地图目录不能超过三级</div>
           <span v-else>{{ formState.parentName }}</span>
         </a-form-item>
 
@@ -95,7 +95,7 @@ watch(
   () => {
     const { isLeaf, parent } = formState
     error.value = false
-    if(isLeaf == '0' && parent.level > 0) {
+    if(isLeaf == '0' && parent.level > 1) {
       error.value = true
     }
   }

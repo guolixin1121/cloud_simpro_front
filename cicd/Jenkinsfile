@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-        VERSION='0.184'
+        CURRENT_TIME = sh(script: "echo `date '+%Y%m%d%H%M%S'`", returnStdout: true).trim()
+        VERSION="build-${BUILD_ID}-${CURRENT_TIME}"
     }
     stages {
         stage('Prepare env') {
@@ -11,7 +12,7 @@ pipeline {
                     if (env.gitlabSourceBranch != null) {
                         env.BRANCH_NAME = "${env.gitlabSourceBranch}" 
                     }
-                    if (env.BRANCH_NAME == 'master') {
+                    if (env.BRANCH_NAME == 'master' || env.gitlabActionType == 'TAG_PUSH') {
                         env.OCI_URI = 'registry-vecps-ns.gaccloud.com.cn/tenant-cgzo'
                     } else {
                         env.OCI_URI = 'registry-vecps-ns.gaccloud.com.cn/tenant-eaws'
@@ -60,7 +61,10 @@ envsubst < cicd/cloud-simpro-front.yml | kubectl apply -f -
         }
         stage('Deploy prod') {
             when {
-                branch 'master'
+                anyOf {
+                    branch 'master'
+                    environment name: 'gitlabActionType', value: 'TAG_PUSH'
+                }
                 beforeInput true
             }
             options {

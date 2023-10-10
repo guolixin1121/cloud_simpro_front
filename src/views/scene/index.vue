@@ -140,7 +140,7 @@ const onTreeSelect = async (sceneset: any) => {
 
 const refreshSelected = (data: any) => ({
   ...data,
-  name: useRoute().query?.scenesetname
+  name: useRoute().query?.scenesetname || data.title
 })
 
 const treeBtnHandlers = {
