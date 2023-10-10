@@ -16,7 +16,8 @@
           </a-select>
           <div v-else>{{ formState.isLeaf == '1' ? "地图集" : "地图目录" }}</div>
         </a-form-item>
-        <a-form-item label="所属地图目录" name="parentId" :rules="[{ required: formState.isLeaf == '1', message: '请选择地图目录'}]">
+        <!-- 场景目录无法获取到详情，编辑时不显示父节点 -->
+        <a-form-item v-if="isAdd" label="所属地图目录" name="parentId" :rules="[{ required: formState.isLeaf == '1', message: '请选择地图目录'}]">
           <tree-select
             v-if="isAdd"
             placeholder="请选择所属地图目录"
@@ -105,6 +106,7 @@ watch(
 const dataLoading = ref(false)
 const getEditData = async () => {
   if(id !== '0') {
+    // 场景目录无法获取到详情，编辑时只展示名称
     if(isLeaf == 'false') {
       formState.name = name as string
       formState.isLeaf = '0'
