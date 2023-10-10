@@ -8,7 +8,7 @@
 在独立的git上   
 ```
 git remote add yizhuang http://10.9.0.167:22080/cloud-simpro1/cloud_simpro_front   
-账号: cloud-simpro   
+账号: cloud-simpro    
 密码: Da*hF4ig
 ```
 代码推到此git后，代码自动打包
