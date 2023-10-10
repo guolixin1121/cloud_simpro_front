@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-        VERSION='0.14'
+        CURRENT_TIME = sh(script: "echo `date '+%Y%m%d%H%M%S'`", returnStdout: true).trim()
+        VERSION="build-${BUILD_ID}-${CURRENT_TIME}"
         OCI_HOST='harbor.saimo.com:20080'
         OCI_URI='harbor.saimo.com:20080/cloud-simpro'
     }
