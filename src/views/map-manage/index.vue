@@ -86,7 +86,6 @@ const gotoVersion = (record: any) => {
 const catalogLoading = ref(false)
 store.catalog.mapCatalog = {}
 const onTreeSelect = async (val: any) => {
-  console.log('111', val)
   selectedMapset.value = val
   store.catalog.mapCatalog = val
   // 切换地图集，地图列表page重置为1
@@ -112,7 +111,7 @@ const onBatchDelete = async () => {
 // 修复更新地图集后无法同步获取新数据的问题
 const getMapSet = (data: any) => ({
   ...data,
-  name: useRoute().query?.mapsetname
+  name: useRoute().query?.mapsetname || data.title
 })
 // const getMapSet = async (id: string, data?: any) => 
 // {
