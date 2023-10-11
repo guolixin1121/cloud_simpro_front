@@ -39,6 +39,8 @@
         </template>
       </a-tree>
     </div>
+
+    <!-- 底部buttons -->
     <div class="float-right mt-2">
       <svg-icon title="创建" icon="add" class="cursor-pointer mr-1" 
         v-if="user.hasPermission('add')"
@@ -60,10 +62,11 @@
         @click="onButtonClick('delete')"
       ></svg-icon>
     </div>
-
+    <!-- 调整组件大小 -->
     <div class="resize-handler" @mousedown="onResizeStart"></div>
   </div>
 
+  <!-- 删除确认弹窗 -->
   <a-modal v-model:visible="showDeleteConfirm" :closable="false" :footer="null">
     <div>
       <svg-icon style="color: #faad14" icon="alert"></svg-icon>
@@ -109,9 +112,6 @@ const props = defineProps({
   isRecurse: {
     type: Boolean,
     default: () => false
-  },
-  refreshSelected: {
-    type: Function
   }
 })
 const emits = defineEmits(['select', 'btn-click'])
@@ -120,21 +120,12 @@ const routeName = useRoute().path.replaceAll('/', '')
 const searchValue = useSessionStorage(routeName + ': tree-search', '')
 const searchQuery = ref()
 
-const { query }: any = toRefs(props)
-if (query.value?.name) {
-  searchValue.value = query.value.name
-}
-
 onMounted(async () => {
+  // 恢复缓存的搜索、选中数据
+  searchValue.value = props.query.name
   searchQuery.value = { ...props.query, name: searchValue.value }
-  // 修复更新数据后无法同步新数据的问题
-  if(props.refreshSelected) {
-    selectedNode.value = props.refreshSelected(selectedNode.value)
-  }
   selectedRowKeys.value = [selectedNode.value?.id]
-  if (!isEmpty(selectedNode.value) && selectedNode.value.isLeaf) {
-    emits('select', selectedNode.value)
-  }
+
   document.addEventListener('mouseup', onResizeEnd)
   document.addEventListener('mousemove', onResize)
 })
@@ -208,6 +199,8 @@ const refresh = async () => {
     loading.value = true
     const data = await getOptions()
     treeData.value = data
+
+    // 只有一个根节点，默认展开
     if(data.length == 1) {
       expandRowKeys.value = [data[0].id]
     }
@@ -222,7 +215,36 @@ const getOptions = async (query: any = {}) => {
     ...query
   })
   recurse(res.results)
-  return transformData(res.results)
+  const data = transformData(res.results)
+
+  // 更新缓存的选中节点数据
+  refreshSelectedNode(data)
+
+  return data
+}
+
+const refreshSelectedNode = (data: any = treeData.value) => {
+  const selectedId = selectedNode.value?.id
+  if(!selectedId) return
+  let result = null
+  for(let i = 0; i < data.length; i++) {
+    const item = data[i]
+    if(item.id == selectedId) {
+      result = item
+    } else if(item.children) {
+      refreshSelectedNode(item.children)
+    }
+    if(!isEmpty(result)) {
+      break
+    }
+  }
+  if(result) {
+    console.log(11111)
+    selectedNode.value = result
+    if (selectedNode.value.isLeaf) {
+      emits('select', selectedNode.value)
+    }
+  }
 }
 
 const transformData = (data: any = []) => {
@@ -251,6 +273,7 @@ const recurse = (results: any) => {
   }
 }
 
+// 动态获取子节点
 const loadData = async (treeNode: any) => {
   return new Promise((resolve: (value?: unknown) => void) => {
     if (treeNode.dataRef.children) {

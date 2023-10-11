@@ -1,8 +1,7 @@
 <template>
   <div class="main-tree">
     <tree :title="'地图集'" :api="mapsApi.getMapCatalog" :button-handlers="treeBtnHandlers" 
-      @select="onTreeSelect"
-      :refreshSelected="getMapSet"/>
+      @select="onTreeSelect"/>
 
     <div class="main-right">
       <a-spin :spinning="catalogLoading">
@@ -106,31 +105,4 @@ const onBatchDelete = async () => {
   tableRef.value.refresh()
 
 }
-
-// 遍历地图目录树查找
-// 修复更新地图集后无法同步获取新数据的问题
-const getMapSet = (data: any) => ({
-  ...data,
-  name: useRoute().query?.mapsetname || data.title
-})
-// const getMapSet = async (id: string, data?: any) => 
-// {
-//   if(!data) {
-//     const res = await api.mapsets.getList()
-//     data = res.results
-//   }
-//   let result = {}
-//   for(let i = 0; i < data.length; i++) {
-//     const item = data[i]
-//     if(item.id == id) {
-//       result = item
-//     } else if(item.children) {
-//       result = getMapSet(id, item.children)
-//     }
-//     if(!isEmpty(result)) {
-//       break
-//     }
-//   }
-//   return result
-// }
 </script>
