@@ -23,7 +23,12 @@ export const useUserStore = defineStore('user', () => {
   }
 
   const gotoLogin = () => {
-    location.href = import.meta.env.VITE_LOGIN_URL
+    const loginurl = import.meta.env.VITE_LOGIN_URL
+    if(loginurl.indexOf('/login') > -1) {
+      router.push(loginurl)
+    } else {
+      location.href = import.meta.env.VITE_LOGIN_URL
+    }
   }
 
   const hasToken = () => {
