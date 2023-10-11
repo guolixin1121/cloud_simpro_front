@@ -15,8 +15,9 @@
           </a-select>
           <div v-else>{{ formState.isLeaf == '1' ? "场景集" : '场景目录' }}</div>
         </a-form-item>
-        <a-form-item v-if="isAdd" label="所属场景目录" name="parentId" 
-          :rules="[{ required: isAdd ? true : false, message: '请选择所属场景目录'}]">
+        <!-- 场景目录无法获取到所属目录 -->
+        <a-form-item v-if="isAdd || formState.isLeaf == '1'" label="所属场景目录" name="parentId" 
+          :rules="[{ required: (isAdd || formState.isLeaf == '1') ? true : false, message: '请选择所属场景目录'}]">
           <tree-select-async
             v-if="isAdd"
             :show-search="false"

@@ -17,19 +17,20 @@
           <div v-else>{{ formState.isLeaf == '1' ? "地图集" : "地图目录" }}</div>
         </a-form-item>
         <!-- 场景目录无法获取到详情，编辑时不显示父节点 -->
-        <a-form-item v-if="isAdd" label="所属地图目录" name="parentId" :rules="[{ required: formState.isLeaf == '1', message: '请选择地图目录'}]">
-          <tree-select
-            v-if="isAdd"
-            placeholder="请选择所属地图目录"
-            allowClear
-            v-model:value="formState.parentId"
-            v-model:selectNode="formState.parent"
-            :api="currentApi.getList"
-            :api-filter="(item: any) => !item.isLeaf"
-            :check-leaf="false"
-          >
-          </tree-select>
-          <div v-if="error" class="ant-form-item-explain-error" style="">地图目录不能超过三级</div>
+        <a-form-item v-if="isAdd || formState.isLeaf == '1'" label="所属地图目录" name="parentId" :rules="[{ required: formState.isLeaf == '1', message: '请选择地图目录'}]">
+          <div v-if="isAdd">
+            <tree-select
+              placeholder="请选择所属地图目录"
+              allowClear
+              v-model:value="formState.parentId"
+              v-model:selectNode="formState.parent"
+              :api="currentApi.getList"
+              :api-filter="(item: any) => !item.isLeaf"
+              :check-leaf="false"
+            >
+            </tree-select>
+            <div v-if="error" class="ant-form-item-explain-error" style="">地图目录不能超过三级</div>
+          </div>
           <span v-else>{{ formState.parentName }}</span>
         </a-form-item>
 
