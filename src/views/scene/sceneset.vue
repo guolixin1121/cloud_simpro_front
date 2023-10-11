@@ -89,8 +89,7 @@ const path = computed(() => {
 
 const loading = ref(false)
 const router = useRouter()
-// scenesetname为了弥补修改数据后tree的selected缓存数据无法同步问题
-const goback = () => router.push('/scene/?scenesetname=' + formState.name)
+const goback = () => router.push('/scene/')
 const add = async () => {
   // if(error.value) return
   loading.value = true
@@ -133,6 +132,7 @@ const add = async () => {
 const dataLoading = ref(false)
 const getEditData = async () => {
   if(id !== '0') {
+    // 目录无法获取到详情，编辑时只展示名称
     if(name) {
       formState.name = name as string
       formState.isLeaf = '0'

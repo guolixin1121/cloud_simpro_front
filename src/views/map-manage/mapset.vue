@@ -72,7 +72,7 @@ const formState = reactive({
 
 const loading = ref(false)
 const router = useRouter()
-const goback = () => router.push('/map-manage/?mapsetname=' + formState.name)
+const goback = () => router.push('/map-manage/')
 const add = async () => {
   if(error.value) return
 
@@ -106,7 +106,7 @@ watch(
 const dataLoading = ref(false)
 const getEditData = async () => {
   if(id !== '0') {
-    // 场景目录无法获取到详情，编辑时只展示名称
+    // 目录无法获取到详情，编辑时只展示名称
     if(isLeaf == 'false') {
       formState.name = name as string
       formState.isLeaf = '0'

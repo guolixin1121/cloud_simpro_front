@@ -25,10 +25,10 @@ import icon_car from '@/assets/images/icon_car_h.png'
 const entries = [
   { icon: icon_newtask, label: '新增任务', router: '/simpro-task/edit/0'},
   { icon: icon_scenelist, label: '场景列表', router: '/scene/'},
-  { icon: icon_resource, label: '理想传感器', router: '/sensor'},
+  { icon: icon_resource, label: '传感器模型', router: '/sensor'},
   { icon: icon_algorithm, label: '算法管理', router: '/algorithm'},
   { icon: icon_SOTIF, label: 'SOTIF分析', router: '/sotif'},
-  { icon: icon_car, label: '车辆动力学', router: '/veticle-model'}
+  { icon: icon_car, label: '动力学模型', router: '/veticle-model'}
 ]
 
 const router = useRouter()
