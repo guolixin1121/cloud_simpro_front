@@ -15,6 +15,7 @@
         <template v-if="column.dataIndex == 'status'">
           <div class="flex items-center">
             <span>{{ record.obs_report ? '正常' : '异常'}}</span>
+            <!-- 如果没有报告就表示有异常，如果异常时没有错误信息则是仿真的bug -->
             <a-tooltip placement="topLeft" :title="record.errmsg" v-if="!record.obs_report">
               <!-- 异常时显示错误信息 -->
               <img class="ml-1 cursor-pointer" style="height: 16px;" src="../../../assets/images/tip.png" />

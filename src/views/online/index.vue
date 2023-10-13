@@ -66,7 +66,12 @@ loadList()
 
 // let newWindow: any
 const enterVnc = ({status, address, username} : any) => {
-  if(status == 0 || user.username === username) { 
+  const hasCurrentUserEntered = list.value.findIndex((item: any) => item.username === user.username) > -1
+  if(hasCurrentUserEntered) {
+    if(user.username == username) {
+      gotoVnc({ action: 0, address }, loading, loadList)
+    }
+  } else if(status == 0 ) { 
     gotoVnc({ action: 0, address }, loading, loadList)
   }
 }
