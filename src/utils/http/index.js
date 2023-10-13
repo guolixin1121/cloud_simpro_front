@@ -121,9 +121,9 @@ class AxiosRequest {
           }
         })
         .catch(error => {
-          if (error.status === 401) {
+          if (error.response?.status === 401) {
             // token过期跳到登录页
-            message.error('无效身份，请重新登录')
+            // message.error('无效身份，请重新登录')
             store.user.gotoLogin()
           } else {
             message.error(error.message || '请求错误，请稍后重试')

@@ -1,7 +1,8 @@
 <template>
   <a-layout>
     <a-layout-header class="flex justify-between items-center">
-      <i class="logo"></i>
+      <!-- <i class="logo"></i> -->
+      <img src="../assets/images/logo.png" alt="logo" />
       <Header />
     </a-layout-header>
     <a-layout>
