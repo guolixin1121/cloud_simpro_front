@@ -346,7 +346,7 @@ const onExpand = (expandedKeys: string[]) => (expandRowKeys.value = expandedKeys
     width: 16px;
     height: 100%;
     // &:hover {
-    //   background-color: @blue-color;
+    //   background-color: @primary-color;
     //   opacity: 0.5;
     // }
   }

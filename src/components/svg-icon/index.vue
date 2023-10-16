@@ -22,6 +22,8 @@ getIcon()
 </script>
 
 <style lang="less">
+@import "@/assets/styles/variable.less";
+
 .icon {
   vertical-align: middle;
   display: inline-block;
@@ -29,10 +31,10 @@ getIcon()
 
 .icon:hover {
   svg *[stroke="#60656E"] {
-    stroke: #1664FF 
+    stroke: @primary-color !important;
   }
   svg path[fill="#60656E"],svg rect[fill="#60656E"] {
-    fill: #1664FF
+    fill:  @primary-color !important;
   }
 }
 </style>
