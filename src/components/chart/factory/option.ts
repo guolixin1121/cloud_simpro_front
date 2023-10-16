@@ -2,7 +2,7 @@ import { merge, cloneDeep } from "lodash"
 import circle from '@/assets/images/circle.png'
 
 const defaultOption = {
-  color: ['#4080FF', '#C5D8FF'],
+  color: ['#00AF59', '#9BE9AA'],
   title: {
     show: false
   },

@@ -15,15 +15,15 @@
         </template>
         <template v-if="column.dataIndex == 'vehicleNameList'">
           <a-tooltip :title="record.vehicleNameList.join('  ')">
-            <span v-for="label in record.vehicleNameList" :key="label" class="text-blue mr-2">
-              {{ label}}
+            <span v-for="label in record.vehicleNameList" :key="label" class="mr-2">
+              {{ label }}
             </span>
           </a-tooltip>
         </template>
         <template v-if="column.dataIndex == 'collaborationList'">
           <a-tooltip :title="record.collaborationList.join('  ')">
-            <span v-for="label in record.collaborationList" :key="label" class="text-blue mr-2">
-              {{ label}}
+            <span v-for="label in record.collaborationList" :key="label" class="mr-2">
+              {{ label }}
             </span>
           </a-tooltip>
         </template>

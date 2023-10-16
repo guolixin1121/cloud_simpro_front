@@ -33,8 +33,8 @@ export default defineConfig(({ mode }) => {
       preprocessorOptions: {
         less: {
           modifyVars: {
-            'primary-color': '#1664ff',
-            'link-color': '#1664ff',
+            'primary-color': '#00AF59',
+            'link-color': '#00AF59',
           },
           javascriptEnabled: true,
         }
@@ -90,13 +90,13 @@ export default defineConfig(({ mode }) => {
           filepath: './.eslintrc-auto-import.json', // 设置eslintrc-auto-import.json生成路径 Default `./.eslintrc-auto-import.json`
           globalsPropValue: true // Default `true`, (true | false | 'readonly' | 'readable' | 'writable' | 'writeable')
         },
-        resolvers: [AntDesignVueResolver({ resolveIcons: true })],
+        resolvers: [AntDesignVueResolver()],
         dts: 'src/auto-import.d.ts' // 会在根目录生成auto-imports.d.ts，里面可以看到自动导入的api
       }),
 
       Components({
         globs: ['src/components/**/index.vue'], // 引入自定义组件
-        resolvers: [AntDesignVueResolver()] // 如果需要自定义主题色，则需要配置importStyle: 'less',并安装less: npm install less --save-dev
+        resolvers: [AntDesignVueResolver({resolveIcons: true})] // 如果需要自定义主题色，则需要配置importStyle: 'less',并安装less: npm install less --save-dev
       }),
       eslintPlugin({
         include: ['src/**/*.vue', 'src/**/*.ts', 'src/**/*.tsx'], // 检查的文件

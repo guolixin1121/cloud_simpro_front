@@ -105,7 +105,7 @@ button.ant-btn-primary:focus {
     overflow: auto !important;
   }
   .ant-table-tbody > tr.ant-table-row-selected > td{
-    background-color: #e6f7ff;
+    background-color: @hover-color;
   }
   .ant-table-cell-scrollbar {
     box-shadow: none !important;
@@ -114,10 +114,17 @@ button.ant-btn-primary:focus {
     display: none;
   }
 }
-
+.ant-checkbox-indeterminate .ant-checkbox-inner::after,
 .ant-checkbox-checked .ant-checkbox-inner {
   background-color: @primary-color !important;
   border-color: @primary-color !important;
+}
+
+.ant-pagination-item-active, .ant-pagination-item:hover {
+  border-color: @primary-color !important;
+  a {
+    color: @primary-color !important;
+  }
 }
 
 .ant-transfer {
@@ -237,6 +244,36 @@ button.ant-btn-primary:focus {
 .ant-select-tree {
 
   .ant-select-tree-node-selected, .ant-select-tree-treenode-selected {
-    background-color: #e6f7ff !important;
+    background-color: @hover-color !important;
   }
+}
+
+.ant-checkbox-wrapper-checked:hover .ant-checkbox-input,
+.ant-checkbox-wrapper:hover .ant-checkbox-inner,
+.ant-tree-checkbox-checked .ant-tree-checkbox-inner,
+.ant-tree-checkbox-inner:hover,
+.ant-input-number:hover,
+.ant-input-number:focus,
+textarea.ant-input:hover,
+textarea.ant-input:focus,
+.ant-select-selector:hover,
+.ant-select-focused .ant-select-selector,
+.ant-picker-focused,
+.ant-input-affix-wrapper-focused,
+.ant-input-affix-wrapper:hover,
+.ant-picker-cell-today .ant-picker-cell-inner:before {
+  border-color: @primary-color !important
+}
+
+.ant-tree-checkbox-checked .ant-tree-checkbox-inner,
+.ant-picker-range .ant-picker-active-bar,
+.ant-picker-cell-range-start  .ant-picker-cell-inner,
+.ant-picker-cell-range-start-single .ant-picker-cell-inner,
+.ant-picker-cell-range-end .ant-picker-cell-inner,
+.ant-picker-cell-selected .ant-picker-cell-inner {
+  background-color: @primary-color !important;
+}
+.ant-picker-cell-in-view.ant-picker-cell-in-range::before,
+.ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+  background-color: @hover-color !important;
 }

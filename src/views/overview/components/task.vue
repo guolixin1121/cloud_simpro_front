@@ -80,7 +80,11 @@ fetchData()
 }
 </style>
 <style lang="less" scoped>
-.name:hover {
-  color: #4080FF;
+@import '@/assets/styles/variable.less';
+.name {
+  color: inherit;
+  &:hover {
+    color: @primary-color;
+  }
 }
 </style>
