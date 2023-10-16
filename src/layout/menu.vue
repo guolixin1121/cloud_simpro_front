@@ -30,6 +30,7 @@ const props = defineProps({
 </template>
 
 <style lang="less">
+@import "@/assets/styles/variable.less";
 .ant-menu-item, .ant-menu-submenu-title {
   .icon {
     position: relative;
@@ -44,10 +45,10 @@ const props = defineProps({
 .ant-menu-submenu-selected .ant-menu-submenu-title {
   .icon {
     svg *[stroke="#60656E"] {
-      stroke: #1664FF 
+      stroke: @primary-color 
     }
     svg path[fill="#60656E"], svg rect[fill="#60656E"] {
-      fill: #1664FF
+      fill: @primary-color 
     }
   }
 }
