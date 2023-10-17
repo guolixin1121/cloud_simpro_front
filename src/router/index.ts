@@ -52,7 +52,7 @@ router.beforeEach(async (to, from, next) => {
         setToken(res.token)
         location.href = process.env.VITE_BASE_STATIC_URL || '/'
       } else {
-        message.info('无效身份，请先登录!')
+        // message.info('无效身份，请先登录!')
         user.gotoLogin()
       }
     }
