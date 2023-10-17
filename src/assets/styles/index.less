@@ -3,6 +3,7 @@
 @import './tailwind.css';
 @import './variable.less';
 
+.ant-layout {
 .title--noborder {
   font-weight: 600;
   font-size: 16px;
@@ -257,14 +258,31 @@ main {
   .vxe-body--row {
     cursor: pointer;
   }
+  .vxe-loading--text {
+    display: none;
+  }
+  .vxe-loading {
+    .vxe-loading--default-icon {
+      margin-top: 100px;
+    }
+    .vxe-loading--chunk {
+      color: @primary-color
+    }
+  }
+  // .vxe-body--row.row--stripe {
+  //   background-color: @active-color;
+  // }
+  .vxe-body--row.row--hover {
+    background-color:  #fafafa;
+  }
+  .vxe-cell--title {
+    font-weight: 500;
+    color: rgba(0, 0, 0, 0.85)
+  }
 }
 .left-tree .vxe-table {
   .vxe-body--column {
     background-image: none !important;
   }
 }
-.vxe-loading {
-  .vxe-loading--default-icon {
-    margin-top: 200px;
-  }
 }

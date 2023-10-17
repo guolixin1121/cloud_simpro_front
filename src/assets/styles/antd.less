@@ -66,7 +66,7 @@ button.ant-btn-primary:focus {
   }
 
   .ant-menu-item-selected {
-    background: #e6f2ff;
+    background: @active-color !important;
     border-radius: 2px;
 
     &:after {
@@ -105,7 +105,7 @@ button.ant-btn-primary:focus {
     overflow: auto !important;
   }
   .ant-table-tbody > tr.ant-table-row-selected > td{
-    background-color: @hover-color;
+    background-color: @active-color;
   }
   .ant-table-cell-scrollbar {
     box-shadow: none !important;
@@ -194,7 +194,7 @@ button.ant-btn-primary:focus {
     width: 16px;
   }
   .ant-tree-treenode-selected {
-    background-color: #e6f2ff;
+    background-color: @active-color;
   }
   .ant-tree-node-content-wrapper {
     white-space: nowrap;
@@ -205,7 +205,7 @@ button.ant-btn-primary:focus {
       white-space: nowrap;
     }
     &.ant-tree-node-selected {
-      background-color: #e6f2ff !important;
+      background-color: transparent !important;
       color: @primary-color;
     }
     &:hover {
@@ -244,7 +244,7 @@ button.ant-btn-primary:focus {
 .ant-select-tree {
 
   .ant-select-tree-node-selected, .ant-select-tree-treenode-selected {
-    background-color: @hover-color !important;
+    background-color: @active-color !important;
   }
 }
 
@@ -253,18 +253,25 @@ button.ant-btn-primary:focus {
 .ant-tree-checkbox-checked .ant-tree-checkbox-inner,
 .ant-tree-checkbox-inner:hover,
 .ant-input-number:hover,
-.ant-input-number:focus,
 textarea.ant-input:hover,
 textarea.ant-input:focus,
 .ant-select-selector:hover,
-.ant-select-focused .ant-select-selector,
-.ant-picker-focused,
-.ant-input-affix-wrapper-focused,
+.ant-picker:hover,
 .ant-input-affix-wrapper:hover,
 .ant-picker-cell-today .ant-picker-cell-inner:before {
   border-color: @primary-color !important
 }
 
+.ant-input-number-focused,
+.ant-picker-focused,
+.ant-input-affix-wrapper-focused,
+.ant-input-number:focus,
+.ant-select-focused .ant-select-selector {
+  border-color: @primary-color !important;
+  box-shadow: 0 0 0 2px rgba(0,175,89, 0.2) !important;
+}
+
+.ant-spin-dot-item,
 .ant-tree-checkbox-checked .ant-tree-checkbox-inner,
 .ant-picker-range .ant-picker-active-bar,
 .ant-picker-cell-range-start  .ant-picker-cell-inner,
@@ -275,5 +282,5 @@ textarea.ant-input:focus,
 }
 .ant-picker-cell-in-view.ant-picker-cell-in-range::before,
 .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
-  background-color: @hover-color !important;
+  background-color: @active-color !important;
 }

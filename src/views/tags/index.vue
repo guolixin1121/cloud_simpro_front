@@ -63,13 +63,3 @@ const columns = [
   }
 ]
 </script>
-
-<style scoped>
-:deep(.vxe-table--render-default) .vxe-body--row.row--stripe {
-  background: #f7f8fa;
-}
-:deep(.vxe-table--render-default) .vxe-cell--title {
-  font-weight: 500;
-  color: rgba(0, 0, 0, 0.85)
-}
-</style>
