@@ -1,8 +1,10 @@
 <template>
   <div class="login-container">
-    <span class="pro-name">智驾云平台</span>
+    <span class="pro-name">
+      <img src="../../assets//images/logo-login.png"/>
+    </span>
     <a-form style="margin: 0 auto" @finish="login" :model="formData" autocomplete="off">
-      <span class="title">登录</span>
+      <span class="form-title">登录</span>
       <label className="label">账户</label>
       <a-form-item name="username" :rules="[{ required: true, message: '请输入账户' }]" autocomplete="off">
         <a-input name="username" v-model:value="formData.username" placeholder="请输入账户" autocomplete="off"></a-input>
@@ -57,8 +59,8 @@ const handleChange = () => {
 <style scoped lang="less">
 .pro-name {
   position: absolute;
-  left: 40%;
-  top: 40%;
+  left: 35%;
+  top: 46%;
   transform: translate(-50%, -50%);
   color: #fff;
   font-size: 60px;
@@ -81,11 +83,11 @@ const handleChange = () => {
     position: absolute;
     background: #ffffff;
     border-radius: 4px;
-    right: 230px;
+    left: 60%;
     top: 50%;
     transform: translate(0, -50%);
     padding: 32px 40px 0;
-    .title {
+    .form-title {
       font-size: 36px;
       font-weight: 500;
       color: #1e2229;

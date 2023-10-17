@@ -66,7 +66,7 @@ button.ant-btn-primary:focus {
   }
 
   .ant-menu-item-selected {
-    background: #e6f2ff;
+    background: @active-color;
     border-radius: 2px;
 
     &:after {
@@ -163,7 +163,7 @@ button.ant-btn-primary:focus {
       white-space: nowrap;
     }
     &.ant-tree-node-selected {
-      background-color: #e6f2ff !important;
+      background-color: @active-color !important;
       color: @primary-color;
     }
   }
@@ -187,7 +187,7 @@ button.ant-btn-primary:focus {
     width: 16px;
   }
   .ant-tree-treenode-selected {
-    background-color: #e6f2ff;
+    background-color: @active-color;
   }
   .ant-tree-node-content-wrapper {
     white-space: nowrap;
@@ -198,7 +198,7 @@ button.ant-btn-primary:focus {
       white-space: nowrap;
     }
     &.ant-tree-node-selected {
-      background-color: #e6f2ff !important;
+      background-color: @active-color !important;
       color: @primary-color;
     }
     &:hover {

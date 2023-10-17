@@ -38,12 +38,7 @@ const list = ref(
   // { name: 'GuangQi - 3', username: 'test7', status: 1 },
   // { name: 'GuangQi - 4', username: '', status: 0 },
   // { name: 'GuangQi - 5', username: '', status: 0 },
-  // { name: 'GuangQi - 6', username: 'test1', status: 1 },
-  // { name: 'GuangQi - 6', username: '', status: 0 },
-  // { name: 'GuangQi - 7', username: '', status: 0 },
-  // { name: 'GuangQi - 8', username: '', status: 0 },
-  // { name: 'GuangQi - 9', username: '', status: 0 },
-  // { name: 'GuangQi - 10', username: '', status: 0 },
+  // { name: 'GuangQi - 6', username: 'test1', status: 1 }
 // ]
 )
 
@@ -101,6 +96,8 @@ const loopVncStatus = async (id: String) => {
 </script>
 
 <style lang="less" scoped>
+@import "@/assets/styles/variable.less";
+
 .list {
   display: flex;
   flex-wrap: wrap;
@@ -112,6 +109,9 @@ const loopVncStatus = async (id: String) => {
     margin-top: 18px;
     border-radius: 4px;
     border: 1px solid #E8EAEC;
+    &:hover {
+      border: 2px solid @primary-color;
+    }
     &-header {
       height: 30px;
       line-height: 30px;
