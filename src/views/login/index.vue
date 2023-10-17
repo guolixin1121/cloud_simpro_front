@@ -60,8 +60,8 @@ const handleChange = () => {
 <style scoped lang="less">
 .pro-name {
   position: absolute;
-  left: 43%;
-  top: 43%;
+  left: 35%;
+  top: 46%;
   transform: translate(-50%, -50%);
   color: #fff;
   font-size: 60px;
@@ -84,7 +84,7 @@ const handleChange = () => {
     position: absolute;
     background: #ffffff;
     border-radius: 4px;
-    right: 230px;
+    left: 60%;
     top: 50%;
     transform: translate(0, -50%);
     padding: 32px 40px 0;
