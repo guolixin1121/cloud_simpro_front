@@ -32,13 +32,13 @@ import { gotoVnc } from '@/utils/vnc'
 
 const user = store.user.user
 const list = ref(
-//   [
-//   { name: 'GuangQi - 1', username: '', status: 0 },
-//   { name: 'GuangQi - 2', username: 'test1', status: 1 },
-//   { name: 'GuangQi - 3', username: 'test7', status: 1 },
-//   { name: 'GuangQi - 4', username: '', status: 0 },
-//   { name: 'GuangQi - 5', username: '', status: 0 },
-//   { name: 'GuangQi - 6', username: 'test1', status: 1 }
+  // [
+  // { name: 'GuangQi - 1', username: '', status: 0 },
+  // { name: 'GuangQi - 2', username: 'test1', status: 1 },
+  // { name: 'GuangQi - 3', username: 'test7', status: 1 },
+  // { name: 'GuangQi - 4', username: '', status: 0 },
+  // { name: 'GuangQi - 5', username: '', status: 0 },
+  // { name: 'GuangQi - 6', username: 'test1', status: 1 }
 // ]
 )
 
@@ -96,6 +96,8 @@ const loopVncStatus = async (id: String) => {
 </script>
 
 <style lang="less" scoped>
+@import "@/assets/styles/variable.less";
+
 .list {
   display: flex;
   flex-wrap: wrap;
@@ -107,6 +109,9 @@ const loopVncStatus = async (id: String) => {
     margin-top: 18px;
     border-radius: 4px;
     border: 1px solid #E8EAEC;
+    &:hover {
+      border: 2px solid @primary-color;
+    }
     &-header {
       height: 30px;
       line-height: 30px;

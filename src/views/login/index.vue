@@ -3,7 +3,6 @@
     <span class="pro-name">
       <img src="../../assets//images/logo-login.png"/>
     </span>
-    <!-- <span class="pro-name">智驾云平台</span> -->
     <a-form style="margin: 0 auto" @finish="login" :model="formData" autocomplete="off">
       <span class="form-title">登录</span>
       <label className="label">账户</label>

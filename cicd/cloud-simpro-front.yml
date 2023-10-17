@@ -23,7 +23,8 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-  - http:
+  - host: simpro01.saimo.cloud
+    http:
       paths:
       - backend:
           service:
