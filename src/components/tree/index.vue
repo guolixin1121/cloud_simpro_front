@@ -201,7 +201,7 @@ const refresh = async () => {
     treeData.value = data
 
     // 只有一个根节点，默认展开
-    if(data.length == 1) {
+    if(data.length == 1 && expandRowKeys.value.length == 0) {
       expandRowKeys.value = [data[0].id]
     }
   } finally {
