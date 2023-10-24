@@ -49,7 +49,7 @@ const isLastVisible = () => {
 
 const labels = ['场景来源', '功能类型', '区域', '道路类型', '车道', '主车行为', '交通参与者类型', '交通参与行为', '环境', '其他']
 const inputName = ref('')
-const fullName = ref('GAC_')
+const fullName = ref('SAIMO_')
 const names = ref<string[]>([])
 const options = ref<Record<string, string>[][]>([])
 
@@ -83,7 +83,7 @@ const getChildOptions = async (parent?: string, pLevel?: number) => {
 
 const emitsFullName = () => {
   const namesString = names.value.reduce((sum, name) => sum += name ? (name + '_') : '', '')
-  fullName.value = 'GAC_' + namesString + inputName.value
+  fullName.value = 'SAIMO_' + namesString + inputName.value
 
   // 判断是9级还是10级, 是否所有级别有数据
   const levels = isLastVisible() ? 10 : 9
