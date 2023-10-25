@@ -1,5 +1,6 @@
 <template>
-  <search-form :items="formItems" @search="onSearch"></search-form>
+  <search-form v-if="activeKey == 1" :items="formItems" @search="onSearch"></search-form>
+  <search-form v-else :items="stpaFormItems" @search="onStpaSearch"></search-form>
 
   <div class="main">
     <div class="flex justify-between items-center">
@@ -8,7 +9,35 @@
         <a-button type="primary" class="mr-2" @click="()=> gotoSotif()">进入SOTIF分析工具</a-button>
       </div>
     </div>
-    <Table :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
+    <a-tabs v-model:activeKey="activeKey" class="tabs">
+      <a-tab-pane :key="1" tab="SOTIF分析">
+      </a-tab-pane>
+      <a-tab-pane :key="2" tab="STPA分析">
+      </a-tab-pane>
+    </a-tabs> 
+    <Table v-if="activeKey == 1" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.dataIndex == 'projectStatus'">
+          <span>{{  getSotifStatus(record.projectStatus) }}</span>
+        </template>
+        <template v-if="column.dataIndex == 'vehicleNameList'">
+          <a-tooltip :title="record.vehicleNameList.join('  ')">
+            <span v-for="label in record.vehicleNameList" :key="label" class="text-blue mr-2">
+              {{ label}}
+            </span>
+          </a-tooltip>
+        </template>
+        <template v-if="column.dataIndex == 'collaborationList'">
+          <a-tooltip :title="record.collaborationList.join('  ')">
+            <span v-for="label in record.collaborationList" :key="label" class="text-blue mr-2">
+              {{ label}}
+            </span>
+          </a-tooltip>
+        </template>
+      </template>
+    </Table>
+
+    <Table v-else :api="currentApi.getStpaList" :query="stpaQuery" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'projectStatus'">
           <span>{{  getSotifStatus(record.projectStatus) }}</span>
@@ -33,12 +62,15 @@
 </template>
 
 <script setup lang="ts">
+// 组件不支持api变化，所以尽管只api不同其他逻辑都相同，暂时还是需要写两套几乎相同的代码
+
 import { SotifStatusOptions, getSotifStatus } from '@/utils/dict'
 const currentApi: any = api.sotif
+const activeKey = ref(1)
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
   { label: '项目名称', key: 'projectName', type: 'input', maxlength: '100', placeholder: '请输入项目名称' },
-  { label: '负责人', key: 'managerId', type: 'select', api: currentApi.getManagers , 
+  { label: '负责人', key: 'managerId', type: 'select', api: api.sotif.getManagers , 
     fieldNames: { label:'userName', value:'userId'},
     placeholder: '请输入项目负责人' },
   {
@@ -55,6 +87,29 @@ const query: Query = ref({})
 const onSearch = (data: Query) => {
   query.value = { ...data, startTime: data.start_date, endTime: data.end_date }
 }
+
+// stpa搜索区域
+const stpaFormItems = ref<SearchFormItem[]>([
+  { label: '项目名称', key: 'projectName', type: 'input', maxlength: '100', placeholder: '请输入项目名称' },
+  { label: '负责人', key: 'managerId', type: 'select', api: api.sotif.getStpaManagers , 
+    fieldNames: { label:'userName', value:'userId'},
+    placeholder: '请输入项目负责人' },
+  {
+    label: '项目状态',
+    key: 'projectStatus',
+    type: 'select',
+    options: SotifStatusOptions,
+    placeholder: '请选择项目状态',
+    defaultValue: ''
+  },
+  { label: '创建时间', key: 'create_time', type: 'range-picker' }
+])
+
+const stpaQuery: Query = ref({})
+const onStpaSearch = (data: Query) => {
+  stpaQuery.value = { ...data, startTime: data.start_date, endTime: data.end_date }
+}
+
 /****** 表格区域 */
 const columns = [
   { title: '序号', dataIndex: 'index', width: 80 },
