@@ -140,7 +140,7 @@ const selectedRows = ref([])
 const onSelect = (keys: any) => (selectedRows.value = keys)
 const batchDelete = async () => {
   await currentApi.batchDelete({ tasks: selectedRows.value })
-  table.value.refresh()
+  table.value.refresh({ deletedRows: selectedRows.value.length })
 }
 </script>
 

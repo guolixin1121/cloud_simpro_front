@@ -61,6 +61,6 @@ const selectedRows = ref([])
 const onSelect = (keys: any) => (selectedRows.value = keys)
 const batchDelete = async () => {
   await algorithmApi.batchDelete({ algorithms: selectedRows.value })
-  tableRef.value.refresh()
+  tableRef.value.refresh({ deletedRows: selectedRows.value.length })
 }
 </script>

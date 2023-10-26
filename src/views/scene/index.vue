@@ -148,6 +148,6 @@ const selectedItems = ref([])
 const onSelect = (data: any) => selectedItems.value = data
 const onBatchDelete = async () => {
   await currentApi.batchDelete({scenes_id: selectedItems.value})
-  tableRef.value.refresh()
+  tableRef.value.refresh({ deletedRows: selectedItems.value.length })
 }
 </script>
