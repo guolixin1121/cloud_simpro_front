@@ -42,9 +42,13 @@
 
     <!-- 底部buttons -->
     <div class="float-right mt-2">
-      <svg-icon title="创建" icon="add" class="cursor-pointer mr-1" 
+      <svg-icon
+        title="创建"
+        icon="add"
+        class="cursor-pointer mr-1"
         v-if="user.hasPermission('add')"
-        @click="onButtonClick('add')"></svg-icon>
+        @click="onButtonClick('add')"
+      ></svg-icon>
       <svg-icon
         icon="edit"
         title="编辑"
@@ -110,6 +114,10 @@ const props = defineProps({
     type: Object
   },
   isRecurse: {
+    type: Boolean,
+    default: () => false
+  },
+  isFolderSelectable: {
     type: Boolean,
     default: () => false
   }
@@ -181,7 +189,7 @@ const onDeleteConfirm = async () => {
 
     // clear and reset
     expandRowKeys.value = expandRowKeys.value.filter((key: string) => key != selectedNode.value.id)
-    if (selectedNode.value.isLeaf) {
+    if (props.isFolderSelectable || selectedNode.value.isLeaf) {
       emits('select', {})
     }
     expandRowKeys.value = expandRowKeys.value.filter((item: any) => item.id != selectedNode.value?.id)
@@ -200,9 +208,14 @@ const refresh = async () => {
     const data = await getOptions()
     treeData.value = data
 
-    // 只有一个根节点，默认展开
-    if(data.length == 1 && expandRowKeys.value.length == 0) {
+    // 只有一个根节点，默认展开并选中
+    if (data.length == 1 && expandRowKeys.value.length == 0) {
       expandRowKeys.value = [data[0].id]
+      if (props.isFolderSelectable) {
+        selectedRowKeys.value = [data[0].id]
+        selectedNode.value = data[0]
+        emits('select', selectedNode.value)
+      }
     }
   } finally {
     loading.value = false
@@ -225,23 +238,22 @@ const getOptions = async (query: any = {}) => {
 
 const refreshSelectedNode = (data: any = treeData.value) => {
   const selectedId = selectedNode.value?.id
-  if(!selectedId) return
+  if (!selectedId) return
   let result = null
-  for(let i = 0; i < data.length; i++) {
+  for (let i = 0; i < data.length; i++) {
     const item = data[i]
-    if(item.id == selectedId) {
+    if (item.id == selectedId) {
       result = item
-    } else if(item.children) {
+    } else if (item.children) {
       refreshSelectedNode(item.children)
     }
-    if(!isEmpty(result)) {
+    if (!isEmpty(result)) {
       break
     }
   }
-  if(result) {
-    console.log(11111)
+  if (result) {
     selectedNode.value = result
-    if (selectedNode.value.isLeaf) {
+    if (props.isFolderSelectable || selectedNode.value.isLeaf) {
       emits('select', selectedNode.value)
     }
   }
@@ -255,6 +267,7 @@ const transformData = (data: any = []) => {
     title: item[label],
     name: item[label],
     isLeaf: item.isLeaf == 1,
+
     children: props.lazy ? null : transformData(item.children)
   }))
 }
@@ -262,10 +275,10 @@ const transformData = (data: any = []) => {
 // 含id的精确搜索，自动循环展开各级
 const isRecurse = ref(props.isRecurse)
 const recurse = (results: any) => {
-  if(isRecurse.value && searchValue.value && results.length) {
+  if (isRecurse.value && searchValue.value && results.length) {
     const firstChild = results[0]
     expandRowKeys.value.push(firstChild.id)
-    if(firstChild.isLeaf) {
+    if (firstChild.isLeaf) {
       selectedRowKeys.value = [firstChild.id]
       selectedNode.value = firstChild
       emits('select', selectedNode.value)
@@ -289,15 +302,13 @@ const loadData = async (treeNode: any) => {
 }
 
 const onSearch = () => {
-  // clear tree 
+  // clear tree
   expandRowKeys.value = []
   isRecurse.value = false
   // reset query
   searchQuery.value = { ...props.query, name: searchValue.value }
   delete searchQuery.value.baidu_id // 仅跳转过来时支持紧缺搜索，手动搜索时需要删掉
 }
-
-watch(searchQuery, refresh)
 
 // 节点选中：展开或触发外部选中事件
 const selectedNode = useSessionStorage(routeName + ': tree-select', {} as any)
@@ -315,8 +326,7 @@ const onSelect = (keys: string[], { selected, selectedNodes }: any) => {
     expandRowKeys.value = expandRowKeys.value.filter((val: any) => val != node.id)
   }
 
-  // 触发叶子结点
-  if (node.isLeaf && node.id != selectedNode.value?.id) {
+  if ((props.isFolderSelectable || node.isLeaf) && node.id != selectedNode.value?.id) {
     emits('select', node)
   }
 
@@ -327,6 +337,8 @@ const onSelect = (keys: string[], { selected, selectedNodes }: any) => {
 // 节点展开
 const expandRowKeys = useSessionStorage<string[]>(routeName + ': tree-expand', [])
 const onExpand = (expandedKeys: string[]) => (expandRowKeys.value = expandedKeys)
+
+watch(searchQuery, refresh)
 </script>
 
 <style lang="less" scoped>

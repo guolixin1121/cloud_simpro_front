@@ -1,15 +1,6 @@
 <template>
   <div class="main-tree">
-    <tree
-      :title="'场景集'"
-      :api="sceneApi.getList"
-      :query="{ ...selectedSceneset, version: 2 }"
-      :lazy="true"
-      :is-recurse="scenesetFromLogic != null"
-      :filedNames="{ label: 'groupName', value: 'id' }"
-      :button-handlers="treeBtnHandlers"
-      @select="onTreeSelect"
-    />
+    <tree :title="'场景集'" :api="sceneApi.getList" :query="{ ...selectedSceneset, version: 2 }" :lazy="true" :is-folder-selectable="true" :is-recurse="scenesetFromLogic != null" :filedNames="{ label: 'groupName', value: 'id' }" :button-handlers="treeBtnHandlers" @select="onTreeSelect" />
     <div class="main-right">
       <a-spin :spinning="scenesetLoading">
         <div class="right-title">
@@ -33,12 +24,11 @@
           <span class="title">场景列表</span>
           <div>
             <batch-button :disabled="!selectedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
-            <a-button type="primary" :disabled="selectedItems.length > 0"  v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
+            <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
           </div>
         </div>
         <a-spin :spinning="loading">
-          <Table ref="tableRef" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" 
-            @select="onSelect" /> 
+          <Table ref="tableRef" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" />
         </a-spin>
       </div>
     </div>
@@ -110,10 +100,7 @@ const columns = [
     actions: {
       查看: (data: any) => router.push('/scene/view/' + data.id),
       编辑: (data: any) => router.push('/scene/edit/' + data.id),
-      编辑场景: (data: any) => gotoVnc({ action: 1, value: data.id }, 
-        loading,
-        null,
-        () => vncModal.value.show()),
+      编辑场景: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show()),
       删除: async ({ id }: { id: string }) => await currentApi.delete(id)
     }
   }
@@ -139,15 +126,15 @@ const onTreeSelect = async (sceneset: any) => {
 
 const treeBtnHandlers = {
   add: () => router.push('/scene/sceneset/0'),
-  edit: (data: any) => router.push('/scene/sceneset/' + data.id + (data.isLeaf ? '' : ('?name=' + encodeURIComponent(data.name)))),
+  edit: (data: any) => router.push('/scene/sceneset/' + data.id + (data.isLeaf ? '' : '?name=' + encodeURIComponent(data.name))),
   delete: api.scenesets.delete
 }
 
 const tableRef = ref()
 const selectedItems = ref([])
-const onSelect = (data: any) => selectedItems.value = data
+const onSelect = (data: any) => (selectedItems.value = data)
 const onBatchDelete = async () => {
-  await currentApi.batchDelete({scenes_id: selectedItems.value})
+  await currentApi.batchDelete({ scenes_id: selectedItems.value })
   tableRef.value.refresh({ deletedRows: selectedItems.value.length })
 }
 </script>
