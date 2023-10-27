@@ -30,7 +30,7 @@
             <span :class="'task-status task-status--' + record.status">{{ getResultStatus(record.status) }}</span>
             <a-tooltip placement="topLeft" :title="record.errmsg" v-if="record.status == 4 && record.errmsg">
               <!-- 异常时显示错误信息 -->
-              <img class="ml-1 cursor-pointer" style="height: 16px;" src="../../assets/images/tip.png" />
+              <img class="ml-1 cursor-pointer" style="height: 16px" src="../../assets/images/tip.png" />
             </a-tooltip>
           </template>
         </template>
@@ -42,6 +42,7 @@
 <script setup lang="ts">
 import { TaskSourceOptions, getTaskSourceName, resultStatus, getResultStatus } from '@/utils/dict'
 import { SStorage } from '@/utils/storage'
+import { openLink } from '@/utils/tools'
 
 const templateId = useRoute().query.templateId as string
 const router = useRouter()
@@ -57,11 +58,14 @@ type Query = Record<string, any>
 const query: Query = ref({})
 
 const isOwner = ref(false)
-const onChecked = () => query.value = {...query.value, owner: isOwner.value ? 1 : 0}
+const onChecked = () => (query.value = { ...query.value, owner: isOwner.value ? 1 : 0 })
 
 const formItems = ref<SearchFormItem[]>([
   {
-    label: '名称', key: 'name', type: 'input', placeholder: '请输入仿真任务名称或任务ID',
+    label: '名称',
+    key: 'name',
+    type: 'input',
+    placeholder: '请输入仿真任务名称或任务ID',
     defaultValue: templateId,
     resetValue: ''
   },
@@ -69,7 +73,11 @@ const formItems = ref<SearchFormItem[]>([
   { label: '仿真算法', key: 'algorithm', type: 'select', api: api.algorithm.getList, defaultValue: '' },
   { label: '运行状态', key: 'status', type: 'select', options: resultStatus, defaultValue: '' },
   {
-    label: '任务结果', key: 'is_passed', type: 'select', placeholder: '请选择仿真结果', defaultValue: '',
+    label: '任务结果',
+    key: 'is_passed',
+    type: 'select',
+    placeholder: '请选择仿真结果',
+    defaultValue: '',
     options: [
       { label: '全部', value: '' },
       { label: '未通过', value: '0' },
@@ -80,15 +88,12 @@ const formItems = ref<SearchFormItem[]>([
   { label: '所属用户', key: 'user', type: 'input', placeholder: '请输入所属用户' },
   { label: '完成时间', key: 'create_time', type: 'range-picker' }
 ])
-const onSearch = (data: Query) => (query.value =  { ...data, owner: isOwner.value ? 1 : 0 })
+const onSearch = (data: Query) => (query.value = { ...data, owner: isOwner.value ? 1 : 0 })
 
 /****** 表格区域 */
 const table = ref()
 const columns = [
-  { 
-    dataIndex: 'checkbox', width: 50,
-    validator: (data: RObject) => isNotRunning(data.status)
-  },
+  { dataIndex: 'checkbox', width: 50, validator: (data: RObject) => isNotRunning(data.status) },
   { title: '任务ID', dataIndex: 'template_number', width: 130 },
   { title: '仿真任务名称', dataIndex: 'name', width: 200, ellipsis: true },
   { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90 },
@@ -103,7 +108,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 150,
+    width: 160,
     actions: {
       停止: {
         validator: (data: any) => isRunOrWait(data.status),
@@ -116,6 +121,10 @@ const columns = [
           SStorage.remove(versionUrlPath + ':table-page')
           router.push(`/simpro-result/view/${data.id}?u=${data.uuid}`)
         }
+      },
+      查看报告: {
+        validator: (data: any) => isFinished(data.status) && data.obs_report,
+        handler: (data: any) => openLink('/api/simpro/resource/' + data.obs_report)
       },
       删除: {
         validator: (data: any) => isNotRunning(data.status),
@@ -146,9 +155,9 @@ const batchDelete = async () => {
 
 <style lang="less" scope>
 .task-passed--true {
-  color: #00B54E;
+  color: #00b54e;
 }
-.task-passed--false{
-  color: #FA2F30
+.task-passed--false {
+  color: #fa2f30;
 }
 </style>
