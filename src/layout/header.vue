@@ -1,11 +1,11 @@
 <script setup lang="ts">
 interface MenuItem {
-  title: string, 
+  title: string
   path: string
 }
 const user = store.user.user
 let topMenus = ref<MenuItem[]>([])
-api.user.getTopMenu().then(data => topMenus.value = data)
+api.user.getTopMenu().then(data => (topMenus.value = data))
 
 const logout = store.user.logout
 </script>
@@ -13,13 +13,8 @@ const logout = store.user.logout
 <template>
   <div class="flex justify-between w-full">
     <div>
-      <a v-for="(menu, index) in topMenus" 
-        :key="index"
-        :href="menu.path"
-        class=" ml-16"
-        style="display: none;"
-        target="_blank">
-        {{ menu.title }} 
+      <a v-for="(menu, index) in topMenus" :key="index" :href="menu.path" class="ml-16" style="display: none" target="_blank">
+        {{ menu.title }}
       </a>
     </div>
     <div class="flex items-center justify-center">
@@ -39,6 +34,9 @@ const logout = store.user.logout
           </a-menu>
         </template>
       </a-dropdown>
+      <a href="/helper" target="_blank">
+        <img src="../assets//images/icon_explain.png" class="cursor-pointer" style="margin-left: 16px" />
+      </a>
     </div>
   </div>
 </template>
@@ -48,7 +46,7 @@ const logout = store.user.logout
   width: 40px;
   height: 40px;
   text-align: center;
-  background-color: #30353F;
+  background-color: #30353f;
   position: relative;
 
   &-icon {
@@ -61,7 +59,7 @@ const logout = store.user.logout
 
   &-circle {
     display: inline-block;
-    background-color: #FF4040;
+    background-color: #ff4040;
     width: 6px;
     height: 6px;
     border-radius: 6px;
@@ -75,7 +73,7 @@ const logout = store.user.logout
   display: inline-block;
   width: 8px;
   height: 8px;
-  border: 2px solid #B1B6C3;
+  border: 2px solid #b1b6c3;
   border-right: transparent;
   border-top: transparent;
   transform: rotate(-45deg);
