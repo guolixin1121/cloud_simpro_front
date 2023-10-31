@@ -210,7 +210,8 @@ const refresh = (option: any) => {
   clearCheckbox()
   // 判断是否还剩一条，剩一条删除成功后请求上一页
   const slient = option?.slient
-  if (dataSource?.value?.length === 1) {
+  const deletedRows = option?.deletedRows || 1
+  if (dataSource?.value?.length === deletedRows) {
     const page = current.value > 1 ? current.value - 1 : current.value
     run({ ...props.query, page, size }, slient)
     return

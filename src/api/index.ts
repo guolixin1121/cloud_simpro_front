@@ -127,8 +127,10 @@ export const vnc = defineApi({
 })()
 
 export const sotif = defineApi({
-  getList: { url: '/stats/sotif/projects/', method: 'post' },
-  getManagers: { url: '/stats/sotif/managers/', method: 'get' }
+  getList: { url: '/stats/sotif/projects/', method: 'post' }, // SOTIF项目列表
+  getManagers: { url: '/stats/sotif/managers/', method: 'get' }, // 负责人列表
+  getStpaList: { url: 'stats/sotif/stpa/projects/', method: 'post' }, // SOTIF项目列表
+  getStpaManagers: { url: '/stats/sotif/stpa/managers/', method: 'get' } // 负责人列表
 })()
 
 export const algorithm = defineApi({
@@ -165,11 +167,15 @@ export const kpi = defineApi({
 // 车辆动力学
 export const veticleModel = defineApi({
   getTurnModel: { url: '/vehicle/checkbox/', method: 'get' },
-  getList: { url: '/vehicle/dynamic_vehicle/', method: 'get' },
+  getList: { url: '/vehicle/dynamic_model/', method: 'get' },
+  getVersions: { url: '/vehicle/dynamic_model/version/', method: 'get' },
+  addVersion: { url: '/vehicle/dynamic_model/version/', method: 'post' },
+  deleteVersion: { url: '/vehicle/dynamic_vehicle/{sid}', method: 'delete' },
   edit: { url: '/vehicle/dynamic_vehicle/{sid}', method: 'put' },
+  editShare: { url: '/vehicle/dynamic_model/{sid}/', method: 'put' },
   add: { url: '/vehicle/dynamic_vehicle/', method: 'post' },
   upload: { url: '/vehicle/import_vehicle/', method: 'post', headers: { 'content-type': 'multipart/form-data' } },
-  delete: { url: '/vehicle/dynamic_vehicle/{sid}', method: 'delete' }
+  delete: { url: '/vehicle/dynamic_model/{sid}', method: 'delete' },
 })()
 // 传感器
 export const sensor = defineApi({
