@@ -73,7 +73,6 @@ const disabled = computed(() => {
 
   const validator = props.scope.column.validator
   if(validator) {
-    console.log(isDisabled, validator(props.scope.record))
     isDisabled = isDisabled || !validator(props.scope.record)
   }
   return isDisabled

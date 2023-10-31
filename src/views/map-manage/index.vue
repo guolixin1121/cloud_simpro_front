@@ -102,7 +102,6 @@ const selectedItems = ref([])
 const onSelect = (selectedKeys: any, selectedRows: any) => selectedItems.value = selectedRows.map((item: any) => item.name)
 const onBatchDelete = async () => {
   await api.maps.batchDeleteMaps({maps_name: selectedItems.value})
-  tableRef.value.refresh()
-
+  tableRef.value.refresh({ deletedRows: selectedItems.value.length })
 }
 </script>

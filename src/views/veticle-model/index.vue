@@ -20,14 +20,19 @@
       :scroll="{ x: 1000, y: 'auto' }"
     >
       <template #bodyCell="{ column, record, index }">
-        <template v-if="column.dataIndex == 'type'">
+        <!-- <template v-if="column.dataIndex == 'type'">
           <span v-if="record.type === 1">导入</span><span v-else-if="record.type === 2">创建</span> <span v-else>全部</span>
-        </template>
+        </template> -->
         <template v-if="column.dataIndex == 'direct'">
           <span v-if="record.direct === 1">简单转向模型</span>
           <span v-else-if="record.direct === 2">C-EPS模型</span>
           <span v-else-if="record.direct === 3">R-EPS模型</span>
           <span v-else>全部</span>
+        </template>
+        <template v-if="column.dataIndex == 'version_count'">
+          <a class="text-blue inline-block w-full" @click="gotoVersion(record)">
+            {{ record.version_count }}
+          </a>
         </template>
         <template v-if="column.dataIndex === 'power'">
           <span v-if="record.power === 1">燃油车</span>
@@ -37,7 +42,7 @@
           <a-switch
             checked-children="ON"
             un-checked-children="OFF"
-            :disabled="record.user !== user.user.userId"
+            :disabled="record.username !== user.user.username"
             :checked="record.is_share"
             :loading="index === active ? true : false"
             @change="(checked: boolean)=>changeShare(checked, record, index)"
@@ -82,7 +87,7 @@
 
 <script setup lang="ts">
 // import type { UploadChangeParam } from 'ant-design-vue'
-import { typeList } from '@/utils/dict'
+// import { typeList } from '@/utils/dict'
 // store、api、useRouter等通过auto import自动导入的，直接在template、自定义函数等使用时无效，为undefined
 /****** api */
 const user = store.user
@@ -99,13 +104,13 @@ const query: Query = ref({})
 const checked = ref(false)
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', maxlength: '100', placeholder: '请输入模型或用户名称' },
-  {
-    label: '类型',
-    key: 'type',
-    type: 'select',
-    options: typeList,
-    defaultValue: ''
-  },
+  // {
+  //   label: '类型',
+  //   key: 'type',
+  //   type: 'select',
+  //   options: typeList,
+  //   defaultValue: ''
+  // },
   {
     label: '转向模型',
     key: 'direct',
@@ -122,7 +127,7 @@ const formItems = ref<SearchFormItem[]>([
     fieldNames: { label: 'name', value: 'key', apiField: 'power_type' },
     defaultValue: ''
   },
-  { label: '修改时间', key: 'create_time', type: 'range-picker' }
+  { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
 const onSearch = (data: Query) => {
   query.value = { ...data, owner: checked.value ? 1 : 0 }
@@ -131,12 +136,13 @@ const onSearch = (data: Query) => {
 const columns = [
   { title: '模型ID', dataIndex: 'vehicle_no', width: 200 },
   { title: '模型名称', dataIndex: 'name', width: 200, ellipsis: true },
-  { title: '类型', dataIndex: 'type', width: 80, ellipsis: true },
+  { title: '版本数量', dataIndex: 'version_count', width: 120 },
+  // { title: '类型', dataIndex: 'type', width: 80, ellipsis: true },
   { title: '转向模型', dataIndex: 'direct_name', width: 120, ellipsis: true },
   { title: '动力形式', dataIndex: 'power_name', width: 90, ellipsis: true },
   { title: '是否共享', dataIndex: 'is_share', width: 90, ellipsis: true },
   { title: '创建时间', dataIndex: 'create_date', width: 180 },
-  { title: '修改时间', dataIndex: 'update_date', width: 180, ellipsis: true },
+  // { title: '修改时间', dataIndex: 'update_date', width: 180, ellipsis: true },
   { title: '所属用户', dataIndex: 'username', width: 100, ellipsis: true },
   {
     title: '操作',
@@ -144,8 +150,8 @@ const columns = [
     fixed: 'right',
     width: 180,
     actions: {
-      查看: (data: any) => gotoVeticlePro(data.id, '?type=look'),
-      编辑: (data: any) => gotoVeticlePro(data.id, '?type=edit'),
+      查看: (data: any) => gotoVeticlePro(data.latest_dynamic_vehicle_id, '?type=look'),
+      编辑: (data: any) => gotoVeticlePro(data.latest_dynamic_vehicle_id, '?type=edit'),
       复制: (data: any) => copy(data),
       删除: async ({ id }: { id: string }) => await veticleModelApi.delete(id)
     }
@@ -158,7 +164,7 @@ const selectModel = async (val: boolean) => {
 const changeShare = async (checked: boolean, val: any, index: number) => {
   try {
     active.value = index
-    await veticleModelApi.edit({ id: val.id, data: { is_share: checked } })
+    await veticleModelApi.editShare({ id: val.id, data: { is_share: checked } })
     active.value = -1
     val.is_share = checked
   } catch {
@@ -199,6 +205,16 @@ const confirmModal = async () => {
     loading.value = false
   }
 }
+
+// import { SStorage } from '../../utils/storage'
+const router = useRouter()
+const preRoute = router.currentRoute.value.path
+const gotoVersion = (record: any) => {
+  const versionUrlPath = '/veticle-model/version/' + record.id
+  // SStorage.remove(versionUrlPath + ':table-page')
+  router.push({ path: versionUrlPath, query: { preRoute } })
+}
+
 const cancelModal = () => {
   fileList.value = []
   importVisible.value = false

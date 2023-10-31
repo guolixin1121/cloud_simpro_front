@@ -34,8 +34,8 @@ const logout = store.user.logout
           </a-menu>
         </template>
       </a-dropdown>
-      <a href="/helper" target="_blank">
-        <img src="../assets//images/icon_explain.png" class="cursor-pointer" style="margin-left: 16px" />
+      <a href="/helper/" target="_blank">
+        <img src="../assets//images/icon_explain.png" class="cursor-pointer" style="width: 24px; margin-left: 16px" />
       </a>
     </div>
   </div>

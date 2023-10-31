@@ -30,7 +30,8 @@ const router = useRouter()
 const columns = [
   { title: '动态库ID', dataIndex: 'id', width: 150 },
   { title: '动态库名称', dataIndex: 'name' },
-  { title: '描述', dataIndex: 'desc' },
+  { title: '描述', dataIndex: 'desc', ellipsis: 'true' },
+  { title: '动态库版本号', dataIndex: 'version', width: 180 },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },
   { title: '所属用户', dataIndex: 'create_user', width: 130 },

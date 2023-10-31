@@ -104,6 +104,6 @@ const batchRun = async () => {
 const batchDelete = async () => {
   const templateids = selectedDeleteRows.value.map((item: any) => item.id)
   await currentApi.batchDelete({ template_id: templateids })
-  tableRef.value.refresh()
+  tableRef.value.refresh({ deletedRows: selectedDeleteRows.value.length })
 }
 </script>

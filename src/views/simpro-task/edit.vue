@@ -5,7 +5,7 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
-    <a-form ref="form" :model="formState" :labelCol ="{ style: { width: '150px' } }"  style="width: 55%"
+    <a-form ref="form" :model="formState" :labelCol ="{ style: { width: '150px' } }"  style="width: 80%"
       @finish="add">
       <a-form-item label="任务名称" name="name" :rules="[
         { required: true, message: '请输入任务名称'}, 
@@ -28,16 +28,27 @@
         </a-select>
       </a-form-item>
       <div v-show="formState.mount == '1'">
-        <a-form-item label="动力学动态库" name="dynamic_lib"
+        <!-- <a-form-item label="动力学动态库" name="dynamic_lib"
           :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择动力学动态库' }]">
           <scroll-select v-model:value="formState.dynamic_lib" 
             :api="baseApi.dll.getList" :is-set-default="isAdd" placeholder="请选择动力学动态库"></scroll-select>
-        </a-form-item>
-        <a-form-item label="车辆动力学" name="dynamic_vehicle"
-          :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择车辆动力学' }]">
-          <scroll-select v-model:value="formState.dynamic_vehicle" 
-            :api="baseApi.vehicle.getList"
-            :query="{is_share: 1}" placeholder="请选择车辆动力学"></scroll-select>
+        </a-form-item> -->
+        <a-form-item label="动力学模型" name="dynamic_vehicle"
+          :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择动力学模型及版本' }]">
+          <a-form-item-rest>
+            <scroll-select v-model:value="formState.dynamic_model_id" 
+              :api="baseApi.veticleModel.getList"
+              :query="{is_share: 1}" placeholder="请选择动力学模型"
+              @change="onVehicleChange"
+              style="width:50%"></scroll-select>
+            <!-- :is-set-default="isAdd" 下拉框自动填充值 -->
+            <scroll-select v-model:value="formState.dynamic_vehicle" 
+              :api="getVehicleVersions"
+              :fieldNames="{label: 'full_version', value: 'id'}"
+              :is-set-default="isAdd"
+              placeholder="请选择动力学模型版本"
+              style="width:50%"></scroll-select>
+          </a-form-item-rest>
         </a-form-item>
         <!-- <a-form-item label="驾驶员模型" name="driver">
           <scroll-select v-model:value="formState.driver"
@@ -71,8 +82,8 @@
           :titles="['可选传感器', '选中传感器']"></scroll-transfer>
       </a-form-item>
       <a-form-item label="评测指标" name="kpi" :rules="[{ required: true, message: '请选择评测指标'}]">
-        <scroll-transfer v-model:target-keys="formState.kpi" :api="baseApi.kpi.getList"
-          :titles="['可选评测指标', '选中评测指标']"></scroll-transfer>
+        <kpi-list v-model:target-keys="formState.kpi" :api="baseApi.kpi.getList"
+          :titles="['可选评测指标', '选中评测指标']"></kpi-list>
       </a-form-item>
       <a-form-item v-if="isAdd" label="所属场景集" name="scenesets" :rules="[{ required: isAdd, message: '请先选择场景集，再选择场景' }]">
         <tree-select-async
@@ -107,6 +118,7 @@
 <script setup lang="ts">
 import { checkChName } from '@/utils/tools';
 import { VerticalOptions, HorizontalOptions } from '@/utils/dict';
+import KpiList from './components/kpi-list.vue'
 const id = useRoute().params.id
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
@@ -116,8 +128,9 @@ const currentApi = api.task
 
 const formState = reactive({
   name: undefined,
-  dynamic_lib: '',
-  dynamic_vehicle: '',
+  // dynamic_lib: ''，
+  dynamic_vehicle: undefined,
+  dynamic_model_id: undefined,
   vehicle_horizontal: 0,
   vehicle_vertical: 0,
   sensors: [],
@@ -144,7 +157,7 @@ const add = async () => {
     source: 0,
     name: formState.name,
     algorithm: formState.algorithm,
-    dynamic_lib: formState.dynamic_lib,
+    // dynamic_lib: formState.dynamic_lib,
     dynamic_vehicle: formState.dynamic_vehicle,
     vehicle_horizontal: formState.vehicle_horizontal,
     vehicle_vertical: formState.vehicle_vertical,
@@ -153,6 +166,12 @@ const add = async () => {
     sensors: formState.is_sensor == '1' ? formState.sensors.map((item:any) =>item.value) : [],
     scenes: formState.scenes.map((item:any) =>item.value || item.baidu_id),
     kpi: formState.kpi.map((item:any) =>item.value),
+    kpis_threshold: formState.kpi.map((item:any) => ({
+      id: item.id,
+      threshold_min: item.threshold.threshold_min,
+      threshold_max: item.threshold.threshold_max,
+      threshold_value: item.threshold.threshold_value,
+    })),
     is_in_ring: formState.is_in_ring,
     driver: formState.driver,
     frequency: formState.frequency
@@ -170,6 +189,12 @@ const add = async () => {
   }
 }
 
+const getVehicleVersions = ref()
+const onVehicleChange = () => {
+  formState.dynamic_vehicle = undefined
+  getVehicleVersions.value = (args: any)  => api.veticleModel.getVersions({dynamic_model_id: formState.dynamic_model_id , ...args})
+}
+
 const getScenes = ref()
 const onScenesetChanged = () => {
   getScenes.value = (args: any)  => api.scene.getList({scene_set: formState.scenesets, ...args})
@@ -180,20 +205,24 @@ const onRingChanged = () => {
   formState.mount = formState.is_in_ring == '0' ? '0' : '1'
   getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
   formState.algorithm = undefined
+  // 控制在环为‘是’时才显示动力学相关参数
+  // 参数重置
   if(formState.is_in_ring == '0') {
     formState.driver = '' as any
     formState.vehicle_horizontal = 0
     formState.vehicle_vertical = 0
-    formState.dynamic_vehicle = ''
-    formState.dynamic_lib = ''
+    formState.dynamic_vehicle = undefined
+    // formState.dynamic_lib = ''
   }
 }
 const onMountChanged = () => {
+  // 内部挂载时显示动力学相关参数
+  // 参数重置
   if(formState.mount == '0') {
     formState.vehicle_horizontal = 0
     formState.vehicle_vertical = 0
-    formState.dynamic_vehicle = ''
-    formState.dynamic_lib = ''
+    formState.dynamic_vehicle = undefined
+    // formState.dynamic_lib = ''
   }
 }
 
@@ -204,26 +233,56 @@ const getEditData = async () => {
      formState.name = data.name
      formState.batch = data.batch
      formState.algorithm = data.algorithm_detail.id
-     formState.dynamic_lib = data.dynamic_lib_detail?.id
+    //  formState.dynamic_lib = data.dynamic_lib_detail?.id
+     formState.dynamic_model_id = data.vehicle_detail?.dynamic_model_id
      formState.dynamic_vehicle = data.vehicle_detail?.id
      formState.vehicle_horizontal = data.vehicle_horizontal
      formState.vehicle_vertical = data.vehicle_vertical
      formState.is_sensor = data.sensors_detail.length ? '1' : '0'
      formState.sensors = data.sensors_detail
      formState.scenes= data.scenes_detail
-     formState.kpi = data.kpi_detail
+     formState.kpi = data.kpi_detail.map((item: any) => ({
+       id: item.id,
+       name: item.name,
+       threshold: {
+        threshold_min: item.threshold_min,
+        threshold_max: item.threshold_max,
+        threshold_unit: item.threshold_unit,
+        threshold_type: item.threshold_type,
+        threshold_value: item.threshold_value,
+       },
+     }))
      formState.frequency = data.frequency
      formState.is_in_ring = data.is_in_ring ? '1' : '0',
      formState.driver = data.driver_detail?.id
      formState.mount = data.mount.toString()
+
+     // dynamic_model_id为必填项，非空时再赋值
+     if(formState.dynamic_model_id) {
+      getVehicleVersions.value = (args: any)  => api.veticleModel.getVersions({dynamic_model_id: formState.dynamic_model_id, ...args})
+     }
    }
+   // 无论新建还是编辑都要默认加载算法
    getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
 }
 getEditData()
 
 const form = ref()
+// 自定义组件的变量，需要主动触发一下校验，以便消除红色提示
 watch(() => formState.scenesets, () => form.value.validateFields('scenesets'))
 watch(() => formState.scenes, () => form.value.validateFields('scenes'))
 watch(() => formState.kpi, () => form.value.validateFields('kpi'))
 watch(() => formState.sensors, () => form.value.validateFields('sensors'))
+watch(() => formState.dynamic_vehicle, () => form.value.validateFields('dynamic_vehicle'))
 </script>
+
+<style lang="less" scoped>
+:deep(.ant-transfer) {
+  .ant-transfer-list:first-child {
+    width: 35%;
+  }
+  .ant-transfer-list:last-child {
+    width: 65%;
+  }
+}
+</style>
