@@ -1,11 +1,7 @@
 <template>
-  <div class="h-80">
+  <div>
     <div class="name">{{ title }}</div>
-    <div
-      :style="title ? 'height:90%' : 'height:100%'"
-      style="width: 100%;"
-      ref="chartElement"
-    ></div>
+    <div :style="title ? 'height:calc(100% - 25px)' : 'height:100%'" style="width: 100%" ref="chartElement"></div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -20,7 +16,7 @@ onMounted(render)
 
 watch(() => props.option, render)
 
-function render () {
+function render() {
   chartInstance?.clear()
   chartInstance = echarts.init(chartElement.value)
   const option = produceOption(props.option)
@@ -31,14 +27,14 @@ function render () {
 }
 
 const produceOption = (option: any) => {
-  if(typeof option !== 'object') return 
+  if (typeof option !== 'object') return
 
   // 判断chart类型去加载相应的默认配置，判断顺序为：
   // 1. 判断是否为radar
   // 2. 判断series的第一组数据的type
   // 3. 显示指定
   // 4. 默认配置
-  const type = option.radar ? 'radar' : (option.series?.[0].type || option.type || 'option')
+  const type = option.radar ? 'radar' : option.series?.[0].type || option.type || 'option'
   const fact = (factory as Record<string, any>)[type] || factory['option']
   return fact(option)
 }
@@ -51,6 +47,6 @@ onUnmounted(() => window.removeEventListener('resize', () => chartInstance?.resi
   font-size: 16px;
   font-weight: 600;
   margin-bottom: 8px;
-  color: #1E2229;
+  color: #1e2229;
 }
 </style>

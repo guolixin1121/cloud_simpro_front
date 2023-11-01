@@ -1,16 +1,14 @@
 <template>
   <div class="white-block entry">
-     <div class="title--noborder">快捷入口</div>
-     <div class="item-list">
-        <template v-for="item in entries" :key="item.label">
-          <div v-if="hasPermission(item)" 
-            class="item"
-            @click="gotoPage(item.router)">
-            <img :src="item.icon" width="24">
-            <span class="mt-1">{{ item.label }}</span>
-         </div>
+    <div class="title--noborder">快捷入口</div>
+    <div class="item-list">
+      <template v-for="item in entries" :key="item.label">
+        <div v-if="hasPermission(item)" class="item" @click="gotoPage(item.router)">
+          <img :src="item.icon" width="24" style="margin-bottom: 12px;" />
+          <span class="mt-1">{{ item.label }}</span>
+        </div>
       </template>
-     </div>
+    </div>
   </div>
 </template>
 
@@ -23,19 +21,19 @@ import icon_SOTIF from '@/assets/images/icon_SOTIF.png'
 import icon_car from '@/assets/images/icon_car_h.png'
 
 const entries = [
-  { icon: icon_newtask, label: '新增任务', router: '/simpro-task/edit/0'},
-  { icon: icon_scenelist, label: '场景列表', router: '/scene/'},
-  { icon: icon_resource, label: '传感器模型', router: '/sensor'},
-  { icon: icon_algorithm, label: '算法管理', router: '/algorithm'},
-  { icon: icon_SOTIF, label: 'SOTIF分析', router: '/sotif'},
-  { icon: icon_car, label: '动力学模型', router: '/veticle-model'}
+  { icon: icon_newtask, label: '新增任务', router: '/simpro-task/edit/0' },
+  { icon: icon_scenelist, label: '场景列表', router: '/scene/' },
+  { icon: icon_resource, label: '传感器模型', router: '/sensor' },
+  { icon: icon_algorithm, label: '算法管理', router: '/algorithm' },
+  { icon: icon_SOTIF, label: 'SOTIF分析', router: '/sotif' },
+  { icon: icon_car, label: '动力学模型', router: '/veticle-model' }
 ]
 
 const router = useRouter()
 const gotoPage = (url: string) => router.push(url)
 
-const hasPermission = ({router, label} : any) => {
- return store.user.hasPermission( label == '新增任务' ? 'add' : 'view', router) 
+const hasPermission = ({ router, label }: any) => {
+  return store.user.hasPermission(label == '新增任务' ? 'add' : 'view', router)
 }
 </script>
 <style lang="less" scoped>
@@ -45,13 +43,14 @@ const hasPermission = ({router, label} : any) => {
     // justify-content: space-between;
     flex-wrap: wrap;
     cursor: pointer;
+    padding-top: 4px;
   }
   .item {
     // width: 96px;
     width: 33%;
-    height: 85px;
+    height: 86px;
     // margin-right: 5px;
-    margin-top: 20px;
+    margin-top: 12px;
     display: inline-block;
     display: flex;
     flex-direction: column;
@@ -59,11 +58,11 @@ const hasPermission = ({router, label} : any) => {
     align-items: center;
 
     p {
-      color: #60656E;
+      color: #60656e;
     }
 
     &:hover {
-      background: #F2F3F5;
+      background: var(--gray-globel-bg-color);
       border-radius: 2px;
     }
   }

@@ -1,17 +1,6 @@
 <!-- 封装了 - 日期格式化、操作列（有操作权限时才展示操作按钮） -->
 <template>
-  <a-table
-    class="ant-table-striped"
-    v-bind="$attrs"
-    v-on="$attrs"
-    :loading="loading"
-    :dataSource="dataSource"
-    :columns="columns"
-    :row-class-name="(_record: any, index: number) => (index % 2 === 1 ? 'table-striped' : null)"
-    :defaultExpandAllRows="true"
-    :pagination="pagination"
-    @change="onChange"
-  >
+  <a-table class="ant-table-striped" v-bind="$attrs" v-on="$attrs" :loading="loading" :dataSource="dataSource" :columns="columns" :row-class-name="(_record: any, index: number) => (index % 2 === 1 ? 'table-striped' : null)" :defaultExpandAllRows="true" :pagination="pagination" @change="onChange">
     <template #emptyText>
       <!-- loading时不显示暂无数据 -->
       <div v-if="loading" style="height: 100px"></div>
@@ -21,14 +10,8 @@
             <g transform="translate(0 1)" fill="none" fill-rule="evenodd">
               <ellipse class="ant-empty-img-simple-ellipse" fill="#F5F5F5" cx="32" cy="33" rx="32" ry="7"></ellipse>
               <g class="ant-empty-img-simple-g" fill-rule="nonzero" stroke="#D9D9D9">
-                <path
-                  d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"
-                ></path>
-                <path
-                  d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
-                  fill="#FAFAFA"
-                  class="ant-empty-img-simple-path"
-                ></path>
+                <path d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"></path>
+                <path d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z" fill="#FAFAFA" class="ant-empty-img-simple-path"></path>
               </g>
             </g>
           </svg>
@@ -38,20 +21,18 @@
       </div>
     </template>
     <template v-slot:[item]="scope" v-for="item in Object.keys($slots)">
-      <slot v-if="item !== 'bodyCell'" :name="item" :scope="scope" v-bind="scope || {}">
-      </slot>
+      <slot v-if="item !== 'bodyCell'" :name="item" :scope="scope" v-bind="scope || {}"> </slot>
       <slot v-else :name="item" :scope="scope" v-bind="scope || {}">
-        <column :scope="scope" :pagination="pagination" :checkedAll="isCheckedAll" :is-only-creator="isOnlyCreator" @refresh="refresh" @select="onSelect" @before-handler="onBeforeHandler"/>
+        <column :scope="scope" :pagination="pagination" :checkedAll="isCheckedAll" :is-only-creator="isOnlyCreator" @refresh="refresh" @select="onSelect" @before-handler="onBeforeHandler" />
       </slot>
     </template>
     <!-- 父组件中没有指定bodyCell时使用此模板 -->
     <template #bodyCell="scope">
-      <column :scope="scope" :pagination="pagination" :checkedAll="isCheckedAll" :is-only-creator="isOnlyCreator" @refresh="refresh" @select="onSelect"  @before-handler="onBeforeHandler"/>
+      <column :scope="scope" :pagination="pagination" :checkedAll="isCheckedAll" :is-only-creator="isOnlyCreator" @refresh="refresh" @select="onSelect" @before-handler="onBeforeHandler" />
     </template>
-    <template #headerCell="{column}">
+    <template #headerCell="{ column }">
       <template v-if="column.dataIndex == 'checkbox'">
-        <a-checkbox v-model:checked="checkedAll" :indeterminate="indeterminate"
-         @change="onCheckAllChanged"></a-checkbox>
+        <a-checkbox v-model:checked="checkedAll" :indeterminate="indeterminate" @change="onCheckAllChanged"></a-checkbox>
       </template>
       <template v-else>
         {{ column.title }}
@@ -118,7 +99,7 @@ const size = pagination.value.size
 
 // selection handler
 const indeterminate = ref(false)
-const checkedAll = ref(false)   // 控制header的checkbox
+const checkedAll = ref(false) // 控制header的checkbox
 const isCheckedAll = ref(false) // 仅用于传给子组件
 const selectedRows = ref<any[]>([])
 const onCheckAllChanged = (e: any) => {
@@ -126,19 +107,19 @@ const onCheckAllChanged = (e: any) => {
 
   // 部分选中到全选中的trick
   isCheckedAll.value = !isCheckedAll.value
-  nextTick(()=> {
+  nextTick(() => {
     isCheckedAll.value = e.target.checked
     checkedAll.value = e.target.checked
-  }) 
+  })
 }
 const onSelect = (isChecked: boolean, row: any) => {
   const existRow = selectedRows.value.find((item: any) => item.id == row.id)
-  
-  if(isChecked) {
+
+  if (isChecked) {
     !existRow && selectedRows.value.push(row)
   } else {
     checkedAll.value = false
-    if(existRow) {
+    if (existRow) {
       selectedRows.value = selectedRows.value.filter((item: any) => item.id != row.id)
     }
   }
@@ -152,9 +133,9 @@ const clearCheckbox = () => {
 
   // column组件中checkbox会被缓存，通过这个trick强迫checkbox刷新状态
   isCheckedAll.value = !isCheckedAll.value
-  nextTick(()=> {
+  nextTick(() => {
     isCheckedAll.value = false
-  }) 
+  })
 }
 
 // 页面切换 event handler
@@ -220,7 +201,7 @@ const refresh = (option: any) => {
 }
 
 // 操作时将table设置为loading，避免重复操作
-const onBeforeHandler = () => loading.value = true
+const onBeforeHandler = () => (loading.value = true)
 
 // 为了兼容树状的table，为每个数据增加key
 // const addKeysToData = (data: any) => {
@@ -245,7 +226,7 @@ defineExpose({ refresh })
   margin: 16px 0 0 0 !important;
 }
 .ant-table-striped :deep(.table-striped) td {
-  background: #f7f8fa;
+  background: var(--table-stripe-color);
 }
 
 .ant-table-striped :deep(.ant-table) {

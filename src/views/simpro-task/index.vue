@@ -1,5 +1,5 @@
 <template>
-  <search-form :items="formItems" @search="onSearch"></search-form>
+  <search-form class="multiline-form " :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
     <div class="flex justify-between items-center">
@@ -14,14 +14,12 @@
       </div>
     </div>
 
-    <Table
-      ref="tableRef"
-      :api="currentApi.getList"
-      :query="query"
-      :columns="columns"
-      :scroll="{ x: 2000, y: 'auto' }"
-      @select="onSelect"
-    >
+    <Table ref="tableRef" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 2000, y: 'auto' }" @select="onSelect">
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.dataIndex == 'vehicle_detail' && !isEmpty(record.vehicle_detail)">
+          {{ record.vehicle_detail.dynamic_model_name + '_' + record.vehicle_detail.version }}
+        </template>
+      </template>
     </Table>
   </div>
 </template>
@@ -29,6 +27,7 @@
 <script setup lang="ts">
 import { TaskSourceOptions, getTaskSourceName, resultStatus } from '@/utils/dict'
 import { SStorage } from '@/utils/storage'
+import { isEmpty } from '@/utils/tools'
 /****** api */
 const user = store.user
 const currentApi = api.task
@@ -46,15 +45,13 @@ const query: Query = ref({})
 const onSearch = (data: Query) => (query.value = { ...data, owner: isOwner.value ? 1 : 0 })
 
 const isOwner = ref(false)
-const onChecked = () => query.value = {...query.value, owner: isOwner.value ? 1 : 0}
+const onChecked = () => (query.value = { ...query.value, owner: isOwner.value ? 1 : 0 })
 
 /****** 表格区域 */
 const tableRef = ref()
 const router = useRouter()
 const columns = [
-  { dataIndex: 'checkbox', width: 50, 
-    validator: (data: RObject) => ['等待', '运行'].indexOf(data.status) == -1
-  },
+  { dataIndex: 'checkbox', width: 50, validator: (data: RObject) => ['等待', '运行'].indexOf(data.status) == -1 },
   { title: '任务ID', dataIndex: 'number', width: 120 },
   { title: '仿真任务名称', dataIndex: 'name', width: 150, ellipsis: true },
   { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90 },
@@ -81,7 +78,7 @@ const columns = [
       },
       查看: (data: RObject) => router.push('/simpro-task/view/' + data.id),
       编辑: (data: RObject) => router.push('/simpro-task/edit/' + data.id),
-      删除:{
+      删除: {
         validator: (data: RObject) => canBeDelete(data),
         handler: async ({ id }: RObject) => await currentApi.delete(id)
       }

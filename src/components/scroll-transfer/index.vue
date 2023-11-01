@@ -6,16 +6,9 @@
           <span>{{ titles[0] }}</span>
           <!-- <span class=" text-blue cursor-pointer" @click="() => onCheckedAll()">全选</span> -->
         </div>
-        <a-input-search class="my-2" placeholder="请输入搜索内容" allowClear 
-          @search="onSearch"
-          @pressEnter="onSearch"></a-input-search>
-        <div class="scroll-box" style="height: calc(100% - 40px); overflow: auto" 
-          @scroll="(e: Event) => onScroll(e)">
-          <a-checkbox-group 
-            v-model:value="leftState.checkedKeys" 
-            :options="leftState.dataSource"
-            @change="onChecked">
-          </a-checkbox-group>
+        <a-input-search class="my-2" placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
+        <div class="scroll-box" style="height: calc(100% - 40px); overflow: auto" @scroll="(e: Event) => onScroll(e)">
+          <a-checkbox-group v-model:value="leftState.checkedKeys" :options="leftState.dataSource" @change="onChecked"> </a-checkbox-group>
           <a-spin v-if="loading" style="width: 100%; padding-top: 20px"></a-spin>
         </div>
       </div>
@@ -23,14 +16,12 @@
       <div class="ant-transfer-list">
         <div class="ant-transfer-list-title mt-1 flex justify-between">
           <span>{{ titles[1] }}</span>
-          <span class=" text-blue cursor-pointer" @click="onRemoveAll">删除全部</span>
+          <span class="text-blue cursor-pointer" @click="onRemoveAll">删除全部</span>
         </div>
         <ul class="scroll-box" style="height: calc(100% - 40px); overflow: auto">
-          <li class="transfer-checked-item flex justify-between items-center"
-            v-for="item in selectedNodes" :key="item.value">
+          <li class="transfer-checked-item flex justify-between items-center" v-for="item in selectedNodes" :key="item.value">
             {{ item.label }}
-            <svg-icon icon="close" class=" text-gray-400 cursor-pointer"
-              @click="onRemove(item)"/>
+            <svg-icon icon="close" class="text-gray-400 cursor-pointer" @click="onRemove(item)" />
           </li>
         </ul>
       </div>
@@ -38,7 +29,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import "ant-design-vue/es/transfer/style/index.css"
+import 'ant-design-vue/es/transfer/style/index.css'
 import { watchOnce } from '@vueuse/core'
 
 const emits = defineEmits(['update:targetKeys'])
@@ -77,7 +68,7 @@ const getOptions = async () => {
       loading.value = true
       const { label, value, apiField } = props.fieldNames
       const res = await props.api({ page, size: 10, [label]: leftState.searchText })
-      const results = res.results ||  res[apiField] || res
+      const results = res.results || res[apiField] || res
       const newOptions = results.map((item: any) => ({
         label: item[label],
         value: item[value]
@@ -108,7 +99,7 @@ const onSearch = (input: string) => {
 const onScroll = (e: any) => {
   if (props.api && !isAllLoaded.value) {
     const { target } = e
-    if (target.scrollTop + target.offsetHeight >= (target.scrollHeight - 50) && !loading.value) {
+    if (target.scrollTop + target.offsetHeight >= target.scrollHeight - 50 && !loading.value) {
       page = page + 1
       getOptions()
     }
@@ -143,13 +134,13 @@ const onRemoveAll = () => {
 // }
 
 // 有数据筛选，所以要保留筛选前选中的数据
-const getSelectedNode = (currentCheckedKeys: string[]) => {  
+const getSelectedNode = (currentCheckedKeys: string[]) => {
   const currentCheckedNodes = currentCheckedKeys.map((key: string) => leftState.dataSource.find((d: any) => d.value == key))
   // 合并前后选中的数据
   const allCheckedNodes = [...selectedNodes.value]
   currentCheckedNodes.forEach((node: any) => {
     const isExist = allCheckedNodes.find((d: any) => d.value === node.value)
-    if(!isExist)  {
+    if (!isExist) {
       allCheckedNodes.push(node)
     }
   })
@@ -158,9 +149,11 @@ const getSelectedNode = (currentCheckedKeys: string[]) => {
   allCheckedNodes.forEach((node: any) => {
     const inLeftDataSource = leftState.dataSource.find((d: any) => d.value === node.value)
     const inCurrentCheckedNodes = currentCheckedNodes.find((d: any) => d.value === node.value)
-    if(!inLeftDataSource) {     // 不在左侧数据源中，则为旧的选中数据，需要保留
+    if (!inLeftDataSource) {
+      // 不在左侧数据源中，则为旧的选中数据，需要保留
       checkedNodes.push(node)
-    } else if(inCurrentCheckedNodes) { // 在当前选中数据中
+    } else if (inCurrentCheckedNodes) {
+      // 在当前选中数据中
       checkedNodes.push(node)
     }
   })
@@ -172,7 +165,7 @@ let hasDefaultValue = true
 watchOnce(
   () => props.targetKeys,
   () => {
-    if(hasDefaultValue && props.targetKeys) {
+    if (hasDefaultValue && props.targetKeys) {
       hasDefaultValue = false
       const { label, value } = props.fieldNames
       selectedNodes.value = props.targetKeys?.map((item: any) => ({
@@ -182,7 +175,8 @@ watchOnce(
       leftState.checkedKeys = selectedNodes.value?.map((data: any) => data.value)
       emits('update:targetKeys', selectedNodes.value) // 同步父组件数据，保持数据结构一致
     }
-  })
+  }
+)
 
 // 动态api
 watch(
@@ -214,10 +208,10 @@ getOptions()
   line-height: 20px;
   padding: 6px 12px;
   word-break: break-word;
-  white-space:break-spaces;
+  white-space: break-spaces;
   margin-top: 2px;
   &:hover {
-    background: #f2f3f5;
+    background: var(--gray-globel-bg-color);
   }
   .delete-icon {
     cursor: pointer;

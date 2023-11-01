@@ -23,9 +23,10 @@ const logout = store.user.logout
         <i class="alert-circle"></i>
       </div> -->
       <a-dropdown>
-        <div class="text-white opacity-80 cursor-pointer">
-          <span>{{ user?.username || '管理员' }}</span>
-        </div>
+        <a class="username">
+          <span style="margin-right: 8px;">{{ user?.username || '管理员' }}</span>
+          <svg-icon icon="arrow"/>
+        </a>
         <template #overlay>
           <a-menu>
             <a-menu-item>
@@ -42,6 +43,16 @@ const logout = store.user.logout
 </template>
 
 <style scoped lang="less">
+.username {
+  color: #fffc;
+  
+}
+:deep(.icon) {
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
 .alert {
   width: 40px;
   height: 40px;
