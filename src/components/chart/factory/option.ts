@@ -9,7 +9,8 @@ const defaultOption = {
   legend: {
     left: 0,
     top: 0,
-    itemWidth: 15,
+    itemWidth: 8,
+    itemHeight: 8,
     textStyle: {
       color: '#60656E'
     }

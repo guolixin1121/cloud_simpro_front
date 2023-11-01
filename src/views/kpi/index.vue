@@ -46,7 +46,7 @@ const columns = [
   { dataIndex: 'checkbox', width: 60, validator: (data: RObject) => data.custom !== 0 }, 
   { title: '评测指标ID', dataIndex: 'id', width: 120 },
   { title: '评测指标名称', dataIndex: 'name', ellipsis: true },
-  { title: '指标类型', dataIndex: 'category_name', width: 180 },
+  { title: '指标类型', dataIndex: 'category_name', ellipsis: true,width: 180 },
   { title: '创建时间', dataIndex: 'create_date', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },
   { title: '所属用户', dataIndex: 'create_user', width: 120 },

@@ -1,5 +1,5 @@
 <template>
-  <search-form :items="formItems" @search="onSearch"></search-form>
+  <search-form class="multiline-form " :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
     <div class="flex justify-between items-center">

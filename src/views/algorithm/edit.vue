@@ -25,7 +25,7 @@
           { min: 1, max: 255, message: '镜像地址长度为1到255位' }
         ]"
       >
-      <ch-input v-model:value="formState.docker_path" placeholder="镜像地址结构：registry-vecps-ns.gaccloud.com.cn/tenant-vydx/********" :maxlength="255"></ch-input>
+      <ch-input v-model:value="formState.docker_path" placeholder="镜像地址结构：harbor.saimo.com:20080/ad/********" :maxlength="255"></ch-input>
       </a-form-item>
       <a-form-item
         label="启动命令"

@@ -1,5 +1,6 @@
 <template>
-  <a-form ref="form" layout="inline" class="white-block mb-5 top" :model="formState" v-bind="$attrs">
+  <a-form ref="form" layout="inline" class="white-block mb-5 top" 
+    :model="formState" v-bind="$attrs">
     <a-form-item
       v-for="item in items"
       :key="item"
@@ -38,7 +39,7 @@
       ></component>
     </a-form-item>
     <a-form-item>
-      <a-button @click="reset" class="mr-2">重置</a-button>
+      <a-button @click="reset" class="marginR-16">重置</a-button>
       <a-button type="primary" @click="search">查询</a-button>
     </a-form-item>
   </a-form>

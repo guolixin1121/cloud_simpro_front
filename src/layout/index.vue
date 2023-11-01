@@ -2,19 +2,26 @@
   <a-layout>
     <a-layout-header class="flex justify-between items-center">
       <!-- <i class="logo"></i> -->
-      <img src="../assets/images/logo.png" alt="logo" />
+      <img src="../assets/images/icon_navlogo_home.png" alt="logo"/>
       <Header />
     </a-layout-header>
-    <a-layout>
-      <a-layout-sider width="235" style="background-color: #fff; padding-top: 10px; overflow: auto">
+    <a-layout class="layout-main">
+      <div class="sidebar" :class="{'collapsed': collapsed}">
         <a-menu
           mode="inline"
+          :inline-collapsed="collapsed"
           :style="{ height: '100%', borderRight: 0 }"
           v-model:selectedKeys="selectedKeys"
           v-model:openKeys="openKeys"
         >
           <Menu :menus="menus"></Menu>
         </a-menu>
+        <div class="toggle-menu" :class="{'collapsed': collapsed}" @click="toggleCollapsed">
+          <svg-icon icon="collapse"></svg-icon>
+        </div>
+      </div>
+      <a-layout-sider style="display: none;">
+      <!-- 为了布局临时占位 -->
       </a-layout-sider>
       <a-layout-content>
         <router-view />
@@ -26,7 +33,6 @@
 <script setup lang="ts">
 import Header from './header.vue'
 import Menu from './menu.vue'
-
 // menus for current login user
 let menus: Permission[] = store.user.user.permissions
 
@@ -65,16 +71,63 @@ function getParentKeys(list: Permission[], keys: string[] = []): string[] | bool
   }
   return false
 }
+
+const collapsed = ref(false);
+const toggleCollapsed = () => {
+  collapsed.value = !collapsed.value
+}
+
 </script>
 
-<style scoped>
-.logo {
-  display: block;
-  background-image: url(../assets/images/logo.png);
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
-  width: 290px;
-  height: 36px;
+<style scoped lang="less">
+.layout-main {
+  flex-direction: row !important;
+}
+.sidebar {
+  width: 235px !important;
+  min-width: 235px !important;
+  max-width: 235px !important;
+  position: relative; 
+  background-color: #fff; 
+  padding-top: 16px; 
+  overflow: auto;
+  transition: all 0.5s;
+
+  &.collapsed {
+    width: 64px !important;
+    min-width: 64px !important;
+    max-width: 64px !important;
+
+    .ant-menu.ant-menu-inline-collapsed {
+      width: 64px;
+    }
+  }
+}
+.toggle-menu {
+  position: absolute;
+  bottom: 2px;
+  width: 100%;
+  height: 40px;
+  line-height: 40px;
+  border-top: 1px solid #e6e7eb;
+  background-color: #fff;
+
+  .icon {
+    cursor: pointer; 
+    margin-left: 24px;
+    line-height: 1;
+  }
+
+  &.collapsed {
+    .icon{
+      transform: rotate(180deg);
+    }
+  }
+
+  &:hover {
+    svg path{
+      fill: red;
+    }
+  }
 }
 </style>

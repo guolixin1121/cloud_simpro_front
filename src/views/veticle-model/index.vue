@@ -1,5 +1,5 @@
 <template>
-  <search-form :items="formItems" @search="onSearch" :query="query"></search-form>
+  <search-form class="reactive-form" :items="formItems" @search="onSearch" :query="query"></search-form>
 
   <div class="main">
     <div class="flex justify-between items-center">
