@@ -1,5 +1,6 @@
 <template>
-  <a-form ref="form" layout="inline" class="white-block mb-5 top" :model="formState" v-bind="$attrs">
+  <a-form ref="form" layout="inline" class="white-block mb-5 top" 
+    :model="formState" v-bind="$attrs">
     <a-form-item
       v-for="item in items"
       :key="item"
@@ -11,7 +12,7 @@
       <scroll-select
         v-if="item.type == 'select'"
         allowClear
-        style="width: 245px"
+        style="width: 246px"
         v-model:value="formState[item.key]"
         v-bind="{ ...item, ...getDefaultStyle(item.type) }"
         v-on="item"
@@ -20,7 +21,7 @@
       </scroll-select>
       <tree-select
         v-else-if="item.type == 'tree-select'"
-        style="width: 245px"
+        style="width: 246px"
         v-model:value="formState[item.key]"
         v-bind="{ ...item, ...getDefaultStyle(item.type) }"
         v-on="item"
@@ -31,14 +32,14 @@
         v-else
         :is="Ant[getComponent(item.type)]"
         allowClear
-        style="width: 245px"
+        style="width: 246px"
         v-model:value="formState[item.key]"
         v-bind="{ ...item, ...getDefaultStyle(item.type) }"
         v-on="item"
       ></component>
     </a-form-item>
     <a-form-item>
-      <a-button @click="reset" class="mr-2">重置</a-button>
+      <a-button @click="reset" class="marginR-16">重置</a-button>
       <a-button type="primary" @click="search">查询</a-button>
     </a-form-item>
   </a-form>

@@ -2,55 +2,24 @@
   <div class="overview">
     <overview />
 
-    <div class="flex justify-between mt-4" style="height: 300px">
-      <entry style="width: 432px;"></entry>
-      <task style="width: calc(100% - 432px); margin-left: 16px;"></task>
+    <div class="flex justify-between mt-4" style="height: 286px">
+      <entry style="width: 432px"></entry>
+      <task style="width: calc(100% - 432px); margin-left: 16px"></task>
     </div>
 
-    <div class="flex justify-between">
-      <chart 
-        :loading="tasksLoading" 
-        class="chart white-block" 
-        title="近7日仿真任务创建情况" 
-        :option="tasksOptions">
-      </chart>
-      <chart 
-        :loading="scenesLoading"
-        class="chart white-block" 
-        title="近7日场景数量新增情况" 
-        :option="scenesOptions">
-      </chart>
+    <div class="flex justify-between" style="height: 309px;">
+      <chart :loading="tasksLoading" class="chart white-block" title="近7日仿真任务创建情况" :option="tasksOptions"> </chart>
+      <chart :loading="scenesLoading" class="chart white-block" title="近7日场景数量新增情况" :option="scenesOptions"> </chart>
     </div>
 
-    <div class="flex justify-between">
-      <chart 
-        :loading="executionsLoading" 
-        class="white-block" 
-        style="width: 65%; margin-right: 16px;"
-        title="近7日仿真任务执行情况" 
-        :option="executionsOptions">
-      </chart>
-      <chart 
-        class="white-block"
-        style="width: 35%"
-        title="近7日仿真任务统计"
-        :option="statusOptions">
-      </chart>
+    <div class="flex justify-between" style="height: 309px;">
+      <chart :loading="executionsLoading" class="white-block" style="width: 65%; margin-right: 16px" title="近7日仿真任务执行情况" :option="executionsOptions"> </chart>
+      <chart class="white-block" style="width: 35%" title="近7日仿真任务统计" :option="statusOptions"> </chart>
     </div>
 
-    <div class="flex justify-between">
-      <chart 
-        :loading="runningtimeLoading" 
-        class="chart white-block" 
-        title="近7日仿真任务耗时" 
-        :option="runningtimeOptions">
-      </chart>
-      <chart 
-        :loading="reportsLoading"
-        class="chart white-block" 
-        title="近7日仿真报告" 
-        :option="reportsOptions">
-      </chart>
+    <div class="flex justify-between last-row" style="height: 309px;">
+      <chart :loading="runningtimeLoading" class="chart white-block" title="近7日仿真任务耗时" :option="runningtimeOptions"> </chart>
+      <chart :loading="reportsLoading" class="chart white-block" title="近7日仿真报告" :option="reportsOptions"> </chart>
     </div>
   </div>
 </template>
@@ -62,10 +31,10 @@ import Overview from './components/overview.vue'
 
 const getXData = (source: []) => source.map((item: any) => item.time)
 const getLineYData = (source: []) => source.map((item: any) => item.value)
-const getBarYData = (source: []) => source.map((item: any) => item.value === 0 ? null : item.value)
+const getBarYData = (source: []) => source.map((item: any) => (item.value === 0 ? null : item.value))
 
 const executionsLoading = ref(false)
-const executionsOptions =  ref({})
+const executionsOptions = ref({})
 const fetchExecutions = async () => {
   executionsLoading.value = true
   const res = await api.overview.executions()
@@ -79,12 +48,12 @@ const fetchExecutions = async () => {
       {
         data: getBarYData(res.passed),
         type: 'bar',
-        name: '通过',
+        name: '通过'
       },
       {
         data: getBarYData(res.failed),
         type: 'bar',
-        name: '未通过',
+        name: '未通过'
       }
     ]
   }
@@ -114,7 +83,7 @@ const fetchRunningtime = async () => {
 fetchRunningtime()
 
 const tasksLoading = ref(false)
-const tasksOptions =  ref({})
+const tasksOptions = ref({})
 const fetchTasks = async () => {
   tasksLoading.value = true
   const res = await api.overview.tasks({ interval: 'day' })
@@ -128,7 +97,7 @@ const fetchTasks = async () => {
       {
         data: getBarYData(res),
         type: 'bar',
-        name: '任务数（个）',
+        name: '任务数（个）'
       }
     ]
   }
@@ -136,7 +105,7 @@ const fetchTasks = async () => {
 fetchTasks()
 
 const reportsLoading = ref(false)
-const reportsOptions =  ref({})
+const reportsOptions = ref({})
 const fetchReports = async () => {
   reportsLoading.value = true
   const res = await api.overview.reports()
@@ -150,7 +119,7 @@ const fetchReports = async () => {
       {
         data: getBarYData(res),
         type: 'bar',
-        name: '仿真报告数量（个）',
+        name: '仿真报告数量（个）'
       }
     ]
   }
@@ -158,7 +127,7 @@ const fetchReports = async () => {
 fetchReports()
 
 const statusLoading = ref(false)
-const statusOptions =  ref({})
+const statusOptions = ref({})
 const fetchStatus = async () => {
   statusLoading.value = true
   const res = await api.overview.status()
@@ -168,14 +137,16 @@ const fetchStatus = async () => {
     xAxis: {
       show: false
     },
-    series: [{
-      name: '运行状态',
-      type: 'pie',
-      label: {
-        formatter: (params: any) => params.value
-      },
-      data: res
-    }]
+    series: [
+      {
+        name: '运行状态',
+        type: 'pie',
+        label: {
+          formatter: (params: any) => params.value
+        },
+        data: res
+      }
+    ]
   }
 }
 fetchStatus()
@@ -213,6 +184,11 @@ fetchScenes()
 
     &:first-child {
       margin-right: 16px;
+    }
+  }
+  .last-row {
+    .white-block {
+      margin-bottom: 0px;
     }
   }
 }

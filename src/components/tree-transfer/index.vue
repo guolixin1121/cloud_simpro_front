@@ -5,19 +5,9 @@
         <span>{{ titles[0] }}</span>
         <!-- <span class=" text-blue cursor-pointer" @click="onCheckedAll">全选</span> -->
       </div>
-      <a-input-search
-        class="my-2"
-        placeholder="请输入搜索内容"
-        allowClear
-        @search="onSearch"
-        @pressEnter="onSearch"
-      ></a-input-search>
-      <div style="height: calc(100% - 40px); overflow: auto"
-        @scroll="onScroll">
-        <a-tree checkable
-          :tree-data="treeData" 
-          v-model:checkedKeys="checkedKeys" 
-          @check="onChecked"></a-tree>
+      <a-input-search class="my-2" placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
+      <div style="height: calc(100% - 40px); overflow: auto" @scroll="onScroll">
+        <a-tree checkable :tree-data="treeData" v-model:checkedKeys="checkedKeys" @check="onChecked"></a-tree>
         <a-spin :spinning="loading" style="width: 100%; padding-top: 20px"></a-spin>
       </div>
     </div>
@@ -25,14 +15,12 @@
     <div class="ant-transfer-list">
       <div class="ant-transfer-list-title mt-1 flex justify-between">
         <span>{{ titles[1] }}({{ selectedNodes?.length }})</span>
-        <span class=" text-blue cursor-pointer" @click="onRemoveAll">删除全部</span>
+        <span class="text-blue cursor-pointer" @click="onRemoveAll">删除全部</span>
       </div>
-      <ul class="scroll-box" style="height: calc(100% - 40px); overflow: auto;">
-        <li class="transfer-checked-item flex justify-between items-center"
-          v-for="item in selectedNodes" :key="item.key">
+      <ul class="scroll-box" style="height: calc(100% - 40px); overflow: auto">
+        <li class="transfer-checked-item flex justify-between items-center" v-for="item in selectedNodes" :key="item.key">
           <span class="label">{{ item.title }}</span>
-          <svg-icon icon="close" class=" text-gray-400 cursor-pointer"
-            @click="onRemove(item)"/>
+          <svg-icon icon="close" class="text-gray-400 cursor-pointer" @click="onRemove(item)" />
         </li>
       </ul>
     </div>
@@ -41,8 +29,8 @@
 </template>
 
 <script lang="ts" setup>
-import { watchOnce } from "@vueuse/core"
-import "ant-design-vue/es/transfer/style/index.css"
+import { watchOnce } from '@vueuse/core'
+import 'ant-design-vue/es/transfer/style/index.css'
 import { TreeDataItem } from 'ant-design-vue/lib/tree'
 
 const emits = defineEmits(['update:targetKeys'])
@@ -106,7 +94,7 @@ const onChecked = (_checkedKeys: any, e: any) => {
   isExceedLimit.value = false
   let checkedNodes = e.checkedNodes.filter((item: any) => item.isTag)
   checkedNodes = getSelectedNode(checkedNodes)
-  if(checkedNodes.length > 9) {
+  if (checkedNodes.length > 9) {
     isExceedLimit.value = true
     checkedKeys.value = [...checkedKeysBackup.value]
   } else {
@@ -132,15 +120,14 @@ const onRemoveAll = () => {
   emits('update:targetKeys', [])
 }
 
-
 // 有数据筛选，所以要保留筛选前选中的数据
-const getSelectedNode = (currentCheckedNodes: any[]) => {  
+const getSelectedNode = (currentCheckedNodes: any[]) => {
   // const currentCheckedNodes = currentCheckedKeys.map((key: string) => treeData.value.find((d: any) => d.value == key))
   // 合并前后选中的数据
   const allCheckedNodes = [...selectedNodes.value]
   currentCheckedNodes.forEach((node: any) => {
     const isExist = allCheckedNodes.find((d: any) => d.value === node.value)
-    if(!isExist)  {
+    if (!isExist) {
       allCheckedNodes.push(node)
     }
   })
@@ -149,30 +136,32 @@ const getSelectedNode = (currentCheckedNodes: any[]) => {
   allCheckedNodes.forEach((node: any) => {
     const inLeftDataSource = isInTree(node.value)
     const inCurrentCheckedNodes = currentCheckedNodes.find((d: any) => d.value === node.value)
-    if(!inLeftDataSource) {     // 不在左侧数据源中，则为旧的选中数据，需要保留
+    if (!inLeftDataSource) {
+      // 不在左侧数据源中，则为旧的选中数据，需要保留
       checkedNodes.push(node)
-    } else if(inCurrentCheckedNodes) { // 在当前选中数据中
+    } else if (inCurrentCheckedNodes) {
+      // 在当前选中数据中
       checkedNodes.push(node)
     }
   })
   return checkedNodes
 }
 
-const isInTree = (value: string, dataSource: any [] = treeData.value): boolean => {
+const isInTree = (value: string, dataSource: any[] = treeData.value): boolean => {
   let isExist = false
-  for(let i = 0; i < dataSource.length; i++) {
+  for (let i = 0; i < dataSource.length; i++) {
     const item = dataSource[i]
-    if(item.value === value) {
+    if (item.value === value) {
       isExist = true
     } else {
       isExist = isInTree(value, item.children)
     }
-    if(isExist) break
+    if (isExist) break
   }
   return isExist
 }
 
-watch(checkedKeys, () => checkedKeysBackup.value = [...checkedKeys.value])
+watch(checkedKeys, () => (checkedKeysBackup.value = [...checkedKeys.value]))
 
 // const onCheckedAll = () => {
 //   hasDefaultValue = false
@@ -203,7 +192,7 @@ let hasDefaultValue = true
 watchOnce(
   () => props.targetKeys,
   () => {
-    if(hasDefaultValue && props.targetKeys) {
+    if (hasDefaultValue && props.targetKeys) {
       hasDefaultValue = false
       const { label, value } = props.fieldNames
       selectedNodes.value = props.targetKeys?.map((item: any) => ({
@@ -213,12 +202,13 @@ watchOnce(
       }))
       checkedKeys.value = selectedNodes.value?.map((data: any) => data.key)
     }
-  })
+  }
+)
 
 const onScroll = (e: any) => {
   if (props.api && !isAllLoaded) {
     const { target } = e
-    if (target.scrollTop + target.offsetHeight >= (target.scrollHeight - 50) && !loading.value) {
+    if (target.scrollTop + target.offsetHeight >= target.scrollHeight - 50 && !loading.value) {
       page = page + 1
       getOptions()
     }
@@ -237,13 +227,13 @@ getOptions()
   line-height: 20px;
   padding: 6px 12px;
   word-break: break-word;
-  white-space:break-spaces;
+  white-space: break-spaces;
   margin-top: 2px;
   .label {
     white-space: break-spaces;
   }
   &:hover {
-    background: #f2f3f5;
+    background: var(--gray-globel-bg-color);
   }
   .delete-icon {
     cursor: pointer;

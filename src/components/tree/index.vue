@@ -5,32 +5,14 @@
     <div class="tree-container">
       <a-spin :spinning="loading" style="min-height: 50px">
         <!-- 视觉占位 -->
-        <a-tree
-          v-if="loading"
-          :show-icon="true"
-          :load-data="lazy ? loadData : null"
-          :tree-data="treeData"
-          :expandedKeys="expandRowKeys"
-          :selectedKeys="selectedRowKeys"
-          @expand="onExpand"
-          @select="onSelect"
-        >
+        <a-tree v-if="loading" :show-icon="true" :load-data="lazy ? loadData : null" :tree-data="treeData" :expandedKeys="expandRowKeys" :selectedKeys="selectedRowKeys" @expand="onExpand" @select="onSelect">
           <template #icon="{ isLeaf }">
             <svg-icon :icon="isLeaf ? 'leaf' : 'folder'"></svg-icon>
           </template>
         </a-tree>
       </a-spin>
       <!-- 刷新数据需要重新渲染，否则展开节点会有bug -->
-      <a-tree
-        v-if="!loading"
-        :show-icon="true"
-        :load-data="lazy ? loadData : null"
-        :tree-data="treeData"
-        :expandedKeys="expandRowKeys"
-        :selectedKeys="selectedRowKeys"
-        @expand="onExpand"
-        @select="onSelect"
-      >
+      <a-tree v-if="!loading" :show-icon="true" :load-data="lazy ? loadData : null" :tree-data="treeData" :expandedKeys="expandRowKeys" :selectedKeys="selectedRowKeys" @expand="onExpand" @select="onSelect">
         <template #icon="{ isLeaf }">
           <svg-icon :icon="isLeaf ? 'leaf' : 'folder'"></svg-icon>
         </template>
@@ -42,29 +24,9 @@
 
     <!-- 底部buttons -->
     <div class="float-right mt-2">
-      <svg-icon
-        title="创建"
-        icon="add"
-        class="cursor-pointer mr-1"
-        v-if="user.hasPermission('add')"
-        @click="onButtonClick('add')"
-      ></svg-icon>
-      <svg-icon
-        icon="edit"
-        title="编辑"
-        class="cursor-pointer mr-1"
-        v-if="user.hasPermission('edit')"
-        :class="isEmpty(selectedNode) ? 'icon--disable' : ''"
-        @click="onButtonClick('edit')"
-      ></svg-icon>
-      <svg-icon
-        icon="delete"
-        title="删除"
-        class="cursor-pointer mr-1"
-        v-if="user.hasPermission('delete')"
-        :class="isEmpty(selectedNode) ? 'icon--disable' : ''"
-        @click="onButtonClick('delete')"
-      ></svg-icon>
+      <svg-icon title="创建" icon="add" class="cursor-pointer mr-1" v-if="user.hasPermission('add')" @click="onButtonClick('add')"></svg-icon>
+      <svg-icon icon="edit" title="编辑" class="cursor-pointer mr-1" v-if="user.hasPermission('edit')" :class="isEmpty(selectedNode) ? 'icon--disable' : ''" @click="onButtonClick('edit')"></svg-icon>
+      <svg-icon icon="delete" title="删除" class="cursor-pointer mr-1" v-if="user.hasPermission('delete')" :class="isEmpty(selectedNode) ? 'icon--disable' : ''" @click="onButtonClick('delete')"></svg-icon>
     </div>
     <!-- 调整组件大小 -->
     <div class="resize-handler" @mousedown="onResizeStart"></div>
@@ -358,7 +320,7 @@ watch(searchQuery, refresh)
     width: 16px;
     height: 100%;
     // &:hover {
-    //   background-color: @primary-color;
+    //   background-color: var(--primary-color);
     //   opacity: 0.5;
     // }
   }

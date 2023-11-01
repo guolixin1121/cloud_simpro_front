@@ -21,7 +21,7 @@
     display: inline-block;
     width: 3px;
     height: 16px;
-    background: @primary-color;
+    background: var(--primary-color);
     border-radius: 2px;
     margin-right: 8px;
   }
@@ -35,11 +35,15 @@
 }
 
 .text-blue {
-  color: @primary-color;
+  color: var(--primary-color);
 }
 
 .text-gray {
-  color: @gray-color;
+  color: var(--gray-color);
+ }
+
+ .marginR-16 {
+  margin-right: 16px;
  }
 
 .breadcrumb {
@@ -47,16 +51,16 @@
   font-size: 14px;
 
   &--current {
-    color: @text-main-color;
+    color: var(--text-main-color);
 
     &:before {
       content: '/';
-      color: @gray-color;
+      color: var(--gray-color);
       padding: 0px 10px;
     }
   }
   .breadcrumb-title, a {
-    color: @gray-color;
+    color: var(--gray-color);
   }
 }
 
@@ -72,7 +76,7 @@
   white-space: break-spaces;
 
   li {
-    background-color: #f2f3f5;
+    background-color: var(--gray-globel-bg-color);
     padding: 4px 8px;
     margin-right: 10px;
     display: inline-block;
@@ -80,7 +84,7 @@
 }
 .ant-table {
   .label {
-    background-color: #f2f3f5;
+    background-color: var(--gray-globel-bg-color);
     padding: 4px 8px;
     margin-right: 10px;
     display: inline-block;
@@ -130,7 +134,7 @@
         display: flex;
 
         .label {
-          color: @text-gray-color; 
+          color: var(--text-second-color); 
           padding-right: 8px;
           display: block;
           width: 78px;
@@ -155,8 +159,8 @@
 }
 main {
   .white-block {
-    padding: 16px 24px;
-    padding-bottom: 8px;
+    padding: 24px;
+    // padding-bottom: 8px;
     border-radius: 4px;
     margin-bottom: 16px;
     background-color: #fff;
@@ -169,7 +173,7 @@ main {
   margin-top: 16px;
   thead tr {
     text-align: left;
-    background: #f2f3f5;
+    background: var(--gray-globel-bg-color);
   }
   tr {
     background-color: #fcfdff;
@@ -195,7 +199,7 @@ main {
 .sign {
   width: 3px;
   height: 14px;
-  background: @primary-color;
+  background: var(--primary-color);
   border-radius: 2px;
   margin-top: 5px;
   margin-right: 5px;
@@ -250,12 +254,25 @@ main {
 //   }
 // }
 
-.vxe-table {
+.vxe-table.vxe-table--render-default {
+  .vxe-header--column {
+    background-color: var(--table-header-color);;
+  }
   .vxe-table--body {
     width: auto !important;
   }
   .vxe-body--row {
     cursor: pointer;
+  }
+  .row--stripe {
+    background: var(--table-stripe-color);
+  }
+  .vxe-cell {
+    height: 22px;
+  }
+  .vxe-cell--title {
+    font-weight: 500;
+    color: var(--text-main-color);
   }
 }
 .left-tree .vxe-table {

@@ -1,5 +1,5 @@
 <template>
-  <search-form :items="formItems" @search="onSearch"></search-form>
+  <search-form class="reactive-form" :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
     <page-title title="逻辑场景列表">
