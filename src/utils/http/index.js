@@ -3,9 +3,8 @@ import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css' // 必须引用
 import { getToken } from '@/utils/storage'
 import AxiosCanceler from './cancelCancel'
-
+import { useUserStore } from '@/store/user'
 // 处理错误信息
-
 const errorInfo = status => {
   const errorMap = new Map([
     [400, '错误请求'],
@@ -81,9 +80,11 @@ class AxiosRequest {
     return new Promise((resolve, reject) => {
       const { url, data = {}, method = 'POST', headers = {} } = params || {}
       const type = headers['content-type']
+      const store = useUserStore()
       Object.assign(headers, {
         Authorization: `JWT ${getToken()}`,
-        'content-type': type || 'application/json'
+        'content-type': type || 'application/json',
+        'X-Project-Id': store.user?.project_id || ''
       })
       let postData = data
       if(type === 'multipart/form-data') {
