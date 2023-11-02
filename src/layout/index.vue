@@ -20,8 +20,8 @@
           <svg-icon icon="collapse"></svg-icon>
         </div>
       </div>
+      <!-- layout-sider临时占位,解决右侧table宽度一直自动增加的bug。原因未知 -->
       <a-layout-sider style="display: none;">
-      <!-- 为了布局临时占位 -->
       </a-layout-sider>
       <a-layout-content>
         <router-view />
@@ -81,7 +81,7 @@ const toggleCollapsed = () => {
 
 <style scoped lang="less">
 .layout-main {
-  flex-direction: row !important;
+  flex-direction: row;
 }
 .sidebar {
   width: 232px !important;
