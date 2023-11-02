@@ -336,7 +336,7 @@ button.ant-btn-primary:not([disabled]) {
   .ant-tabs-content-holder {
     overflow: auto;
   }
-  .ant-tabs-tab-btn {
+  .ant-tabs-tab-active .ant-tabs-tab-btn {
     color: var(--primary-color) !important;
   }
   .ant-tabs-ink-bar {
@@ -437,7 +437,6 @@ button.ant-btn-primary:not([disabled]) {
 }
 
 .ant-select-tree {
-
   .ant-select-tree-node-selected, .ant-select-tree-treenode-selected {
     background-color: var(--active-color) !important;
   }
@@ -449,8 +448,6 @@ button.ant-btn-primary:not([disabled]) {
 .ant-tree-checkbox-checked .ant-tree-checkbox-inner,
 .ant-tree-checkbox-inner:hover,
 .ant-input-number:hover,
-textarea.ant-input:hover,
-textarea.ant-input:focus,
 .ant-select-selector:hover,
 .ant-picker:hover,
 .ant-input:hover,
@@ -460,12 +457,12 @@ textarea.ant-input:focus,
 }
 
 // 激活
-.ant-input-number-focused,
-.ant-picker-focused,
-.ant-input-affix-wrapper-focused,
+.ant-input-number:focus,
+.ant-picker:focus,
+.ant-input-affix-wrapper:focus,
 .ant-input-number:focus,
 .ant-input:focus,
-.ant-select-focused .ant-select-selector {
+.ant-select-selector:focus {
   border-color: var(--primary-color) !important;
   box-shadow: 0 0 0 2px var(--shadow-color) !important;
 }
@@ -490,6 +487,13 @@ input::placeholder,
 }
 
 .ant-select,
-.ant-input {
+.ant-checkbox-wrapper,
+.ant-transfer,
+.ant-input-affix-wrapper .ant-input {
   color: var(--text-main-color) !important;
+}
+
+// 清除顶部margin，会引起和周边文本不对齐的问题
+.ant-checkbox-wrapper {
+  margin-top: 0 !important;
 }

@@ -15,11 +15,17 @@ const routes: RouteRecordRaw[] = [
     path: '/demo',
     name: 'demo',
     component: async () => await import(/* webpackChunkName: "demo" */ '@/components/index.vue'),
+    meta: {
+      auth: false
+    }
   },
   {
     name: 'login',
     path: '/login',
-    component: async () => await import(/* webpackChunkName: "login" */ '@/views/login/index.vue')
+    component: async () => await import(/* webpackChunkName: "login" */ '@/views/login/index.vue'),
+    meta: {
+      auth: false
+    }
   }
 ]
 
@@ -29,7 +35,7 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
-  if (to.path === '/login') {
+  if (to.meta.auth == false) {
     next()
   } else {
     const user = store.user
