@@ -79,11 +79,25 @@ const disabled = computed(() => {
 })
 const isChecked = ref(false)
 // 监控全选按钮的触发
+// 点击checkbox时，每一列都会触发watch
+// disabled判断时需要的validator函数仅在checkbox列有
+// 所以如果不是checkbox列，就不做处理
 watch(() => props.checkedAll, (val: boolean) => {
-  if(disabled.value) return
-  isChecked.value = val
+  if(props.scope.column.dataIndex != 'checkbox') return
+  if(disabled.value) {
+    // 保证总是能触发外层select事件，用于控制全选checkbox
+    emits('select', false, props.scope?.record)
+  } else {
+    isChecked.value = val
+  }
 })
-watch(isChecked, () => emits('select', isChecked.value, props.scope?.record) )
+// 同上
+watch(isChecked, () => {
+  if(props.scope.column.dataIndex != 'checkbox') return
+  if(disabled.value) return
+  emits('select', isChecked.value, props.scope?.record) 
+})
+  
 </script>
 
 <style lang="less" scoped>

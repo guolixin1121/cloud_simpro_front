@@ -160,11 +160,15 @@
 main {
   .white-block {
     padding: 24px;
-    padding-bottom: 14px;  // 底部跟form-item的样式合并一起共24px
+    padding-bottom: 24px; 
     border-radius: 4px;
     margin-bottom: 16px;
     background-color: #fff;
     box-shadow: 0px 1px 2px 0px rgba(0, 0, 0, 0.04);
+  }
+  .ant-form.white-block {
+    padding-bottom: 14px;
+    // 底部跟form-item的样式合并一起共24px
   }
 }
 
@@ -255,6 +259,7 @@ main {
 // }
 
 .vxe-table.vxe-table--render-default {
+  color: var(--text-main-color);
   .vxe-header--column {
     background-color: var(--table-header-color);;
   }

@@ -96,7 +96,7 @@ button.ant-btn-primary:not([disabled]) {
     }
 
     .ant-menu-item {
-      padding-left: 40px !important;
+      padding-left: 18px !important;
     }
 
     .ant-menu-title-content {
@@ -130,7 +130,7 @@ button.ant-btn-primary:not([disabled]) {
   // 选中时高亮
   .ant-menu-item-selected,
   .ant-menu-item-selected:hover {
-    background: var(--active-color) !important;
+    background: var(--menu-active-bg-color) !important;
     border-radius: 2px;
 
     a {
@@ -196,13 +196,19 @@ button.ant-btn-primary:not([disabled]) {
 }
 
 .ant-pagination {
+  .ant-pagination-prev,
+  .ant-pagination-next,
   .ant-pagination-prev .ant-pagination-item-link, 
   .ant-pagination-next .ant-pagination-item-link {
     border-radius: 30px;
     width: 28px;
+    min-width: 28px;
     height: 28px;
     line-height: 28px;
     font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .ant-pagination-item,
   .ant-pagination-jump-prev,
@@ -275,6 +281,9 @@ button.ant-btn-primary:not([disabled]) {
   }
   .ant-table-row:hover > td {
     background-color: var(--table-hover-color) !important;
+  }
+  .ant-table-row.table-striped:hover > td {
+    background-color: var(--table-stripe-hover-color) !important;
   }
   .ant-table-cell {   
     padding: 12px 16px;
@@ -376,10 +385,10 @@ button.ant-btn-primary:not([disabled]) {
     width: 16px;
   }
   .ant-tree-treenode-selected {
-    background-color: var(--active-color);
+    background-color: var(--menu-active-bg-color);
 
     &:hover {
-      background-color: var(--active-color);
+      background-color: var(--menu-active-bg-color);
       .ant-tree-title {
         color: var(--primary-color);
       }
@@ -433,6 +442,7 @@ button.ant-btn-primary:not([disabled]) {
 .ant-select-tree {
   .ant-select-tree-node-selected, .ant-select-tree-treenode-selected {
     background-color: var(--active-color) !important;
+    color: var(--primary-color);
   }
 }
 
@@ -473,6 +483,8 @@ button.ant-btn-primary:not([disabled]) {
 .ant-picker-cell-in-view.ant-picker-cell-in-range::before,
 .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
   background-color: var(--active-color) !important;
+  color: var(--primary-color) !important;
+  font-weight: 400 !important;
 }
 
 input::placeholder,

@@ -101,16 +101,17 @@ const size = pagination.value.size
 const indeterminate = ref(false)
 const checkedAll = ref(false) // 控制header的checkbox
 const isCheckedAll = ref(false) // 仅用于传给子组件
+                                // 不能和header的checkbox使用一个，会引起checkbox样式错误
 const selectedRows = ref<any[]>([])
-const onCheckAllChanged = (e: any) => {
+const onCheckAllChanged = () => {
   indeterminate.value = false
 
   // 部分选中到全选中的trick
-  isCheckedAll.value = !isCheckedAll.value
-  nextTick(() => {
-    isCheckedAll.value = e.target.checked
-    checkedAll.value = e.target.checked
-  })
+  // isCheckedAll.value = !isCheckedAll.value
+  // nextTick(() => {
+    isCheckedAll.value = !isCheckedAll.value // e.target.checked
+    checkedAll.value = !isCheckedAll.value // e.target.checked
+  // })
 }
 const onSelect = (isChecked: boolean, row: any) => {
   const existRow = selectedRows.value.find((item: any) => item.id == row.id)
@@ -125,17 +126,25 @@ const onSelect = (isChecked: boolean, row: any) => {
   }
   indeterminate.value = checkedAll.value ? false : selectedRows.value.length > 0
   const selectedKeys = selectedRows.value.map((item: any) => item.id)
+
+  // 重新设置全选
+  if(selectedKeys.length === size ) {
+    checkedAll.value = true
+    isCheckedAll.value = true
+    indeterminate.value = false
+  }
   emits('select', selectedKeys, selectedRows.value)
 }
 const clearCheckbox = () => {
-  checkedAll.value = false
   indeterminate.value = false
+  checkedAll.value = false
+  isCheckedAll.value = false
 
   // column组件中checkbox会被缓存，通过这个trick强迫checkbox刷新状态
-  isCheckedAll.value = !isCheckedAll.value
-  nextTick(() => {
-    isCheckedAll.value = false
-  })
+  // isCheckedAll.value = !isCheckedAll.value
+  // nextTick(() => {
+    // isCheckedAll.value = false
+  // })
 }
 
 // 页面切换 event handler
