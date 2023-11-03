@@ -3,7 +3,7 @@ import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css' // 必须引用
 import { getToken } from '@/utils/storage'
 import AxiosCanceler from './cancelCancel'
-import { useUserStore } from '@/store/user'
+
 // 处理错误信息
 const errorInfo = status => {
   const errorMap = new Map([
@@ -80,7 +80,7 @@ class AxiosRequest {
     return new Promise((resolve, reject) => {
       const { url, data = {}, method = 'POST', headers = {} } = params || {}
       const type = headers['content-type']
-      const store = useUserStore()
+
       Object.assign(headers, {
         Authorization: `JWT ${getToken()}`,
         'content-type': type || 'application/json',
@@ -110,6 +110,7 @@ class AxiosRequest {
         })
         .then(res => {
           const { code, data = {}, msg, err } = res.data
+
           if (code === 0 || code === 200) {
             resolve(data)
           } else if (code === 100) {
