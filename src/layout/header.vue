@@ -47,9 +47,10 @@ const logout = store.user.logout
 <style scoped lang="less">
 .username {
   color: #fffc;
-  
+  display: flex;
 }
 :deep(.icon) {
+  transform: rotate(90deg);
   svg {
     width: 14px;
     height: 14px;

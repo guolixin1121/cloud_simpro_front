@@ -1,5 +1,5 @@
 <template>
-  <search-form class="multiline-form " :items="formItems" @search="onSearch"></search-form>
+  <search-form class="multiline-form " :items="formItems" @search="onSearch" @show-more="toggleMore"></search-form>
 
   <div class="main">
     <div class="flex justify-between items-center">
@@ -46,6 +46,7 @@ const onSearch = (data: Query) => (query.value = { ...data, owner: isOwner.value
 
 const isOwner = ref(false)
 const onChecked = () => (query.value = { ...query.value, owner: isOwner.value ? 1 : 0 })
+const toggleMore = () => tableRef.value.calcateHeight()
 
 /****** 表格区域 */
 const tableRef = ref()

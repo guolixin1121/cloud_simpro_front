@@ -121,12 +121,8 @@ const toggleCollapsed = () => {
   &.collapsed {
     .icon{
       transform: rotate(180deg);
-    }
-  }
-
-  &:hover {
-    svg path{
-      fill: red;
+      position: relative;
+      top: -2px;
     }
   }
 }

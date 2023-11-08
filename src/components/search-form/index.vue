@@ -1,48 +1,62 @@
 <template>
-  <a-form ref="form" layout="inline" class="white-block mb-5 top" 
-    :model="formState" v-bind="$attrs">
-    <a-form-item
-      v-for="item in items"
-      :key="item"
-      :label="item.label"
-      :name="item.key"
-      style="margin-bottom: 10px"
-      :rules="[{ required: item.required }]"
-    >
-      <scroll-select
-        v-if="item.type == 'select'"
-        allowClear
-        style="width: 246px"
-        v-model:value="formState[item.key]"
-        v-bind="{ ...item, ...getDefaultStyle(item.type) }"
-        v-on="item"
-        @select="(value: string|string[]) => onSelectChange(item.key, value)"
+  <!-- top作为标记类，用于table计算自身高度以便填充满页面高度 -->
+  <div class="white-block top search-form" :class="{'opened': isOpened}">
+    <a-form ref="form" :class="'col-' + colLimit"
+      layout="inline" :model="formState" v-bind="$attrs">
+      <template v-for="(item, index) in items" :key="item">
+      <a-form-item
+        :class="{'last-row': isLastRow(index), 'more-row': isMoreRow(index)}"
+        :label="item.label"
+        :name="item.key"
+        style="margin-bottom: 10px"
+        :rules="[{ required: item.required }]"
       >
-      </scroll-select>
-      <tree-select
-        v-else-if="item.type == 'tree-select'"
-        style="width: 246px"
-        v-model:value="formState[item.key]"
-        v-bind="{ ...item, ...getDefaultStyle(item.type) }"
-        v-on="item"
-        @change="(value: string|string[]) => onTreeSelectChange(item.key, value)"
-      >
-      </tree-select>
-      <component
-        v-else
-        :is="Ant[getComponent(item.type)]"
-        allowClear
-        style="width: 246px"
-        v-model:value="formState[item.key]"
-        v-bind="{ ...item, ...getDefaultStyle(item.type) }"
-        v-on="item"
-      ></component>
-    </a-form-item>
-    <a-form-item>
-      <a-button @click="reset" class="marginR-16">重置</a-button>
-      <a-button type="primary" @click="search">查询</a-button>
-    </a-form-item>
-  </a-form>
+        <scroll-select
+          v-if="item.type == 'select'"
+          allowClear
+          v-model:value="formState[item.key]"
+          v-bind="{ ...item, ...getDefaultStyle(item.type) }"
+          v-on="item"
+          @select="(value: string|string[]) => onSelectChange(item.key, value)"
+        >
+        </scroll-select>
+        <tree-select
+          v-else-if="item.type == 'tree-select'"
+          v-model:value="formState[item.key]"
+          v-bind="{ ...item, ...getDefaultStyle(item.type) }"
+          v-on="item"
+          @change="(value: string|string[]) => onTreeSelectChange(item.key, value)"
+        >
+        </tree-select>
+        <component
+          v-else
+          :is="Ant[getComponent(item.type)]"
+          allowClear
+          :style="{width: '100%'}"
+          v-model:value="formState[item.key]"
+          v-bind="{ ...item, ...getDefaultStyle(item.type) }"
+          v-on="item"
+        ></component>
+      </a-form-item>
+
+      </template>
+      <a-form-item class="last-row search-form-button" v-if="items.length < colLimit">
+        <a-button @click="reset" class="marginR-8">重置</a-button>
+        <a-button type="primary" @click="search">查询</a-button>
+      </a-form-item>
+    </a-form>
+    <div class="search-form-button" v-if="items.length >= colLimit">
+      <div>
+        <a-button @click="reset" class="marginR-8">重置</a-button>
+        <a-button type="primary" @click="search">查询</a-button>
+      </div>
+      <div class="show-more" @click="showMore" v-if="rowTotal > 2">
+        <span>展开更多</span>
+        <i class="icon down"></i>
+        <i class="icon up"></i>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -68,7 +82,7 @@ const props = defineProps({
     default: ()=> false
   }
 } as any)
-const emits = defineEmits(['search'])
+const emits = defineEmits(['search', 'show-more'])
 
 // form state, and get default value from props
 const formState = reactive<Record<string, any>>({})
@@ -206,6 +220,98 @@ watch(
     }
   }
 )
+
+/**** 3列或4列布局 *****/
+// 根据总共多少列计算每列width，css里使用
+const colLimit = ref(3)
+const rowTotal = computed(() => Math.ceil(props.items.length / colLimit.value))
+// 当前显示总行数
+const showRowTotal = computed(() => {
+  const itemLength = props.items.length
+  if(isOpened.value) {
+    return Math.ceil(itemLength / colLimit.value)
+  } else {
+    return itemLength <= colLimit.value ? 1 : 2
+  }
+})
+// 是否最后一行，最后一行padding bottom清空
+const isLastRow = (itemIndex: number) => {
+  const rowIndex = Math.floor(itemIndex / colLimit.value) + 1 
+  return rowIndex == showRowTotal.value
+}
+// 是否为更多行
+const isMoreRow =  (itemIndex: number) => {
+  const rowIndex = Math.floor(itemIndex / colLimit.value) + 1 
+  return rowIndex > 2
+}
+const isOpened = ref(false)
+const showMore = () => {
+  isOpened.value = !isOpened.value
+  nextTick(() => {
+    // 等展开后，重新计算
+    emits('show-more', isOpened.value)
+  })
+}
+window.addEventListener('resize', () => colLimit.value = document.body.clientWidth < 1920 ? 3 : 4)
+onMounted(() => colLimit.value = document.body.clientWidth < 1920 ? 3 : 4 )
 </script>
 
-<style></style>
+<style lang="less" scoped>
+.search-form {
+  .search-form-button {
+    display: flex;
+    flex-direction: column;
+
+    .show-more {
+      cursor: pointer;
+      margin-top: 22px;
+      text-align: center;
+      .icon {
+        width: 8px;
+        height: 8px;
+        margin-left: 8px;
+        border: 1px solid var(--text-second-color);
+        border-top: 0px;
+        border-left: 0px;
+      }
+      .up {
+        transform: rotate(45deg);
+        position: relative;
+        top: -3px;
+        display: inline-block;
+      }
+      .down {
+        transform: rotate(-135deg);
+        position: relative;
+        top: 1px;
+        display: none;
+      }
+
+      &:hover {
+        color: var(--primary-color);
+        .icon {
+          border-color: var(--primary-color);
+        }
+      }
+    }
+  }
+
+  .more-row {
+    display: none;
+  }
+
+  &.opened {
+    .more-row {
+      display: flex;
+    }
+    .show-more {
+      .up {
+        display: none;
+      }
+      .down {
+        display: inline-block;
+      }
+    }
+  }
+}
+</style>

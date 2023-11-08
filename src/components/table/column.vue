@@ -20,10 +20,6 @@
   <template v-else-if="isDateColumn(dataIndex)">
     {{ dataValue ? dayjs(dataValue).format(dataValue.length < 11 ? 'YYYY-MM-DD' : 'YYYY-MM-DD HH:mm:ss') : '' }}
   </template>
-  <!-- 值为对象：获取name -->
-  <template v-else-if="isObject(dataValue)">
-    {{ dataValue[column.apiField] || dataValue.name }}
-  </template>
   <!-- 值为数组： 默认获取name值，可通过label指定字段 -->
   <template v-else-if="Array.isArray(dataValue)">
     <a-tooltip placement="topLeft" :title="dataValue.map((d: any) => d[column.apiField]|| d.name).join('  ')">
@@ -32,9 +28,18 @@
       </span>
     </a-tooltip>
   </template>
+  <!-- 值为对象：获取name -->
+  <template v-else-if="isObject(dataValue)">
+    <a-tooltip placement="topLeft" :title="dataValue[column.apiField] || dataValue.name">
+      {{ dataValue[column.apiField] || dataValue.name }}
+    </a-tooltip>
+  </template>
   <!-- 自定义格式化函数 -->
   <template v-else-if="column.formatter">
-    {{ column.formatter(dataValue) }}
+    <a-tooltip v-if="column.ellipsis" placement="topLeft" :title="column.formatter(dataValue)">
+      {{ column.formatter(dataValue) }}
+    </a-tooltip>
+    <span v-else>{{ column.formatter(dataValue) }}</span>
   </template>
   <!-- 默认列 -->
   <!-- hover时加tooltip -->

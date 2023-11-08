@@ -29,13 +29,13 @@ const defaultOption = {
       type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
     },
     formatter: (series: any) => {
-      const name = series[0].name
-      let relVal = '<div><p style="font-weight: 500; margin-bottom: 5px">' + name + '</p>';
+      // const name = series[0].name
+      let relVal = '' // '<div><p style="font-weight: 500; margin-bottom: 5px">' + name + '</p>';
       for (let i = 0, l = series.length; i < l; i++) {
           relVal += '<div>' + 
-            '<span style="display: inline-block; margin-right: 5px; width: 10px; height: 10px; border-radius: 10px; background-color:' + series[i].color + '"></span>' +
-            '<span>' + series[i].seriesName + '：</span>' + 
-            '<span style="float: right">' + (series[i].value || 0) + ('') + '</span></div>'
+            '<span style="display: inline-block; margin-right: 5px; width: 8px; height: 8px; border-radius: 10px; background-color:' + series[i].color + '"></span>' +
+            '<span style="color: #1E2229">' + series[i].seriesName + '：</span>' + 
+            '<span style="float: right; color: #1e2229">' + (series[i].value || 0) + ('') + '</span></div>'
       }
       relVal += '<div> <div style="clear: both"></div>'
       return relVal
@@ -99,10 +99,11 @@ const seriesOptions = {
     }
   },
   'pie': {
-    radius: ['35%', '55%'],
+    radius: ['45%', '65%'],
+    center: ['50%', '60%'],
     avoidLabelOverlap: false,
     itemStyle: {
-      borderRadius: 10,
+      // borderRadius: 10,
       borderColor: '#fff',
       borderWidth: 2
     }

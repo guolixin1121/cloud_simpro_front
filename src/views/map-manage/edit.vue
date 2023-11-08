@@ -94,10 +94,10 @@
           >
         </template>
         <a-form-item v-if="!isView" :wrapper-col="{ style: { paddingLeft: '100px' } }">
-          <a-button type="primary" html-type="submit" :loading="loading">
+          <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">
             {{ isAdd ? '上传' : '修改' }}
           </a-button>
-          <a-button @click="goback" class="ml-2">取消</a-button>
+          <a-button @click="goback">取消</a-button>
         </a-form-item>
       </a-form>
     </a-spin>

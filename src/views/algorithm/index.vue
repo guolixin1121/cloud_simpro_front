@@ -42,7 +42,7 @@ const columns = [
   { title: '感知在环', dataIndex: 'perception', width: 100, formatter: (value: string) => value ? '是' : '否' },
   { title: '描述', dataIndex: 'desc', ellipsis: true },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
-  { title: '创建者', dataIndex: 'create_user', width: 120, ellipsis: true },
+  { title: '创建者', dataIndex: 'create_user', width: 150 },
   {
     title: '操作',
     dataIndex: 'actions',

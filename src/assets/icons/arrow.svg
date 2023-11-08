@@ -1,1 +1,17 @@
-<svg focusable="false" width="16" height="16" data-icon="down" fill="currentColor" aria-hidden="true" viewBox="64 64 896 896"><path d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z"></path></svg>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon_more_n</title>
+    <g id="首页" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="云仿真-首页-默认" transform="translate(-1384, -247)" fill="#999CA3">
+            <g id="数据" transform="translate(248, 220)">
+                <g id="仿真任务" transform="translate(448, 0)">
+                    <g id="Group-10" transform="translate(636, 26)">
+                        <g id="Group" transform="translate(52, 1)">
+                            <path d="M12.0181818,5.86388494 C12.210393,5.67167377 12.5220289,5.67167377 12.7142401,5.86388494 C12.9045291,6.05417401 12.906432,6.36151123 12.7199487,6.55414126 L12.7142401,6.55994318 L8.51697443,10.7572088 C8.32668537,10.9474979 8.01934814,10.9494008 7.82671812,10.7629175 L7.82091619,10.7572088 L3.62365057,6.55994318 C3.43143939,6.36773201 3.43143939,6.05609612 3.62365057,5.86388494 C3.81393963,5.67359588 4.12127686,5.67169299 4.31390688,5.85817627 L4.31970881,5.86388494 L8.16894531,9.71313086 L12.0181818,5.86388494 Z" id="路径-4" transform="translate(8.1689, 8.3105) rotate(-90) translate(-8.1689, -8.3105)"></path>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

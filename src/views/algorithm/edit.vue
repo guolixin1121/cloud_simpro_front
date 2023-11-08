@@ -53,7 +53,7 @@
         <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入描述" :maxlength="255" rows="10"></ch-input>
       </a-form-item>
       <a-form-item :wrapper-col="{ style: { paddingLeft: '80px' } }">
-        <a-button class="mr-2" type="primary" html-type="submit" :loading="loading">
+        <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">
           {{ isAdd ? '创建' : '修改' }}
         </a-button>
         <a-button @click="goback">取消</a-button>

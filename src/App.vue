@@ -6,7 +6,7 @@ dayjs.locale('zh-cn')
 </script>
 
 <template>
-  <a-config-provider :locale="locale">
+  <a-config-provider :locale="locale" :autoInsertSpaceInButton="false">
     <router-view />
   </a-config-provider>
 </template>
