@@ -18,25 +18,26 @@
 
     <a-modal v-model:visible="showRunConfirm" 
       title="泛化"
-      :closable="false"
       :footer="null">
         <template v-if="runScene.config_result_count <= 10000">
-          <div>
-            <svg-icon style="color: #faad14" icon="alert"></svg-icon>
-            <span class="ml-4" style="font-size: 16px">是否要对此逻辑场景进行泛化？</span>
+          <div class="modal-content">
+            <div>
+              <svg-icon style="color: #faad14" icon="alert"></svg-icon>
+              <span class="ml-4" style="font-size: 16px">是否要对此逻辑场景进行泛化？</span>
+            </div>
+            <p class="ml-8 mt-2">泛化结果为{{ runScene.config_result_count }}个具体场景</p>
           </div>
-          <p class="ml-8 mt-2">泛化结果为{{ runScene.config_result_count }}个具体场景</p>
-          <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
-            <a-button @click="closeRunConfirm">否</a-button>
-            <a-button @click="runConfirm" :loading="isSubmitting" type="primary" class="ml-2">是</a-button>
+          <div class="modal-buttons" style="border-top: 1px solid #f0f0f0">
+            <a-button @click="closeRunConfirm" class="marginR-16">否</a-button>
+            <a-button @click="runConfirm" :loading="isSubmitting" type="primary">是</a-button>
           </div>
         </template>
       <template v-else>
-        <div>
+        <div class="modal-content">
           <svg-icon style="color: #faad14" icon="alert"></svg-icon>
           <span class="ml-4" style="font-size: 16px">泛化数量超过上限（10000）</span>
         </div>
-        <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
+        <div class="modal-buttons" style="border-top: 1px solid #f0f0f0">
             <a-button @click="closeRunConfirm">确定</a-button>
           </div>
       </template>
@@ -86,11 +87,11 @@ const columns = [
   { dataIndex: 'checkbox', width: 60 },
   { title: '场景ID', dataIndex: 'id', width: 90 },
   { title: '逻辑场景名称', dataIndex: 'name', width: 150, ellipsis: true },
-  { title: '关联场景数', dataIndex: 'result_scene_count', width: 120, ellipsis: true },
+  { title: '关联场景数', dataIndex: 'result_scene_count', width: 120 },
   { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
   { title: '来源', dataIndex: 'source', width: 100, formatter: (source: number) => source == 0 ? '云平台' : 'SOTIF' },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
-  { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
+  { title: '所属用户', dataIndex: 'create_user', width: 180 },
   {
     title: '操作',
     dataIndex: 'actions',

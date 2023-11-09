@@ -10,7 +10,7 @@
       :api="algorithmApi.getList" 
       :query="query" 
       :columns="columns" 
-      :scroll="{ x: 1000, y: 'auto' }"
+      :scroll="{ x: 1300, y: 'auto' }"
       @select="onSelect">
     </Table>
   </div>
@@ -36,13 +36,13 @@ const onSearch = (data: Query) => (query.value = data)
 const router = useRouter()
 const columns = [
   { dataIndex: 'checkbox', width: 60 }, 
-  { title: '算法ID', dataIndex: 'id', width: 100 },
+  { title: '算法ID', dataIndex: 'id', width: 120 },
   { title: '算法名称', dataIndex: 'name', width: 200, ellipsis: true },
   { title: '控制在环', dataIndex: 'is_in_ring', width: 100, formatter: (value: string) => value ? '是' : '否' },
   { title: '感知在环', dataIndex: 'perception', width: 100, formatter: (value: string) => value ? '是' : '否' },
   { title: '描述', dataIndex: 'desc', ellipsis: true },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
-  { title: '创建者', dataIndex: 'create_user', width: 120, ellipsis: true },
+  { title: '创建者', dataIndex: 'create_user', width: 150 },
   {
     title: '操作',
     dataIndex: 'actions',

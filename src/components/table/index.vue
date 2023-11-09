@@ -101,16 +101,17 @@ const size = pagination.value.size
 const indeterminate = ref(false)
 const checkedAll = ref(false) // 控制header的checkbox
 const isCheckedAll = ref(false) // 仅用于传给子组件
+                                // 不能和header的checkbox使用一个，会引起checkbox样式错误
 const selectedRows = ref<any[]>([])
-const onCheckAllChanged = (e: any) => {
+const onCheckAllChanged = () => {
   indeterminate.value = false
 
   // 部分选中到全选中的trick
-  isCheckedAll.value = !isCheckedAll.value
-  nextTick(() => {
-    isCheckedAll.value = e.target.checked
-    checkedAll.value = e.target.checked
-  })
+  // isCheckedAll.value = !isCheckedAll.value
+  // nextTick(() => {
+    isCheckedAll.value = !isCheckedAll.value // e.target.checked
+    checkedAll.value = !isCheckedAll.value // e.target.checked
+  // })
 }
 const onSelect = (isChecked: boolean, row: any) => {
   const existRow = selectedRows.value.find((item: any) => item.id == row.id)
@@ -125,17 +126,25 @@ const onSelect = (isChecked: boolean, row: any) => {
   }
   indeterminate.value = checkedAll.value ? false : selectedRows.value.length > 0
   const selectedKeys = selectedRows.value.map((item: any) => item.id)
+
+  // 重新设置全选
+  if(selectedKeys.length === size ) {
+    checkedAll.value = true
+    isCheckedAll.value = true
+    indeterminate.value = false
+  }
   emits('select', selectedKeys, selectedRows.value)
 }
 const clearCheckbox = () => {
-  checkedAll.value = false
   indeterminate.value = false
+  checkedAll.value = false
+  isCheckedAll.value = false
 
   // column组件中checkbox会被缓存，通过这个trick强迫checkbox刷新状态
-  isCheckedAll.value = !isCheckedAll.value
-  nextTick(() => {
-    isCheckedAll.value = false
-  })
+  // isCheckedAll.value = !isCheckedAll.value
+  // nextTick(() => {
+    // isCheckedAll.value = false
+  // })
 }
 
 // 页面切换 event handler
@@ -162,26 +171,34 @@ watch(
 // watch(current, newVal => run({ ...props.query, page: newVal, size }))
 
 // 动态计算表格父容器高度
-onMounted(() => {
+const calcateHeight = () => {
   // 搜索框高度
   let height = document.getElementsByClassName('top')?.[0]?.clientHeight
-  height = isNaN(height) ? 0 : height + 16 // + 16的padding高度
+  height = isNaN(height) ? 0 : (height + 16) // + 16的padding高度
 
   // 场景集地图集标题区高度
   let titleHeight = document.getElementsByClassName('right-title')?.[0]?.clientHeight
-  titleHeight = isNaN(titleHeight) ? 0 : height
+  titleHeight = isNaN(titleHeight) ? 0 : (titleHeight + 16)
   height += titleHeight
+
+  const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
+  let tabHeight = mainContent.getElementsByClassName('tabs')?.[0]?.clientHeight
+  tabHeight = isNaN(tabHeight) ? 0 : 14
 
   // 表格内容区域
   const tableScrollBody = document.getElementsByClassName('ant-table-body')?.[0] as HTMLElement
   if (tableScrollBody) {
-    tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + 300) + 'px)'
+    tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + tabHeight + 290) + 'px)'
   }
 
-  const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
   if (mainContent) {
     mainContent.style.height = 'calc(100% - ' + height + 'px)'
   }
+}
+onMounted(() => {
+  // form筛选区域为单行时，因为有默认的padding，有时会一开始计算成两行
+  // nexttick保证获取筛选区域的最终高度
+  nextTick(calcateHeight)
 })
 
 // 用于删除等操作后，重新加载table
@@ -215,7 +232,7 @@ const onBeforeHandler = () => (loading.value = true)
 //     }
 //   })
 // }
-defineExpose({ refresh })
+defineExpose({ refresh, calcateHeight })
 </script>
 
 <style scoped>

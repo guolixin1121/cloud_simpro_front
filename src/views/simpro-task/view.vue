@@ -62,11 +62,11 @@
                   <span>{{ record.threshold_max }}</span>
                 </template>
                 <template v-else-if="record.threshold_type == 1">
-                  <img src="../../assets/images/icon_dayu.png"/>
+                  <img src="../../assets/images/icon_dayu.png" style="width: 16px"/>
                   <span>{{ record.threshold_min }}</span>
                 </template>
                 <template v-else-if="record.threshold_type == 2">
-                  <img src="../../assets/images/icon_xiaoyu.png"/>
+                  <img src="../../assets/images/icon_xiaoyu.png" style="width: 16px"/>
                   <span>{{ record.threshold_max }}</span>
                 </template>
                 <template v-else-if="record.threshold_type == 3">

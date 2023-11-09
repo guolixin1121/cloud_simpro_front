@@ -1,28 +1,30 @@
 <template>
-  <vxe-table stripe ref="table" :border="isTree ? 'none' : 'full'" :show-header="isTree ? false : true" :row-config="{ isHover: true, keyField: 'id' }" :tree-config="{ transform: true, reserve: true, rowField: 'id', lazy: lazy, loadMethod: loadMethod }" :loading="loading" :data="tableData" @toggle-tree-expand="onTreeExpand" @cell-click="onCellClick">
-    <vxe-column v-for="column in columns" :key="column.dataIndex" :field="column.dataIndex" :title="column.title" :width="column.width" :tree-node="column.dataIndex === treeNode">
-      <template #default="{ row }">
-        <template v-if="column.dataIndex == 'operation'">
-          <template v-for="action in Object.keys(column.actions || {})" :key="action">
-            <template v-if="hasPermission(column, row, action)">
-              <a-popconfirm v-if="action === '删除'" title="是否删除？" ok-text="是" cancel-text="否" @confirm="onHandler(column, row, action)">
-                <a class="text-blue mr-2">删除</a>
-              </a-popconfirm>
-              <a v-else class="text-blue mr-2" @click="onHandler(column, row, action)">
-                {{ action }}
-              </a>
+  <a-spin :spinning="loading">
+    <vxe-table stripe ref="table" :border="isTree ? 'none' : 'full'" :show-header="isTree ? false : true" :row-config="{ isHover: true, keyField: 'id' }" :tree-config="{ transform: true, reserve: true, rowField: 'id', lazy: lazy, loadMethod: loadMethod }" :data="tableData" @toggle-tree-expand="onTreeExpand" @cell-click="onCellClick">
+      <vxe-column v-for="column in columns" :key="column.dataIndex" :field="column.dataIndex" :title="column.title" :width="column.width" :tree-node="column.dataIndex === treeNode">
+        <template #default="{ row }">
+          <template v-if="column.dataIndex == 'operation'">
+            <template v-for="action in Object.keys(column.actions || {})" :key="action">
+              <template v-if="hasPermission(column, row, action)">
+                <a-popconfirm v-if="action === '删除'" title="是否删除？" @confirm="onHandler(column, row, action)">
+                  <a class="text-blue mr-2">删除</a>
+                </a-popconfirm>
+                <a v-else class="text-blue mr-2" @click="onHandler(column, row, action)">
+                  {{ action }}
+                </a>
+              </template>
             </template>
           </template>
+          <template v-else>
+            <slot :column="column" :row="row">
+              <svg-icon icon="folder-light" class="mr-1" v-if="!row.isLeaf && column.dataIndex == treeNode"></svg-icon>
+              <span>{{ row[column.dataIndex] }}</span>
+            </slot>
+          </template>
         </template>
-        <template v-else>
-          <slot :column="column" :row="row">
-            <svg-icon icon="folder-light" class="mr-1" v-if="!row.isLeaf && column.dataIndex == treeNode"></svg-icon>
-            <span>{{ row[column.dataIndex] }}</span>
-          </slot>
-        </template>
-      </template>
-    </vxe-column>
-  </vxe-table>
+      </vxe-column>
+    </vxe-table>
+  </a-spin>
   <div class="float-right mt-4 mr-4">
     <a-pagination v-if="page.hasPagination" :total="page.total" :show-total="(total: number) => `共 ${total} 条`" :page-size="page.size" v-model:current="current" @change="onPageChange" />
   </div>
