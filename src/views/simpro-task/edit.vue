@@ -5,7 +5,7 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
-    <a-form ref="form" :model="formState" :labelCol ="{ style: { width: '150px' } }"  style="width: 80%"
+    <a-form ref="form" :model="formState" :labelCol ="{ style: { width: '150px' } }"  style="width: 70%"
       @finish="add">
       <a-form-item label="任务名称" name="name" :rules="[
         { required: true, message: '请输入任务名称'}, 

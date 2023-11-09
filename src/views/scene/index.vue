@@ -1,10 +1,21 @@
 <template>
   <div class="main-tree">
-    <tree :title="'场景集'" :api="sceneApi.getList" :query="{ ...selectedSceneset, version: 2 }" :lazy="true" :is-folder-selectable="true" :is-recurse="scenesetFromLogic != null" :filedNames="{ label: 'groupName', value: 'id' }" :button-handlers="treeBtnHandlers" @select="onTreeSelect" />
+    <tree :title="'场景集'" 
+      :api="sceneApi.getList" 
+      :query="{ ...selectedSceneset, version: 2 }" 
+      :lazy="true" 
+      :is-folder-selectable="true" 
+      :is-recurse="scenesetFromLogic != null" 
+      :filedNames="{ label: 'groupName', value: 'id' }" 
+      :button-handlers="treeBtnHandlers" 
+      @select="onTreeSelect" />
     <div class="main-right">
       <a-spin :spinning="scenesetLoading">
         <div class="right-title">
-          <div class="title-item"><span class="label">场景集名称</span>{{ selectedSceneset?.name }}</div>
+          <div class="title-item">
+            <span class="label">场景集名称</span>
+            {{ selectedSceneset?.name }}
+          </div>
           <!-- <div class="title-item"><span class="label">路径</span>{{ selectedSceneset?.path }}</div> -->
           <div class="title-item">
             <span class="label">标签</span>
@@ -23,8 +34,10 @@
         <div class="flex justify-between items-center">
           <span class="title">场景列表</span>
           <div>
-            <batch-button :disabled="!selectedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
-            <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
+            <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
+            <a-button type="primary" :disabled="checkedItems.length > 0 || !selectedSceneset?.isLeaf" 
+              v-if="user.hasPermission('add')"
+               @click="router.push('/scene/edit/0')">上传场景</a-button>
           </div>
         </div>
         <a-spin :spinning="loading">
@@ -131,10 +144,10 @@ const treeBtnHandlers = {
 }
 
 const tableRef = ref()
-const selectedItems = ref([])
-const onSelect = (data: any) => (selectedItems.value = data)
+const checkedItems = ref([])
+const onSelect = (data: any) => (checkedItems.value = data)
 const onBatchDelete = async () => {
-  await currentApi.batchDelete({ scenes_id: selectedItems.value })
-  tableRef.value.refresh({ deletedRows: selectedItems.value.length })
+  await currentApi.batchDelete({ scenes_id: checkedItems.value })
+  tableRef.value.refresh({ deletedRows: checkedItems.value.length })
 }
 </script>

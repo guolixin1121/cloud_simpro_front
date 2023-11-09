@@ -35,6 +35,7 @@ const currentApi = api.task
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入仿真任务名称或主车模型' },
+  { label: '任务ID', key: 'number', type: 'input', placeholder: '请输入仿真任务ID' },
   { label: '任务来源', key: 'source', type: 'select', options: TaskSourceOptions, defaultValue: '' },
   { label: '运行状态', key: 'status', type: 'select', options: resultStatus, defaultValue: '' },
   { label: '仿真算法', key: 'algorithm', type: 'select', api: api.algorithm.getList, defaultValue: '' },

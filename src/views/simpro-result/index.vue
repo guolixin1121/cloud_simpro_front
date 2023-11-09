@@ -95,7 +95,8 @@ const onSearch = (data: Query) => (query.value = { ...data, owner: isOwner.value
 const table = ref()
 const columns = [
   { dataIndex: 'checkbox', width: 50, validator: (data: RObject) => isNotRunning(data.status) },
-  { title: '任务ID', dataIndex: 'template_number', width: 130 },
+  { title: '任务ID', dataIndex: 'template_number', width: 150 },
+  { title: '运行时序', dataIndex: 'serial', width: 90 },
   { title: '仿真任务名称', dataIndex: 'name', width: 200, ellipsis: true },
   { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90 },
   { title: '主车模型', dataIndex: 'vehicle_detail', width: 150, ellipsis: true },
