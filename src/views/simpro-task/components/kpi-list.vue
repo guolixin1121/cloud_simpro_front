@@ -41,13 +41,13 @@
                 </template>
                 <template v-if="item.threshold?.threshold_type == 1">
                   <div class="flex">
-                    <img src="../../../assets/images/icon_dayu.png" />
+                    <img src="../../../assets/images/icon_dayu.png" style="width: 16px"/>
                     <a-input-number size="small" v-model:value="item.threshold.threshold_min" />
                   </div>
                 </template>
                 <template v-if="item.threshold?.threshold_type == 2">
                   <div class="flex">
-                    <img src="../../../assets/images/icon_xiaoyu.png" />
+                    <img src="../../../assets/images/icon_xiaoyu.png" style="width: 16px"/>
                     <a-input-number size="small" v-model:value="item.threshold.threshold_max" />
                   </div>
                 </template>

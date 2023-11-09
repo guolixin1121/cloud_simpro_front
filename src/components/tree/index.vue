@@ -269,6 +269,7 @@ const onSearch = () => {
   isRecurse.value = false
   // reset query
   searchQuery.value = { ...props.query, name: searchValue.value }
+  console.log(props.query)
   delete searchQuery.value.baidu_id // 仅跳转过来时支持紧缺搜索，手动搜索时需要删掉
 }
 

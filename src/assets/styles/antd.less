@@ -221,7 +221,6 @@ button.ant-btn-primary[disabled] {
 }
 .ant-menu-inline-collapsed-tooltip {
   .ant-tooltip-inner, .ant-tooltip-arrow-content {
-    background-color: #fff;
     a {
       color: var(--text-main-color);
     }
@@ -233,8 +232,25 @@ button.ant-btn-primary[disabled] {
 }
 
 .ant-popover-inner {
-  width: 226px;
+  min-width: 226px;
   border-radius: 4px !important;
+  // position: relative;
+  // top: -10px;
+
+  .ant-popover-inner-content {
+    padding: 24px !important;
+    padding-bottom: 32px !important;
+    .anticon {
+      display: none;
+    }
+    .ant-popover-message {
+      padding-top: 0px;
+      padding-bottom: 24px;
+      .ant-popover-message-title {
+        padding-left: 0px;
+      }
+    }
+  }
 
   .ant-popover-buttons button {
     margin-left: 16px;
@@ -357,9 +373,9 @@ button.ant-btn-primary[disabled] {
     box-shadow: none !important;
   }
   .ant-table-thead {
-    .ant-table-cell-fix-right {
-      right: 0 !important;
-    }
+    // .ant-table-cell-fix-right {
+    //   right: 0 !important;
+    // }
     .ant-table-cell-fix-right-first:before {
       display: none;
     }
@@ -405,7 +421,7 @@ button.ant-btn-primary[disabled] {
   .ant-tabs-tab-btn {
     color: var(--tab-text-color);
 
-    &:hover {
+    &:hover, &:focus, &:active {
       color: var(--tab-hover-color)
     }
   }
@@ -432,7 +448,6 @@ button.ant-btn-primary[disabled] {
     }
     &.ant-tree-node-selected {
       background-color: transparent !important;
-      color: var(--primary-color);
     }
   }
 }
@@ -594,4 +609,17 @@ input::placeholder,
 }
 .ant-checkbox-indeterminate .ant-checkbox-inner::after {
   background-color: var(--primary-color) !important;
+}
+
+.ant-tooltip {
+  .ant-tooltip-inner {
+    padding: 8px;
+    max-height: 200px;
+    overflow: auto;
+  }
+  .ant-tooltip-inner, .ant-tooltip-arrow-content {
+    background: #FFFFFF;
+    box-shadow: 0px 4px 20px 0px rgba(0,0,0,0.12);
+    color: var(--text-main-color) !important;
+  }
 }

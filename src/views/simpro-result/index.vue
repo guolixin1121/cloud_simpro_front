@@ -110,7 +110,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 160,
+    width: 180,
     actions: {
       停止: {
         validator: (data: any) => isRunOrWait(data.status),

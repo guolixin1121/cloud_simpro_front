@@ -2,7 +2,7 @@
   <div class="main-tree">
     <tree :title="'场景集'" 
       :api="sceneApi.getList" 
-      :query="{ ...selectedSceneset, version: 2 }" 
+      :query="{ ...scenesetFromLogic, version: 2 }" 
       :lazy="true" 
       :is-folder-selectable="true" 
       :is-recurse="scenesetFromLogic != null" 
@@ -35,7 +35,8 @@
           <span class="title">场景列表</span>
           <div>
             <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
-            <a-button type="primary" :disabled="checkedItems.length > 0 || !selectedSceneset?.isLeaf" 
+            <a-button type="primary" 
+            :disabled="checkedItems.length > 0 || (selectedSceneset && !selectedSceneset.isLeaf)" 
               v-if="user.hasPermission('add')"
                @click="router.push('/scene/edit/0')">上传场景</a-button>
           </div>
@@ -60,7 +61,6 @@ const currentApi = api.scene
 const sceneApi = api.scenesets
 const user = store.user
 const selectedSceneset = ref(scenesetFromLogic) // 逻辑场景跳转的默认场景集
-
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称' },

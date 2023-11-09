@@ -123,7 +123,7 @@ const mapApi = api.maps
 const formState = reactive<any>({
   id: '',
   name: '',
-  catalog: mapCatalog.id != '' ? { label: mapCatalog?.name, value: mapCatalog?.id} : null,
+  catalog: (mapCatalog.id && mapCatalog.id != '') ? { label: mapCatalog?.name, value: mapCatalog?.id} : null,
   xodr: null,
   desc: '',
   latestVersion: '',
