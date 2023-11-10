@@ -30,6 +30,7 @@ const formItems = ref<SearchFormItem[]>([
     label: '标签类型',
     key: 'tag_type',
     type: 'select',
+    allowClear: false,
     api: () => currentApi.getType({ tree: 1 }),
     fieldNames: { label: 'value', value: 'key' },
     defaultValue: 2
@@ -48,7 +49,7 @@ const columns = [
   { title: '标签英文名称', dataIndex: 'name' },
   { title: '标签类别', dataIndex: 'isTag', width: 100 },
   { title: '创建时间', dataIndex: 'create_time', width: 200 },
-  { title: '所属用户', dataIndex: 'create_user', width: 150 },
+  { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'operation',

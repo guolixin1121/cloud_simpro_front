@@ -27,7 +27,7 @@
           </template>
           <template v-if="formState.threshold?.threshold_type == '1'">
               <div class="flex">
-                  <img src="../../assets/images/icon_dayu.png"/>
+                  <img src="../../assets/images/icon_dayu.png" style="width: 16px"/>
                   <span>{{ formState.threshold.threshold_min }}</span>
               </div>
           </template>

@@ -39,7 +39,7 @@
           >
         </template>
         <a-form-item v-if="!isView" :wrapper-col="{ style: { paddingLeft: '90px' } }">
-          <a-button class="mr-2" type="primary" html-type="submit" :loading="loading">
+          <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">
             {{ '修改' }}
           </a-button>
           <a-button @click="goback">取消</a-button>

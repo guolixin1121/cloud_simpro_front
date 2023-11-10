@@ -94,10 +94,10 @@
           >
         </template>
         <a-form-item v-if="!isView" :wrapper-col="{ style: { paddingLeft: '100px' } }">
-          <a-button type="primary" html-type="submit" :loading="loading">
+          <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">
             {{ isAdd ? '上传' : '修改' }}
           </a-button>
-          <a-button @click="goback" class="ml-2">取消</a-button>
+          <a-button @click="goback">取消</a-button>
         </a-form-item>
       </a-form>
     </a-spin>
@@ -123,7 +123,7 @@ const mapApi = api.maps
 const formState = reactive<any>({
   id: '',
   name: '',
-  catalog: mapCatalog.id != '' ? { label: mapCatalog?.name, value: mapCatalog?.id} : null,
+  catalog: (mapCatalog.id && mapCatalog.id != '') ? { label: mapCatalog?.name, value: mapCatalog?.id} : null,
   xodr: null,
   desc: '',
   latestVersion: '',

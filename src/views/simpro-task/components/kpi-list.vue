@@ -8,7 +8,16 @@
         </div>
         <a-input-search class="my-2" placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
         <div class="scroll-box" style="height: calc(100% - 40px); overflow: auto" @scroll="(e: Event) => onScroll(e)">
-          <a-checkbox-group v-model:value="leftState.checkedKeys" :options="leftState.dataSource" @change="onChecked"> </a-checkbox-group>
+          <a-checkbox-group v-model:value="leftState.checkedKeys" @change="onChecked">
+            <a-checkbox class="ant-checkbox-group-item" v-for="item in leftState.dataSource" :key="item.key" :value="item.value">
+              <div class="flex items-center">
+                {{ item.label }}
+                <a-tooltip placement="topLeft" :title="item.desc" v-if="item.desc">
+                  <img src="../../../assets/images/tip.png" class="ml-1 cursor-pointer" style="height: 16px;"/>
+                </a-tooltip>
+              </div>
+            </a-checkbox>
+          </a-checkbox-group>
           <a-spin v-if="loading" style="width: 100%; padding-top: 20px"></a-spin>
         </div>
       </div>
@@ -32,13 +41,13 @@
                 </template>
                 <template v-if="item.threshold?.threshold_type == 1">
                   <div class="flex">
-                    <img src="../../../assets/images/icon_dayu.png" />
+                    <img src="../../../assets/images/icon_dayu.png" style="width: 16px"/>
                     <a-input-number size="small" v-model:value="item.threshold.threshold_min" />
                   </div>
                 </template>
                 <template v-if="item.threshold?.threshold_type == 2">
                   <div class="flex">
-                    <img src="../../../assets/images/icon_xiaoyu.png" />
+                    <img src="../../../assets/images/icon_xiaoyu.png" style="width: 16px"/>
                     <a-input-number size="small" v-model:value="item.threshold.threshold_max" />
                   </div>
                 </template>
@@ -48,12 +57,12 @@
                     <a-input-number size="small" v-model:value="item.threshold.threshold_value" />
                   </div>
                 </template>
-                <template v-if="item.threshold?.threshold_type == 4">
+                <!-- <template v-if="item.threshold?.threshold_type == 4">
                   <a-select size="small" v-model:value="item.threshold.threshold_value">
                     <a-select-option key="1" :value="1">是</a-select-option>
                     <a-select-option key="0" :value="0">否</a-select-option>
                   </a-select>
-                </template>
+                </template> -->
               </div>
               <div>{{ item.threshold?.threshold_unit }}</div>
               <svg-icon icon="close" class="text-gray-400 cursor-pointer" @click="onRemove(item)" />

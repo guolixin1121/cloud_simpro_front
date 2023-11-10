@@ -34,13 +34,13 @@
 
   <!-- 删除确认弹窗 -->
   <a-modal v-model:visible="showDeleteConfirm" :closable="false" :footer="null">
-    <div>
-      <svg-icon style="color: #faad14" icon="alert"></svg-icon>
-      <span class="ml-4" style="font-size: 16px">删除后，关联数据(场景、地图等)将会一起删除，是否删除？</span>
+    <div class="modal-content">
+      <!-- <svg-icon style="color: #faad14" icon="alert"></svg-icon> -->
+      <span style="font-size: 16px">删除后，关联数据(场景、地图等)将会一起删除，是否删除？</span>
     </div>
-    <div class="text-right mt-4 pt-4" style="border-top: 1px solid #f0f0f0">
-      <a-button @click="closeDeleteConfirm">否</a-button>
-      <a-button @click="onDeleteConfirm" type="primary" class="ml-2">是</a-button>
+    <div class="modal-buttons">
+      <a-button @click="closeDeleteConfirm" class="marginR-16">取消</a-button>
+      <a-button @click="onDeleteConfirm" type="primary">确定</a-button>
     </div>
   </a-modal>
 </template>
@@ -92,8 +92,16 @@ const searchQuery = ref()
 
 onMounted(async () => {
   // 恢复缓存的搜索、选中数据
-  searchValue.value = props.query.name
-  searchQuery.value = { ...props.query, name: searchValue.value }
+  const query = { ...props.query, name: searchValue.value } as any
+  if(searchValue.value) {
+    // 如果有了搜索条件，表示从二级页面返回的，则清空父节点对指定场景集的查询条件
+    delete query.baidu_id
+    delete query.id
+  } else {
+    // 直接访问或跳转到该页面，直接获取父节点的查询条件
+    searchValue.value = props.query.name
+  }
+  searchQuery.value = query
   selectedRowKeys.value = [selectedNode.value?.id]
 
   document.addEventListener('mouseup', onResizeEnd)

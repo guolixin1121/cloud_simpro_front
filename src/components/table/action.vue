@@ -3,7 +3,7 @@
     <template v-if="hasPermission(scope, key)">
       <!-- 删除列 -->
       <a-popconfirm v-if="key === '删除'"
-        :title="getDeleteTip(scope, key)" ok-text="是" cancel-text="否" @confirm="onHandler(scope, key)">
+        :title="getDeleteTip(scope, key)" @confirm="onHandler(scope, key)">
         <a class="text-blue mr-2">{{ key }}</a>
       </a-popconfirm>
       <!-- 其他列 -->

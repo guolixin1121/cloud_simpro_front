@@ -3,33 +3,35 @@
   <search-form v-else :items="stpaFormItems" @search="onStpaSearch"></search-form>
 
   <div class="main">
-    <div class="flex justify-between items-center">
-      <span class="title">SOTIF</span>
+    <!-- margin-top调整因tab引起的margin-top变大的问题 -->
+    <div class="flex justify-between items-center" style="margin-top: -12px">
+      <!-- <span class="title">SOTIF</span> -->
+
+      <a-tabs v-model:activeKey="activeKey" class="tabs">
+        <a-tab-pane :key="1" tab="SOTIF分析">
+        </a-tab-pane>
+        <a-tab-pane :key="2" tab="STPA分析">
+        </a-tab-pane>
+      </a-tabs> 
       <div>
-        <a-button type="primary" class="mr-2" @click="()=> gotoSotif()">进入SOTIF分析工具</a-button>
+        <a-button type="primary" @click="()=> gotoSotif()">进入SOTIF分析工具</a-button>
       </div>
     </div>
-    <a-tabs v-model:activeKey="activeKey" class="tabs">
-      <a-tab-pane :key="1" tab="SOTIF分析">
-      </a-tab-pane>
-      <a-tab-pane :key="2" tab="STPA分析">
-      </a-tab-pane>
-    </a-tabs> 
-    <Table v-if="activeKey == 1" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
+    <Table style="margin-top: 0" v-if="activeKey == 1" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'projectStatus'">
           <span>{{  getSotifStatus(record.projectStatus) }}</span>
         </template>
         <template v-if="column.dataIndex == 'vehicleNameList'">
           <a-tooltip :title="record.vehicleNameList.join('  ')">
-            <span v-for="label in record.vehicleNameList" :key="label" class="text-blue mr-2">
+            <span v-for="label in record.vehicleNameList" :key="label" class="label mr-2">
               {{ label}}
             </span>
           </a-tooltip>
         </template>
         <template v-if="column.dataIndex == 'collaborationList'">
           <a-tooltip :title="record.collaborationList.join('  ')">
-            <span v-for="label in record.collaborationList" :key="label" class="text-blue mr-2">
+            <span v-for="label in record.collaborationList" :key="label" class="label mr-2">
               {{ label}}
             </span>
           </a-tooltip>
@@ -37,22 +39,22 @@
       </template>
     </Table>
 
-    <Table v-else :api="currentApi.getStpaList" :query="stpaQuery" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
+    <Table style="margin-top: 0" v-else :api="currentApi.getStpaList" :query="stpaQuery" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'projectStatus'">
           <span>{{  getSotifStatus(record.projectStatus) }}</span>
         </template>
         <template v-if="column.dataIndex == 'vehicleNameList'">
           <a-tooltip :title="record.vehicleNameList.join('  ')">
-            <span v-for="label in record.vehicleNameList" :key="label" class="mr-2">
-              {{ label }}
+            <span v-for="label in record.vehicleNameList" :key="label" class="label mr-2">
+              {{ label}}
             </span>
           </a-tooltip>
         </template>
         <template v-if="column.dataIndex == 'collaborationList'">
           <a-tooltip :title="record.collaborationList.join('  ')">
-            <span v-for="label in record.collaborationList" :key="label" class="mr-2">
-              {{ label }}
+            <span v-for="label in record.collaborationList" :key="label" class="label mr-2">
+              {{ label}}
             </span>
           </a-tooltip>
         </template>

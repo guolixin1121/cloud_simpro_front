@@ -1,5 +1,5 @@
 <template>
-  <search-form class="multiline-form " :items="formItems" @search="onSearch"></search-form>
+  <search-form class="multiline-form " :items="formItems" @search="onSearch" @show-more="toggleMore"></search-form>
 
   <div class="main">
     <div class="flex justify-between items-center">
@@ -59,6 +59,7 @@ const query: Query = ref({})
 
 const isOwner = ref(false)
 const onChecked = () => (query.value = { ...query.value, owner: isOwner.value ? 1 : 0 })
+const toggleMore = () => table.value.calcateHeight()
 
 const formItems = ref<SearchFormItem[]>([
   {
@@ -94,7 +95,8 @@ const onSearch = (data: Query) => (query.value = { ...data, owner: isOwner.value
 const table = ref()
 const columns = [
   { dataIndex: 'checkbox', width: 50, validator: (data: RObject) => isNotRunning(data.status) },
-  { title: '任务ID', dataIndex: 'template_number', width: 130 },
+  { title: '任务ID', dataIndex: 'template_number', width: 150 },
+  { title: '运行时序', dataIndex: 'serial', width: 90 },
   { title: '仿真任务名称', dataIndex: 'name', width: 200, ellipsis: true },
   { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90 },
   { title: '主车模型', dataIndex: 'vehicle_detail', width: 150, ellipsis: true },
@@ -103,12 +105,12 @@ const columns = [
   { title: '运行状态', dataIndex: 'status', width: 100 },
   { title: '任务结果', dataIndex: 'is_passed', width: 80 },
   { title: '完成时间', dataIndex: 'finish_time', width: 150 },
-  { title: '所属用户', dataIndex: 'create_user', width: 100 },
+  { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 160,
+    width: 180,
     actions: {
       停止: {
         validator: (data: any) => isRunOrWait(data.status),

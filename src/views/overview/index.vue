@@ -13,8 +13,8 @@
     </div>
 
     <div class="flex justify-between" style="height: 309px;">
-      <chart :loading="executionsLoading" class="white-block" style="width: 65%; margin-right: 16px" title="近7日仿真任务执行情况" :option="executionsOptions"> </chart>
-      <chart class="white-block" style="width: 35%" title="近7日仿真任务统计" :option="statusOptions"> </chart>
+      <chart class="white-block" style="width: 33%" title="近7日仿真任务统计" :option="statusOptions"> </chart>
+      <chart :loading="executionsLoading" class="white-block" style="width: 67%; margin-left: 16px" title="近7日仿真任务执行情况" :option="executionsOptions"> </chart>
     </div>
 
     <div class="flex justify-between last-row" style="height: 309px;">
@@ -178,6 +178,7 @@ fetchScenes()
 .overview {
   height: 100%;
   overflow: auto;
+  padding: 16px;
 
   .chart {
     width: calc(50% - 8px);
@@ -191,5 +192,8 @@ fetchScenes()
       margin-bottom: 0px;
     }
   }
+}
+.ant-layout-content:has(.overview) {
+  padding: 0px !important;
 }
 </style>

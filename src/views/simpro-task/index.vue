@@ -1,5 +1,5 @@
 <template>
-  <search-form class="multiline-form " :items="formItems" @search="onSearch"></search-form>
+  <search-form class="multiline-form " :items="formItems" @search="onSearch" @show-more="toggleMore"></search-form>
 
   <div class="main">
     <div class="flex justify-between items-center">
@@ -35,6 +35,7 @@ const currentApi = api.task
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入仿真任务名称或主车模型' },
+  { label: '任务ID', key: 'number', type: 'input', placeholder: '请输入仿真任务ID' },
   { label: '任务来源', key: 'source', type: 'select', options: TaskSourceOptions, defaultValue: '' },
   { label: '运行状态', key: 'status', type: 'select', options: resultStatus, defaultValue: '' },
   { label: '仿真算法', key: 'algorithm', type: 'select', api: api.algorithm.getList, defaultValue: '' },
@@ -46,6 +47,7 @@ const onSearch = (data: Query) => (query.value = { ...data, owner: isOwner.value
 
 const isOwner = ref(false)
 const onChecked = () => (query.value = { ...query.value, owner: isOwner.value ? 1 : 0 })
+const toggleMore = () => tableRef.value.calcateHeight()
 
 /****** 表格区域 */
 const tableRef = ref()
@@ -61,7 +63,7 @@ const columns = [
   { title: '执行任务次数', dataIndex: 'batch', width: 100 },
   { title: '运行状态', dataIndex: 'status', width: 80 },
   { title: '创建时间', dataIndex: 'create_time', width: 150 },
-  { title: '所属用户', dataIndex: 'create_user', width: 100 },
+  { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',
