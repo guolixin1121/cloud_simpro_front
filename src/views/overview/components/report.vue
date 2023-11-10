@@ -26,7 +26,7 @@
           </tr>
           <tr>
             <td>CDD覆盖率</td>
-            <td class="unpass">不通过</td>
+            <td class="unpass">未通过</td>
           </tr>
         </tbody>
       </table>

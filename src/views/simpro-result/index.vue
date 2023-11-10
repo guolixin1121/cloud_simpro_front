@@ -21,9 +21,13 @@
         @select="onSelect"
       >
         <template #bodyCell="{ column, record }">
-          <template v-if="column.dataIndex == 'is_passed'">
-            <div class="flex items-center" :class="'task-passed--' + record.is_passed">
-              {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '未通过' }}
+          <template v-if="column.dataIndex == 'results_status'">
+            <div class="flex items-center" :class="'task-passed--' + record.results_status">
+              <template v-if="record.results_status == 1">通过</template>
+              <template v-else-if="record.results_status == 0">未通过</template>
+              <template v-else-if="record.results_status == 2">N/A</template>
+              <template v-else>--</template>
+              <!-- {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '未通过' }} -->
             </div>
           </template>
           <template v-if="column.dataIndex == 'status'">
@@ -103,7 +107,7 @@ const columns = [
   { title: '仿真算法', dataIndex: 'algorithm_detail', width: 150, ellipsis: true },
   { title: '评测指标', dataIndex: 'kpi_detail', width: 180, ellipsis: true },
   { title: '运行状态', dataIndex: 'status', width: 100 },
-  { title: '任务结果', dataIndex: 'is_passed', width: 80 },
+  { title: '任务结果', dataIndex: 'results_status', width: 80 },
   { title: '完成时间', dataIndex: 'finish_time', width: 150 },
   { title: '所属用户', dataIndex: 'create_user', width: 100 },
   {
@@ -156,10 +160,10 @@ const batchDelete = async () => {
 </script>
 
 <style lang="less" scope>
-.task-passed--true {
+.task-passed--1 {
   color: #00b54e;
 }
-.task-passed--false {
+.task-passed--0 {
   color: #fa2f30;
 }
 </style>
