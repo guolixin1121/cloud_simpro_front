@@ -84,7 +84,7 @@ class AxiosRequest {
       Object.assign(headers, {
         Authorization: `JWT ${getToken()}`,
         'content-type': type || 'application/json',
-        'X-Project-Id': store.user?.project_id || ''
+        'X-Project-Id': store.user?.user?.project_id || ''
       })
       let postData = data
       if(type === 'multipart/form-data') {
