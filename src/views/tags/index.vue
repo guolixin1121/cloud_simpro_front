@@ -30,6 +30,7 @@ const formItems = ref<SearchFormItem[]>([
     label: '标签类型',
     key: 'tag_type',
     type: 'select',
+    allowClear: false,
     api: () => currentApi.getType({ tree: 1 }),
     fieldNames: { label: 'value', value: 'key' },
     defaultValue: 2
