@@ -101,17 +101,14 @@ const size = pagination.value.size
 const indeterminate = ref(false)
 const checkedAll = ref(false) // 控制header的checkbox
 const isCheckedAll = ref(false) // 仅用于传给子组件
-                                // 不能和header的checkbox使用一个，会引起checkbox样式错误
+                                // 不能和header的checkbox使用一个，会引起checkbox样式和逻辑错误
 const selectedRows = ref<any[]>([])
-const onCheckAllChanged = () => {
+const onCheckAllChanged = (e: any) => {
   indeterminate.value = false
 
-  // 部分选中到全选中的trick
-  // isCheckedAll.value = !isCheckedAll.value
-  // nextTick(() => {
-    isCheckedAll.value = !isCheckedAll.value // e.target.checked
-    checkedAll.value = !isCheckedAll.value // e.target.checked
-  // })
+  // 部分选中到全选时，因isCheckedAll值不改变而无法触发onselect的trick
+  isCheckedAll.value = !isCheckedAll.value
+  nextTick(() => isCheckedAll.value = e.target.checked)
 }
 const onSelect = (isChecked: boolean, row: any) => {
   const existRow = selectedRows.value.find((item: any) => item.id == row.id)
@@ -127,8 +124,8 @@ const onSelect = (isChecked: boolean, row: any) => {
   indeterminate.value = checkedAll.value ? false : selectedRows.value.length > 0
   const selectedKeys = selectedRows.value.map((item: any) => item.id)
 
-  // 重新设置全选
-  if(selectedKeys.length === size ) {
+  // 重新设置全选（一页不够size时根据total判断）
+  if(selectedKeys.length === pagination.value.total || selectedKeys.length === size) {
     checkedAll.value = true
     isCheckedAll.value = true
     indeterminate.value = false

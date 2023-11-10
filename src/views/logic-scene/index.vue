@@ -17,28 +17,28 @@
     </Table>
 
     <a-modal v-model:visible="showRunConfirm" 
-      title="泛化"
+      :closable="false"
       :footer="null">
         <template v-if="runScene.config_result_count <= 10000">
           <div class="modal-content">
             <div>
-              <svg-icon style="color: #faad14" icon="alert"></svg-icon>
-              <span class="ml-4" style="font-size: 16px">是否要对此逻辑场景进行泛化？</span>
+              <svg-icon style="color: #faad14; width: 16px;" icon="alert"></svg-icon>
+              <span class="modal-title">是否要对此逻辑场景进行泛化？</span>
             </div>
-            <p class="ml-8 mt-2">泛化结果为{{ runScene.config_result_count }}个具体场景</p>
+            <p class="description">泛化结果为{{ runScene.config_result_count }}个具体场景</p>
           </div>
-          <div class="modal-buttons" style="border-top: 1px solid #f0f0f0">
-            <a-button @click="closeRunConfirm" class="marginR-16">否</a-button>
-            <a-button @click="runConfirm" :loading="isSubmitting" type="primary">是</a-button>
+          <div class="modal-buttons">
+            <a-button @click="closeRunConfirm" class="marginR-16">取消</a-button>
+            <a-button @click="runConfirm" :loading="isSubmitting" type="primary">确定</a-button>
           </div>
         </template>
       <template v-else>
         <div class="modal-content">
           <svg-icon style="color: #faad14" icon="alert"></svg-icon>
-          <span class="ml-4" style="font-size: 16px">泛化数量超过上限（10000）</span>
+          <span class="modal-title">泛化数量超过上限（10000）</span>
         </div>
-        <div class="modal-buttons" style="border-top: 1px solid #f0f0f0">
-            <a-button @click="closeRunConfirm">确定</a-button>
+        <div class="modal-buttons">
+            <a-button @click="closeRunConfirm">关闭</a-button>
           </div>
       </template>
     </a-modal>
@@ -91,7 +91,7 @@ const columns = [
   { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
   { title: '来源', dataIndex: 'source', width: 100, formatter: (source: number) => source == 0 ? '云平台' : 'SOTIF' },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
-  { title: '所属用户', dataIndex: 'create_user', width: 180 },
+  { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',

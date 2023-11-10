@@ -3,14 +3,15 @@
 
   <a-modal v-model:visible="showConfirm"
     :closable="false"
-    :footer="null">
+    :footer="null"
+    width="226px">
     <div class="modal-content">
-      <svg-icon style="color: #faad14" icon="alert"></svg-icon>
-      <span class="ml-4" style="font-size: 16px">是否{{label}}？</span>
+      <!-- <svg-icon style="color: #faad14" icon="alert"></svg-icon> -->
+      <span style="font-size: 16px">是否{{label}}？</span>
     </div>
-    <div class="modal-buttons" style="border-top: 1px solid #f0f0f0">
-      <a-button @click="showConfirm = false" class="marginR-16">否</a-button>
-      <a-button @click="onBatch" v-model:loading="loading" type="primary">是</a-button>
+    <div class="modal-buttons">
+      <a-button @click="showConfirm = false" class="marginR-16">取消</a-button>
+      <a-button @click="onBatch" v-model:loading="loading" type="primary">确定</a-button>
     </div>
   </a-modal>
 </template>

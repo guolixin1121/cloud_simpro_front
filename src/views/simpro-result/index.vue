@@ -105,7 +105,7 @@ const columns = [
   { title: '运行状态', dataIndex: 'status', width: 100 },
   { title: '任务结果', dataIndex: 'is_passed', width: 80 },
   { title: '完成时间', dataIndex: 'finish_time', width: 150 },
-  { title: '所属用户', dataIndex: 'create_user', width: 100 },
+  { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',

@@ -42,7 +42,7 @@ const columns = [
   { title: '传感器类型', dataIndex: 'type_name' },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },
-  { title: '所属用户', dataIndex: 'create_user', width: 130 },
+  { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',

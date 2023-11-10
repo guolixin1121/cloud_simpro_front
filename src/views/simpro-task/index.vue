@@ -63,7 +63,7 @@ const columns = [
   { title: '执行任务次数', dataIndex: 'batch', width: 100 },
   { title: '运行状态', dataIndex: 'status', width: 80 },
   { title: '创建时间', dataIndex: 'create_time', width: 150 },
-  { title: '所属用户', dataIndex: 'create_user', width: 100 },
+  { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',
