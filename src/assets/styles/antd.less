@@ -564,9 +564,16 @@ button.ant-btn-primary[disabled] {
 }
 
 .ant-select-tree {
-  .ant-select-tree-node-selected, .ant-select-tree-treenode-selected {
+  .ant-select-tree-treenode:hover {
+    background-color: var(--gray-globel-bg-color) !important;
+  }
+  .ant-select-tree-treenode-selected {
     background-color: var(--active-color) !important;
     color: var(--primary-color);
+  }
+  .ant-select-tree-node-selected,
+  .ant-select-tree-node-content-wrapper:hover {
+    background-color: transparent !important;
   }
 }
 
