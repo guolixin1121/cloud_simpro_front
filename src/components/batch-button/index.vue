@@ -9,7 +9,7 @@
       <!-- <svg-icon style="color: #faad14" icon="alert"></svg-icon> -->
       <span style="font-size: 16px">是否{{label}}？</span>
     </div>
-    <div class="modal-buttons">
+    <div class="modal-buttons" style="border: 0px; padding-top: 0px;">
       <a-button @click="showConfirm = false" class="marginR-16">取消</a-button>
       <a-button @click="onBatch" v-model:loading="loading" type="primary">确定</a-button>
     </div>
