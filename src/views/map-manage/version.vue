@@ -9,7 +9,7 @@
       <Table ref="table" :api="mapsApi.getMapVersion" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }">
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'mapType'">
-            <a-tooltip :title="type[record.mapType]">
+            <a-tooltip placement="topLeft" :title="type[record.mapType]">
               {{ type[record.mapType] }}
             </a-tooltip>
           </template>

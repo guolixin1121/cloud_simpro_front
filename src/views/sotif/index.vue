@@ -23,14 +23,14 @@
           <span>{{  getSotifStatus(record.projectStatus) }}</span>
         </template>
         <template v-if="column.dataIndex == 'vehicleNameList'">
-          <a-tooltip :title="record.vehicleNameList.join('  ')">
+          <a-tooltip placement="topLeft" :title="record.vehicleNameList.join('  ')">
             <span v-for="label in record.vehicleNameList" :key="label" class="label mr-2">
               {{ label}}
             </span>
           </a-tooltip>
         </template>
         <template v-if="column.dataIndex == 'collaborationList'">
-          <a-tooltip :title="record.collaborationList.join('  ')">
+          <a-tooltip placement="topLeft" :title="record.collaborationList.join('  ')">
             <span v-for="label in record.collaborationList" :key="label" class="label mr-2">
               {{ label}}
             </span>
@@ -45,14 +45,14 @@
           <span>{{  getSotifStatus(record.projectStatus) }}</span>
         </template>
         <template v-if="column.dataIndex == 'vehicleNameList'">
-          <a-tooltip :title="record.vehicleNameList.join('  ')">
+          <a-tooltip placement="topLeft" :title="record.vehicleNameList.join('  ')">
             <span v-for="label in record.vehicleNameList" :key="label" class="label mr-2">
               {{ label}}
             </span>
           </a-tooltip>
         </template>
         <template v-if="column.dataIndex == 'collaborationList'">
-          <a-tooltip :title="record.collaborationList.join('  ')">
+          <a-tooltip placement="topLeft" :title="record.collaborationList.join('  ')">
             <span v-for="label in record.collaborationList" :key="label" class="label mr-2">
               {{ label}}
             </span>
