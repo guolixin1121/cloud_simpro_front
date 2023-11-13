@@ -179,7 +179,7 @@ const calcateHeight = () => {
   height += titleHeight
 
   const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
-  let tabHeight = mainContent.getElementsByClassName('tabs')?.[0]?.clientHeight
+  let tabHeight = mainContent?.getElementsByClassName('tabs')?.[0]?.clientHeight
   tabHeight = isNaN(tabHeight) ? 0 : 14
 
   // 表格内容区域
