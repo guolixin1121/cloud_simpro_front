@@ -21,7 +21,7 @@
           <template v-if="formState.threshold?.threshold_type == '0'">
               <div class="flex">
                   <span>{{ formState.threshold.threshold_min }}</span>
-                  <img src="../../assets/images/icon_to.png"/>
+                  <img src="../../assets/images/icon_to.png" style="width: 16px"/>
                   <span>{{ formState.threshold.threshold_max }}</span>
               </div>
           </template>
@@ -31,9 +31,9 @@
                   <span>{{ formState.threshold.threshold_min }}</span>
               </div>
           </template>
-          <template v-if="formState.threshold?.threshold_type == '2'">
+          <template v-if="formState.threshold?.threshold_type == '2'" >
               <div class="flex">
-                <img src="../../assets/images/icon_xiaoyu.png" />
+                <img src="../../assets/images/icon_xiaoyu.png" style="width: 16px"/>
                 <span>{{ formState.threshold.threshold_max }}</span>
               </div>
           </template>
@@ -43,9 +43,9 @@
                   <span>{{ formState.threshold.threshold_value }}</span>
               </div>
           </template>
-          <template v-if="formState.threshold?.threshold_type == '4'">
+          <!-- <template v-if="formState.threshold?.threshold_type == '4'">
               {{ formState.threshold.threshold_value == '0' ? '否' : '是'}}
-          </template>
+          </template> -->
             <span class="ml-2">{{ formState.threshold.threshold_unit }}</span>
           </div>
         </a-form-item>
@@ -56,10 +56,10 @@
           {{ formState.desc }}
         </a-form-item>
         <a-form-item label="创建时间">
-          {{ formState.create_date }}
+          {{ formatDate(formState.create_date) }}
         </a-form-item>
         <a-form-item label="修改时间">
-          {{ formState.update_time }}
+          {{ formatDate(formState.update_time) }}
         </a-form-item>
         <a-form-item label="所属用户">
           {{ formState.create_user }}
@@ -70,6 +70,7 @@
 </template>
 
 <script setup lang="ts">
+import { formatDate } from '@/utils/tools'
 // const formItems = ref<FormItem[]>([])
 const loading = ref(false)
 const formState = reactive({

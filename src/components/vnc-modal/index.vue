@@ -1,5 +1,6 @@
 <template>
-    <a-modal v-model:visible="visible" 
+    <a-modal v-model:visible="visible"
+     title="在线仿真"
      @cancel="visible=false" @ok="onConfirm">
         <div class="modal-content">
             <div class="flex mb-2">

@@ -68,7 +68,7 @@ const add = async () => {
   loading.value = true
 
   const data = {...formState}
-
+  debugger
   try {
     isAdd
       ? await currentApi.add( data)
@@ -97,7 +97,7 @@ const getEditData = async () => {
     const data = res.results?.[0]
     formState.name = data.name
     formState.category = data.category
-    formState.desc = data.desc
+    formState.desc = data.desc || ''
     formState.py_url = data.py_url
   }
 }

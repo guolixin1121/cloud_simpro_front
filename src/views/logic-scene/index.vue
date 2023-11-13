@@ -16,12 +16,12 @@
       @select="onSelect">
     </Table>
 
-    <a-modal v-model:visible="showRunConfirm" 
-      :closable="false"
+    <a-modal v-model:visible="showRunConfirm"
+      title="泛化"
       :footer="null">
         <template v-if="runScene.config_result_count <= 10000">
           <div class="modal-content">
-            <div>
+            <div class="flex items-center">
               <svg-icon style="color: #faad14; width: 16px;" icon="alert"></svg-icon>
               <span class="modal-title">是否要对此逻辑场景进行泛化？</span>
             </div>
