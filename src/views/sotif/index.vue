@@ -23,15 +23,15 @@
           <span>{{  getSotifStatus(record.projectStatus) }}</span>
         </template>
         <template v-if="column.dataIndex == 'vehicleNameList'">
-          <a-tooltip placement="topLeft" :title="record.vehicleNameList.join('  ')">
-            <span v-for="label in record.vehicleNameList" :key="label" class="label mr-2">
+          <a-tooltip placement="topLeft" :title="record.vehicleNameList.join('&nbsp;&nbsp;')">
+            <span v-for="label in record.vehicleNameList" :key="label" class="label mr-4">
               {{ label}}
             </span>
           </a-tooltip>
         </template>
         <template v-if="column.dataIndex == 'collaborationList'">
-          <a-tooltip placement="topLeft" :title="record.collaborationList.join('  ')">
-            <span v-for="label in record.collaborationList" :key="label" class="label mr-2">
+          <a-tooltip placement="topLeft" :title="record.collaborationList.join('&nbsp;&nbsp;')">
+            <span v-for="label in record.collaborationList" :key="label" class="label mr-4">
               {{ label}}
             </span>
           </a-tooltip>
@@ -45,15 +45,15 @@
           <span>{{  getSotifStatus(record.projectStatus) }}</span>
         </template>
         <template v-if="column.dataIndex == 'vehicleNameList'">
-          <a-tooltip placement="topLeft" :title="record.vehicleNameList.join('  ')">
-            <span v-for="label in record.vehicleNameList" :key="label" class="label mr-2">
+          <a-tooltip placement="topLeft" :title="record.vehicleNameList.join('&nbsp;&nbsp;')">
+            <span v-for="label in record.vehicleNameList" :key="label" class="label mr-4">
               {{ label}}
             </span>
           </a-tooltip>
         </template>
         <template v-if="column.dataIndex == 'collaborationList'">
-          <a-tooltip placement="topLeft" :title="record.collaborationList.join('  ')">
-            <span v-for="label in record.collaborationList" :key="label" class="label mr-2">
+          <a-tooltip placement="topLeft" :title="record.collaborationList.join('&nbsp;&nbsp;')">
+            <span v-for="label in record.collaborationList" :key="label" class="label mr-4">
               {{ label}}
             </span>
           </a-tooltip>

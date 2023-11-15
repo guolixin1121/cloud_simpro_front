@@ -49,7 +49,7 @@ const columns = [
   { title: '指标类型', dataIndex: 'category_name', ellipsis: true,width: 180 },
   { title: '创建时间', dataIndex: 'create_date', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },
-  { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
+  { title: '所属用户', dataIndex: 'create_user', width: 200, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',
