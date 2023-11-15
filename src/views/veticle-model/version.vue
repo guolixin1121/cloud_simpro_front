@@ -30,8 +30,10 @@
       title="创建新版本"
       :footer="null">
         <div class="modal-content">
-          <svg-icon style="color: #faad14" icon="alert"></svg-icon>
-          <span class="ml-4" style="font-size: 16px">是否创建新版本？</span>
+          <div class="flex items-center">
+            <svg-icon style="color: #faad14" icon="alert"></svg-icon>
+            <span class="modal-title">是否创建新版本？</span>
+          </div>
         </div>
         <div class="modal-buttons" style="border-top: 1px solid #f0f0f0">
           <a-button @click="showCreateModel = false" class="marginR-16">取消</a-button>

@@ -1,7 +1,11 @@
 <template>
   <a-spin :spinning="loading">
     <vxe-table stripe ref="table" :border="isTree ? 'none' : 'full'" :show-header="isTree ? false : true" :row-config="{ isHover: true, keyField: 'id' }" :tree-config="{ transform: true, reserve: true, rowField: 'id', lazy: lazy, loadMethod: loadMethod }" :data="tableData" @toggle-tree-expand="onTreeExpand" @cell-click="onCellClick">
-      <vxe-column v-for="column in columns" :key="column.dataIndex" :field="column.dataIndex" :title="column.title" :width="column.width" :tree-node="column.dataIndex === treeNode">
+      <vxe-column v-for="column in columns" 
+        :key="column.dataIndex" :field="column.dataIndex" 
+        :tree-node="column.dataIndex === treeNode"
+        :show-overflow="column.ellipsis"
+        v-bind="{...column}">
         <template #default="{ row }">
           <template v-if="column.dataIndex == 'operation'">
             <template v-for="action in Object.keys(column.actions || {})" :key="action">
@@ -18,7 +22,10 @@
           <template v-else>
             <slot :column="column" :row="row">
               <svg-icon icon="folder-light" class="mr-1" v-if="!row.isLeaf && column.dataIndex == treeNode"></svg-icon>
-              <span>{{ row[column.dataIndex] }}</span>
+              <a-tooltip placement="topLeft" :title="row[column.dataIndex]" v-if="column.ellipsis">
+                <span>{{ row[column.dataIndex] }}</span>
+              </a-tooltip>
+              <span v-else>{{ row[column.dataIndex] }}</span>
             </slot>
           </template>
         </template>

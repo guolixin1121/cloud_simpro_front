@@ -12,6 +12,9 @@
             >查看报告</a
           >
         </template>
+        <template v-if="column.dataIndex == 'result'">
+          {{ getSimproSceneResults(record.status) }}
+        </template>
         <template v-if="column.dataIndex == 'status'">
           <div class="flex items-center">
             <span>{{ record.obs_report ? '正常' : '异常'}}</span>
@@ -32,6 +35,7 @@
 <script setup lang="ts">
 import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
+import { getSimproSceneResults } from '@/utils/dict'
 const vncModal = ref()
 const task = useRoute().params.id
 const getScenes = (args: any) => api.result.getScenes({ ...args, task })
@@ -40,7 +44,7 @@ const columns = [
   { dataIndex: 'scene_id', title: '场景ID', width: 150 },
   { dataIndex: 'adsName', title: '场景名称' },
   { dataIndex: 'labels_detail', title: '场景标签', apiField: 'display_name' },
-  // { dataIndex: 'batch', title: '仿真轮次', width: 100 },
+  { dataIndex: 'result', title: '结果', width: 100 },
   { dataIndex: 'status', title: '状态', width: 100 },
   {
     dataIndex: 'actions',

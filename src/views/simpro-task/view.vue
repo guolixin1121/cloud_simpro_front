@@ -74,7 +74,8 @@
                   <span>{{ record.threshold_value }}</span>
                 </template>
                 <template v-else-if="record.threshold_type == 4">
-                  {{ record.threshold_value == '0' ? '否' : '是'}}
+                  {{ '' }}
+                  <!-- {{ record.threshold_value == '0' ? '否' : '是'}} -->
                 </template>
               </template>
             </template>

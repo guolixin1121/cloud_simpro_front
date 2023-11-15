@@ -81,6 +81,15 @@ export const resultStatus = [
 
 export const getResultStatus = (value: number | string) => resultStatus.find(v => v.value === value)?.label
 
+export const simproSceneResults = [
+  { label: '未通过', value: 0 },
+  { label: '通过', value: 1 },
+  { label: '跳过', value: 2 },
+  { label: '未激活', value: 3 }
+]
+
+export const getSimproSceneResults = (value: number | string) => simproSceneResults.find(v => v.value == value)?.label
+
 export const SotifStatusOptions = [
   { label: '全部', value: '' },
   { label: '暂停', value: '1' },

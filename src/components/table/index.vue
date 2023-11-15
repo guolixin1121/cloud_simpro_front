@@ -135,13 +135,13 @@ const onSelect = (isChecked: boolean, row: any) => {
 const clearCheckbox = () => {
   indeterminate.value = false
   checkedAll.value = false
-  isCheckedAll.value = false
-
-  // column组件中checkbox会被缓存，通过这个trick强迫checkbox刷新状态
-  // isCheckedAll.value = !isCheckedAll.value
-  // nextTick(() => {
-    // isCheckedAll.value = false
-  // })
+  // isCheckedAll.value = false
+  // 1. 批量删除时需要清空已有选项
+  // 2. column组件中checkbox会被缓存，通过这个trick强迫checkbox刷新状态
+  isCheckedAll.value = !isCheckedAll.value
+  nextTick(() => {
+    isCheckedAll.value = false
+  })
 }
 
 // 页面切换 event handler
@@ -179,7 +179,7 @@ const calcateHeight = () => {
   height += titleHeight
 
   const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
-  let tabHeight = mainContent.getElementsByClassName('tabs')?.[0]?.clientHeight
+  let tabHeight = mainContent?.getElementsByClassName('tabs')?.[0]?.clientHeight
   tabHeight = isNaN(tabHeight) ? 0 : 14
 
   // 表格内容区域

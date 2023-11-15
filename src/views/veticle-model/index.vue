@@ -52,8 +52,7 @@
     </Table>
     <a-modal
       v-model:visible="importVisible"
-      class="importOutModel-containter"
-      :closable="false"
+      title="导入外部模型"
       :footer="null"
       @cancel="cancelModal"
     >
@@ -67,13 +66,15 @@
         <a-button @click="confirmModal" :loading="loading" type="primary">确定</a-button>
       </div>
     </a-modal>
-    <a-modal v-model:visible="visible" :closable="false" :footer="null" :mask-closable="false">
+    <a-modal v-model:visible="visible" 
+      title="复制模型"
+      :footer="null" :mask-closable="false">
       <div class="modal-content">
         模型名称：
         <a-input
           v-model:value="copyVal.name"
           :maxlength="100"
-          :style="{ width: '176px' }"
+          :style="{ width: '70%' }"
           placeholder="模型名称"
         />
           <!-- onkeyup="value=value.replace(/[^\w\u4E00-\u9FA5,]/g, '').replaceAll('_','')" -->
@@ -145,7 +146,7 @@ const columns = [
   { title: '是否共享', dataIndex: 'is_share', width: 90, ellipsis: true },
   { title: '创建时间', dataIndex: 'create_date', width: 180 },
   // { title: '修改时间', dataIndex: 'update_date', width: 180, ellipsis: true },
-  { title: '所属用户', dataIndex: 'username', width: 150, ellipsis: true },
+  { title: '所属用户', dataIndex: 'username', width: 200, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',

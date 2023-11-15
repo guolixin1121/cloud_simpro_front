@@ -22,8 +22,8 @@
   </template>
   <!-- 值为数组： 默认获取name值，可通过label指定字段 -->
   <template v-else-if="Array.isArray(dataValue)">
-    <a-tooltip placement="topLeft" :title="dataValue.map((d: any) => d[column.apiField]|| d.name).join('  ')">
-      <span v-for="label in dataValue" :key="label.id" class="label mr-2">
+    <a-tooltip placement="topLeft" :title="dataValue.map((d: any) => d[column.apiField]|| d.name).join('&nbsp;&nbsp;')">
+      <span v-for="label in dataValue" :key="label.id" class="label mr-4">
         {{ label[column.apiField] || label.name }}
       </span>
     </a-tooltip>

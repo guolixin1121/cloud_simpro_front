@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100%">
     <div class="name">{{ title }}</div>
     <div :style="title ? 'height:calc(100% - 25px)' : 'height:100%'" style="width: 100%" ref="chartElement"></div>
   </div>

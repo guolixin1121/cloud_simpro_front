@@ -23,15 +23,15 @@
           <span>{{  getSotifStatus(record.projectStatus) }}</span>
         </template>
         <template v-if="column.dataIndex == 'vehicleNameList'">
-          <a-tooltip :title="record.vehicleNameList.join('  ')">
-            <span v-for="label in record.vehicleNameList" :key="label" class="label mr-2">
+          <a-tooltip placement="topLeft" :title="record.vehicleNameList.join('&nbsp;&nbsp;')">
+            <span v-for="label in record.vehicleNameList" :key="label" class="label mr-4">
               {{ label}}
             </span>
           </a-tooltip>
         </template>
         <template v-if="column.dataIndex == 'collaborationList'">
-          <a-tooltip :title="record.collaborationList.join('  ')">
-            <span v-for="label in record.collaborationList" :key="label" class="label mr-2">
+          <a-tooltip placement="topLeft" :title="record.collaborationList.join('&nbsp;&nbsp;')">
+            <span v-for="label in record.collaborationList" :key="label" class="label mr-4">
               {{ label}}
             </span>
           </a-tooltip>
@@ -45,15 +45,15 @@
           <span>{{  getSotifStatus(record.projectStatus) }}</span>
         </template>
         <template v-if="column.dataIndex == 'vehicleNameList'">
-          <a-tooltip :title="record.vehicleNameList.join('  ')">
-            <span v-for="label in record.vehicleNameList" :key="label" class="label mr-2">
+          <a-tooltip placement="topLeft" :title="record.vehicleNameList.join('&nbsp;&nbsp;')">
+            <span v-for="label in record.vehicleNameList" :key="label" class="label mr-4">
               {{ label}}
             </span>
           </a-tooltip>
         </template>
         <template v-if="column.dataIndex == 'collaborationList'">
-          <a-tooltip :title="record.collaborationList.join('  ')">
-            <span v-for="label in record.collaborationList" :key="label" class="label mr-2">
+          <a-tooltip placement="topLeft" :title="record.collaborationList.join('&nbsp;&nbsp;')">
+            <span v-for="label in record.collaborationList" :key="label" class="label mr-4">
               {{ label}}
             </span>
           </a-tooltip>
@@ -118,8 +118,8 @@ const columns = [
   { title: '项目名称', dataIndex: 'projectName', width: 200, ellipsis: true },
   { title: '负责人', dataIndex: 'manager', width: 200 },
   { title: '项目状态', dataIndex: 'projectStatus', width: 100},
-  { title: '参与成员', dataIndex: 'collaborationList', ellipsis: true },
-  { title: '分析项(整车级功能)', dataIndex: 'vehicleNameList', ellipsis: true },
+  { title: '参与成员', dataIndex: 'collaborationList',  width: 200, ellipsis: true },
+  { title: '分析项(整车级功能)', dataIndex: 'vehicleNameList',  width: 200, ellipsis: true },
   { title: '创建时间', dataIndex: 'createTime', width: 150 },
   {
     title: '操作',
