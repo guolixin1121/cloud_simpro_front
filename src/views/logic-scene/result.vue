@@ -73,52 +73,106 @@ const columns = [
         const schema = distribution.header
         const data = distribution.data
 
-        chartOptions.value = {
-          xAxis: { show: false },
-          parallelAxis: schema.map(((item: any, index: number) => ({
-            dim: index,
-            name: item
-          }))),
-          parallel: {
-              bottom: 50,
-              top: 10,
-              axisExpandable: false,
-              axisExpandCenter: 5,
-              axisExpandCount: 10,
-              axisExpandWidth: 80,
-              parallelAxisDefault: {
-                type: 'value',
-                nameLocation: 'start',
-                nameTextStyle: {
-                  color: '#1e2229',
-                  fontSize: 12
-                },
-                axisLine: {
-                  lineStyle: {
-                    color: '#DADCE0'
-                  }
-                },
-                axisTick: {
-                  lineStyle: {
-                    color: '#DADCE0'
-                  }
-                },
-                splitLine: {
-                  show: false
-                },
-                axisLabel: {
-                  color: '#1e2229'
-                }
+        // 只有一个维度的数据时，平行坐标系无法展示数据，该用线性图展示单个点
+        if(schema.length == 1) {
+          chartOptions.value = {
+            legend: {
+              show: false
+            },
+            grid: {
+              left: '15%',
+              top: 10
+            },
+            tooltip: {
+              show: false,
+            },
+            xAxis: {
+              type: 'category',
+              data: [...schema, ''],
+              boundaryGap: false,
+              axisLine: {
+                show: false
               }
-          },
-          series: [
-            {
-              type: 'parallel',
-              data,
-              lineStyle: { opacity: 0.7 }
-            }
-          ]
-        }
+            },
+            yAxis: {
+              type: 'value',
+              splitNumber: 3,
+              axisLine: {
+                show: true,
+                lineStyle: {
+                  color: '#DADCE0'
+                }
+              },
+              axisTick: {
+                show: true,
+                inside: true
+              },
+              splitLine: {
+                show: false,
+              },
+              axisLabel: {
+                inside: true,
+                color: '#1e2229'
+              }
+            },
+            series: [
+              {
+                type: 'line',
+                symbol: 'emptyCircle',
+                symbolSize: 6,
+                name: schema[0],
+                data: data[0],
+              }
+            ]
+          }
+        } else {
+          chartOptions.value = {
+            xAxis: { show: false },
+            parallelAxis: schema.map(((item: any, index: number) => ({
+              dim: index,
+              name: item
+            }))),
+            parallel: {
+                bottom: 50,
+                top: 10,
+                axisExpandable: false,
+                axisExpandCenter: 5,
+                axisExpandCount: 10,
+                axisExpandWidth: 80,
+                parallelAxisDefault: {
+                  type: 'value',
+                  nameLocation: 'start',
+                  nameTextStyle: {
+                    color: '#1e2229',
+                    fontSize: 12
+                  },
+                  axisLine: {
+                    lineStyle: {
+                      color: '#DADCE0'
+                    }
+                  },
+                  axisTick: {
+                    lineStyle: {
+                      color: '#DADCE0'
+                    }
+                  },
+                  splitLine: {
+                    show: false
+                  },
+                  axisLabel: {
+                    color: '#1e2229'
+                  }
+                }
+            },
+            series: [
+              {
+                type: 'parallel',
+                data,
+                lineStyle: { opacity: 0.7 }
+              }
+            ]
+          }
+      }
       }
     }
   }
