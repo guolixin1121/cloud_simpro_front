@@ -131,6 +131,8 @@ const onTreeSelect = async (sceneset: any) => {
       scenesetLoading.value = true
       const res = await api.scenesets.get(sceneset?.id)
       selectedSceneset.value = res
+      // 兼容get接口isLeaf返回为空的情况
+      selectedSceneset.value.isLeaf = sceneset?.isLeaf
     } finally {
       scenesetLoading.value = false
     }

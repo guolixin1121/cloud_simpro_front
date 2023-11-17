@@ -37,11 +37,11 @@ const router = useRouter()
 const columns = [
   { dataIndex: 'checkbox', width: 60 }, 
   { title: '算法ID', dataIndex: 'id', width: 120 },
-  { title: '算法名称', dataIndex: 'name', width: 200, ellipsis: true },
-  { title: '控制在环', dataIndex: 'is_in_ring', width: 100, formatter: (value: string) => value ? '是' : '否' },
-  { title: '感知在环', dataIndex: 'perception', width: 100, formatter: (value: string) => value ? '是' : '否' },
-  { title: '描述', dataIndex: 'desc', ellipsis: true },
-  { title: '创建时间', dataIndex: 'create_time', width: 180 },
+  { title: '算法名称', dataIndex: 'name', width: 250, ellipsis: true },
+  { title: '控制在环', dataIndex: 'is_in_ring', width: 120, formatter: (value: string) => value ? '是' : '否' },
+  { title: '感知在环', dataIndex: 'perception', width: 120, formatter: (value: string) => value ? '是' : '否' },
+  { title: '描述', dataIndex: 'desc', width: 250, ellipsis: true },
+  { title: '创建时间', dataIndex: 'create_time', width: 200 },
   { title: '创建者', dataIndex: 'create_user', width: 150 },
   {
     title: '操作',
