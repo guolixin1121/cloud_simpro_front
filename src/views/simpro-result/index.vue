@@ -17,7 +17,7 @@
         :api="currentApi.getList"
         :query="query"
         :columns="columns"
-        :scroll="{ x: 1900, y: 'auto' }"
+        :scroll="{ x: 2000, y: 'auto' }"
         @select="onSelect"
       >
         <template #bodyCell="{ column, record }">
@@ -109,7 +109,7 @@ const columns = [
   { title: '运行状态', dataIndex: 'status', width: 100 },
   { title: '任务结果', dataIndex: 'results_status', width: 80 },
   { title: '完成时间', dataIndex: 'finish_time', width: 150 },
-  { title: '所属用户', dataIndex: 'create_user', width: 100 },
+  { title: '所属用户', dataIndex: 'create_user', width: 120, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',

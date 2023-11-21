@@ -185,7 +185,7 @@ const calcateHeight = () => {
   // 表格内容区域
   const tableScrollBody = document.getElementsByClassName('ant-table-body')?.[0] as HTMLElement
   if (tableScrollBody) {
-    tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + tabHeight + 290) + 'px)'
+    tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + tabHeight + 282) + 'px)'
   }
 
   if (mainContent) {

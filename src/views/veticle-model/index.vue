@@ -146,7 +146,7 @@ const columns = [
   { title: '是否共享', dataIndex: 'is_share', width: 90, ellipsis: true },
   { title: '创建时间', dataIndex: 'create_date', width: 180 },
   // { title: '修改时间', dataIndex: 'update_date', width: 180, ellipsis: true },
-  { title: '所属用户', dataIndex: 'username', width: 120 },
+  { title: '所属用户', dataIndex: 'username', width: 150, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',

@@ -103,8 +103,8 @@ const columns = [
   { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
   { title: '创建时间', dataIndex: 'createTime', width: 180 },
   { title: '修改时间', dataIndex: 'updateTime', width: 180 },
-  { title: '创建者', dataIndex: 'createUser', width: 150 },
-  { title: '修改者', dataIndex: 'updateUser', width: 150 },
+  { title: '创建者', dataIndex: 'createUser', width: 150, ellipsis: true },
+  { title: '修改者', dataIndex: 'updateUser', width: 150, ellipsis: true  },
   {
     title: '操作',
     dataIndex: 'actions',

@@ -6,7 +6,7 @@
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/tags/edit/0?tag_type=' + query.tag_type)">创建标签</a-button>
     </div>
 
-    <div style="height: calc(100% - 50px)" class="mt-4 overflow-auto">
+    <div class="mt-4 overflow-auto">
       <tree-table :query="query" :columns="columns" :api="currentApi.getList" :tree-node="'display_name'">
         <template #default="{ column, row }">
           <template v-if="column.dataIndex == 'isTag'">
@@ -49,7 +49,7 @@ const columns = [
   { title: '标签英文名称', dataIndex: 'name' },
   { title: '标签类别', dataIndex: 'isTag', width: 100 },
   { title: '创建时间', dataIndex: 'create_time', width: 200 },
-  { title: '所属用户', dataIndex: 'create_user', width: 150 },
+  { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'operation',

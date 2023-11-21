@@ -5,6 +5,7 @@
       <batch-button :disabled="!selectedRows.length" v-if="user.hasPermission('delete')" :api="batchDelete"></batch-button>
       <a-button type="primary" :disabled="selectedRows.length > 0"  v-if="user.hasPermission('add')" @click="router.push('/algorithm/edit/0')">创建算法</a-button>
     </page-title>
+
     <Table 
       ref="tableRef"
       :api="algorithmApi.getList" 
@@ -42,7 +43,7 @@ const columns = [
   { title: '感知在环', dataIndex: 'perception', width: 120, formatter: (value: string) => value ? '是' : '否' },
   { title: '描述', dataIndex: 'desc', width: 250, ellipsis: true },
   { title: '创建时间', dataIndex: 'create_time', width: 200 },
-  { title: '创建者', dataIndex: 'create_user', width: 150 },
+  { title: '创建者', dataIndex: 'create_user', width: 150, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',
