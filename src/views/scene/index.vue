@@ -19,11 +19,12 @@
           <!-- <div class="title-item"><span class="label">路径</span>{{ selectedSceneset?.path }}</div> -->
           <div class="title-item">
             <span class="label">标签</span>
-            <ul style="flex: 1">
+            <ul style="flex: 1" v-if="selectedSceneset?.labels_detail.length > 0">
               <li class="inline-block mr-4" v-for="item in selectedSceneset?.labels_detail" :key="item.name">
                 {{ item.display_name }}
               </li>
             </ul>
+            <span v-else>--</span>
           </div>
         </div>
       </a-spin>

@@ -4,7 +4,7 @@
 
   <div class="main">
     <!-- margin-top调整因tab引起的margin-top变大的问题 -->
-    <div class="flex justify-between items-center" style="margin-top: -12px">
+    <div class="flex justify-between">
       <!-- <span class="title">SOTIF</span> -->
 
       <a-tabs v-model:activeKey="activeKey" class="tabs">
@@ -17,7 +17,7 @@
         <a-button type="primary" @click="()=> gotoSotif()">进入SOTIF分析工具</a-button>
       </div>
     </div>
-    <Table style="margin-top: 0" v-if="activeKey == 1" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
+    <Table v-if="activeKey == 1" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'projectStatus'">
           <span>{{  getSotifStatus(record.projectStatus) }}</span>
@@ -39,7 +39,7 @@
       </template>
     </Table>
 
-    <Table style="margin-top: 0" v-else :api="currentApi.getStpaList" :query="stpaQuery" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
+    <Table v-else :api="currentApi.getStpaList" :query="stpaQuery" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'projectStatus'">
           <span>{{  getSotifStatus(record.projectStatus) }}</span>
@@ -145,3 +145,15 @@ const gotoSotif = (path: string = '') => {
   }
 }
 </script>
+
+<style lang="less">
+.tabs.ant-tabs {
+  .ant-tabs-nav {
+    margin: 0px;
+  }
+
+  .ant-tabs-tab {
+    padding-top: 0px;
+  }
+}
+</style>

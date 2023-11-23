@@ -31,7 +31,8 @@
       </template>
     </Table>
   </div>
-  <a-modal v-model:visible="showModal" title="泛化结果分布" :footer="null" width="50%">
+  <a-modal v-model:visible="showModal" title="泛化结果分布" :footer="null" width="50%"
+    :destroyOnClose="true">
     <div class="modal-content">
         <chart style="height: 500px" :option="chartOptions"> </chart>
     </div>
@@ -67,6 +68,7 @@ const columns = [
     actions: {
       '泛化结果分布': (record:any) => {
         showModal.value = true
+        chartOptions.value = []
         const distribution = record.result_params_distribution?.[0]
         if(!distribution) return
 
@@ -184,9 +186,9 @@ const sotifColumns = [
   { title: '结束时间', dataIndex: 'finish_time' }
 ]
 
-const refreshTable = () => {
+const refreshTable = (option?: Object) => {
   interval = setInterval(() => table.value?.refresh({slient: true}), 5000)
-  table.value.refresh()
+  table.value.refresh(option)
 }
 
 const table = ref()
@@ -195,7 +197,8 @@ onMounted(refreshTable)
 onUnmounted(() => clearInterval(interval))
 
 watch(activeKey, () => {
-  refreshTable()
+  // 从第一页加载数据
+  refreshTable({page: 1})
   clearInterval(interval)
 })
 

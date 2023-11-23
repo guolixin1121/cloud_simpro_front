@@ -227,7 +227,7 @@ onMounted(() => {
 
   const tableScrollBody = document.getElementsByClassName('vxe-table--body-wrapper')?.[0] as HTMLElement
   if (tableScrollBody) {
-    tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + 282) + 'px)'
+    tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + 280) + 'px)'
   }
 
   const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement

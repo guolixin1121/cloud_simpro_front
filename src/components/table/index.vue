@@ -203,9 +203,12 @@ onMounted(() => {
 const refresh = (option: any) => {
   loading.value = false
   clearCheckbox()
-  // 判断是否还剩一条，剩一条删除成功后请求上一页
+  if (option?.page) {
+    current.value = option.page
+  }
   const slient = option?.slient
-  const deletedRows = option?.deletedRows || 1
+  // 单个删除或批量删除时判断是否为最后一页，删除成功后请求上一页
+  const deletedRows = option?.deletedRows || 1 
   if (dataSource?.value?.length === deletedRows) {
     const page = current.value > 1 ? current.value - 1 : current.value
     run({ ...props.query, page, size }, slient)
