@@ -12,7 +12,7 @@
       :api="currentApi.getList" 
       :query="query" 
       :columns="columns" 
-      :scroll="{ x: 1000, y: 'auto' }"
+      :scroll="{ x: 1400, y: 'auto' }"
       @select="onSelect">
     </Table>
   </div>
@@ -49,7 +49,7 @@ const columns = [
   { title: '指标类型', dataIndex: 'category_name', ellipsis: true,width: 180 },
   { title: '创建时间', dataIndex: 'create_date', width: 150 },
   { title: '修改时间', dataIndex: 'update_time', width: 150 },
-  { title: '所属用户', dataIndex: 'create_user', width: 100, ellipsis: true },
+  { title: '所属用户', dataIndex: 'create_user', width: 100, ellips5s: true },
   {
     title: '操作',
     dataIndex: 'actions',

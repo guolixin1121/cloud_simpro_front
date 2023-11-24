@@ -183,11 +183,18 @@ const calcateHeight = () => {
   tabHeight = isNaN(tabHeight) ? 0 : 14
 
   // 表格内容区域
+  let tableHeight = height + tabHeight + 282
+  if(document.body.scrollWidth <= 1360) {
+    // App.vue定义的页面最小宽度1360
+    // 小于这个宽度出现滚动条时，计算表格高度时要加上滚动条高度，以确保分页符离底部总是最小24px
+    tableHeight += 6
+  }
   const tableScrollBody = document.getElementsByClassName('ant-table-body')?.[0] as HTMLElement
   if (tableScrollBody) {
-    tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + tabHeight + 282) + 'px)'
+    tableScrollBody.style.maxHeight = 'calc(100vh - ' + tableHeight + 'px)'
   }
 
+  // 右侧内容区域高度
   if (mainContent) {
     mainContent.style.height = 'calc(100% - ' + height + 'px)'
   }
@@ -196,6 +203,7 @@ onMounted(() => {
   // form筛选区域为单行时，因为有默认的padding，有时会一开始计算成两行
   // nexttick保证获取筛选区域的最终高度
   nextTick(calcateHeight)
+  window.addEventListener('resize', calcateHeight)
 })
 
 // 用于删除等操作后，重新加载table

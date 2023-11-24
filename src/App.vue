@@ -13,8 +13,8 @@ dayjs.locale('zh-cn')
 
 <style>
 #app {
-  min-width: 1440px;
-  overflow: auto;
+  min-width: 1360px;
+  overflow: hidden;
   display: flex;
 }
 </style>

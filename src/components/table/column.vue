@@ -65,8 +65,6 @@ const dataIndex = computed(() => props.scope?.column.dataIndex)
 const record = computed(() => props.scope?.record)
 const dataValue = computed(() => props.scope?.record[dataIndex.value])
 
-console.log(props)
-
 const isDateColumn = (column: string) => {
   if(!column) return ''
   return column.indexOf('_time') > -1 || column.indexOf('Time') > -1 || column.indexOf('_date') > -1 || column.indexOf('Date') > -1 
