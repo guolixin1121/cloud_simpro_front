@@ -15,9 +15,11 @@
     </div>
 
     <Table ref="tableRef" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 2000, y: 'auto' }" @select="onSelect">
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.dataIndex == 'vehicle_detail' && !isEmpty(record.vehicle_detail)">
-          {{ record.vehicle_detail.dynamic_model_name + '_' + record.vehicle_detail.version }}
+      <template #bodyCell="{ column, text }">
+        <template v-if="column.dataIndex == 'vehicle_detail' && !isEmpty(text)">
+          <a-tooltip :title="text.dynamic_model_name + '_' + text.version " placement="topLeft">
+            {{ text.dynamic_model_name + '_' + text.version }}
+          </a-tooltip>
         </template>
       </template>
     </Table>

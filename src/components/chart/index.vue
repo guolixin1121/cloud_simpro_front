@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%">
+  <div>
     <div class="name">{{ title }}</div>
     <div :style="title ? 'height:calc(100% - 25px)' : 'height:100%'" style="width: 100%" ref="chartElement"></div>
   </div>
@@ -20,7 +20,7 @@ function render() {
   chartInstance?.clear()
   chartInstance = echarts.init(chartElement.value)
   const option = produceOption(props.option)
-
+  
   chartInstance.setOption(option, true)
   window.addEventListener('resize', () => {
     chartInstance?.resize()

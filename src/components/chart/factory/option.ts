@@ -113,7 +113,7 @@ const seriesOptions = {
 export default (option: any) => {
   option.series?.forEach((series: any) => {
     const config = seriesOptions[series.type as keyof typeof seriesOptions]
-    merge(series, config)
+    series = merge(series, config)
   })
   option = merge(cloneDeep(defaultOption), option)
   

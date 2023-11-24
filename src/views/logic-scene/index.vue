@@ -91,7 +91,7 @@ const columns = [
   { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
   { title: '来源', dataIndex: 'source', width: 100, formatter: (source: number) => source == 0 ? '云平台' : 'SOTIF' },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
-  { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
+  { title: '所属用户', dataIndex: 'create_user', width: 180, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',

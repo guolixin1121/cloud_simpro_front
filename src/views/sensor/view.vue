@@ -1,6 +1,6 @@
 <template>
-  <form-view title="动态库详情" :items="formItems" :loading="loading">
-    <router-link to="/dll/">动力学动态库</router-link>
+  <form-view title="传感器详情" :items="formItems" :loading="loading">
+    <router-link to="/dll/">传感器模型</router-link>
   </form-view>
 </template>
 
@@ -11,10 +11,11 @@ const loading = ref(false)
 const getLookData = async () => {
   try {
     loading.value = true
-    const data = await api.dll.get({ id: useRoute().params.id })
+    const data = await api.sensor.get({ id: useRoute().params.id })
     formItems.value = [
-      { label: '动态库名称', value: data.name },
-      { label: '动态库文件', value: data.so_url },
+      { label: '传感器名称', value: data.name },
+      { label: '传感器类型', value: data.type_name },
+      { label: '传感器文件', value: data.csv_url },
       { label: '描述', value: data.desc },
       { label: '创建时间', value: data.create_time },
       { label: '修改时间', value: data.update_time },

@@ -183,11 +183,18 @@ const calcateHeight = () => {
   tabHeight = isNaN(tabHeight) ? 0 : 14
 
   // 表格内容区域
+  let tableHeight = height + tabHeight + 282
+  if(document.body.scrollWidth <= 1440) {
+    // App.vue定义的页面最小宽度1440
+    // 小于这个宽度出现滚动条时，计算表格高度时要加上滚动条高度，以确保分页符离底部总是最小24px
+    tableHeight += 6
+  }
   const tableScrollBody = document.getElementsByClassName('ant-table-body')?.[0] as HTMLElement
   if (tableScrollBody) {
-    tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + tabHeight + 290) + 'px)'
+    tableScrollBody.style.maxHeight = 'calc(100vh - ' + tableHeight + 'px)'
   }
 
+  // 右侧内容区域高度
   if (mainContent) {
     mainContent.style.height = 'calc(100% - ' + height + 'px)'
   }
@@ -196,6 +203,7 @@ onMounted(() => {
   // form筛选区域为单行时，因为有默认的padding，有时会一开始计算成两行
   // nexttick保证获取筛选区域的最终高度
   nextTick(calcateHeight)
+  window.addEventListener('resize', calcateHeight)
 })
 
 // 用于删除等操作后，重新加载table
@@ -203,9 +211,12 @@ onMounted(() => {
 const refresh = (option: any) => {
   loading.value = false
   clearCheckbox()
-  // 判断是否还剩一条，剩一条删除成功后请求上一页
+  if (option?.page) {
+    current.value = option.page
+  }
   const slient = option?.slient
-  const deletedRows = option?.deletedRows || 1
+  // 单个删除或批量删除时判断是否为最后一页，删除成功后请求上一页
+  const deletedRows = option?.deletedRows || 1 
   if (dataSource?.value?.length === deletedRows) {
     const page = current.value > 1 ? current.value - 1 : current.value
     run({ ...props.query, page, size }, slient)

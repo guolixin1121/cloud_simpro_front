@@ -1,11 +1,15 @@
 <template>
   <a-spin :spinning="loading">
-    <vxe-table stripe ref="table" :border="isTree ? 'none' : 'full'" :show-header="isTree ? false : true" :row-config="{ isHover: true, keyField: 'id' }" :tree-config="{ transform: true, reserve: true, rowField: 'id', lazy: lazy, loadMethod: loadMethod }" :data="tableData" @toggle-tree-expand="onTreeExpand" @cell-click="onCellClick">
-      <vxe-column v-for="column in columns" 
-        :key="column.dataIndex" :field="column.dataIndex" 
-        :tree-node="column.dataIndex === treeNode"
-        :show-overflow="column.ellipsis"
-        v-bind="{...column}">
+    <vxe-table stripe ref="table" 
+      :scroll-x="{enabled: true, gt: 0 }"
+      :border="isTree ? 'none' : 'full'" :show-header="isTree ? false : true" 
+      :row-config="{ isHover: true, keyField: 'id' }" 
+      :tree-config="{ transform: true, reserve: true, rowField: 'id', lazy: lazy, loadMethod: loadMethod }" 
+      :data="tableData" @toggle-tree-expand="onTreeExpand" @cell-click="onCellClick">
+      <vxe-column v-for="column in columns" :key="column.dataIndex" 
+      :field="column.dataIndex" :title="column.title" :width="column.width" 
+      :tree-node="column.dataIndex === treeNode"
+      v-bind="column">
         <template #default="{ row }">
           <template v-if="column.dataIndex == 'operation'">
             <template v-for="action in Object.keys(column.actions || {})" :key="action">
@@ -22,7 +26,7 @@
           <template v-else>
             <slot :column="column" :row="row">
               <svg-icon icon="folder-light" class="mr-1" v-if="!row.isLeaf && column.dataIndex == treeNode"></svg-icon>
-              <a-tooltip placement="topLeft" :title="row[column.dataIndex]" v-if="column.ellipsis">
+              <a-tooltip placement="topLeft" :title="row[column.dataIndex]" v-if="column['show-overflow']">
                 <span>{{ row[column.dataIndex] }}</span>
               </a-tooltip>
               <span v-else>{{ row[column.dataIndex] }}</span>
@@ -143,7 +147,8 @@ const fetchTableData = async (params: any = {}) => {
   })
   results.total = res.count
   results.data = (res.results || res).map((item: any) => ({ ...item, hasChild: !item.isLeaf }))
-  results.hasPagination = results.total > results.data.length
+  // results.hasPagination = results.total > results.data.length
+  results.hasPagination = true
   results.data = props.lazy ? results.data : transformTreeToArray(results.data)
   return results
 }
@@ -218,22 +223,30 @@ const loadMethod = async ({ row }: any) => {
   return Promise.resolve(data)
 }
 
-onMounted(() => {
+const calcateHeight = () => {
   if (props.isTree) return
 
   let height = document.getElementsByClassName('top')?.[0]?.clientHeight
   height = isNaN(height) ? 0 : height + 16 // + 16的padding高度
 
+  // 设置表格内容的高度
+  let tableHeight = height + 280
+  if(document.body.scrollWidth <= 1440) {
+    // App.vue定义的页面最小宽度1440
+    // 小于这个宽度出现滚动条时，计算表格高度时要加上滚动条高度，以确保分页符离底部总是最小24px
+    tableHeight += 6
+  }
   const tableScrollBody = document.getElementsByClassName('vxe-table--body-wrapper')?.[0] as HTMLElement
   if (tableScrollBody) {
-    tableScrollBody.style.maxHeight = 'calc(100vh - ' + (height + 290) + 'px)'
+    tableScrollBody.style.maxHeight = 'calc(100vh - ' + tableHeight + 'px)'
   }
 
+  // 页面右侧内容区域的高度
   const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
   if (mainContent) {
     mainContent.style.height = 'calc(100% - ' + height + 'px)'
   }
-})
+}
 
 const hasPermission = (column: RObject, row: RObject, key: string) => {
   const action = column.actions[key]
@@ -260,6 +273,11 @@ const onPageChange = (val: number) => {
   current.value = val
   refresh()
 }
+
+onMounted(() => {
+  nextTick(calcateHeight)
+  window.addEventListener('resize', calcateHeight)
+})
 
 defineExpose({ refresh })
 </script>
