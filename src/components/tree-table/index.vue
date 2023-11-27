@@ -230,11 +230,11 @@ const calcateHeight = () => {
   height = isNaN(height) ? 0 : height + 16 // + 16的padding高度
 
   // 设置表格内容的高度
-  let tableHeight = height + 280
+  let tableHeight = height + 278
   if(document.body.scrollWidth <= 1360) {
     // App.vue定义的页面最小宽度1360
     // 小于这个宽度出现滚动条时，计算表格高度时要加上滚动条高度，以确保分页符离底部总是最小24px
-    tableHeight += 6
+    tableHeight += 8
   }
   const tableScrollBody = document.getElementsByClassName('vxe-table--body-wrapper')?.[0] as HTMLElement
   if (tableScrollBody) {

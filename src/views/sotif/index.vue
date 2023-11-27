@@ -7,7 +7,7 @@
     <div class="flex justify-between">
       <!-- <span class="title">SOTIF</span> -->
 
-      <a-tabs v-model:activeKey="activeKey" class="tabs">
+      <a-tabs v-model:activeKey="activeKey" class="min-tabs">
         <a-tab-pane :key="1" tab="SOTIF分析">
         </a-tab-pane>
         <a-tab-pane :key="2" tab="STPA分析">
@@ -147,13 +147,14 @@ const gotoSotif = (path: string = '') => {
 </script>
 
 <style lang="less">
-.tabs.ant-tabs {
+.min-tabs.ant-tabs {
   .ant-tabs-nav {
     margin: 0px;
   }
 
   .ant-tabs-tab {
     padding-top: 0px;
+    padding-bottom: 10px;
   }
 }
 </style>

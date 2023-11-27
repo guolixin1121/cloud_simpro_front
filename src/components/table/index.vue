@@ -179,15 +179,15 @@ const calcateHeight = () => {
   height += titleHeight
 
   const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
-  let tabHeight = mainContent?.getElementsByClassName('tabs')?.[0]?.clientHeight
-  tabHeight = isNaN(tabHeight) ? 0 : 14
+  let tabHeight = document?.getElementsByClassName('tabs')?.[0]?.clientHeight
+  tabHeight = isNaN(tabHeight) ? 0 : 72
 
   // 表格内容区域
   let tableHeight = height + tabHeight + 282
   if(document.body.scrollWidth <= 1360) {
     // App.vue定义的页面最小宽度1360
     // 小于这个宽度出现滚动条时，计算表格高度时要加上滚动条高度，以确保分页符离底部总是最小24px
-    tableHeight += 6
+    tableHeight += 8
   }
   const tableScrollBody = document.getElementsByClassName('ant-table-body')?.[0] as HTMLElement
   if (tableScrollBody) {
