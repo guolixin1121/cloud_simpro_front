@@ -17,7 +17,7 @@
       :api="veticleModelApi.getList"
       :query="query"
       :columns="columns"
-      :scroll="{ x: 1000, y: 'auto' }"
+      :scroll="{ x: 1500, y: 'auto' }"
     >
       <template #bodyCell="{ column, record, index }">
         <!-- <template v-if="column.dataIndex == 'type'">
@@ -137,16 +137,16 @@ const onSearch = (data: Query) => {
 }
 /****** 表格区域 */
 const columns = [
-  { title: '模型ID', dataIndex: 'vehicle_no', width: 200 },
-  { title: '模型名称', dataIndex: 'name', width: 200, ellipsis: true },
+  { title: '模型ID', dataIndex: 'vehicle_no', width: 180 },
+  { title: '模型名称', dataIndex: 'name', width: 200 },
   { title: '版本数量', dataIndex: 'version_count', width: 120 },
   // { title: '类型', dataIndex: 'type', width: 80, ellipsis: true },
-  { title: '转向模型', dataIndex: 'direct_name', width: 120, ellipsis: true },
+  { title: '转向模型', dataIndex: 'direct_name', width: 200 },
   { title: '动力形式', dataIndex: 'power_name', width: 90 },
-  { title: '是否共享', dataIndex: 'is_share', width: 90, ellipsis: true },
+  { title: '是否共享', dataIndex: 'is_share', width: 100},
   { title: '创建时间', dataIndex: 'create_date', width: 180 },
   // { title: '修改时间', dataIndex: 'update_date', width: 180, ellipsis: true },
-  { title: '所属用户', dataIndex: 'username', width: 150, ellipsis: true },
+  { title: '所属用户', dataIndex: 'username', width: 150 },
   {
     title: '操作',
     dataIndex: 'actions',

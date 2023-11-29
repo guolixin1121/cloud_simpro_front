@@ -99,14 +99,14 @@ const loading = ref(false)
 const router = useRouter()
 const columns = [
   { dataIndex: 'checkbox', width: 60 },
-  { title: '场景ID', dataIndex: 'id', width: 150 },
+  { title: '场景ID', dataIndex: 'id', width: 120 },
   { title: '场景名称', dataIndex: 'adsName', width: 200, ellipsis: true },
-  { title: '场景来源', dataIndex: 'adsSource', formatter: getSceneSourceName, width: 90 },
+  { title: '场景来源', dataIndex: 'adsSource', formatter: getSceneSourceName, width: 120 },
   { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
   { title: '创建时间', dataIndex: 'createTime', width: 180 },
   { title: '修改时间', dataIndex: 'updateTime', width: 180 },
-  { title: '创建者', dataIndex: 'createUser', width: 150, ellipsis: true },
-  { title: '修改者', dataIndex: 'updateUser', width: 150, ellipsis: true  },
+  { title: '创建者', dataIndex: 'createUser', width: 150 },
+  { title: '修改者', dataIndex: 'updateUser', width: 150 },
   {
     title: '操作',
     dataIndex: 'actions',

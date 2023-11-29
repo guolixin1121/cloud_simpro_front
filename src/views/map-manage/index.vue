@@ -54,9 +54,9 @@ const onTableSearch = (data: Query) => {
 const router = useRouter()
 const columns = [
   { title: '', dataIndex: 'checkbox', width: 60 },
-  { title: '地图ID', dataIndex: 'id', width: 100 },
+  { title: '地图ID', dataIndex: 'id', width: 150 },
   { title: '地图名称', dataIndex: 'name' },
-  { title: '地图版本数量', dataIndex: 'versionCount', width: 120 },
+  { title: '地图版本数量', dataIndex: 'versionCount', width: 250 },
   {
     title: '操作',
     dataIndex: 'actions',

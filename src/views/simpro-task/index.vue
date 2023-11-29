@@ -17,9 +17,9 @@
     <Table ref="tableRef" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 2000, y: 'auto' }" @select="onSelect">
       <template #bodyCell="{ column, text }">
         <template v-if="column.dataIndex == 'vehicle_detail' && !isEmpty(text)">
-          <a-tooltip :title="text.dynamic_model_name + '_' + text.version " placement="topLeft">
+          <!-- <a-tooltip :title="text.dynamic_model_name + '_' + text.version " placement="topLeft"> -->
             {{ text.dynamic_model_name + '_' + text.version }}
-          </a-tooltip>
+          <!-- </a-tooltip> -->
         </template>
       </template>
     </Table>
@@ -56,16 +56,16 @@ const tableRef = ref()
 const router = useRouter()
 const columns = [
   { dataIndex: 'checkbox', width: 50, validator: (data: RObject) => ['等待', '运行'].indexOf(data.status) == -1 },
-  { title: '任务ID', dataIndex: 'number', width: 120 },
-  { title: '仿真任务名称', dataIndex: 'name', width: 150, ellipsis: true },
+  { title: '任务ID', dataIndex: 'number', width: 150 },
+  { title: '仿真任务名称', dataIndex: 'name', width: 150 },
   { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90 },
-  { title: '主车模型', dataIndex: 'vehicle_detail', width: 150, ellipsis: true },
   { title: '场景文件数量', dataIndex: 'scene_count', width: 100 },
-  { title: '仿真算法', dataIndex: 'algorithm_detail', width: 150, ellipsis: true },
+  { title: '主车模型', dataIndex: 'vehicle_detail', width: 150 },
+  { title: '仿真算法', dataIndex: 'algorithm_detail', width: 150 },
   { title: '执行任务次数', dataIndex: 'batch', width: 100 },
   { title: '运行状态', dataIndex: 'status', width: 80 },
   { title: '创建时间', dataIndex: 'create_time', width: 150 },
-  { title: '所属用户', dataIndex: 'create_user', width: 100, ellipsis: true },
+  { title: '所属用户', dataIndex: 'create_user', width: 100 },
   {
     title: '操作',
     dataIndex: 'actions',

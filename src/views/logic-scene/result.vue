@@ -59,8 +59,8 @@ const chartOptions = ref({})
 /****** 表格区域 */
 const columns = [
   { title: '逻辑场景名称', dataIndex: 'name', width: 200, ellipsis: true },
-  { title: '场景集名称', dataIndex: 'result_scene_set', width: 150, ellipsis: true  },
-  { title: '关联场景数', dataIndex: 'scene_count', width: 100, ellipsis: true },
+  { title: '场景集名称', dataIndex: 'result_scene_set', width: 150  },
+  { title: '关联场景数', dataIndex: 'scene_count', width: 100 },
   { title: '开始时间', dataIndex: 'running_time', width: 150, },
   { title: '结束时间', dataIndex: 'finish_time', width: 150, },
   { title: '状态', dataIndex: 'status', width: 100, },
@@ -182,8 +182,8 @@ const columns = [
   }
 ]
 const sotifColumns = [
-  { title: '场景集名称', dataIndex: 'result_scene_set', width: 250, ellipsis: true  },
-  { title: '关联场景数', dataIndex: 'scene_count', width: 150, ellipsis: true },
+  { title: '场景集名称', dataIndex: 'result_scene_set', width: 250 },
+  { title: '关联场景数', dataIndex: 'scene_count', width: 150 },
   { title: '开始时间', dataIndex: 'running_time' },
   { title: '结束时间', dataIndex: 'finish_time' }
 ]

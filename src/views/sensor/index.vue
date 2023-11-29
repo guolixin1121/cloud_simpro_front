@@ -38,11 +38,11 @@ const router = useRouter()
 // const preRoute = router.currentRoute.value.path
 const columns = [
   { title: '传感器ID', dataIndex: 'id', width: 110 },
-  { title: '传感器名称', dataIndex: 'name', width: 250, ellipsis: true },
-  { title: '传感器类型', dataIndex: 'type_name', width: 250, ellipsis: true },
-  { title: '创建时间', dataIndex: 'create_time', width: 180 },
-  { title: '修改时间', dataIndex: 'update_time', width: 180 },
-  { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
+  { title: '传感器名称', dataIndex: 'name', width: 250 },
+  { title: '传感器类型', dataIndex: 'type_name', width: 250},
+  { title: '创建时间', dataIndex: 'create_time', width: 200 },
+  { title: '修改时间', dataIndex: 'update_time', width: 200 },
+  { title: '所属用户', dataIndex: 'create_user', width: 150 },
   {
     title: '操作',
     dataIndex: 'actions',

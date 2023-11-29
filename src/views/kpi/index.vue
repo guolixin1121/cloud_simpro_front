@@ -45,11 +45,11 @@ const router = useRouter()
 const columns = [
   { dataIndex: 'checkbox', width: 60, validator: (data: RObject) => data.custom !== 0 }, 
   { title: '评测指标ID', dataIndex: 'id', width: 120 },
-  { title: '评测指标名称', dataIndex: 'name',width: 200, ellipsis: true },
-  { title: '指标类型', dataIndex: 'category_name', ellipsis: true,width: 180 },
+  { title: '评测指标名称', dataIndex: 'name', width: 200 },
+  { title: '指标类型', dataIndex: 'category_name', width: 180 },
   { title: '创建时间', dataIndex: 'create_date', width: 150 },
   { title: '修改时间', dataIndex: 'update_time', width: 150 },
-  { title: '所属用户', dataIndex: 'create_user', width: 100, ellips5s: true },
+  { title: '所属用户', dataIndex: 'create_user', width: 100 },
   {
     title: '操作',
     dataIndex: 'actions',

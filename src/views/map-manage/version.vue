@@ -36,10 +36,9 @@ const query: Query = ref({ map: id, name })
 /****** 表格区域 */
 const router = useRouter()
 const columns = [
-  { title: '地图版本ID', dataIndex: 'id', width: 200 },
-  // { title: '地图名称', dataIndex: 'mapName', width: 150, ellipsis: true },
+  { title: '地图版本ID', dataIndex: 'id', width: 180 },
   { title: '地图版本', dataIndex: 'mapVersion', width: 90 },
-  { title: '地图文件', dataIndex: 'mapFileName', width: 100, ellipsis: true },
+  { title: '地图文件', dataIndex: 'mapFileName', width: 180, ellipsis: true },
   // { title: '地图类型', dataIndex: 'mapType', width: 100 },
   { title: '创建时间', dataIndex: 'importTime', width: 150 },
   { title: '创建者', dataIndex: 'importUserName', width: 100 },
