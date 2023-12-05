@@ -66,6 +66,7 @@ const selectedSceneset = ref(scenesetFromLogic) // 逻辑场景跳转的默认�
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称' },
+  { label: '场景ID', key: 'adsId', type: 'input', placeholder: '请输入场景ID，多个用逗号隔开' },
   {
     label: '场景来源',
     key: 'adsSource',

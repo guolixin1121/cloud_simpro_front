@@ -32,7 +32,6 @@
           v-else
           :is="Ant[getComponent(item.type)]"
           allowClear
-          :style="{width: '100%'}"
           v-model:value="formState[item.key]"
           v-bind="{ ...item, ...getDefaultStyle(item.type) }"
           v-on="item"
