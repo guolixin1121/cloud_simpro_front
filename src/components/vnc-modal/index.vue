@@ -3,7 +3,7 @@
      title="在线仿真"
      @cancel="visible=false" @ok="onConfirm">
         <div class="modal-content">
-            <div class="flex mb-2">
+            <div class="flex items-center mb-2">
                 <svg-icon style="color: #faad14" icon="alert"></svg-icon>
                 <span class="ml-2 font-medium">在线仿真资源已满，暂时无法{{ title }}</span>
             </div>

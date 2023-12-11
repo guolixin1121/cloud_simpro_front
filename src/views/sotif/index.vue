@@ -151,10 +151,5 @@ const gotoSotif = (path: string = '') => {
   .ant-tabs-nav {
     margin: 0px;
   }
-
-  .ant-tabs-tab {
-    padding-top: 0px;
-    padding-bottom: 10px;
-  }
 }
 </style>

@@ -211,3 +211,9 @@ const gotoScene = (record: RObject) => {
   router.push('/scene')
 }
 </script>
+
+<style lang="less" scoped>
+.tabs {
+  margin-top: 16px;
+}
+</style>

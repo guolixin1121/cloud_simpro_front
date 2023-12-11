@@ -188,7 +188,7 @@ const onCurrentAllChecked = (e: any) => {
 
 // 全选
 const onAllChecked = async () => {
-  if(!scenes.value.length) return 
+  if(!scenes.value.length || sceneLoading.value) return 
   isAllChecked.value = true
 
   const totalPageSize = Math.floor((pagination.total - 1) / pagination.size + 1)

@@ -222,25 +222,25 @@ watch(
 
 /**** 3列或4列布局 *****/
 // 根据总共多少列计算每列width，css里使用
-const colLimit = ref(3)
-const rowTotal = computed(() => Math.ceil(props.items.length / colLimit.value))
+const colLimit = props.items.length > 4 ? 3 : props.items.length == 4 ? 4 : 3 // 每行几个
+const rowTotal = computed(() => Math.ceil(props.items.length / colLimit)) // 总行数
 // 当前显示总行数
 const showRowTotal = computed(() => {
   const itemLength = props.items.length
   if(isOpened.value) {
-    return Math.ceil(itemLength / colLimit.value)
+    return Math.ceil(itemLength / colLimit)
   } else {
-    return itemLength <= colLimit.value ? 1 : 2
+    return itemLength <= colLimit ? 1 : 2
   }
 })
 // 是否最后一行，最后一行padding bottom清空
 const isLastRow = (itemIndex: number) => {
-  const rowIndex = Math.floor(itemIndex / colLimit.value) + 1 
+  const rowIndex = Math.floor(itemIndex / colLimit) + 1 
   return rowIndex == showRowTotal.value
 }
 // 是否为更多行
 const isMoreRow =  (itemIndex: number) => {
-  const rowIndex = Math.floor(itemIndex / colLimit.value) + 1 
+  const rowIndex = Math.floor(itemIndex / colLimit) + 1 
   return rowIndex > 2
 }
 const isOpened = ref(false)
@@ -251,8 +251,8 @@ const showMore = () => {
     emits('show-more', isOpened.value)
   })
 }
-window.addEventListener('resize', () => colLimit.value = document.body.clientWidth < 1920 ? 3 : 4)
-onMounted(() => colLimit.value = document.body.clientWidth < 1920 ? 3 : 4 )
+// window.addEventListener('resize', () => colLimit.value = document.body.clientWidth < 1920 ? 3 : 4)
+// onMounted(() => colLimit.value = document.body.clientWidth < 1920 ? 3 : 4 )
 </script>
 
 <style lang="less" scoped>
