@@ -22,7 +22,8 @@
         name="docker_path"
         :rules="[
           { required: true, message: '请输入算法镜像地址' },
-          { min: 1, max: 255, message: '镜像地址长度为1到255位' }
+          { min: 1, max: 255, message: '镜像地址长度为1到255位' },
+          { validator: () => checkEmpty(formState.docker_path) }
         ]"
       >
       <ch-input v-model:value="formState.docker_path" placeholder="镜像地址结构：registry-vecps-ns.gaccloud.com.cn/tenant-vydx/********" :maxlength="255"></ch-input>
@@ -32,7 +33,8 @@
         name="cmd"
         :rules="[
           { required: true, message: '请输入启动命令' },
-          { min: 1, max: 255, message: '镜像地址长度为1到255位' }
+          { min: 1, max: 255, message: '镜像地址长度为1到255位' },
+          { validator: () => checkEmpty(formState.cmd) }
         ]"
       >
       <ch-input v-model:value="formState.cmd" placeholder="请输入启动命令" :maxlength="255"></ch-input>
@@ -63,7 +65,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate, checkChName } from '@/utils/tools'
+import { formatDate, checkChName, checkEmpty } from '@/utils/tools'
 
 const id = useRoute().params.id
 const isAdd = id === '0'

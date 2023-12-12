@@ -113,12 +113,22 @@ export function getWordLength(str) {
   // return total * 2 + (str.length - total)
 }
 
+export const checkEmpty = (value) => {
+  if (value && value.trim().length == 0) {
+    return Promise.reject(`必填项不能为空`)
+  }
+  return Promise.resolve() 
+}
+
 export const checkChName = (str, maxLength = 32, minLength = 2) => {
   if (!str) return Promise.resolve()
 
   // const chLength = getCnWordTotal(str)
   // const length = chLength * 2 + (str.length - chLength)
   const length = getWordLength(str)
+  if(str.trim().length == 0) {
+    return Promise.reject(`名称不能为空`)
+  }
 
   if (length < minLength || length > maxLength) {
     return Promise.reject(`名称长度为${minLength}到${maxLength}位`)
