@@ -6,7 +6,7 @@ export const getPendingUrl = (config) => [config.method, config.url].join('&')
 
 class AxiosCanceler {
   pendingMap = ''
-  static instance = AxiosCanceler
+  static instance = null
 
   constructor() {
     this.pendingMap = new Map()
@@ -38,7 +38,7 @@ class AxiosCanceler {
     const url = getPendingUrl(config)
     if (this.pendingMap.has(url)) {
       const cancel = this.pendingMap.get(url)
-      cancel && cancel('操作频繁，请稍后重试')
+      cancel && cancel()
       this.pendingMap.delete(url)
     }
   }
