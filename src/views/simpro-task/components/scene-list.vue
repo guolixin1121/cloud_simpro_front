@@ -9,7 +9,6 @@
         <div style="height: calc(100% - 40px); overflow: auto">
           <a-tree v-if="!scenesetLoading" :tree-data="scenesets" :load-data="loadSubSceneset" 
             v-model:checkedKeys="selectedSceneset" 
-            @check="onScenesetChecked"
             @select="onScenesetSelected"></a-tree>
           <a-spin :spinning="scenesetLoading" style="width: 100%; padding-top: 20px"></a-spin>
         </div>
@@ -135,18 +134,19 @@ const onScenesetSearch = async () => {
 }
 
 // 切换场景集，重置所有数据
-const onScenesetChecked = (checkedKeys: string[]) => {
-  pagination.current = 1
-  selectedSceneset.value = checkedKeys
-  selectedScenes.value = []
-  currentSelectedScenes.value = []
-  isAllChecked.value = false
-  loadScene()
-}
+// const onScenesetChecked = (checkedKeys: string[]) => {
+//   pagination.current = 1
+//   selectedSceneset.value = checkedKeys
+//   selectedScenes.value = []
+//   currentSelectedScenes.value = []
+//   isAllChecked.value = false
+//   loadScene()
+// }
 
-// 切换场景集，重置所有数据
+// 切换场景集: 重置所有数据, cancel other request
 const onScenesetSelected = async (selectedKeys: string[]) => {
   pagination.current = 1
+  pagination.total = 0
   selectedSceneset.value = selectedKeys
   selectedScenes.value = []
   currentSelectedScenes.value = []
@@ -189,8 +189,6 @@ const onCurrentAllChecked = (e: any) => {
 // 全选
 const onAllChecked = async () => {
   if(!scenes.value.length || sceneLoading.value) return 
-  isAllChecked.value = true
-
   const totalPageSize = Math.floor((pagination.total - 1) / pagination.size + 1)
   selectedScenes.value = []
   const allData = [] 
@@ -205,6 +203,7 @@ const onAllChecked = async () => {
     }
   }
   selectedScenes.value = allData
+  isAllChecked.value = true
 
   // 更新当前选中
   currentSelectedScenes.value = selectedScenes.value.filter((item: any) => scenes.value.find((scene: any) => scene.id === item))
