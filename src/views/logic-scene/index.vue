@@ -86,10 +86,10 @@ const router = useRouter()
 const columns = [
   { dataIndex: 'checkbox', width: 60 },
   { title: '场景ID', dataIndex: 'id', width: 90 },
-  { title: '逻辑场景名称', dataIndex: 'name', width: 150, ellipsis: true },
-  { title: '关联场景数', dataIndex: 'result_scene_count', width: 120 },
-  { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
-  { title: '来源', dataIndex: 'source', width: 100, formatter: (source: number) => source == 0 ? '云平台' : 'SOTIF' },
+  { title: '逻辑场景名称', dataIndex: 'name', width: 250, ellipsis: true },
+  { title: '关联场景数', dataIndex: 'result_scene_count', width: 150 },
+  { title: '标签', dataIndex: 'labels_detail', width: 200,  apiField: 'display_name', ellipsis: true },
+  { title: '来源', dataIndex: 'source', width: 120, formatter: (source: number) => source == 0 ? '云平台' : 'SOTIF' },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '所属用户', dataIndex: 'create_user', width: 180, ellipsis: true },
   {

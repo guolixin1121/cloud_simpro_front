@@ -15,7 +15,11 @@
 
 button.ant-btn {
   color: var(--text-main-color);
-  &:hover, &:focus {
+  &:focus {
+    color: var(--text-main-color);
+    border-color: var(--border-color);
+  }
+  &:hover {
     background-color: var(--gray-globel-bg-color);
     color: var(--text-main-color);
     border-color: var(--border-color);
@@ -26,7 +30,11 @@ button.ant-btn {
 }
 button.ant-btn-primary:not([disabled]) {
   color: #fff;
-  &:hover, &:focus {
+  &:focus {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+  }
+  &:hover {
     background-color: var(--primary-hover-color) !important;
     border-color: var(--primary-hover-color) !important;
     color: #fff !important;
@@ -359,6 +367,9 @@ button.ant-btn-primary[disabled] {
   .ant-switch-checked {
     background-color: #00b54e;
   }
+  .ant-checkbox-wrapper {
+    margin-top: 0px;
+  }
   .ant-table-body {
     overflow: scroll !important;
   }
@@ -448,12 +459,21 @@ button.ant-btn-primary[disabled] {
   }
   .ant-tabs-ink-bar {
     background-color: var(--primary-color) !important;
+    border-radius: 2px;
+    height: 3px !important;
   }
   // .ant-tabs-nav {
   //   margin-bottom: 24px !important;
   // }
   .ant-tabs-nav::before {
     border-bottom: 0px !important;
+  }
+  .ant-tabs-tab {
+      padding-top: 0px;
+      padding-bottom: 4px !important;
+      & + .ant-tabs-tab {
+      margin-left: 16px;
+    }
   }
 }
 
@@ -526,6 +546,10 @@ button.ant-btn-primary[disabled] {
   align-items: center;
   .ant-modal {
     top: 0px !important;
+    
+    .ant-modal-title {
+      color: var(--text-main-color);
+    }
 
     .ant-modal-header {
       padding: 12px 24px;
@@ -559,6 +583,14 @@ button.ant-btn-primary[disabled] {
         padding: 16px 24px;
         text-align: right;
         border-top: 1px solid var(--gray-bg-color);
+      }
+    }
+
+    .ant-modal-footer {
+      padding: 16px 24px !important;
+
+      .ant-btn-primary {
+        margin-left: 16px !important;
       }
     }
   }
@@ -628,6 +660,10 @@ button.ant-btn-primary[disabled] {
   box-shadow: 0 0 0 2px var(--shadow-color) !important;
 }
 
+.ant-picker-range {
+  width: 100%;
+}
+
 .ant-spin-dot-item,
 .ant-tree-checkbox-checked .ant-tree-checkbox-inner,
 .ant-picker-range .ant-picker-active-bar,
@@ -652,7 +688,8 @@ input::placeholder,
 .ant-select,
 .ant-checkbox-wrapper,
 .ant-transfer,
-.ant-input-affix-wrapper .ant-input {
+.ant-input-affix-wrapper .ant-input,
+.ant-popover-message {
   color: var(--text-main-color) !important;
 }
 

@@ -115,11 +115,11 @@ const onStpaSearch = (data: Query) => {
 /****** 表格区域 */
 const columns = [
   { title: '序号', dataIndex: 'index', width: 80 },
-  { title: '项目名称', dataIndex: 'projectName', width: 200, ellipsis: true },
+  { title: '项目名称', dataIndex: 'projectName', width: 200 },
   { title: '负责人', dataIndex: 'manager', width: 200 },
   { title: '参与成员', dataIndex: 'collaborationList',  width: 200, ellipsis: true },
   { title: '分析项(整车级功能)', dataIndex: 'vehicleNameList',  width: 200, ellipsis: true },
-  { title: '项目状态', dataIndex: 'projectStatus', width: 100},
+  { title: '项目状态', dataIndex: 'projectStatus', width: 150},
   { title: '创建时间', dataIndex: 'createTime', width: 150 },
   {
     title: '操作',
@@ -150,10 +150,6 @@ const gotoSotif = (path: string = '') => {
 .min-tabs.ant-tabs {
   .ant-tabs-nav {
     margin: 0px;
-  }
-
-  .ant-tabs-tab {
-    padding-top: 0px;
   }
 }
 </style>

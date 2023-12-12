@@ -7,7 +7,7 @@
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/dll/edit/0')">创建动态库</a-button>
     </div>
     <Table :api="dllApi.getList" :query="query" 
-      :columns="columns" :scroll="{ x: 1000, y: 'auto' }"> </Table>
+      :columns="columns" :scroll="{ x: 1400, y: 'auto' }"> </Table>
   </div>
 </template>
 
@@ -29,8 +29,8 @@ const router = useRouter()
 // const preRoute = router.currentRoute.value.path
 const columns = [
   { title: '动态库ID', dataIndex: 'id', width: 100 },
-  { title: '动态库名称', dataIndex: 'name', ellipsis: 'true' },
-  { title: '描述', dataIndex: 'desc', ellipsis: 'true' },
+  { title: '动态库名称', dataIndex: 'name', 'min-width': 105 },
+  { title: '描述', dataIndex: 'desc', 'min-width': 105, ellipsis:true },
   { title: '动态库版本号', dataIndex: 'version', width: 180 },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },

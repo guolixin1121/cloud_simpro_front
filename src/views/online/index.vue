@@ -30,16 +30,17 @@
 import { gotoVnc } from '@/utils/vnc'
 
 const user = store.user.user
-const list =
-  ref()
-  // [
-  // { name: 'GuangQi - 1', username: '', status: 0 },
-  // { name: 'GuangQi - 2', username: 'test1', status: 1 },
-  // { name: 'GuangQi - 3', username: 'test7', status: 1 },
-  // { name: 'GuangQi - 4', username: '', status: 0 },
-  // { name: 'GuangQi - 5', username: '', status: 0 },
-  // { name: 'GuangQi - 6', username: 'test1', status: 1 }
-  // ]
+const list = ref()
+// const list = ref(
+//   [
+//   { name: 'GuangQi - 1', username: '', status: 0 },
+//   { name: 'GuangQi - 2', username: 'test1', status: 1 },
+//   { name: 'GuangQi - 3', username: 'test7', status: 1 },
+//   { name: 'GuangQi - 4', username: '', status: 0 },
+//   { name: 'GuangQi - 5', username: '', status: 0 },
+//   { name: 'GuangQi - 6', username: 'test1', status: 1 }
+//   ]
+// )
 
 const loading = ref(false)
 const loadList = async () => {
@@ -96,7 +97,9 @@ const loopVncStatus = async (id: String) => {
 
 <style lang="less" scoped>
 @import '@/assets/styles/variable.less';
-
+.main {
+  overflow: auto;
+}
 .list {
   display: flex;
   flex-wrap: wrap;

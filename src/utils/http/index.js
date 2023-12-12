@@ -86,6 +86,12 @@ class AxiosRequest {
         'content-type': type || 'application/json',
         'X-Project-Id': store.user?.user?.project_id || ''
       })
+      Object.keys(data).forEach(key => {
+        if(typeof data[key] == 'string') {
+          data[key] = data[key]?.trim()
+        }
+      })
+
       let postData = data
       if(type === 'multipart/form-data') {
         const formData = new FormData()
@@ -114,7 +120,6 @@ class AxiosRequest {
             resolve(data)
           } else if (code === 100) {
             // token过期跳到登录页
-            // message.error('登录失效，请重新登录')
             store.user.gotoLogin()
           } else {
             message.error(typeof msg === 'string' ? msg : err)
@@ -124,7 +129,6 @@ class AxiosRequest {
         .catch(error => {
           if (error.response?.status === 401) {
             // token过期跳到登录页
-            // message.error('无效身份，请重新登录')
             store.user.gotoLogin()
           } else {
             message.error(error.message || '请求错误，请稍后重试')
