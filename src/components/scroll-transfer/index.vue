@@ -194,7 +194,7 @@ getOptions()
 .ant-transfer-list {
   padding: 8px 12px;
 }
-.ant-checkbox-wrapper {
+.scroll-box .ant-checkbox-wrapper {
   display: flex;
   margin-top: 4px;
 }
