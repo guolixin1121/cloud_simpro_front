@@ -179,9 +179,11 @@ const onCurrentAllChecked = (e: any) => {
   const { checked } = e.target
   if(checked) {
     currentSelectedScenes.value = scenes.value.map((item: any) => item.id)
+    selectedScenes.value = selectedScenes.value.filter((item: any) => currentSelectedScenes.value.findIndex((scene: any) => scene === item) == -1)
     selectedScenes.value = [...selectedScenes.value, ...currentSelectedScenes.value]
   } else {
     currentSelectedScenes.value = []
+    // 过滤掉当前页的数据
     selectedScenes.value = selectedScenes.value.filter((item: any) => scenes.value.findIndex((scene: any) => scene.id === item) == -1)
   }
 }
@@ -198,11 +200,11 @@ const onAllChecked = async () => {
       sceneLoading.value = true
       const data = await getScenes({ page: i + 1})
       allData.push(...data.map((item: any) => item.id))
+      selectedScenes.value = allData
     } finally {
       sceneLoading.value = false
     }
   }
-  selectedScenes.value = allData
   isAllChecked.value = true
 
   // 更新当前选中
