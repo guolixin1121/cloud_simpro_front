@@ -5,7 +5,7 @@ pipeline {
         VERSION="build-${BUILD_ID}-${CURRENT_TIME}"
         OCI_HOST='harbor.saimo.com:20080'
         OCI_URI='harbor.saimo.com:20080/cloud-simpro'
-        GIT_COMMIT_MESSAGE = sh(script: "git --no-pager log -1 --pretty=format:'%s'",returnStdout: true.trim()
+        GIT_COMMIT_MESSAGE = sh(script: "git --no-pager log -1 --pretty=format:'%s'",returnStdout: true).trim()
     }
     stages {
         stage('Build') {
@@ -65,7 +65,7 @@ curl -X POST -H "Content-Type: application/json" \
     \\"elements\\": [{
         \\"tag\\": \\"div\\",
         \\"text\\": {
-            \\"content\\": \\"commit_id: ${GIT_COMMIT}\\",
+            \\"content\\": \\"commit_id: ${GIT_COMMIT}\ncommit_message: ${GIT_COMMIT_MESSAGE}\\",
             \\"tag\\": \\"lark_md\\"
         }
     }, {
