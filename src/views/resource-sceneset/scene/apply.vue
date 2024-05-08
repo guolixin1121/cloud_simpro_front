@@ -55,7 +55,7 @@
 import { goback } from '@/utils/tools'
 
 const id = useRoute().params.id
-const currentApi = api.scenesets
+const currentApi = api.sceneResource
 const scenset = store.catalog.sceneCatalog
 
 const formState = reactive({
@@ -76,16 +76,15 @@ const add = async () => {
   loading.value = true
 
   const params = {
-    parentId: 1,
-    name: formState.name,
-    desc: formState.desc,
-    // labels: formState.labels?.map((item: any) => item.value || item.name)
+    type: 4,
+    id: [id],
+    reason: formState.reason
   }
   
   try {
-    await currentApi.add(params)
+    await api.grant.apply(params)
 
-    message.info(`申请成功`)
+    message.info(`任务已提交，请前往授权任务管理查看任务状态。`)
     goback()
   } finally {
     loading.value = false
@@ -98,15 +97,15 @@ const getEditData = async () => {
   if(id !== '0') {
     try {
       dataLoading.value = true
-      const data = await currentApi.get(id)
+      const data = await currentApi.getScene(id)
       formState.name = data.name
       formState.desc = data.desc
       formState.labels_detail = data.labels_detail
       formState.mapName = data.mapName
       formState.mapVersion = data.mapVersion
-      formState.adsUrl = data.adsUrl
+      formState.adsUrl = data.xosc_key
       formState.id = data.id
-      formState.sceneset_name = data.sceneset_name
+      formState.sceneset_name = scenset.name
       formState.create_time = data.create_time
     } finally {
       dataLoading.value = false

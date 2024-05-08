@@ -95,10 +95,7 @@ export const useUserStore = defineStore('user', () => {
     return -1
   }
 
-  const isAdmin = () => {
-    console.log('isAdmin', user.value)
-    return user.value?.username == 'admin'
-  }
-
+  const isAdmin = () => user.value?.username == 'admin'
+  
   return { user, token, hasToken, gotoLogin, logout, hasPermission, getUserInfo, isAdmin }
 })

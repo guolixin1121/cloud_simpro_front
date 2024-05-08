@@ -2,7 +2,7 @@
   <div class="breadcrumb">
     <span>场景资源库</span>
     <a @click="goback()">具体场景</a>
-    <span class="breadcrumb--current">{{ selectedSceneset?.name }}</span>
+    <span>{{ selectedSceneset?.name }}</span>
   </div>
 
   <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
@@ -24,12 +24,12 @@
 
   <VncModal ref="vncModal"></VncModal>
 
-  <a-modal v-model:visible="modal.visible" title="批量申请场景集授权"
+  <a-modal ref="modalForm" v-model:visible="modal.visible" title="批量申请场景集授权"
     :footer="null" :destroyOnClose="true">
       <a-form ref="modalForm" class="modal-content" :model="modal" 
         :labelCol ="{ style: { width: '100px' } }" 
         style="padding-bottom: 0px"
-        @finish="onConfirm">
+        @finish="onBatchApply">
         <span>已选择{{ checkedItems.length }}个场景集，请填写申请原因：</span>
         <a-form-item label="" name="reason"
           :rules="[{ required: true, message: '请输入申请原因'} ]">
@@ -39,7 +39,7 @@
       </a-form>
       <div class="modal-buttons">
         <a-button @click="modal.visible = false">取消</a-button>
-        <a-button @click="onConfirm" :loading="submitting" type="primary">确定</a-button>
+        <a-button @click="onBatchApply" :loading="submitting" type="primary">确定</a-button>
       </div>
   </a-modal>
 </template>
@@ -106,14 +106,24 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 300,
+    width: 180,
     actions: {
-      申请授权: (data: any) => gotoSubPage('/apply/' + data.id),
+      申请授权: {
+        validator: () => !user.isAdmin(),
+        handler: (data: any) => gotoSubPage('/apply/' + data.id)
+      },
       查看: (data: any) => gotoSubPage('/view/' + data.id),
-      编辑: (data: any) => gotoSubPage('/edit/' + data.id),
-      编辑场景: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show()),
+      编辑: {
+        validator: () => user.isAdmin(),
+        handler: (data: any) => gotoSubPage('/edit/' + data.id)
+      },
+      编辑场景: {
+        validator: () => user.isAdmin(),
+        handler: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show())
+      },
       场景预览: (data: any) => gotoSubPage('/preview/' + data.id),
       删除: {
+        validator: () => user.isAdmin(),
         tip: '场景删除后不可恢复，您确定要删除场景吗？',
         handler: async ({ id }: { id: string }) => await currentApi.deleteScene({id: [id] })
       }
@@ -129,12 +139,20 @@ const onBatchDelete = async () => {
   tableRef.value.refresh({ deletedRows: checkedItems.value.length })
 }
 
-const cloneForm = ref()
+const modalForm = ref()
 const submitting = ref(false)
-const onConfirm = async () => {
-  cloneForm.value.validate().then(() => {
+const onBatchApply = () => {
+  modalForm.value.validate().then(async () => {
     try {
       submitting.value = true
+      await api.grant.apply({
+        id: checkedItems.value,
+        type: 4,
+        reason: modal.reason
+      })
+      message.success('任务已提交，请前往授权任务管理查看任务状态。')
+      modal.visible = false
+      tableRef.value.refresh({ deletedRows: checkedItems.value.length })
     } finally {
       submitting.value = false
     }

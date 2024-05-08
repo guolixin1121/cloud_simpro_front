@@ -42,7 +42,7 @@ const query = ref({})
 const onSearch = (data: Query) => (query.value = data)
 
 const activeKey = ref(1)
-const listApi = computed(() => (params: any) => api.grant.getList({...params, type: activeKey.value == 1 ? 3 : 4}))
+const listApi = (params: any) => api.grant.getList({...params, type: activeKey.value == 1 ? 3 : 4})
 const columns = computed(() => activeKey.value == 1 ? scenesetColumns : sceneColumns )
 const formItems = computed(() => activeKey.value == 1 ? scenetsetFormItems : sceneFormItems )
 
@@ -51,19 +51,19 @@ const scenetsetFormItems = [
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景集ID或名称' },
   {
     label: '状态',
-    key: 'labels',
-    type: 'tree-select',
+    key: 'status',
+    type: 'select',
     options: ApplyStatusOptions,
-    placeholder: '请选择状态',
-    defaultValue: '',
+    placeholder: '请选择场景来源',
+    defaultValue: ''
   }]
 const sceneFormItems = [
   { label: '任务ID', key: 'id', type: 'input', placeholder: '请输入任务ID' },
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景ID或名称' },
   {
     label: '状态',
-    key: 'labels',
-    type: 'tree-select',
+    key: 'status',
+    type: 'select',
     options: ApplyStatusOptions,
     placeholder: '请选择状态',
     defaultValue: '',
@@ -125,4 +125,9 @@ const onBatchReject = async () => {
   await api.scene.batchDelete({ scenes_id: checkedItems.value })
   tableRef.value.refresh({ deletedRows: checkedItems.value.length })
 }
+
+watch(activeKey, () => {
+  query.value = { id: '', name: '', status: '' }
+  tableRef.value.refresh({page: 1})
+})
 </script>

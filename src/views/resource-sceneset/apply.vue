@@ -56,7 +56,7 @@ const add = async () => {
   loading.value = true
 
   const params = {
-    type: 3,
+    type: useRoute().query.type,
     id,
     reason: formState.reason
   }
