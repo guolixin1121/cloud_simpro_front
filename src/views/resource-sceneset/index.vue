@@ -5,18 +5,20 @@
     <div class="title-section">
       <span class="title">具体场景集列表</span>
       <div>
-        <a-button type="primary" :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" @click="modal.visible = true">申请授权</a-button>
-        <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
-        <a-button type="primary" v-if="user.hasPermission('add')" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
-        <a-button type="primary" v-if="user.hasPermission('add')" @click="gotoSubPage('/apply-manage/0')">授权任务管理</a-button>
+        <template v-if="user.isAdmin()">
+          <batch-button :disabled="!checkedItems.length" :api="onBatchDelete"></batch-button>
+          <a-button type="primary" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
+        </template>
+        <a-button v-else type="primary" @click="modal.visible = true">申请授权</a-button>
+        <a-button type="primary" @click="gotoSubPage('/apply-manage/0')">授权任务管理</a-button>
       </div>
     </div>
     <div>
       <Table :query="query" :columns="columns" :api="currentApi.getScenesetList" :fieldNames="{ label: 'groupName', value: 'id' }"
         :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
         <template #bodyCell="{ column, record }">
-          <template v-if="column.dataIndex == 'count'">
-              <a @click="gotoSubPage('/scene/?pid=' + record.id)">{{ record.count }}</a>
+          <template v-if="column.dataIndex == 'scene_count'">
+              <a @click="gotoSubPage('/scene/?pid=' + record.id)">{{ record.scene_count }}</a>
           </template>
         </template>
       </Table>
@@ -59,7 +61,7 @@ const formItems = ref<SearchFormItem[]>([
     type: 'tree-select',
     mode: 'multiple',
     api: api.tags.getList,
-    query: { tree: 1, tag_type: 3, size: 100 }, // tree无法分页，一次性获取所有
+    query: { tree: 1, tag_type: 2, size: 100 }, // tree无法分页，一次性获取所有
     placeholder: '请选择标签，最多选择9个',
     fieldNames: { label: 'display_name', value: 'name' },
     defaultValue: [''],
@@ -79,16 +81,20 @@ const columns = [
   { title: '场景集名称', dataIndex: 'name', ellipsis: true },
   { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
   { title: '场景数量', dataIndex: 'scene_count', width: 180 },
-  { title: '创建时间', dataIndex: 'createTime', width: 180 },
+  { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },
   {
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 200,
+    width: 150,
     actions: {
       申请授权: {
-        // validator: ({status} : RObject) => status == 0,
+        validator: (data : RObject) => {
+          // 普通用户，且
+          console.log(data)
+          return !user.isAdmin() // && data.status == 
+        },
         handler: ({ id }: RObject) => gotoSubPage('/apply/' + id)
       },
       查看: {
@@ -99,7 +105,7 @@ const columns = [
       },
       删除: {
         tip: '场景集删除后，场景集内场景也会被删除，你确定要删除场景集吗？',
-        handler: async ({ id }: { id: string }) => await currentApi.deleteSceneset(id)
+        handler: async ({ id }: { id: string }) => await currentApi.deleteSceneset({id: [id]})
       }
     }
   }

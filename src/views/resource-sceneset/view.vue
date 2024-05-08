@@ -46,7 +46,7 @@ const loading = ref(false)
 const getEditData = async () => {
   if(id !== '0') {
     loading.value = true
-    const data = await api.scenesets.get(id)
+    const data = await api.sceneResource.getSceneset(id)
     loading.value = false
     for(const prop in formState) {
       formState[prop as keyof typeof formState] = data[prop]
