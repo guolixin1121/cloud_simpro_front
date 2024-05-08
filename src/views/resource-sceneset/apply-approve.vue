@@ -3,32 +3,31 @@
     <span>场景资源库</span>
     <a @click="goback(-2)">具体场景</a>
     <a @click="goback()">授权任务管理</a>
-    <span>任务审批</span>
+    <span>{{ user.isAdmin() ? '任务审批' : '任务查看' }}</span>
   </div>
   <div class="min-main">
-    <span class="title mb-5">任务审批</span>
+    <span class="title mb-5">{{ user.isAdmin() ? '任务审批' : '任务查看' }}</span>
     <div class="flex">
       <div style="width: 50%">
       <a-spin :spinning="dataLoading">
-        <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"
-          @finish="add">
-          <a-form-item label="申请人" name="name" >
-            {{ formState.name }}
+        <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }">
+          <a-form-item label="申请人" >
+            {{ formState.apply_username }}
           </a-form-item>
-          <a-form-item label="申请时间" name="name" >
-            {{ formState.name }}
+          <a-form-item label="申请时间">
+            {{ formState.create_time }}
           </a-form-item>
-          <a-form-item label="申请原因" name="name" >
-            {{ formState.name }}
+          <a-form-item label="申请原因">
+            {{ formState.reason }}
           </a-form-item>
-          <a-form-item label="场景集ID" name="name" >
-            {{ formState.name }}
+          <a-form-item label="场景集ID">
+            {{ formState.resource_id }}
           </a-form-item>
-          <a-form-item label="场景集名称" name="name" >
-            {{ formState.name }}
+          <a-form-item label="场景集名称">
+            {{ formState.resource_name }}
           </a-form-item>
           <a-form-item label="场景集描述" name="desc">
-            {{ formState.desc }}
+            {{ formState.resource_desc }}
           </a-form-item>
           <a-form-item label="标签">
             <ul class="view-list"  v-if="formState.labels_detail?.length > 0">
@@ -44,12 +43,12 @@
         </a-form>
       </a-spin>
     </div>
-      <div style="width: 40%">
+      <div style="width: 40%" v-if="user.isAdmin()">
         <p>审批意见</p>
-        <ch-input type="textarea" rows="15" placeholder="请输入审批意见" v-model="formState.reason" />
+        <ch-input type="textarea" rows="15" placeholder="请输入审批意见" v-model:value="formState.comments" />
         <div class="my-4">
-          <a-button type="primary" class="mr-4">批准</a-button>
-          <a-button :loading="loading">驳回</a-button>
+          <a-button type="primary" class="mr-4" @click="onApprove">批准</a-button>
+          <a-button :loading="loading" @click="onReject">驳回</a-button>
         </div>
       </div>
     </div>
@@ -60,31 +59,52 @@
 import { goback } from '@/utils/tools'
 
 const id = useRoute().params.id
-const currentApi = api.scenesets
+const currentApi = api.grant
+const user = store.user
 
 const formState = reactive({
-  name: '',
+  apply_username: '',
   desc: '',
   reason: '',
+  comments: '',
+  resource_id: '',
+  resource_name: '',
+  resource_desc: '',
   create_time: '',
   labels_detail: []
 })
 
 const loading = ref(false)
-const add = async () => {
+const onApprove = async () => {
   loading.value = true
 
   const params = {
-    parentId: 1,
-    name: formState.name,
-    desc: formState.desc,
-    // labels: formState.labels?.map((item: any) => item.value || item.name)
+    id: [id],
+    comments: formState.comments
   }
   
   try {
-    await currentApi.add(params)
+    await currentApi.approve(params)
 
-    message.info(`申请成功`)
+    message.info(`任务已批准`)
+    goback()
+  } finally {
+    loading.value = false
+  }
+}
+
+const onReject = async () => {
+  loading.value = true
+
+  const params = {
+    id: [id],
+    comments: formState.comments
+  }
+  
+  try {
+    await currentApi.reject(params)
+
+    message.info(`任务已驳回`)
     goback()
   } finally {
     loading.value = false
@@ -97,10 +117,10 @@ const getEditData = async () => {
   if(id !== '0') {
     try {
       dataLoading.value = true
-      const data = await currentApi.get(id)
-      formState.name = data.name
-      formState.desc = data.desc
-      formState.labels_detail = data.labels_detail
+      const data = await currentApi.get({id})
+      for(const prop in formState) {
+        formState[prop as keyof typeof formState] = data[prop]
+      }
     } finally {
       dataLoading.value = false
     }

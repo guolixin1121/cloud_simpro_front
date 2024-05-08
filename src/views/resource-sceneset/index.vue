@@ -14,7 +14,7 @@
       </div>
     </div>
     <div>
-      <Table :query="query" :columns="columns" :api="currentApi.getScenesetList" :fieldNames="{ label: 'groupName', value: 'id' }"
+      <Table ref='tableRef' :query="query" :columns="columns" :api="currentApi.getScenesetList" :fieldNames="{ label: 'groupName', value: 'id' }"
         :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'scene_count'">
@@ -30,7 +30,7 @@
       <a-form ref="modalForm" class="modal-content" :model="modal" 
         :labelCol ="{ style: { width: '100px' } }" 
         style="padding-bottom: 0px"
-        @finish="onConfirm">
+        @finish="onBatchApply">
         <span>已选择{{ checkedItems.length }}个场景集，请填写申请原因：</span>
         <a-form-item label="" name="reason"
           :rules="[{ required: true, message: '请输入申请原因'} ]">
@@ -40,7 +40,7 @@
       </a-form>
       <div class="modal-buttons">
         <a-button @click="modal.visible = false">取消</a-button>
-        <a-button @click="onConfirm" :loading="submitting" type="primary">确定</a-button>
+        <a-button @click="onBatchApply" :loading="submitting" type="primary">确定</a-button>
       </div>
   </a-modal>
 </template>
@@ -76,7 +76,7 @@ const modal = reactive({
   reason: '' // 另存为的名字
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60, validator: (data: any) => data.status == 0 },
+  { dataIndex: 'checkbox', width: 60 },
   { title: '场景集ID', dataIndex: 'id', width: 150 },
   { title: '场景集名称', dataIndex: 'name', ellipsis: true },
   { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
@@ -101,9 +101,11 @@ const columns = [
         handler: ({ id }: RObject) => gotoSubPage('/view/' + id)
       },
       编辑: {
+        validator: () => user.isAdmin(),
         handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
       },
       删除: {
+        validator: () => user.isAdmin(),
         tip: '场景集删除后，场景集内场景也会被删除，你确定要删除场景集吗？',
         handler: async ({ id }: { id: string }) => await currentApi.deleteSceneset({id: [id]})
       }
@@ -113,19 +115,18 @@ const columns = [
 
 const modalForm = ref()
 const submitting = ref(false)
-const onConfirm = async () => {
-  modalForm.value.validate().then(() => {
+const onBatchApply = () => {
+  modalForm.value.validate().then(async () => {
     try {
       submitting.value = true
-      // const { id, groupName } = modal.sourceData
-      // const { code, message } = await currentApi.clone(id, modal.cloneName)
-      // if (code === 200) {
-      //   message.success('复制成功')
-      //   modal.visible = false
-      //   modal.cloneName = ''
-      // } else {
-      //   message.error(message)
-      // }
+      await api.grant.apply({
+        id: checkedItems.value,
+        type: 3,
+        reason: modal.reason
+      })
+      message.success('任务已提交，请前往授权任务管理查看任务状态。')
+      modal.visible = false
+      tableRef.value.refresh({ deletedRows: checkedItems.value.length })
     } finally {
       submitting.value = false
     }
@@ -135,7 +136,7 @@ const tableRef = ref()
 const checkedItems = ref([])
 const onSelect = (data: any) => (checkedItems.value = data)
 const onBatchDelete = async () => {
-  // await currentApi.batchDelete({ scenes_id: checkedItems.value })
+  await currentApi.deleteSceneset({ id: checkedItems.value })
   tableRef.value.refresh({ deletedRows: checkedItems.value.length })
 }
 </script>

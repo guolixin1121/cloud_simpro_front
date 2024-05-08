@@ -148,8 +148,8 @@ export const getMySceneSourceName = (value: number | string) => MySceneSourceOpt
 // 申请授权状态
 export const ApplyStatusOptions = [
   { label: '全部', value: '' },
-  { label: '待审批', value: 0 },
-  { label: '已通过', value: 1 },
-  { label: '已拒绝', value: 2 }
+  { label: '待审批', value: 1 },
+  { label: '已通过', value: 2 },
+  { label: '已拒绝', value: 3 }
 ]
 export const getApplyStatus = (value: number | string) => ApplyStatusOptions.find(v => v.value == value)?.label

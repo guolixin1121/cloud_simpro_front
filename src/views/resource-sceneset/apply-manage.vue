@@ -13,7 +13,7 @@
         <a-tab-pane :key="2" tab="具体场景管理">
         </a-tab-pane>
       </a-tabs> 
-      <div>
+      <div v-if="user.isAdmin()">
         <a-button :disabled="checkedItems.length == 0" type="primary" @click="modalVisible = true">审批</a-button>
       </div>
     </div>
@@ -36,13 +36,13 @@
 import { goback } from '@/utils/tools'
 import { ApplyStatusOptions, getApplyStatus } from '@/utils/dict'
 
-// const user = store.user
+const user = store.user
 const router = useRouter()
 const query = ref({})
 const onSearch = (data: Query) => (query.value = data)
 
 const activeKey = ref(1)
-const listApi = computed(() => activeKey.value == 1 ? api.scene.getList : api.scene.getList)
+const listApi = computed(() => (params: any) => api.grant.getList({...params, type: activeKey.value == 1 ? 3 : 4}))
 const columns = computed(() => activeKey.value == 1 ? scenesetColumns : sceneColumns )
 const formItems = computed(() => activeKey.value == 1 ? scenetsetFormItems : sceneFormItems )
 
@@ -71,19 +71,21 @@ const sceneFormItems = [
 const scenesetColumns = [
   { dataIndex: 'checkbox', width: 60 },
   { title: '任务ID', dataIndex: 'id', width: 120 },
-  { title: '场景集ID', dataIndex: 'scenetset-id', width: 120 },
-  { title: '场景集名称', dataIndex: 'scenet-name', width: 200, ellipsis: true },
+  { title: '场景集ID', dataIndex: 'resource_id', width: 120 },
+  { title: '场景集名称', dataIndex: 'resource_name', width: 200, ellipsis: true },
   { title: '任务状态', dataIndex: 'status', width: 180, formatter: getApplyStatus },
-  { title: '申请人', dataIndex: 'createTime', width: 180 },
-  { title: '申请时间', dataIndex: 'updateTime', width: 180 },
-  { title: '审批时间', dataIndex: 'createUser', width: 150 },
+  { title: '申请人', dataIndex: 'apply_username', width: 180 },
+  { title: '申请时间', dataIndex: 'create_time', width: 180 },
+  { title: '审批时间', dataIndex: 'operate_time', width: 150 },
   {
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
     width: 100,
-    actions: {
+    actions: user.isAdmin() ? {
       审批: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
+    } :  {
+      查看: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
     }
   }
 ]
@@ -91,20 +93,22 @@ const scenesetColumns = [
 const sceneColumns = [
   { dataIndex: 'checkbox', width: 60 },
   { title: '任务ID', dataIndex: 'id', width: 120 },
-  { title: '场景ID', dataIndex: 'scenetset-id', width: 120 },
-  { title: '场景名称', dataIndex: 'scenet-name', ellipsis: true },
-  { title: '所属场景集', dataIndex: 'scenet-name', width: 200, ellipsis: true },
+  { title: '场景ID', dataIndex: 'resource_id', width: 120 },
+  { title: '场景名称', dataIndex: 'resource_name', ellipsis: true },
+  { title: '所属场景集', dataIndex: 'parent_name', width: 200, ellipsis: true },
   { title: '任务状态', dataIndex: 'status', width: 180, formatter: getApplyStatus },
-  { title: '申请人', dataIndex: 'createTime', width: 180 },
-  { title: '申请时间', dataIndex: 'updateTime', width: 180 },
-  { title: '审批时间', dataIndex: 'createUser', width: 150 },
+  { title: '申请人', dataIndex: 'apply_username', width: 180 },
+  { title: '申请时间', dataIndex: 'create_time', width: 180 },
+  { title: '审批时间', dataIndex: 'creaoperate_timeteUser', width: 150 },
   {
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 100,
-    actions: {
-      审批: (data: any) => router.push('/resource-sceneset/apply/' + data.id)
+    width: 80,
+    actions: user.isAdmin() ? {
+      审批: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
+    } :  {
+      查看: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
     }
   }
 ]

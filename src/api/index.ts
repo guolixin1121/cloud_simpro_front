@@ -228,3 +228,11 @@ export const loginsceneResource = defineApi({
   editScene: { url: '/resource/logic/scene/{id}/', method: 'put'  },
   addScene: { url: '/resource/logic/scene/', method: 'post' }
 })()
+// 授权
+export const grant = defineApi({
+  getList: { url: '/grant/list/', method: 'get' },
+  get: { url: '/grant/detail/', method: 'get' },
+  approve: { url: '/grant/approve/', method: 'post' },
+  reject: { url: '/grant/reject/', method: 'post' },
+  apply: { url: '/grant/apply/', method: 'post' }
+})()
