@@ -8,10 +8,10 @@
     <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading">
       <Form :model="formState" @finish="add">
-        <a-form-item label="场景名称" name="adsName"
+        <a-form-item label="场景名称" name="name"
           :rules="[{ required: true, message: '请输入场景名称' }]"
         >
-          <ch-input v-model:value="formState.adsName" :maxlength="50" placeholder="请输入场景名称"></ch-input>
+          <ch-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景描述" name="desc">
           <ch-input type="textarea" v-model:value="formState.desc" :maxlength="255" rows="10" placeholder="请输入场景描述"></ch-input>
@@ -73,11 +73,10 @@ const title =  actionText + '具体场景'
 const scenset = store.catalog.sceneCatalog
 
 const baseApi = api
-const currentApi = baseApi.scene
-// const sceneCatalog = store.catalog.sceneCatalog
+const currentApi = baseApi.sceneResource
 
 const formState = reactive({
-  adsName: '',
+  name: '',
   desc: '',
   mapCatalog: undefined,
   map: undefined,
@@ -94,9 +93,9 @@ const goback = (step: number = -1) => router.go(step)
 const add = async () => {
   const { labels } = formState
   const params = {
-    source: 0,
-    adsName: formState.adsName,
-    // baiduSceneSets: formState.scenesets,
+    name: formState.name,
+    desc: formState.desc,
+    scene_set: scenset.id,
     mapName: formState.map ? (formState.map as unknown as SelectOption).label : formState.mapName,
     mapVersion: formState.mapVersion,
     xosc: formState.xosc,
@@ -111,8 +110,8 @@ const add = async () => {
     loading.value = true
 
     isAdd
-      ? await currentApi.add(params)
-      : await currentApi.edit({ id, data: params })
+      ? await currentApi.addScene(params)
+      : await currentApi.editScene({ id, data: params })
 
     message.info(`${actionText}成功`)
     goback()
@@ -139,15 +138,14 @@ const dataLoading = ref(false)
 const getEditData = async () => {
   if (id !== '0') {
     dataLoading.value = true
-    const scene = await currentApi.get(id)
+    const scene = await currentApi.getScene(id)
     dataLoading.value = false
-    formState.adsName = scene.adsName
+    formState.name = scene.name
     formState.labels = scene.labels_detail
     formState.mapVersion = scene.mapVersion
     formState.mapName = scene.mapName
-    formState.adsUrl = scene.adsUrl
-    // formState.scenesets = scene.baiduSceneSets
-    // formState.scenesetsName = scene.sceneset_name
+    formState.adsUrl = scene.xosc_filename
+    formState.desc = scene.desc
   }
 }
 getEditData()

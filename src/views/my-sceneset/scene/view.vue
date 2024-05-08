@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { getSceneSourceName } from '@/utils/dict'
+import { getMySceneSourceName } from '@/utils/dict'
 
 const scenset = store.catalog.sceneCatalog
 const router = useRouter()
@@ -23,7 +23,7 @@ const getEditData = async () => {
       { label: '场景ID', value: data.id },
       { label: '场景名称', value: data.adsName, isBreak: false },
       { label: '场景描述', value: data.desc },
-      { label: '场景来源', value: getSceneSourceName(data.adsSource) },
+      { label: '场景来源', value: getMySceneSourceName(data.adsSource) },
       { label: '所属场景集', value: data.sceneset_name },
       { label: '关联地图', value: data.mapName + '_' + data.mapVersion },
       { label: '场景文件', value: data.adsUrl },

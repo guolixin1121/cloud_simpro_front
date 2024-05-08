@@ -64,7 +64,7 @@ const formItems = ref<SearchFormItem[]>([
     type: 'tree-select',
     mode: 'multiple',
     api: api.tags.getList,
-    query: { tree: 1, tag_type: 3, size: 100 }, // tree无法分页，一次性获取所有
+    query: { tree: 1, tag_type: 2, size: 100 }, // tree无法分页，一次性获取所有
     placeholder: '请选择标签，最多选择9个',
     fieldNames: { label: 'display_name', value: 'name' },
     defaultValue: [''],
@@ -85,7 +85,7 @@ const columns = [
   { title: '场景集ID', dataIndex: 'id', width: 150 },
   { title: '场景集名称', dataIndex: 'groupName', ellipsis: true },
   { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
-  { title: '来源', dataIndex: 'adsSource', formatter: getMyScenesetSourceName, width: 180 },
+  { title: '来源', dataIndex: 'source', formatter: getMyScenesetSourceName, width: 180 },
   { title: '场景数量', dataIndex: 'count', width: 180 },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },
@@ -93,7 +93,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 200,
+    width: 180,
     actions: {
       查看: {
         handler: ({ id }: RObject) => router.push('/my-sceneset/view/' + id)

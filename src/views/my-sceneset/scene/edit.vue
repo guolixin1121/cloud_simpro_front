@@ -96,8 +96,9 @@ const add = async () => {
   const { labels } = formState
   const params = {
     source: 0,
+    desc: formState.desc,
     adsName: formState.adsName,
-    // baiduSceneSets: formState.scenesets,
+    baiduSceneSets: scenset.id,
     mapName: formState.map ? (formState.map as unknown as SelectOption).label : formState.mapName,
     mapVersion: formState.mapVersion,
     xosc: formState.xosc,
@@ -147,6 +148,7 @@ const getEditData = async () => {
     formState.mapVersion = scene.mapVersion
     formState.mapName = scene.mapName
     formState.adsUrl = scene.adsUrl
+    formState.desc = scene.desc
     // formState.scenesets = scene.baiduSceneSets
     // formState.scenesetsName = scene.sceneset_name
   }

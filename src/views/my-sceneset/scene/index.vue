@@ -80,7 +80,7 @@ loadSceneset()
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入具体场景ID或名称' },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入具体场景ID或名称' },
   {
     label: '来源',
     key: 'adsSource',

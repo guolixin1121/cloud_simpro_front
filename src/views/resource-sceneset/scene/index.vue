@@ -1,6 +1,7 @@
 <template>
   <div class="breadcrumb">
-    <router-link to="/my-sceneset/">具体场景</router-link>
+    <span>场景资源库</span>
+    <a @click="goback()">具体场景</a>
     <span class="breadcrumb--current">{{ selectedSceneset?.name }}</span>
   </div>
 
@@ -10,14 +11,14 @@
     <div class="title-section">
       <span class="title">场景列表</span>
       <div>
-        <a-button type="primary" :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" @click="modal.visible = true">申请授权</a-button>
-        <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
-        <a-button type="primary" :disabled="checkedItems.length > 0" v-if="user.hasPermission('add')"
+        <batch-button v-if="user.isAdmin()" :disabled="!checkedItems.length" :api="onBatchDelete"></batch-button>
+        <a-button v-if="user.isAdmin()"  type="primary" :disabled="checkedItems.length > 0"
             @click="gotoSubPage('/edit/0')">上传具体场景</a-button>
+        <a-button type="primary" v-if="!user.isAdmin()" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
       </div>
     </div>
     <a-spin :spinning="loading">
-      <Table ref="tableRef" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" />
+      <Table ref="tableRef" :api="currentApi.getSceneList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" />
     </a-spin>
   </div>
 
@@ -46,17 +47,17 @@
 <script setup lang="ts">
 import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
-import { gotoSubPage } from '@/utils/tools'
+import { gotoSubPage, goback } from '@/utils/tools'
 
 const vncModal = ref()
-const currentApi = api.scene
+const currentApi = api.sceneResource
 const user = store.user
 const selectedSceneset = ref() // 逻辑场景跳转的默认场景集
 
 const loadSceneset = async () => {
   const scenesetId = useRoute().query.pid
   if (scenesetId) {
-    const data = await api.scenesets.get(scenesetId)
+    const data = await api.sceneResource.getSceneset(scenesetId)
     selectedSceneset.value = data
     store.catalog.sceneCatalog = data
     query.value = { scene_set: data.id}
@@ -66,7 +67,7 @@ loadSceneset()
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入具体场景ID或名称' },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入具体场景ID或名称' },
   {
     label: '标签',
     key: 'labels',
@@ -97,10 +98,10 @@ const modal = reactive({
 const columns = [
   { dataIndex: 'checkbox', width: 60 },
   { title: '场景ID', dataIndex: 'id', width: 120 },
-  { title: '场景名称', dataIndex: 'adsName', width: 200, ellipsis: true },
+  { title: '场景名称', dataIndex: 'name', width: 200, ellipsis: true },
   { title: '场景标签', dataIndex: 'labels_detail', apiField: 'display_name',width: 250, ellipsis: true },
-  { title: '创建时间', dataIndex: 'createTime', width: 180 },
-  { title: '修改时间', dataIndex: 'updateTime', width: 180 },
+  { title: '创建时间', dataIndex: 'create_time', width: 180 },
+  { title: '修改时间', dataIndex: 'update_time', width: 180 },
   {
     title: '操作',
     dataIndex: 'actions',
@@ -114,7 +115,7 @@ const columns = [
       场景预览: (data: any) => gotoSubPage('/preview/' + data.id),
       删除: {
         tip: '场景删除后不可恢复，您确定要删除场景吗？',
-        handler: async ({ id }: { id: string }) => await currentApi.delete(id)
+        handler: async ({ id }: { id: string }) => await currentApi.deleteScene({id: [id] })
       }
     }
   }
@@ -124,7 +125,7 @@ const tableRef = ref()
 const checkedItems = ref([])
 const onSelect = (data: any) => (checkedItems.value = data)
 const onBatchDelete = async () => {
-  await currentApi.batchDelete({ scenes_id: checkedItems.value })
+  await currentApi.deleteScene({ id: checkedItems.value })
   tableRef.value.refresh({ deletedRows: checkedItems.value.length })
 }
 

@@ -59,7 +59,7 @@ const add = async () => {
   loading.value = true
 
   const params = {
-    parentId: 1,
+    parentId: -1,
     name: formState.name,
     desc: formState.desc,
     labels: formState.labels?.map((item: any) => item.value || item.name)

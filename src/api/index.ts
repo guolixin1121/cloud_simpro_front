@@ -212,9 +212,9 @@ export const sceneResource = defineApi({
   addSceneset: { url: '/resource/concrete/sceneset/', method: 'post' },
   getSceneList: { url: '/resource/concrete/scene/', method: 'get' },
   getScene: { url: '/resource/concrete/scene/{id}/', method: 'get' },
-  deleteScene: { url: '/resource/concrete/scene/{id}', method: 'delete' },
-  editScene: { url: '/resource/concrete/scene/{id}/', method: 'put' },
-  addScene: { url: '/resource/concrete/scene/', method: 'post' }
+  deleteScene: { url: '/resource/concrete/scene/delete/', method: 'delete' },
+  editScene: { url: '/resource/concrete/scene/{id}/', method: 'put', headers: { 'content-type': 'multipart/form-data' }  },
+  addScene: { url: '/resource/concrete/scene/', method: 'post', headers: { 'content-type': 'multipart/form-data' }  }
 })()
 export const loginsceneResource = defineApi({
   getScenesetList: { url: '/resource/logic/sceneset/', method: 'get' },
@@ -224,7 +224,7 @@ export const loginsceneResource = defineApi({
   addSceneset: { url: '/resource/logic/sceneset/', method: 'post' },
   getSceneList: { url: '/resource/logic/scene/', method: 'get' },
   getScene: { url: '/resource/logic/scene/{id}/', method: 'get' },
-  deleteScene: { url: '/resource/logic/scene/{id}', method: 'delete' },
-  editScene: { url: '/resource/logic/scene/{id}/', method: 'put' },
+  deleteScene: { url: '/resource/logic/scene/delete/', method: 'delete' },
+  editScene: { url: '/resource/logic/scene/{id}/', method: 'put'  },
   addScene: { url: '/resource/logic/scene/', method: 'post' }
 })()
