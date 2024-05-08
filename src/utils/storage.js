@@ -34,6 +34,14 @@ class MyStorage {
     }
   }
 
+  getWithPrefix(prefix) {
+    const keys = Object.keys(sessionStorage)
+    return keys.filter(key => {
+      const keyPrefix = key.split(':')[0]
+      return keyPrefix != prefix && key.startsWith(prefix)
+    })
+  }
+
   remove(key) {
     this.storage.removeItem(key)
   }

@@ -33,14 +33,13 @@
       <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
 
       <div class="main">
-        <div class="flex justify-between items-center">
+        <div class="title-section">
           <span class="title">场景列表</span>
           <div>
             <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
             <a-button type="primary" 
             :disabled="checkedItems.length > 0 || (selectedSceneset && !selectedSceneset.isLeaf)" 
-              v-if="user.hasPermission('add')"
-               @click="router.push('/scene/edit/0')">上传场景</a-button>
+              v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
           </div>
         </div>
         <a-spin :spinning="loading">

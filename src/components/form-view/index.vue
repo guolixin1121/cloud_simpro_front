@@ -45,11 +45,3 @@ defineProps({
   }
 })
 </script>
-
-<style lang="less" scoped>
-.break-text {
-  word-break:break-all; 
-  // word-wrap:inherit;
-  white-space: break-spaces;
-}
-</style>

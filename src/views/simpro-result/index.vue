@@ -2,7 +2,7 @@
   <search-form class="multiline-form " :items="formItems" @search="onSearch" @show-more="toggleMore"></search-form>
 
   <div class="main">
-    <div class="flex justify-between items-center">
+    <div class="title-section">
       <div class="flex items-center">
         <span class="title mr-4">仿真结果列表</span>
         <a-checkbox v-model:checked="isOwner" class="table_model" @change="onChecked">我的结果</a-checkbox>
@@ -48,11 +48,9 @@
 
 <script setup lang="ts">
 import { TaskSourceOptions, getTaskSourceName, resultStatus, getResultStatus } from '@/utils/dict'
-import { SStorage } from '@/utils/storage'
-import { openLink } from '@/utils/tools'
+import { gotoSubPage, openLink } from '@/utils/tools'
 
 const templateId = useRoute().query.templateId as string
-const router = useRouter()
 const user = store.user
 const currentApi = api.result
 
@@ -126,11 +124,7 @@ const columns = [
       },
       查看结果: {
         validator: (data: any) => isFinished(data.status),
-        handler: (data: any) => {
-          const versionUrlPath = '/simpro-result/view/' + data.id
-          SStorage.remove(versionUrlPath + ':table-page')
-          router.push(`/simpro-result/view/${data.id}?u=${data.uuid}`)
-        }
+        handler: (data: any) => gotoSubPage(`/view/${data.id}?u=${data.uuid}`)
       },
       查看报告: {
         validator: (data: any) => isFinished(data.status) && data.obs_report,

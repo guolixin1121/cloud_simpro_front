@@ -36,7 +36,7 @@
           </div>
         </div>
         <div class="modal-buttons" style="border-top: 1px solid #f0f0f0">
-          <a-button @click="showCreateModel = false" class="marginR-16">取消</a-button>
+          <a-button @click="showCreateModel = false">取消</a-button>
           <a-button @click="confirmAdd" :loading="isCreating" type="primary">确定</a-button>
         </div>
     </a-modal>

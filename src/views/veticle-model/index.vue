@@ -62,12 +62,11 @@
         <div class="desc mt-2">支持格式：.par，单个文件不能超过50MB。</div>
       </div>
       <div class="modal-buttons">
-        <a-button @click="cancelModal" class="marginR-16">取消</a-button>
+        <a-button @click="cancelModal">取消</a-button>
         <a-button @click="confirmModal" :loading="loading" type="primary">确定</a-button>
       </div>
     </a-modal>
-    <a-modal v-model:visible="visible" 
-      title="复制模型"
+    <a-modal v-model:visible="visible" title="复制模型" 
       :footer="null" :mask-closable="false">
       <div class="modal-content">
         模型名称：
@@ -81,7 +80,7 @@
         <span v-if="copyVal.name === '' && showTip" class="error">模型名称不能为空</span>
       </div>
       <div class="modal-buttons">
-        <a-button @click="visible = false" class="marginR-16">取消</a-button>
+        <a-button @click="visible = false">取消</a-button>
         <a-button @click="confirmCopy" :loading="loading" type="primary">确定</a-button>
       </div>
     </a-modal>
@@ -89,6 +88,8 @@
 </template>
 
 <script setup lang="ts">
+import { gotoSubPage } from '@/utils/tools'
+
 // import type { UploadChangeParam } from 'ant-design-vue'
 // import { typeList } from '@/utils/dict'
 // store、api、useRouter等通过auto import自动导入的，直接在template、自定义函数等使用时无效，为undefined
@@ -209,14 +210,7 @@ const confirmModal = async () => {
   }
 }
 
-// import { SStorage } from '../../utils/storage'
-const router = useRouter()
-const preRoute = router.currentRoute.value.path
-const gotoVersion = (record: any) => {
-  const versionUrlPath = '/veticle-model/version/' + record.id
-  // SStorage.remove(versionUrlPath + ':table-page')
-  router.push({ path: versionUrlPath, query: { preRoute } })
-}
+const gotoVersion = (record: any) => gotoSubPage('/version/' + record.id)
 
 const cancelModal = () => {
   fileList.value = []

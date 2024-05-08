@@ -6,13 +6,8 @@
   <div class="min-main">
     <span class="title mb-5">算法详情</span>
     <a-form :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 55%" @finish="add">
-      <a-form-item
-        label="算法名称"
-        name="name"
-        :rules="[
-          { required: true, message: '请输入算法名称' },
-          { validator: () => checkChName(formState.name, 50) }
-        ]"
+      <a-form-item label="算法名称" name="name"
+        :rules="[{ required: true, message: '请输入算法名称' }]"
       >
         <ch-input v-if="isAdd" v-model:value="formState.name" :maxlength="50" placeholder="请输入算法名称"></ch-input>
         <span v-else>{{ formState.name }}</span>
@@ -65,7 +60,7 @@
 </template>
 
 <script setup lang="ts">
-import { formatDate, checkChName, checkEmpty } from '@/utils/tools'
+import { formatDate, checkEmpty } from '@/utils/tools'
 
 const id = useRoute().params.id
 const isAdd = id === '0'

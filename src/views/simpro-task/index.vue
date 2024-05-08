@@ -2,7 +2,7 @@
   <search-form class="multiline-form " :items="formItems" @search="onSearch" @show-more="toggleMore"></search-form>
 
   <div class="main">
-    <div class="flex justify-between items-center">
+    <div class="title-section">
       <div class="flex items-center">
         <span class="title mr-4">仿真任务列表</span>
         <a-checkbox v-model:checked="isOwner" class="table_model" @change="onChecked">我的任务</a-checkbox>

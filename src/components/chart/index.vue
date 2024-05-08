@@ -18,7 +18,9 @@ watch(() => props.option, render)
 
 function render() {
   chartInstance?.clear()
-  chartInstance = echarts.init(chartElement.value)
+  if(!chartInstance) {
+    chartInstance = echarts.init(chartElement.value)
+  }
   const option = produceOption(props.option)
   
   chartInstance.setOption(option, true)

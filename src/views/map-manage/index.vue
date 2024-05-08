@@ -11,11 +11,11 @@
       </a-spin>
       <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
       <div class="main">
-        <div class="flex justify-between items-center">
+        <div class="title-section">
           <span class="title">地图列表</span>
           <div>
             <batch-button :disabled="!selectedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
-            <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add')" @click="router.push('/map-manage/edit/0')">上传地图</a-button>
+            <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add')" @click="gotoSubPage('/edit/0')">上传地图</a-button>
           </div>
         </div>
         <Table ref="tableRef" :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 800, y: 'auto' }"
@@ -34,8 +34,7 @@
 </template>
 
 <script setup lang="ts">
-import { SStorage } from '@/utils/storage'
-// import { isEmpty } from '@/utils/tools'
+import { gotoSubPage } from '@/utils/tools'
 
 /****** api */
 const user = store.user
@@ -51,7 +50,6 @@ const onTableSearch = (data: Query) => {
 }
 
 /****** 表格区域 */
-const router = useRouter()
 const columns = [
   { title: '', dataIndex: 'checkbox', width: 60 },
   { title: '地图ID', dataIndex: 'id', width: 150 },
@@ -63,8 +61,8 @@ const columns = [
     fixed: 'right',
     width: 150,
     actions: {
-      查看: (data: any) => router.push('/map-manage/edit/' + data.id + '?type=0&name=' + encodeURIComponent(data.name)),
-      编辑: (data: any) => router.push('/map-manage/edit/' + data.id + '?name=' + encodeURIComponent(data.name)),
+      查看: (data: any) => gotoSubPage('/edit/' + data.id + '?type=0&name=' + encodeURIComponent(data.name)),
+      编辑: (data: any) => gotoSubPage('/edit/' + data.id + '?name=' + encodeURIComponent(data.name)),
       删除: {
         tip: '删除后，关联数据(场景、地图等)将会一起删除，是否删除？',
         handler: async ({ id, name }: any) => await mapsApi.deleteMaps({ id, data: { name } })
@@ -73,12 +71,7 @@ const columns = [
   }
 ]
 
-const preRoute = router.currentRoute.value.path
-const gotoVersion = (record: any) => {
-  const versionUrlPath = '/map-manage/version/' + record.id
-  SStorage.remove(versionUrlPath + ':table-page')
-  router.push({ path: versionUrlPath, query: { preRoute, name: record.name } })
-}
+const gotoVersion = (record: any) => gotoSubPage('/version/' + record.id + '?name=' + encodeURIComponent(record.name))
 
 const catalogLoading = ref(false)
 store.catalog.mapCatalog = {}
@@ -90,8 +83,8 @@ const onTreeSelect = async (val: any) => {
 }
 
 const treeBtnHandlers = {
-  add: () => router.push('/map-manage/mapset/0'),
-  edit: (data: any) => router.push('/map-manage/mapset/' + data.id + '?name=' + encodeURIComponent(data.name) + '&isLeaf=' + data.isLeaf),
+  add: () => gotoSubPage('/mapset/0'),
+  edit: (data: any) => gotoSubPage('/mapset/' + data.id + '?name=' + encodeURIComponent(data.name) + '&isLeaf=' + data.isLeaf),
   delete: api.mapsets.delete
 }
 

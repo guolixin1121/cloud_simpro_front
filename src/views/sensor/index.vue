@@ -35,7 +35,6 @@ const onSearch = (data: Query) => {
 }
 /****** 表格区域 */
 const router = useRouter()
-// const preRoute = router.currentRoute.value.path
 const columns = [
   { title: '传感器ID', dataIndex: 'id', width: 110 },
   { title: '传感器名称', dataIndex: 'name', width: 250 },
