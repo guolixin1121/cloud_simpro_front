@@ -1,7 +1,7 @@
 <template>
   <div class="breadcrumb">
     <span>场景资源库</span>
-    <a @click="goback(-2)">具体场景</a>
+    <a @click="goback(-2)">逻辑场景</a>
     <a @click="goback()">{{ scenset?.name }}</a>
     <span>申请授权</span>
   </div>
@@ -76,7 +76,7 @@ const add = async () => {
   loading.value = true
 
   const params = {
-    type: 4,
+    type: 2,
     id: [id],
     reason: formState.reason
   }

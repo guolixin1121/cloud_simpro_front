@@ -3,7 +3,7 @@
     <div class="title--noborder">快捷入口</div>
     <div class="item-list">
       <template v-for="item in entries" :key="item.label">
-        <div v-if="hasPermission(item)" class="item" @click="gotoPage(item.router)">
+        <div v-if="hasPermission(item)" class="item" @click="gotoSubPage(item.router)">
           <img :src="item.icon" width="24" style="margin-bottom: 12px;" />
           <span class="mt-1">{{ item.label }}</span>
         </div>
@@ -30,7 +30,7 @@ const entries = [
 ]
 
 const router = useRouter()
-const gotoPage = (url: string) => router.push(url)
+const gotoSubPage = (url: string) => router.push(url)
 
 const hasPermission = ({ router, label }: any) => {
   return store.user.hasPermission(label == '新增任务' ? 'add' : 'view', router)

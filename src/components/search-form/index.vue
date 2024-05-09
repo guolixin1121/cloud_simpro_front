@@ -92,7 +92,7 @@ props.items.forEach((item: any) => {
 // 获取缓存的搜索项
 // 从菜单进入时设置?menu来清空缓存
 const route = useRoute()
-const routeName = route.path.replaceAll('/', '')
+const routeName = route.path //.replaceAll('/', '')
 onMounted(() => {
   const clear = route.query.clear === null
   const isBrowserBack = window.history.state.forward // 是否是浏览器回退

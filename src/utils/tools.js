@@ -163,19 +163,25 @@ export const preventReClick = {
 }
 
 /*
-* 跳转到当前页面的子页面
-* 跳转前清除所有子页面的缓存
+* 跳转到指定页面,跳转前清除目标页面的缓存
+* path：目的路径，如果是到子页面，只需指定相对路径
+* isChild：boolean path是否为当前页面的子页面
 */
-export const gotoSubPage = (subPath) => {
-  // clear storage of subpages
-  let currentRoute = router.currentRoute.value.path
-  currentRoute = currentRoute.endsWith('/') ? currentRoute : (currentRoute + '/')
-  const subPages = SStorage.getWithPrefix(currentRoute)
-  subPages.forEach((page) => SStorage.remove(page))
-
+export const gotoSubPage = (targetPath, isChild = true) => {
+  // clear storage of target path
+  // let target = isChild ? router.currentRoute.value.path : path
+  // target = target.endsWith('/') ? target : (target + '/')
+  // const targetKeys = SStorage.getWithPrefix(target)
+  // targetKeys.forEach((key) => SStorage.remove(key))
+  targetPath = targetPath.startsWith('/') ? targetPath.substring(1) : targetPath
+  
+  const targetFullPath = isChild ?  (router.currentRoute.value.path + targetPath) : targetPath
+  const targetKeys = SStorage.getWithPrefix(targetFullPath.split('?')[0])
+  targetKeys.forEach((key) => SStorage.remove(key))
+  
   // open subpage
-  subPath = subPath.startsWith('/') ? subPath.substring(1) : subPath
-  router.push(currentRoute + subPath)
+  // path = path.startsWith('/') ? path.substring(1) : path
+  router.push(targetFullPath)
 }
 
 export const goback = (step = -1) => router.go(step)

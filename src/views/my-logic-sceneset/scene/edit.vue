@@ -12,12 +12,10 @@
         <a-form-item label="场景名称" name="name"
           :rules="[{ required: true, message: '请输入场景名称'}]"
         >
-          <ch-input v-if="isAdd" v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></ch-input>
-          <span v-else>{{ formState.name }}</span>
+          <ch-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景描述" name="desc">
-          <ch-input type="textarea" v-if="isAdd" v-model:value="formState.desc" placeholder="请输入场景描述" :max-length="255" rows="10"></ch-input>
-          <span v-else>{{ formState.desc }}</span>
+          <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入场景描述" :max-length="255" rows="10"></ch-input>
         </a-form-item>
         <a-form-item label="关联地图" v-if="!isAdd" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
           {{ formState.mapName + '_' + formState.mapVersion }}
@@ -107,6 +105,7 @@ const add = async () => {
   const params = {
     logic_scene_set_id: sceneset.id,
     source: 0,
+    desc: formState.desc,
     name: formState.name,
     map_id: formState.mapVersion,
     xosc_scene: formState.xosc_scene,
@@ -150,6 +149,7 @@ const getEditData = async () => {
     const data = await currentApi.get(id)
     dataLoading.value = false
     formState.name = data.name
+    formState.desc = data.desc
     formState.mapName = data.map_name
     formState.mapVersion = data.map_version_num
     formState.labels = data.labels_detail

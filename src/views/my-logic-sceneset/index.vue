@@ -135,7 +135,7 @@ const tableRef = ref()
 const checkedItems = ref([])
 const onSelect = (data: any) => (checkedItems.value = data)
 const onBatchDelete = async () => {
-  // await currentApi.batchDelete({ scenes_id: checkedItems.value })
+  await currentApi.delete({ id: checkedItems.value })
   tableRef.value.refresh({ deletedRows: checkedItems.value.length })
 }
 </script>

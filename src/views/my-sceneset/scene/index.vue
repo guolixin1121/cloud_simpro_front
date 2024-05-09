@@ -26,7 +26,7 @@
 
   <VncModal ref="vncModal"></VncModal>
 
-  <a-modal v-model:visible="modal.cloneVisible" title="复制场景"
+  <a-modal v-model:visible="modal.cloneVisible" title="场景另存为"
     :footer="null" :destroyOnClose="true">
       <div class="modal-content">
         <p>请选择场景的保存路径</p>

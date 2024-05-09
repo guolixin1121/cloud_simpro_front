@@ -9,7 +9,7 @@
           <batch-button :disabled="!checkedItems.length" :api="onBatchDelete"></batch-button>
           <a-button type="primary" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
         </template>
-        <a-button v-else type="primary" @click="modal.visible = true">申请授权</a-button>
+        <a-button v-else type="primary" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
         <a-button type="primary" @click="gotoSubPage('/apply-manage/0')">授权任务管理</a-button>
       </div>
     </div>

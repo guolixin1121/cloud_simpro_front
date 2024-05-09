@@ -5,7 +5,7 @@
     <span>场景集{{ selectedSceneset?.name }}</span>
   </div>
 
-  <search-form class="reactive-form" :items="formItems" @search="onSearch"></search-form>
+  <search-form class="reactive-form" :manual="true" :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
     <page-title title="逻辑场景列表">
@@ -79,18 +79,26 @@
       </template>
     </a-modal>
 
-    <a-modal v-model:visible="modal.cloneVisible" title="复制场景"
-      :footer="null" :destroyOnClose="true">
-      <a-form ref="cloneForm" class="modal-content" :model="modal" 
-        :labelCol ="{ style: { width: '100px' } }" style="padding-bottom: 0px"
-        @finish="onConfirmClone">
-        <a-form-item label="场景集名称" name="targetSceneset" 
-          :rules="[{ required: true, message: '请选择场景集'} ]">
-          <scroll-select :api="scenesetApi" v-model:value="modal.targetSceneset" 
-            :fieldNames="{ label: 'groupName', value: 'id' }" placeholder="请输入场景集名称">
-          </scroll-select>
-        </a-form-item>
-      </a-form>
+    <a-modal v-model:visible="modal.cloneVisible" title="场景另存为"
+    :footer="null" :destroyOnClose="true">
+      <div class="modal-content">
+        <p>请选择场景的保存路径</p>
+        <a-radio-group v-model:value="modal.scenesetType" name="radioGroup">
+            <a-radio :value="1">新建场景集</a-radio>
+            <a-radio :value="2">已有场景集</a-radio>
+        </a-radio-group>
+        <a-form ref="modalForm" :model="modal" style="margin-top: 16px;"
+            :labelCol ="{ style: { width: '140px' } }">
+            <a-form-item label="我的场景-具体场景" name="targetSceneset" 
+                :rules="[{ required: true, message: '请选择已有场景集'} ]" v-if="modal.scenesetType == 1">
+                <ch-input v-model:value="modal.targetSceneset" placeholder="请输入场景集名称"></ch-input>
+            </a-form-item>
+            <a-form-item label="我的场景-具体场景" name="targetSceneset" 
+                :rules="[{ required: true, message: '请输入场景集名称'} ]" v-else>
+                <scroll-select :api="scenesetApi" v-model:value="modal.targetSceneset" placeholder="请选择场景集名称"></scroll-select>
+            </a-form-item>
+        </a-form>
+      </div>
       <div class="modal-buttons">
         <a-button @click="modal.cloneVisible = false">取消</a-button>
         <a-button @click="onConfirmClone" :loading="submitting" type="primary">确定</a-button>
@@ -104,7 +112,7 @@ import { gotoSubPage, goback } from '@/utils/tools'
 
 const user = store.user
 const currentApi = api.logicScene
-const scenesetApi = api.scenesets.getList
+const scenesetApi = (arg: any) => api.logicScenesets.getList({...arg, source: 0})
 
 const selectedSceneset = ref() 
 const loadSceneset = async () => {
@@ -113,7 +121,7 @@ const loadSceneset = async () => {
     const data = await api.logicScenesets.get(scenesetId)
     selectedSceneset.value = data
     store.catalog.sceneCatalog = data
-    query.value = { scene_set: data.id}
+    query.value = { logic_scene_set_id: data.id}
   }
 }
 loadSceneset()
@@ -156,6 +164,7 @@ const generateModal = reactive({
 const modal = reactive({
   cloneVisible: false,
   sourceData: {},
+  scenesetType: 1, // 1: 新建， 2: 已有
   targetSceneset: '' // 另存为的场景集
 })
 const columns = [

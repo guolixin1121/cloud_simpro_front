@@ -13,7 +13,7 @@
           {{ formState.name }}
         </a-form-item>
         <a-form-item label="场景集描述" name="desc">
-          {{ formState.desc }}
+          <span class="break-all">{{ formState.desc }}</span>
         </a-form-item>
         <a-form-item label="标签">
           <ul class="view-list"  v-if="formState.labels_detail?.length > 0">
@@ -56,7 +56,7 @@ const add = async () => {
   loading.value = true
 
   const params = {
-    type: useRoute().query.type,
+    type: 3,
     id,
     reason: formState.reason
   }

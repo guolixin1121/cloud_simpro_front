@@ -86,7 +86,7 @@ const formItems = ref<SearchFormItem[]>([
 const query: Query = ref({})
 const onTableSearch = (data: Query) => {
   const sceneCatalog = selectedSceneset.value
-  query.value = { ...data, scene_set: sceneCatalog?.id }
+  query.value = { ...data, logic_scene_set_id: sceneCatalog?.id }
 }
 
 /****** 表格区域 */
@@ -147,7 +147,7 @@ const onBatchApply = () => {
       submitting.value = true
       await api.grant.apply({
         id: checkedItems.value,
-        type: 4,
+        type: 2,
         reason: modal.reason
       })
       message.success('任务已提交，请前往授权任务管理查看任务状态。')

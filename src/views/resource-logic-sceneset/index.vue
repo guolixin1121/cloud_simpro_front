@@ -9,8 +9,8 @@
           <batch-button :disabled="!checkedItems.length" :api="onBatchDelete"></batch-button>
           <a-button type="primary" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
         </template>
-        <a-button v-else type="primary" @click="modal.visible = true">申请授权</a-button>
-        <a-button type="primary" @click="gotoSubPage('/apply-manage/0')">授权任务管理</a-button>
+        <a-button v-else type="primary" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
+        <a-button type="primary" @click="gotoSubPage('/apply-manage/0/')">授权任务管理</a-button>
       </div>
     </div>
     <div>
@@ -71,7 +71,6 @@ const query = ref({})
 const onSearch = (data: Query) => (query.value = data)
 
 /****** 表格区域 */
-const router = useRouter()
 const modal = reactive({
   visible: false,
   reason: '' // 另存为的名字
@@ -96,7 +95,7 @@ const columns = [
           console.log(data)
           return !user.isAdmin() // && data.status == 
         },
-        handler: ({ id }: RObject) => router.push('/resource-sceneset/apply/' + id)
+        handler: ({ id }: RObject) => gotoSubPage('/apply/' + id)
       },
       查看: {
         handler: ({ id }: RObject) => gotoSubPage('/view/' + id)
@@ -122,7 +121,7 @@ const onBatchApply = () => {
       submitting.value = true
       await api.grant.apply({
         id: checkedItems.value,
-        type: 3,
+        type: 1,
         reason: modal.reason
       })
       message.success('任务已提交，请前往授权任务管理查看任务状态。')

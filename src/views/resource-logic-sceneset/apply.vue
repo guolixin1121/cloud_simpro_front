@@ -1,8 +1,7 @@
 <template>
   <div class="breadcrumb">
     <span>场景资源库</span>
-    <a @click="goback(-2)">具体场景</a>
-    <a @click="goback()">{{ scenset?.name }}</a>
+    <a @click="goback()">逻辑场景</a>
     <span>申请授权</span>
   </div>
   <div class="min-main">
@@ -10,23 +9,11 @@
     <a-spin :spinning="dataLoading">
       <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 55%"
         @finish="add">
-        <a-form-item label="场景ID" name="id" >
-          {{ formState.id }}
-        </a-form-item>
-        <a-form-item label="场景名称" name="name" >
+        <a-form-item label="场景集名称" name="name" >
           {{ formState.name }}
         </a-form-item>
-        <a-form-item label="场景描述" name="desc">
+        <a-form-item label="场景集描述" name="desc">
           <span class="break-all">{{ formState.desc }}</span>
-        </a-form-item>
-        <a-form-item label="所属场景集" name="sceneset_name">
-          {{ formState.sceneset_name }}
-        </a-form-item>
-        <a-form-item label="关联地图" name="sceneset">
-          {{ formState.mapName + '_' + formState.mapVersion }}
-        </a-form-item>
-        <a-form-item label="场景文件" name="adsUrl">
-          {{ formState.adsUrl }}
         </a-form-item>
         <a-form-item label="标签">
           <ul class="view-list"  v-if="formState.labels_detail?.length > 0">
@@ -55,19 +42,12 @@
 import { goback } from '@/utils/tools'
 
 const id = useRoute().params.id
-const currentApi = api.sceneResource
-const scenset = store.catalog.sceneCatalog
 
 const formState = reactive({
-  id:'',
   name: '',
   desc: '',
-  sceneset_name: '',
-  mapName: '',
-  mapVersion: '',
-  adsUrl: '',
-  create_time: '',
   reason: '',
+  create_time: '',
   labels_detail: []
 })
 
@@ -76,8 +56,8 @@ const add = async () => {
   loading.value = true
 
   const params = {
-    type: 4,
-    id: [id],
+    type: 1,
+    id,
     reason: formState.reason
   }
   
@@ -97,16 +77,11 @@ const getEditData = async () => {
   if(id !== '0') {
     try {
       dataLoading.value = true
-      const data = await currentApi.getScene(id)
+      const data = await api.loginsceneResource.getSceneset(id)
       formState.name = data.name
       formState.desc = data.desc
-      formState.labels_detail = data.labels_detail
-      formState.mapName = data.mapName
-      formState.mapVersion = data.mapVersion
-      formState.adsUrl = data.xosc_key
-      formState.id = data.id
-      formState.sceneset_name = scenset.name
       formState.create_time = data.create_time
+      formState.labels_detail = data.labels_detail
     } finally {
       dataLoading.value = false
     }
