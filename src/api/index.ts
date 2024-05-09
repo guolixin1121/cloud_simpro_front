@@ -25,6 +25,14 @@ export const scenesets = defineApi({
   add: { url: '/scene/scenesets/', method: 'post' }
 })()
 
+export const logicScenesets = defineApi({
+  getList: { url: '/simpro/logic_scene_sets/', method: 'get' },
+  get: { url: '/simpro/logic_scene_sets/{sid}', method: 'get' },
+  delete: { url: '/simpro/logic_scene_sets/{sid}/', method: 'delete' },
+  edit: { url: '/simpro/logic_scene_sets/{sid}/', method: 'put' },
+  add: { url: '/simpro/logic_scene_sets/', method: 'post' }
+})()
+
 export const scene = defineApi({
   getList: { url: '/scene/scenes/', method: 'get' },
   get: { url: '/scene/scenes/{sid}/', method: 'get' },

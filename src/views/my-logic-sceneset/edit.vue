@@ -45,7 +45,7 @@ const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '场景集'
 
 const baseApi = api
-const currentApi = api.scenesets
+const currentApi = api.logicScenesets
 
 const formState = reactive({
   name: '',
@@ -59,7 +59,6 @@ const add = async () => {
   loading.value = true
 
   const params = {
-    parentId: 1,
     name: formState.name,
     desc: formState.desc,
     labels: formState.labels?.map((item: any) => item.value || item.name)

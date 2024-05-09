@@ -6,7 +6,7 @@
       <span class="title">具体场景集列表</span>
       <div>
         <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
-        <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/my-sceneset/edit/0')">创建场景集</a-button>
+        <a-button type="primary" v-if="user.hasPermission('add')" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
       </div>
     </div>
     <div>
@@ -79,7 +79,7 @@ const modal = reactive({
   sourceData: {} as RObject,
   cloneName: '' // 另存为的名字
 })
-const router = useRouter()
+// const router = useRouter()
 const columns = [
   { dataIndex: 'checkbox', width: 60 },
   { title: '场景集ID', dataIndex: 'id', width: 150 },
@@ -96,10 +96,10 @@ const columns = [
     width: 180,
     actions: {
       查看: {
-        handler: ({ id }: RObject) => router.push('/my-sceneset/view/' + id)
+        handler: ({ id }: RObject) => gotoSubPage('/view/' + id)
       },
       编辑: {
-        handler: ({ id }: RObject) => router.push('/my-sceneset/edit/' + id)
+        handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
       },
       复制: (data: RObject) => {
         modal.cloneVisible = true
