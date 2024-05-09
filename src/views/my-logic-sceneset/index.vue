@@ -10,7 +10,7 @@
       </div>
     </div>
     <div>
-      <Table :query="query" :columns="columns" :api="currentApi.getList" :fieldNames="{ label: 'groupName', value: 'id' }"
+      <Table ref="tableRef" :query="query" :columns="columns" :api="currentApi.getList" :fieldNames="{ label: 'groupName', value: 'id' }"
         :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'count'">
@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <a-modal v-model:visible="modal.cloneVisible" title="复制场景集"
+  <a-modal v-model:visible="modal.cloneVisible" title="场景集另存为"
     :footer="null" :destroyOnClose="true">
       <a-form ref="cloneForm" class="modal-content" :model="modal" 
         :labelCol ="{ style: { width: '100px' } }" 
@@ -100,14 +100,14 @@ const columns = [
       编辑: {
         handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
       },
-      复制: (data: RObject) => {
+      另存为: (data: RObject) => {
         modal.cloneVisible = true
         modal.sourceData = data
         modal.cloneName = ''
       },
       删除: {
         tip: '场景集删除后，场景集内场景也会被删除，你确定要删除场景集吗？',
-        handler: async ({ id }: { id: string }) => await currentApi.delete(id)
+        handler: async ({ id }: { id: string }) => await currentApi.delete({id: [id]})
       }
     }
   }
@@ -115,19 +115,17 @@ const columns = [
 
 const cloneForm = ref()
 const submitting = ref(false)
-const onConfirmClone = async () => {
-  cloneForm.value.validate().then(() => {
+const onConfirmClone = () => {
+  cloneForm.value.validate().then(async () => {
     try {
       submitting.value = true
-      // const { id, groupName } = modal.sourceData
-      // const { code, message } = await currentApi.clone(id, modal.cloneName)
-      // if (code === 200) {
-      //   message.success('复制成功')
-      //   modal.cloneVisible = false
-      //   modal.cloneName = ''
-      // } else {
-      //   message.error(message)
-      // }
+      await currentApi.clone({
+        name: modal.cloneName,
+        logic_scene_set_id: modal.sourceData.id
+      })
+      message.success('已另存')
+      modal.cloneVisible = false
+      tableRef.value.refresh()
     } finally {
       submitting.value = false
     }

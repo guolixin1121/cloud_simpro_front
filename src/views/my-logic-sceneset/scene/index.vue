@@ -2,7 +2,7 @@
   <div class="breadcrumb">
     <span>我的场景</span>
     <a @click="goback()">逻辑场景</a>
-    <span>场景集{{ sceneset?.name }}</span>
+    <span>场景集{{ selectedSceneset?.name }}</span>
   </div>
 
   <search-form class="reactive-form" :items="formItems" @search="onSearch"></search-form>
@@ -106,11 +106,21 @@ const user = store.user
 const currentApi = api.logicScene
 const scenesetApi = api.scenesets.getList
 
-const sceneset = store.catalog.sceneCatalog
+const selectedSceneset = ref() 
+const loadSceneset = async () => {
+  const scenesetId = useRoute().query.pid
+  if (scenesetId) {
+    const data = await api.logicScenesets.get(scenesetId)
+    selectedSceneset.value = data
+    store.catalog.sceneCatalog = data
+    query.value = { scene_set: data.id}
+  }
+}
+loadSceneset()
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入逻辑场景名称' },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入逻辑场景ID或名称' },
   {
     label: '标签',
     key: 'labels',

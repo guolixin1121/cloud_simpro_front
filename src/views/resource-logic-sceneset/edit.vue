@@ -1,5 +1,6 @@
 <template>
   <div class="breadcrumb">
+    <span>场景资源库</span>
     <a @click="goback()">逻辑场景</a>
     <span>{{ title }}</span>
   </div>
@@ -13,7 +14,7 @@
           <ch-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景集名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景集描述" name="desc">
-          <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入场景集描述" :maxlength="255" rows="10"></ch-input>
+          <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入场景集描述" :maxlength="255" rows="5"></ch-input>
         </a-form-item>
         <a-form-item label="标签">
           <tree-transfer
@@ -44,7 +45,7 @@ const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '场景集'
 
 const baseApi = api
-const currentApi = api.scenesets
+const currentApi = api.loginsceneResource
 
 const formState = reactive({
   name: '',
@@ -58,14 +59,13 @@ const add = async () => {
   loading.value = true
 
   const params = {
-    parentId: 1,
     name: formState.name,
     desc: formState.desc,
     labels: formState.labels?.map((item: any) => item.value || item.name)
   }
   
   try {
-    isAdd ? await currentApi.add(params) : await currentApi.edit({ id, data: params })
+    isAdd ? await currentApi.addSceneset(params) : await currentApi.editSceneset({ id, data: params })
 
     message.info(`${actionText}成功`)
     goback()
@@ -80,7 +80,7 @@ const getEditData = async () => {
   if(id !== '0') {
     try {
       dataLoading.value = true
-      const data = await currentApi.get(id)
+      const data = await currentApi.getSceneset(id)
       formState.name = data.name
       formState.desc = data.desc
       formState.labels = data.labels_detail

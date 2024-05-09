@@ -15,7 +15,7 @@
           <span v-else>{{ formState.name }}</span>
         </a-form-item>
         <a-form-item label="场景描述" name="desc">
-          <ch-input type="textarea" v-if="isAdd" v-model:value="formState.desc" placeholder="请输入场景描述" :max-length="255" rows="10"></ch-input>
+          <ch-input type="textarea" v-if="isAdd" v-model:value="formState.desc" placeholder="请输入场景描述" :max-length="255" rows="5"></ch-input>
           <span v-else>{{ formState.desc }}</span>
         </a-form-item>
         <a-form-item label="关联地图" v-if="!isAdd" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">

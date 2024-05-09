@@ -29,7 +29,7 @@
   <a-modal v-model:visible="modal.cloneVisible" title="复制场景"
     :footer="null" :destroyOnClose="true">
       <div class="modal-content">
-        <p>请选择泛化生成的具体场景的保存路径</p>
+        <p>请选择场景的保存路径</p>
         <a-radio-group v-model:value="modal.scenesetType" name="radioGroup">
             <a-radio :value="1">新建场景集</a-radio>
             <a-radio :value="2">已有场景集</a-radio>
@@ -65,7 +65,7 @@ const vncModal = ref()
 const currentApi = api.scene
 const scenesetApi = api.scenesets.getList
 const user = store.user
-const selectedSceneset = ref() // 逻辑场景跳转的默认场景集
+const selectedSceneset = ref() 
 
 const loadSceneset = async () => {
   const scenesetId = useRoute().query.pid

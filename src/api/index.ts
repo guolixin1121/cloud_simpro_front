@@ -28,9 +28,10 @@ export const scenesets = defineApi({
 export const logicScenesets = defineApi({
   getList: { url: '/simpro/logic_scene_sets/', method: 'get' },
   get: { url: '/simpro/logic_scene_sets/{sid}', method: 'get' },
-  delete: { url: '/simpro/logic_scene_sets/{sid}/', method: 'delete' },
+  delete: { url: '/simpro/logic_scene_sets/delete/', method: 'delete' },
   edit: { url: '/simpro/logic_scene_sets/{sid}/', method: 'put' },
-  add: { url: '/simpro/logic_scene_sets/', method: 'post' }
+  add: { url: '/simpro/logic_scene_sets/', method: 'post' },
+  clone: { url: '/simpro/logic_scene_sets/copy/', method: 'post' }
 })()
 
 export const scene = defineApi({
@@ -227,7 +228,7 @@ export const sceneResource = defineApi({
 export const loginsceneResource = defineApi({
   getScenesetList: { url: '/resource/logic/sceneset/', method: 'get' },
   getSceneset: { url: '/resource/logic/sceneset/{id}/', method: 'get' },
-  deleteSceneset: { url: '/resource/logic/sceneset/{id}', method: 'delete' },
+  deleteSceneset: { url: '/resource/logic/sceneset/delete/', method: 'delete' },
   editSceneset: { url: '/resource/logic/sceneset/{id}/', method: 'put' },
   addSceneset: { url: '/resource/logic/sceneset/', method: 'post' },
   getSceneList: { url: '/resource/logic/scene/', method: 'get' },

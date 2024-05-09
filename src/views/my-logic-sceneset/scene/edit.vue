@@ -2,7 +2,7 @@
   <div class="breadcrumb">
     <span>我的场景</span>
     <a @click="goback(-2)">逻辑场景</a>
-    <a @click='goback()'>场景集{{ scenset?.name }}</a>
+    <a @click='goback()'>场景集{{ sceneset?.name }}</a>
     <span>{{ title }}</span>
   </div>
   <div class="min-main">
@@ -74,7 +74,6 @@
 </template>
 
 <script setup lang="ts">
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { goback } from "@/utils/tools"
 
 const id = useRoute().params.id
@@ -82,7 +81,7 @@ const isAdd = id === '0'
 const actionText = isAdd ? '上传' : '修改'
 const title =  actionText + '逻辑场景'
 
-const scenset = store.catalog.sceneCatalog
+const sceneset = store.catalog.sceneCatalog
 const baseApi = api
 const currentApi = api.logicScene
 
@@ -106,6 +105,7 @@ const add = async () => {
   loading.value = true
   
   const params = {
+    logic_scene_set_id: sceneset.id,
     source: 0,
     name: formState.name,
     map_id: formState.mapVersion,

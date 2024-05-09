@@ -14,7 +14,7 @@
           <ch-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景集名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景集描述" name="desc">
-          <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入场景集描述" :maxlength="255" rows="10"></ch-input>
+          <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入场景集描述" :maxlength="255" rows="5"></ch-input>
         </a-form-item>
         <a-form-item label="标签">
           <tree-transfer

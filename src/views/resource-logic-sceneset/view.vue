@@ -1,5 +1,6 @@
 <template>
   <div class="breadcrumb">
+    <span>场景资源库</span>
     <a @click="goback()">逻辑场景</a>
     <span>场景集详情</span>
   </div>
@@ -11,7 +12,7 @@
           {{ formState.name }}
         </a-form-item>
         <a-form-item label="场景集描述">
-          {{ formState.desc }}
+          <span class="break-text">{{ formState.desc }}</span>
         </a-form-item>
         <a-form-item label="标签">
           <ul class="view-list"  v-if="formState.labels_detail?.length > 0">
@@ -45,7 +46,7 @@ const loading = ref(false)
 const getEditData = async () => {
   if(id !== '0') {
     loading.value = true
-    const data = await api.scenesets.get(id)
+    const data = await api.loginsceneResource.getSceneset(id)
     loading.value = false
     for(const prop in formState) {
       formState[prop as keyof typeof formState] = data[prop]
