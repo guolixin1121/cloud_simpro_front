@@ -37,6 +37,7 @@ import { goback } from '@/utils/tools'
 import { ApplyStatusOptions, getApplyStatus } from '@/utils/dict'
 
 const user = store.user
+const isAdmin = user.isAdmin()
 const router = useRouter()
 const query = ref({})
 const onSearch = (data: Query) => (query.value = data)
@@ -69,7 +70,7 @@ const sceneFormItems = [
     defaultValue: '',
   }]
 const scenesetColumns = [
-  { dataIndex: 'checkbox', width: 60 },
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => isAdmin && data.status != 2 },
   { title: '任务ID', dataIndex: 'id', width: 120 },
   { title: '场景集ID', dataIndex: 'resource_id', width: 120 },
   { title: '场景集名称', dataIndex: 'resource_name', width: 200, ellipsis: true },
@@ -83,15 +84,17 @@ const scenesetColumns = [
     fixed: 'right',
     width: 100,
     actions: user.isAdmin() ? {
-      审批: (data: any) => router.push('/resource-logic-sceneset/apply-approve/' + data.id)
-    } :  {
+      审批: {
+        validator: (data: any) => data.status == 1,
+        handler: (data: any) => router.push('/resource-logic-sceneset/apply-approve/' + data.id)
+      }} :  {
       查看: (data: any) => router.push('/resource-logic-sceneset/apply-approve/' + data.id)
     }
   }
 ]
 
 const sceneColumns = [
-  { dataIndex: 'checkbox', width: 60 },
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => isAdmin && data.status != 2 },
   { title: '任务ID', dataIndex: 'id', width: 120 },
   { title: '场景ID', dataIndex: 'resource_id', width: 120 },
   { title: '场景名称', dataIndex: 'resource_name', ellipsis: true },
@@ -99,15 +102,17 @@ const sceneColumns = [
   { title: '任务状态', dataIndex: 'status', width: 180, formatter: getApplyStatus },
   { title: '申请人', dataIndex: 'apply_username', width: 180 },
   { title: '申请时间', dataIndex: 'create_time', width: 180 },
-  { title: '审批时间', dataIndex: 'creaoperate_timeteUser', width: 150 },
+  { title: '审批时间', dataIndex: 'operate_time', width: 180 },
   {
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
     width: 80,
     actions: user.isAdmin() ? {
-      审批: (data: any) => router.push('/resource-logic-sceneset/apply-approve/' + data.id)
-    } :  {
+      审批: {
+        validator: (data: any) => data.status == 1,
+        handler: (data: any) => router.push('/resource-logic-sceneset/apply-approve/' + data.id)
+      }} :  {
       查看: (data: any) => router.push('/resource-logic-sceneset/apply-approve/' + data.id)
     }
   }

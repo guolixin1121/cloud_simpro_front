@@ -11,10 +11,12 @@
     <div class="title-section">
       <span class="title">场景列表</span>
       <div>
-        <batch-button v-if="user.isAdmin()" :disabled="!checkedItems.length" :api="onBatchDelete"></batch-button>
-        <a-button v-if="user.isAdmin()"  type="primary" :disabled="checkedItems.length > 0"
+        <batch-button v-if="isAdmin" :disabled="!checkedItems.length"
+         :tips="'您已勾选' + checkedItems.length+ '个场景，确定要删除所有勾选的场景吗？'"
+         :api="onBatchDelete"></batch-button>
+        <a-button v-if="isAdmin && selectedSceneset?.edit_enable"  type="primary" :disabled="checkedItems.length > 0"
             @click="gotoSubPage('/edit/0')">上传具体场景</a-button>
-        <a-button type="primary" v-if="!user.isAdmin()" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
+        <a-button type="primary" v-if="!isAdmin" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
       </div>
     </div>
     <a-spin :spinning="loading">
@@ -52,6 +54,7 @@ import { gotoSubPage, goback } from '@/utils/tools'
 const vncModal = ref()
 const currentApi = api.sceneResource
 const user = store.user
+const isAdmin = user.isAdmin()
 const selectedSceneset = ref() // 逻辑场景跳转的默认场景集
 
 const loadSceneset = async () => {
@@ -96,7 +99,7 @@ const modal = reactive({
   reason: ''
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60 },
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => isAdmin ? data.delete_enable : data.apply_enable },
   { title: '场景ID', dataIndex: 'id', width: 120 },
   { title: '场景名称', dataIndex: 'name', width: 200, ellipsis: true },
   { title: '场景标签', dataIndex: 'labels_detail', apiField: 'display_name',width: 250, ellipsis: true },
@@ -106,24 +109,24 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 180,
+    width: 200,
     actions: {
       申请授权: {
-        validator: () => !user.isAdmin(),
+        validator: (data: any) => !isAdmin && data.apply_enable,
         handler: (data: any) => gotoSubPage('/apply/' + data.id)
       },
       查看: (data: any) => gotoSubPage('/view/' + data.id),
       编辑: {
-        validator: () => user.isAdmin(),
+        validator: (data: any) => isAdmin && data.edit_enable,
         handler: (data: any) => gotoSubPage('/edit/' + data.id)
       },
       编辑场景: {
-        validator: () => user.isAdmin(),
+        validator: (data: any) => isAdmin && data.edit_enable,
         handler: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show())
       },
       场景预览: (data: any) => gotoSubPage('/preview/' + data.id),
       删除: {
-        validator: () => user.isAdmin(),
+        validator: (data: any) => isAdmin && data.delete_enable,
         tip: '场景删除后不可恢复，您确定要删除场景吗？',
         handler: async ({ id }: { id: string }) => await currentApi.deleteScene({id: [id] })
       }

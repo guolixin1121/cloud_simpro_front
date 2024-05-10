@@ -17,7 +17,7 @@
           {{ formState.name }}
         </a-form-item>
         <a-form-item label="场景描述" name="desc">
-          <span class="break-all">{{ formState.desc }}</span>
+          <span class="break-text">{{ formState.desc }}</span>
         </a-form-item>
         <a-form-item label="所属场景集" name="sceneset_name">
           {{ formState.sceneset_name }}
@@ -55,7 +55,7 @@
 import { goback } from '@/utils/tools'
 
 const id = useRoute().params.id
-const currentApi = api.sceneResource
+const currentApi = api.loginsceneResource
 const scenset = store.catalog.sceneCatalog
 
 const formState = reactive({
@@ -101,9 +101,9 @@ const getEditData = async () => {
       formState.name = data.name
       formState.desc = data.desc
       formState.labels_detail = data.labels_detail
-      formState.mapName = data.mapName
-      formState.mapVersion = data.mapVersion
-      formState.adsUrl = data.xosc_key
+      formState.mapName = data.map_name
+      formState.mapVersion = data.map_version_num
+      formState.adsUrl = data.scene_url
       formState.id = data.id
       formState.sceneset_name = scenset.name
       formState.create_time = data.create_time

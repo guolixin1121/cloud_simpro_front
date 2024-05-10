@@ -10,8 +10,9 @@
   <div class="main">
     <page-title title="逻辑场景列表">
       <a-button type="primary" :disabled="!selectedItems.length" v-if="user.hasPermission('add')" @click="onBatchClone()">另存为</a-button>
-      <batch-button :disabled="!selectedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
-      <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add')" @click="gotoSubPage('/edit/0')">上传逻辑场景</a-button>
+      <batch-button :disabled="!selectedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
+        :tips="'您已勾选' + selectedItems.length+ '个场景，确定要删除所有勾选的场景吗？'"></batch-button>
+      <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isNotFromResource" @click="gotoSubPage('/edit/0')">上传逻辑场景</a-button>
     </page-title>
     <a-spin :spinning="loadingSceneset">
       <Table 
@@ -53,6 +54,7 @@
       <template v-else>
         <div class="modal-content">
           <p>请选择泛化生成的具体场景的保存路径</p>
+          {{ generateModal.targetSceneset }}
           <select-sceneset ref="generateSceneset" v-model:value="generateModal.targetSceneset"></select-sceneset>
         </div>
         <div class="modal-buttons">
@@ -66,8 +68,7 @@
     :footer="null" :destroyOnClose="true">
       <div class="modal-content">
         <p>请选择场景的保存路径</p>
-        <select-sceneset ref="cloneSceneset" :scenesetApi="logicscenesetApi" :fieldNames="{ label: 'name', value: 'id' }"
-          v-model:value="cloneModal.targetSceneset"></select-sceneset>
+        <select-sceneset ref="cloneSceneset" :isLogicSceneset="true" v-model:value="cloneModal.targetSceneset"></select-sceneset>
       </div>
       <div class="modal-buttons">
         <a-button @click="cloneModal.cloneVisible = false">取消</a-button>
@@ -79,11 +80,10 @@
 
 <script setup lang="ts">
 import { gotoSubPage, goback } from '@/utils/tools'
-import { MyLogicSceneSourceOptions, getMyLogicSceneSourceName } from '@/utils/dict'
+import { MyLogicSceneSourceOptions, IsMyLogicSceneFromResource, IsMyLogicScenesetFromResource, getMyLogicSceneSourceName } from '@/utils/dict'
 
 const user = store.user
 const currentApi = api.logicScene
-const logicscenesetApi = (arg: any) => api.logicScenesets.getList({...arg, source: 0})
 
 const selectedSceneset = ref() 
 const loadingSceneset = ref(false)
@@ -94,6 +94,7 @@ const loadSceneset = async () => {
     const data = await api.logicScenesets.get(scenesetId)
     loadingSceneset.value = false
     selectedSceneset.value = data
+    selectedSceneset.value.isNotFromResource = !IsMyLogicScenesetFromResource(data.source)
     store.catalog.sceneCatalog = data
     query.value = { logic_scene_set_id: data.id}
   }
@@ -132,9 +133,8 @@ const onSearch = (data: Query) => (query.value = { ...data, logic_scene_set_id: 
 const tableRef = ref()
 const generateModal = reactive({
   visible: false,
-  scenesetType: 1,
   step: 1,
-  targetSceneset: '',
+  targetSceneset: { sceneset: '', scenesetType: 1 }, // 另存为的场景
   sourceData: { logic_scene_version_id: '', config_result_count: 0 }
 }) // 泛化
 const cloneModal = reactive({
@@ -142,6 +142,7 @@ const cloneModal = reactive({
   sourceData: [{id: ''}],
   targetSceneset: { sceneset: '', scenesetType: 1 } // 另存为的场景
 })
+const isNotFromResource = ({source}: any) => !IsMyLogicSceneFromResource(source)
 const columns = [
   { dataIndex: 'checkbox', width: 60 },
   { title: '场景ID', dataIndex: 'id', width: 90 },
@@ -163,7 +164,10 @@ const columns = [
       },
       泛化结果: (data: any) => gotoSubPage('/result/' + data.id +'?name=' + data.name),
       查看: (data: any) => gotoSubPage('/view/' + data.id),
-      编辑: (data: any) => gotoSubPage('/edit/' + data.id),
+      编辑: {
+        validator: isNotFromResource,
+        handler: (data: any) => gotoSubPage('/edit/' + data.id)
+      },
       另存为: (data: any) => {
         cloneModal.sourceData = [data.id]
         cloneModal.cloneVisible = true
@@ -181,8 +185,9 @@ const runConfirm = () => {
   generateSceneset.value.validate().then(async () => {
     try {
       isSubmitting.value = true
-      const params = generateModal.scenesetType == 1 ? { result_scene_set_name: generateModal.targetSceneset} 
-          : { result_scene_set_id: generateModal.targetSceneset }
+      const { sceneset, scenesetType } = generateModal.targetSceneset
+      const params = scenesetType == 1 ? { result_scene_set_name: sceneset } 
+          : { result_scene_set_id: sceneset }
         
       await currentApi.run({
         source: 0,

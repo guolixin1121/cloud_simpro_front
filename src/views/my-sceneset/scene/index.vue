@@ -6,16 +6,16 @@
   </div>
 
   <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
-
   <div class="main">
     <div class="title-section">
       <span class="title">场景列表</span>
       <div>
-        <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('add')" :api="onBatchDelete" label="另存为"></batch-button>
-        <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
-        <a-button type="primary" v-if="user.hasPermission('add')"
+        <a-button type="primary" :disabled="!checkedItems.length" v-if="user.hasPermission('add')" @click="onBatchClone()">另存为</a-button>
+        <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
+           :tips="'您已勾选' + checkedItems.length+ '个场景，确定要删除所有勾选的场景吗？'"></batch-button>
+        <a-button type="primary" v-if="selectedSceneset?.isNotFromResource"
             @click="router.push('/my-sceneset/my-scene/edit/0')">大模型生成场景</a-button>
-        <a-button type="primary" :disabled="checkedItems.length > 0" v-if="user.hasPermission('add')"
+        <a-button type="primary" :disabled="checkedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isNotFromResource"
             @click="gotoSubPage('/edit/0')">上传具体场景</a-button>
       </div>
     </div>
@@ -26,21 +26,21 @@
 
   <VncModal ref="vncModal"></VncModal>
 
-  <a-modal v-model:visible="modal.cloneVisible" title="场景另存为"
+  <a-modal v-model:visible="cloneModal.cloneVisible" title="场景另存为"
     :footer="null" :destroyOnClose="true">
       <div class="modal-content">
         <p>请选择场景的保存路径</p>
-        <select-sceneset v-model:value="modal.targetSceneset"></select-sceneset>
+        <select-sceneset ref="cloneSceneset" v-model:value="cloneModal.targetSceneset"></select-sceneset>
       </div>
       <div class="modal-buttons">
-        <a-button @click="modal.cloneVisible = false">取消</a-button>
+        <a-button @click="cloneModal.cloneVisible = false">取消</a-button>
         <a-button @click="onConfirmClone" :loading="submitting" type="primary">确定</a-button>
       </div>
   </a-modal>
 </template>
 
 <script setup lang="ts">
-import { MySceneSourceOptions, getMySceneSourceName } from '@/utils/dict'
+import { MySceneSourceOptions, IsMyScenesetFromResource, IsMySceneFromResource, getMySceneSourceName } from '@/utils/dict'
 import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
 import { gotoSubPage, goback } from '@/utils/tools'
@@ -55,6 +55,7 @@ const loadSceneset = async () => {
   if (scenesetId) {
     const data = await api.scenesets.get(scenesetId)
     selectedSceneset.value = data
+    selectedSceneset.value.isNotFromResource = !IsMyScenesetFromResource(data.source)
     store.catalog.sceneCatalog = data
     query.value = { scene_set: data.id}
   }
@@ -95,13 +96,8 @@ const onTableSearch = (data: Query) => {
 
 /****** 表格区域 */
 const loading = ref(false)
-const modal = reactive({
-  cloneVisible: false,
-  sourceData: {},
-  scenesetType: 1, // 1: 新建， 2: 已有
-  targetSceneset: '' // 另存为的场景集
-})
 const router = useRouter()
+const isNotFromResource = ({adsSource}: any) => !IsMySceneFromResource(adsSource)
 const columns = [
   { dataIndex: 'checkbox', width: 60 },
   { title: '场景ID', dataIndex: 'id', width: 120 },
@@ -114,16 +110,21 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 300,
+    width: 280,
     actions: {
       查看: (data: any) => gotoSubPage('/view/' + data.id),
-      编辑: (data: any) => gotoSubPage('/edit/' + data.id),
-      编辑场景: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show()),
+      编辑: { 
+        validator: isNotFromResource,
+        handler: (data: any) => gotoSubPage('/edit/' + data.id)
+      },
+      编辑场景: {
+        validator: isNotFromResource,
+        handler: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show()),
+      },
       场景预览: (data: any) => gotoSubPage('/preview/' + data.id),
       另存为: (data: any) => {
-        modal.sourceData = data
-        modal.targetSceneset = ''
-        modal.cloneVisible = true
+        cloneModal.sourceData = [data.id]
+        cloneModal.cloneVisible = true
       },
       删除: {
         tip: '场景删除后不可恢复，您确定要删除场景吗？',
@@ -133,6 +134,40 @@ const columns = [
   }
 ]
 
+const cloneSceneset = ref()
+const cloneModal = reactive({
+  cloneVisible: false,
+  sourceData: {},
+  targetSceneset: { sceneset: '', scenesetType: 1 } // 另存为的场景
+})
+const submitting = ref(false)
+const onConfirmClone = () => {
+  cloneSceneset.value.validate().then(async () => {
+    try {
+      submitting.value = true
+      const { sceneset, scenesetType } = cloneModal.targetSceneset
+      const params = scenesetType == 1 ? { scene_set_name: sceneset} : { scene_set_id: sceneset }
+
+      await currentApi.clone({
+        id: cloneModal.sourceData,
+        ...params
+      })
+      message.success('已另存')
+      cloneModal.cloneVisible = false
+      tableRef.value.refresh()
+    } finally {
+      submitting.value = false
+    }
+  })
+}
+
+// 批量另存为
+const onBatchClone = () => {
+  cloneModal.cloneVisible = true
+  cloneModal.sourceData = checkedItems.value
+}
+
+// 批量删除
 const tableRef = ref()
 const checkedItems = ref([])
 const onSelect = (data: any) => (checkedItems.value = data)
@@ -141,15 +176,4 @@ const onBatchDelete = async () => {
   tableRef.value.refresh({ deletedRows: checkedItems.value.length })
 }
 
-const cloneForm = ref()
-const submitting = ref(false)
-const onConfirmClone = async () => {
-  cloneForm.value.validate().then(() => {
-    try {
-      submitting.value = true
-    } finally {
-      submitting.value = false
-    }
-  })
-}
 </script>

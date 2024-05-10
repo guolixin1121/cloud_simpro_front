@@ -83,8 +83,10 @@ const scenesetColumns = [
     fixed: 'right',
     width: 100,
     actions: user.isAdmin() ? {
-      审批: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
-    } :  {
+      审批: { 
+        validator: ({status}: any) => status == 1,
+        handler: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
+      }} :  {
       查看: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
     }
   }
@@ -99,15 +101,17 @@ const sceneColumns = [
   { title: '任务状态', dataIndex: 'status', width: 180, formatter: getApplyStatus },
   { title: '申请人', dataIndex: 'apply_username', width: 180 },
   { title: '申请时间', dataIndex: 'create_time', width: 180 },
-  { title: '审批时间', dataIndex: 'creaoperate_timeteUser', width: 150 },
+  { title: '审批时间', dataIndex: 'operate_time', width: 180 },
   {
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
     width: 80,
     actions: user.isAdmin() ? {
-      审批: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
-    } :  {
+      审批: { 
+        validator: ({status}: any) => status == 1,
+        handler: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
+      }} :  {
       查看: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
     }
   }

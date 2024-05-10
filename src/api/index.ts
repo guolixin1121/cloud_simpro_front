@@ -21,6 +21,7 @@ export const scenesets = defineApi({
   getList: { url: '/scene/scenesets/', method: 'get' },
   get: { url: '/scene/scenesets/{sid}', method: 'get' },
   delete: { url: '/scene/scenesets/{sid}/', method: 'delete' },
+  batchDelete: { url: '/scene/scenesets/delete/', method: 'delete' },
   edit: { url: '/scene/scenesets/{sid}/', method: 'put' },
   add: { url: '/scene/scenesets/', method: 'post' },
   clone: { url: '/scene/scenesets/copy/', method: 'post' },

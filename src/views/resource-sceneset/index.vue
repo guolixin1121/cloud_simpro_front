@@ -5,8 +5,9 @@
     <div class="title-section">
       <span class="title">具体场景集列表</span>
       <div>
-        <template v-if="user.isAdmin()">
-          <batch-button :disabled="!checkedItems.length" :api="onBatchDelete"></batch-button>
+        <template v-if="isAdmin">
+          <batch-button :disabled="!checkedItems.length" :api="onBatchDelete"
+          :tips="'您已勾选' + checkedItems.length+ '个场景集，确定要删除所有勾选的场景集吗？'"></batch-button>
           <a-button type="primary" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
         </template>
         <a-button v-else type="primary" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
@@ -50,6 +51,7 @@ import { gotoSubPage } from '@/utils/tools'
 
 /****** api */
 const user = store.user
+const isAdmin = user.isAdmin()
 const currentApi = api.sceneResource
 
 /****** 搜素区域 */
@@ -76,7 +78,7 @@ const modal = reactive({
   reason: '' // 另存为的名字
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60 },
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => isAdmin ? data.delete_enable : data.apply_enable },
   { title: '场景集ID', dataIndex: 'id', width: 150 },
   { title: '场景集名称', dataIndex: 'name', ellipsis: true },
   { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
@@ -90,22 +92,18 @@ const columns = [
     width: 150,
     actions: {
       申请授权: {
-        validator: (data : RObject) => {
-          // 普通用户，且
-          console.log(data)
-          return !user.isAdmin() // && data.status == 
-        },
+        validator: (data : RObject) => !isAdmin && data.apply_enable,
         handler: ({ id }: RObject) => gotoSubPage('/apply/' + id)
       },
       查看: {
         handler: ({ id }: RObject) => gotoSubPage('/view/' + id)
       },
       编辑: {
-        validator: () => user.isAdmin(),
+        validator: (data : RObject) => isAdmin && data.edit_enable,
         handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
       },
       删除: {
-        validator: () => user.isAdmin(),
+        validator: (data : RObject) => isAdmin && data.delete_enable,
         tip: '场景集删除后，场景集内场景也会被删除，你确定要删除场景集吗？',
         handler: async ({ id }: { id: string }) => await currentApi.deleteSceneset({id: [id]})
       }

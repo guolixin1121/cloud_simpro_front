@@ -18,20 +18,20 @@
             {{ formState.create_time }}
           </a-form-item>
           <a-form-item label="申请原因">
-            {{ formState.reason }}
+            <span class="break-text">{{ formState.reason || '无' }}</span>
           </a-form-item>
           <template v-if="isSceneset">
             <a-form-item label="场景集ID">{{ formState.data.id }}</a-form-item>
             <a-form-item label="场景集名称">{{ formState.data.name }}</a-form-item>
             <a-form-item label="场景集描述" name="desc">
-              <span class="break-all">{{ formState.data.desc || '无' }}</span>
+              <span class="break-text">{{ formState.data.desc || '无' }}</span>
             </a-form-item>
           </template>
           <template v-else>
             <a-form-item label="场景ID">{{ formState.data.id }}</a-form-item>
             <a-form-item label="场景名称">{{ formState.data.name }}</a-form-item>
             <a-form-item label="场景描述" name="desc">
-              <span class="break-all">{{ formState.data.desc || '无' }}</span>
+              <span class="break-text">{{ formState.data.desc || '无' }}</span>
             </a-form-item>
             <a-form-item label="路径">{{ formState.data.name }}</a-form-item>
             <a-form-item label="关联地图">{{ formState.data.mapName + formState.data.mapVersion }}</a-form-item>
@@ -49,9 +49,9 @@
         </a-form>
       </a-spin>
     </div>
-      <div style="width: 40%" v-if="user.isAdmin()">
+      <div style="width: 40%; margin-left: 48px;" v-if="user.isAdmin()">
         <p>审批意见</p>
-        <ch-input type="textarea" rows="15" placeholder="请输入审批意见" v-model:value="formState.comments" />
+        <ch-input type="textarea" rows="15" placeholder="请输入审批意见" :maxlength="255" v-model:value="formState.comments" />
         <div class="my-4">
           <a-button type="primary" class="mr-4" @click="onApprove">批准</a-button>
           <a-button :loading="loading" @click="onReject">驳回</a-button>
@@ -84,12 +84,14 @@ const formState = reactive({
     create_time: ''
   }
 })
+debugger
 const isSceneset = ref(false)
 
 const loading = ref(false)
 const onApprove = async () => {
   loading.value = true
 
+  debugger
   const params = {
     id: [id],
     comments: formState.comments

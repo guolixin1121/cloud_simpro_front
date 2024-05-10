@@ -5,12 +5,13 @@
     <div class="title-section">
       <span class="title">具体场景集列表</span>
       <div>
-        <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
+        <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
+          :tips="'您已勾选' + checkedItems.length+ '个场景集，确定要删除所有勾选的场景集吗？'"></batch-button>
         <a-button type="primary" v-if="user.hasPermission('add')" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
       </div>
     </div>
     <div>
-      <Table :query="query" :columns="columns" :api="currentApi.getList" :fieldNames="{ label: 'groupName', value: 'id' }"
+      <Table ref="tableRef" :query="query" :columns="columns" :api="currentApi.getList" :fieldNames="{ label: 'groupName', value: 'id' }"
         :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'count'">
@@ -40,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { MyScenesetSourceOptions, getMyScenesetSourceName } from '@/utils/dict'
+import { MyScenesetSourceOptions, IsMyScenesetFromResource, getMyScenesetSourceName } from '@/utils/dict'
 import { gotoSubPage } from '@/utils/tools'
 
 /****** api */
@@ -79,9 +80,13 @@ const modal = reactive({
   sourceData: {} as RObject,
   cloneName: '' // 另存为的名字
 })
-// const router = useRouter()
+
+// 判断是否为旧的场景集，不可被删除和编辑
+const isOldData = (name: string) => name !== 'SOTIF' && name!= '公共场景集'
 const columns = [
-  { dataIndex: 'checkbox', width: 60 },
+  { dataIndex: 'checkbox', width: 60,
+    validator: (data: any) => isOldData(data.groupName),
+   },
   { title: '场景集ID', dataIndex: 'id', width: 150 },
   { title: '场景集名称', dataIndex: 'groupName', ellipsis: true },
   { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
@@ -99,6 +104,7 @@ const columns = [
         handler: ({ id }: RObject) => gotoSubPage('/view/' + id)
       },
       编辑: {
+        validator: ({ source }: any) => !IsMyScenesetFromResource(source),
         handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
       },
       另存为: (data: RObject) => {
@@ -107,6 +113,7 @@ const columns = [
         modal.cloneName = ''
       },
       删除: {
+        validator: (data: any) => isOldData(data.groupName),
         tip: '场景集删除后，场景集内场景也会被删除，你确定要删除场景集吗？',
         handler: async ({ id }: { id: string }) => await currentApi.delete(id)
       }
@@ -136,7 +143,7 @@ const tableRef = ref()
 const checkedItems = ref([])
 const onSelect = (data: any) => (checkedItems.value = data)
 const onBatchDelete = async () => {
-  // await currentApi.batchDelete({ scenes_id: checkedItems.value })
+  await currentApi.batchDelete({ scene_set_id: checkedItems.value })
   tableRef.value.refresh({ deletedRows: checkedItems.value.length })
 }
 </script>

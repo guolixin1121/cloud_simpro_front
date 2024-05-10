@@ -5,7 +5,8 @@
     <div class="title-section">
       <span class="title">逻辑场景集列表</span>
       <div>
-        <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
+        <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
+          :tips="'您已勾选' + checkedItems.length+ '个场景集，确定要删除所有勾选的场景集吗？'"></batch-button>
         <a-button type="primary" v-if="user.hasPermission('add')" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
       </div>
     </div>
@@ -40,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { MyScenesetSourceOptions, getMyScenesetSourceName } from '@/utils/dict'
+import { MyLogicSceneSourceOptions, IsMyLogicScenesetFromResource, getMyLogicScenesetSourceName } from '@/utils/dict'
 import { gotoSubPage } from '@/utils/tools'
 
 /****** api */
@@ -54,7 +55,7 @@ const formItems = ref<SearchFormItem[]>([
     label: '来源',
     key: 'source',
     type: 'select',
-    options: MyScenesetSourceOptions,
+    options: MyLogicSceneSourceOptions,
     placeholder: '请选择场景来源',
     defaultValue: ''
   },
@@ -80,11 +81,11 @@ const modal = reactive({
   cloneName: '' // 另存为的名字
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60 },
+  { dataIndex: 'checkbox', width: 60,validator: (data: any) => data.name !== 'SOTIF', },
   { title: '场景集ID', dataIndex: 'id', width: 150 },
   { title: '场景集名称', dataIndex: 'name', ellipsis: true },
   { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
-  { title: '来源', dataIndex: 'source', formatter: getMyScenesetSourceName, width: 180 },
+  { title: '来源', dataIndex: 'source', formatter: getMyLogicScenesetSourceName, width: 180 },
   { title: '场景数量', dataIndex: 'count', width: 180 },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },
@@ -98,6 +99,7 @@ const columns = [
         handler: ({ id }: RObject) => gotoSubPage('/view/' + id)
       },
       编辑: {
+        validator: ({source}: RObject) => !IsMyLogicScenesetFromResource(source),
         handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
       },
       另存为: (data: RObject) => {
@@ -106,6 +108,7 @@ const columns = [
         modal.cloneName = ''
       },
       删除: {
+        validator: (data: any) => data.name !== 'SOTIF',
         tip: '场景集删除后，场景集内场景也会被删除，你确定要删除场景集吗？',
         handler: async ({ id }: { id: string }) => await currentApi.delete({id: [id]})
       }

@@ -9,7 +9,7 @@
 是否进行二次弹窗确认，默认为true
 
 ```
- <batch-button :api="batchRun" :double-confirm="false" label="运行"></batch-button> // 批量运行
+ <batch-button :api="batchRun" :double-confirm="false" label="是否运行"></batch-button> // 批量运行
  <batch-button :api="batchDelete"></batch-button> // 批量删除   
 ```
 ![Alt text](./image.png)

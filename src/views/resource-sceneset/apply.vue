@@ -13,7 +13,7 @@
           {{ formState.name }}
         </a-form-item>
         <a-form-item label="场景集描述" name="desc">
-          <span class="break-all">{{ formState.desc }}</span>
+          <span class="break-text">{{ formState.desc }}</span>
         </a-form-item>
         <a-form-item label="标签">
           <ul class="view-list"  v-if="formState.labels_detail?.length > 0">
@@ -27,7 +27,7 @@
           {{ formState.create_time }}
         </a-form-item>
         <a-form-item label="申请说明" name="reason">
-          <a-textarea v-model:value="formState.reason" :rows="4" />
+          <a-textarea v-model:value="formState.reason" :maxlength="300" :rows="4" />
         </a-form-item>
         <a-form-item :wrapper-col="{ style: { paddingLeft: '100px' }}">
           <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">申请</a-button>
@@ -57,7 +57,7 @@ const add = async () => {
 
   const params = {
     type: 3,
-    id,
+    id: [id],
     reason: formState.reason
   }
   
