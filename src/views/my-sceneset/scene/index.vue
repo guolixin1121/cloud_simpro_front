@@ -2,7 +2,7 @@
   <div class="breadcrumb">
     <span>我的场景</span>
     <a @click="goback()">具体场景</a>
-    <span>场景集{{ selectedSceneset?.name }}</span>
+    <span>{{ selectedSceneset?.name }}</span>
   </div>
 
   <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
@@ -11,7 +11,7 @@
     <div class="title-section">
       <span class="title">场景列表</span>
       <div>
-        <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('add')" :api="onBatchDelete" label="复制"></batch-button>
+        <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('add')" :api="onBatchDelete" label="另存为"></batch-button>
         <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
         <a-button type="primary" v-if="user.hasPermission('add')"
             @click="router.push('/my-sceneset/my-scene/edit/0')">大模型生成场景</a-button>
@@ -30,23 +30,7 @@
     :footer="null" :destroyOnClose="true">
       <div class="modal-content">
         <p>请选择场景的保存路径</p>
-        <a-radio-group v-model:value="modal.scenesetType" name="radioGroup">
-            <a-radio :value="1">新建场景集</a-radio>
-            <a-radio :value="2">已有场景集</a-radio>
-        </a-radio-group>
-        <a-form ref="modalForm" :model="modal" style="margin-top: 16px;"
-            :labelCol ="{ style: { width: '140px' } }">
-            <a-form-item label="我的场景-具体场景" name="targetSceneset" 
-                :rules="[{ required: true, message: '请选择已有场景集'} ]" v-if="modal.scenesetType == 1">
-                <ch-input v-model:value="modal.targetSceneset" placeholder="请输入场景集名称"></ch-input>
-            </a-form-item>
-            <a-form-item label="我的场景-具体场景" name="targetSceneset" 
-                :rules="[{ required: true, message: '请输入场景集名称'} ]" v-else>
-                <scroll-select :api="scenesetApi" v-model:value="modal.targetSceneset" 
-                :fieldNames="{ label: 'groupName', value: 'id' }" placeholder="请输入场景集名称">
-                </scroll-select>
-            </a-form-item>
-        </a-form>
+        <select-sceneset v-model:value="modal.targetSceneset"></select-sceneset>
       </div>
       <div class="modal-buttons">
         <a-button @click="modal.cloneVisible = false">取消</a-button>
@@ -63,7 +47,6 @@ import { gotoSubPage, goback } from '@/utils/tools'
 
 const vncModal = ref()
 const currentApi = api.scene
-const scenesetApi = api.scenesets.getList
 const user = store.user
 const selectedSceneset = ref() 
 
@@ -137,7 +120,7 @@ const columns = [
       编辑: (data: any) => gotoSubPage('/edit/' + data.id),
       编辑场景: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show()),
       场景预览: (data: any) => gotoSubPage('/preview/' + data.id),
-      复制: (data: any) => {
+      另存为: (data: any) => {
         modal.sourceData = data
         modal.targetSceneset = ''
         modal.cloneVisible = true

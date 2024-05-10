@@ -21,7 +21,7 @@
     </div>
   </div>
 
-  <a-modal v-model:visible="modal.cloneVisible" title="复制场景集"
+  <a-modal v-model:visible="modal.cloneVisible" title="场景集另存为"
     :footer="null" :destroyOnClose="true">
       <a-form ref="cloneForm" class="modal-content" :model="modal" 
         :labelCol ="{ style: { width: '100px' } }" 
@@ -93,7 +93,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 180,
+    width: 200,
     actions: {
       查看: {
         handler: ({ id }: RObject) => gotoSubPage('/view/' + id)
@@ -101,7 +101,7 @@ const columns = [
       编辑: {
         handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
       },
-      复制: (data: RObject) => {
+      另存为: (data: RObject) => {
         modal.cloneVisible = true
         modal.sourceData = data
         modal.cloneName = ''
@@ -116,19 +116,17 @@ const columns = [
 
 const cloneForm = ref()
 const submitting = ref(false)
-const onConfirmClone = async () => {
-  cloneForm.value.validate().then(() => {
+const onConfirmClone = () => {
+  cloneForm.value.validate().then(async () => {
     try {
       submitting.value = true
-      // const { id, groupName } = modal.sourceData
-      // const { code, message } = await currentApi.clone(id, modal.cloneName)
-      // if (code === 200) {
-      //   message.success('复制成功')
-      //   modal.cloneVisible = false
-      //   modal.cloneName = ''
-      // } else {
-      //   message.error(message)
-      // }
+
+      await currentApi.clone({
+        name: modal.cloneName,
+        id: modal.sourceData.id
+      })
+      modal.cloneVisible = false
+      tableRef.value.refresh()
     } finally {
       submitting.value = false
     }

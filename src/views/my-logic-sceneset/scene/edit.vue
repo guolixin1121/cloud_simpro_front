@@ -2,7 +2,7 @@
   <div class="breadcrumb">
     <span>我的场景</span>
     <a @click="goback(-2)">逻辑场景</a>
-    <a @click='goback()'>场景集{{ sceneset?.name }}</a>
+    <a @click='goback()'>{{ sceneset?.name }}</a>
     <span>{{ title }}</span>
   </div>
   <div class="min-main">
@@ -15,7 +15,7 @@
           <ch-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景描述" name="desc">
-          <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入场景描述" :max-length="255" rows="10"></ch-input>
+          <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入场景描述" :max-length="255" rows="5"></ch-input>
         </a-form-item>
         <a-form-item label="关联地图" v-if="!isAdd" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
           {{ formState.mapName + '_' + formState.mapVersion }}

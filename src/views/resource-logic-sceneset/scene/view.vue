@@ -1,7 +1,7 @@
 <template>
   <form-view title="逻辑场景详情" :items="formItems" :loading="loading" :labelWidth="80">
     <a @click="goback(-2)">逻辑场景</a>
-    <a @click='goback()'>场景集{{ scenset?.name }}</a>
+    <a @click='goback()'>{{ scenset?.name }}</a>
   </form-view>
 </template>
 
@@ -14,7 +14,7 @@ const loading = ref(false)
 const getEditData = async () => {
   try {
     loading.value = true
-    const data = await api.logicScene.get(useRoute().params.id)
+    const data = await api.loginsceneResource.getScene(useRoute().params.id)
     formItems.value = [
       { label: '场景ID', value: data.id },
       { label: '场景名称', value: data.name, isBreak: false },

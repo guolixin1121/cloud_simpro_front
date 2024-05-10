@@ -20,26 +20,32 @@
           <a-form-item label="申请原因">
             {{ formState.reason }}
           </a-form-item>
-          <a-form-item label="场景集ID">
-            {{ formState.resource_id }}
-          </a-form-item>
-          <a-form-item label="场景集名称">
-            {{ formState.resource_name }}
-          </a-form-item>
-          <a-form-item label="场景集描述" name="desc">
-            {{ formState.resource_desc }}
-          </a-form-item>
+          <template v-if="isSceneset">
+            <a-form-item label="场景集ID">{{ formState.data.id }}</a-form-item>
+            <a-form-item label="场景集名称">{{ formState.data.name }}</a-form-item>
+            <a-form-item label="场景集描述" name="desc">
+              <span class="break-all">{{ formState.data.desc || '无' }}</span>
+            </a-form-item>
+          </template>
+          <template v-else>
+            <a-form-item label="场景ID">{{ formState.data.id }}</a-form-item>
+            <a-form-item label="场景名称">{{ formState.data.name }}</a-form-item>
+            <a-form-item label="场景描述" name="desc">
+              <span class="break-all">{{ formState.data.desc || '无' }}</span>
+            </a-form-item>
+            <a-form-item label="路径">{{ formState.data.name }}</a-form-item>
+            <a-form-item label="关联地图">{{ formState.data.mapName + formState.data.mapVersion }}</a-form-item>
+            <a-form-item label="场景文件">{{ formState.data.name }}</a-form-item>
+          </template>
           <a-form-item label="标签">
-            <ul class="view-list"  v-if="formState.labels_detail?.length > 0">
-              <li class="mb-2" v-for="item in formState.labels_detail as any" :key="item">
+            <ul class="view-list"  v-if="formState.data.labels_detail?.length > 0">
+              <li class="mb-2" v-for="item in formState.data.labels_detail as any" :key="item">
                 {{ item.display_name }}
               </li>
             </ul>
             <span v-else>无</span>
           </a-form-item>
-          <a-form-item label="创建时间" name="create_time">
-            {{ formState.create_time }}
-          </a-form-item>
+          <a-form-item label="创建时间" name="create_time">{{ formState.data.create_time }}</a-form-item>
         </a-form>
       </a-spin>
     </div>
@@ -64,15 +70,21 @@ const user = store.user
 
 const formState = reactive({
   apply_username: '',
-  desc: '',
-  reason: '',
   comments: '',
-  resource_id: '',
-  resource_name: '',
-  resource_desc: '',
+  reason: '',
   create_time: '',
-  labels_detail: []
+  data: {
+    id: '',
+    name: '',
+    desc: '',
+    labels_detail: [],
+    mapName: '',
+    mapVersion: '',
+    path: '',
+    create_time: ''
+  }
 })
+const isSceneset = ref(false)
 
 const loading = ref(false)
 const onApprove = async () => {
@@ -121,6 +133,7 @@ const getEditData = async () => {
       for(const prop in formState) {
         formState[prop as keyof typeof formState] = data[prop]
       }
+      isSceneset.value = data.grant_type == 1 || data.grant_type == 3
     } finally {
       dataLoading.value = false
     }

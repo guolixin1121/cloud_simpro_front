@@ -22,7 +22,8 @@ export const scenesets = defineApi({
   get: { url: '/scene/scenesets/{sid}', method: 'get' },
   delete: { url: '/scene/scenesets/{sid}/', method: 'delete' },
   edit: { url: '/scene/scenesets/{sid}/', method: 'put' },
-  add: { url: '/scene/scenesets/', method: 'post' }
+  add: { url: '/scene/scenesets/', method: 'post' },
+  clone: { url: '/scene/scenesets/copy/', method: 'post' },
 })()
 
 export const logicScenesets = defineApi({
@@ -38,6 +39,7 @@ export const scene = defineApi({
   getList: { url: '/scene/scenes/', method: 'get' },
   get: { url: '/scene/scenes/{sid}/', method: 'get' },
   delete: { url: '/scene/scenes/{sid}/', method: 'delete' },
+  clone: { url: '/scene/scenes/copy/', method: 'post' },
   batchDelete: { url: '/scene/scenes/delete/', method: 'delete' },
   edit: {
     url: '/scene/scenes/{sid}/',
@@ -56,6 +58,7 @@ export const logicScene = defineApi({
   getList: { url: '/simpro/logic_scenes/', method: 'get' },
   get: { url: '/simpro/logic_scenes/{sid}/', method: 'get' },
   delete: { url: '/simpro/logic_scenes/{sid}/', method: 'delete' },
+  clone: { url: '/simpro/logic_scenes/copy/', method: 'post' },
   batchDelete: { url: '/simpro/logic_scenes/batch/delete/', method: 'post' },
   edit: {
     url: '/simpro/logic_scenes/{sid}/',
@@ -234,8 +237,8 @@ export const loginsceneResource = defineApi({
   getSceneList: { url: '/resource/logic/scene/', method: 'get' },
   getScene: { url: '/resource/logic/scene/{id}/', method: 'get' },
   deleteScene: { url: '/resource/logic/scene/delete/', method: 'delete' },
-  editScene: { url: '/resource/logic/scene/{id}/', method: 'put'  },
-  addScene: { url: '/resource/logic/scene/', method: 'post' }
+  editScene: { url: '/resource/logic/scene/{id}/', method: 'put', headers: { 'content-type': 'multipart/form-data' }  },
+  addScene: { url: '/resource/logic/scene/', method: 'post', headers: { 'content-type': 'multipart/form-data' } }
 })()
 // 授权
 export const grant = defineApi({

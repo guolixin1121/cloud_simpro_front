@@ -1,7 +1,7 @@
 <template>
   <form-view title="具体场景详情" :items="formItems" :loading="loading">
     <a @click="goback(-2)">具体场景</a>
-    <a @click='goback()'>场景集{{ scenset?.name }}</a>
+    <a @click='goback()'>{{ scenset?.name }}</a>
   </form-view>
 </template>
 

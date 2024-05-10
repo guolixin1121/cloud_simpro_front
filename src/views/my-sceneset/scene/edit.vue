@@ -2,7 +2,7 @@
   <div class="breadcrumb">
     <span>我的场景</span>
     <a @click="goback(-2)">具体场景</a>
-    <a @click='goback()'>场景集{{ scenset?.name }}</a>
+    <a @click='goback()'>{{ scenset?.name }}</a>
     <span class="breadcrumb--current">{{ title }}</span>
   </div>
   <div class="min-main">

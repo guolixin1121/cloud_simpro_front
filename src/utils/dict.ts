@@ -144,6 +144,15 @@ export const MySceneSourceOptions = [
 
 export const getMySceneSourceName = (value: number | string) => MySceneSourceOptions.find(v => v.value === value)?.label
 
+export const MyLogicSceneSourceOptions = [
+  { label: '全部', value: '' },
+  { label: '创建', value: 0 },
+  { label: 'SOTIF', value: 1 },
+  { label: '场景资源库', value: 2 },
+]
+
+export const getMyLogicSceneSourceName = (value: number | string) => MyLogicSceneSourceOptions.find(v => v.value === value)?.label
+
 
 // 申请授权状态
 export const ApplyStatusOptions = [
