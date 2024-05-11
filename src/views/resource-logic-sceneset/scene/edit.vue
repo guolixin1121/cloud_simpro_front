@@ -1,5 +1,6 @@
 <template>
   <div class="breadcrumb">
+    <span>场景资源库</span>
     <a @click="goback(-2)">逻辑场景</a>
     <a @click='goback()'>{{ sceneset?.name }}</a>
     <span>{{ title }}</span>
@@ -9,12 +10,13 @@
     <a-spin :spinning="dataLoading">
       <a-form ref="form" :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 55%" @finish="add">
         <a-form-item label="场景名称" name="name"
-          :rules="[{ required: true, message: '请输入场景名称'}]"
+          :rules="[{ required: true, message: '请输入场景名称'},
+            { min: 2, max: 160, message: '场景名称长度为2到160位' }]"
         >
-          <ch-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></ch-input>
+          <ch-input v-model:value="formState.name" :maxlength="160" placeholder="请输入场景名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景描述" name="desc">
-          <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入场景描述" :max-length="255" rows="5"></ch-input>
+          <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入场景描述" :maxlength="300" rows="5"></ch-input>
         </a-form-item>
         <a-form-item label="关联地图" v-if="!isAdd" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
           {{ formState.mapName + '_' + formState.mapVersion }}

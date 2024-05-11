@@ -19,8 +19,8 @@
         <a-form-item label="场景描述" name="desc">
           <span class="break-text">{{ formState.desc }}</span>
         </a-form-item>
-        <a-form-item label="所属场景集" name="sceneset_name">
-          {{ formState.sceneset_name }}
+        <a-form-item label="路径" name="path">
+          <span class="break-text">场景资源库-具体场景-{{ formState.name }}</span>
         </a-form-item>
         <a-form-item label="关联地图" name="sceneset">
           {{ formState.mapName + '_' + formState.mapVersion }}

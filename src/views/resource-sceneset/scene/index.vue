@@ -33,8 +33,7 @@
         style="padding-bottom: 0px"
         @finish="onBatchApply">
         <span>已选择{{ checkedItems.length }}个场景集，请填写申请原因：</span>
-        <a-form-item label="" name="reason"
-          :rules="[{ required: true, message: '请输入申请原因'} ]">
+        <a-form-item label="" name="reason" style="margin-top: 8px">
           <ch-input type="textarea" v-model:value="modal.reason" 
             :maxlength="255" placeholder="请输入申请原因" rows="4"></ch-input>
         </a-form-item>

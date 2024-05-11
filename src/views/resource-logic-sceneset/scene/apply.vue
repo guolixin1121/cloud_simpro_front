@@ -19,14 +19,17 @@
         <a-form-item label="场景描述" name="desc">
           <span class="break-text">{{ formState.desc }}</span>
         </a-form-item>
-        <a-form-item label="所属场景集" name="sceneset_name">
-          {{ formState.sceneset_name }}
+        <a-form-item label="路径" name="path">
+          <span class="break-text">场景资源库-逻辑场景-{{ formState.name }}</span>
         </a-form-item>
         <a-form-item label="关联地图" name="sceneset">
-          {{ formState.mapName + '_' + formState.mapVersion }}
+          {{ formState.map_name + '_' + formState.map_version_num }}
         </a-form-item>
         <a-form-item label="场景文件" name="adsUrl">
-          {{ formState.adsUrl }}
+          {{ formState.scene_url }}
+        </a-form-item>
+        <a-form-item label="配置文件" name="adsUrl">
+          {{ formState.config_url }}
         </a-form-item>
         <a-form-item label="标签">
           <ul class="view-list"  v-if="formState.labels_detail?.length > 0">
@@ -39,8 +42,8 @@
         <a-form-item label="创建时间" name="create_time">
           {{ formState.create_time }}
         </a-form-item>
-        <a-form-item label="申请说明" name="reason">
-          <a-textarea v-model:value="formState.reason" :rows="4" />
+        <a-form-item label="申请原因" name="reason">
+          <a-textarea v-model:value="formState.reason" :maxlength="255" :rows="4" placeholder="请输入申请原因" />
         </a-form-item>
         <a-form-item :wrapper-col="{ style: { paddingLeft: '100px' }}">
           <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">申请</a-button>
@@ -63,9 +66,10 @@ const formState = reactive({
   name: '',
   desc: '',
   sceneset_name: '',
-  mapName: '',
-  mapVersion: '',
-  adsUrl: '',
+  map_name: '',
+  map_version_num: '',
+  scene_url: '',
+  config_url: '',
   create_time: '',
   reason: '',
   labels_detail: []
@@ -101,9 +105,10 @@ const getEditData = async () => {
       formState.name = data.name
       formState.desc = data.desc
       formState.labels_detail = data.labels_detail
-      formState.mapName = data.map_name
-      formState.mapVersion = data.map_version_num
-      formState.adsUrl = data.scene_url
+      formState.map_name = data.map_name
+      formState.map_version_num = data.map_version_num
+      formState.scene_url = data.scene_url
+      formState.config_url = data.config_url
       formState.id = data.id
       formState.sceneset_name = scenset.name
       formState.create_time = data.create_time

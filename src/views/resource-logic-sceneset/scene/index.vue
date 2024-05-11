@@ -32,8 +32,7 @@
         style="padding-bottom: 0px"
         @finish="onBatchApply">
         <span>已选择{{ checkedItems.length }}个场景集，请填写申请原因：</span>
-        <a-form-item label="" name="reason"
-          :rules="[{ required: true, message: '请输入申请原因'} ]">
+        <a-form-item label="" name="reason" style="margin-top: 8px">
           <ch-input type="textarea" v-model:value="modal.reason" 
             :maxlength="255" placeholder="请输入申请原因" rows="4"></ch-input>
         </a-form-item>
@@ -62,7 +61,7 @@ const loadSceneset = async () => {
     const data = await currentApi.getSceneset(scenesetId)
     selectedSceneset.value = data
     store.catalog.sceneCatalog = data
-    query.value = { scene_set: data.id}
+    query.value = { logic_scene_set_resource: data.id}
   }
 }
 loadSceneset()
@@ -88,7 +87,7 @@ const formItems = ref<SearchFormItem[]>([
 const query: Query = ref({})
 const onTableSearch = (data: Query) => {
   const sceneCatalog = selectedSceneset.value
-  query.value = { ...data, logic_scene_set_id: sceneCatalog?.id }
+  query.value = { ...data, logic_scene_set_resource: sceneCatalog?.id }
 }
 
 /****** 表格区域 */

@@ -22,7 +22,8 @@
           </a-form-item>
           <template v-if="isSceneset">
             <a-form-item label="场景集ID">{{ formState.data.id }}</a-form-item>
-            <a-form-item label="场景集名称">{{ formState.data.name }}</a-form-item>
+            <a-form-item label="场景集名称">
+              <span class="break-text">{{ formState.data.name }}</span></a-form-item>
             <a-form-item label="场景集描述" name="desc">
               <span class="break-text">{{ formState.data.desc || '无' }}</span>
             </a-form-item>
@@ -33,9 +34,12 @@
             <a-form-item label="场景描述" name="desc">
               <span class="break-text">{{ formState.data.desc || '无' }}</span>
             </a-form-item>
-            <a-form-item label="路径">{{ formState.data.name }}</a-form-item>
+            <a-form-item label="路径">
+              <span class="break-text">场景集资源库-具体场景-{{ formState.data.name }}</span></a-form-item>
             <a-form-item label="关联地图">{{ formState.data.mapName + formState.data.mapVersion }}</a-form-item>
-            <a-form-item label="场景文件">{{ formState.data.name }}</a-form-item>
+            <a-form-item label="场景文件">
+              <span class="break-text">{{ formState.data.xosc_key }}</span>
+            </a-form-item>
           </template>
           <a-form-item label="标签">
             <ul class="view-list"  v-if="formState.data.labels_detail?.length > 0">
@@ -53,8 +57,8 @@
         <p>审批意见</p>
         <ch-input type="textarea" rows="15" :maxlength="300" placeholder="请输入审批意见" v-model:value="formState.comments" />
         <div class="my-4">
-          <a-button type="primary" class="mr-4" @click="onApprove">批准</a-button>
-          <a-button :loading="loading" @click="onReject">驳回</a-button>
+          <a-button type="primary" class="mr-4" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
+          <a-button :loading="isRejecting" @click="onApprove(false)">驳回</a-button>
         </div>
       </div>
     </div>
@@ -80,46 +84,29 @@ const formState = reactive({
     labels_detail: [],
     mapName: '',
     mapVersion: '',
-    path: '',
+    xosc_key: '',
     create_time: ''
   }
 })
 const isSceneset = ref(false)
 
-const loading = ref(false)
-const onApprove = async () => {
-  loading.value = true
+const isApproving = ref(false)
+const isRejecting = ref(false)
+const onApprove = async (isAproved: boolean = true) => {
+  isAproved ? isApproving.value = true : isRejecting.value = true
 
   const params = {
     id: [id],
-    comments: formState.comments
+    comments: formState.comments || ''
   }
   
   try {
-    await currentApi.approve(params)
+    await isAproved ? currentApi.approve(params) : currentApi.reject(params)
 
-    message.info(`任务已批准`)
+    message.info(isAproved ? `任务已批准` : '任务已驳回')
     goback()
   } finally {
-    loading.value = false
-  }
-}
-
-const onReject = async () => {
-  loading.value = true
-
-  const params = {
-    id: [id],
-    comments: formState.comments
-  }
-  
-  try {
-    await currentApi.reject(params)
-
-    message.info(`任务已驳回`)
-    goback()
-  } finally {
-    loading.value = false
+    isAproved ? isApproving.value = false : isRejecting.value = false
   }
 }
 

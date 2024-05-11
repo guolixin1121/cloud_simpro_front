@@ -4,7 +4,7 @@
     <a @click="goback()">具体场景</a>
     <span>授权任务管理</span>
   </div>
-  <search-form :items="formItems" @search="onSearch"></search-form>
+  <search-form ref="searchFormRef" :items="formItems" @search="onSearch"></search-form>
   <div class="main">
     <div class="title-section">
       <a-tabs class="tabs" v-model:activeKey="activeKey" >
@@ -26,8 +26,8 @@
       <p>审批之后无法修改，请谨慎操作。</p>
     </div>
     <div class="modal-buttons">
-      <a-button @click="onBatchReject">驳回</a-button>
-      <a-button type="primary" @click="onBatchPass">批准</a-button>
+      <a-button @click="onBatchReject" :loading="isRejecting">驳回</a-button>
+      <a-button type="primary" @click="onBatchPass" :loading="isApproving">批准</a-button>
     </div>
   </a-modal>
 </template>
@@ -69,7 +69,7 @@ const sceneFormItems = [
     defaultValue: '',
   }]
 const scenesetColumns = [
-  { dataIndex: 'checkbox', width: 60 },
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => user.isAdmin() && data.status != 2 },
   { title: '任务ID', dataIndex: 'id', width: 120 },
   { title: '场景集ID', dataIndex: 'resource_id', width: 120 },
   { title: '场景集名称', dataIndex: 'resource_name', width: 200, ellipsis: true },
@@ -81,7 +81,7 @@ const scenesetColumns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 100,
+    width: 80,
     actions: user.isAdmin() ? {
       审批: { 
         validator: ({status}: any) => status == 1,
@@ -93,10 +93,10 @@ const scenesetColumns = [
 ]
 
 const sceneColumns = [
-  { dataIndex: 'checkbox', width: 60 },
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => user.isAdmin() && data.status != 2 },
   { title: '任务ID', dataIndex: 'id', width: 120 },
   { title: '场景ID', dataIndex: 'resource_id', width: 120 },
-  { title: '场景名称', dataIndex: 'resource_name', ellipsis: true },
+  { title: '场景名称', dataIndex: 'resource_name', width: 200, ellipsis: true },
   { title: '所属场景集', dataIndex: 'parent_name', width: 200, ellipsis: true },
   { title: '任务状态', dataIndex: 'status', width: 180, formatter: getApplyStatus },
   { title: '申请人', dataIndex: 'apply_username', width: 180 },
@@ -120,18 +120,35 @@ const sceneColumns = [
 const tableRef = ref()
 const modalVisible = ref(false)
 const checkedItems = ref([])
+const isRejecting = ref(false)
+const isApproving = ref(false)
 const onSelect = (data: any) => (checkedItems.value = data)
 const onBatchPass = async () => {
-  await api.scene.batchDelete({ scenes_id: checkedItems.value })
-  tableRef.value.refresh({ deletedRows: checkedItems.value.length })
+  try {
+    isApproving.value = true
+    await api.grant.approve({ id: checkedItems.value })
+    tableRef.value.refresh({ deletedRows: checkedItems.value.length })
+    message.success('已批准')
+    modalVisible.value = false
+  } finally {
+    isApproving.value = false
+  }
 }
 const onBatchReject = async () => {
-  await api.scene.batchDelete({ scenes_id: checkedItems.value })
-  tableRef.value.refresh({ deletedRows: checkedItems.value.length })
+  try {
+    isRejecting.value = true
+    await api.grant.reject({ id: checkedItems.value })
+    tableRef.value.refresh({ deletedRows: checkedItems.value.length })
+    message.success('已驳回')
+    modalVisible.value = false
+  } finally {
+    isRejecting.value = false
+  }
 }
 
+const searchFormRef = ref()
 watch(activeKey, () => {
-  query.value = { id: '', name: '', status: '' }
+  searchFormRef.value.reset()
   tableRef.value.refresh({page: 1})
 })
 </script>
