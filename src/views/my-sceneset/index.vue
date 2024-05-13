@@ -47,7 +47,7 @@ import { gotoSubPage } from '@/utils/tools'
 /****** api */
 const user = store.user
 const currentApi = api.scenesets
-const scenesetList = api.scene.getScenesetList() 
+const scenesetList = api.scene.getScenesetList
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([

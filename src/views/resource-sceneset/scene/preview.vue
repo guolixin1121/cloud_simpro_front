@@ -4,12 +4,10 @@
       <a @click="goback(-2)">具体场景</a>
       <a @click='goback()'>{{ scenset?.name }}</a>
       <template v-slot:right>
-        <div style="width: 65%">
-          <video width="800" controls autoplay>
-            <source :src="videoUrl" type="video/mp4">
-            <!-- 您的浏览器不支持视频标签。 -->
-          </video>
-        </div>
+        <video controls autoplay>
+          <source :src="videoUrl" type="video/mp4">
+          <!-- 您的浏览器不支持视频标签。 -->
+        </video>
       </template> 
     </form-view>
 </template>
@@ -32,7 +30,7 @@ const getEditData = async () => {
       { label: '场景描述', value: data.desc },
       { label: '路径', value: '场景资源库-具体场景-' + scenset.name },
       { label: '关联地图', value: data.mapName + '_' + data.mapVersion },
-      { label: '场景文件', value: data.xosc_filename },
+      { label: '场景文件', value: data.xosc_key },
       { label: '标签', value: data.labels_detail?.map((item: any) => item.display_name) },
       { label: '创建时间', value: data.create_time }
     ]

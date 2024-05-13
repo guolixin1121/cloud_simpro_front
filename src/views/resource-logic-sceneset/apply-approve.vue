@@ -37,7 +37,7 @@
               <span class="break-text">{{ formState.data.desc || '无' }}</span>
             </a-form-item>
             <a-form-item label="路径">
-              <span class="break-text">场景资源库-逻辑场景-{{ formState.data.name }}</span>
+              <span class="break-text">场景资源库-逻辑场景-{{ sceneset.name }}</span>
             </a-form-item>
             <a-form-item label="关联地图">{{ formState.data.map_name + formState.data.map_version_num }}</a-form-item>
             <a-form-item label="场景文件">{{ formState.data.scene_url }}</a-form-item>
@@ -73,6 +73,7 @@ import { goback } from '@/utils/tools'
 const id = useRoute().params.id
 const currentApi = api.grant
 const user = store.user
+const sceneset = store.catalog.sceneCatalog
 
 const formState = reactive({
   apply_username: '',

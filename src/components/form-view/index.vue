@@ -5,28 +5,26 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
-    <div class="flex justify-between">
-      <div style="width: 50%">
-        <a-spin :spinning="loading">
-          <a-form :labelCol ="{ style: { width: labelWidth + 'px' } }">
-            <templage v-for="(item, index) in items" :key="index">
-              <a-form-item :label="item.label" v-if="item.isShow == undefined || item.isShow" >
-                <span v-if="!Array.isArray(item.value)" 
-                  :class="item.isBreak == undefined || item.isBreak || item.label == '描述' ? 'break-text' : ''">
-                  {{ !item.value ? '-' : item.label.indexOf('时间') > -1 ? formatDate(item.value) : item.value }}
-                </span>
-                <ul v-else-if="item.value.length > 0" class="view-list">
-                  <li class="mb-2" v-for="val in item.value" :key="val">
-                    {{ val }}
-                  </li>
-                </ul>
-                <span v-else>无</span>
-              </a-form-item>
-            </templage>
-          </a-form>
-        </a-spin>
-      </div>
-      <slot name="right"></slot>
+    <slot name="right"></slot>
+    <div style="width: 55%">
+      <a-spin :spinning="loading">
+        <a-form :labelCol ="{ style: { width: labelWidth + 'px' } }">
+          <templage v-for="(item, index) in items" :key="index">
+            <a-form-item :label="item.label" v-if="item.isShow == undefined || item.isShow" >
+              <span v-if="!Array.isArray(item.value)" 
+                :class="item.isBreak == undefined || item.isBreak || item.label == '描述' ? 'break-text' : ''">
+                {{ !item.value ? '-' : item.label.indexOf('时间') > -1 ? formatDate(item.value) : item.value }}
+              </span>
+              <ul v-else-if="item.value.length > 0" class="view-list">
+                <li class="mb-2" v-for="val in item.value" :key="val">
+                  {{ val }}
+                </li>
+              </ul>
+              <span v-else>无</span>
+            </a-form-item>
+          </templage>
+        </a-form>
+      </a-spin>
     </div>
   </div>
 </template>

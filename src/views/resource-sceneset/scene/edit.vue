@@ -146,7 +146,7 @@ const getEditData = async () => {
     formState.labels = scene.labels_detail
     formState.mapVersion = scene.mapVersion
     formState.mapName = scene.mapName
-    formState.adsUrl = scene.xosc_filename
+    formState.adsUrl = scene.xosc_key
     formState.desc = scene.desc
   }
 }

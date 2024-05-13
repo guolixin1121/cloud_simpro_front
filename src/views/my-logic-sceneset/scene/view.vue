@@ -2,14 +2,14 @@
   <form-view title="逻辑场景详情" :items="formItems" :loading="loading" :labelWidth="80">
     <span>我的场景</span>
     <a @click="goback(-2)">逻辑场景</a>
-    <a @click='goback()'>{{ scenset?.name }}</a>
+    <a @click='goback()'>{{ sceneset?.name }}</a>
   </form-view>
 </template>
 
 <script setup lang="ts">
 import {goback} from '@/utils/tools'
 
-const scenset = store.catalog.sceneCatalog
+const sceneset = store.catalog.sceneCatalog
 const formItems = ref<FormItem[]>([])
 const loading = ref(false)
 const getEditData = async () => {
@@ -20,7 +20,7 @@ const getEditData = async () => {
       { label: '场景ID', value: data.id },
       { label: '场景名称', value: data.name, isBreak: true },
       { label: '场景描述', value: data.desc },
-      { label: '路径', value: '我的场景-逻辑场景-' + scenset.name },
+      { label: '路径', value: '我的场景-逻辑场景-' + sceneset.name },
       { label: '关联地图', value: data.map_name ? (data.map_name + '_' + data.map_version_num) : '无'},
       { label: '场景文件', value: data.scene_url },
       { label: '配置文件', value: data.config_url },

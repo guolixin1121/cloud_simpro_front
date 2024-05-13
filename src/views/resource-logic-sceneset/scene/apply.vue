@@ -2,7 +2,7 @@
   <div class="breadcrumb">
     <span>场景资源库</span>
     <a @click="goback(-2)">逻辑场景</a>
-    <a @click="goback()">{{ scenset?.name }}</a>
+    <a @click="goback()">{{ sceneset?.name }}</a>
     <span>申请授权</span>
   </div>
   <div class="min-main">
@@ -20,7 +20,7 @@
           <span class="break-text">{{ formState.desc }}</span>
         </a-form-item>
         <a-form-item label="路径" name="path">
-          <span class="break-text">场景资源库-逻辑场景-{{ formState.name }}</span>
+          <span class="break-text">场景资源库-逻辑场景-{{ sceneset.name }}</span>
         </a-form-item>
         <a-form-item label="关联地图" name="sceneset">
           {{ formState.map_name + '_' + formState.map_version_num }}
@@ -59,13 +59,12 @@ import { goback } from '@/utils/tools'
 
 const id = useRoute().params.id
 const currentApi = api.loginsceneResource
-const scenset = store.catalog.sceneCatalog
+const sceneset = store.catalog.sceneCatalog
 
 const formState = reactive({
   id:'',
   name: '',
   desc: '',
-  sceneset_name: '',
   map_name: '',
   map_version_num: '',
   scene_url: '',
@@ -110,7 +109,6 @@ const getEditData = async () => {
       formState.scene_url = data.scene_url
       formState.config_url = data.config_url
       formState.id = data.id
-      formState.sceneset_name = scenset.name
       formState.create_time = data.create_time
     } finally {
       dataLoading.value = false
