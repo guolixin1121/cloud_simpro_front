@@ -9,7 +9,7 @@
     <a-spin :spinning="loading">
       <a-form :model="formState" :labelCol ="{ style: { width: '80px' } }"  style="width: 55%">
         <a-form-item label="场景集名称">
-          {{ formState.name }}
+          <span class="break-text">{{ formState.name }}</span>
         </a-form-item>
         <a-form-item label="场景集描述">
           <span class="break-text">{{ formState.desc }}</span>

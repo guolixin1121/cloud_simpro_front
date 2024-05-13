@@ -13,7 +13,7 @@
           :rules="[{ required: true, message: '请输入场景名称' },
             { min: 2, max: 160, message: '场景名称长度为2到160位' }]"
         >
-          <ch-input v-model:value="formState.adsName" :maxlength="50" placeholder="请输入场景名称"></ch-input>
+          <ch-input v-model:value="formState.adsName" :maxlength="160" placeholder="请输入场景名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景描述" name="desc">
           <ch-input type="textarea" v-model:value="formState.desc" :maxlength="255" rows="10" placeholder="请输入场景描述"></ch-input>

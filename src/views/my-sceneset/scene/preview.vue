@@ -1,16 +1,8 @@
 <template>
-  <form-view title="具体场景预览" :items="formItems" :loading="loading">
+  <form-view title="具体场景预览" :items="formItems" :videoUrl="videoUrl" :loading="loading">
     <span>我的场景</span>
     <a @click="goback(-2)">具体场景</a>
-    <a @click='goback()'>{{ sceneset?.name }}</a>   
-    <template v-slot:right>
-      <div style="width: 65%">
-        <video width="800" controls autoplay>
-          <source :src="videoUrl" type="video/mp4">
-          <!-- 您的浏览器不支持视频标签。 -->
-        </video>
-      </div>
-    </template> 
+    <a @click='goback()'>{{ sceneset?.name }}</a> 
   </form-view>
 </template>
 

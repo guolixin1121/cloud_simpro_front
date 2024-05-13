@@ -54,7 +54,6 @@
       <template v-else>
         <div class="modal-content">
           <p>请选择泛化生成的具体场景的保存路径</p>
-          {{ generateModal.targetSceneset }}
           <select-sceneset ref="generateSceneset" v-model:value="generateModal.targetSceneset"></select-sceneset>
         </div>
         <div class="modal-buttons">

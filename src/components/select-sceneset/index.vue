@@ -32,7 +32,7 @@ const props = defineProps({
 const emits = defineEmits(['update:value'])
 
 const scenesetApi = props.isLogicSceneset ? (args: any) => api.logicScenesets.getList({...args, source: 0})
-    : (args: any) => api.scenesets.getList({...args, source: 0})
+    : (args: any) => api.scene.getScenesetList({...args, source: 0})
 const fieldNames = props.isLogicSceneset ? { label: 'name', value: 'id' }
     : { label: 'groupName', value: 'id' }
 const label = props.isLogicSceneset ? '我的场景-逻辑场景' : '我的场景-具体场景'
@@ -51,6 +51,7 @@ watch(() => modal.targetSceneset, () => {
         })
     })
 })
+watch(() => modal.scenesetType, () => modal.targetSceneset = '')
 defineExpose({
     validate: () => modalForm.value.validate()
 })

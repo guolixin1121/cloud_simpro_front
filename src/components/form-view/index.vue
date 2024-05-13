@@ -5,7 +5,13 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
-    <slot name="right"></slot>
+    <div style="margin-left: 32px" v-if="videoUrl">
+      <video width="800"  controls disablePictureInPicture
+        controlslist="nodownload noremoteplaybakc noplaybackrate">
+        <source :src="videoUrl" type="video/mp4">
+        <!-- 您的浏览器不支持视频标签。 -->
+      </video>
+    </div>
     <div style="width: 55%">
       <a-spin :spinning="loading">
         <a-form :labelCol ="{ style: { width: labelWidth + 'px' } }">
@@ -38,6 +44,9 @@ defineProps({
   items: {
     type: Array<FormItem>
   },
+  videoUrl: {
+    type: String
+  },
   loading: {
     type: Boolean,
     default: () => false
@@ -48,3 +57,8 @@ defineProps({
   }
 })
 </script>
+
+<style>
+video::-webkit-media-controls-mute-button { display: none; }
+video::-webkit-media-controls-toggle-closed-captions-button { display: none; }
+</style>

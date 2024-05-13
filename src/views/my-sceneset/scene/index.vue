@@ -1,7 +1,7 @@
 <template>
   <div class="breadcrumb">
     <span>我的场景</span>
-    <a @click="goback()">具体场景</a>
+    <router-link to="/my-sceneset/">具体场景</router-link>
     <span>{{ selectedSceneset?.name }}</span>
   </div>
 
@@ -43,7 +43,7 @@
 import { MySceneSourceOptions, IsMyScenesetFromResource, IsMySceneFromResource, getMySceneSourceName } from '@/utils/dict'
 import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
-import { gotoSubPage, goback, openLink } from '@/utils/tools'
+import { gotoSubPage, openLink } from '@/utils/tools'
 
 const vncModal = ref()
 const currentApi = api.scene

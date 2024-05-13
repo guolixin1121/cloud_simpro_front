@@ -168,20 +168,27 @@ export const preventReClick = {
 * isChild：boolean path是否为当前页面的子页面
 */
 export const gotoSubPage = (targetPath, isChild = true) => {
-  // clear storage of target path
-  // let target = isChild ? router.currentRoute.value.path : path
-  // target = target.endsWith('/') ? target : (target + '/')
-  // const targetKeys = SStorage.getWithPrefix(target)
-  // targetKeys.forEach((key) => SStorage.remove(key))
-  targetPath = targetPath.startsWith('/') ? targetPath.substring(1) : targetPath
-  
-  const targetFullPath = isChild ?  (router.currentRoute.value.path + targetPath) : targetPath
+  let currentpath = router.currentRoute.value.path
+  currentpath = currentpath.endsWith('/') ? currentpath.substring(0, currentpath.length - 1) : currentpath
+ 
+  const targetFullPath = isChild ?  (currentpath + targetPath) : targetPath
   const targetKeys = SStorage.getWithPrefix(targetFullPath.split('?')[0])
   targetKeys.forEach((key) => SStorage.remove(key))
-  
+
   // open subpage
   // path = path.startsWith('/') ? path.substring(1) : path
   router.push(targetFullPath)
 }
 
 export const goback = (step = -1) => router.go(step)
+// export const goback = (step = -1) => {
+//   const currentPath = router.currentRoute.value.path
+//   const paths = currentPath.split('/')
+//   let targetIndex = paths.length-2+step
+//   let targetPath = ''
+//   while(targetIndex) {
+//     targetPath = '/' + paths[targetIndex] +  targetPath
+//     targetIndex--
+//   }
+//   router.push(targetPath)
+// }
