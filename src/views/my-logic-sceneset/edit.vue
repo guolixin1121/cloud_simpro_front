@@ -10,7 +10,8 @@
       <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 55%"
         @finish="add">
         <a-form-item label="场景集名称" name="name" 
-          :rules="[{ required: true, message: '请输入场景集名称'}]">
+          :rules="[{ required: true, message: '请输入场景集名称'},
+          { min: 2, max: 160, message: '场景集名称长度为2到160位' }]">
           <ch-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景集名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景集描述" name="desc">

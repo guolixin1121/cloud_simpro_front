@@ -10,7 +10,8 @@
     <a-spin :spinning="dataLoading">
       <a-form ref="form" :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 55%" @finish="add">
         <a-form-item label="场景名称" name="name"
-          :rules="[{ required: true, message: '请输入场景名称'}]"
+          :rules="[{ required: true, message: '请输入场景名称'},
+            { min: 2, max: 160, message: '场景名称长度为2到160位' }]"
         >
           <ch-input v-model:value="formState.name" :maxlength="50" placeholder="请输入场景名称"></ch-input>
         </a-form-item>

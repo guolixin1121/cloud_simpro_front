@@ -97,7 +97,7 @@ const modal = reactive({
   reason: ''
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60 },
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => isAdmin ? data.can_delete : data.can_apply },
   { title: '场景ID', dataIndex: 'id', width: 120 },
   { title: '场景名称', dataIndex: 'name', width: 200, ellipsis: true },
   { title: '场景标签', dataIndex: 'labels_detail', apiField: 'display_name',width: 250, ellipsis: true },

@@ -36,7 +36,7 @@
               <span class="break-text">{{ formState.data.desc || '无' }}</span>
             </a-form-item>
             <a-form-item label="路径">
-              <span class="break-text">场景集资源库-具体场景-{{ formState.data.name }}</span></a-form-item>
+              <span class="break-text">场景资源库-具体场景-{{ formState.data.name }}</span></a-form-item>
             <a-form-item label="关联地图">{{ formState.data.mapName + formState.data.mapVersion }}</a-form-item>
             <a-form-item label="场景文件">
               <span class="break-text">{{ formState.data.xosc_key }}</span>

@@ -24,7 +24,7 @@ const getEditData = async () => {
       { label: '场景名称', value: data.adsName, isBreak: true },
       { label: '场景描述', value: data.desc },
       { label: '场景来源', value: getMySceneSourceName(data.adsSource) },
-      { label: '所属场景集', value: data.sceneset_name },
+      { label: '路径', value: '我的场景-具体场景-' + data.sceneset_name },
       { label: '关联地图', value: data.mapName + '_' + data.mapVersion },
       { label: '场景文件', value: data.adsUrl },
       { label: '标签', value: data.labels_detail?.map((item: any) => item.display_name) },

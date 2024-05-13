@@ -37,6 +37,7 @@ export const logicScenesets = defineApi({
 })()
 
 export const scene = defineApi({
+  getScenesetList: { url: '/scene/v2/scenesets/', method: 'get'},
   getList: { url: '/scene/scenes/', method: 'get' },
   get: { url: '/scene/scenes/{sid}/', method: 'get' },
   delete: { url: '/scene/scenes/{sid}/', method: 'delete' },

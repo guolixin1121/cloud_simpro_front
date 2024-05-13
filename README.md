@@ -12,7 +12,7 @@
 3. yizhuang_dev 亦庄分支  
 在独立的git上   
 ```
-git remote add yizhuang http://10.9.0.167:22080/cloud-simpro1/cloud_simpro_front   
+git remote add yizhuang http://10.9.0.167:22080/cloud-simpro1/cloud_simpro_front  
 账号: cloud-simpro    
 密码: Da*hF4ig
 ```
@@ -21,6 +21,8 @@ git remote add yizhuang http://10.9.0.167:22080/cloud-simpro1/cloud_simpro_front
 1. 更改jenkinfile里的版本号
 2. 提交代码：git push yizhuang yizhuang_dev  
 ```
+
+亦庄jenkins http://10.9.0.167:21080
 
 ## 自动import
 + `components`下所有组件的`index.vue`已在vite中配置了自动引用，组件名为目录名。使用时无需`import`

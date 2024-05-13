@@ -11,11 +11,11 @@
       </div>
     </div>
     <div>
-      <Table ref="tableRef" :query="query" :columns="columns" :api="currentApi.getList" :fieldNames="{ label: 'groupName', value: 'id' }"
+      <Table ref="tableRef" :query="query" :columns="columns" :api="scenesetList" :fieldNames="{ label: 'groupName', value: 'id' }"
         :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'count'">
-              <a @click="gotoSubPage('/scene/?pid=' + record.id)">{{ record.count }}</a>
+              <a class="text-blue inline-block w-full" @click="gotoSubPage('/scene/?pid=' + record.id)">{{ record.count }}</a>
           </template>
         </template>
       </Table>
@@ -47,6 +47,7 @@ import { gotoSubPage } from '@/utils/tools'
 /****** api */
 const user = store.user
 const currentApi = api.scenesets
+const scenesetList = api.scene.getScenesetList() 
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
