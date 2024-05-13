@@ -1,5 +1,8 @@
 import dayjs from 'dayjs'
+import router from '@/router'
 import { getType } from './validate'
+import { SStorage } from './storage'
+
 /**
  * 获取 url 中的参数
  * @param { String } name url参数name
@@ -113,12 +116,22 @@ export function getWordLength(str) {
   // return total * 2 + (str.length - total)
 }
 
+export const checkEmpty = (value) => {
+  if (value && value.trim().length == 0) {
+    return Promise.reject(`必填项不能为空`)
+  }
+  return Promise.resolve() 
+}
+
 export const checkChName = (str, maxLength = 32, minLength = 2) => {
   if (!str) return Promise.resolve()
 
   // const chLength = getCnWordTotal(str)
   // const length = chLength * 2 + (str.length - chLength)
   const length = getWordLength(str)
+  if(str.trim().length == 0) {
+    return Promise.reject(`名称不能为空`)
+  }
 
   if (length < minLength || length > maxLength) {
     return Promise.reject(`名称长度为${minLength}到${maxLength}位`)
@@ -148,3 +161,27 @@ export const preventReClick = {
     })
   }
 }
+
+/*
+* 跳转到指定页面,跳转前清除目标页面的缓存
+* path：目的路径，如果是到子页面，只需指定相对路径
+* isChild：boolean path是否为当前页面的子页面
+*/
+export const gotoSubPage = (targetPath, isChild = true) => {
+  // clear storage of target path
+  // let target = isChild ? router.currentRoute.value.path : path
+  // target = target.endsWith('/') ? target : (target + '/')
+  // const targetKeys = SStorage.getWithPrefix(target)
+  // targetKeys.forEach((key) => SStorage.remove(key))
+  targetPath = targetPath.startsWith('/') ? targetPath.substring(1) : targetPath
+  
+  const targetFullPath = isChild ?  (router.currentRoute.value.path + targetPath) : targetPath
+  const targetKeys = SStorage.getWithPrefix(targetFullPath.split('?')[0])
+  targetKeys.forEach((key) => SStorage.remove(key))
+  
+  // open subpage
+  // path = path.startsWith('/') ? path.substring(1) : path
+  router.push(targetFullPath)
+}
+
+export const goback = (step = -1) => router.go(step)

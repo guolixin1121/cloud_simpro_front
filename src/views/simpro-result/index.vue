@@ -2,7 +2,7 @@
   <search-form class="multiline-form " :items="formItems" @search="onSearch" @show-more="toggleMore"></search-form>
 
   <div class="main">
-    <div class="flex justify-between items-center">
+    <div class="title-section">
       <div class="flex items-center">
         <span class="title mr-4">仿真结果列表</span>
         <a-checkbox v-model:checked="isOwner" class="table_model" @change="onChecked">我的结果</a-checkbox>
@@ -17,7 +17,7 @@
         :api="currentApi.getList"
         :query="query"
         :columns="columns"
-        :scroll="{ x: 1900, y: 'auto' }"
+        :scroll="{ x: 2100, y: 'auto' }"
         @select="onSelect"
       >
         <template #bodyCell="{ column, record }">
@@ -32,7 +32,10 @@
           </template>
           <template v-if="column.dataIndex == 'status'">
             <span :class="'task-status task-status--' + record.status">{{ getResultStatus(record.status) }}</span>
-            <a-tooltip placement="topLeft" :title="record.errmsg" v-if="record.status == 4 && record.errmsg">
+            <a-tooltip placement="topLeft" v-if="record.status == 4 && record.errmsg">
+              <template #title>
+                <span v-html="record.errmsg.replaceAll('\n', '<br />')"></span>
+              </template>
               <!-- 异常时显示错误信息 -->
               <img class="ml-1 cursor-pointer" style="height: 16px" src="../../assets/images/tip.png" />
             </a-tooltip>
@@ -45,11 +48,9 @@
 
 <script setup lang="ts">
 import { TaskSourceOptions, getTaskSourceName, resultStatus, getResultStatus } from '@/utils/dict'
-import { SStorage } from '@/utils/storage'
-import { openLink } from '@/utils/tools'
+import { gotoSubPage, openLink } from '@/utils/tools'
 
 const templateId = useRoute().query.templateId as string
-const router = useRouter()
 const user = store.user
 const currentApi = api.result
 
@@ -87,7 +88,8 @@ const formItems = ref<SearchFormItem[]>([
       { label: '全部', value: '' },
       { label: '未通过', value: '0' },
       { label: '通过', value: '1' },
-      { label: '--', value: '2' }
+      { label: 'N/A', value: '2' },
+      { label: '--', value: '-1' }
     ]
   },
   { label: '所属用户', key: 'user', type: 'input', placeholder: '请输入所属用户' },
@@ -98,18 +100,18 @@ const onSearch = (data: Query) => (query.value = { ...data, owner: isOwner.value
 /****** 表格区域 */
 const table = ref()
 const columns = [
-  { dataIndex: 'checkbox', width: 50, validator: (data: RObject) => isNotRunning(data.status) },
+  { dataIndex: 'checkbox', width: 60, validator: (data: RObject) => isNotRunning(data.status) },
   { title: '任务ID', dataIndex: 'template_number', width: 150 },
   { title: '运行时序', dataIndex: 'serial', width: 90 },
-  { title: '仿真任务名称', dataIndex: 'name', width: 200, ellipsis: true },
+  { title: '仿真任务名称', dataIndex: 'name', width: 200 },
   { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90 },
-  { title: '主车模型', dataIndex: 'vehicle_detail', width: 150, ellipsis: true },
-  { title: '仿真算法', dataIndex: 'algorithm_detail', width: 150, ellipsis: true },
+  { title: '主车模型', dataIndex: 'vehicle_detail', width: 200 },
+  { title: '仿真算法', dataIndex: 'algorithm_detail', width: 200 },
   { title: '评测指标', dataIndex: 'kpi_detail', width: 180, ellipsis: true },
   { title: '运行状态', dataIndex: 'status', width: 100 },
   { title: '任务结果', dataIndex: 'results_status', width: 80 },
   { title: '完成时间', dataIndex: 'finish_time', width: 150 },
-  { title: '所属用户', dataIndex: 'create_user', width: 150, ellipsis: true },
+  { title: '所属用户', dataIndex: 'create_user', width: 120 },
   {
     title: '操作',
     dataIndex: 'actions',
@@ -122,11 +124,7 @@ const columns = [
       },
       查看结果: {
         validator: (data: any) => isFinished(data.status),
-        handler: (data: any) => {
-          const versionUrlPath = '/simpro-result/view/' + data.id
-          SStorage.remove(versionUrlPath + ':table-page')
-          router.push(`/simpro-result/view/${data.id}?u=${data.uuid}`)
-        }
+        handler: (data: any) => gotoSubPage(`/view/${data.id}?u=${data.uuid}`)
       },
       查看报告: {
         validator: (data: any) => isFinished(data.status) && data.obs_report,

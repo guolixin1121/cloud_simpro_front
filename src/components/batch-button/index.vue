@@ -1,16 +1,16 @@
 <template>
-  <a-button type="primary" class="marginR-16" v-bind="$attrs" @click="onButtonClick">{{ label }}</a-button>
+  <a-button type="primary" v-bind="$attrs" @click="onButtonClick">{{ label }}</a-button>
 
   <a-modal v-model:visible="showConfirm"
     :closable="false"
     :footer="null"
-    width="226px">
+    width="250px">
     <div class="modal-content">
       <!-- <svg-icon style="color: #faad14" icon="alert"></svg-icon> -->
-      <span style="font-size: 16px">是否{{label}}？</span>
+      <span style="font-size: 16px">{{tips || '是否' + label + '?'}}</span>
     </div>
     <div class="modal-buttons" style="border: 0px; padding-top: 0px;">
-      <a-button @click="showConfirm = false" class="marginR-16">取消</a-button>
+      <a-button @click="showConfirm = false">取消</a-button>
       <a-button @click="onBatch" v-model:loading="loading" type="primary">确定</a-button>
     </div>
   </a-modal>
@@ -22,6 +22,10 @@ const props = defineProps({
   label: {
     type: String,
     default: () => '删除'
+  },
+  tips: {
+    type: String,
+    default: () => '是否删除'
   },
   api: {
     type: Function,

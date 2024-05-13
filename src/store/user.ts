@@ -1,5 +1,5 @@
 // import { useLocalStorage } from '@vueuse/core'
-import { getToken, removeToken, setToken } from '@/utils/storage'
+import { getToken, removeToken, setToken, LStorage } from '@/utils/storage'
 import router from '../router'
 import { getQueryParmas } from '@/utils/tools'
 import { Operations } from '@/utils/dict'
@@ -16,7 +16,7 @@ export const useUserStore = defineStore('user', () => {
     token.value = null
     await api.user.logout()
     removeToken()
-    // LStorage.remove('token')
+    LStorage.remove('auth')
     setTimeout(() => {
       gotoLogin()
     }, 1000)
@@ -95,5 +95,7 @@ export const useUserStore = defineStore('user', () => {
     return -1
   }
 
-  return { user, token, hasToken, gotoLogin, logout, hasPermission, getUserInfo }
+  const isAdmin = () => user.value?.username == 'admin'
+  
+  return { user, token, hasToken, gotoLogin, logout, hasPermission, getUserInfo, isAdmin }
 })

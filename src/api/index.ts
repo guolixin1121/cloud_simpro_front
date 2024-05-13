@@ -21,14 +21,26 @@ export const scenesets = defineApi({
   getList: { url: '/scene/scenesets/', method: 'get' },
   get: { url: '/scene/scenesets/{sid}', method: 'get' },
   delete: { url: '/scene/scenesets/{sid}/', method: 'delete' },
+  batchDelete: { url: '/scene/scenesets/delete/', method: 'delete' },
   edit: { url: '/scene/scenesets/{sid}/', method: 'put' },
-  add: { url: '/scene/scenesets/', method: 'post' }
+  add: { url: '/scene/scenesets/', method: 'post' },
+  clone: { url: '/scene/scenesets/copy/', method: 'post' },
+})()
+
+export const logicScenesets = defineApi({
+  getList: { url: '/simpro/logic_scene_sets/', method: 'get' },
+  get: { url: '/simpro/logic_scene_sets/{sid}', method: 'get' },
+  delete: { url: '/simpro/logic_scene_sets/delete/', method: 'delete' },
+  edit: { url: '/simpro/logic_scene_sets/{sid}/', method: 'put' },
+  add: { url: '/simpro/logic_scene_sets/', method: 'post' },
+  clone: { url: '/simpro/logic_scene_sets/copy/', method: 'post' }
 })()
 
 export const scene = defineApi({
   getList: { url: '/scene/scenes/', method: 'get' },
   get: { url: '/scene/scenes/{sid}/', method: 'get' },
   delete: { url: '/scene/scenes/{sid}/', method: 'delete' },
+  clone: { url: '/scene/scenes/copy/', method: 'post' },
   batchDelete: { url: '/scene/scenes/delete/', method: 'delete' },
   edit: {
     url: '/scene/scenes/{sid}/',
@@ -47,6 +59,7 @@ export const logicScene = defineApi({
   getList: { url: '/simpro/logic_scenes/', method: 'get' },
   get: { url: '/simpro/logic_scenes/{sid}/', method: 'get' },
   delete: { url: '/simpro/logic_scenes/{sid}/', method: 'delete' },
+  clone: { url: '/simpro/logic_scenes/copy/', method: 'post' },
   batchDelete: { url: '/simpro/logic_scenes/batch/delete/', method: 'post' },
   edit: {
     url: '/simpro/logic_scenes/{sid}/',
@@ -202,4 +215,37 @@ export const overview = defineApi({
   reports: { url: '/stats/simresults/reports/', method: 'get' },
   scenes: { url: '/stats/scenes/count/', method: 'get' },
   status: { url: '/stats/simtask/status/', method: 'get' }
+})()
+
+export const sceneResource = defineApi({
+  getScenesetList: { url: '/resource/concrete/sceneset/', method: 'get' },
+  getSceneset: { url: '/resource/concrete/sceneset/{id}/', method: 'get' },
+  deleteSceneset: { url: '/resource/concrete/sceneset/delete/', method: 'delete' },
+  editSceneset: { url: '/resource/concrete/sceneset/{id}/', method: 'put' },
+  addSceneset: { url: '/resource/concrete/sceneset/', method: 'post' },
+  getSceneList: { url: '/resource/concrete/scene/', method: 'get' },
+  getScene: { url: '/resource/concrete/scene/{id}/', method: 'get' },
+  deleteScene: { url: '/resource/concrete/scene/delete/', method: 'delete' },
+  editScene: { url: '/resource/concrete/scene/{id}/', method: 'put', headers: { 'content-type': 'multipart/form-data' }  },
+  addScene: { url: '/resource/concrete/scene/', method: 'post', headers: { 'content-type': 'multipart/form-data' }  }
+})()
+export const loginsceneResource = defineApi({
+  getScenesetList: { url: '/resource/logic/sceneset/', method: 'get' },
+  getSceneset: { url: '/resource/logic/sceneset/{id}/', method: 'get' },
+  deleteSceneset: { url: '/resource/logic/sceneset/delete/', method: 'delete' },
+  editSceneset: { url: '/resource/logic/sceneset/{id}/', method: 'put' },
+  addSceneset: { url: '/resource/logic/sceneset/', method: 'post' },
+  getSceneList: { url: '/resource/logic/scene/', method: 'get' },
+  getScene: { url: '/resource/logic/scene/{id}/', method: 'get' },
+  deleteScene: { url: '/resource/logic/scene/delete/', method: 'delete' },
+  editScene: { url: '/resource/logic/scene/{id}/', method: 'put', headers: { 'content-type': 'multipart/form-data' }  },
+  addScene: { url: '/resource/logic/scene/', method: 'post', headers: { 'content-type': 'multipart/form-data' } }
+})()
+// 授权
+export const grant = defineApi({
+  getList: { url: '/grant/list/', method: 'get' },
+  get: { url: '/grant/detail/', method: 'get' },
+  approve: { url: '/grant/approve/', method: 'post' },
+  reject: { url: '/grant/reject/', method: 'post' },
+  apply: { url: '/grant/apply/', method: 'post' }
 })()

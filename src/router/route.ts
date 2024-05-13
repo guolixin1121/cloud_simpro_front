@@ -1,9 +1,11 @@
 export const generateRouteFromViews = () => {
   const routes = []
   // views子目录下的.vue文件自动生成路由。index.vue为列表页，其他页路径上包含参数id
-  const modules = import.meta.glob('../views/*/*.vue')
+  const modules = import.meta.glob('../views/**/*.vue')
   for (const filePath in modules) {
-    if (filePath.indexOf('login') == -1) {
+    const isComponents = filePath.indexOf('components') > -1
+    const isLogin = filePath.indexOf('login') > -1
+    if (!isLogin && !isComponents) {
       let path = filePath.replace('../views', '').replace('.vue', '')
       path = path.indexOf('/index') > -1 ? path.replace('index', '') : path + '/:id'
       routes.push({
@@ -13,6 +15,7 @@ export const generateRouteFromViews = () => {
       })
     }
   }
+  console.log(routes)
   return routes
 }
 

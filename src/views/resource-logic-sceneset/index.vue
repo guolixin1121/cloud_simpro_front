@@ -1,0 +1,139 @@
+<template>
+  <search-form :items="formItems" @search="onSearch"></search-form>
+
+  <div class="main">
+    <div class="title-section">
+      <span class="title">逻辑场景集列表</span>
+      <div>
+        <template v-if="isAdmin">
+          <batch-button :disabled="!checkedItems.length" :api="onBatchDelete"
+           :tips="'您已勾选' + checkedItems.length+ '个场景集，确定要删除所有勾选的场景集吗？'"></batch-button>
+          <a-button type="primary" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
+        </template>
+        <a-button v-else type="primary" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
+        <a-button type="primary" @click="gotoSubPage('/apply-manage/0/')">授权任务管理</a-button>
+      </div>
+    </div>
+    <div>
+      <Table ref='tableRef' :query="query" :columns="columns" :api="currentApi.getScenesetList" :fieldNames="{ label: 'groupName', value: 'id' }"
+        :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
+        <template #bodyCell="{ column, record }">
+          <template v-if="column.dataIndex == 'count'">
+              <a @click="gotoSubPage('/scene/?pid=' + record.id)">{{ record.count }}</a>
+          </template>
+        </template>
+      </Table>
+    </div>
+  </div>
+
+  <a-modal v-model:visible="modal.visible" title="批量申请场景集授权"
+    :footer="null" :destroyOnClose="true">
+      <a-form ref="modalForm" class="modal-content" :model="modal" 
+        :labelCol ="{ style: { width: '100px' } }" 
+        style="padding-bottom: 0px"
+        @finish="onBatchApply">
+        <span>已选择{{ checkedItems.length }}个场景集，请填写申请原因：</span>
+        <a-form-item label="" name="reason" style="margin-top: 8px">
+          <ch-input type="textarea" v-model:value="modal.reason" 
+            :maxlength="255" placeholder="请输入申请原因" rows="4"></ch-input>
+        </a-form-item>
+      </a-form>
+      <div class="modal-buttons">
+        <a-button @click="modal.visible = false">取消</a-button>
+        <a-button @click="onBatchApply" :loading="submitting" type="primary">确定</a-button>
+      </div>
+  </a-modal>
+</template>
+
+<script setup lang="ts">
+import { gotoSubPage } from '@/utils/tools'
+
+/****** api */
+const user = store.user
+const isAdmin = user.isAdmin()
+const currentApi = api.loginsceneResource
+
+/****** 搜素区域 */
+const formItems = ref<SearchFormItem[]>([
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景集ID或名称' },
+  {
+    label: '标签',
+    key: 'labels',
+    type: 'tree-select',
+    mode: 'multiple',
+    api: api.tags.getList,
+    query: { tree: 1, tag_type: 2, size: 100 }, // tree无法分页，一次性获取所有
+    placeholder: '请选择标签，最多选择9个',
+    fieldNames: { label: 'display_name', value: 'name' },
+    defaultValue: [''],
+    multiple: true
+  }])
+const query = ref({})
+const onSearch = (data: Query) => (query.value = data)
+
+/****** 表格区域 */
+const modal = reactive({
+  visible: false,
+  reason: '' // 另存为的名字
+})
+const columns = [
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => isAdmin ? data.can_delete : data.can_apply },
+  { title: '场景集ID', dataIndex: 'id', width: 150 },
+  { title: '场景集名称', dataIndex: 'name', ellipsis: true },
+  { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
+  { title: '场景数量', dataIndex: 'count', width: 180 },
+  { title: '创建时间', dataIndex: 'create_time', width: 180 },
+  { title: '修改时间', dataIndex: 'update_time', width: 180 },
+  {
+    title: '操作',
+    dataIndex: 'actions',
+    fixed: 'right',
+    width: 150,
+    actions: {
+      申请授权: {
+        validator: (data : RObject) => !isAdmin && data.can_apply,
+        handler: ({ id }: RObject) => gotoSubPage('/apply/' + id)
+      },
+      查看: {
+        handler: ({ id }: RObject) => gotoSubPage('/view/' + id)
+      },
+      编辑: {
+        validator: (data : RObject) => isAdmin && data.can_edit,
+        handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
+      },
+      删除: {
+        validator: (data : RObject) => isAdmin && data.can_delete,
+        tip: '场景集删除后，场景集内场景也会被删除，你确定要删除场景集吗？',
+        handler: async ({ id }: { id: string }) => await currentApi.deleteSceneset({id: [id]})
+      }
+    }
+  }
+]
+
+const modalForm = ref()
+const submitting = ref(false)
+const onBatchApply = () => {
+  modalForm.value.validate().then(async () => {
+    try {
+      submitting.value = true
+      await api.grant.apply({
+        id: checkedItems.value,
+        type: 1,
+        reason: modal.reason
+      })
+      message.success('任务已提交，请前往授权任务管理查看任务状态。')
+      modal.visible = false
+      tableRef.value.refresh({ deletedRows: checkedItems.value.length })
+    } finally {
+      submitting.value = false
+    }
+  })
+}
+const tableRef = ref()
+const checkedItems = ref([])
+const onSelect = (data: any) => (checkedItems.value = data)
+const onBatchDelete = async () => {
+  await currentApi.deleteSceneset({ id: checkedItems.value })
+  tableRef.value.refresh({ deletedRows: checkedItems.value.length })
+}
+</script>

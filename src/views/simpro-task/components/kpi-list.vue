@@ -221,7 +221,6 @@ watchOnce(
         label: item[label],
         value: item[value]
       }))
-      console.log(selectedNodes.value)
       leftState.checkedKeys = selectedNodes.value?.map((data: any) => data.value)
       emits('update:targetKeys', selectedNodes.value) // 同步父组件数据，保持数据结构一致
     }
@@ -252,7 +251,7 @@ getOptions()
     border-right: 0;
   }
 }
-.ant-checkbox-wrapper {
+.scroll-box .ant-checkbox-wrapper {
   display: flex;
   margin-top: 4px;
 }

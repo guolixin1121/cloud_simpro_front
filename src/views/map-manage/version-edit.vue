@@ -1,7 +1,7 @@
 <template>
   <div class="breadcrumb">
-    <router-link to="/map-manage/">地图管理</router-link>
-    <a class="breadcrumb--current breadcrumb-title" @click="goback">地图版本</a>
+    <a @click="goback(-2)">地图管理</a>
+    <a @click="goback()">地图版本</a>
     <span class="breadcrumb--current">{{ title }}</span>
   </div>
   <div class="min-main">
@@ -62,7 +62,7 @@ const formState = reactive<any>({})
 
 const loading = ref(false)
 const router = useRouter()
-const goback = () => router.go(-1)
+const goback = (step = -1) => router.go(step)
 const add = async () => {
   loading.value = true
   const params: any = { mapVersionDesc: formState.mapVersionDesc, catalog: mapCategory?.id }

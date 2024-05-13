@@ -2,7 +2,7 @@
   <search-form class="multiline-form " :items="formItems" @search="onSearch" @show-more="toggleMore"></search-form>
 
   <div class="main">
-    <div class="flex justify-between items-center">
+    <div class="title-section">
       <div class="flex items-center">
         <span class="title mr-4">仿真任务列表</span>
         <a-checkbox v-model:checked="isOwner" class="table_model" @change="onChecked">我的任务</a-checkbox>
@@ -15,9 +15,11 @@
     </div>
 
     <Table ref="tableRef" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 2000, y: 'auto' }" @select="onSelect">
-      <template #bodyCell="{ column, record }">
-        <template v-if="column.dataIndex == 'vehicle_detail' && !isEmpty(record.vehicle_detail)">
-          {{ record.vehicle_detail.dynamic_model_name + '_' + record.vehicle_detail.version }}
+      <template #bodyCell="{ column, text }">
+        <template v-if="column.dataIndex == 'vehicle_detail' && !isEmpty(text)">
+          <!-- <a-tooltip :title="text.dynamic_model_name + '_' + text.version " placement="topLeft"> -->
+            {{ text.dynamic_model_name + '_' + text.version }}
+          <!-- </a-tooltip> -->
         </template>
       </template>
     </Table>
@@ -54,12 +56,12 @@ const tableRef = ref()
 const router = useRouter()
 const columns = [
   { dataIndex: 'checkbox', width: 50, validator: (data: RObject) => ['等待', '运行'].indexOf(data.status) == -1 },
-  { title: '任务ID', dataIndex: 'number', width: 120 },
-  { title: '仿真任务名称', dataIndex: 'name', width: 150, ellipsis: true },
+  { title: '任务ID', dataIndex: 'number', width: 150 },
+  { title: '仿真任务名称', dataIndex: 'name', width: 150 },
   { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90 },
-  { title: '主车模型', dataIndex: 'vehicle_detail', width: 150, ellipsis: true },
   { title: '场景文件数量', dataIndex: 'scene_count', width: 100 },
-  { title: '仿真算法', dataIndex: 'algorithm_detail', width: 150, ellipsis: true },
+  { title: '主车模型', dataIndex: 'vehicle_detail', width: 150 },
+  { title: '仿真算法', dataIndex: 'algorithm_detail', width: 150 },
   { title: '执行任务次数', dataIndex: 'batch', width: 100 },
   { title: '运行状态', dataIndex: 'status', width: 80 },
   { title: '创建时间', dataIndex: 'create_time', width: 150 },

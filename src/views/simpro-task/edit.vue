@@ -85,7 +85,7 @@
         <kpi-list v-model:target-keys="formState.kpi" :api="baseApi.kpi.getList"
           :titles="['可选评测指标', '选中评测指标']"></kpi-list>
       </a-form-item>
-      <a-form-item v-if="isAdd" label="所属场景集" name="scenesets" :rules="[{ required: isAdd, message: '请先选择场景集，再选择场景' }]">
+      <!-- <a-form-item v-if="isAdd" label="所属场景集" name="scenesets" :rules="[{ required: isAdd, message: '请先选择场景集，再选择场景' }]">
         <tree-select-async
             v-model:value="formState.scenesets" 
             placeholder="请选择所属场景集"
@@ -97,7 +97,10 @@
         <scroll-transfer v-model:target-keys="formState.scenes" :api="getScenes" 
           :fieldNames="{label: 'adsName', value: 'baidu_id'}"
           :titles="['可选场景', '选中场景']"></scroll-transfer>
-      </a-form-item> 
+      </a-form-item>  -->
+      <a-form-item v-if="isAdd"  label="场景" name="scenes" :rules="[{ required: isAdd, message: '请选择场景'}]">
+        <scene-list v-model:value="formState.scenes"></scene-list>
+      </a-form-item>
        <a-form-item label="场景" v-if="!isAdd">
         <ul class="view-list" v-if="formState.scenes?.length > 0">
           <li class="mb-2" v-for="item in formState.scenes as any" :key="item">
@@ -119,6 +122,8 @@
 import { checkChName } from '@/utils/tools';
 import { VerticalOptions, HorizontalOptions } from '@/utils/dict';
 import KpiList from './components/kpi-list.vue'
+import SceneList from './components/scene-list.vue'
+
 const id = useRoute().params.id
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
@@ -139,7 +144,7 @@ const formState = reactive({
   mount: '',
   driver: undefined,
   algorithm: undefined,
-  scenesets: undefined,
+  // scenesets: undefined,
   scenes: [],
   batch: 1,
   frequency: 50,
@@ -164,7 +169,7 @@ const add = async () => {
     batch: formState.batch,
     mount: formState.mount,
     sensors: formState.is_sensor == '1' ? formState.sensors.map((item:any) =>item.value) : [],
-    scenes: formState.scenes.map((item:any) =>item.value || item.baidu_id),
+    scenes: formState.scenes, //.map((item:any) =>item.value || item.baidu_id),
     kpi: formState.kpi.map((item:any) =>item.value),
     kpis_threshold: formState.kpi.map((item:any) => ({
       id: item.id,
@@ -195,10 +200,10 @@ const onVehicleChange = () => {
   getVehicleVersions.value = (args: any)  => api.veticleModel.getVersions({dynamic_model_id: formState.dynamic_model_id , ...args})
 }
 
-const getScenes = ref()
-const onScenesetChanged = () => {
-  getScenes.value = (args: any)  => api.scene.getList({scene_set: formState.scenesets, ...args})
-}
+// const getScenes = ref()
+// const onScenesetChanged = () => {
+//   getScenes.value = (args: any)  => api.scene.getList({scene_set: formState.scenesets, ...args})
+// }
 
 const getAlgorithm = ref()
 const onRingChanged = () => {
@@ -269,7 +274,7 @@ getEditData()
 
 const form = ref()
 // 自定义组件的变量，需要主动触发一下校验，以便消除红色提示
-watch(() => formState.scenesets, () => form.value.validateFields('scenesets'))
+// watch(() => formState.scenesets, () => form.value.validateFields('scenesets'))
 watch(() => formState.scenes, () => form.value.validateFields('scenes'))
 watch(() => formState.kpi, () => form.value.validateFields('kpi'))
 watch(() => formState.sensors, () => form.value.validateFields('sensors'))

@@ -1,6 +1,6 @@
 <template>
   <form-view title="动态库详情" :items="formItems" :loading="loading">
-    <router-link to="/dll/">动态库管理</router-link>
+    <router-link to="/dll/">动力学动态库</router-link>
   </form-view>
 </template>
 

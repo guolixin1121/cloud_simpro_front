@@ -4,10 +4,10 @@
 
   <div class="main">
     <!-- margin-top调整因tab引起的margin-top变大的问题 -->
-    <div class="flex justify-between items-center" style="margin-top: -12px">
+    <div class="flex justify-between">
       <!-- <span class="title">SOTIF</span> -->
 
-      <a-tabs v-model:activeKey="activeKey" class="tabs">
+      <a-tabs v-model:activeKey="activeKey" class="min-tabs">
         <a-tab-pane :key="1" tab="SOTIF分析">
         </a-tab-pane>
         <a-tab-pane :key="2" tab="STPA分析">
@@ -17,7 +17,7 @@
         <a-button type="primary" @click="()=> gotoSotif()">进入SOTIF分析工具</a-button>
       </div>
     </div>
-    <Table style="margin-top: 0" v-if="activeKey == 1" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
+    <Table v-if="activeKey == 1" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'projectStatus'">
           <span>{{  getSotifStatus(record.projectStatus) }}</span>
@@ -39,7 +39,7 @@
       </template>
     </Table>
 
-    <Table style="margin-top: 0" v-else :api="currentApi.getStpaList" :query="stpaQuery" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
+    <Table v-else :api="currentApi.getStpaList" :query="stpaQuery" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'projectStatus'">
           <span>{{  getSotifStatus(record.projectStatus) }}</span>
@@ -115,11 +115,11 @@ const onStpaSearch = (data: Query) => {
 /****** 表格区域 */
 const columns = [
   { title: '序号', dataIndex: 'index', width: 80 },
-  { title: '项目名称', dataIndex: 'projectName', width: 200, ellipsis: true },
+  { title: '项目名称', dataIndex: 'projectName', width: 200 },
   { title: '负责人', dataIndex: 'manager', width: 200 },
-  { title: '项目状态', dataIndex: 'projectStatus', width: 100},
   { title: '参与成员', dataIndex: 'collaborationList',  width: 200, ellipsis: true },
   { title: '分析项(整车级功能)', dataIndex: 'vehicleNameList',  width: 200, ellipsis: true },
+  { title: '项目状态', dataIndex: 'projectStatus', width: 150},
   { title: '创建时间', dataIndex: 'createTime', width: 150 },
   {
     title: '操作',
@@ -145,3 +145,11 @@ const gotoSotif = (path: string = '') => {
   }
 }
 </script>
+
+<style lang="less">
+.min-tabs.ant-tabs {
+  .ant-tabs-nav {
+    margin: 0px;
+  }
+}
+</style>

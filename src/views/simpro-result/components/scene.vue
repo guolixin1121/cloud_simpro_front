@@ -42,7 +42,7 @@ const getScenes = (args: any) => api.result.getScenes({ ...args, task })
 
 const columns = [
   { dataIndex: 'scene_id', title: '场景ID', width: 150 },
-  { dataIndex: 'adsName', title: '场景名称' },
+  { dataIndex: 'adsName', title: '场景名称', ellipsis: true },
   { dataIndex: 'labels_detail', title: '场景标签', apiField: 'display_name' },
   { dataIndex: 'result', title: '结果', width: 100 },
   { dataIndex: 'status', title: '状态', width: 100 },

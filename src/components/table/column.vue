@@ -22,17 +22,21 @@
   </template>
   <!-- 值为数组： 默认获取name值，可通过label指定字段 -->
   <template v-else-if="Array.isArray(dataValue)">
-    <a-tooltip placement="topLeft" :title="dataValue.map((d: any) => d[column.apiField]|| d.name).join('&nbsp;&nbsp;')">
-      <span v-for="label in dataValue" :key="label.id" class="label mr-4">
+    <a-tooltip v-if="column.ellipsis" placement="topLeft" :title="dataValue.map((d: any) => d[column.apiField]|| d.name).join('&nbsp;&nbsp;')">
+      <span v-for="label in dataValue" :key="label.id" class="label mr-2">
         {{ label[column.apiField] || label.name }}
       </span>
     </a-tooltip>
+    <span v-else v-for="label in dataValue" :key="label.id" class="label mr-2">
+      {{ label[column.apiField] || label.name }}
+    </span>
   </template>
   <!-- 值为对象：获取name -->
   <template v-else-if="isObject(dataValue)">
-    <a-tooltip placement="topLeft" :title="dataValue[column.apiField] || dataValue.name">
+    <a-tooltip v-if="column.ellipsis" placement="topLeft" :title="dataValue[column.apiField] || dataValue.name">
       {{ dataValue[column.apiField] || dataValue.name }}
     </a-tooltip>
+    <span v-else>{{ dataValue[column.apiField] || dataValue.name }}</span>
   </template>
   <!-- 自定义格式化函数 -->
   <template v-else-if="column.formatter">

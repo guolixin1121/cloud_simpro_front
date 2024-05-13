@@ -35,21 +35,20 @@ const onSearch = (data: Query) => {
 }
 /****** 表格区域 */
 const router = useRouter()
-// const preRoute = router.currentRoute.value.path
 const columns = [
   { title: '传感器ID', dataIndex: 'id', width: 110 },
-  { title: '传感器名称', dataIndex: 'name', width: 200, ellipsis: true },
-  { title: '传感器类型', dataIndex: 'type_name' },
-  { title: '创建时间', dataIndex: 'create_time', width: 180 },
-  { title: '修改时间', dataIndex: 'update_time', width: 180 },
-  { title: '所属用户', dataIndex: 'create_user', width: 200, ellipsis: true },
+  { title: '传感器名称', dataIndex: 'name', width: 250 },
+  { title: '传感器类型', dataIndex: 'type_name', width: 250},
+  { title: '创建时间', dataIndex: 'create_time', width: 200 },
+  { title: '修改时间', dataIndex: 'update_time', width: 200 },
+  { title: '所属用户', dataIndex: 'create_user', width: 150 },
   {
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
     width: 150,
     actions: {
-      查看: (data: any) => router.push('/sensor/edit/' + data.id + '?type=0'),
+      查看: (data: any) => router.push('/sensor/view/' + data.id),
       编辑: (data: any) => router.push('/sensor/edit/' + data.id),
       删除: async ({ id }: { id: string }) => await sensorApi.delete(id)
     }

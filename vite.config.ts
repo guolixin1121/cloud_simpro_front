@@ -76,7 +76,8 @@ export default defineConfig(({ mode }) => {
             'ant-design-vue': ['message'],
             '@/hooks/api.ts': ['defineApi'],
             '@/api/index.ts': [['*', 'api']],
-            '@/store/index.ts': [['*', 'store']]
+            '@/store/index.ts': [['*', 'store']],
+            '@/utils/tools.js': [['*', 'tools']],
           },
           {
             from: 'vue-request',

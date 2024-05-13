@@ -5,7 +5,9 @@
       <batch-button :disabled="!selectedRows.length" v-if="user.hasPermission('delete')" :api="batchDelete"></batch-button>
       <a-button type="primary" :disabled="selectedRows.length > 0"  v-if="user.hasPermission('add')" @click="router.push('/algorithm/edit/0')">创建算法</a-button>
     </page-title>
-    <Table 
+
+    <Table
+      sticky 
       ref="tableRef"
       :api="algorithmApi.getList" 
       :query="query" 

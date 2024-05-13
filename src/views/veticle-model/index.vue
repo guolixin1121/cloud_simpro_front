@@ -17,7 +17,7 @@
       :api="veticleModelApi.getList"
       :query="query"
       :columns="columns"
-      :scroll="{ x: 1000, y: 'auto' }"
+      :scroll="{ x: 1500, y: 'auto' }"
     >
       <template #bodyCell="{ column, record, index }">
         <!-- <template v-if="column.dataIndex == 'type'">
@@ -62,12 +62,11 @@
         <div class="desc mt-2">支持格式：.par，单个文件不能超过50MB。</div>
       </div>
       <div class="modal-buttons">
-        <a-button @click="cancelModal" class="marginR-16">取消</a-button>
+        <a-button @click="cancelModal">取消</a-button>
         <a-button @click="confirmModal" :loading="loading" type="primary">确定</a-button>
       </div>
     </a-modal>
-    <a-modal v-model:visible="visible" 
-      title="复制模型"
+    <a-modal v-model:visible="visible" title="复制模型" 
       :footer="null" :mask-closable="false">
       <div class="modal-content">
         模型名称：
@@ -81,7 +80,7 @@
         <span v-if="copyVal.name === '' && showTip" class="error">模型名称不能为空</span>
       </div>
       <div class="modal-buttons">
-        <a-button @click="visible = false" class="marginR-16">取消</a-button>
+        <a-button @click="visible = false">取消</a-button>
         <a-button @click="confirmCopy" :loading="loading" type="primary">确定</a-button>
       </div>
     </a-modal>
@@ -89,6 +88,8 @@
 </template>
 
 <script setup lang="ts">
+import { gotoSubPage } from '@/utils/tools'
+
 // import type { UploadChangeParam } from 'ant-design-vue'
 // import { typeList } from '@/utils/dict'
 // store、api、useRouter等通过auto import自动导入的，直接在template、自定义函数等使用时无效，为undefined
@@ -137,16 +138,16 @@ const onSearch = (data: Query) => {
 }
 /****** 表格区域 */
 const columns = [
-  { title: '模型ID', dataIndex: 'vehicle_no', width: 200 },
-  { title: '模型名称', dataIndex: 'name', width: 200, ellipsis: true },
+  { title: '模型ID', dataIndex: 'vehicle_no', width: 180 },
+  { title: '模型名称', dataIndex: 'name', width: 200 },
   { title: '版本数量', dataIndex: 'version_count', width: 120 },
   // { title: '类型', dataIndex: 'type', width: 80, ellipsis: true },
-  { title: '转向模型', dataIndex: 'direct_name', width: 120, ellipsis: true },
+  { title: '转向模型', dataIndex: 'direct_name', width: 200 },
   { title: '动力形式', dataIndex: 'power_name', width: 90 },
-  { title: '是否共享', dataIndex: 'is_share', width: 90, ellipsis: true },
+  { title: '是否共享', dataIndex: 'is_share', width: 100},
   { title: '创建时间', dataIndex: 'create_date', width: 180 },
   // { title: '修改时间', dataIndex: 'update_date', width: 180, ellipsis: true },
-  { title: '所属用户', dataIndex: 'username', width: 200, ellipsis: true },
+  { title: '所属用户', dataIndex: 'username', width: 150 },
   {
     title: '操作',
     dataIndex: 'actions',
@@ -209,14 +210,7 @@ const confirmModal = async () => {
   }
 }
 
-// import { SStorage } from '../../utils/storage'
-const router = useRouter()
-const preRoute = router.currentRoute.value.path
-const gotoVersion = (record: any) => {
-  const versionUrlPath = '/veticle-model/version/' + record.id
-  // SStorage.remove(versionUrlPath + ':table-page')
-  router.push({ path: versionUrlPath, query: { preRoute } })
-}
+const gotoVersion = (record: any) => gotoSubPage('/version/' + record.id)
 
 const cancelModal = () => {
   fileList.value = []

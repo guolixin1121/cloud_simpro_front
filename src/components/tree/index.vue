@@ -39,7 +39,7 @@
       <span style="font-size: 16px">删除后，关联数据(场景、地图等)将会一起删除，是否删除？</span>
     </div>
     <div class="modal-buttons">
-      <a-button @click="closeDeleteConfirm" class="marginR-16">取消</a-button>
+      <a-button @click="closeDeleteConfirm">取消</a-button>
       <a-button @click="onDeleteConfirm" type="primary">确定</a-button>
     </div>
   </a-modal>

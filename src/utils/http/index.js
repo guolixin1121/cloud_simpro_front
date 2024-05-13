@@ -5,23 +5,23 @@ import { getToken } from '@/utils/storage'
 import AxiosCanceler from './cancelCancel'
 
 // 处理错误信息
-const errorInfo = status => {
-  const errorMap = new Map([
-    [400, '错误请求'],
-    [401, '未授权，请重新登录'],
-    [403, '拒绝访问'],
-    [404, '请求错误，未找到该资源'],
-    [405, '请求方法未允许'],
-    [408, '请求超时'],
-    [500, '服务器端出错'],
-    [501, '网络未实现'],
-    [502, '网络错误'],
-    [503, '服务不可用'],
-    [504, '网络超时'],
-    [505, 'http版本不支持该请求']
-  ])
-  return errorMap.get(status) || `连接错误${status}`
-}
+// const errorInfo = status => {
+//   const errorMap = new Map([
+//     [400, '错误请求'],
+//     [401, '未授权，请重新登录'],
+//     [403, '拒绝访问'],
+//     [404, '请求错误，未找到该资源'],
+//     [405, '请求方法未允许'],
+//     [408, '请求超时'],
+//     [500, '服务器端出错'],
+//     [501, '网络未实现'],
+//     [502, '网络错误'],
+//     [503, '服务不可用'],
+//     [504, '网络超时'],
+//     [505, 'http版本不支持该请求']
+//   ])
+//   return errorMap.get(status) || `连接错误${status}`
+// }
 
 class AxiosRequest {
   // axios 实例
@@ -38,6 +38,7 @@ class AxiosRequest {
   static getSingleton() {
     if (!this.singleton) {
       this.singleton = new AxiosRequest()
+      this.singleton.getInterceptors()
     }
     return this.singleton
   }
@@ -56,24 +57,24 @@ class AxiosRequest {
       }
     )
     // 返回拦截器
-    this.instance.interceptors.response.use(
-      res => {
-        AxiosCanceler.removePending(res.config)
-        if ([200, 201].includes(res.status)) {
-          return res.data
-        }
-      },
-      error => {
-        const response = error?.response
-        if (response?.status) {
-          error.message = errorInfo(response?.status)
-        }
-        if (error.message.includes('timeout')) {
-          error.message = '请求超时，请刷新网页重试'
-        }
-        return Promise.reject(error.message || '服务器错误，请稍后重试！')
-      }
-    )
+    // this.instance.interceptors.response.use(
+    //   res => {
+    //     AxiosCanceler.removePending(res.config)
+    //     if ([200, 201].includes(res.status)) {
+    //       return res
+    //     }
+    //   },
+    //   error => {
+    //     const response = error?.response
+    //     if (response?.status) {
+    //       error.message = errorInfo(response?.status)
+    //     }
+    //     if (error.message.includes('timeout')) {
+    //       error.message = '请求超时，请刷新网页重试'
+    //     }
+    //     return Promise.reject(error.message || '服务器错误，请稍后重试！')
+    //   }
+    // )
   }
   // post 请求
   request(params) {
@@ -86,6 +87,13 @@ class AxiosRequest {
         'content-type': type || 'application/json',
         'X-Project-Id': store.user?.user?.project_id || ''
       })
+      // data || {} : 兼容data = null的情况
+      Object.keys(data || {}).forEach(key => {
+        if(typeof data[key] == 'string') {
+          data[key] = data[key]?.trim()
+        }
+      })
+
       let postData = data
       if(type === 'multipart/form-data') {
         const formData = new FormData()
@@ -115,7 +123,6 @@ class AxiosRequest {
             resolve(data)
           } else if (code === 100) {
             // token过期跳到登录页
-            // message.error('登录失效，请重新登录')
             store.user.gotoLogin()
           } else {
             message.error(typeof msg === 'string' ? msg : err)
@@ -123,9 +130,9 @@ class AxiosRequest {
           }
         })
         .catch(error => {
+          if(axios.isCancel(error)) return
           if (error.response?.status === 401) {
             // token过期跳到登录页
-            // message.error('无效身份，请重新登录')
             store.user.gotoLogin()
           } else {
             message.error(error.message || '请求错误，请稍后重试')

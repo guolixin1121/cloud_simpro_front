@@ -19,7 +19,9 @@
           <!-- <div class="title-item"><span class="label">路径</span>{{ selectedSceneset?.path }}</div> -->
           <div class="title-item">
             <span class="label">标签</span>
-            <ul style="flex: 1">
+            <span v-if="!selectedSceneset"></span>
+            <span v-else-if="!selectedSceneset.labels_detail || selectedSceneset.labels_detail.length == 0">--</span>
+            <ul style="flex: 1" v-else>
               <li class="inline-block mr-4" v-for="item in selectedSceneset?.labels_detail" :key="item.name">
                 {{ item.display_name }}
               </li>
@@ -31,14 +33,13 @@
       <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
 
       <div class="main">
-        <div class="flex justify-between items-center">
+        <div class="title-section">
           <span class="title">场景列表</span>
           <div>
             <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
             <a-button type="primary" 
             :disabled="checkedItems.length > 0 || (selectedSceneset && !selectedSceneset.isLeaf)" 
-              v-if="user.hasPermission('add')"
-               @click="router.push('/scene/edit/0')">上传场景</a-button>
+              v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
           </div>
         </div>
         <a-spin :spinning="loading">
@@ -64,6 +65,7 @@ const selectedSceneset = ref(scenesetFromLogic) // 逻辑场景跳转的默认�
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
   { label: '名称', key: 'adsName', type: 'input', placeholder: '请输入场景名称' },
+  { label: '场景ID', key: 'adsId', type: 'input', placeholder: '请输入场景ID，多个用逗号隔开' },
   {
     label: '场景来源',
     key: 'adsSource',
@@ -97,9 +99,9 @@ const loading = ref(false)
 const router = useRouter()
 const columns = [
   { dataIndex: 'checkbox', width: 60 },
-  { title: '场景ID', dataIndex: 'id', width: 150 },
+  { title: '场景ID', dataIndex: 'id', width: 120 },
   { title: '场景名称', dataIndex: 'adsName', width: 200, ellipsis: true },
-  { title: '场景来源', dataIndex: 'adsSource', formatter: getSceneSourceName, width: 90 },
+  { title: '场景来源', dataIndex: 'adsSource', formatter: getSceneSourceName, width: 120 },
   { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
   { title: '创建时间', dataIndex: 'createTime', width: 180 },
   { title: '修改时间', dataIndex: 'updateTime', width: 180 },
@@ -131,6 +133,8 @@ const onTreeSelect = async (sceneset: any) => {
       scenesetLoading.value = true
       const res = await api.scenesets.get(sceneset?.id)
       selectedSceneset.value = res
+      // 兼容get接口isLeaf返回为空的情况
+      selectedSceneset.value.isLeaf = sceneset?.isLeaf
     } finally {
       scenesetLoading.value = false
     }
