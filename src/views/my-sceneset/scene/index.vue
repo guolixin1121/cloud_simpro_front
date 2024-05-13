@@ -14,7 +14,7 @@
         <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
            :tips="'您已勾选' + checkedItems.length+ '个场景，确定要删除所有勾选的场景吗？'"></batch-button>
         <a-button type="primary" v-if="selectedSceneset?.isNotFromResource"
-            @click="router.push('/my-sceneset/my-scene/edit/0')">大模型生成场景</a-button>
+            @click="gotoSPT()">大模型生成场景</a-button>
         <a-button type="primary" :disabled="checkedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isNotFromResource"
             @click="gotoSubPage('/edit/0')">上传具体场景</a-button>
       </div>
@@ -43,12 +43,14 @@
 import { MySceneSourceOptions, IsMyScenesetFromResource, IsMySceneFromResource, getMySceneSourceName } from '@/utils/dict'
 import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
-import { gotoSubPage, goback } from '@/utils/tools'
+import { gotoSubPage, goback, openLink } from '@/utils/tools'
 
 const vncModal = ref()
 const currentApi = api.scene
 const user = store.user
 const selectedSceneset = ref() 
+
+const gotoSPT = () => openLink('https://spt01.saimo.net.cn:17862/simpro/')
 
 const loadSceneset = async () => {
   const scenesetId = useRoute().query.pid
@@ -96,7 +98,6 @@ const onTableSearch = (data: Query) => {
 
 /****** 表格区域 */
 const loading = ref(false)
-const router = useRouter()
 const isNotFromResource = ({adsSource}: any) => !IsMySceneFromResource(adsSource)
 const columns = [
   { dataIndex: 'checkbox', width: 60 },

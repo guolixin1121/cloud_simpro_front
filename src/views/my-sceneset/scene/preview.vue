@@ -6,7 +6,7 @@
     <template v-slot:right>
       <div style="width: 65%">
         <video width="800" controls autoplay>
-          <source src="/scene.mp4" type="video/mp4">
+          <source :src="videoUrl" type="video/mp4">
           <!-- 您的浏览器不支持视频标签。 -->
         </video>
       </div>
@@ -20,6 +20,7 @@ import { getMySceneSourceName } from '@/utils/dict'
 const scenset = store.catalog.sceneCatalog
 const router = useRouter()
 const goback = (step: number = -1) => router.go(step)
+const videoUrl = import.meta.env.VITE_BASE_STATIC_URL + 'scene.mp4'
 
 const formItems = ref<FormItem[]>([])
 const loading = ref(false)
