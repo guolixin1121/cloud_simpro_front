@@ -70,7 +70,7 @@ const sceneFormItems = [
     defaultValue: '',
   }]
 const scenesetColumns = [
-  { dataIndex: 'checkbox', width: 60, validator: (data: any) => isAdmin && data.status != 2 },
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => isAdmin && data.status == 1 },
   { title: '任务ID', dataIndex: 'id', width: 120 },
   { title: '场景集ID', dataIndex: 'resource_id', width: 120 },
   { title: '场景集名称', dataIndex: 'resource_name', width: 200, ellipsis: true },
@@ -94,7 +94,7 @@ const scenesetColumns = [
 ]
 
 const sceneColumns = [
-  { dataIndex: 'checkbox', width: 60, validator: (data: any) => isAdmin && data.status != 2 },
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => isAdmin && data.status == 1 },
   { title: '任务ID', dataIndex: 'id', width: 120 },
   { title: '场景ID', dataIndex: 'resource_id', width: 120 },
   { title: '场景名称', dataIndex: 'resource_name', ellipsis: true },
