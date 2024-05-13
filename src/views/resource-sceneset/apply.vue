@@ -39,7 +39,8 @@
 </template>
 
 <script setup lang="ts">
-import { goback } from '@/utils/tools'
+const router = useRouter()
+const goback = () => router.push('/resource-sceneset/')
 
 const id = useRoute().params.id
 

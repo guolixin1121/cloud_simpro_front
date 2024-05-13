@@ -39,13 +39,12 @@
 </template>
 
 <script setup lang="ts">
-import { goback } from '@/utils/tools'
-
 const id = useRoute().params.id
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '场景集'
-
+const router = useRouter()
+const goback = () => router.push('/resource-sceneset/')
 const baseApi = api
 const currentApi = api.sceneResource
 const formState = reactive({
