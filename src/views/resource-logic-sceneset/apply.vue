@@ -39,10 +39,10 @@
 </template>
 
 <script setup lang="ts">
-import { goback } from '@/utils/tools'
-
 const id = useRoute().params.id
 
+const router = useRouter()
+const goback = () => router.push('/resource-logic-sceneset/')
 const formState = reactive({
   name: '',
   desc: '',

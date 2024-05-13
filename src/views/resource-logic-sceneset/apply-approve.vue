@@ -1,7 +1,7 @@
 <template>
   <div class="breadcrumb">
     <span>场景资源库</span>
-    <a @click="goback(-2)">逻辑场景</a>
+    <router-link to="/resource-logic-sceneset/">逻辑场景</router-link>
     <a @click="goback()">授权任务管理</a>
     <span>{{ user.isAdmin() ? '任务审批' : '任务查看' }}</span>
   </div>
@@ -68,13 +68,12 @@
 </template>
 
 <script setup lang="ts">
-import { goback } from '@/utils/tools'
-
 const id = useRoute().params.id
 const currentApi = api.grant
 const user = store.user
 const sceneset = store.catalog.sceneCatalog
-
+const router = useRouter()
+const goback = () => router.push('/resource-logic-sceneset/apply-manage/0')
 const formState = reactive({
   apply_username: '',
   comments: '',

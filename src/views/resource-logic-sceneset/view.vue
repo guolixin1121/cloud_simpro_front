@@ -1,7 +1,7 @@
 <template>
   <div class="breadcrumb">
     <span>场景资源库</span>
-    <a @click="goback()">逻辑场景</a>
+    <router-link to="/resource-logic-sceneset/">逻辑场景</router-link>
     <span>场景集详情</span>
   </div>
   <div class="min-main">
@@ -31,7 +31,6 @@
 </template>
 
 <script setup lang="ts">
-import { goback } from '@/utils/tools'
 const id = useRoute().params.id
 
 const formState = reactive({

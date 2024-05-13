@@ -1,7 +1,7 @@
 <template>
   <div class="breadcrumb">
     <span>场景资源库</span>
-    <a @click="goback(-2)">逻辑场景</a>
+    <router-link to="/resource-logic-sceneset/">逻辑场景</router-link>
     <a @click='goback()'>{{ sceneset?.name }}</a>
     <span>{{ title }}</span>
   </div>
@@ -73,17 +73,16 @@
 </template>
 
 <script setup lang="ts">
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { goback } from "@/utils/tools"
-
 const id = useRoute().params.id
 const isAdd = id === '0'
 const actionText = isAdd ? '上传' : '修改'
 const title =  actionText + '逻辑场景'
 
+const router = useRouter()
 const sceneset = store.catalog.sceneCatalog
 const baseApi = api
 const currentApi = api.loginsceneResource
+const goback = () => router.push('/resource-logic-sceneset/scene/?pid=' + sceneset.id)
 
 const formState = reactive({
   name: '',

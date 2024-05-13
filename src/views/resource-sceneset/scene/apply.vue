@@ -1,7 +1,7 @@
 <template>
   <div class="breadcrumb">
     <span>场景资源库</span>
-    <a @click="goback(-2)">具体场景</a>
+    <router-link to="/resource-sceneset/">具体场景</router-link>
     <a @click="goback()">{{ sceneset?.name }}</a>
     <span>申请授权</span>
   </div>
@@ -52,11 +52,11 @@
 </template>
 
 <script setup lang="ts">
-import { goback } from '@/utils/tools'
-
 const id = useRoute().params.id
 const currentApi = api.sceneResource
 const sceneset = store.catalog.sceneCatalog
+const router = useRouter()
+const goback = () => router.push('/resource-sceneset/scene/?pid=' + sceneset.id)
 
 const formState = reactive({
   id:'',

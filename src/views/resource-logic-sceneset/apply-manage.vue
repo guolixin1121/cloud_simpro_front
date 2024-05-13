@@ -33,7 +33,6 @@
 </template>
 
 <script setup lang="ts">
-import { goback } from '@/utils/tools'
 import { ApplyStatusOptions, getApplyStatus } from '@/utils/dict'
 
 const user = store.user
@@ -41,7 +40,7 @@ const isAdmin = user.isAdmin()
 const router = useRouter()
 const query = ref({})
 const onSearch = (data: Query) => (query.value = data)
-
+const goback = () => router.push('/resource-logic-sceneset/')
 const activeKey = ref(1)
 const listApi = (params: any) => api.grant.getList({...params, type: activeKey.value == 1 ? 1 : 2})
 const columns = computed(() => activeKey.value == 1 ? scenesetColumns : sceneColumns )

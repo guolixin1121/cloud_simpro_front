@@ -122,7 +122,6 @@ const columns = [
         validator: (data: any) => isAdmin && data.can_edit,
         handler: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show())
       },
-      场景预览: (data: any) => gotoSubPage('/preview/' + data.id),
       删除: {
         validator: (data: any) => isAdmin && data.can_delete,
         tip: '场景删除后不可恢复，您确定要删除场景吗？',

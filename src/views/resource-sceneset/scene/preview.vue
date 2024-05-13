@@ -1,7 +1,7 @@
 <template>
     <form-view title="具体场景预览" :videoUrl="videoUrl" :items="formItems" :loading="loading">
       <span>场景资源库</span>
-      <a @click="goback(-2)">具体场景</a>
+      <router-link to="/resource-sceneset/">具体场景</router-link>
       <a @click='goback()'>{{ scenset?.name }}</a>
     </form-view>
 </template>
@@ -9,7 +9,7 @@
 <script setup lang="ts">
 const scenset = store.catalog.sceneCatalog
 const router = useRouter()
-const goback = (step: number = -1) => router.go(step)
+const goback = () => router.push('/resource-sceneset/scene/?pid=' + scenset.id)
 
 const videoUrl = import.meta.env.VITE_BASE_STATIC_URL + 'scene.mp4'
 const formItems = ref<FormItem[]>([])
