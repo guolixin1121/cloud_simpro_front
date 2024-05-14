@@ -1,7 +1,7 @@
 <template>
   <form-view title="具体场景详情" :items="formItems" :loading="loading">
     <span>我的场景</span>
-    <a @click="goback(-2)">具体场景</a>
+    <router-link to="/my-sceneset/">具体场景</router-link>
     <a @click='goback()'>{{ sceneset?.name }}</a>
   </form-view>
 </template>
@@ -11,7 +11,7 @@ import { getMySceneSourceName } from '@/utils/dict'
 
 const sceneset = store.catalog.sceneCatalog
 const router = useRouter()
-const goback = (step: number = -1) => router.go(step)
+const goback = () => router.push('/my-sceneset/scene/?pid=' + sceneset.id)
 
 const formItems = ref<FormItem[]>([])
 const loading = ref(false)

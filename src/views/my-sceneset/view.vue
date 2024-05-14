@@ -1,8 +1,8 @@
 <template>
   <div class="breadcrumb">
     <span>我的场景</span>
-    <a @click="goback()">具体场景</a>
-    <span class="breadcrumb--current">场景集详情</span>
+    <router-link to="/my-sceneset/">具体场景</router-link>
+    <span>场景集详情</span>
   </div>
   <div class="min-main">
     <span class="title mb-5">场景集详情</span>
@@ -31,8 +31,6 @@
 </template>
 
 <script setup lang="ts">
-import { goback } from '@/utils/tools'
-
 const id = useRoute().params.id
 
 const formState = reactive({

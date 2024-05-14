@@ -1,9 +1,9 @@
 <template>
   <div class="breadcrumb">
     <span>我的场景</span>
-    <a @click="goback(-2)">具体场景</a>
-    <a @click='goback()'>{{ scenset?.name }}</a>
-    <span class="breadcrumb--current">{{ title }}</span>
+    <router-link to="/my-sceneset/">具体场景</router-link>
+    <a @click='goback()'>{{ sceneset?.name }}</a>
+    <span>{{ title }}</span>
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
@@ -72,7 +72,7 @@ const { id } = route.params
 const isAdd = id === '0'
 const actionText = isAdd ? '上传' : '修改'
 const title =  actionText + '具体场景'
-const scenset = store.catalog.sceneCatalog
+const sceneset = store.catalog.sceneCatalog
 
 const baseApi = api
 const currentApi = baseApi.scene
@@ -91,7 +91,7 @@ const formState = reactive({
 })
 const loading = ref(false)
 const router = useRouter()
-const goback = (step: number = -1) => router.go(step)
+const goback = () => router.push('/my-sceneset/scene/?pid=' + sceneset.id)
 
 const add = async () => {
   const { labels } = formState
@@ -99,7 +99,7 @@ const add = async () => {
     source: 0,
     desc: formState.desc,
     adsName: formState.adsName,
-    baiduSceneSets: scenset.id,
+    baiduSceneSets: sceneset.id,
     mapName: formState.map ? (formState.map as unknown as SelectOption).label : formState.mapName,
     mapVersion: formState.mapVersion,
     xosc: formState.xosc,

@@ -54,7 +54,6 @@ const formState = reactive({
 
 const loading = ref(false)
 const router = useRouter()
-
 const goback = () => router.push('/my-sceneset/')
 const add = async () => {
   loading.value = true
