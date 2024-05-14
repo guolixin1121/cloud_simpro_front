@@ -26,7 +26,7 @@
             :titles="['可选标签', '选中标签']"
           ></tree-transfer>
         </a-form-item>
-        <a-form-item :wrapper-col="{ style: { paddingLeft: '100px' }}">
+        <a-form-item :wrapper-col="{ style: { paddingLeft: '100px' }}" v-if="formState.can_edit">
           <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">
             {{ actionText }}
           </a-button>
@@ -51,7 +51,8 @@ const currentApi = api.loginsceneResource
 const formState = reactive({
   name: '',
   desc: '',
-  labels: []
+  labels: [],
+  can_edit: true
 })
 
 const loading = ref(false)
@@ -85,6 +86,7 @@ const getEditData = async () => {
       formState.name = data.name
       formState.desc = data.desc
       formState.labels = data.labels_detail
+      formState.can_edit = data.can_edit
     } finally {
       dataLoading.value = false
     }

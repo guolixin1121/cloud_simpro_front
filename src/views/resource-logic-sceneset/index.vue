@@ -103,7 +103,6 @@ const columns = [
       },
       删除: {
         validator: (data : RObject) => isAdmin && data.can_delete,
-        tip: '场景集删除后，场景集内场景也会被删除，你确定要删除场景集吗？',
         handler: async ({ id }: { id: string }) => await currentApi.deleteSceneset({id: [id]})
       }
     }

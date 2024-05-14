@@ -26,13 +26,15 @@
         <a-form-item label="创建时间" name="create_time">
           {{ formState.create_time }}
         </a-form-item>
-        <a-form-item label="申请原因" name="reason">
-          <a-textarea v-model:value="formState.reason" :maxlength="255" :rows="4" placeholder="请输入申请原因" />
-        </a-form-item>
-        <a-form-item :wrapper-col="{ style: { paddingLeft: '100px' }}">
-          <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">申请</a-button>
-          <a-button @click="goback()">取消</a-button>
-        </a-form-item>
+        <template v-if="formState.can_apply">
+          <a-form-item label="申请原因" name="reason">
+            <a-textarea v-model:value="formState.reason" :maxlength="255" :rows="4" placeholder="请输入申请原因" />
+          </a-form-item>
+          <a-form-item :wrapper-col="{ style: { paddingLeft: '100px' }}">
+            <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">申请</a-button>
+            <a-button @click="goback()">取消</a-button>
+          </a-form-item>
+        </template>
       </a-form>
     </a-spin>
   </div>
@@ -48,6 +50,7 @@ const formState = reactive({
   name: '',
   desc: '',
   reason: '',
+  can_apply: true,
   create_time: '',
   labels_detail: []
 })
@@ -81,6 +84,7 @@ const getEditData = async () => {
       const data = await api.sceneResource.getSceneset(id)
       formState.name = data.name
       formState.desc = data.desc
+      formState.can_apply = data.apply_enable
       formState.create_time = data.create_time
       formState.labels_detail = data.labels_detail
     } finally {

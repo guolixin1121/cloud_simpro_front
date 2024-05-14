@@ -126,7 +126,6 @@ const columns = [
       场景预览: (data: any) => gotoSubPage('/preview/' + data.id),
       删除: {
         validator: (data: any) => isAdmin && data.delete_enable,
-        tip: '场景删除后不可恢复，您确定要删除场景吗？',
         handler: async ({ id }: { id: string }) => await currentApi.deleteScene({id: [id] })
       }
     }

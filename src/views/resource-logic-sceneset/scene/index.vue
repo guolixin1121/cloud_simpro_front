@@ -115,7 +115,6 @@ const columns = [
       },
       删除: {
         validator: (data: any) => isAdmin && data.can_delete,
-        tip: '场景删除后不可恢复，您确定要删除场景吗？',
         handler: async ({ id }: { id: string }) => await currentApi.deleteScene({id: [id] })
       }
     }

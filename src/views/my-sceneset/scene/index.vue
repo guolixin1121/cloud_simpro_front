@@ -127,7 +127,6 @@ const columns = [
         cloneModal.cloneVisible = true
       },
       删除: {
-        tip: '场景删除后不可恢复，您确定要删除场景吗？',
         handler: async ({ id }: { id: string }) => await currentApi.delete(id)
       }
     }

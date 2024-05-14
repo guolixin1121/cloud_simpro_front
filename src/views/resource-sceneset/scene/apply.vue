@@ -39,13 +39,15 @@
         <a-form-item label="创建时间" name="create_time">
           {{ formState.create_time }}
         </a-form-item>
-        <a-form-item label="申请说明" name="reason">
-          <a-textarea v-model:value="formState.reason" :maxlength="255" :rows="4" />
-        </a-form-item>
-        <a-form-item :wrapper-col="{ style: { paddingLeft: '100px' }}">
-          <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">申请</a-button>
-          <a-button @click="goback()">取消</a-button>
-        </a-form-item>
+        <template v-if="formState.can_apply">
+          <a-form-item label="申请说明" name="reason">
+            <a-textarea v-model:value="formState.reason" :maxlength="255" :rows="4" />
+          </a-form-item>
+          <a-form-item :wrapper-col="{ style: { paddingLeft: '100px' }}">
+            <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">申请</a-button>
+            <a-button @click="goback()">取消</a-button>
+          </a-form-item>
+        </template>
       </a-form>
     </a-spin>
   </div>
@@ -67,7 +69,8 @@ const formState = reactive({
   adsUrl: '',
   create_time: '',
   reason: '',
-  labels_detail: []
+  labels_detail: [],
+  can_apply: false
 })
 
 const loading = ref(false)
@@ -105,6 +108,7 @@ const getEditData = async () => {
       formState.adsUrl = data.xosc_key
       formState.id = data.id
       formState.create_time = data.create_time
+      formState.can_apply = data.can_apply
     } finally {
       dataLoading.value = false
     }

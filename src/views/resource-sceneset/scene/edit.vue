@@ -55,7 +55,7 @@
             :titles="['可选标签', '选中标签']"
           ></tree-transfer>
         </a-form-item>
-        <a-form-item :wrapper-col="{ style: { paddingLeft: '100px' }}">
+        <a-form-item :wrapper-col="{ style: { paddingLeft: '100px' }}" v-if="formState.can_edit">
           <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">
             {{ actionText }}
           </a-button>
@@ -87,6 +87,7 @@ const formState = reactive({
   xosc: undefined,
   labels: [],
   adsUrl: undefined,
+  can_edit: true
 })
 const loading = ref(false)
 const router = useRouter()
@@ -148,6 +149,7 @@ const getEditData = async () => {
     formState.mapName = scene.mapName
     formState.adsUrl = scene.xosc_key
     formState.desc = scene.desc
+    formState.can_edit = scene.can_edit
   }
 }
 getEditData()

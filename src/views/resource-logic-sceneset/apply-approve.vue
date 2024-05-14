@@ -54,14 +54,21 @@
           <a-form-item label="创建时间" name="create_time">{{ formState.data.create_time }}</a-form-item>
         </a-form>
       </a-spin>
-    </div>
-      <div style="width: 40%; margin-left: 48px;" v-if="user.isAdmin()">
-        <p>审批意见</p>
-        <ch-input type="textarea" rows="15" placeholder="请输入审批意见" :maxlength="255" v-model:value="formState.comments" />
-        <div class="my-4">
-          <a-button type="primary" class="mr-4" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
-          <a-button :loading="isRejecting" @click="onApprove(false)">驳回</a-button>
-        </div>
+      </div>
+      <div style="width: 40%; margin-left: 48px;">
+        <template v-if="user.isAdmin()">
+          <p>审批意见</p>
+          <ch-input type="textarea" rows="15" :maxlength="255" :disabled="isApproved"
+            placeholder="请输入审批意见" v-model:value="formState.comments" />
+          <div class="my-4" v-if="!isApproved">
+            <a-button type="primary" class="mr-4" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
+            <a-button :loading="isRejecting" @click="onApprove(false)">驳回</a-button>
+          </div>
+        </template>
+        <template v-else-if="isApproved">
+          <p>审批意见</p>
+          <ch-input type="textarea" rows="15" disabled v-model:value="formState.comments" />
+        </template>
       </div>
     </div>
   </div>
@@ -74,11 +81,14 @@ const user = store.user
 const sceneset = store.catalog.sceneCatalog
 const router = useRouter()
 const goback = () => router.push('/resource-logic-sceneset/apply-manage/0')
+
+const isApproved = computed(() => formState.status != '1' )
 const formState = reactive({
   apply_username: '',
   comments: '',
   reason: '',
   create_time: '',
+  status: '',  // 1 待审批， 2 已批准 3 已拒绝
   data: {
     id: '',
     name: '',
