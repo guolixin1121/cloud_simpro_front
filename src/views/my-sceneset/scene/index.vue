@@ -49,11 +49,10 @@ const vncModal = ref()
 const currentApi = api.scene
 const user = store.user
 const selectedSceneset = ref() 
-
+const scenesetId = useRoute().query.pid
 const gotoSPT = () => openLink('https://spt01.saimo.net.cn:17862/simpro/')
 
 const loadSceneset = async () => {
-  const scenesetId = useRoute().query.pid
   if (scenesetId) {
     const data = await api.scenesets.get(scenesetId)
     selectedSceneset.value = data
@@ -111,7 +110,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 280,
+    width: 300,
     actions: {
       查看: (data: any) => gotoSubPage('/view/' + data.id),
       编辑: { 

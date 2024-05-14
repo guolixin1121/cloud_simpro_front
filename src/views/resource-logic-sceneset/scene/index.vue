@@ -23,8 +23,6 @@
     </a-spin>
   </div>
 
-  <VncModal ref="vncModal"></VncModal>
-
   <a-modal ref="modalForm" v-model:visible="modal.visible" title="批量申请场景集授权"
     :footer="null" :destroyOnClose="true">
       <a-form ref="modalForm" class="modal-content" :model="modal" 
@@ -45,11 +43,8 @@
 </template>
 
 <script setup lang="ts">
-import { gotoVnc } from '@/utils/vnc'
-import VncModal from '@/components/vnc-modal/index.vue'
 import { gotoSubPage, goback } from '@/utils/tools'
 
-const vncModal = ref()
 const currentApi = api.loginsceneResource
 const user = store.user
 const isAdmin = user.isAdmin()
@@ -107,7 +102,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 200,
+    width: 150,
     actions: {
       申请授权: {
         validator: (data: any) => !isAdmin && data.can_apply,
@@ -117,10 +112,6 @@ const columns = [
       编辑: {
         validator: (data: any) => isAdmin && data.can_edit,
         handler: (data: any) => gotoSubPage('/edit/' + data.id)
-      },
-      编辑场景: {
-        validator: (data: any) => isAdmin && data.can_edit,
-        handler: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show())
       },
       删除: {
         validator: (data: any) => isAdmin && data.can_delete,

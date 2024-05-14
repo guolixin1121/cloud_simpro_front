@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { gotoVnc } from '@/utils/vnc'
+// import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
 import { gotoSubPage, goback } from '@/utils/tools'
 
@@ -119,10 +119,10 @@ const columns = [
         validator: (data: any) => isAdmin && data.edit_enable,
         handler: (data: any) => gotoSubPage('/edit/' + data.id)
       },
-      编辑场景: {
-        validator: (data: any) => isAdmin && data.edit_enable,
-        handler: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show())
-      },
+      // 编辑场景: {
+      //   validator: (data: any) => isAdmin && data.edit_enable,
+      //   handler: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show())
+      // },
       场景预览: (data: any) => gotoSubPage('/preview/' + data.id),
       删除: {
         validator: (data: any) => isAdmin && data.delete_enable,

@@ -73,10 +73,8 @@ const isAdd = id === '0'
 const actionText = isAdd ? '上传' : '修改'
 const title =  actionText + '具体场景'
 const sceneset = store.catalog.sceneCatalog
-
 const baseApi = api
 const currentApi = baseApi.scene
-// const sceneCatalog = store.catalog.sceneCatalog
 
 const formState = reactive({
   adsName: '',

@@ -7,9 +7,10 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ user.isAdmin() ? '任务审批' : '任务查看' }}</span>
+
+    <a-spin :spinning="dataLoading">
     <div class="flex">
       <div style="width: 50%">
-      <a-spin :spinning="dataLoading">
         <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }">
           <a-form-item label="申请人" >
             {{ formState.apply_username }}
@@ -18,14 +19,14 @@
             {{ formState.create_time }}
           </a-form-item>
           <a-form-item label="申请原因">
-            <span class="break-text">{{ formState.reason || '无' }}</span>
+            <span class="break-text">{{ formState.reason || '-' }}</span>
           </a-form-item>
           <template v-if="isSceneset">
             <a-form-item label="场景集ID">{{ formState.data.id }}</a-form-item>
             <a-form-item label="场景集名称">
               <span class="break-text">{{ formState.data.name }}</span></a-form-item>
             <a-form-item label="场景集描述" name="desc">
-              <span class="break-text">{{ formState.data.desc || '无' }}</span>
+              <span class="break-text">{{ formState.data.desc || '-' }}</span>
             </a-form-item>
           </template>
           <template v-else>
@@ -33,7 +34,7 @@
             <a-form-item label="场景名称">
               <span class="break-text">{{ formState.data.name }}</span></a-form-item>
             <a-form-item label="场景描述" name="desc">
-              <span class="break-text">{{ formState.data.desc || '无' }}</span>
+              <span class="break-text">{{ formState.data.desc || '-' }}</span>
             </a-form-item>
             <a-form-item label="路径">
               <span class="break-text">场景资源库-具体场景-{{ formState.data.scene_set_name }}</span></a-form-item>
@@ -52,17 +53,18 @@
           </a-form-item>
           <a-form-item label="创建时间" name="create_time">{{ formState.data.create_time }}</a-form-item>
         </a-form>
-      </a-spin>
-    </div>
+      </div>
       <div style="width: 40%; margin-left: 48px;" v-if="user.isAdmin()">
         <p>审批意见</p>
-        <ch-input type="textarea" rows="15" :maxlength="255" placeholder="请输入审批意见" v-model:value="formState.comments" />
-        <div class="my-4">
+        <ch-input type="textarea" rows="15" :maxlength="255" :disabled="formState.status != '1'"
+          placeholder="请输入审批意见" v-model:value="formState.comments" />
+        <div class="my-4" v-if="formState.status == '1'">
           <a-button type="primary" class="mr-4" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
           <a-button :loading="isRejecting" @click="onApprove(false)">驳回</a-button>
         </div>
       </div>
     </div>
+  </a-spin>
   </div>
 </template>
 
@@ -80,6 +82,7 @@ const formState = reactive({
   comments: '',
   reason: '',
   create_time: '',
+  status: '',
   data: {
     id: '',
     name: '',
@@ -125,6 +128,7 @@ const getEditData = async () => {
         formState[prop as keyof typeof formState] = data[prop]
       }
       isSceneset.value = data.grant_type == 1 || data.grant_type == 3
+      formState.comments = formState.comments || '无'
     } finally {
       dataLoading.value = false
     }
