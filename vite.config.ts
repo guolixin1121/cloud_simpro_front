@@ -4,7 +4,7 @@ import vueJsx from '@vitejs/plugin-vue-jsx' // 配置vue使用jsx
 import svgLoader from 'vite-svg-loader'
 import Markdown from 'vite-plugin-vue-markdown'
 import eslintPlugin from 'vite-plugin-eslint'
-import { createHtmlPlugin } from 'vite-plugin-html'
+// import { createHtmlPlugin } from 'vite-plugin-html'
 // import viteCompression from 'vite-plugin-compression'
 // 自动导入vue中hook reactive ref等
 import AutoImport from 'unplugin-auto-import/vite'
@@ -39,18 +39,6 @@ export default defineConfig(({ mode }) => {
           javascriptEnabled: true,
         }
       }
-      // loaderOptions: {
-      //   less: {
-      //     lessOptions: {
-      //       modifyVars: {
-      //         'primary-color': '#1664ff',
-      //         'link-color': '#1664ff',
-      //         'border-radius-base': '4px',
-      //       },
-      //       javascriptEnabled: true,
-      //     },
-      //   },
-      // },
     },
     plugins: [
       vue({ include: [/\.vue$/, /\.md$/], reactivityTransform: true }),
@@ -58,13 +46,13 @@ export default defineConfig(({ mode }) => {
       svgLoader(),
       Markdown(),
       // markdown({ mode: [Mode.VUE] }),
-      createHtmlPlugin({
-        inject: {
-          data: {
-            title: env['VITE_TITLE']
-          }
-        }
-      }),
+      // createHtmlPlugin({
+      //   inject: {
+      //     data: {
+      //       title: env['VITE_TITLE']
+      //     }
+      //   }
+      // }),
       AutoImport({
         //安装后你会发现在组件中不用再导入ref，reactive等
         imports: [
@@ -105,14 +93,6 @@ export default defineConfig(({ mode }) => {
         cache: false,
         fix: true
       })
-      // //开启gzip压缩  ng需要配合  体积不是很大不建议使用
-      // viteCompression({
-      //   verbose: true,
-      //   disable: false,
-      //   threshold: 10240,
-      //   algorithm: 'gzip',
-      //   ext: '.gz'
-      // })
     ],
     build: {
       target: 'modules', //浏览器兼容性modules|esnext

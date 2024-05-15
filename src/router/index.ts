@@ -35,17 +35,19 @@ const router = createRouter({
 })
 
 router.beforeEach(async (to, from, next) => {
+  console.log(to)
   if (to.meta.auth == false) {
     next()
   } else {
     const user = store.user
     if (await user.hasToken()) {
       await user.getUserInfo()
-      if(user.hasPermission('view', to.path)) {
-        next()
-      } else {
-        next('/')
-      }
+      next()
+      // if(user.hasPermission('view', to.path)) {
+      //   next()
+      // } else {
+      //   next('/')
+      // }
     } else {
       // message.info('无效身份，请先登录!')
       // user.logout()

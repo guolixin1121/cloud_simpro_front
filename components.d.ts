@@ -49,7 +49,6 @@ declare module '@vue/runtime-core' {
     Chart: typeof import('./src/components/chart/index.vue')['default']
     ChInput: typeof import('./src/components/ch-input/index.vue')['default']
     Components: typeof import('./src/components/index.vue')['default']
-    CopytoSceneset: typeof import('./src/components/copyto-sceneset/index.vue')['default']
     Empty: typeof import('./src/components/empty/index.vue')['default']
     Form: typeof import('./src/components/form/index.vue')['default']
     FormView: typeof import('./src/components/form-view/index.vue')['default']

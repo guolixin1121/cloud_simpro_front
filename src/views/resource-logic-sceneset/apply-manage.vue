@@ -10,7 +10,7 @@
       <a-tabs class="tabs" v-model:activeKey="activeKey" >
         <a-tab-pane :key="1" tab="场景集管理">
         </a-tab-pane>
-        <a-tab-pane :key="2" tab="具体场景管理">
+        <a-tab-pane :key="2" tab="逻辑场景管理">
         </a-tab-pane>
       </a-tabs> 
       <div v-if="user.isAdmin()">
