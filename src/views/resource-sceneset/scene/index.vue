@@ -48,7 +48,7 @@
 <script setup lang="ts">
 // import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
-import { gotoSubPage, goback } from '@/utils/tools'
+import { gotoSubPage, goback, openLink } from '@/utils/tools'
 
 const vncModal = ref()
 const currentApi = api.sceneResource
@@ -124,6 +124,7 @@ const columns = [
       //   handler: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show())
       // },
       场景预览: (data: any) => gotoSubPage('/preview/' + data.id),
+      // 场景预览: (data: any) => openLink('http://10.10.55.226:3005/#/overview?type=1&id=' + data.id),
       删除: {
         validator: (data: any) => isAdmin && data.delete_enable,
         handler: async ({ id }: { id: string }) => await currentApi.deleteScene({id: [id] })
