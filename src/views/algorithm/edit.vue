@@ -4,7 +4,7 @@
     <span class="breadcrumb--current">{{ title }}</span>
   </div>
   <div class="min-main">
-    <span class="title mb-5">算法详情</span>
+    <span class="title mb-5">{{ title }}</span>
     <a-form :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 55%" @finish="add">
       <a-form-item
         label="算法名称"
