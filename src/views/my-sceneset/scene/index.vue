@@ -122,7 +122,7 @@ const columns = [
         handler: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show()),
       },
       // 场景预览: (data: any) => gotoSubPage('/preview/' + data.id),
-      场景预览: (data: any) => openLink('/scene-simulation-client/#/overview/?type=1&id=' + data.id),
+      场景预览: (data: any) => openLink('/scene-simulation-client/#/overview/?type=2&id=' + data.id),
       另存为: (data: any) => {
         cloneModal.sourceData = [data.id]
         cloneModal.cloneVisible = true
