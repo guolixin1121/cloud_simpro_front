@@ -58,11 +58,12 @@ const columns = [
     actions: {
       查看: ({ id }: RObject) => router.push('/tags/view/' + id),
       编辑: {
-        validator: () => user.isAdmin(),
+        // create_user == 'admin' 代表全局标签，仅有admin可以编辑删除
+        validator: ({create_user}: RObject ) => create_user == 'admin' ? user.isAdmin() : true,
         handler: ({ id }: RObject) => router.push('/tags/edit/' + id + '?tag_type=' + query.value.tag_type)
       },
       删除:{
-        validator: () => user.isAdmin(),
+        validator: ({create_user}: RObject ) => create_user == 'admin' ? user.isAdmin() : true,
         handler: async ({ id }: { id: string }) => await currentApi.delete(id)
       }
     }
