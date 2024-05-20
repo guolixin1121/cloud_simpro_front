@@ -23,7 +23,7 @@ const getEditData = async () => {
       { label: '场景名称', value: data.name, isBreak: true },
       { label: '场景描述', value: data.desc },
       { label: '路径', value: '场景资源库-逻辑场景-' + senesetname },
-      { label: '关联地图', value: data.map_name ? (data.map_name + '_' + data.map_version_num) : '无'},
+      { label: '关联地图', value: data.map_name + '_' + data.map_version_num},
       { label: '场景文件', value: data.scene_url },
       { label: '配置文件', value: data.config_url },
       { label: '标签', value: data.labels_detail?.map((item: any) => item.display_name) },

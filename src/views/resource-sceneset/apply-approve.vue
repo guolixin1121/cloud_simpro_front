@@ -55,18 +55,17 @@
         </a-form>
       </div>
       <div style="width: 40%; margin-left: 48px;">
-        <template v-if="user.isAdmin()">
-          <p>审批意见</p>
-          <ch-input type="textarea" rows="15" :maxlength="255" :disabled="isApproved"
+        <p>审批意见</p>
+        <template v-if="isAdmin && !isApproved">
+          <ch-input type="textarea" rows="15" :maxlength="255"
             placeholder="请输入审批意见" v-model:value="formState.comments" />
-          <div class="my-4" v-if="!isApproved">
+          <div class="my-4">
             <a-button type="primary" class="mr-4" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
             <a-button :loading="isRejecting" @click="onApprove(false)">驳回</a-button>
           </div>
         </template>
-        <template v-else-if="isApproved">
-          <p>审批意见</p>
-          <ch-input type="textarea" rows="15" disabled v-model:value="formState.comments" />
+        <template v-else>
+          <p class="comments">{{ formState.comments || '无' }}</p>
         </template>
       </div>
     </div>
@@ -78,6 +77,7 @@
 const id = useRoute().params.id
 const currentApi = api.grant
 const user = store.user
+const isAdmin = user.isAdmin()
 // const sceneset = store.catalog.sceneCatalog
 
 const router = useRouter()
@@ -134,7 +134,6 @@ const getEditData = async () => {
         formState[prop as keyof typeof formState] = data[prop]
       }
       isSceneset.value = data.grant_type == 1 || data.grant_type == 3
-      formState.comments = formState.comments || '无'
     } finally {
       dataLoading.value = false
     }
@@ -142,3 +141,10 @@ const getEditData = async () => {
 }
 getEditData()
 </script>
+
+<style>
+.comments {
+  width: 100%; height: 400px; padding: 8px; border: 1px solid #d3d3d3;
+  word-break: break-all;
+}
+</style>

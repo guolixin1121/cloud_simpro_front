@@ -27,8 +27,9 @@
           {{ formState.create_time }}
         </a-form-item>
         <template v-if="formState.can_apply">
-          <a-form-item label="申请说明" name="reason">
-            <a-textarea v-model:value="formState.reason" :maxlength="255" :rows="4" />
+          <a-form-item label="申请原因" name="reason">
+            <ch-input type="textarea" v-model:value="formState.reason" :maxlength="255" :rows="4"
+              placeholder="请输入申请原因" />
           </a-form-item>
           <a-form-item :wrapper-col="{ style: { paddingLeft: '100px' }}">
             <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">申请</a-button>

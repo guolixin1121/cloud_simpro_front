@@ -57,8 +57,14 @@ const columns = [
     fixed: 'right',
     actions: {
       查看: ({ id }: RObject) => router.push('/tags/view/' + id),
-      编辑: ({ id }: RObject) => router.push('/tags/edit/' + id + '?tag_type=' + query.value.tag_type),
-      删除: async ({ id }: { id: string }) => await currentApi.delete(id)
+      编辑: {
+        validator: () => user.isAdmin(),
+        handler: ({ id }: RObject) => router.push('/tags/edit/' + id + '?tag_type=' + query.value.tag_type)
+      },
+      删除:{
+        validator: () => user.isAdmin(),
+        handler: async ({ id }: { id: string }) => await currentApi.delete(id)
+      }
     }
   }
 ]

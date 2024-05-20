@@ -30,6 +30,8 @@ declare module '@vue/runtime-core' {
     AModal: typeof import('ant-design-vue/es')['Modal']
     APagination: typeof import('ant-design-vue/es')['Pagination']
     APopconfirm: typeof import('ant-design-vue/es')['Popconfirm']
+    ARadio: typeof import('ant-design-vue/es')['Radio']
+    ARadioGroup: typeof import('ant-design-vue/es')['RadioGroup']
     ASelect: typeof import('ant-design-vue/es')['Select']
     ASelectOption: typeof import('ant-design-vue/es')['SelectOption']
     ASpin: typeof import('ant-design-vue/es')['Spin']

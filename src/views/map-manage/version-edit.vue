@@ -28,7 +28,7 @@
         </a-form-item>
         <a-form-item label="描述" name="name">
           <ch-input v-if="!isView" type="textarea" v-model:value="formState.mapVersionDesc" placeholder="请输入描述" :maxlength="160" rows="10"></ch-input>
-          <template v-else>{{ formState.mapVersionDesc }}</template>
+          <template v-else>{{ formState.mapVersionDesc || '-' }}</template>
         </a-form-item>
         <template v-if="isView">
           <a-form-item label="创建时间："

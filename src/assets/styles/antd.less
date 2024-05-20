@@ -199,7 +199,7 @@ button.ant-btn-primary[disabled] {
   }
 
   // hover父菜单样式
-  .ant-menu-submenu:hover {
+  .ant-menu-submenu-title:hover {
     background-color: var(--gray-globel-bg-color);
     .ant-menu-title-content {
       color: var(--text-main-color);
@@ -215,7 +215,7 @@ button.ant-btn-primary[disabled] {
   
   // 选中子菜单时，父菜单加粗
   .ant-menu-submenu-selected  {
-    .ant-menu-submenu-title {
+    & > .ant-menu-submenu-title {
       color: var(--text-main-color);
       font-weight: 600;
     }

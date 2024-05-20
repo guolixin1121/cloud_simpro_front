@@ -12,7 +12,7 @@
           <span class="break-text">{{ formState.name }}</span>
         </a-form-item>
         <a-form-item label="场景集描述">
-          <span class="break-text">{{ formState.desc }}</span>
+          <span class="break-text">{{ formState.desc || '-' }}</span>
         </a-form-item>
         <a-form-item label="标签">
           <ul class="view-list"  v-if="formState.labels_detail?.length > 0">
