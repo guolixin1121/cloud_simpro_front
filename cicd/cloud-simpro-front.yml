@@ -4,7 +4,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: cloud-simpro-front
-  namespace: hengrun-cloud-simpro
+  namespace: ${K8S_NS}
 spec:
   selector:
     app: cloud-simpro-front
@@ -19,11 +19,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: cloud-simpro-front
-  namespace: hengrun-cloud-simpro
+  namespace: ${K8S_NS}
 spec:
   ingressClassName: nginx
   rules:
-  - host: simpro02.saimo.cloud
+  - host: ${HOST}
     http:
       paths:
       - backend:
@@ -40,7 +40,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: cloud-simpro-front
-  namespace: hengrun-cloud-simpro
+  namespace: ${K8S_NS}
   labels:
     app: cloud-simpro-front
 spec:
@@ -50,7 +50,7 @@ spec:
       app: cloud-simpro-front
   template:
     metadata:
-      namespace: hengrun-cloud-simpro
+      namespace: ${K8S_NS}
       labels:
         app: cloud-simpro-front
     spec:

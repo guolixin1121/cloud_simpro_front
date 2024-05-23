@@ -69,7 +69,7 @@
 <script setup lang="ts">
 const route = useRoute()
 const { id } = route.params
-const isAdd = id === '0'
+const isAdd = !id
 const actionText = isAdd ? '上传' : '修改'
 const title =  actionText + '具体场景'
 const sceneset = store.catalog.sceneCatalog
@@ -138,7 +138,7 @@ const onMapChanged = (item: any) => {
 /****** 获取编辑数据 */
 const dataLoading = ref(false)
 const getEditData = async () => {
-  if (id !== '0') {
+  if (id) {
     dataLoading.value = true
     const scene = await currentApi.get(id)
     dataLoading.value = false

@@ -43,7 +43,7 @@ const formState = reactive({
 
 const loading = ref(false)
 const getEditData = async () => {
-  if(id !== '0') {
+  if(id) {
     loading.value = true
     const data = await api.scenesets.get(id)
     loading.value = false

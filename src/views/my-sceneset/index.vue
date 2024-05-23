@@ -7,7 +7,7 @@
       <div>
         <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
           :tips="'您已勾选' + checkedItems.length+ '个场景集，确定要删除所有勾选的场景集吗？'"></batch-button>
-        <a-button type="primary" v-if="user.hasPermission('add')" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
+        <a-button type="primary" v-if="user.hasPermission('add')" @click="gotoSubPage('/edit/')">创建场景集</a-button>
       </div>
     </div>
     <div>

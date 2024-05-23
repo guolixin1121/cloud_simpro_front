@@ -7,7 +7,7 @@ export const generateRouteFromViews = () => {
     const isLogin = filePath.indexOf('login') > -1
     if (!isLogin && !isComponents) {
       let path = filePath.replace('../views', '').replace('.vue', '')
-      path = path.indexOf('/index') > -1 ? path.replace('index', '') : path + '/:id'
+      path = path.indexOf('/index') > -1 ? path.replace('index', '') : path + '/:id?'
       routes.push({
         path: path,
         name: path,

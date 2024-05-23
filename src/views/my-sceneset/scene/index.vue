@@ -16,7 +16,7 @@
         <a-button type="primary" v-if="selectedSceneset?.isNotFromResource"
             @click="gotoSPT()">大模型生成场景</a-button>
         <a-button type="primary" :disabled="checkedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isNotFromResource"
-            @click="gotoSubPage('/edit/0')">上传具体场景</a-button>
+            @click="gotoSubPage('/edit/')">上传具体场景</a-button>
       </div>
     </div>
     <a-spin :spinning="loading">

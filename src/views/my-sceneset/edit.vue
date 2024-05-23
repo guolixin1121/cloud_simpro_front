@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 const id = useRoute().params.id
-const isAdd = id === '0'
+const isAdd = !id
 const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '场景集'
 
@@ -59,7 +59,7 @@ const add = async () => {
   loading.value = true
 
   const params = {
-    parentId: -1,
+    // parentId: -1,
     name: formState.name,
     desc: formState.desc,
     labels: formState.labels?.map((item: any) => item.value || item.name)
@@ -78,7 +78,7 @@ const add = async () => {
 /****** 获取编辑数据 */
 const dataLoading = ref(false)
 const getEditData = async () => {
-  if(id !== '0') {
+  if(id) {
     try {
       dataLoading.value = true
       const data = await currentApi.get(id)
