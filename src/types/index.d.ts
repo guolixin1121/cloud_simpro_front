@@ -32,7 +32,6 @@ interface FieldNames {
   value: string
   apiField?: string  // api返回的字段，默认为results
 }
-
 type Query = Record<string, any>
 
 interface RObject {

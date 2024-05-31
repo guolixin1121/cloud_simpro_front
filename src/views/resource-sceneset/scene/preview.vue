@@ -1,6 +1,7 @@
 <template>
     <form-view title="具体场景预览" :videoUrl="videoUrl" :items="formItems" :loading="loading">
-      <span>场景资源库</span>
+      <span>场景管理</span>
+<span>场景资源库</span>
       <router-link to="/resource-sceneset/">具体场景</router-link>
       <a @click='goback()'>{{ sceneset?.name }}</a>
     </form-view>

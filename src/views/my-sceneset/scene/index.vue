@@ -1,21 +1,22 @@
 <template>
   <div class="breadcrumb">
+    <span>场景管理</span>
     <span>我的场景</span>
     <router-link to="/my-sceneset/">具体场景</router-link>
     <span>{{ selectedSceneset?.name }}</span>
   </div>
 
+  <sceneset :sceneset="selectedSceneset"></sceneset>
+
   <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
   <div class="main">
     <div class="title-section">
-      <span class="title">场景列表</span>
+      <span class="title">具体场景列表</span>
       <div>
-        <a-button type="primary" :disabled="!checkedItems.length" v-if="user.hasPermission('add')" @click="onBatchClone()">另存为</a-button>
+        <a-button :disabled="!checkedItems.length" v-if="user.hasPermission('add')" @click="onBatchClone()">另存为</a-button>
         <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
            :tips="'您已勾选' + checkedItems.length+ '个场景，确定要删除所有勾选的场景吗？'"></batch-button>
-        <a-button type="primary" v-if="selectedSceneset?.isNotFromResource"
-            @click="gotoSPT()">大模型生成场景</a-button>
-        <a-button type="primary" :disabled="checkedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isNotFromResource"
+        <a-button type="primary" :disabled="checkedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isEditable"
             @click="gotoSubPage('/edit/')">上传具体场景</a-button>
       </div>
     </div>
@@ -26,10 +27,10 @@
 
   <VncModal ref="vncModal"></VncModal>
 
-  <a-modal v-model:visible="cloneModal.cloneVisible" title="场景另存为"
+  <a-modal v-model:visible="cloneModal.cloneVisible" :title="cloneModal.title"
     :footer="null" :destroyOnClose="true">
       <div class="modal-content">
-        <p>请选择场景的保存路径</p>
+        <p><span v-if="cloneModal.desc">{{cloneModal.desc}}</span>请选择场景的保存路径</p>
         <select-sceneset ref="cloneSceneset" v-model:value="cloneModal.targetSceneset"></select-sceneset>
       </div>
       <div class="modal-buttons">
@@ -40,23 +41,22 @@
 </template>
 
 <script setup lang="ts">
-import { MySceneSourceOptions, IsMyScenesetFromResource, IsMySceneFromResource, getMySceneSourceName } from '@/utils/dict'
+import { MySceneSourceOptions, isMyScenesetEditable, isMySceneEditable, getMySceneSourceName } from '@/utils/dict'
 import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
-import { gotoSubPage, openLink } from '@/utils/tools'
+import { gotoSubPage } from '@/utils/tools'
 
 const vncModal = ref()
 const currentApi = api.scene
 const user = store.user
 const selectedSceneset = ref() 
 const scenesetId = useRoute().query.pid
-const gotoSPT = () => openLink('https://spt01.saimo.net.cn:17862/simpro/')
 
 const loadSceneset = async () => {
   if (scenesetId) {
     const data = await api.scenesets.get(scenesetId)
     selectedSceneset.value = data
-    selectedSceneset.value.isNotFromResource = !IsMyScenesetFromResource(data.source)
+    selectedSceneset.value.isEditable = isMyScenesetEditable(data.source)
     store.catalog.sceneCatalog = data
     query.value = { scene_set: data.id}
   }
@@ -97,7 +97,6 @@ const onTableSearch = (data: Query) => {
 
 /****** 表格区域 */
 const loading = ref(false)
-const isNotFromResource = ({adsSource}: any) => !IsMySceneFromResource(adsSource)
 const columns = [
   { dataIndex: 'checkbox', width: 60 },
   { title: '场景ID', dataIndex: 'id', width: 120 },
@@ -110,20 +109,20 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 300,
+    width: 250,
     actions: {
       查看: (data: any) => gotoSubPage('/view/' + data.id),
       编辑: { 
-        validator: isNotFromResource,
+        validator: ({status}: any) => isMySceneEditable(status),
         handler: (data: any) => gotoSubPage('/edit/' + data.id)
       },
       编辑场景: {
-        validator: isNotFromResource,
+        validator: ({status}: any) => isMySceneEditable(status),
         handler: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show()),
       },
-      // 场景预览: (data: any) => gotoSubPage('/preview/' + data.id),
-      场景预览: (data: any) => openLink('/scene-simulation-client/#/overview/?type=2&id=' + data.id),
       另存为: (data: any) => {
+        cloneModal.title = '另存为'
+        cloneModal.desc = ''
         cloneModal.sourceData = [data.id]
         cloneModal.cloneVisible = true
       },
@@ -136,6 +135,8 @@ const columns = [
 
 const cloneSceneset = ref()
 const cloneModal = reactive({
+  title: '',
+  desc: '',
   cloneVisible: false,
   sourceData: {},
   targetSceneset: { sceneset: '', scenesetType: 1 } // 另存为的场景
@@ -163,6 +164,8 @@ const onConfirmClone = () => {
 
 // 批量另存为
 const onBatchClone = () => {
+  cloneModal.title = '批量另存为'
+  cloneModal.desc = '您已选择' + checkedItems.value.length + '个场景，'
   cloneModal.cloneVisible = true
   cloneModal.sourceData = checkedItems.value
 }

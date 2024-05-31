@@ -1,15 +1,15 @@
 <template>
   <div class="breadcrumb">
+    <span>场景管理</span>
     <span>场景资源库</span>
     <a @click="goback()">具体场景</a>
     <span>{{ selectedSceneset?.name }}</span>
   </div>
-
+  <sceneset :sceneset="selectedSceneset"></sceneset>
   <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
-
   <div class="main">
     <div class="title-section">
-      <span class="title">场景列表</span>
+      <span class="title">具体场景列表</span>
       <div>
         <batch-button v-if="isAdmin" :disabled="!checkedItems.length"
          :tips="'您已勾选' + checkedItems.length+ '个场景，确定要删除所有勾选的场景吗？'"
@@ -48,7 +48,7 @@
 <script setup lang="ts">
 // import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
-import { gotoSubPage, goback, openLink } from '@/utils/tools'
+import { gotoSubPage, goback } from '@/utils/tools'
 
 const vncModal = ref()
 const currentApi = api.sceneResource
@@ -108,7 +108,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 200,
+    width: 100,
     actions: {
       申请授权: {
         validator: (data: any) => !isAdmin && data.apply_enable,
@@ -119,12 +119,6 @@ const columns = [
         validator: (data: any) => isAdmin && data.edit_enable,
         handler: (data: any) => gotoSubPage('/edit/' + data.id)
       },
-      // 编辑场景: {
-      //   validator: (data: any) => isAdmin && data.edit_enable,
-      //   handler: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show())
-      // },
-      // 场景预览: (data: any) => gotoSubPage('/preview/' + data.id),
-      场景预览: (data: any) => openLink('/scene-simulation-client/#/overview/?type=1&id=' + data.id),
       删除: {
         validator: (data: any) => isAdmin && data.delete_enable,
         handler: async ({ id }: { id: string }) => await currentApi.deleteScene({id: [id] })

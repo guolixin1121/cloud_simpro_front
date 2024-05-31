@@ -1,5 +1,6 @@
 <template>
   <div class="breadcrumb">
+    <span>场景管理</span>
     <span>场景资源库</span>
     <router-link to="/resource-sceneset/">具体场景</router-link>
     <span>场景集详情</span>

@@ -1,6 +1,6 @@
 <template>
   <!-- top作为标记类，用于table计算自身高度以便填充满页面高度 -->
-  <div class="white-block top search-form" :class="{'opened': isOpened}">
+  <div class="white-block search-form" :class="{'opened': isOpened}">
     <a-form ref="form" :class="'col-' + colLimit"
       layout="inline" :model="formState" v-bind="$attrs">
       <template v-for="(item, index) in items" :key="item">

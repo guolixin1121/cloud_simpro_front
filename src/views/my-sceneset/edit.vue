@@ -1,5 +1,6 @@
 <template>
   <div class="breadcrumb">
+    <span>场景管理</span>
     <span>我的场景</span>
     <a @click="goback">具体场景</a>
     <span class="breadcrumb--current">{{ title }}</span>

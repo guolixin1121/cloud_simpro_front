@@ -1,6 +1,7 @@
 <template>
   <div class="breadcrumb">
-    <span>场景资源库</span>
+    <span>场景管理</span>
+<span>场景资源库</span>
     <a @click="goback()">逻辑场景</a>
     <span>授权任务管理</span>
   </div>
@@ -17,7 +18,13 @@
         <a-button :disabled="checkedItems.length == 0" type="primary" @click="modalVisible = true">审批</a-button>
       </div>
     </div>
-    <Table ref="tableRef" style="margin-top: 0px;" :api="listApi" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" />
+    <Table ref="tableRef" style="margin-top: 0px;" :api="listApi" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect">
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.dataIndex == 'status'">
+          <span :class="'apply-status--' + record.status">{{ getApplyStatus(record.status) }}</span>
+        </template>
+      </template>
+    </Table>
   </div>
 
   <a-modal title="批量审批" v-model:visible="modalVisible" :footer="null">
@@ -47,6 +54,7 @@ const listApi = (params: any) => api.grant.getList({...params, type: activeKey.v
 const columns = computed(() => activeKey.value == 1 ? scenesetColumns : sceneColumns )
 const formItems = computed(() => activeKey.value == 1 ? scenetsetFormItems : sceneFormItems )
 
+const isWaitingForApproval = (status: number) => status == 1
 const scenetsetFormItems = [
   { label: '任务ID', key: 'id', type: 'input', placeholder: '请输入任务ID' },
   { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景集ID或名称' },
@@ -83,12 +91,15 @@ const scenesetColumns = [
     dataIndex: 'actions',
     fixed: 'right',
     width: 80,
-    actions: user.isAdmin() ? {
-      审批: {
-        validator: (data: any) => data.status == 1,
+    actions: {
+      审批: { 
+        validator: ({status}: any) => user.isAdmin() && isWaitingForApproval(status),
         handler: (data: any) => router.push('/resource-logic-sceneset/apply-approve/' + data.id)
-      }} :  {
-      查看: (data: any) => router.push('/resource-logic-sceneset/apply-approve/' + data.id)
+      }, 
+      查看: {
+        validator: ({status}: any) => !user.isAdmin() || !isWaitingForApproval(status),
+        handler: (data: any) => router.push('/resource-logic-sceneset/apply-approve/' + data.id)
+      }
     }
   }
 ]
@@ -108,12 +119,15 @@ const sceneColumns = [
     dataIndex: 'actions',
     fixed: 'right',
     width: 80,
-    actions: user.isAdmin() ? {
-      审批: {
-        validator: (data: any) => data.status == 1,
+    actions: {
+      审批: { 
+        validator: ({status}: any) => user.isAdmin() && isWaitingForApproval(status),
         handler: (data: any) => router.push('/resource-logic-sceneset/apply-approve/' + data.id)
-      }} :  {
-      查看: (data: any) => router.push('/resource-logic-sceneset/apply-approve/' + data.id)
+      },
+      查看: {
+        validator: ({status}: any) => !user.isAdmin() || !isWaitingForApproval(status),
+        handler: (data: any) => router.push('/resource-logic-sceneset/apply-approve/' + data.id)
+      }
     }
   }
 ]

@@ -1,6 +1,7 @@
 <template>
   <form-view title="逻辑场景详情" :items="formItems" :loading="loading" :labelWidth="80">
-    <span>场景资源库</span>
+    <span>场景管理</span>
+<span>场景资源库</span>
     <router-link to="/resource-logic-sceneset/">逻辑场景</router-link>
     <a @click='goback()'>{{ senesetname }}</a>
   </form-view>

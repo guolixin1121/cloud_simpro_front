@@ -1,5 +1,6 @@
 <template>
   <form-view title="逻辑场景详情" :items="formItems" :loading="loading" :labelWidth="80">
+    <span>场景管理</span>
     <span>我的场景</span>
     <a @click="goback(-2)">逻辑场景</a>
     <a @click='goback()'>{{ sceneset?.name }}</a>

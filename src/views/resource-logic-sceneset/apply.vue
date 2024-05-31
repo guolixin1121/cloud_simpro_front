@@ -1,6 +1,7 @@
 <template>
   <div class="breadcrumb">
-    <span>场景资源库</span>
+    <span>场景管理</span>
+<span>场景资源库</span>
     <a @click="goback()">逻辑场景</a>
     <span>申请授权</span>
   </div>
@@ -13,7 +14,7 @@
           <span class="break-text">{{ formState.name }}</span>
         </a-form-item>
         <a-form-item label="场景集描述" name="desc">
-          <span class="break-text">{{ formState.desc }}</span>
+          <span class="break-text">{{ formState.desc || '--' }}</span>
         </a-form-item>
         <a-form-item label="标签">
           <ul class="view-list"  v-if="formState.labels_detail?.length > 0">
@@ -22,6 +23,9 @@
             </li>
           </ul>
           <span v-else>无</span>
+        </a-form-item>
+        <a-form-item label="场景数量" name="scene_count">
+          {{ formState.scene_count }}
         </a-form-item>
         <a-form-item label="创建时间" name="create_time">
           {{ formState.create_time }}
@@ -52,7 +56,8 @@ const formState = reactive({
   reason: '',
   create_time: '',
   labels_detail: [],
-  can_apply: true
+  can_apply: true,
+  scene_count: ''
 })
 
 const loading = ref(false)
@@ -87,6 +92,7 @@ const getEditData = async () => {
       formState.create_time = data.create_time
       formState.labels_detail = data.labels_detail
       formState.can_apply = data.can_apply
+      formState.scene_count = data.count
     } finally {
       dataLoading.value = false
     }

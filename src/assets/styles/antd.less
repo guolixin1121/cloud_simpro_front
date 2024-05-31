@@ -139,6 +139,10 @@ button.ant-btn-primary[disabled] {
     .ant-menu-sub {
       background-color: #fff;
       padding: 0px;
+
+      .ant-menu-sub {
+        padding: 0px 10px;
+      }
     }
 
     .ant-menu-item {
@@ -748,5 +752,14 @@ input::placeholder,
     a:hover {
       color: var(--text-main-color);
     }
+  }
+}
+
+.ant-radio-checked {
+  .ant-radio-inner {
+    border-color: var(--primary-color) !important;
+  }
+  .ant-radio-inner::after {
+    background-color: var(--primary-color) !important;
   }
 }

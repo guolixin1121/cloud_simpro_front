@@ -1,5 +1,6 @@
 <template>
   <div class="breadcrumb">
+    <span>场景管理</span>
     <span>场景资源库</span>
     <a @click="goback()">具体场景</a>
     <span>申请授权</span>
@@ -22,6 +23,9 @@
             </li>
           </ul>
           <span v-else>无</span>
+        </a-form-item>
+        <a-form-item label="场景数量" name="scene_count">
+          <span>{{ formState.scene_count }}</span>
         </a-form-item>
         <a-form-item label="创建时间" name="create_time">
           {{ formState.create_time }}
@@ -52,7 +56,8 @@ const formState = reactive({
   reason: '',
   can_apply: true,
   create_time: '',
-  labels_detail: []
+  labels_detail: [],
+  scene_count: ''
 })
 
 const loading = ref(false)
@@ -87,6 +92,7 @@ const getEditData = async () => {
       formState.can_apply = data.apply_enable
       formState.create_time = data.create_time
       formState.labels_detail = data.labels_detail
+      formState.scene_count = data.scene_count
     } finally {
       dataLoading.value = false
     }

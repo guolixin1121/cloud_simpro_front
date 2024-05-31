@@ -4,7 +4,9 @@
     <span class="breadcrumb--current">{{ title }}</span>
   </div>
   <div class="min-main">
-    <span class="title mb-5">{{ title }}</span>
+    <span class="title mb-5">
+      {{ title }}
+    </span>
     <div style="margin-left: 32px" v-if="videoUrl">
       <video width="800"  controls disablePictureInPicture
         controlslist="nodownload noremoteplaybakc noplaybackrate">

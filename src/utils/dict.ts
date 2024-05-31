@@ -129,9 +129,10 @@ export const getLogicSceneStatusOption = (value: number | string) => LogicSceneS
 export const MyScenesetSourceOptions = [
   { label: '全部', value: '' },
   { label: '创建', value: 0 },
+  { label: 'SOTIF', value: 2 },
   { label: '场景资源库', value: 1 }
 ]
-export const IsMyScenesetFromResource = (value: number | string) => value == 1
+export const isMyScenesetEditable = (value: number | string) => value != 1
 export const getMyScenesetSourceName = (value: number | string) => MyScenesetSourceOptions.find(v => v.value === value)?.label
 
 export const MySceneSourceOptions = [
@@ -141,15 +142,16 @@ export const MySceneSourceOptions = [
   { label: '场景挖掘', value: 4 },
   { label: '场景资源库', value: 3 },
 ]
-export const IsMySceneFromResource = (value: number | string) => value == 3
+export const isMySceneEditable = (value: number | string) => value != 3
 export const getMySceneSourceName = (value: number | string) => MySceneSourceOptions.find(v => v.value === value)?.label
 
 export const MyLogicScenesetSourceOptions = [
   { label: '全部', value: '' },
   { label: '创建', value: 0 },
+  { label: 'SOTIF', value: 1 },
   { label: '场景资源库', value: 2 }
 ]
-export const IsMyLogicScenesetFromResource = (value: number | string) => value == 2
+export const isMyLogicScenesetEditable = (value: number | string) => value == 0
 export const getMyLogicScenesetSourceName = (value: number | string) => MyLogicScenesetSourceOptions.find(v => v.value === value)?.label
 
 export const MyLogicSceneSourceOptions = [
@@ -158,7 +160,7 @@ export const MyLogicSceneSourceOptions = [
   { label: 'SOTIF', value: 1 },
   { label: '场景资源库', value: 2 },
 ]
-export const IsMyLogicSceneFromResource = (value: number | string) => value == 2
+export const isMyLogicSceneEditable = (value: number | string) => value != 2
 export const getMyLogicSceneSourceName = (value: number | string) => MyLogicSceneSourceOptions.find(v => v.value === value)?.label
 
 

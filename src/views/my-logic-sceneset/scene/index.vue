@@ -1,10 +1,12 @@
 <template>
   <div class="breadcrumb">
+    <span>场景管理</span>
     <span>我的场景</span>
     <a @click="goback()">逻辑场景</a>
     <span>{{ selectedSceneset?.name }}</span>
   </div>
 
+  <sceneset :sceneset="selectedSceneset"></sceneset>
   <search-form class="reactive-form" :manual="true" :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
@@ -12,7 +14,7 @@
       <a-button type="primary" :disabled="!selectedItems.length" v-if="user.hasPermission('add')" @click="onBatchClone()">另存为</a-button>
       <batch-button :disabled="!selectedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
         :tips="'您已勾选' + selectedItems.length+ '个场景，确定要删除所有勾选的场景吗？'"></batch-button>
-      <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isNotFromResource" @click="gotoSubPage('/edit/0')">上传逻辑场景</a-button>
+      <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isEditable" @click="gotoSubPage('/edit/0')">上传逻辑场景</a-button>
     </page-title>
     <a-spin :spinning="loadingSceneset">
       <Table 
@@ -63,10 +65,10 @@
       </template>
     </a-modal>
 
-    <a-modal v-model:visible="cloneModal.cloneVisible" title="场景另存为"
+    <a-modal v-model:visible="cloneModal.cloneVisible" :title="cloneModal.title"
     :footer="null" :destroyOnClose="true">
       <div class="modal-content">
-        <p>请选择场景的保存路径</p>
+        <p><span v-if="cloneModal.desc">{{ cloneModal.desc }}</span>请选择场景的保存路径</p>
         <select-sceneset ref="cloneSceneset" :isLogicSceneset="true" v-model:value="cloneModal.targetSceneset"></select-sceneset>
       </div>
       <div class="modal-buttons">
@@ -79,7 +81,7 @@
 
 <script setup lang="ts">
 import { gotoSubPage, goback } from '@/utils/tools'
-import { MyLogicSceneSourceOptions, IsMyLogicSceneFromResource, IsMyLogicScenesetFromResource, getMyLogicSceneSourceName } from '@/utils/dict'
+import { MyLogicSceneSourceOptions, isMyLogicSceneEditable, isMyLogicScenesetEditable, getMyLogicSceneSourceName } from '@/utils/dict'
 
 const user = store.user
 const currentApi = api.logicScene
@@ -93,7 +95,7 @@ const loadSceneset = async () => {
     const data = await api.logicScenesets.get(scenesetId)
     loadingSceneset.value = false
     selectedSceneset.value = data
-    selectedSceneset.value.isNotFromResource = !IsMyLogicScenesetFromResource(data.source)
+    selectedSceneset.value.isEditable = isMyLogicScenesetEditable(data.source)
     store.catalog.sceneCatalog = data
     query.value = { logic_scene_set_id: data.id}
   }
@@ -137,11 +139,12 @@ const generateModal = reactive({
   sourceData: { logic_scene_version_id: '', config_result_count: 0 }
 }) // 泛化
 const cloneModal = reactive({
+  title: '',
+  desc: '',
   cloneVisible: false,
   sourceData: [{id: ''}],
   targetSceneset: { sceneset: '', scenesetType: 1 } // 另存为的场景
 })
-const isNotFromResource = ({source}: any) => !IsMyLogicSceneFromResource(source)
 const columns = [
   { dataIndex: 'checkbox', width: 60 },
   { title: '场景ID', dataIndex: 'id', width: 90 },
@@ -162,12 +165,14 @@ const columns = [
         generateModal.sourceData = data
       },
       泛化结果: (data: any) => gotoSubPage('/result/' + data.id +'?name=' + data.name),
-      查看: (data: any) => gotoSubPage('/view/' + data.id),
       编辑: {
-        validator: isNotFromResource,
+        validator:  ({source}: any) => isMyLogicSceneEditable(source),
         handler: (data: any) => gotoSubPage('/edit/' + data.id)
       },
+      查看: (data: any) => gotoSubPage('/view/' + data.id),
       另存为: (data: any) => {
+        cloneModal.title = '另存为'
+        cloneModal.desc = ''
         cloneModal.sourceData = [data.id]
         cloneModal.cloneVisible = true
       },
@@ -228,6 +233,8 @@ const onConfirmClone = () => {
 
 // 批量另存为
 const onBatchClone = () => {
+  cloneModal.title = '批量另存为'
+  cloneModal.desc = '您已选择' + selectedItems.value.length + '个场景，'
   cloneModal.cloneVisible = true
   cloneModal.sourceData = selectedItems.value
 }

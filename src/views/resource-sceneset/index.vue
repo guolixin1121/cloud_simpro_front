@@ -1,4 +1,9 @@
 <template>
+  <div class="breadcrumb">
+    <span>场景管理</span>
+    <span>场景资源库</span>
+    <span>具体场景</span>
+  </div>
   <search-form :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
@@ -7,21 +12,16 @@
       <div>
         <template v-if="isAdmin">
           <batch-button :disabled="!checkedItems.length" :api="onBatchDelete"
-          :tips="'您已勾选' + checkedItems.length+ '个场景集，确定要删除所有勾选的场景集吗？'"></batch-button>
+          :tips="'已勾选' + checkedItems.length+ '个场景集，是否删除所有勾选场景集及其关联数据？'"></batch-button>
           <a-button type="primary" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
         </template>
-        <a-button v-else type="primary" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
+        <a-button v-else :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
         <a-button type="primary" @click="gotoSubPage('/apply-manage/')">授权任务管理</a-button>
       </div>
     </div>
     <div>
       <Table ref='tableRef' :query="query" :columns="columns" :api="currentApi.getScenesetList" :fieldNames="{ label: 'groupName', value: 'id' }"
         :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
-        <template #bodyCell="{ column, record }">
-          <template v-if="column.dataIndex == 'scene_count'">
-              <a class="text-blue inline-block w-full" @click="gotoSubPage('/scene/?pid=' + record.id)">{{ record.scene_count }}</a>
-          </template>
-        </template>
       </Table>
     </div>
   </div>
@@ -95,13 +95,14 @@ const columns = [
         handler: ({ id }: RObject) => gotoSubPage('/apply/' + id)
       },
       查看: {
-        handler: ({ id }: RObject) => gotoSubPage('/view/' + id)
+        handler: ({ id }: RObject) => gotoSubPage('/scene/?pid=' + id)
       },
       编辑: {
         validator: (data : RObject) => isAdmin && data.edit_enable,
         handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
       },
       删除: {
+        tip: '场景集删除后，关联数据（场景、地图）将会一起删除，是否删除？',
         validator: (data : RObject) => isAdmin && data.delete_enable,
         handler: async ({ id }: { id: string }) => await currentApi.deleteSceneset({id: [id]})
       }

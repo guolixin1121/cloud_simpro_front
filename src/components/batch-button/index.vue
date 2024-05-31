@@ -1,5 +1,5 @@
 <template>
-  <a-button type="primary" v-bind="$attrs" @click="onButtonClick">{{ label }}</a-button>
+  <a-button v-bind="$attrs" @click="onButtonClick">{{ label }}</a-button>
 
   <a-modal v-model:visible="showConfirm"
     :closable="false"

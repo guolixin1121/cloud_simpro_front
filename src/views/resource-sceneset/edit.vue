@@ -1,6 +1,7 @@
 <template>
   <div class="breadcrumb">
-    <span>场景资源库</span>
+    <span>场景管理</span>
+<span>场景资源库</span>
     <a @click="goback()">具体场景</a>
     <span>{{ title }}</span>
   </div>

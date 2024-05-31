@@ -142,7 +142,7 @@
 }
 // 用于带导航的内容页
 .min-main {
-  height: calc(100% - 33px);
+  height: calc(100% - 32px);
 }
 .main-tree {
   height: 100%;
@@ -207,6 +207,48 @@ main {
   .ant-form.white-block {
     padding-bottom: 14px;
     // 底部跟form-item的样式合并一起共24px
+  }
+}
+
+.white-block {
+  // .line {
+    // margin-bottom: 8px;
+    // .line-item {
+    //   display: inline-flex;
+    // }
+    .ant-col:has(.line-value) {
+      display: inline-flex;
+      margin-bottom: 8px;
+
+      &:last-child {
+        margin-bottom: 0px;
+      }
+    }
+    .line-value {
+      width: calc(100% - 100px);
+      display: inline-block;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+  // }
+}
+
+.ant-form-item {
+  margin-bottom: 16px;
+}
+
+.ant-form-item-label {
+  label {
+    font-weight: 600;
+  }
+}
+
+.ant-form-item-control {
+  .ant-form-item-children {
+    .ant-input {
+      height: 32px;
+    }
   }
 }
 
@@ -315,4 +357,11 @@ main {
     background-image: none !important;
   }
 }
+}
+
+.apply-status--1 {
+  color: #FF8A03;
+}
+.apply-status--3 {
+  color: #FA2F30;
 }

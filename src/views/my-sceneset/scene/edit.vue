@@ -1,5 +1,6 @@
 <template>
   <div class="breadcrumb">
+    <span>场景管理</span>
     <span>我的场景</span>
     <router-link to="/my-sceneset/">具体场景</router-link>
     <a @click='goback()'>{{ sceneset?.name }}</a>
@@ -7,6 +8,7 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
+
     <a-spin :spinning="dataLoading">
       <Form :model="formState" @finish="add">
         <a-form-item label="场景名称" name="adsName"
@@ -16,7 +18,7 @@
           <ch-input v-model:value="formState.adsName" :maxlength="160" placeholder="请输入场景名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景描述" name="desc">
-          <ch-input type="textarea" v-model:value="formState.desc" :maxlength="255" rows="10" placeholder="请输入场景描述"></ch-input>
+          <ch-input type="textarea" v-model:value="formState.desc" :maxlength="255" rows="4" placeholder="请输入场景描述"></ch-input>
         </a-form-item>
         <a-form-item label="关联地图" name="mapVersion" :rules="[{ required: isAdd, message: '请选择关联地图' }]">
           <a-form-item-rest v-if="isAdd" >

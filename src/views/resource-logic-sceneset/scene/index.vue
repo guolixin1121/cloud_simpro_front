@@ -1,15 +1,18 @@
 <template>
   <div class="breadcrumb">
+    <span>场景管理</span>
     <span>场景资源库</span>
     <a @click="goback()">逻辑场景</a>
     <span>{{ selectedSceneset?.name }}</span>
-  </div>
+  </div>  
+
+  <sceneset :sceneset="selectedSceneset"></sceneset>
 
   <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
 
   <div class="main">
     <div class="title-section">
-      <span class="title">场景列表</span>
+      <span class="title">逻辑场景列表</span>
       <div>
         <batch-button v-if="isAdmin" :disabled="!checkedItems.length" :api="onBatchDelete"
           :tips="'您已勾选' + checkedItems.length+ '个场景，确定要删除所有勾选的场景吗？'"></batch-button>

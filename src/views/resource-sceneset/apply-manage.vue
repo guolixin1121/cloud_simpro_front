@@ -1,6 +1,7 @@
 <template>
   <div class="breadcrumb">
-    <span>场景资源库</span>
+    <span>场景管理</span>
+<span>场景资源库</span>
     <a @click="goback()">具体场景</a>
     <span>授权任务管理</span>
   </div>
@@ -17,13 +18,18 @@
         <a-button :disabled="checkedItems.length == 0" type="primary" @click="modalVisible = true">审批</a-button>
       </div>
     </div>
-    <Table ref="tableRef" style="margin-top: 0px;" :api="listApi" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" />
+    <Table ref="tableRef" style="margin-top: 0px;" :api="listApi" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect">
+      <template #bodyCell="{ column, record }">
+        <template v-if="column.dataIndex == 'status'">
+          <span :class="'apply-status--' + record.status">{{ getApplyStatus(record.status) }}</span>
+        </template>
+      </template>
+    </Table>
   </div>
 
   <a-modal title="批量审批" v-model:visible="modalVisible" :footer="null">
     <div class="modal-content">
-      <p>已勾选{{ checkedItems.length }}个任务，是否批准全部任务申请？</p>
-      <p>审批之后无法修改，请谨慎操作。</p>
+      <p>已勾选{{ checkedItems.length }}个任务，是否批准全部任务申请？审批之后无法修改，请谨慎操作。</p>
     </div>
     <div class="modal-buttons">
       <a-button @click="onBatchReject" :loading="isRejecting">驳回</a-button>
@@ -46,6 +52,8 @@ const activeKey = useSessionStorage('apply-manage-active-key',1)
 const listApi = (params: any) => api.grant.getList({...params, type: activeKey.value == 1 ? 3 : 4})
 const columns = computed(() => activeKey.value == 1 ? scenesetColumns : sceneColumns )
 const formItems = computed(() => activeKey.value == 1 ? scenetsetFormItems : sceneFormItems )
+
+const isWaitingForApproval = (status: number) => status == 1
 
 const scenetsetFormItems = [
   { label: '任务ID', key: 'id', type: 'input', placeholder: '请输入任务ID' },
@@ -70,11 +78,11 @@ const sceneFormItems = [
     defaultValue: '',
   }]
 const scenesetColumns = [
-  { dataIndex: 'checkbox', width: 60, validator: (data: any) => user.isAdmin() && data.status == 1 },
+  { dataIndex: 'checkbox', width: 60, validator: ({status}: any) => user.isAdmin() && isWaitingForApproval(status) },
   { title: '任务ID', dataIndex: 'id', width: 120 },
   { title: '场景集ID', dataIndex: 'resource_id', width: 120 },
   { title: '场景集名称', dataIndex: 'resource_name', width: 200, ellipsis: true },
-  { title: '任务状态', dataIndex: 'status', width: 150, formatter: getApplyStatus },
+  { title: '任务状态', dataIndex: 'status', width: 150 },
   { title: '申请人', dataIndex: 'apply_username', width: 150 },
   { title: '申请时间', dataIndex: 'create_time', width: 180 },
   { title: '审批时间', dataIndex: 'operate_time', width: 150 },
@@ -83,23 +91,26 @@ const scenesetColumns = [
     dataIndex: 'actions',
     fixed: 'right',
     width: 80,
-    actions: user.isAdmin() ? {
+    actions: {
       审批: { 
-        validator: ({status}: any) => status == 1,
+        validator: ({status}: any) => user.isAdmin() && isWaitingForApproval(status),
         handler: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
-      }} :  {
-      查看: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
+      }, 
+      查看: {
+        validator: ({status}: any) => !user.isAdmin() || !isWaitingForApproval(status),
+        handler: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
+      }
     }
   }
 ]
 
 const sceneColumns = [
-  { dataIndex: 'checkbox', width: 60, validator: (data: any) => user.isAdmin() && data.status == 1 },
+  { dataIndex: 'checkbox', width: 60, validator: ({status}: any) => user.isAdmin() && isWaitingForApproval(status) },
   { title: '任务ID', dataIndex: 'id', width: 120 },
   { title: '场景ID', dataIndex: 'resource_id', width: 120 },
   { title: '场景名称', dataIndex: 'resource_name', width: 200, ellipsis: true },
   { title: '所属场景集', dataIndex: 'parent_name', width: 200, ellipsis: true },
-  { title: '任务状态', dataIndex: 'status', width: 180, formatter: getApplyStatus },
+  { title: '任务状态', dataIndex: 'status', width: 180 },
   { title: '申请人', dataIndex: 'apply_username', width: 180 },
   { title: '申请时间', dataIndex: 'create_time', width: 180 },
   { title: '审批时间', dataIndex: 'operate_time', width: 180 },
@@ -108,12 +119,15 @@ const sceneColumns = [
     dataIndex: 'actions',
     fixed: 'right',
     width: 80,
-    actions: user.isAdmin() ? {
+    actions: {
       审批: { 
-        validator: ({status}: any) => status == 1,
+        validator: ({status}: any) => user.isAdmin() && isWaitingForApproval(status),
         handler: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
-      }} :  {
-      查看: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
+      },
+      查看: {
+        validator: ({status}: any) => !user.isAdmin() || !isWaitingForApproval(status),
+        handler: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
+      }
     }
   }
 ]

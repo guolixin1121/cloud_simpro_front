@@ -1,16 +1,17 @@
 <template>
   <div class="breadcrumb">
+    <span>场景管理</span>
     <span>场景资源库</span>
     <router-link to="/resource-sceneset/">具体场景</router-link>
     <a @click="goback()">授权任务管理</a>
-    <span>{{ user.isAdmin() ? '任务审批' : '任务查看' }}</span>
+    <span>{{ title }}</span>
   </div>
-  <div class="min-main">
-    <span class="title mb-5">{{ user.isAdmin() ? '任务审批' : '任务查看' }}</span>
 
-    <a-spin :spinning="dataLoading">
-    <div class="flex">
-      <div style="width: 50%">
+  <div class="flex justify-between" style="height: calc(100% - 20px)">
+    <div class="white-block" style="width: 60%">
+      <span class="title mb-5">{{ title }}</span>
+
+      <div>
         <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }">
           <a-form-item label="申请人" >
             {{ formState.apply_username }}
@@ -27,6 +28,9 @@
               <span class="break-text">{{ formState.data.name }}</span></a-form-item>
             <a-form-item label="场景集描述" name="desc">
               <span class="break-text">{{ formState.data.desc || '-' }}</span>
+            </a-form-item>
+            <a-form-item label="场景数量" name="scene_count">
+              <span class="break-text">{{ formState.data.scene_count || '-' }}</span>
             </a-form-item>
           </template>
           <template v-else>
@@ -54,30 +58,39 @@
           <a-form-item label="创建时间" name="create_time">{{ formState.data.create_time }}</a-form-item>
         </a-form>
       </div>
-      <div style="width: 40%; margin-left: 48px;">
-        <p>审批意见</p>
-        <template v-if="isAdmin && !isApproved">
-          <ch-input type="textarea" rows="15" :maxlength="255"
-            placeholder="请输入审批意见" v-model:value="formState.comments" />
-          <div class="my-4">
-            <a-button type="primary" class="mr-4" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
-            <a-button :loading="isRejecting" @click="onApprove(false)">驳回</a-button>
-          </div>
-        </template>
-        <template v-else>
-          <p class="comments">{{ formState.comments || '无' }}</p>
-        </template>
-      </div>
     </div>
-  </a-spin>
+    <div class="white-block" style="width: 40%; margin-left: 16px;">
+      <span class="title mb-5">审批意见</span>
+      <p>审批状态：<span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></p>
+      <p>审批意见：</p>
+      <template v-if="isAdmin && !isApproved">
+        <ch-input type="textarea" rows="15" :maxlength="255"
+          placeholder="请输入审批意见" v-model:value="formState.comments" />
+        <div class="my-4">
+          <a-button type="primary" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
+          <a-button class="mx-4" :loading="isRejecting" @click="onApprove(false)">驳回</a-button>
+          <a-button @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
+        </div>
+      </template>
+      <template v-else>
+        <p class="comments">{{ formState.comments }}</p>
+        <div class="my-4">
+          <a-button @click="goback()">返回</a-button>
+          <a-button class="ml-4" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
+        </div>
+      </template>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { getApplyStatus } from '@/utils/dict'
+
 const id = useRoute().params.id
 const currentApi = api.grant
 const user = store.user
 const isAdmin = user.isAdmin()
+const title = isAdmin ? '任务审批' : '任务详情'
 // const sceneset = store.catalog.sceneCatalog
 
 const router = useRouter()
@@ -98,7 +111,8 @@ const formState = reactive({
     mapName: '',
     mapVersion: '',
     xosc_key: '',
-    create_time: ''
+    create_time: '',
+    scene_count: ''
   }
 })
 const isSceneset = ref(false)
@@ -121,6 +135,11 @@ const onApprove = async (isAproved: boolean = true) => {
   } finally {
     isAproved ? isApproving.value = false : isRejecting.value = false
   }
+}
+
+const gotoPage = () => {
+  isSceneset.value ? router.push('/resource-sceneset/scene?pid=' + formState.data.id)
+    : router.push('/resource-sceneset/scene/view/' + formState.data.id)
 }
 
 /****** 获取编辑数据 */

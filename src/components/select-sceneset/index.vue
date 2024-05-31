@@ -3,13 +3,13 @@
         <a-radio :value="1">新建场景集</a-radio>
         <a-radio :value="2">已有场景集</a-radio>
     </a-radio-group>
-    <a-form ref="modalForm" :model="modal" style="margin-top: 16px;"
-        :labelCol ="{ style: { width: '140px' } }">
-        <a-form-item :label="label" name="targetSceneset" 
+    <p style="margin: 16px 0 8px;">{{ label }}</p>
+    <a-form ref="modalForm" :model="modal">
+        <a-form-item name="targetSceneset" 
             :rules="[{ required: true, message: '请输入场景集名称'} ]" v-if="modal.scenesetType == 1">
             <ch-input v-model:value="modal.targetSceneset" placeholder="请输入场景集名称"></ch-input>
         </a-form-item>
-        <a-form-item :label="label" name="targetSceneset" 
+        <a-form-item name="targetSceneset" 
             :rules="[{ required: true, message: '请选择已有场景集'} ]" v-else>
             <scroll-select :api="scenesetApi" v-model:value="modal.targetSceneset" 
                 :fieldNames="fieldNames" placeholder="请选择已有场景集">

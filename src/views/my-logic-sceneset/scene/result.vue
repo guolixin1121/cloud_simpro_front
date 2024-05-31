@@ -1,5 +1,6 @@
 <template>
    <div class="breadcrumb">
+    <span>场景管理</span>
     <span>我的场景</span>
     <a @click="goback(-2)">逻辑场景</a>
     <a @click='goback()'>{{ sceneset?.name }}</a>
@@ -24,7 +25,7 @@
           {{ name }}
         </template>
         <template v-if="column.dataIndex == 'status'">
-          {{ getLogicSceneStatusOption(record.status) }}
+          <span :class="'status--' + record.status">{{ getLogicSceneStatusOption(record.status) }}</span>
         </template>
         <template v-if="column.dataIndex == 'result_scene_set'">
           {{ '我的场景-具体场景-' + record.result_scene_set?.name }}
@@ -224,5 +225,11 @@ const gotoScene = (record: RObject) => {
 <style lang="less" scoped>
 .tabs {
   margin-top: 16px;
+}
+.status--0, .status--1, .status--2 {
+  color: #FF8A03;
+}
+.status--3, .status--5 {
+  color: #FA2F30;
 }
 </style>

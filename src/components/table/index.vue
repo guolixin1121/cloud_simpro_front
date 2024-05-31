@@ -156,35 +156,33 @@ watch(
 // watch(current, newVal => run({ ...props.query, page: newVal, size }))
 
 // 动态计算表格父容器高度
-const calcateHeight = () => {
-  // 搜索框高度
-  let height = document.getElementsByClassName('top')?.[0]?.clientHeight
-  height = isNaN(height) ? 0 : (height + 16) // + 16的padding高度
+const calcateHeight = () => { 
+  // table父容器上方所有区域的高度
+  let height = 0
+  const tops = document.querySelectorAll('.ant-layout-content > div:not(:last-child)')
+  tops.forEach((top) => height += isNaN(top.clientHeight) ? 0 : (top.clientHeight + 16))
 
-  // 场景集地图集标题区高度
-  let titleHeight = document.getElementsByClassName('right-title')?.[0]?.clientHeight
-  titleHeight = isNaN(titleHeight) ? 0 : (titleHeight + 16)
-  height += titleHeight
+  // table父容器高度
+  const mainContent = document.querySelector<HTMLElement>('.main')
+  if (mainContent) {
+    mainContent.style.height = 'calc(100% - ' + height + 'px)'
+  }
+  
+  // table上方所有区域的高度
+  let tableHeight = height + 230
+  const tableTop = document.querySelectorAll('.main > div:not(:last-child)')
+  tableTop.forEach((top) => tableHeight += isNaN(top.clientHeight) ? 0 : (top.clientHeight + 16))
 
-  const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
-  let tabHeight = document?.getElementsByClassName('tabs')?.[0]?.clientHeight
-  tabHeight = isNaN(tabHeight) ? 0 : 72
-
-  // 表格内容区域
-  let tableHeight = height + tabHeight + 282
   if(document.body.scrollWidth <= 1440) {
     // App.vue定义的页面最小宽度1440
     // 小于这个宽度出现滚动条时，计算表格高度时要加上滚动条高度，以确保分页符离底部总是最小24px
     tableHeight += 8
   }
-  const tableScrollBody = document.getElementsByClassName('ant-table-body')?.[0] as HTMLElement
+
+  // 表格内容区域
+  const tableScrollBody = document.querySelector<HTMLElement>('.ant-table-body')
   if (tableScrollBody) {
     tableScrollBody.style.maxHeight = 'calc(100vh - ' + tableHeight + 'px)'
-  }
-
-  // 右侧内容区域高度
-  if (mainContent) {
-    mainContent.style.height = 'calc(100% - ' + height + 'px)'
   }
 }
 onMounted(() => {

@@ -1,6 +1,7 @@
 <template>
   <form-view title="具体场景详情" :items="formItems" :loading="loading">
-    <span>场景资源库</span>
+    <span>场景管理</span>
+<span>场景资源库</span>
     <router-link to="/resource-sceneset/">具体场景</router-link>
     <router-link :to="'/resource-sceneset/scene/?pid=' + sceneset.id" scene>{{ sceneset?.name }}</router-link>
   </form-view>
