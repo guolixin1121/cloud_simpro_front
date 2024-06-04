@@ -17,6 +17,10 @@
   margin-top: 10px;
   font-size: 12px;
 }
+.label {
+  color: var(--text-second-color); 
+  padding-right: 8px;
+}
 .break-text {
   word-break:break-all; 
   // word-wrap:inherit;
@@ -210,37 +214,13 @@ main {
   }
 }
 
-.white-block {
-  // .line {
-    // margin-bottom: 8px;
-    // .line-item {
-    //   display: inline-flex;
-    // }
-    .ant-col:has(.line-value) {
-      display: inline-flex;
-      margin-bottom: 8px;
-
-      &:last-child {
-        margin-bottom: 0px;
-      }
-    }
-    .line-value {
-      width: calc(100% - 100px);
-      display: inline-block;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
-    }
-  // }
-}
-
 .ant-form-item {
   margin-bottom: 16px;
 }
 
 .ant-form-item-label {
   label {
-    font-weight: 600;
+    font-weight: 400;
   }
 }
 

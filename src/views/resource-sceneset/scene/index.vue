@@ -48,7 +48,10 @@
 <script setup lang="ts">
 // import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
-import { gotoSubPage, goback } from '@/utils/tools'
+import { gotoSubPage } from '@/utils/tools'
+
+const router = useRouter()
+const goback = () => router.push('/resource-sceneset/')
 
 const vncModal = ref()
 const currentApi = api.sceneResource

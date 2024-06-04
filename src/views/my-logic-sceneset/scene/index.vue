@@ -81,7 +81,7 @@
 
 <script setup lang="ts">
 import { gotoSubPage, goback } from '@/utils/tools'
-import { MyLogicSceneSourceOptions, isMyLogicSceneEditable, isMyLogicScenesetEditable, getMyLogicSceneSourceName } from '@/utils/dict'
+import { MyLogicSceneSourceOptions, isMyLogicSceneEditable, isMyLogicScenesetEditable, getMyLogicSceneSourceName, getMyLogicScenesetSourceName } from '@/utils/dict'
 
 const user = store.user
 const currentApi = api.logicScene
@@ -95,6 +95,7 @@ const loadSceneset = async () => {
     const data = await api.logicScenesets.get(scenesetId)
     loadingSceneset.value = false
     selectedSceneset.value = data
+    selectedSceneset.value.sourceName = getMyLogicScenesetSourceName(data.source)
     selectedSceneset.value.isEditable = isMyLogicScenesetEditable(data.source)
     store.catalog.sceneCatalog = data
     query.value = { logic_scene_set_id: data.id}

@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { MySceneSourceOptions, isMyScenesetEditable, isMySceneEditable, getMySceneSourceName } from '@/utils/dict'
+import { MySceneSourceOptions, isMyScenesetEditable, isMySceneEditable, getMySceneSourceName, getMyScenesetSourceName } from '@/utils/dict'
 import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
 import { gotoSubPage } from '@/utils/tools'
@@ -57,6 +57,7 @@ const loadSceneset = async () => {
     const data = await api.scenesets.get(scenesetId)
     selectedSceneset.value = data
     selectedSceneset.value.isEditable = isMyScenesetEditable(data.source)
+    selectedSceneset.value.sourceName = getMyScenesetSourceName(data.source)
     store.catalog.sceneCatalog = data
     query.value = { scene_set: data.id}
   }

@@ -4,14 +4,15 @@
     <span>场景资源库</span>
     <router-link to="/resource-logic-sceneset/">逻辑场景</router-link>
     <a @click="goback()">授权任务管理</a>
-    <span>{{ user.isAdmin() ? '任务审批' : '任务查看' }}</span>
+    <span>任务审批</span>
   </div>
 
   <div class="flex justify-between" style="height: calc(100% - 20px)">
-    <div class="white-block" style="width: 60%">
-      <span class="title mb-5">{{ user.isAdmin() ? '任务审批' : '任务查看' }}</span>
+    <div class="white-block" style="width: 60%; overflow: auto;">
+      <span class="title mb-5">任务详情</span>
       <a-spin :spinning="dataLoading">
-        <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }">
+        <div class="sub-title">申请信息</div>
+        <a-form :model="formState" :labelCol ="{ style: { width: '90px' } }">
           <a-form-item label="申请人" >
             {{ formState.apply_username }}
           </a-form-item>
@@ -19,8 +20,12 @@
             {{ formState.create_time }}
           </a-form-item>
           <a-form-item label="申请原因">
-            <span class="break-text">{{ formState.reason || '-' }}</span>
+            <span class="break-text">{{ formState.reason || '--' }}</span>
           </a-form-item>
+        </a-form>
+
+        <div class="sub-title">{{ isSceneset ? '场景集信息' : '场景信息' }}</div>
+        <a-form :model="formState" :labelCol ="{ style: { width: '90px' } }">
           <template v-if="isSceneset">
             <a-form-item label="场景集ID">{{ formState.data.id }}</a-form-item>
             <a-form-item label="场景集名称">
@@ -53,17 +58,18 @@
                 {{ item.display_name }}
               </li>
             </ul>
-            <span v-else>无</span>
+            <span v-else>--</span>
           </a-form-item>
           <a-form-item label="创建时间" name="create_time">{{ formState.data.create_time }}</a-form-item>
         </a-form>
       </a-spin>
     </div>
     <div class="white-block" style="width: 40%; margin-left: 16px;">
-      <p>审批状态：<span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></p>
-        <p>审批意见</p>
+      <span class="title mb-5">审批意见</span>
+        <p>
+          <span class="label">任务状态</span><span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></p>
         <template v-if="user.isAdmin() && !isApproved">
-          <ch-input type="textarea" rows="15" :maxlength="255"
+          <ch-input type="textarea" rows="10" :maxlength="255"
             placeholder="请输入审批意见" v-model:value="formState.comments" />
           <div class="my-4">
             <a-button type="primary" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
@@ -74,8 +80,8 @@
         <template v-else>
           <p class="comments">{{ formState.comments || '无' }}</p>
           <div class="my-4">
+            <a-button type="primary" class="mr-4" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
             <a-button @click="goback()">返回</a-button>
-            <a-button class="ml-4" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
           </div>
         </template>
     </div>
@@ -136,7 +142,7 @@ const onApprove = async (isAproved: boolean = true) => {
 }
 
 const gotoPage = () => {
-  isSceneset.value ? router.push('/resource-logic-sceneset/scene?pid=' + formState.data.id)
+  isSceneset.value ? router.push('/resource-logic-sceneset/scene/?pid=' + formState.data.id)
     : router.push('/resource-logic-sceneset/scene/view/' + formState.data.id)
 }
 
@@ -160,7 +166,7 @@ getEditData()
 </script>
 <style>
 .comments {
-  width: 100%; height: 400px; padding: 8px; border: 1px solid #d3d3d3;
+  width: 100%; height: 200px; padding: 8px; border: 1px solid #d3d3d3;
   word-break: break-all;
 }
 </style>

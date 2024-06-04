@@ -46,8 +46,10 @@
 </template>
 
 <script setup lang="ts">
-import { gotoSubPage, goback } from '@/utils/tools'
+import { gotoSubPage } from '@/utils/tools'
 
+const router = useRouter()
+const goback = () => router.push('/resource-logic-sceneset/')
 const currentApi = api.loginsceneResource
 const user = store.user
 const isAdmin = user.isAdmin()

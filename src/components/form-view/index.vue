@@ -21,7 +21,7 @@
             <a-form-item :label="item.label" v-if="item.isShow == undefined || item.isShow" >
               <span v-if="!Array.isArray(item.value)" 
                 :class="item.isBreak == undefined || item.isBreak || item.label == '描述' ? 'break-text' : ''">
-                {{ !item.value ? '-' : item.label.indexOf('时间') > -1 ? formatDate(item.value) : item.value }}
+                {{ !item.value ? '--' : item.label.indexOf('时间') > -1 ? formatDate(item.value) : item.value }}
               </span>
               <ul v-else-if="item.value.length > 0" class="view-list">
                 <li class="mb-2" v-for="val in item.value" :key="val">

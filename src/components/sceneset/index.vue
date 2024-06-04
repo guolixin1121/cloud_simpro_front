@@ -1,35 +1,42 @@
 <!-- 场景列表页的顶部展示场景集信息 -->
 <template>
-  <div class="white-block top">
-    <a-row>
-      <a-col :span="4">场景集ID：{{ sceneset?.id }}</a-col>
-      <a-col :span="5">
-        场景集名称：
-        <a-tooltip :title="sceneset?.name">
-          <span class="line-value">{{ sceneset?.name }}</span>
+  <div class="white-block">
+    <div class="line" :class="'line--' + (sceneset?.sourceName ? '4' : '3')">
+      <div class="line-item">
+        <span class="label" style="width: 80px">场景集ID</span>{{ sceneset?.id }}
+      </div>
+      <div class="line-item">
+        <span class="label">场景集名称</span>
+        <a-tooltip :title="sceneset?.name.length < 10 ? '' : sceneset?.name" placement="topLeft" class="overflow-ellipsis">
+          {{ sceneset?.name }}
         </a-tooltip>
-      </a-col>
-      <a-col :span="15">
-        场景集标签：
+      </div>
+      <div class="line-item">
+        <span class="label">创建时间</span>
+        {{ sceneset?.create_time }}
+      </div>
+      <div class="line-item" v-if="sceneset?.sourceName">
+        <span class="label">场景集来源</span>
+        {{ sceneset?.sourceName }}
+      </div>
+    </div>
+    <div class="line">
+      <div class="line-item" style="width: 100%">
+        <span class="label">场景集描述</span>
+        <a-tooltip class="overflow-ellipsis" :title="sceneset?.desc" placement="topLeft">{{ sceneset?.desc || '--' }}</a-tooltip>
+      </div>
+    </div>
+    <div class="line">
+      <div class="line-item" style="width: 100%">
+        <span class="label">场景集标签</span>
         <span v-if="!sceneset || (sceneset.labels_detail && sceneset.labels_detail.length == 0)">--</span>
-        <div class="inline-block line-value" v-else>
-          <span class="mr-4" v-for="item in sceneset?.labels_detail" :key="item.name">
+        <ul v-else class="view-list">
+          <li class="mb-2" v-for="item in sceneset?.labels_detail" :key="item.name">
             {{ item.display_name }}
-          </span>
-        </div>
-      </a-col>
-    </a-row>
-    <a-row>
-      <a-col :span="4">
-        创建时间：{{ sceneset?.create_time }}
-      </a-col>
-      <a-col :span="20">
-        场景集描述：
-        <a-tooltip :title="sceneset?.desc" placement="topLeft">
-            <span class="line-value">{{ sceneset?.desc || '--' }}</span>
-        </a-tooltip>
-      </a-col>
-    </a-row>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -41,3 +48,40 @@ defineProps({
     }
 })
 </script>
+
+<style lang="less" scopped>
+.line {
+  display: flex;
+  margin-bottom: 8px;
+
+  &:last-child {
+    margin-bottom: 0px;
+  }
+
+  .line-item {
+    display: flex;
+    padding-right: 30px;
+
+    &:last-child {
+      padding-right: 0px;
+    }
+    .label {
+      color: var(--text-second-color); 
+      padding-right: 8px;
+    }
+    .overflow-ellipsis {
+      display: inline-block;
+      width: calc(100% - 100px);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+    .view-list {
+      width: calc(100% - 100px);
+      margin-bottom: 0px;
+    }
+  }
+}
+.line--3 .line-item { width: 33%; }
+.line--4 .line-item { width: 25%; }
+</style>

@@ -87,12 +87,13 @@ class AxiosRequest {
         'content-type': type || 'application/json',
         'X-Project-Id': store.user?.user?.project_id || ''
       })
-      // data || {} : 兼容data = null的情况
-      Object.keys(data || {}).forEach(key => {
-        if(typeof data[key] == 'string') {
-          data[key] = data[key]?.trim()
-        }
-      })
+      if(typeof data == 'object') {
+        Object.keys(data).forEach(key => {
+          if(typeof data[key] == 'string') {
+            data[key] = data[key]?.trim()
+          }
+        })
+      }
 
       let postData = data
       if(type === 'multipart/form-data') {

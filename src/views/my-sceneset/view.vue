@@ -32,27 +32,17 @@
 </template>
 
 <script setup lang="ts">
+import useSetData from '@/hooks/useSetdata'
 const id = useRoute().params.id
 
 const formState = reactive({
-  id: '',
   name: '',
   desc: '',
   labels_detail: [],
   create_time: ''
 })
 
-const loading = ref(false)
-const getEditData = async () => {
-  if(id) {
-    loading.value = true
-    const data = await api.scenesets.get(id)
-    loading.value = false
-    for(const prop in formState) {
-      formState[prop as keyof typeof formState] = data[prop]
-    }
-  }
-}
+const { loading, setData } = useSetData()
 
-getEditData()
+setData(formState, api.scenesets.get, id)
 </script>

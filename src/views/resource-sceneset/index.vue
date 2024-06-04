@@ -90,12 +90,12 @@ const columns = [
     fixed: 'right',
     width: 150,
     actions: {
+      查看: {
+        handler: ({ id }: RObject) => gotoSubPage('/scene/?pid=' + id)
+      },
       申请授权: {
         validator: (data : RObject) => !isAdmin && data.apply_enable,
         handler: ({ id }: RObject) => gotoSubPage('/apply/' + id)
-      },
-      查看: {
-        handler: ({ id }: RObject) => gotoSubPage('/scene/?pid=' + id)
       },
       编辑: {
         validator: (data : RObject) => isAdmin && data.edit_enable,
