@@ -31,7 +31,7 @@
             <a-form-item label="场景集名称">
               <span class="break-text">{{ formState.data.name }}</span></a-form-item>
             <a-form-item label="场景集描述" name="desc">
-              <span class="break-text">{{ formState.data.desc || '-' }}</span>
+              <span class="break-text">{{ formState.data.desc || '--' }}</span>
             </a-form-item>
             <a-form-item label="场景数量" name="count">
               <span>{{ formState.data.count }}</span>
@@ -43,7 +43,7 @@
               <span class="break-text">{{ formState.data.name }}</span>
             </a-form-item>
             <a-form-item label="场景描述" name="desc">
-              <span class="break-text">{{ formState.data.desc || '-' }}</span>
+              <span class="break-text">{{ formState.data.desc || '--' }}</span>
             </a-form-item>
             <a-form-item label="路径">
               <span class="break-text">场景资源库-逻辑场景-{{ sceneset.name }}</span>
@@ -66,24 +66,24 @@
     </div>
     <div class="white-block" style="width: 40%; margin-left: 16px;">
       <span class="title mb-5">审批意见</span>
+      <template v-if="user.isAdmin() && !isApproved">
+        <ch-input type="textarea" rows="10" :maxlength="255"
+          placeholder="请输入审批意见" v-model:value="formState.comments" />
+        <div class="my-4">
+          <a-button type="primary" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
+          <a-button class="mx-4" :loading="isRejecting" @click="onApprove(false)">驳回</a-button>
+          <a-button @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
+        </div>
+      </template>
+      <template v-else>
         <p>
           <span class="label">任务状态</span><span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></p>
-        <template v-if="user.isAdmin() && !isApproved">
-          <ch-input type="textarea" rows="10" :maxlength="255"
-            placeholder="请输入审批意见" v-model:value="formState.comments" />
-          <div class="my-4">
-            <a-button type="primary" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
-            <a-button class="mx-4" :loading="isRejecting" @click="onApprove(false)">驳回</a-button>
-            <a-button @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
-          </div>
-        </template>
-        <template v-else>
-          <p class="comments">{{ formState.comments || '无' }}</p>
-          <div class="my-4">
-            <a-button type="primary" class="mr-4" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
-            <a-button @click="goback()">返回</a-button>
-          </div>
-        </template>
+        <p class="comments">{{ formState.comments || '无' }}</p>
+        <div class="my-4">
+          <a-button type="primary" class="mr-4" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
+          <a-button @click="goback()">返回</a-button>
+        </div>
+      </template>
     </div>
   </div>
 </template>

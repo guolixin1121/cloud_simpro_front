@@ -23,7 +23,7 @@
         <a-form-item label="路径" name="path">
           <span class="break-text">场景资源库-具体场景-{{ sceneset.name }}</span>
         </a-form-item>
-        <a-form-item label="关联地图" name="sceneset">
+        <a-form-item label="关联地图" name="map">
           {{ formState.mapName + '_' + formState.mapVersion }}
         </a-form-item>
         <a-form-item label="场景文件" name="adsUrl">
@@ -35,7 +35,7 @@
               {{ item.display_name }}
             </li>
           </ul>
-          <span v-else>无</span>
+          <span v-else>--</span>
         </a-form-item>
         <a-form-item label="创建时间" name="create_time">
           {{ formState.create_time }}
@@ -57,9 +57,9 @@
 <script setup lang="ts">
 const id = useRoute().params.id
 const currentApi = api.sceneResource
-const sceneset = store.catalog.sceneCatalog
+const sceneset = ref({id: '', name: ''})
 const router = useRouter()
-const goback = () => router.push('/resource-sceneset/scene/?pid=' + sceneset.id)
+const goback = () => router.push('/resource-sceneset/scene/?pid=' + sceneset.value.id)
 
 const formState = reactive({
   id:'',
@@ -110,6 +110,8 @@ const getEditData = async () => {
       formState.id = data.id
       formState.create_time = data.create_time
       formState.can_apply = data.can_apply
+      sceneset.value.id = data.scene_set_id
+      sceneset.value.name = data.scene_set_name
     } finally {
       dataLoading.value = false
     }

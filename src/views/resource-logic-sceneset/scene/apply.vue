@@ -60,9 +60,9 @@
 <script setup lang="ts">
 const id = useRoute().params.id
 const currentApi = api.loginsceneResource
-const sceneset = store.catalog.sceneCatalog
+const sceneset = ref()
 const router = useRouter()
-const goback = () => router.push('/resource-logic-sceneset/scene/?pid=' + sceneset.id)
+const goback = () => router.push('/resource-logic-sceneset/scene/?pid=' + sceneset.value?.id)
 const formState = reactive({
   id:'',
   name: '',
@@ -114,6 +114,7 @@ const getEditData = async () => {
       formState.id = data.id
       formState.create_time = data.create_time
       formState.can_apply = data.can_apply
+      sceneset.value = data.logic_scene_set_resource
     } finally {
       dataLoading.value = false
     }

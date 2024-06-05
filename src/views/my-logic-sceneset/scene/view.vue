@@ -10,13 +10,14 @@
 <script setup lang="ts">
 import {goback} from '@/utils/tools'
 
-const sceneset = store.catalog.sceneCatalog
+const sceneset = store.catalog.sceneCatalog  //ref({id: '', name: ''})
 const formItems = ref<FormItem[]>([])
 const loading = ref(false)
 const getEditData = async () => {
   try {
     loading.value = true
     const data = await api.logicScene.get(useRoute().params.id)
+    // sceneset.value = data.logic_scene_set
     formItems.value = [
       { label: '场景ID', value: data.id },
       { label: '场景名称', value: data.name, isBreak: true },

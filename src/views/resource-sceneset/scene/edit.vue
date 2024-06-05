@@ -73,7 +73,7 @@ const { id } = route.params
 const isAdd = id === '0'
 const actionText = isAdd ? '上传' : '修改'
 const title =  actionText + '具体场景'
-const sceneset = store.catalog.sceneCatalog
+const sceneset = ref({id: '', name: ''})
 
 const baseApi = api
 const currentApi = baseApi.sceneResource
@@ -92,14 +92,14 @@ const formState = reactive({
 })
 const loading = ref(false)
 const router = useRouter()
-const goback = () => router.push('/resource-sceneset/scene/?pid=' + sceneset.id)
+const goback = () => router.push('/resource-sceneset/scene/?pid=' + sceneset.value.id)
 
 const add = async () => {
   const { labels } = formState
   const params = {
     name: formState.name,
     desc: formState.desc,
-    scene_set: sceneset.id,
+    scene_set: sceneset.value.id,
     mapName: formState.map ? (formState.map as unknown as SelectOption).label : formState.mapName,
     mapVersion: formState.mapVersion,
     xosc: formState.xosc,
@@ -151,6 +151,8 @@ const getEditData = async () => {
     formState.adsUrl = scene.xosc_key
     formState.desc = scene.desc
     formState.can_edit = scene.can_edit
+    sceneset.value.id = scene.scene_set_id
+    sceneset.value.name = scene.scene_set_name
   }
 }
 getEditData()

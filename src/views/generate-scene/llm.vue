@@ -3,8 +3,7 @@
     <span>场景生成</span>
     <span>语义生成</span>
   </div>
-  <div class="main">
-    <!-- <span class="title">语义生成</span> -->
+  <div>
     <div class="container">
       <div class="messages">
         <!-- 欢迎语 -->
@@ -23,32 +22,32 @@
         <div class="messages-content">
           <div v-for="(chat, index) in data.chats" :key="index" class="message">
             <div class="message-left">
-              <image src="@/assets/images/me_avatar.png" class="avatar" v-if="chat.type == 0"/>
-              <image src="@/assets/images/bot_avatar.png" class="avatar" v-else />
+              <img src="@/assets/images/bot_avatar.png" class="avatar" v-if="isSaimo(chat.type)" />
+              <img src="@/assets/images/me_avatar.png" class="avatar" v-else/>
             </div>
             <div class="message-right">
-              <div class="username">{{ chat.type == 0 ? 'YOU' : '赛目科技大模型' }}</div>
+              <div class="username">{{ isSaimo(chat.type) ? '赛目科技大模型' : 'YOU' }}</div>
               <div class="message-body" :class="'message-body-' + chat.type">
                 {{ chat.message }}
+              </div>
+              <div class="message-footer" v-if="isSaimo(chat.type)">
+                <div>
+                  场景文件保存路径：我的场景-具体场景-赛目大模型-set20244
+                </div>
+                <a @click="preview(chat)">查看</a>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="recorder" v-if="data.isRecording">
-        <div class="circle"></div>
-        <image src="@/assets/images/recorder.png"></image>
-      </div>
+
       <div class="input-box-wrapper">
-        <div class="input-box">
-          <a-button class="audio-button" @click="onSwitchInputType" title="语音输入" v-if="data.inputType == InputType.Text">🎙️</a-button>
-          <a-button class="audio-button" @click="onSwitchInputType" title="文本输入" v-else>⏹</a-button>
-          <a-textarea :placeholder="data.placeholder" rows="1" class="input" v-model="data.question"
-            @input="onInputChange"></a-textarea>
-          <a-button type="primary" class="submit" @click="onSend" v-if="!data.isWriting">
-            <img src="@/assets/images/loading.png" class="loading" v-if="data.isSubmitting"/>
-            发送
-          </a-button>
+        <a-textarea :placeholder="data.placeholder" rows="1" class="input" v-model:value="data.question"></a-textarea>
+        <div class="flex justify-between items-center">
+          <svg-icon icon="recorder-stop" class="recorder" @click="stopRecording" v-if="data.isRecording"></svg-icon>
+          <svg-icon icon="recorder" class="recorder" @click="startRecording" v-else></svg-icon>
+          <a-button type="primary" size="small" class="submit" @click="onSend" v-if="!data.isWriting"
+            :loading="data.isSubmitting">发送</a-button>
         </div>
       </div>
     </div>
@@ -59,11 +58,6 @@
 import axios from 'axios'
 import '@/utils/recorder'
 
-const InputType = {
-    Text: 1,
-    Voice: 2
-}
-
 const axiosInstance = axios.create({
     baseURL: '',
     timeout: 10000,
@@ -71,51 +65,39 @@ const axiosInstance = axios.create({
 let mediaRecorder: MediaRecorder
 HZRecorder.get((rec: MediaRecorder) => mediaRecorder = rec)
 
+const isSaimo = (type: number) => type == 1
+
 const data = reactive<LLMData>({
   question: '',            // 问题
   answer: null,              // 答案
-  chats: [],               // 所有对话数据
+  chats: [{ type: 0, message: '欢迎使用赛目科技大模型，请输入您的问题。'}, { type: 1, message: '赛目科技大模型已就绪，请输入您的问题。'}],               // 所有对话数据
   isWriting: false,        // 是否正在逐行输出结果
   isRecording: false,      // 是否正在语音输入
   isSubmitting: false,     // 是否正在提交到服务器
-  inputType: InputType.Text, // 当前为文本输入还是语音输入
   placeholder: '请输入场景描述'
 })
-
-// 切换输入方式
-const onSwitchInputType = () => {
-  data.question = ''
-  data.inputType = data.inputType == InputType.Text ? InputType.Voice : InputType.Text
-  data.placeholder = data.inputType == InputType.Text ? '请输入场景描述' : '正在录音...'
-  data.inputType == InputType.Text ? stopRecording() : startRecording()
-}
-
-// 动态调整textarea高度
-const onInputChange = (event: { target: any }) => {
-  const target = event.target
-  if(target.scrollHeight > target.clientHeight) {
-    target.style.height = target.scrollHeight - 20 + 'px'  // 20 == padding
-  }
-}
 
 const onSend = () => {
   if(data.question.trim().length == 0) {
     message.error('请输入您的问题')
     return
   }
-  
-  data.isSubmitting = true
-  axiosInstance.request({
-    url: '/api/predict/',
-    data: { message: data.question.trim() },
-    method: 'POST'
-  }).then(res => {
-    if(res.data.code == 200) {
-      writeChats(res.data.data)
-    } else {
-      message.error('服务器发生错误')
-    }
-  })
+  try {
+    data.isSubmitting = true
+    axiosInstance.request({
+      url: '/api/predict/',
+      data: { message: data.question.trim() },
+      method: 'POST'
+    }).then(res => {
+      if(res.data.code == 200) {
+        writeChats(res.data.data)
+      } else {
+        message.error('服务器发生错误')
+      }
+    })
+  } finally {
+    data.isSubmitting = false
+  }
 }
 // 显示答案
 const writeChats = (answer: { xml?: any; id?: any }) => {
@@ -176,6 +158,7 @@ const scroll = () => {
 
 // 录音
 function startRecording() {
+  data.placeholder = '正在录音...'
   mediaRecorder.start()
   data.isRecording = true
 }
@@ -202,34 +185,20 @@ function audioToText() {
     data.question = res.data.data.text
   })
 }
+
+const router = useRouter()
+function preview(chat: Chat) {
+  console.log(chat)
+  router.push('/my-sceneset/scene/preview/793')
+}
 </script>
 
 <style lang="less" scoped>
 .container {
-  background-color: #fff;
   width: 1000px;
-  height: calc(100% - 110px);
-  // margin: 16px 0px;
+  margin: 16px auto;
 }
 
-button {
-  color: #fff;
-  border-radius: 10px;
-  border: 0px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-.loading {
-    width: 20px !important;
-    height: 20px !important;
-    animation: loading 2s linear infinite;
-}
-@keyframes loading {
-    from {  transform: rotate(0) }
-    to { transform: rotate(360deg) }
-}
 .messages {
     height: 100%;
     overflow-y: auto;
@@ -239,95 +208,70 @@ button {
 }
 	
 .message {
-    display: flex;
-    margin-bottom: 10px;
-}
-		
-.message .avatar {
-    width: 50px;
-    height: 50px;
+  display: flex;
+  margin-bottom: 16px;
 
-    margin-right: 20px;
-}
-		
-.message .username {
-    font-weight: 600;
-}
-		
-.message .message-body-1 {
-    margin-top: 4px;
-    border: 1px solid #375141;
-    // background-color: #111827;
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
-    padding: 8px;
-    margin-bottom: 4px;
-}
-	
-.input-box-wrapper {
-    // background-color: #0b0f19;
-    width: 1000px;
-    position: fixed;
-    bottom: 24px;
-}
-.input-box-wrapper .input-box {
-    display: flex;
-    align-items: flex-end;
-}
-		
-.input-box-wrapper .input {
-    border: 1px solid #374151;
-    border-radius: 5px;
-    width: 100%;
-    margin: 0px 4px;
-}
-.input-box-wrapper .voice {
-    box-sizing: border-box;
-    text-align: center;
-    line-height: 40px;
+  .message-left {
+    width: 40px;
     height: 40px;
-}
-	
-.recorder {
-    position: fixed;
-    bottom: 80px;
-    width: 1000px;
-    height: 80px;
-    background-color: #0b0f19;
+    background-color: #fff;
+    border-radius: 4px;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-.recorder .circle {
-    position: absolute;
-    background-color: #374151;
-    height: 50px;
-    width: 50px;
-    border-radius: 50px;
-    animation: blur 1s infinite;
-}
-@keyframes blur
-{
-    from { width: 40px; height: 40px; }
-    to { width: 70px; height: 70px; }
-}
-.recorder img {
-    width: 40px;
-    height: 40px;
-    z-index: 1;
-}
+    margin-right: 10px;
+  }
 
-.submit {
-    // background-color: #f97316;
-    color: #fff;
-    width: 100px;
-    height: 40px;
-}
+  .message-right {
+    width: 100%;
+  }
+  .username {
+    color: var(--text-second-color);
+  }
+  .message-body {
+    background-color: #fff;
+    width: 100%;
+    padding: 16px;
+    border-radius: 4px;
+    margin-top: 4px;
+    white-space: pre-wrap;
+    overflow-wrap: break-word;
+  }
 
-.audio-button {
-    width: 100px;
-    height: 40px;
-    cursor: pointer;
-    // background: linear-gradient(to bottom right, #4b5563 , #374151 );
+  .message-body-0 {
+    background-color: #E6E7EB;
+  }
+  .message-footer {
+    border-top: 1px solid #E6E7EB;
+    background-color: #fff;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+.input-box-wrapper {
+    background-color: #fff;
+    padding: 16px;
+    border-radius: 4px;
+    width: 1000px;
+    position: fixed;
+    bottom: 24px;
+
+    .input {
+      margin-bottom: 16px;
+      border: 0px;
+      max-height: 100px;
+    }
+    button {
+      height: 32px;
+      width: 80px;
+    }
+    .recorder {
+      cursor: pointer;
+
+      &:hover {
+        color: var(--primary-color);
+      }
+    }
 }
 </style>
