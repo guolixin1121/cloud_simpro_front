@@ -48,7 +48,7 @@
 <script setup lang="ts">
 // import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
-import { gotoSubPage } from '@/utils/tools'
+import { gotoSubPage, openLink } from '@/utils/tools'
 
 const router = useRouter()
 const goback = () => router.push('/resource-sceneset/')
@@ -118,6 +118,7 @@ const columns = [
         handler: (data: any) => gotoSubPage('/apply/' + data.id)
       },
       查看: (data: any) => gotoSubPage('/view/' + data.id),
+      场景预览: (data: any) => openLink('/scene-simulation-client/#/overview/?type=1&id=' + data.id),
       编辑: {
         validator: (data: any) => isAdmin && data.edit_enable,
         handler: (data: any) => gotoSubPage('/edit/' + data.id)

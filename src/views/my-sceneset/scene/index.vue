@@ -44,7 +44,7 @@
 import { MySceneSourceOptions, isMyScenesetEditable, isMySceneEditable, getMySceneSourceName, getMyScenesetSourceName } from '@/utils/dict'
 import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
-import { gotoSubPage } from '@/utils/tools'
+import { gotoSubPage, openLink } from '@/utils/tools'
 
 const vncModal = ref()
 const currentApi = api.scene
@@ -113,6 +113,7 @@ const columns = [
     width: 250,
     actions: {
       查看: (data: any) => gotoSubPage('/view/' + data.id),
+      场景预览: (data: any) => openLink('/scene-simulation-client/#/overview/?type=2&id=' + data.id),
       编辑: { 
         validator: ({status}: any) => isMySceneEditable(status),
         handler: (data: any) => gotoSubPage('/edit/' + data.id)
