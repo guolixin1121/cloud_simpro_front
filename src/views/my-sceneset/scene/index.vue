@@ -110,7 +110,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 250,
+    width: 280,
     actions: {
       查看: (data: any) => gotoSubPage('/view/' + data.id),
       场景预览: (data: any) => openLink('/scene-simulation-client/#/overview/?type=2&id=' + data.id),

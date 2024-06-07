@@ -111,7 +111,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 100,
+    width: 150,
     actions: {
       申请授权: {
         validator: (data: any) => !isAdmin && data.apply_enable,
