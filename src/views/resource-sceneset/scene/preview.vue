@@ -19,7 +19,7 @@ const sceneName = ref()
 const previewUrl = '/scene-simulation-client/#/overview/?type=1&id=' + id
 const getEditData = async () => {
   if (id) {
-    const scene = await api.scene.get(id)
+    const scene = await api.sceneResource.getScene(id)
     sceneName.value = scene.adsName
   }
 }
