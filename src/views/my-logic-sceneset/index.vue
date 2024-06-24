@@ -89,13 +89,15 @@ const modal = reactive({
 })
 const columns = [
   { dataIndex: 'checkbox', width: 60,validator: (data: any) => data.name !== 'SOTIF', },
-  { title: '场景集ID', dataIndex: 'id', width: 150 },
+  { title: '场景集ID', dataIndex: 'id', width: 120 },
   { title: '场景集名称', dataIndex: 'name', ellipsis: true },
   { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
-  { title: '来源', dataIndex: 'source', formatter: getMyLogicScenesetSourceName, width: 180 },
-  { title: '场景数量', dataIndex: 'count', width: 180 },
+  { title: '来源', dataIndex: 'source', formatter: getMyLogicScenesetSourceName, width: 120 },
+  { title: '场景数量', dataIndex: 'count', width: 100 },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },
+  { title: '创建者', dataIndex: 'create_user', width: 150 },
+  { title: '修改者', dataIndex: 'update_user', width: 150 },
   {
     title: '操作',
     dataIndex: 'actions',

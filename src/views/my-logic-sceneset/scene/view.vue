@@ -26,7 +26,10 @@ const getEditData = async () => {
       { label: '场景文件', value: data.scene_url },
       { label: '配置文件', value: data.config_url },
       { label: '标签', value: data.labels_detail?.map((item: any) => item.display_name) },
-      { label: '创建时间', value: data.create_time }
+      { label: '创建时间', value: data.create_time },
+      { label: '修改时间', value: data.update_time },
+      { label: '创建者', value: data.create_user },
+      { label: '修改者', value: data.update_user }
     ]
   } finally {
     loading.value = false

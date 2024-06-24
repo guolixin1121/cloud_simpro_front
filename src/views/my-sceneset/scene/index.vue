@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { MySceneSourceOptions, isMyScenesetEditable, isMySceneEditable, getMySceneSourceName } from '@/utils/dict'
+import { MySceneSourceOptions, isMyScenesetEditable, isMySceneEditable, getMySceneSourceName, getMyScenesetSourceName } from '@/utils/dict'
 import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
 import { gotoSubPage } from '@/utils/tools'
@@ -56,7 +56,8 @@ const loadSceneset = async () => {
   if (scenesetId) {
     const data = await api.scenesets.get(scenesetId)
     selectedSceneset.value = data
-    selectedSceneset.value.isEditable = isMyScenesetEditable(data.source)
+    selectedSceneset.value.isEditable = isMyScenesetEditable(data)
+    selectedSceneset.value.sourceName = getMyScenesetSourceName(data.source)
     store.catalog.sceneCatalog = data
     query.value = { scene_set: data.id}
   }
@@ -105,13 +106,16 @@ const columns = [
   { title: '来源', dataIndex: 'adsSource', formatter: getMySceneSourceName, width: 120 },
   { title: '创建时间', dataIndex: 'createTime', width: 180 },
   { title: '修改时间', dataIndex: 'updateTime', width: 180 },
+  { title: '创建者', dataIndex: 'createUser', width: 150 },
+  { title: '修改者', dataIndex: 'updateUser', width: 150 },
   {
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 250,
+    width: 320,
     actions: {
-      查看: (data: any) => gotoSubPage('/view/' + data.id),
+      查看: (data: any) => gotoSubPage('/preview/' + data.id),
+      // 场景预览: (data: any) => openLink('/scene-simulation-client/#/overview/?type=2&id=' + data.id),
       编辑: { 
         validator: ({status}: any) => isMySceneEditable(status),
         handler: (data: any) => gotoSubPage('/edit/' + data.id)

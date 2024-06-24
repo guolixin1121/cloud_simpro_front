@@ -130,9 +130,10 @@ export const MyScenesetSourceOptions = [
   { label: '全部', value: '' },
   { label: '创建', value: 0 },
   { label: 'SOTIF', value: 2 },
-  { label: '场景资源库', value: 1 }
+  { label: '场景资源库', value: 1 },
+  { label: '语义生成', value: 3 },
 ]
-export const isMyScenesetEditable = (value: number | string) => value != 1
+export const isMyScenesetEditable = ({ source, name, groupName }: any) => source != 1 && (groupName ? groupName != '赛目大模型场景集' : name != '赛目大模型场景集')
 export const getMyScenesetSourceName = (value: number | string) => MyScenesetSourceOptions.find(v => v.value === value)?.label
 
 export const MySceneSourceOptions = [
@@ -141,6 +142,7 @@ export const MySceneSourceOptions = [
   { label: '泛化', value: 1 },
   { label: '场景挖掘', value: 4 },
   { label: '场景资源库', value: 3 },
+  { label: '语义生成', value: 5 },
 ]
 export const isMySceneEditable = (value: number | string) => value != 3
 export const getMySceneSourceName = (value: number | string) => MySceneSourceOptions.find(v => v.value === value)?.label

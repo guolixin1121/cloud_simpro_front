@@ -1,12 +1,15 @@
 <template>
   <div class="breadcrumb">
     <span>场景生成</span>
-    <span>语义生成</span>
+    <span v-if="!isPreview">语义生成</span>
+    <template v-else>
+      <span class=" cursor-pointer" @click="isPreview = false">语义生成</span>
+      <span>场景查看</span>
+    </template>
   </div>
-  <div class="main">
-    <!-- <span class="title">语义生成</span> -->
-    <div class="container">
-      <div class="messages">
+  <div style="height: 100%;">
+    <div class="container" v-show="!isPreview">
+      <div class="messages" :style="{ height: 'calc(100% - 150px - '+ inputHeight +'px)'}">
         <!-- 欢迎语 -->
         <div class="message">
           <div class="message-left">
@@ -15,7 +18,7 @@
           <div class="message-right">
             <div class="username">赛目科技大模型</div>
             <div class="message-body">
-              <text :user-select="true" space="ensp">Hi, 我是赛目科技的大模型，很高兴为您服务</text>
+              Hi, 我是赛目科技的大模型，很高兴为您服务
             </div>
           </div>
         </div>
@@ -23,54 +26,57 @@
         <div class="messages-content">
           <div v-for="(chat, index) in data.chats" :key="index" class="message">
             <div class="message-left">
-              <image src="@/assets/images/me_avatar.png" class="avatar" v-if="chat.type == 0"/>
-              <image src="@/assets/images/bot_avatar.png" class="avatar" v-else />
+              <img src="@/assets/images/me_avatar.png" class="avatar" v-if="chat.type == 0"/>
+              <img src="@/assets/images/bot_avatar.png" class="avatar" v-else />
             </div>
             <div class="message-right">
               <div class="username">{{ chat.type == 0 ? 'YOU' : '赛目科技大模型' }}</div>
               <div class="message-body" :class="'message-body-' + chat.type">
                 {{ chat.message }}
               </div>
+              <div class="message-footer" v-if="isSaimo(chat.type) && !data.isWriting">
+                <div>
+                  场景文件保存路径：我的场景-具体场景-赛目大模型场景集-{{ chat.scene?.adsName }}
+                </div>
+                <a @click="preview(chat)">查看</a>
+              </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="recorder" v-if="data.isRecording">
-        <div class="circle"></div>
-        <image src="@/assets/images/recorder.png"></image>
-      </div>
       <div class="input-box-wrapper">
-        <div class="input-box">
-          <a-button class="audio-button" @click="onSwitchInputType" title="语音输入" v-if="data.inputType == InputType.Text">🎙️</a-button>
-          <a-button class="audio-button" @click="onSwitchInputType" title="文本输入" v-else>⏹</a-button>
-          <a-textarea :placeholder="data.placeholder" rows="1" class="input" v-model="data.question"
-            @input="onInputChange"></a-textarea>
-          <a-button type="primary" class="submit" @click="onSend" v-if="!data.isWriting">
-            <img src="@/assets/images/loading.png" class="loading" v-if="data.isSubmitting"/>
-            发送
-          </a-button>
+        <a-textarea ref="inputRef" :bordered="false" :auto-size="{ minRows: 1, maxRows: 5 }" :placeholder="data.placeholder" 
+          class="input" v-model:value="data.question"></a-textarea>
+        <p class="error" style="margin-left: 8px;" v-if="data.errorMsg">请输入您的问题</p>
+        <div class="flex justify-between items-center mt-2">
+          <svg-icon icon="recorder-stop" class="recorder" @click="stopRecording" v-if="data.isRecording"></svg-icon>
+          <svg-icon icon="recorder" class="recorder" @click="startRecording" v-else></svg-icon>
+          <a-button type="primary" size="small" class="submit" @click="onSend" :disabled="data.isWriting"
+            :loading="data.isSubmitting">发送</a-button>
         </div>
       </div>
     </div>
+    <iframe :src="previewUrl" v-if="isPreview"></iframe>
   </div>
 </template>
 
 <script lang="ts" setup>
-import axios from 'axios'
 import '@/utils/recorder'
 
-const InputType = {
-    Text: 1,
-    Voice: 2
-}
-
-const axiosInstance = axios.create({
-    baseURL: '',
-    timeout: 10000,
-})
 let mediaRecorder: MediaRecorder
 HZRecorder.get((rec: MediaRecorder) => mediaRecorder = rec)
 
+const inputRef = ref()
+const isSaimo = (type: number) => type == 1
+
+const isPreview = ref(false)
+const previewUrl = ref()
+function preview(chat: Chat) {
+  isPreview.value = true
+  previewUrl.value = '/scene-simulation-client/#/overview/?type=2&id=' + chat.scene?.id
+}
+
+const inputHeight = ref(30)
 const data = reactive<LLMData>({
   question: '',            // 问题
   answer: null,              // 答案
@@ -78,58 +84,36 @@ const data = reactive<LLMData>({
   isWriting: false,        // 是否正在逐行输出结果
   isRecording: false,      // 是否正在语音输入
   isSubmitting: false,     // 是否正在提交到服务器
-  inputType: InputType.Text, // 当前为文本输入还是语音输入
-  placeholder: '请输入场景描述'
+  placeholder: '请输入场景描述',
+  errorMsg: ''
 })
 
-// 切换输入方式
-const onSwitchInputType = () => {
-  data.question = ''
-  data.inputType = data.inputType == InputType.Text ? InputType.Voice : InputType.Text
-  data.placeholder = data.inputType == InputType.Text ? '请输入场景描述' : '正在录音...'
-  data.inputType == InputType.Text ? stopRecording() : startRecording()
-}
-
-// 动态调整textarea高度
-const onInputChange = (event: { target: any }) => {
-  const target = event.target
-  if(target.scrollHeight > target.clientHeight) {
-    target.style.height = target.scrollHeight - 20 + 'px'  // 20 == padding
-  }
-}
-
-const onSend = () => {
+const onSend = async () => {
   if(data.question.trim().length == 0) {
-    message.error('请输入您的问题')
+    data.errorMsg = '请输入您的问题'
     return
+  } 
+
+  try {
+    data.isSubmitting = true
+    const res = await api.llm.generate({ message: data.question.trim()})
+    writeChats(res)
+  } finally {
+    data.isSubmitting = false
   }
-  
-  data.isSubmitting = true
-  axiosInstance.request({
-    url: '/api/predict/',
-    data: { message: data.question.trim() },
-    method: 'POST'
-  }).then(res => {
-    if(res.data.code == 200) {
-      writeChats(res.data.data)
-    } else {
-      message.error('服务器发生错误')
-    }
-  })
 }
 // 显示答案
-const writeChats = (answer: { xml?: any; id?: any }) => {
+const writeChats = (answer: { xml?: any, scene: Scene}) => {
   data.isSubmitting = false
   data.answer = {
-    ...answer,
-    id: answer.id,
+    scene: answer.scene,
     xml: answer.xml.split('\n')
   }
   
   // 显示问题
   data.chats.push({
     message: data.question,
-    type: 0
+    type: 0,
   })
 
   // 显示答案
@@ -137,7 +121,7 @@ const writeChats = (answer: { xml?: any; id?: any }) => {
   data.chats.push({
     message: isValidXml ? '' : answer.xml,
     type: 1,
-    id: answer.id
+    scene: answer.scene
   })
   if(isValidXml) {
     data.isWriting = true
@@ -176,6 +160,7 @@ const scroll = () => {
 
 // 录音
 function startRecording() {
+  if(data.isWriting || data.isSubmitting) return
   mediaRecorder.start()
   data.isRecording = true
 }
@@ -187,147 +172,95 @@ function stopRecording() {
   audioToText()
 }
 
-function audioToText() {
+async function audioToText() {
   data.placeholder = '语音转换中...'
-  const rate = new window.AudioContext().sampleRate
-  const formData = new FormData();
-  formData.append("audio", mediaRecorder.getBlob());
-  formData.append('rate', rate.toString())
-
-  axiosInstance.request({
-    url: '/api/audio_to_text/',
-    data: formData,
-    method: 'POST'
-  }).then(res => {
-    data.question = res.data.data.text
+  const res = await api.llm.audioToText({
+    audio: mediaRecorder.getBlob(),
+    rate: new window.AudioContext().sampleRate
   })
+  data.placeholder = '请输入场景描述'
+  data.question = res.text
 }
+
+watch(() => data.question, () => {
+  inputHeight.value = inputRef.value.resizableTextArea.textArea.clientHeight
+  if(data.question.trim().length > 0) {
+    data.errorMsg = ''
+  }
+})
 </script>
 
 <style lang="less" scoped>
 .container {
-  background-color: #fff;
   width: 1000px;
-  height: calc(100% - 110px);
-  // margin: 16px 0px;
-}
-
-button {
-  color: #fff;
-  border-radius: 10px;
-  border: 0px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-}
-.loading {
-    width: 20px !important;
-    height: 20px !important;
-    animation: loading 2s linear infinite;
-}
-@keyframes loading {
-    from {  transform: rotate(0) }
-    to { transform: rotate(360deg) }
+  height: 100%;
+  margin: 16px auto;
 }
 .messages {
-    height: 100%;
     overflow-y: auto;
 }
 .message-content {
     height: calc(100% - 50px)
 }
-	
 .message {
     display: flex;
-    margin-bottom: 10px;
-}
-		
-.message .avatar {
-    width: 50px;
-    height: 50px;
+    margin-bottom: 16px;
+    .message-left {
+        width: 50px;
+        height: 50px;
+        background-color: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-    margin-right: 20px;
-}
-		
-.message .username {
-    font-weight: 600;
-}
-		
-.message .message-body-1 {
-    margin-top: 4px;
-    border: 1px solid #375141;
-    // background-color: #111827;
-    white-space: pre-wrap;
-    overflow-wrap: break-word;
-    padding: 8px;
-    margin-bottom: 4px;
+        margin-right: 16px;
+    }
+
+    .message-right {
+      width: calc(100% - 66px);
+
+      .username {
+          color: #60656E;
+      }
+      .message-body {
+          margin-top: 8px;
+          width: 100%;
+          background-color: #fff;;
+          white-space: pre-wrap;
+          overflow-wrap: break-word;
+          padding: 24px;
+      }
+      .message-body-0 {
+        background: #E6E7EB;
+      }
+      .message-footer {
+        display: flex;
+        border-top: 1px solid #E6E7EB;
+        background-color: #fff;
+        justify-content: space-between;
+        padding: 24px;
+      }
+    }
 }
 	
 .input-box-wrapper {
-    // background-color: #0b0f19;
-    width: 1000px;
-    position: fixed;
-    bottom: 24px;
-}
-.input-box-wrapper .input-box {
-    display: flex;
-    align-items: flex-end;
-}
-		
-.input-box-wrapper .input {
-    border: 1px solid #374151;
-    border-radius: 5px;
-    width: 100%;
-    margin: 0px 4px;
-}
-.input-box-wrapper .voice {
-    box-sizing: border-box;
-    text-align: center;
-    line-height: 40px;
-    height: 40px;
-}
-	
-.recorder {
-    position: fixed;
-    bottom: 80px;
-    width: 1000px;
-    height: 80px;
-    background-color: #0b0f19;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.recorder .circle {
-    position: absolute;
-    background-color: #374151;
-    height: 50px;
-    width: 50px;
-    border-radius: 50px;
-    animation: blur 1s infinite;
-}
-@keyframes blur
-{
-    from { width: 40px; height: 40px; }
-    to { width: 70px; height: 70px; }
-}
-.recorder img {
-    width: 40px;
-    height: 40px;
-    z-index: 1;
-}
-
-.submit {
-    // background-color: #f97316;
+  background-color: #fff;
+  padding: 16px;
+  border-radius: 4px;
+  width: 935px;
+  margin-left: 65px;
+  position: absolute;
+  bottom: 24px;
+  .submit {
     color: #fff;
-    width: 100px;
-    height: 40px;
-}
-
-.audio-button {
-    width: 100px;
-    height: 40px;
+    width: 80px;
+    height: 38px;
+  }
+  .recorder {
     cursor: pointer;
-    // background: linear-gradient(to bottom right, #4b5563 , #374151 );
+    &:hover {
+      color: var(--primary-color)
+    }
+  }
 }
 </style>

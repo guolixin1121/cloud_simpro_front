@@ -250,3 +250,8 @@ export const grant = defineApi({
   reject: { url: '/grant/reject/', method: 'post' },
   apply: { url: '/grant/apply/', method: 'post' }
 })()
+
+export const llm = defineApi({
+  audioToText: { url: '/utils/audio_to_text/', method: 'post', headers: { 'content-type': 'multipart/form-data' } },
+  generate: { url: '/scene/llm/generate/', method: 'post' },
+})()

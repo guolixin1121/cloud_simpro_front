@@ -18,7 +18,7 @@
     </div>
     <div>
       <Table ref="tableRef" :query="query" :columns="columns" :api="scenesetList" :fieldNames="{ label: 'groupName', value: 'id' }"
-        :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
+        :scroll="{ x: 1600, y: 'auto' }" @select="onSelect" >
         <!-- <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'count'">
               <a class="text-blue inline-block w-full" @click="gotoSubPage('/scene/?pid=' + record.id)">{{ record.count }}</a>
@@ -95,13 +95,15 @@ const columns = [
   { dataIndex: 'checkbox', width: 60,
     validator: (data: any) => isOldData(data.groupName),
    },
-  { title: '场景集ID', dataIndex: 'id', width: 150 },
+  { title: '场景集ID', dataIndex: 'id', width: 120 },
   { title: '场景集名称', dataIndex: 'groupName', ellipsis: true },
   { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
-  { title: '来源', dataIndex: 'source', formatter: getMyScenesetSourceName, width: 180 },
-  { title: '场景数量', dataIndex: 'count', width: 180 },
+  { title: '来源', dataIndex: 'source', formatter: getMyScenesetSourceName, width: 150 },
+  { title: '场景数量', dataIndex: 'count', width: 120 },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },
+  { title: '创建者', dataIndex: 'create_user', width: 150 },
+  { title: '修改者', dataIndex: 'update_user', width: 150 },
   {
     title: '操作',
     dataIndex: 'actions',
@@ -112,7 +114,7 @@ const columns = [
         handler: ({ id }: RObject) => gotoSubPage('/scene/?pid=' + id)
       },
       编辑: {
-        validator: ({ source }: any) => isMyScenesetEditable(source),
+        validator: (data: any) => isMyScenesetEditable(data),
         handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
       },
       另存为: (data: RObject) => {

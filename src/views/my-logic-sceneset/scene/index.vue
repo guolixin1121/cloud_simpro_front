@@ -154,6 +154,8 @@ const columns = [
   { title: '来源', dataIndex: 'source', width: 120, formatter: getMyLogicSceneSourceName },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },
+  { title: '创建者', dataIndex: 'create_user', width: 150 },
+  { title: '修改者', dataIndex: 'update_user', width: 150 },
   {
     title: '操作',
     dataIndex: 'actions',
