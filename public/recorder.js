@@ -52,20 +52,20 @@
             },
 
             pcm: function () {
-                // let sampleRate = Math.min(this.inputSampleRate, this.outputSampleRate);
+                let sampleRate = Math.min(this.inputSampleRate, this.outputSampleRate);
                 let sampleBits = Math.min(this.inputSampleBits, this.oututSampleBits);
                 let bytes = this.compress();
                 let dataLength = bytes.length * (sampleBits / 8);
                 let buffer = new ArrayBuffer(dataLength);
                 let data = new DataView(buffer);
-                // let channelCount = 1; //单声道
+                let channelCount = 1; //单声道
                 let offset = 0;
 
-                // let writeString = function (str) {
-                //     for (let i = 0; i < str.length; i++) {
-                //         data.setUint8(offset + i, str.charCodeAt(i));
-                //     }
-                // }
+                let writeString = function (str) {
+                    for (let i = 0; i < str.length; i++) {
+                        data.setUint8(offset + i, str.charCodeAt(i));
+                    }
+                }
                 if (sampleBits === 8) {
                     for (let i = 0; i < bytes.length; i++, offset++) {
                         let s = Math.max(-1, Math.min(1, bytes[i]));
