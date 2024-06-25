@@ -7,57 +7,6 @@
       <span>场景查看</span>
     </template>
   </div>
-  <div style="height: 100%;">
-    <div class="container" v-show="!isPreview">
-      <div class="messages" :style="{ height: 'calc(100% - 150px - '+ inputHeight +'px)'}">
-        <!-- 欢迎语 -->
-        <div class="message">
-          <div class="message-left">
-            <img src="@/assets/images/bot_avatar.png" class="avatar"/>
-          </div>
-          <div class="message-right">
-            <div class="username">赛目科技大模型</div>
-            <div class="message-body">
-              Hi, 我是赛目科技的大模型，很高兴为您服务
-            </div>
-          </div>
-        </div>
-        <!-- 聊天记录 -->
-        <div class="messages-content">
-          <div v-for="(chat, index) in data.chats" :key="index" class="message">
-            <div class="message-left">
-              <img src="@/assets/images/me_avatar.png" class="avatar" v-if="chat.type == 0"/>
-              <img src="@/assets/images/bot_avatar.png" class="avatar" v-else />
-            </div>
-            <div class="message-right">
-              <div class="username">{{ chat.type == 0 ? 'YOU' : '赛目科技大模型' }}</div>
-              <div class="message-body" :class="'message-body-' + chat.type">
-                {{ chat.message }}
-              </div>
-              <div class="message-footer" v-if="isSaimo(chat.type) && !data.isWriting">
-                <div>
-                  场景文件保存路径：我的场景-具体场景-赛目大模型场景集-{{ chat.scene?.adsName }}
-                </div>
-                <a @click="preview(chat)">查看</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="input-box-wrapper">
-        <a-textarea ref="inputRef" :bordered="false" :auto-size="{ minRows: 1, maxRows: 5 }" :placeholder="data.placeholder" 
-          class="input" v-model:value="data.question"></a-textarea>
-        <p class="error" style="margin-left: 8px;" v-if="data.errorMsg">请输入您的问题</p>
-        <div class="flex justify-between items-center mt-2">
-          <svg-icon icon="recorder-stop" class="recorder" @click="stopRecording" v-if="data.isRecording"></svg-icon>
-          <svg-icon icon="recorder" class="recorder" @click="startRecording" v-else></svg-icon>
-          <a-button type="primary" size="small" class="submit" @click="onSend" :disabled="data.isWriting"
-            :loading="data.isSubmitting">发送</a-button>
-        </div>
-      </div>
-    </div>
-    <iframe :src="previewUrl" v-if="isPreview"></iframe>
-  </div>
 </template>
 
 <script lang="ts" setup>
@@ -65,10 +14,12 @@ let mediaRecorder: MediaRecorder
 HZRecorder.get((rec: MediaRecorder) => mediaRecorder = rec)
 
 const inputRef = ref()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const isSaimo = (type: number) => type == 1
 
 const isPreview = ref(false)
 const previewUrl = ref()
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function preview(chat: Chat) {
   isPreview.value = true
   previewUrl.value = '/scene-simulation-client/#/overview/?type=2&id=' + chat.scene?.id
@@ -86,6 +37,7 @@ const data = reactive<LLMData>({
   errorMsg: ''
 })
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const onSend = async () => {
   if(data.question.trim().length == 0) {
     data.errorMsg = '请输入您的问题'
@@ -157,12 +109,14 @@ const scroll = () => {
 }
 
 // 录音
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function startRecording() {
   if(data.isWriting || data.isSubmitting) return
   mediaRecorder.start()
   data.isRecording = true
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function stopRecording() {
   mediaRecorder.stop()
   data.isRecording = false
