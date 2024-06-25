@@ -48,7 +48,7 @@
         <a-textarea ref="inputRef" :bordered="false" :auto-size="{ minRows: 1, maxRows: 5 }" :placeholder="data.placeholder" 
           class="input" v-model:value="data.question"></a-textarea>
         <p class="error" style="margin-left: 8px;" v-if="data.errorMsg">请输入您的问题</p>
-        <div class="flex justify-between items-center mt-2">
+        <div class="mt-2">
           <template v-if="canRecording">
             <svg-icon icon="recorder-stop" class="recorder" @click="stopRecording" v-if="data.isRecording"></svg-icon>
             <svg-icon icon="recorder" class="recorder" @click="startRecording" v-else></svg-icon>
@@ -256,9 +256,11 @@ watch(() => data.question, () => {
     color: #fff;
     width: 80px;
     height: 38px;
+    float: right;
   }
   .recorder {
     cursor: pointer;
+    float: left;
     &:hover {
       color: var(--primary-color)
     }
