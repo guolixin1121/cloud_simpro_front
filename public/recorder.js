@@ -272,8 +272,8 @@
                         }
                     });
             } else {
-                HZRecorder.throwError('当前浏览器不支持录音功能。');
-                return;
+                // HZRecorder.throwError('当前浏览器不支持录音功能。');
+                // return;
             }
         }
     }
