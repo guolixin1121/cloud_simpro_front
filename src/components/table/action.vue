@@ -4,10 +4,10 @@
       <!-- 删除列 -->
       <a-popconfirm v-if="key === '删除'"
         :title="getDeleteTip(scope, key)" @confirm="onHandler(scope, key)">
-        <a class="text-blue mr-2">{{ key }}</a>
+        <a class="text-link mr-2">{{ key }}</a>
       </a-popconfirm>
       <!-- 其他列 -->
-      <a v-else class="text-blue mr-2" @click="onHandler(scope, key)">
+      <a v-else class="text-link mr-2" @click="onHandler(scope, key)">
         {{ key }}
       </a>
     </template>

@@ -15,9 +15,9 @@
             <template v-for="action in Object.keys(column.actions || {})" :key="action">
               <template v-if="hasPermission(column, row, action)">
                 <a-popconfirm v-if="action === '删除'" title="是否删除？" @confirm="onHandler(column, row, action)">
-                  <a class="text-blue mr-2">删除</a>
+                  <a class="text-link mr-2">删除</a>
                 </a-popconfirm>
-                <a v-else class="text-blue mr-2" @click="onHandler(column, row, action)">
+                <a v-else class="text-link mr-2" @click="onHandler(column, row, action)">
                   {{ action }}
                 </a>
               </template>

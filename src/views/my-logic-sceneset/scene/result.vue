@@ -31,7 +31,7 @@
           {{ '我的场景-具体场景-' + record.result_scene_set?.name }}
         </template>
         <template v-if="column.dataIndex == 'scene_count'">
-          <a class="text-blue inline-block w-full" @click="() => gotoScene(record)">{{ text }}</a>
+          <a class="text-link inline-block w-full" @click="() => gotoScene(record)">{{ text }}</a>
         </template> 
       </template>
     </Table>

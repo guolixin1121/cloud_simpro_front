@@ -3,7 +3,7 @@
     <div class="ant-transfer-list">
       <div class="flex justify-between ant-transfer-list-title">
         <span>{{ titles[0] }}</span>
-        <!-- <span class=" text-blue cursor-pointer" @click="onCheckedAll">全选</span> -->
+        <!-- <span class=" text-link cursor-pointer" @click="onCheckedAll">全选</span> -->
       </div>
       <a-input-search class="my-2" placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
       <div style="height: calc(100% - 40px); overflow: auto" @scroll="onScroll">
@@ -15,7 +15,7 @@
     <div class="ant-transfer-list">
       <div class="ant-transfer-list-title mt-1 flex justify-between">
         <span>{{ titles[1] }}({{ selectedNodes?.length }})</span>
-        <span class="text-blue cursor-pointer" @click="onRemoveAll">删除全部</span>
+        <span class="text-link cursor-pointer" @click="onRemoveAll">删除全部</span>
       </div>
       <ul class="scroll-box" style="height: calc(100% - 40px); overflow: auto">
         <li class="transfer-checked-item flex justify-between items-center" v-for="item in selectedNodes" :key="item.key">

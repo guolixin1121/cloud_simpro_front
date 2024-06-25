@@ -38,7 +38,7 @@
                 <div>
                   场景文件保存路径：我的场景-具体场景-赛目大模型场景集-{{ chat.scene?.adsName }}
                 </div>
-                <a @click="preview(chat)">查看</a>
+                <a class="text-link" @click="preview(chat)">查看</a>
               </div>
             </div>
           </div>

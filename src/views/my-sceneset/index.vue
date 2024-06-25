@@ -21,7 +21,7 @@
         :scroll="{ x: 1600, y: 'auto' }" @select="onSelect" >
         <!-- <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'count'">
-              <a class="text-blue inline-block w-full" @click="gotoSubPage('/scene/?pid=' + record.id)">{{ record.count }}</a>
+              <a class="text-link inline-block w-full" @click="gotoSubPage('/scene/?pid=' + record.id)">{{ record.count }}</a>
           </template>
         </template> -->
       </Table>
