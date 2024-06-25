@@ -13,6 +13,7 @@ interface LLMData {
 
 declare class HZRecorder {
   static get: (callback: (recorder: MediaRecorder) => {}) => {}
+  static canRecording: boolean
 }
 
 interface MediaRecorder {

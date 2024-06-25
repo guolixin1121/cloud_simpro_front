@@ -49,8 +49,10 @@
           class="input" v-model:value="data.question"></a-textarea>
         <p class="error" style="margin-left: 8px;" v-if="data.errorMsg">请输入您的问题</p>
         <div class="flex justify-between items-center mt-2">
-          <svg-icon icon="recorder-stop" class="recorder" @click="stopRecording" v-if="data.isRecording"></svg-icon>
-          <svg-icon icon="recorder" class="recorder" @click="startRecording" v-else></svg-icon>
+          <template v-if="canRecording">
+            <svg-icon icon="recorder-stop" class="recorder" @click="stopRecording" v-if="data.isRecording"></svg-icon>
+            <svg-icon icon="recorder" class="recorder" @click="startRecording" v-else></svg-icon>
+          </template>
           <a-button type="primary" size="small" class="submit" @click="onSend" :disabled="data.isWriting"
             :loading="data.isSubmitting">发送</a-button>
         </div>
@@ -62,11 +64,8 @@
 
 <script lang="ts" setup>
 let mediaRecorder: MediaRecorder
-try {
-  HZRecorder.get((rec: MediaRecorder) => mediaRecorder = rec)
-} catch(err) {
-  console.log(err)
-}
+HZRecorder.get((rec: MediaRecorder) => mediaRecorder = rec)
+const canRecording = HZRecorder.canRecording
 
 const inputRef = ref()
 const isSaimo = (type: number) => type == 1
