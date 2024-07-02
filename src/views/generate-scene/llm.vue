@@ -42,7 +42,8 @@
       </div>
       <div class="input-box-wrapper">
         <a-textarea ref="inputRef" :bordered="false" :auto-size="{ minRows: 1, maxRows: 5 }" :placeholder="data.placeholder" 
-          class="input" v-model:value="data.question"></a-textarea>
+          class="input" v-model:value="data.question"
+          :allow-clear="true"></a-textarea>
         <p class="error" style="margin-left: 8px;" v-if="data.errorMsg">请输入文字</p>
         <div class="mt-2">
           <template v-if="canRecording">
@@ -92,6 +93,7 @@ const onSend = async () => {
     data.isSubmitting = true
     const res = await api.llm.generate({ message: data.question.trim()})
     writeChats(res)
+    data.question = ''
   } finally {
     data.isSubmitting = false
   }
@@ -111,22 +113,25 @@ const writeChats = (answer: { xml?: any, scene: Scene}) => {
   })
 
   // 显示答案
-  const isValidXml = answer.xml.indexOf('<?xml') > -1
+  const isValidScene = answer.xml.indexOf('<?xml') > -1
   data.chats.push({
-    message: isValidXml ? '' : answer.xml,
+    message: isValidScene ? '' : answer.xml,
     type: 1,
     scene: answer.scene
   })
-  if(isValidXml) {
-    data.isWriting = true
+  if(isValidScene) {
+    // 逐行输出场景文件
     writeLine(0)
   }
+  scroll()
 }
 // 逐行显示答案
 const writeLine = (index: number) => {
-  // 检查是否写完
+  data.isWriting = true
   const answerXml = data.answer?.xml
   if(!answerXml) return 
+
+  // 检查是否写完
   if(index > answerXml.length - 1) {
     data.isWriting = false
     return
@@ -139,7 +144,7 @@ const writeLine = (index: number) => {
   setTimeout(() => {
     writeLine(++index)
     scroll()
-  }, 50)
+  }, 20)
 }
 
 const scroll = () => {
@@ -178,7 +183,7 @@ async function stopRecording() {
 
 watch(() => data.question, () => {
   inputHeight.value = inputRef.value.resizableTextArea.textArea.clientHeight
-  if(data.question.trim().length > 0) {
+  if(data.question.length > 0) {
     data.errorMsg = ''
   }
 })

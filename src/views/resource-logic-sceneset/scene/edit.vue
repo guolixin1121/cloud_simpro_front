@@ -15,7 +15,7 @@
           <ch-input v-model:value="formState.name" :maxlength="160" placeholder="请输入场景名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景描述" name="desc">
-          <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入场景描述" :maxlength="255" rows="5"></ch-input>
+          <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入场景描述" :maxlength="1000" rows="5"></ch-input>
         </a-form-item>
         <a-form-item label="关联地图" v-if="!isAdd" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
           {{ formState.mapName + '_' + formState.mapVersion }}
@@ -78,10 +78,10 @@ const actionText = isAdd ? '上传' : '修改'
 const title =  actionText + '逻辑场景'
 
 const router = useRouter()
-const sceneset = ref()
+const sceneset = store.catalog.sceneCatalog
 const baseApi = api
 const currentApi = api.loginsceneResource
-const goback = () => router.push('/resource-logic-sceneset/scene/?pid=' + sceneset.value?.id)
+const goback = () => router.push('/resource-logic-sceneset/scene/?pid=' + sceneset.id)
 
 const formState = reactive({
   name: '',
@@ -104,7 +104,7 @@ const add = async () => {
   loading.value = true
   
   const params = {
-    logic_scene_set_resource: sceneset.value.id,
+    logic_scene_set_resource: sceneset.id,
     source: 0,
     name: formState.name,
     desc: formState.desc,
@@ -157,7 +157,6 @@ const getEditData = async () => {
     formState.scene_url = data.scene_url
     formState.config_url = data.config_url
     formState.can_edit = data.can_edit
-    sceneset.value = data.logic_scene_set_resource
   }
 }
 getEditData()
