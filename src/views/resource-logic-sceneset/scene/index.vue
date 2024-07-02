@@ -1,8 +1,6 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>场景资源库</span>
-    <a @click="goback()">逻辑场景</a>
+    <router-link to="/resource-logic-sceneset/">逻辑场景</router-link>
     <span>{{ selectedSceneset?.name }}</span>
   </div>  
 
@@ -26,13 +24,13 @@
     </a-spin>
   </div>
 
-  <a-modal ref="modalForm" v-model:visible="modal.visible" title="批量申请场景集授权"
+  <a-modal ref="modalForm" v-model:visible="modal.visible" title="批量申请场景授权"
     :footer="null" :destroyOnClose="true">
       <a-form ref="modalForm" class="modal-content" :model="modal" 
         :labelCol ="{ style: { width: '100px' } }" 
         style="padding-bottom: 0px"
         @finish="onBatchApply">
-        <span>已选择{{ checkedItems.length }}个场景集，请填写申请原因：</span>
+        <span>已选择{{ checkedItems.length }}个场景，请填写申请原因：</span>
         <a-form-item label="" name="reason" style="margin-top: 8px">
           <ch-input type="textarea" v-model:value="modal.reason" 
             :maxlength="255" placeholder="请输入申请原因" rows="4"></ch-input>
@@ -48,8 +46,6 @@
 <script setup lang="ts">
 import { gotoSubPage } from '@/utils/tools'
 
-const router = useRouter()
-const goback = () => router.push('/resource-logic-sceneset/')
 const currentApi = api.loginsceneResource
 const user = store.user
 const isAdmin = user.isAdmin()
@@ -68,7 +64,7 @@ loadSceneset()
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入逻辑场景ID或名称' },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景ID或名称' },
   {
     label: '标签',
     key: 'labels',
@@ -107,7 +103,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 150,
+    width: 100,
     actions: {
       申请授权: {
         validator: (data: any) => !isAdmin && data.can_apply,

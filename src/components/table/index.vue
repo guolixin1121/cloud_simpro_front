@@ -205,6 +205,7 @@ const refresh = (option: any) => {
   const deletedRows = option?.deletedRows || 1 
   if (dataSource?.value?.length === deletedRows) {
     const page = current.value > 1 ? current.value - 1 : current.value
+    current.value = page
     run({ ...props.query, page, size }, slient)
     return
   }

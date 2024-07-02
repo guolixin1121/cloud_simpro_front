@@ -1,7 +1,5 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>场景资源库</span>
     <router-link to="/resource-logic-sceneset/">逻辑场景</router-link>
     <a @click="goback()">授权任务管理</a>
     <span>任务详情</span>

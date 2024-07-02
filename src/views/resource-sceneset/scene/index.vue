@@ -1,8 +1,6 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>场景资源库</span>
-    <a @click="goback()">具体场景</a>
+    <router-link to="/resource-sceneset/">具体场景</router-link>
     <span>{{ selectedSceneset?.name }}</span>
   </div>
   <sceneset :sceneset="selectedSceneset"></sceneset>
@@ -12,7 +10,7 @@
       <span class="title">具体场景列表</span>
       <div>
         <batch-button v-if="isAdmin" :disabled="!checkedItems.length"
-         :tips="'您已勾选' + checkedItems.length+ '个场景，确定要删除所有勾选的场景吗？'"
+         :tips="'已勾选' + checkedItems.length+ '个场景，是否删除所有勾选场景？'"
          :api="onBatchDelete"></batch-button>
         <a-button v-if="isAdmin && selectedSceneset?.edit_enable"  type="primary" :disabled="checkedItems.length > 0"
             @click="gotoSubPage('/edit/0')">上传具体场景</a-button>
@@ -24,15 +22,13 @@
     </a-spin>
   </div>
 
-  <VncModal ref="vncModal"></VncModal>
-
-  <a-modal ref="modalForm" v-model:visible="modal.visible" title="批量申请场景集授权"
+  <a-modal v-model:visible="modal.visible" title="批量申请场景授权"
     :footer="null" :destroyOnClose="true">
       <a-form ref="modalForm" class="modal-content" :model="modal" 
         :labelCol ="{ style: { width: '100px' } }" 
         style="padding-bottom: 0px"
         @finish="onBatchApply">
-        <span>已选择{{ checkedItems.length }}个场景集，请填写申请原因：</span>
+        <span>已选择{{ checkedItems.length }}个场景，请填写申请原因：</span>
         <a-form-item label="" name="reason" style="margin-top: 8px">
           <ch-input type="textarea" v-model:value="modal.reason" 
             :maxlength="255" placeholder="请输入申请原因" rows="4"></ch-input>
@@ -46,14 +42,8 @@
 </template>
 
 <script setup lang="ts">
-// import { gotoVnc } from '@/utils/vnc'
-import VncModal from '@/components/vnc-modal/index.vue'
-import { gotoSubPage, openLink } from '@/utils/tools'
+import { gotoSubPage } from '@/utils/tools'
 
-const router = useRouter()
-const goback = () => router.push('/resource-sceneset/')
-
-const vncModal = ref()
 const currentApi = api.sceneResource
 const user = store.user
 const isAdmin = user.isAdmin()
@@ -72,7 +62,7 @@ loadSceneset()
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入具体场景ID或名称' },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景ID或名称' },
   {
     label: '标签',
     key: 'labels',
@@ -80,12 +70,10 @@ const formItems = ref<SearchFormItem[]>([
     mode: 'multiple',
     api: api.tags.getList,
     query: { tree: 1, tag_type: 3, size: 100 }, // tree无法分页，一次性获取所有
-    placeholder: '请选择标签，最多选择9个',
     fieldNames: { label: 'display_name', value: 'name' },
     defaultValue: [''],
     multiple: true
   },
-  // { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
 
 const query: Query = ref({})
@@ -111,22 +99,22 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 150,
+    width: 100,
     actions: {
       申请授权: {
         validator: (data: any) => !isAdmin && data.apply_enable,
         handler: (data: any) => gotoSubPage('/apply/' + data.id)
       },
-      查看: (data: any) => gotoSubPage('/view/' + data.id),
-      场景预览: (data: any) => openLink('/scene-simulation-client/#/overview/?type=1&id=' + data.id),
+      查看: (data: any) => gotoSubPage('/preview/' + data.id),
       编辑: {
         validator: (data: any) => isAdmin && data.edit_enable,
         handler: (data: any) => gotoSubPage('/edit/' + data.id)
       },
       删除: {
+        tip: '场景删除后不可恢复，是否删除？',
         validator: (data: any) => isAdmin && data.delete_enable,
         handler: async ({ id }: { id: string }) => await currentApi.deleteScene({id: [id] })
-      }
+      },
     }
   }
 ]

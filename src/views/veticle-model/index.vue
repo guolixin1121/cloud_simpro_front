@@ -30,7 +30,7 @@
           <span v-else>全部</span>
         </template>
         <template v-if="column.dataIndex == 'version_count'">
-          <a class="text-blue inline-block w-full" @click="gotoVersion(record)">
+          <a class="text-link inline-block w-full" @click="gotoVersion(record)">
             {{ record.version_count }}
           </a>
         </template>

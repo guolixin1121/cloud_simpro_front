@@ -1,7 +1,5 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-<span>场景资源库</span>
     <router-link to="/resource-sceneset/">具体场景</router-link>
     <a @click='goback()'>{{ sceneset?.name }}</a>
     <span class="breadcrumb--current">{{ title }}</span>
@@ -17,7 +15,7 @@
           <ch-input v-model:value="formState.name" :maxlength="160" placeholder="请输入场景名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景描述" name="desc">
-          <ch-input type="textarea" v-model:value="formState.desc" :maxlength="255" rows="5" placeholder="请输入场景描述"></ch-input>
+          <ch-input type="textarea" v-model:value="formState.desc" :maxlength="1000" rows="5" placeholder="请输入场景描述"></ch-input>
         </a-form-item>
         <a-form-item label="关联地图" name="mapVersion" :rules="[{ required: isAdd, message: '请选择关联地图' }]">
           <a-form-item-rest v-if="isAdd" >
@@ -73,7 +71,7 @@ const { id } = route.params
 const isAdd = id === '0'
 const actionText = isAdd ? '上传' : '修改'
 const title =  actionText + '具体场景'
-const sceneset = ref({id: '', name: ''})
+const sceneset = store.catalog.sceneCatalog
 
 const baseApi = api
 const currentApi = baseApi.sceneResource
@@ -92,14 +90,14 @@ const formState = reactive({
 })
 const loading = ref(false)
 const router = useRouter()
-const goback = () => router.push('/resource-sceneset/scene/?pid=' + sceneset.value.id)
+const goback = () => router.push('/resource-sceneset/scene/?pid=' + sceneset.id)
 
 const add = async () => {
   const { labels } = formState
   const params = {
     name: formState.name,
     desc: formState.desc,
-    scene_set: sceneset.value.id,
+    scene_set: sceneset.id,
     mapName: formState.map ? (formState.map as unknown as SelectOption).label : formState.mapName,
     mapVersion: formState.mapVersion,
     xosc: formState.xosc,
@@ -151,8 +149,6 @@ const getEditData = async () => {
     formState.adsUrl = scene.xosc_key
     formState.desc = scene.desc
     formState.can_edit = scene.can_edit
-    sceneset.value.id = scene.scene_set_id
-    sceneset.value.name = scene.scene_set_name
   }
 }
 getEditData()

@@ -1,9 +1,4 @@
 <template>
-  <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>场景资源库</span>
-    <span>逻辑场景</span>
-  </div>
   <search-form :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
@@ -15,18 +10,13 @@
            :tips="'已勾选' + checkedItems.length+ '个场景集，是否删除所有勾选场景集及其关联数据？'"></batch-button>
           <a-button type="primary" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
         </template>
-        <a-button v-else type="primary" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
+        <a-button v-else :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
         <a-button type="primary" @click="gotoSubPage('/apply-manage/')">授权任务管理</a-button>
       </div>
     </div>
     <div>
       <Table ref='tableRef' :query="query" :columns="columns" :api="currentApi.getScenesetList" :fieldNames="{ label: 'groupName', value: 'id' }"
         :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
-        <!-- <template #bodyCell="{ column, record }">
-          <template v-if="column.dataIndex == 'count'">
-              <a class="text-blue inline-block w-full" @click="gotoSubPage('/scene/?pid=' + record.id)">{{ record.count }}</a>
-          </template>
-        </template> -->
       </Table>
     </div>
   </div>

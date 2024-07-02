@@ -22,7 +22,7 @@
           @select="onSelect" >
           <template #bodyCell="{ column, record }">
             <template v-if="column.dataIndex == 'versionCount'">
-              <a class="text-blue inline-block w-full" @click="gotoVersion(record)">
+              <a class="text-link inline-block w-full" @click="gotoVersion(record)">
                 {{ record.versionCount }}
               </a>
             </template>

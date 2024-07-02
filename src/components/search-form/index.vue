@@ -164,7 +164,7 @@ const emitSearch = (fromFirstPage: boolean = true) => {
  * */
 const getComponent = (name: string) =>
   name
-    .split('-')
+    .split('--')
     .map(n => n.substring(0, 1).toUpperCase() + n.substring(1))
     .join('') as keyof typeof Ant
 

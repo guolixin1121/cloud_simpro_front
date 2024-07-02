@@ -34,7 +34,7 @@
           <router-link :to="`/simpro-result/view/${record.id}`" class="name mr-2">{{ record.name }}</router-link>
         </template>
         <template v-if="column.dataIndex == 'is_passed'">
-          {{ record.is_passed === null ? '-' : record.is_passed ? '通过' : '未通过' }}
+          {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '未通过' }}
         </template>
         <template v-if="column.dataIndex == 'status'">
           <span :class="'task-status task-status--' + record.status">{{ getResultStatus(record.status) }}</span>

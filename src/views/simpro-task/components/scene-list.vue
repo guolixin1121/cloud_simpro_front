@@ -17,8 +17,8 @@
       <div class="ant-transfer-list">
         <div class="ant-transfer-list-title mt-1 flex justify-between">
           <span>场景(累计选中{{ selectedScenes?.length }}项)</span>
-          <span class="text-blue cursor-pointer" v-if="!isAllChecked" @click="onAllChecked">全选</span>
-          <span class="text-blue cursor-pointer" v-else @click="onAllUnchecked">取消选中</span>
+          <span class="text-link cursor-pointer" v-if="!isAllChecked" @click="onAllChecked">全选</span>
+          <span class="text-link cursor-pointer" v-else @click="onAllUnchecked">取消选中</span>
         </div>
         <div class="scroll-box" style="height: calc(100% - 70px); overflow: auto">
           <a-spin :spinning="sceneLoading" v-if="scenes.length" >

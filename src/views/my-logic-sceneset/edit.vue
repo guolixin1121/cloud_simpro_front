@@ -1,7 +1,5 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>我的场景</span>
     <a @click="goback()">逻辑场景</a>
     <span>{{ title }}</span>
   </div>
@@ -16,7 +14,7 @@
           <ch-input v-model:value="formState.name" :maxlength="160" placeholder="请输入场景集名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景集描述" name="desc">
-          <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入场景集描述" :maxlength="255" rows="5"></ch-input>
+          <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入场景集描述" :maxlength="1000" rows="5"></ch-input>
         </a-form-item>
         <a-form-item label="标签">
           <tree-transfer

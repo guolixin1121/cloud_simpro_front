@@ -1,7 +1,5 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>场景资源库</span>
     <a @click="goback()">逻辑场景</a>
     <span>授权任务管理</span>
   </div>
@@ -29,8 +27,7 @@
 
   <a-modal title="批量审批" v-model:visible="modalVisible" :footer="null">
     <div class="modal-content">
-      <p>已勾选{{ checkedItems.length }}个任务，是否批准全部任务申请？</p>
-      <p>审批之后无法修改，请谨慎操作。</p>
+      <p>已勾选{{ checkedItems.length }}个任务，是否批准全部任务申请？审批之后无法修改，请谨慎操作。</p>
     </div>
     <div class="modal-buttons">
       <a-button @click="onBatchReject" :loading="isRejecting">驳回</a-button>
@@ -48,7 +45,7 @@ const router = useRouter()
 const query = ref({})
 const onSearch = (data: Query) => (query.value = data)
 const goback = () => router.push('/resource-logic-sceneset/')
-const activeKey = useSessionStorage('approve-manage-active-key',1)
+const activeKey = useSessionStorage(router.currentRoute.value.path + 'tab-active-key',1)
 const listApi = (params: any) => api.grant.getList({...params, type: activeKey.value == 1 ? 1 : 2})
 
 const isWaitingForApproval = (status: number) => status == 1
@@ -73,6 +70,7 @@ const columns = computed(() => {
   const logicColumns = activeKey.value == 1 ? [
     { title: '场景集ID', dataIndex: 'resource_id', width: 120 },
     { title: '场景集名称', dataIndex: 'resource_name', width: 200, ellipsis: true },
+    { title: '购买场景数量', dataIndex: 'scene_count', width: 120 },
   ] : [
     { title: '场景ID', dataIndex: 'resource_id', width: 120 },
     { title: '场景名称', dataIndex: 'resource_name', width: 200, ellipsis: true },

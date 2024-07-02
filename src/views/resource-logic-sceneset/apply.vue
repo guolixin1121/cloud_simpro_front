@@ -1,7 +1,5 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-<span>场景资源库</span>
     <a @click="goback()">逻辑场景</a>
     <span>申请授权</span>
   </div>
@@ -10,6 +8,9 @@
     <a-spin :spinning="dataLoading">
       <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 55%"
         @finish="add">
+        <a-form-item label="场景集ID" name="id" >
+          <span>{{ id }}</span>
+        </a-form-item>
         <a-form-item label="场景集名称" name="name" >
           <span class="break-text">{{ formState.name }}</span>
         </a-form-item>

@@ -1,10 +1,4 @@
 <template>
-  <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>我的场景</span>
-    <span>具体场景</span>
-  </div>
-
   <search-form :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
@@ -18,12 +12,7 @@
     </div>
     <div>
       <Table ref="tableRef" :query="query" :columns="columns" :api="scenesetList" :fieldNames="{ label: 'groupName', value: 'id' }"
-        :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
-        <!-- <template #bodyCell="{ column, record }">
-          <template v-if="column.dataIndex == 'count'">
-              <a class="text-blue inline-block w-full" @click="gotoSubPage('/scene/?pid=' + record.id)">{{ record.count }}</a>
-          </template>
-        </template> -->
+        :scroll="{ x: 1700, y: 'auto' }" @select="onSelect" >
       </Table>
     </div>
   </div>
@@ -74,7 +63,7 @@ const formItems = ref<SearchFormItem[]>([
     mode: 'multiple',
     api: api.tags.getList,
     query: { tree: 1, tag_type: 2, size: 100 }, // tree无法分页，一次性获取所有
-    placeholder: '请选择标签，最多选择9个',
+    placeholder: '请选择标签',
     fieldNames: { label: 'display_name', value: 'name' },
     defaultValue: [''],
     multiple: true
@@ -82,7 +71,6 @@ const formItems = ref<SearchFormItem[]>([
 const query = ref({})
 const onSearch = (data: Query) => (query.value = data)
 
-/****** 表格区域 */
 const modal = reactive({
   cloneVisible: false,
   sourceData: {} as RObject,
@@ -90,18 +78,20 @@ const modal = reactive({
 })
 
 // 判断是否为旧的场景集，不可被删除和编辑
-const isOldData = (name: string) => name !== 'SOTIF' && name!= '公共场景集'
+const isEditable = ({ groupName, create_user}: any) => ['SOTIF', '公共场景集' , '赛目大模型'].indexOf(groupName) == -1 && create_user == user.user.username 
 const columns = [
   { dataIndex: 'checkbox', width: 60,
-    validator: (data: any) => isOldData(data.groupName),
+    validator: (data: any) => isEditable(data),
    },
-  { title: '场景集ID', dataIndex: 'id', width: 150 },
+  { title: '场景集ID', dataIndex: 'id', width: 120 },
   { title: '场景集名称', dataIndex: 'groupName', ellipsis: true },
   { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
-  { title: '来源', dataIndex: 'source', formatter: getMyScenesetSourceName, width: 180 },
-  { title: '场景数量', dataIndex: 'count', width: 180 },
+  { title: '来源', dataIndex: 'source', formatter: getMyScenesetSourceName, width: 150 },
+  { title: '场景数量', dataIndex: 'count', width: 120 },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },
+  { title: '创建者', dataIndex: 'create_user', width: 150 },
+  { title: '修改者', dataIndex: 'update_user', width: 150 },
   {
     title: '操作',
     dataIndex: 'actions',
@@ -112,7 +102,7 @@ const columns = [
         handler: ({ id }: RObject) => gotoSubPage('/scene/?pid=' + id)
       },
       编辑: {
-        validator: ({ source }: any) => isMyScenesetEditable(source),
+        validator: (data: any) => isMyScenesetEditable(data),
         handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
       },
       另存为: (data: RObject) => {
@@ -122,7 +112,7 @@ const columns = [
       },
       删除: {
         tip: "场景集删除后，关联数据（场景、地图）将会一起删除，是否删除？",
-        validator: (data: any) => isOldData(data.groupName),
+        validator: (data: any) => isEditable(data),
         handler: async ({ id }: { id: string }) => await currentApi.delete(id)
       }
     }

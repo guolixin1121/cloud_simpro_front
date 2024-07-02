@@ -3,7 +3,7 @@
     <div class="ant-transfer-list">
       <div class="flex justify-between ant-transfer-list-title">
         <span>{{ titles[0] }}</span>
-        <!-- <span class=" text-blue cursor-pointer" @click="onCheckedAll">全选</span> -->
+        <!-- <span class=" text-link cursor-pointer" @click="onCheckedAll">全选</span> -->
       </div>
       <a-input-search class="my-2" placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
       <div style="height: calc(100% - 40px); overflow: auto" @scroll="onScroll">
@@ -15,7 +15,7 @@
     <div class="ant-transfer-list">
       <div class="ant-transfer-list-title mt-1 flex justify-between">
         <span>{{ titles[1] }}({{ selectedNodes?.length }})</span>
-        <span class="text-blue cursor-pointer" @click="onRemoveAll">删除全部</span>
+        <span class="text-link cursor-pointer" @click="onRemoveAll">删除全部</span>
       </div>
       <ul class="scroll-box" style="height: calc(100% - 40px); overflow: auto">
         <li class="transfer-checked-item flex justify-between items-center" v-for="item in selectedNodes" :key="item.key">
@@ -25,7 +25,7 @@
       </ul>
     </div>
   </div>
-  <div v-if="isExceedLimit" style="color: #ff4d4f">最多选择9个</div>
+  <div v-if="isExceedLimit" style="color: #ff4d4f">最多选择{{maxCount}}个</div>
 </template>
 
 <script lang="ts" setup>
@@ -33,6 +33,7 @@ import { watchOnce } from '@vueuse/core'
 import 'ant-design-vue/es/transfer/style/index.css'
 import { TreeDataItem } from 'ant-design-vue/lib/tree'
 
+const maxCount = 50
 const emits = defineEmits(['update:targetKeys'])
 const props = defineProps({
   titles: {
@@ -94,7 +95,7 @@ const onChecked = (_checkedKeys: any, e: any) => {
   isExceedLimit.value = false
   let checkedNodes = e.checkedNodes.filter((item: any) => item.isTag)
   checkedNodes = getSelectedNode(checkedNodes)
-  if (checkedNodes.length > 9) {
+  if (checkedNodes.length > maxCount) {
     isExceedLimit.value = true
     checkedKeys.value = [...checkedKeysBackup.value]
   } else {
