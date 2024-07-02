@@ -1,10 +1,14 @@
 <template>
   <div class="breadcrumb">
     <router-link to="/generate-scene/">场景生成</router-link>
-    <span>语义生成</span>
+    <span v-if="!isPreview">语义生成</span>
+    <template v-else>
+      <span class=" cursor-pointer" @click="isPreview = false">语义生成</span>
+      <span>{{ previewSceneName }}</span>
+    </template>
   </div>
   <div style="height: 100%;">
-    <div class="container">
+    <div class="container" v-show="!isPreview">
       <div class="messages" :style="{ height: 'calc(100% - 150px - '+ inputHeight +'px)'}">
         <!-- 欢迎语 -->
         <div class="message">
@@ -14,7 +18,7 @@
           <div class="message-right">
             <div class="username">赛目科技大模型</div>
             <div class="message-body">
-              HI，我是赛目科技的大模型，很高兴为您服务。
+              Hi, 我是赛目科技的大模型，很高兴为您服务
             </div>
           </div>
         </div>
@@ -30,7 +34,7 @@
               <div class="message-body" :class="'message-body-' + chat.type">
                 {{ chat.message }}
               </div>
-              <div class="message-footer" v-if="showScenePath(chat)">
+              <div class="message-footer" v-if="isSaimo(chat.type) && !data.isWriting">
                 <div>
                   场景文件保存路径：我的场景-具体场景-{{ chat.scene?.sceneset_name }}-{{ chat.scene?.adsName }}
                 </div>
@@ -56,6 +60,7 @@
         </div>
       </div>
     </div>
+    <iframe :src="previewUrl" v-if="isPreview"></iframe>
   </div>
 </template>
 
@@ -66,11 +71,15 @@ const canRecording = HZRecorder.canRecording
 
 const user = store.user.user
 const inputRef = ref()
-const showScenePath = (chat: Chat) => chat.type == 1 && chat.scene && !data.isWriting
+const isSaimo = (type: number) => type == 1
 
-const router = useRouter()
+const isPreview = ref(false)
+const previewUrl = ref()
+const previewSceneName = ref()
 function preview(chat: Chat) {
-  router.push('/my-sceneset/scene/preview/' + chat.scene?.id)
+  previewSceneName.value = chat.scene?.adsName
+  isPreview.value = true
+  previewUrl.value = '/scene-simulation-client/#/overview/?type=2&id=' + chat.scene?.id
 }
 
 const inputHeight = ref(30)
@@ -87,7 +96,7 @@ const data = reactive<LLMData>({
 
 const onSend = async () => {
   if(data.question.trim().length == 0) {
-    data.errorMsg = '请输入场景文字'
+    data.errorMsg = '请输入场景描述'
     return
   } 
 

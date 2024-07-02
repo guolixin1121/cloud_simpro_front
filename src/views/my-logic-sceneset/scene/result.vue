@@ -1,7 +1,5 @@
 <template>
    <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>我的场景</span>
     <a @click="goback(-2)">逻辑场景</a>
     <a @click='goback()'>{{ sceneset?.name }}</a>
     <span>泛化任务</span>
@@ -28,7 +26,7 @@
           <span :class="'status--' + record.status">{{ getLogicSceneStatusOption(record.status) }}</span>
         </template>
         <template v-if="column.dataIndex == 'result_scene_set'">
-          {{ '我的场景-具体场景-' + record.result_scene_set?.name }}
+          {{ '我的场景-具体场景-' + record.result_scene_set?.name + '-' + name }}
         </template>
         <template v-if="column.dataIndex == 'scene_count'">
           <a class="text-link inline-block w-full" @click="() => gotoScene(record)">{{ text }}</a>

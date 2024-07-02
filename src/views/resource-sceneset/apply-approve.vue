@@ -1,18 +1,17 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>场景资源库</span>
     <router-link to="/resource-sceneset/">具体场景</router-link>
     <a @click="goback()">授权任务管理</a>
     <span>{{ title }}</span>
   </div>
 
   <div class="flex justify-between" style="height: calc(100% - 20px)">
-    <div class="white-block" style="width: 60%">
+    <div class="white-block" style="width: 60%; height: 100%; overflow: auto;">
       <span class="title mb-5">{{ title }}</span>
 
       <div>
-        <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }">
+        <a-form :model="formState" :labelCol ="{ style: { width: '80px' } }">
+          <p class="sub-title">申请信息</p>
           <a-form-item label="申请人" >
             {{ formState.apply_username }}
           </a-form-item>
@@ -20,17 +19,19 @@
             {{ formState.create_time }}
           </a-form-item>
           <a-form-item label="申请原因">
-            <span class="break-text">{{ formState.reason || '-' }}</span>
+            <span class="break-text">{{ formState.reason || '--' }}</span>
           </a-form-item>
+
+          <p class="sub-title">{{ isSceneset ? '场景集信息' : '场景信息' }}</p>
           <template v-if="isSceneset">
             <a-form-item label="场景集ID">{{ formState.data.id }}</a-form-item>
             <a-form-item label="场景集名称">
               <span class="break-text">{{ formState.data.name }}</span></a-form-item>
             <a-form-item label="场景集描述" name="desc">
-              <span class="break-text">{{ formState.data.desc || '-' }}</span>
+              <span class="break-text">{{ formState.data.desc || '--' }}</span>
             </a-form-item>
             <a-form-item label="场景数量" name="scene_count">
-              <span class="break-text">{{ formState.data.scene_count || '-' }}</span>
+              <span class="break-text">{{ formState.data.scene_count }}</span>
             </a-form-item>
           </template>
           <template v-else>
@@ -38,11 +39,11 @@
             <a-form-item label="场景名称">
               <span class="break-text">{{ formState.data.name }}</span></a-form-item>
             <a-form-item label="场景描述" name="desc">
-              <span class="break-text">{{ formState.data.desc || '-' }}</span>
+              <span class="break-text">{{ formState.data.desc || '--' }}</span>
             </a-form-item>
             <a-form-item label="路径">
-              <span class="break-text">场景资源库-具体场景-{{ formState.data.scene_set_name }}</span></a-form-item>
-            <a-form-item label="关联地图">{{ formState.data.mapName + formState.data.mapVersion }}</a-form-item>
+              <span class="break-text">场景资源库-具体场景-{{ formState.data.scene_set_name }}-{{ formState.data.name }}</span></a-form-item>
+            <a-form-item label="关联地图">{{ formState.data.mapName + '_' + formState.data.mapVersion }}</a-form-item>
             <a-form-item label="场景文件">
               <span class="break-text">{{ formState.data.xosc_key }}</span>
             </a-form-item>
@@ -61,9 +62,8 @@
     </div>
     <div class="white-block" style="width: 40%; margin-left: 16px;">
       <span class="title mb-5">审批意见</span>
-      <p>审批状态：<span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></p>
-      <p>审批意见：</p>
-      <template v-if="isAdmin && !isApproved">
+      <p v-if="isApproved">任务状态：<span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></p>
+      <template v-if="!isApproved">
         <ch-input type="textarea" rows="15" :maxlength="255"
           placeholder="请输入审批意见" v-model:value="formState.comments" />
         <div class="my-4">
@@ -75,8 +75,8 @@
       <template v-else>
         <p class="comments">{{ formState.comments }}</p>
         <div class="my-4">
+          <a-button type="primary" class="mr-4" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
           <a-button @click="goback()">返回</a-button>
-          <a-button class="ml-4" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
         </div>
       </template>
     </div>
@@ -88,13 +88,10 @@ import { getApplyStatus } from '@/utils/dict'
 
 const id = useRoute().params.id
 const currentApi = api.grant
-const user = store.user
-const isAdmin = user.isAdmin()
-const title = isAdmin ? '任务审批' : '任务详情'
-// const sceneset = store.catalog.sceneCatalog
+const title = computed(() => formState.status == '1' ? '任务审批' : '任务详情') 
 
 const router = useRouter()
-const goback = () => router.push('/resource-sceneset/apply-manage/0')
+const goback = () => router.push('/resource-sceneset/apply-manage/')
 const isApproved = computed(() => formState.status != '1' )
 const formState = reactive({
   apply_username: '',
@@ -138,8 +135,8 @@ const onApprove = async (isAproved: boolean = true) => {
 }
 
 const gotoPage = () => {
-  isSceneset.value ? router.push('/resource-sceneset/scene?pid=' + formState.data.id)
-    : router.push('/resource-sceneset/scene/view/' + formState.data.id)
+  isSceneset.value ? router.push('/resource-sceneset/scene/?pid=' + formState.data.id)
+    : router.push('/resource-sceneset/scene/preview/' + formState.data.id)
 }
 
 /****** 获取编辑数据 */

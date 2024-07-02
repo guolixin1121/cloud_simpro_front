@@ -20,10 +20,10 @@ import generate_semantic from '@/assets/images/generate_semantic.png'
 import generate_3d from '@/assets/images/generate_3d.png'
 import generate_editor from '@/assets/images/generate_editor.png'
 const list = [
-  { name: '数据生成', desc: '对真实数据源进行场景挖掘，通过设置场景的参数特征挖掘典型性场景', url: '/data/', image: generate_data},
-  { name: '语义生成', desc: '基于LLM，通过文字或语音直接构建需要的测试场景', url: '/llm/', image: generate_semantic },
-  { name: '三位重构', desc: '基于XCT，通过上传图片或视频直接构建需要的测试场景', url: '', image: generate_3d },
-  { name: '场景编辑器', desc: '利用场景编辑器，建立事件设置交互行为创建测试场景', url: '', image: generate_editor }
+  { name: '数据生成', desc: '对真实数据源进行场景挖掘，通过设置场景的参数特征挖掘典型性场景。', url: '', image: generate_data},
+  { name: '语义生成', desc: '基于LLM，通过打字或者语音直接构建需要的测试场景。', url: '/llm/', image: generate_semantic },
+  { name: '三维重构', desc: '基于XCT通过上传图片或视频直接构建需要的测试场景。', url: '', image: generate_3d },
+  { name: '场景编辑器', desc: '利用场景编辑器，建立事件设置交互行为创建测试场景。', url: '', image: generate_editor }
 ]
 
 const gotoPage = (url: string) => {
@@ -43,7 +43,7 @@ const gotoPage = (url: string) => {
 
   .item {
     width: 23%;
-    height: 320px;
+    height: 300px;
     margin-right: 28px;
     margin-top: 18px;
     border-radius: 4px;
@@ -62,7 +62,7 @@ const gotoPage = (url: string) => {
       text-align: center;
       font-size: 16px;
       font-weight: bold;
-      margin-bottom: 24px;
+      margin-bottom: 16px;
     }
   }
 }

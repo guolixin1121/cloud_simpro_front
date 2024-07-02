@@ -1,7 +1,5 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>我的场景</span>
     <a @click="goback()">逻辑场景</a>
     <span>{{ selectedSceneset?.name }}</span>
   </div>
@@ -11,12 +9,12 @@
 
   <div class="main">
     <page-title title="逻辑场景列表">
-      <a-button type="primary" :disabled="!selectedItems.length" v-if="user.hasPermission('add')" @click="onBatchClone()">另存为</a-button>
+      <a-button :disabled="!selectedItems.length" v-if="user.hasPermission('add')" @click="onBatchClone()">另存为</a-button>
       <batch-button :disabled="!selectedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
-        :tips="'您已勾选' + selectedItems.length+ '个场景，确定要删除所有勾选的场景吗？'"></batch-button>
+        :tips="'已勾选' + selectedItems.length+ '个场景，确定要删除所有勾选的场景吗？'"></batch-button>
       <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isEditable" @click="gotoSubPage('/edit/0')">上传逻辑场景</a-button>
     </page-title>
-    <a-spin :spinning="loadingSceneset">
+    <!-- <a-spin :spinning="loadingSceneset"> -->
       <Table 
         ref="tableRef" 
         :api="currentApi.getList" 
@@ -25,9 +23,10 @@
         :scroll="{ x: 1300, y: 'auto' }"
         @select="onSelect">
       </Table>
-    </a-spin>
+    <!-- </a-spin> -->
+  </div>
 
-    <a-modal v-model:visible="generateModal.visible" title="泛化" 
+  <a-modal v-model:visible="generateModal.visible" title="泛化" 
       :footer="null"  :destroyOnClose="true">
       <template v-if="generateModal.step == 1">
         <template v-if="generateModal.sourceData.config_result_count <= 10000">
@@ -63,9 +62,9 @@
             <a-button @click="runConfirm" :loading="isSubmitting" type="primary">确定</a-button>
           </div>
       </template>
-    </a-modal>
+  </a-modal>
 
-    <a-modal v-model:visible="cloneModal.cloneVisible" :title="cloneModal.title"
+  <a-modal v-model:visible="cloneModal.cloneVisible" :title="cloneModal.title"
     :footer="null" :destroyOnClose="true">
       <div class="modal-content">
         <p><span v-if="cloneModal.desc">{{ cloneModal.desc }}</span>请选择场景的保存路径</p>
@@ -76,7 +75,6 @@
         <a-button @click="onConfirmClone" :loading="submitting" type="primary">确定</a-button>
       </div>
   </a-modal>
-  </div>
 </template>
 
 <script setup lang="ts">
@@ -104,7 +102,7 @@ loadSceneset()
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入逻辑场景ID或名称' },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景ID或名称' },
   {
     label: '来源',
     key: 'source',
@@ -146,7 +144,7 @@ const cloneModal = reactive({
   targetSceneset: { sceneset: '', scenesetType: 1 } // 另存为的场景
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60 },
+  { dataIndex: 'checkbox', width: 60, validator: ({create_user}: any) => user.user.username == create_user },
   { title: '场景ID', dataIndex: 'id', width: 90 },
   { title: '场景名称', dataIndex: 'name', width: 250, ellipsis: true },
   { title: '关联场景数', dataIndex: 'result_scene_count', width: 150 },
@@ -178,7 +176,10 @@ const columns = [
         cloneModal.sourceData = [data.id]
         cloneModal.cloneVisible = true
       },
-      删除: async ({ id }: { id: string }) => await currentApi.delete(id)
+      删除: {
+        validator: ({create_user}: any) => user.user.username == create_user,
+        handler: async ({ id }: { id: string }) => await currentApi.delete(id)
+      }
     }
   }
 ]

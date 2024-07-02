@@ -1,7 +1,5 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>场景资源库</span>
     <router-link to="/resource-sceneset/">具体场景</router-link>
     <a @click='goback()'>{{ sceneset?.name }}</a>
     <span>{{ sceneName }}</span>
@@ -11,9 +9,9 @@
 
 <script setup lang="ts">
 const { id } = useRoute().params
-const sceneset = store.catalog.sceneCatalog
+let sceneset = { id: '', name: ''}
 const router = useRouter()
-const goback = () => router.push('/resource-sceneset/scene/?pid=' + sceneset.value.id)
+const goback = () => router.push('/resource-sceneset/scene/?pid=' + sceneset.id)
 
 const sceneName = ref()
 const previewUrl = '/scene-simulation-client/#/overview/?type=1&id=' + id
@@ -21,6 +19,8 @@ const getEditData = async () => {
   if (id) {
     const scene = await api.sceneResource.getScene(id)
     sceneName.value = scene.name
+    sceneset.id = scene.scene_set_id
+    sceneset.name = scene.scene_set_name
   }
 }
 getEditData()

@@ -1,7 +1,5 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-<span>场景资源库</span>
     <router-link to="/resource-logic-sceneset/">逻辑场景</router-link>
     <a @click="goback()">{{ sceneset?.name }}</a>
     <span>申请授权</span>
@@ -21,7 +19,7 @@
           <span class="break-text">{{ formState.desc || '--' }}</span>
         </a-form-item>
         <a-form-item label="路径" name="path">
-          <span class="break-text">场景资源库-逻辑场景-{{ sceneset.name }}</span>
+          <span class="break-text">场景资源库-逻辑场景-{{ sceneset.name }}-{{ formState.name }}</span>
         </a-form-item>
         <a-form-item label="关联地图" name="sceneset">
           {{ formState.map_name + '_' + formState.map_version_num }}

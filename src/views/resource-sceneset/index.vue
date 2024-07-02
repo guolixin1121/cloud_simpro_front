@@ -1,9 +1,4 @@
 <template>
-  <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>场景资源库</span>
-    <span>具体场景</span>
-  </div>
   <search-form :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
@@ -12,7 +7,7 @@
       <div>
         <template v-if="isAdmin">
           <batch-button :disabled="!checkedItems.length" :api="onBatchDelete"
-          :tips="'已勾选' + checkedItems.length+ '个场景集，是否删除所有勾选场景集及其关联数据？'"></batch-button>
+            :tips="'已勾选' + checkedItems.length+ '个场景集，是否删除所有勾选场景集及其关联数据？'"></batch-button>
           <a-button type="primary" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
         </template>
         <a-button v-else :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
@@ -63,7 +58,7 @@ const formItems = ref<SearchFormItem[]>([
     mode: 'multiple',
     api: api.tags.getList,
     query: { tree: 1, tag_type: 2, size: 100 }, // tree无法分页，一次性获取所有
-    placeholder: '请选择标签，最多选择9个',
+    placeholder: '请选择标签',
     fieldNames: { label: 'display_name', value: 'name' },
     defaultValue: [''],
     multiple: true
@@ -105,7 +100,7 @@ const columns = [
         tip: '场景集删除后，关联数据（场景、地图）将会一起删除，是否删除？',
         validator: (data : RObject) => isAdmin && data.delete_enable,
         handler: async ({ id }: { id: string }) => await currentApi.deleteSceneset({id: [id]})
-      }
+      },
     }
   }
 ]

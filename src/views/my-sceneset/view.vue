@@ -1,7 +1,5 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>我的场景</span>
     <router-link to="/my-sceneset/">具体场景</router-link>
     <span>场景集详情</span>
   </div>
@@ -13,7 +11,7 @@
           {{ formState.name }}
         </a-form-item>
         <a-form-item label="场景集描述">
-          <span class="break-text">{{ formState.desc || '-' }}</span>
+          <span class="break-text">{{ formState.desc || '--' }}</span>
         </a-form-item>
         <a-form-item label="标签">
           <ul class="view-list"  v-if="formState.labels_detail?.length > 0">

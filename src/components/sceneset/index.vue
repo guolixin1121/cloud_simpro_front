@@ -2,14 +2,14 @@
 <template>
   <div class="white-block top">
     <a-row>
-      <a-col :span="4">场景集ID：{{ sceneset?.id }}</a-col>
+      <a-col :span="5">场景集ID：{{ sceneset?.id }}</a-col>
       <a-col :span="5">
         场景集名称：
         <a-tooltip :title="sceneset?.name">
           <span class="line-value">{{ sceneset?.name }}</span>
         </a-tooltip>
       </a-col>
-      <a-col :span="15">
+      <a-col :span="14">
         场景集标签：
         <span v-if="!sceneset || (sceneset.labels_detail && sceneset.labels_detail.length == 0)">--</span>
         <div class="inline-block line-value" v-else>
@@ -20,10 +20,10 @@
       </a-col>
     </a-row>
     <a-row>
-      <a-col :span="4">
+      <a-col :span="5">
         创建时间：{{ sceneset?.create_time }}
       </a-col>
-      <a-col :span="20">
+      <a-col :span="19">
         场景集描述：
         <a-tooltip :title="sceneset?.desc" placement="topLeft">
             <span class="line-value">{{ sceneset?.desc || '--' }}</span>

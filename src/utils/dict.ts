@@ -129,8 +129,8 @@ export const getLogicSceneStatusOption = (value: number | string) => LogicSceneS
 export const MyScenesetSourceOptions = [
   { label: '全部', value: '' },
   { label: '创建', value: 0 },
-  { label: 'SOTIF', value: 2 },
   { label: '场景资源库', value: 1 },
+  { label: 'SOTIF', value: 2 },
   { label: '语义生成', value: 3 },
 ]
 export const isMyScenesetEditable = ({ source, name, groupName }: any) => source != 1 && (groupName ? groupName != '赛目大模型场景集' : name != '赛目大模型场景集')

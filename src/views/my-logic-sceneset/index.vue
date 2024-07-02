@@ -1,10 +1,4 @@
 <template>
-  <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>我的场景</span>
-    <span>逻辑场景</span>
-  </div>
-
   <search-form :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
@@ -19,11 +13,6 @@
     <div>
       <Table ref="tableRef" :query="query" :columns="columns" :api="currentApi.getList" :fieldNames="{ label: 'groupName', value: 'id' }"
         :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
-        <!-- <template #bodyCell="{ column, record }">
-          <template v-if="column.dataIndex == 'count'">
-              <a class="text-link inline-block w-full" @click="gotoSubPage('/scene/?pid=' + record.id)">{{ record.count }}</a>
-          </template>
-        </template> -->
       </Table>
     </div>
   </div>
@@ -88,7 +77,7 @@ const modal = reactive({
   cloneName: '' // 另存为的名字
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60,validator: (data: any) => data.name !== 'SOTIF', },
+  { dataIndex: 'checkbox', width: 60,validator: (data: any) => data.name !== 'SOTIF' && data.create_user == user.user.username, },
   { title: '场景集ID', dataIndex: 'id', width: 120 },
   { title: '场景集名称', dataIndex: 'name', ellipsis: true },
   { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
@@ -118,7 +107,7 @@ const columns = [
       },
       删除: {
         tip: "场景集删除后，关联数据（场景、地图）将会一起删除，是否删除？",
-        validator: (data: any) => data.name !== 'SOTIF',
+        validator: (data: any) => data.name !== 'SOTIF' && data.create_user == user.user.username,
         handler: async ({ id }: { id: string }) => await currentApi.delete({id: [id]})
       }
     }

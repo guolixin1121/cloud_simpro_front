@@ -1,7 +1,5 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>我的场景</span>
     <a @click="goback()">逻辑场景</a>
     <span>场景集详情</span>
   </div>
@@ -13,7 +11,7 @@
           <span class="break-text">{{ formState.name }}</span>
         </a-form-item>
         <a-form-item label="场景集描述">
-          <span class="break-text">{{ formState.desc || '-' }}</span>
+          <span class="break-text">{{ formState.desc || '--' }}</span>
         </a-form-item>
         <a-form-item label="标签">
           <ul class="view-list"  v-if="formState.labels_detail?.length > 0">

@@ -1,7 +1,5 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>场景资源库</span>
     <router-link to="/resource-sceneset/">具体场景</router-link>
     <a @click='goback()'>{{ sceneset?.name }}</a>
     <span class="breadcrumb--current">{{ title }}</span>
@@ -17,7 +15,7 @@
           <ch-input v-model:value="formState.name" :maxlength="160" placeholder="请输入场景名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景描述" name="desc">
-          <ch-input type="textarea" v-model:value="formState.desc" :maxlength="255" rows="5" placeholder="请输入场景描述"></ch-input>
+          <ch-input type="textarea" v-model:value="formState.desc" :maxlength="1000" rows="5" placeholder="请输入场景描述"></ch-input>
         </a-form-item>
         <a-form-item label="关联地图" name="mapVersion" :rules="[{ required: isAdd, message: '请选择关联地图' }]">
           <a-form-item-rest v-if="isAdd" >

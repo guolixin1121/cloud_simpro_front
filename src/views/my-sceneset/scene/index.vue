@@ -1,29 +1,27 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>我的场景</span>
     <router-link to="/my-sceneset/">具体场景</router-link>
     <span>{{ selectedSceneset?.name }}</span>
   </div>
 
-  <sceneset :sceneset="selectedSceneset"></sceneset>
+  <!-- <a-spin :spinning="loading"> -->
+    <sceneset :sceneset="selectedSceneset"></sceneset>
 
-  <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
-  <div class="main">
-    <div class="title-section">
-      <span class="title">具体场景列表</span>
-      <div>
-        <a-button :disabled="!checkedItems.length" v-if="user.hasPermission('add')" @click="onBatchClone()">另存为</a-button>
-        <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
-           :tips="'您已勾选' + checkedItems.length+ '个场景，确定要删除所有勾选的场景吗？'"></batch-button>
-        <a-button type="primary" :disabled="checkedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isEditable"
-            @click="gotoSubPage('/edit/')">上传具体场景</a-button>
+    <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
+    <div class="main">
+      <div class="title-section">
+        <span class="title">具体场景列表</span>
+        <div>
+          <a-button :disabled="!checkedItems.length" v-if="user.hasPermission('add')" @click="onBatchClone()">另存为</a-button>
+          <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
+            :tips="'已勾选' + checkedItems.length+ '个场景，确定要删除所有勾选的场景吗？'"></batch-button>
+          <a-button type="primary" :disabled="checkedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isEditable"
+              @click="gotoSubPage('/edit/')">上传具体场景</a-button>
+        </div>
       </div>
-    </div>
-    <a-spin :spinning="loading">
       <Table ref="tableRef" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" />
-    </a-spin>
-  </div>
+    </div>
+  <!-- </a-spin> -->
 
   <VncModal ref="vncModal"></VncModal>
 
@@ -46,6 +44,7 @@ import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
 import { gotoSubPage } from '@/utils/tools'
 
+const loading = ref(false)
 const vncModal = ref()
 const currentApi = api.scene
 const user = store.user
@@ -54,19 +53,24 @@ const scenesetId = useRoute().query.pid
 
 const loadSceneset = async () => {
   if (scenesetId) {
-    const data = await api.scenesets.get(scenesetId)
-    selectedSceneset.value = data
-    selectedSceneset.value.isEditable = isMyScenesetEditable(data)
-    selectedSceneset.value.sourceName = getMyScenesetSourceName(data.source)
-    store.catalog.sceneCatalog = data
-    query.value = { scene_set: data.id}
+    try {
+      loading.value = true
+      const data = await api.scenesets.get(scenesetId)
+      selectedSceneset.value = data
+      selectedSceneset.value.isEditable = isMyScenesetEditable(data)
+      selectedSceneset.value.sourceName = getMyScenesetSourceName(data.source)
+      store.catalog.sceneCatalog = data
+      query.value = { scene_set: data.id}
+    } finally {
+      loading.value = false
+    }
   }
 }
 loadSceneset()
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入具体场景ID或名称' },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景ID或名称' },
   {
     label: '来源',
     key: 'adsSource',
@@ -97,9 +101,8 @@ const onTableSearch = (data: Query) => {
 }
 
 /****** 表格区域 */
-const loading = ref(false)
 const columns = [
-  { dataIndex: 'checkbox', width: 60 },
+  { dataIndex: 'checkbox', width: 60, validator: ({createUser}: any) => user.user.username == createUser },
   { title: '场景ID', dataIndex: 'id', width: 120 },
   { title: '场景名称', dataIndex: 'adsName', width: 200, ellipsis: true },
   { title: '场景标签', dataIndex: 'labels_detail', apiField: 'display_name',width: 250, ellipsis: true },
@@ -112,16 +115,15 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 320,
+    width: 250,
     actions: {
       查看: (data: any) => gotoSubPage('/preview/' + data.id),
-      // 场景预览: (data: any) => openLink('/scene-simulation-client/#/overview/?type=2&id=' + data.id),
       编辑: { 
-        validator: ({status}: any) => isMySceneEditable(status),
+        validator: ({adsSource}: any) => isMySceneEditable(adsSource),
         handler: (data: any) => gotoSubPage('/edit/' + data.id)
       },
       编辑场景: {
-        validator: ({status}: any) => isMySceneEditable(status),
+        validator: ({adsSource}: any) => isMySceneEditable(adsSource),
         handler: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show()),
       },
       另存为: (data: any) => {
@@ -131,6 +133,7 @@ const columns = [
         cloneModal.cloneVisible = true
       },
       删除: {
+        validator: ({createUser}: any) => user.user.username == createUser,
         handler: async ({ id }: { id: string }) => await currentApi.delete(id)
       }
     }

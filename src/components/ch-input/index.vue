@@ -2,7 +2,7 @@
 <template>
   <a-input v-if="type == 'input'" 
     v-bind="$attrs"
-    :value="value" 
+    v-model:value="innerValue" 
     allowClear
     @input="inputChange"
 ></a-input>
@@ -34,6 +34,7 @@ const props = defineProps({
   }
 } as any)
 
+const innerValue = ref(props.value)
 const emits = defineEmits(['update:value'])
 const { value, maxlength } = toRefs(props)
 const inputChange = (e: { target: { value: any } }) => {
@@ -42,8 +43,26 @@ const inputChange = (e: { target: { value: any } }) => {
     value = value.replace(props.exclude, '')
   }
   const totalLength = getWordLength(value)
-  if ( totalLength <= +maxlength.value) {
-    emits('update:value', value)
+
+  if(totalLength > +maxlength.value) {
+    value = sliceWord(value)
+  }
+  innerValue.value = value
+  emits('update:value', value)
+}
+
+const sliceWord = (text: string, index: number = 1): string => {
+  const preTextToIndex = text.substring(0, index - 1)
+  const textToIndex = text.substring(0, index)
+  const lengthToIndex = getWordLength(textToIndex)
+
+  if(lengthToIndex > +maxlength.value || lengthToIndex == getWordLength(text)) {
+     return preTextToIndex
+  } else {
+    return sliceWord(text, index + 1)
   }
 }
+watch(() => props.value, (val) => {
+  innerValue.value = val
+})
 </script>

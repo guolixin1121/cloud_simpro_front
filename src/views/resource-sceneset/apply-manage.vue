@@ -1,7 +1,5 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-<span>场景资源库</span>
     <a @click="goback()">具体场景</a>
     <span>授权任务管理</span>
   </div>
@@ -47,8 +45,9 @@ const query = ref({})
 const onSearch = (data: Query) => (query.value = data)
 
 const router = useRouter()
+console.log(router.currentRoute)
 const goback = () => router.push('/resource-sceneset/')
-const activeKey = useSessionStorage('apply-manage-active-key',1)
+const activeKey = useSessionStorage(router.currentRoute.value.path + 'tab-active-key',1)
 const listApi = (params: any) => api.grant.getList({...params, type: activeKey.value == 1 ? 3 : 4})
 const columns = computed(() => activeKey.value == 1 ? scenesetColumns : sceneColumns )
 const formItems = computed(() => activeKey.value == 1 ? scenetsetFormItems : sceneFormItems )
@@ -79,13 +78,14 @@ const sceneFormItems = [
   }]
 const scenesetColumns = [
   { dataIndex: 'checkbox', width: 60, validator: ({status}: any) => user.isAdmin() && isWaitingForApproval(status) },
-  { title: '任务ID', dataIndex: 'id', width: 120 },
-  { title: '场景集ID', dataIndex: 'resource_id', width: 120 },
+  { title: '任务ID', dataIndex: 'id', width: 100 },
+  { title: '场景集ID', dataIndex: 'resource_id', width: 100 },
   { title: '场景集名称', dataIndex: 'resource_name', width: 200, ellipsis: true },
+  { title: '购买场景数量', dataIndex: 'scene_count', width: 150 },
   { title: '任务状态', dataIndex: 'status', width: 150 },
   { title: '申请人', dataIndex: 'apply_username', width: 150 },
   { title: '申请时间', dataIndex: 'create_time', width: 180 },
-  { title: '审批时间', dataIndex: 'operate_time', width: 150 },
+  { title: '审批时间', dataIndex: 'operate_time', width: 180 },
   {
     title: '操作',
     dataIndex: 'actions',
@@ -98,7 +98,13 @@ const scenesetColumns = [
       }, 
       查看: {
         validator: ({status}: any) => !user.isAdmin() || !isWaitingForApproval(status),
-        handler: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
+        handler: (data: any) => {
+          if(user.isAdmin()) {
+            router.push('/resource-sceneset/apply-approve/' + data.id)
+          } else {
+            router.push('/resource-sceneset/apply-view/' + data.id)
+          }
+        }
       }
     }
   }
@@ -126,7 +132,13 @@ const sceneColumns = [
       },
       查看: {
         validator: ({status}: any) => !user.isAdmin() || !isWaitingForApproval(status),
-        handler: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
+        handler: (data: any) => {
+          if(user.isAdmin()) {
+            router.push('/resource-sceneset/apply-approve/' + data.id)
+          } else {
+            router.push('/resource-sceneset/apply-view/' + data.id)
+          }
+        }
       }
     }
   }

@@ -53,10 +53,10 @@
           </div>
         </a-form-item>
         <a-form-item label="指标文件地址">
-          {{ formState.py_url || '-' }}
+          {{ formState.py_url || '--' }}
         </a-form-item>
         <a-form-item label="描述">
-          {{ formState.desc || '-' }}
+          {{ formState.desc || '--' }}
         </a-form-item>
         <a-form-item label="创建时间">
           {{ formatDate(formState.create_date) }}
@@ -65,7 +65,7 @@
           {{ formatDate(formState.update_time) }}
         </a-form-item>
         <a-form-item label="所属用户">
-          {{ formState.create_user || '-' }}
+          {{ formState.create_user || '--' }}
         </a-form-item>
       </a-form>
     </a-spin>

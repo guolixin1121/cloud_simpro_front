@@ -25,7 +25,7 @@
       </ul>
     </div>
   </div>
-  <div v-if="isExceedLimit" style="color: #ff4d4f">最多选择9个</div>
+  <div v-if="isExceedLimit" style="color: #ff4d4f">最多选择{{maxCount}}个</div>
 </template>
 
 <script lang="ts" setup>
@@ -33,6 +33,7 @@ import { watchOnce } from '@vueuse/core'
 import 'ant-design-vue/es/transfer/style/index.css'
 import { TreeDataItem } from 'ant-design-vue/lib/tree'
 
+const maxCount = 50
 const emits = defineEmits(['update:targetKeys'])
 const props = defineProps({
   titles: {
@@ -94,7 +95,7 @@ const onChecked = (_checkedKeys: any, e: any) => {
   isExceedLimit.value = false
   let checkedNodes = e.checkedNodes.filter((item: any) => item.isTag)
   checkedNodes = getSelectedNode(checkedNodes)
-  if (checkedNodes.length > 9) {
+  if (checkedNodes.length > maxCount) {
     isExceedLimit.value = true
     checkedKeys.value = [...checkedKeysBackup.value]
   } else {

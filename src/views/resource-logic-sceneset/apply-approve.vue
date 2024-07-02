@@ -1,17 +1,16 @@
 <template>
   <div class="breadcrumb">
-    <span>场景管理</span>
-    <span>场景资源库</span>
     <router-link to="/resource-logic-sceneset/">逻辑场景</router-link>
     <a @click="goback()">授权任务管理</a>
-    <span>{{ user.isAdmin() ? '任务审批' : '任务查看' }}</span>
+    <span>{{ title }}</span>
   </div>
 
   <div class="flex justify-between" style="height: calc(100% - 20px)">
     <div class="white-block" style="width: 60%">
-      <span class="title mb-5">{{ user.isAdmin() ? '任务审批' : '任务查看' }}</span>
+      <span class="title mb-5">{{ title }}</span>
       <a-spin :spinning="dataLoading">
         <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }">
+          <p class="sub-title">申请信息</p>
           <a-form-item label="申请人" >
             {{ formState.apply_username }}
           </a-form-item>
@@ -19,14 +18,16 @@
             {{ formState.create_time }}
           </a-form-item>
           <a-form-item label="申请原因">
-            <span class="break-text">{{ formState.reason || '-' }}</span>
+            <span class="break-text">{{ formState.reason || '--' }}</span>
           </a-form-item>
+
+          <p class="sub-title">{{ isSceneset ? '场景集信息' : '场景信息' }}</p>
           <template v-if="isSceneset">
             <a-form-item label="场景集ID">{{ formState.data.id }}</a-form-item>
             <a-form-item label="场景集名称">
               <span class="break-text">{{ formState.data.name }}</span></a-form-item>
             <a-form-item label="场景集描述" name="desc">
-              <span class="break-text">{{ formState.data.desc || '-' }}</span>
+              <span class="break-text">{{ formState.data.desc || '--' }}</span>
             </a-form-item>
             <a-form-item label="场景数量" name="count">
               <span>{{ formState.data.count }}</span>
@@ -38,12 +39,12 @@
               <span class="break-text">{{ formState.data.name }}</span>
             </a-form-item>
             <a-form-item label="场景描述" name="desc">
-              <span class="break-text">{{ formState.data.desc || '-' }}</span>
+              <span class="break-text">{{ formState.data.desc || '--' }}</span>
             </a-form-item>
             <a-form-item label="路径">
-              <span class="break-text">场景资源库-逻辑场景-{{ sceneset.name }}</span>
+              <span class="break-text">场景资源库-逻辑场景-{{ sceneset.name }}-{{ formState.data.name }}</span>
             </a-form-item>
-            <a-form-item label="关联地图">{{ formState.data.map_name + formState.data.map_version_num }}</a-form-item>
+            <a-form-item label="关联地图">{{ formState.data.map_name + '_'+ formState.data.map_version_num }}</a-form-item>
             <a-form-item label="场景文件">{{ formState.data.scene_url }}</a-form-item>
             <a-form-item label="配置文件">{{ formState.data.config_url }}</a-form-item>
           </template>
@@ -60,8 +61,8 @@
       </a-spin>
     </div>
     <div class="white-block" style="width: 40%; margin-left: 16px;">
-      <p>审批状态：<span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></p>
-        <p>审批意见</p>
+        <span class="title mb-5">审批意见</span>
+        <p v-if="!(user.isAdmin() && formState.status == '1')">任务状态：<span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></p>
         <template v-if="user.isAdmin() && !isApproved">
           <ch-input type="textarea" rows="15" :maxlength="255"
             placeholder="请输入审批意见" v-model:value="formState.comments" />
@@ -74,8 +75,8 @@
         <template v-else>
           <p class="comments">{{ formState.comments || '无' }}</p>
           <div class="my-4">
-            <a-button @click="goback()">返回</a-button>
-            <a-button class="ml-4" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
+            <a-button type="primary" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
+            <a-button class="ml-4" @click="goback()">返回</a-button>
           </div>
         </template>
     </div>
@@ -90,7 +91,9 @@ const currentApi = api.grant
 const user = store.user
 const sceneset = store.catalog.sceneCatalog
 const router = useRouter()
-const goback = () => router.push('/resource-logic-sceneset/apply-manage/0')
+const goback = () => router.push('/resource-logic-sceneset/apply-manage/')
+const isAdmin = user.isAdmin()
+const title = computed(() => isAdmin && formState.status == '1' ? '任务审批' : '任务详情') 
 
 const isApproved = computed(() => formState.status != '1' )
 const formState = reactive({
@@ -136,7 +139,7 @@ const onApprove = async (isAproved: boolean = true) => {
 }
 
 const gotoPage = () => {
-  isSceneset.value ? router.push('/resource-logic-sceneset/scene?pid=' + formState.data.id)
+  isSceneset.value ? router.push('/resource-logic-sceneset/scene/?pid=' + formState.data.id)
     : router.push('/resource-logic-sceneset/scene/view/' + formState.data.id)
 }
 
