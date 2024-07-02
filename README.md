@@ -24,6 +24,7 @@ git remote add yizhuang http://10.9.0.167:22080/cloud-simpro1/cloud_simpro_front
 
 亦庄jenkins http://10.9.0.167:21080
 
+
 ## 自动import
 + `components`下所有组件的`index.vue`已在vite中配置了自动引用，组件名为目录名。使用时无需`import`
 + `vue, vue-router, pinia`已在vite中配置了自动引用，使用时无需`import`
