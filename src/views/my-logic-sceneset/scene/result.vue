@@ -16,7 +16,7 @@
       </a-tab-pane>
     </a-tabs> 
     <Table ref="table" :api="listApi" 
-      :scroll="{x: 100, y: 'auto'}"
+      :scroll="{x: 1000, y: 'auto'}"
       :columns="activeKey =='1' ? columns : sotifColumns" style="margin-top: 0px;">
       <template #bodyCell="{column, record, text}">
         <template v-if="column.dataIndex == 'name'">
@@ -26,7 +26,7 @@
           <span :class="'status--' + record.status">{{ getLogicSceneStatusOption(record.status) }}</span>
         </template>
         <template v-if="column.dataIndex == 'result_scene_set'">
-          {{ '我的场景-具体场景-' + record.result_scene_set?.name + '--' + name }}
+          {{ '我的场景-具体场景-' + record.result_scene_set?.name }}
         </template>
         <template v-if="column.dataIndex == 'scene_count'">
           <a class="text-link inline-block w-full" @click="() => gotoScene(record)">{{ text }}</a>
@@ -61,8 +61,8 @@ const chartOptions = ref({})
 
 /****** 表格区域 */
 const columns = [
-  { title: '逻辑场景名称', dataIndex: 'name', width: 200, ellipsis: true },
-  { title: '路径', dataIndex: 'result_scene_set', width: 150  },
+  { title: '逻辑场景名称', dataIndex: 'name', width: 150, ellipsis: true },
+  { title: '泛化路径', dataIndex: 'result_scene_set', width: 200, ellipsis: true  },
   { title: '关联场景数', dataIndex: 'scene_count', width: 100 },
   { title: '开始时间', dataIndex: 'running_time', width: 150, },
   { title: '结束时间', dataIndex: 'finish_time', width: 150, },

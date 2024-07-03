@@ -1,5 +1,5 @@
 <template>
-  <form-view title="逻辑场景详情" :items="formItems" :loading="loading" :labelWidth="80">
+  <form-view :title="sceneName" subtitle="场景详情" :items="formItems" :loading="loading" :labelWidth="80">
     <router-link to="/resource-logic-sceneset/">逻辑场景</router-link>
     <a @click='goback()'>{{ senesetname }}</a>
   </form-view>
@@ -8,15 +8,16 @@
 <script setup lang="ts">
 import {goback} from '@/utils/tools'
 
-// const sceneset = store.catalog.sceneCatalog
 let senesetname = ''
 const formItems = ref<FormItem[]>([])
+const sceneName = ref('')
 const loading = ref(false)
 const getEditData = async () => {
   try {
     loading.value = true
     const data = await api.loginsceneResource.getScene(useRoute().params.id)
     senesetname = data.logic_scene_set_resource.name
+    sceneName.value = data.name
     formItems.value = [
       { label: '场景ID', value: data.id },
       { label: '场景名称', value: data.name, isBreak: true },

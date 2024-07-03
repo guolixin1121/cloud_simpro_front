@@ -4,8 +4,9 @@
     <span>{{ selectedSceneset?.name }}</span>
   </div>  
 
+  <a-spin :spinning="loading">
   <sceneset :sceneset="selectedSceneset"></sceneset>
-
+</a-spin>
   <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
 
   <div class="main">
@@ -19,9 +20,7 @@
         <a-button type="primary" v-if="!isAdmin" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
       </div>
     </div>
-    <a-spin :spinning="loading">
-      <Table ref="tableRef" :api="currentApi.getSceneList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" />
-    </a-spin>
+    <Table ref="tableRef" :api="currentApi.getSceneList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" />
   </div>
 
   <a-modal ref="modalForm" v-model:visible="modal.visible" title="批量申请场景授权"
@@ -51,13 +50,19 @@ const user = store.user
 const isAdmin = user.isAdmin()
 const selectedSceneset = ref() // 逻辑场景跳转的默认场景集
 
+const loading = ref(false)
 const loadSceneset = async () => {
   const scenesetId = useRoute().query.pid
   if (scenesetId) {
-    const data = await currentApi.getSceneset(scenesetId)
-    selectedSceneset.value = data
-    store.catalog.sceneCatalog = data
-    query.value = { logic_scene_set_resource: data.id}
+    try {
+      loading.value = true
+      const data = await currentApi.getSceneset(scenesetId)
+      selectedSceneset.value = data
+      store.catalog.sceneCatalog = data
+      query.value = { logic_scene_set_resource: data.id}
+    } finally {
+      loading.value = false
+    }
   }
 }
 loadSceneset()
@@ -87,7 +92,6 @@ const onTableSearch = (data: Query) => {
 }
 
 /****** 表格区域 */
-const loading = ref(false)
 const modal = reactive({
   visible: false,
   reason: ''

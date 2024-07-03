@@ -5,7 +5,7 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">
-      {{ title }}
+      {{ subtitle || title }}
     </span>
     <div style="margin-left: 32px" v-if="videoUrl">
       <video width="800"  controls disablePictureInPicture
@@ -41,6 +41,9 @@
 import { formatDate } from '@/utils/tools';
 defineProps({
   title: {
+    type: String
+  },
+  subtitle: {
     type: String
   },
   items: {

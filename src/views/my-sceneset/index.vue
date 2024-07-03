@@ -24,9 +24,10 @@
         style="padding-bottom: 0px"
         @finish="onConfirmClone">
           <a-form-item name="cloneName" style="width: 74%"
-            :rules="[{ required: true, message: '请输入另存为场景集名称'} ]">
+            :rules="[{ required: true, message: '请输入另存为场景集名称'},
+            { min: 2, max: 160, message: '场景集名称长度为2到160位' } ]">
             <span class="mr-2">我的场景-具体场景</span>
-            <ch-input v-model:value="modal.cloneName" :maxlength="50" placeholder="请输入另存为场景集名称"></ch-input>
+            <ch-input v-model:value="modal.cloneName" :maxlength="160" placeholder="请输入另存为场景集名称"></ch-input>
           </a-form-item>
       </a-form>
       <div class="modal-buttons">

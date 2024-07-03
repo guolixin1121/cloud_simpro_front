@@ -4,24 +4,23 @@
     <span>{{ selectedSceneset?.name }}</span>
   </div>
 
-  <!-- <a-spin :spinning="loading"> -->
+  <a-spin :spinning="loading">
     <sceneset :sceneset="selectedSceneset"></sceneset>
-
-    <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
-    <div class="main">
-      <div class="title-section">
-        <span class="title">具体场景列表</span>
-        <div>
-          <a-button :disabled="!checkedItems.length" v-if="user.hasPermission('add')" @click="onBatchClone()">另存为</a-button>
-          <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
-            :tips="'已勾选' + checkedItems.length+ '个场景，确定要删除所有勾选的场景吗？'"></batch-button>
-          <a-button type="primary" :disabled="checkedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isEditable"
-              @click="gotoSubPage('/edit/')">上传具体场景</a-button>
-        </div>
+  </a-spin>
+  <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
+  <div class="main">
+    <div class="title-section">
+      <span class="title">具体场景列表</span>
+      <div>
+        <a-button :disabled="!checkedItems.length" v-if="user.hasPermission('add')" @click="onBatchClone()">另存为</a-button>
+        <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
+          :tips="'已勾选' + checkedItems.length+ '个场景，是否删除所有勾选场景？'"></batch-button>
+        <a-button type="primary" :disabled="checkedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isEditable"
+            @click="gotoSubPage('/edit/')">上传具体场景</a-button>
       </div>
-      <Table ref="tableRef" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" />
     </div>
-  <!-- </a-spin> -->
+    <Table ref="tableRef" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" />
+  </div>
 
   <VncModal ref="vncModal"></VncModal>
 

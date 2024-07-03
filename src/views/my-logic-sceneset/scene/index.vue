@@ -4,26 +4,27 @@
     <span>{{ selectedSceneset?.name }}</span>
   </div>
 
-  <sceneset :sceneset="selectedSceneset"></sceneset>
+  <a-spin  :spinning="loadingSceneset">
+    <sceneset :sceneset="selectedSceneset"></sceneset>
+  </a-spin>
   <search-form class="reactive-form" :manual="true" :items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
     <page-title title="逻辑场景列表">
       <a-button :disabled="!selectedItems.length" v-if="user.hasPermission('add')" @click="onBatchClone()">另存为</a-button>
       <batch-button :disabled="!selectedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
-        :tips="'已勾选' + selectedItems.length+ '个场景，确定要删除所有勾选的场景吗？'"></batch-button>
+        :tips="'已勾选' + selectedItems.length+ '个场景，是否删除所有勾选场景？'"></batch-button>
       <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isEditable" @click="gotoSubPage('/edit/0')">上传逻辑场景</a-button>
     </page-title>
-    <!-- <a-spin :spinning="loadingSceneset"> -->
-      <Table 
-        ref="tableRef" 
-        :api="currentApi.getList" 
-        :query="query" 
-        :columns="columns" 
-        :scroll="{ x: 1300, y: 'auto' }"
-        @select="onSelect">
-      </Table>
-    <!-- </a-spin> -->
+
+    <Table 
+      ref="tableRef" 
+      :api="currentApi.getList" 
+      :query="query" 
+      :columns="columns" 
+      :scroll="{ x: 1300, y: 'auto' }"
+      @select="onSelect">
+    </Table>
   </div>
 
   <a-modal v-model:visible="generateModal.visible" title="泛化" 
@@ -31,11 +32,7 @@
       <template v-if="generateModal.step == 1">
         <template v-if="generateModal.sourceData.config_result_count <= 10000">
           <div class="modal-content">
-            <div class="flex items-center">
-              <svg-icon style="color: #faad14; width: 16px;" icon="alert"></svg-icon>
-              <span class="modal-title">是否要对此逻辑场景进行泛化？</span>
-            </div>
-            <p class="description">泛化结果为{{ generateModal.sourceData.config_result_count }}个具体场景</p>
+              是否要对此逻辑场景进行泛化？泛化结果为{{ generateModal.sourceData.config_result_count }}个具体场景。
           </div>
           <div class="modal-buttons">
             <a-button @click="closeRunConfirm">取消</a-button>
@@ -89,14 +86,17 @@ const loadingSceneset = ref(false)
 const loadSceneset = async () => {
   const scenesetId = useRoute().query.pid
   if (scenesetId) {
-    loadingSceneset.value = true
-    const data = await api.logicScenesets.get(scenesetId)
-    loadingSceneset.value = false
-    selectedSceneset.value = data
-    selectedSceneset.value.sourceName = getMyLogicScenesetSourceName(data.source)
-    selectedSceneset.value.isEditable = isMyLogicScenesetEditable(data.source)
-    store.catalog.sceneCatalog = data
-    query.value = { logic_scene_set_id: data.id}
+    try {
+      loadingSceneset.value = true
+      const data = await api.logicScenesets.get(scenesetId)
+      selectedSceneset.value = data
+      selectedSceneset.value.sourceName = getMyLogicScenesetSourceName(data.source)
+      selectedSceneset.value.isEditable = isMyLogicScenesetEditable(data.source)
+      store.catalog.sceneCatalog = data
+      query.value = { logic_scene_set_id: data.id}
+    } finally {
+      loadingSceneset.value = false
+    }
   }
 }
 loadSceneset()
@@ -206,6 +206,7 @@ const runConfirm = () => {
       }]})
       closeRunConfirm()
       tableRef.value.refresh()
+      message.success('泛化成功')
     } finally {
       isSubmitting.value = false
     }
