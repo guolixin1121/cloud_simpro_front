@@ -102,7 +102,7 @@ const onTableSearch = (data: Query) => {
 
 /****** 表格区域 */
 const columns = [
-  { dataIndex: 'checkbox', width: 60, validator: ({create_user}: any) => user.user.username == create_user },
+  { dataIndex: 'checkbox', width: 60 },
   { title: '场景ID', dataIndex: 'id', width: 120 },
   { title: '场景名称', dataIndex: 'adsName', width: 200, ellipsis: true },
   { title: '场景标签', dataIndex: 'labels_detail', apiField: 'display_name',width: 250, ellipsis: true },
@@ -115,7 +115,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 280,
+    width: 250,
     actions: {
       查看: (data: any) => gotoSubPage('/preview/' + data.id),
       编辑: { 
@@ -133,7 +133,8 @@ const columns = [
         cloneModal.cloneVisible = true
       },
       删除: {
-        validator: ({create_user}: any) => user.user.username == create_user,
+        tip: '场景删除后不可恢复，是否删除？',
+        // validator: ({create_user}: any) => user.user.username == create_user,
         handler: async ({ id }: { id: string }) => await currentApi.delete(id)
       }
     }

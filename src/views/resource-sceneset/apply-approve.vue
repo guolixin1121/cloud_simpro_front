@@ -9,7 +9,7 @@
     <div class="white-block" style="width: 60%">
       <span class="title mb-5">{{ title }}</span>
       <div>
-        <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }">
+        <a-form :model="formState" :labelCol ="{ style: { width: '80px' } }">
           <p class="sub-title">申请信息</p>
           <a-form-item label="申请人" >
             {{ formState.apply_username }}

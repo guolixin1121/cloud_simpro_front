@@ -140,7 +140,7 @@ export const MySceneSourceOptions = [
   { label: '全部', value: '' },
   { label: '创建', value: 0 },
   { label: '泛化', value: 1 },
-  { label: '场景挖掘', value: 4 },
+  // { label: '场景挖掘', value: 4 },
   { label: '场景资源库', value: 3 },
   { label: '语义生成', value: 5 },
 ]

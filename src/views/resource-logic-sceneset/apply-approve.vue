@@ -9,7 +9,7 @@
     <div class="white-block" style="width: 60%">
       <span class="title mb-5">{{ title }}</span>
       <a-spin :spinning="dataLoading">
-        <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }">
+        <a-form :model="formState" :labelCol ="{ style: { width: '80px' } }">
           <p class="sub-title">申请信息</p>
           <a-form-item label="申请人" >
             {{ formState.apply_username }}
@@ -30,7 +30,7 @@
               <span class="break-text">{{ formState.data.desc || '--' }}</span>
             </a-form-item>
             <a-form-item label="场景数量" name="count">
-              <span>{{ formState.data.count }}</span>
+              <span>{{ formState.scene_count }}</span>
             </a-form-item>
           </template>
           <template v-else>
@@ -73,7 +73,7 @@
           </div>
         </template>
         <template v-else>
-          <p class="comments">{{ formState.comments || '无' }}</p>
+          <p class="comments">{{ formState.comments }}</p>
           <div class="my-4">
             <a-button type="primary" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
             <a-button class="ml-4" @click="goback()">返回</a-button>
@@ -101,6 +101,7 @@ const formState = reactive({
   comments: '',
   reason: '',
   create_time: '',
+  scene_count: '',
   status: '',  // 1 待审批， 2 已批准 3 已拒绝
   data: {
     id: '',

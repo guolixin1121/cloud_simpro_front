@@ -145,7 +145,7 @@ const cloneModal = reactive({
   targetSceneset: { sceneset: '', scenesetType: 1 } // 另存为的场景
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60, validator: ({createUser}: any) => user.user.username == createUser },
+  { dataIndex: 'checkbox', width: 60 },
   { title: '场景ID', dataIndex: 'id', width: 90 },
   { title: '场景名称', dataIndex: 'name', width: 250, ellipsis: true },
   { title: '关联场景数', dataIndex: 'result_scene_count', width: 150 },
@@ -178,7 +178,8 @@ const columns = [
         cloneModal.cloneVisible = true
       },
       删除: {
-        validator: ({createUser}: any) => user.user.username == createUser,
+        tip: '场景删除后不可恢复，是否删除？',
+        // validator: ({createUser}: any) => user.user.username == createUser,
         handler: async ({ id }: { id: string }) => await currentApi.delete(id)
       }
     }

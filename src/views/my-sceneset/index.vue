@@ -24,9 +24,9 @@
         style="padding-bottom: 0px"
         @finish="onConfirmClone">
           <a-form-item name="cloneName" style="width: 74%"
-            :rules="[{ required: true, message: '请输入场景集名称'} ]">
+            :rules="[{ required: true, message: '请输入另存为场景集名称'} ]">
             <span class="mr-2">我的场景-具体场景</span>
-            <ch-input v-model:value="modal.cloneName" :maxlength="50" placeholder="请输入场景集名称"></ch-input>
+            <ch-input v-model:value="modal.cloneName" :maxlength="50" placeholder="请输入另存为场景集名称"></ch-input>
           </a-form-item>
       </a-form>
       <div class="modal-buttons">
@@ -78,7 +78,7 @@ const modal = reactive({
 })
 
 // 判断是否为旧的场景集，不可被删除和编辑
-const isEditable = ({ groupName, create_user}: any) => ['SOTIF', '公共场景集' , '赛目大模型'].indexOf(groupName) == -1 && create_user == user.user.username 
+const isEditable = ({ groupName }: any) => ['SOTIF', '公共场景集' , '赛目大模型'].indexOf(groupName) == -1 
 const columns = [
   { dataIndex: 'checkbox', width: 60,
     validator: (data: any) => isEditable(data),
