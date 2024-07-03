@@ -17,10 +17,10 @@
         <a-form-item label="场景描述" name="desc">
           <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入场景描述" :maxlength="1000" rows="5"></ch-input>
         </a-form-item>
-        <a-form-item label="关联地图" v-if="!isAdd" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
+        <a-form-item label="关联地图" v-if="!isAdd" name="mapVersion">
           {{ formState.mapName + '_' + formState.mapVersion }}
         </a-form-item>
-        <a-form-item label="关联地图" v-if="isAdd" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
+        <a-form-item label="关联地图" v-if="isAdd" name="mapVersion"  :rules="[{ required: true, message: '请选择关联地图' }]">
           <a-form-item-rest>
             <div class="flex justify-between">
               <tree-select 

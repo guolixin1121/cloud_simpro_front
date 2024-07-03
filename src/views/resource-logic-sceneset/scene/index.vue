@@ -119,6 +119,7 @@ const columns = [
         handler: (data: any) => gotoSubPage('/edit/' + data.id)
       },
       删除: {
+        tip: '场景删除后不可恢复，是否删除？',
         validator: (data: any) => isAdmin && data.can_delete,
         handler: async ({ id }: { id: string }) => await currentApi.deleteScene({id: [id] })
       }
