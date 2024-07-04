@@ -15,7 +15,7 @@
       <div>
         <batch-button v-if="isAdmin" :disabled="!checkedItems.length" :api="onBatchDelete"
           :tips="'已勾选' + checkedItems.length+ '个场景，是否删除所有勾选场景？'"></batch-button>
-        <a-button v-if="isAdmin && selectedSceneset?.can_edit"  type="primary" :disabled="checkedItems.length > 0"
+        <a-button v-if="isAdmin && selectedSceneset?.can_add"  type="primary" :disabled="checkedItems.length > 0"
             @click="gotoSubPage('/edit/0')">上传逻辑场景</a-button>
         <a-button type="primary" v-if="!isAdmin" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
       </div>

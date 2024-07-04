@@ -103,7 +103,7 @@
       </a-form-item>
        <a-form-item label="场景" v-if="!isAdd">
         <ul class="view-list" v-if="formState.scenes?.length > 0">
-          <li class="mb-2" v-for="item in formState.scenes as any" :key="item">
+          <li v-for="item in formState.scenes as any" :key="item">
             {{ item.adsName }}
           </li>
         </ul>

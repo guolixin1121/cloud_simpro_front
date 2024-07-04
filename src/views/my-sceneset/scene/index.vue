@@ -4,7 +4,7 @@
     <span>{{ selectedSceneset?.name }}</span>
   </div>
 
-  <a-spin :spinning="loading">
+  <a-spin :spinning="scenesetLoading">
     <sceneset :sceneset="selectedSceneset"></sceneset>
   </a-spin>
   <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
@@ -19,7 +19,9 @@
             @click="gotoSubPage('/edit/')">上传具体场景</a-button>
       </div>
     </div>
-    <Table ref="tableRef" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" />
+    <a-spin :spinning="loading">
+      <Table ref="tableRef" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" />
+    </a-spin>
   </div>
 
   <VncModal ref="vncModal"></VncModal>
@@ -50,10 +52,11 @@ const user = store.user
 const selectedSceneset = ref() 
 const scenesetId = useRoute().query.pid
 
+const scenesetLoading = ref(false)
 const loadSceneset = async () => {
   if (scenesetId) {
     try {
-      loading.value = true
+      scenesetLoading.value = true
       const data = await api.scenesets.get(scenesetId)
       selectedSceneset.value = data
       selectedSceneset.value.isEditable = isMyScenesetEditable(data)
@@ -61,7 +64,7 @@ const loadSceneset = async () => {
       store.catalog.sceneCatalog = data
       query.value = { scene_set: data.id}
     } finally {
-      loading.value = false
+      scenesetLoading.value = false
     }
   }
 }

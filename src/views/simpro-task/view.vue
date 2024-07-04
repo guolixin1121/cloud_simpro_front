@@ -46,7 +46,7 @@
         </a-form-item>
         <a-form-item label="传感器">
           <ul v-if="formState.sensors_detail.length > 0" class="view-list">
-            <li class="mb-2" v-for="(val, index) in formState.sensors_detail" :key="index">
+            <li v-for="(val, index) in formState.sensors_detail" :key="index">
               {{ val.name }}
             </li>
           </ul>
@@ -83,7 +83,7 @@
         </a-form-item>
         <a-form-item label="场景">
           <ul v-if="formState.scenes_detail.length > 0" class="view-list">
-            <li class="mb-2" v-for="(val, index) in formState.scenes_detail" :key="index">
+            <li v-for="(val, index) in formState.scenes_detail" :key="index">
               {{ val.adsName }}
             </li>
           </ul>

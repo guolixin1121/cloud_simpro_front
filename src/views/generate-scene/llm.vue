@@ -26,7 +26,7 @@
               <img src="@/assets/images/bot_avatar.png" class="avatar" v-else />
             </div>
             <div class="message-right">
-              <div class="username">{{ chat.type == 0 ? 'YOU' : '赛目科技大模型' }}</div>
+              <div class="username">{{ chat.type == 0 ? user.username : '赛目科技大模型' }}</div>
               <div class="message-body" :class="'message-body-' + chat.type">
                 {{ chat.message }}
               </div>
@@ -43,7 +43,7 @@
       <div class="input-box-wrapper">
         <a-textarea ref="inputRef" :bordered="false" :auto-size="{ minRows: 1, maxRows: 5 }" :placeholder="data.placeholder" 
           class="input" v-model:value="data.question"
-          :allow-clear="true"></a-textarea>
+          :allow-clear="true" :maxlength="500"></a-textarea>
         <p class="error" style="margin-left: 8px;" v-if="data.errorMsg">请输入文字</p>
         <div class="mt-2">
           <template v-if="canRecording">
@@ -62,6 +62,8 @@
 </template>
 
 <script lang="ts" setup>
+const user = store.user.user
+
 let mediaRecorder: MediaRecorder
 HZRecorder.get((rec: MediaRecorder) => mediaRecorder = rec)
 const canRecording = HZRecorder.canRecording

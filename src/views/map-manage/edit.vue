@@ -72,7 +72,7 @@
           ></tree-transfer>
           <template v-else>
             <ul class="view-list" v-if="formState.labels?.length > 0">
-              <li class="mb-2" v-for="item in formState.labels as any" :key="item.name">
+              <li v-for="item in formState.labels as any" :key="item.name">
                 {{ item.display_name }}
               </li>
             </ul>

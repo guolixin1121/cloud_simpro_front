@@ -19,7 +19,7 @@
           <span class="break-text">{{ formState.desc || '--' }}</span>
         </a-form-item>
         <a-form-item label="路径" name="path">
-          <span class="break-text">场景资源库-逻辑场景-{{ sceneset.name }}-{{ formState.name }}</span>
+          <span class="break-text">场景资源库-逻辑场景-{{ sceneset?.name }}-{{ formState.name }}</span>
         </a-form-item>
         <a-form-item label="关联地图" name="sceneset">
           {{ formState.map_name + '_' + formState.map_version_num }}
@@ -32,7 +32,7 @@
         </a-form-item>
         <a-form-item label="标签">
           <ul class="view-list"  v-if="formState.labels_detail?.length > 0">
-            <li class="mb-2" v-for="item in formState.labels_detail as any" :key="item">
+            <li v-for="item in formState.labels_detail as any" :key="item">
               {{ item.display_name }}
             </li>
           </ul>

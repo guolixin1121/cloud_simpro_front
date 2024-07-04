@@ -49,6 +49,7 @@ export const useUserStore = defineStore('user', () => {
     if (user.value) return
 
     user.value = await userApi.getLoginUser()
+    LStorage.set('user', user.value.username)
     const permissions = await userApi.getPermissions()
 
     user.value.permissions = permissions

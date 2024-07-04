@@ -16,7 +16,7 @@
           <ch-input v-model:value="formState.adsName" :maxlength="160" placeholder="请输入场景名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景描述" name="desc">
-          <ch-input type="textarea" v-model:value="formState.desc" :maxlength="1000" rows="4" placeholder="请输入场景描述"></ch-input>
+          <ch-input type="textarea" v-model:value="formState.desc" :maxlength="1000" rows="5" placeholder="请输入场景描述"></ch-input>
         </a-form-item>
         <a-form-item label="关联地图" name="mapVersion" :rules="[{ required: isAdd, message: '请选择关联地图' }]">
           <a-form-item-rest v-if="isAdd" >

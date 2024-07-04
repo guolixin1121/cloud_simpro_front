@@ -84,7 +84,7 @@ const scenesetColumns = [
   { title: '任务状态', dataIndex: 'status', width: 150 },
   { title: '申请人', dataIndex: 'apply_username', width: 150 },
   { title: '申请时间', dataIndex: 'create_time', width: 180 },
-  { title: '审批时间', dataIndex: 'operate_time', width: 150 },
+  { title: '审批时间', dataIndex: 'operate_time', width: 180 },
   {
     title: '操作',
     dataIndex: 'actions',

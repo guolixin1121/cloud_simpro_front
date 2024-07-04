@@ -24,7 +24,7 @@
                 {{ !item.value ? '--' : item.label.indexOf('时间') > -1 ? formatDate(item.value) : item.value }}
               </span>
               <ul v-else-if="item.value.length > 0" class="view-list">
-                <li class="mb-2" v-for="val in item.value" :key="val">
+                <li v-for="val in item.value" :key="val">
                   {{ val }}
                 </li>
               </ul>

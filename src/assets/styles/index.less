@@ -22,8 +22,9 @@
   padding-right: 8px;
 }
 .break-text {
-  word-break:break-all; 
+  // word-break:break-all; 
   // word-wrap:inherit;
+  vertical-align: middle;
   white-space: break-spaces;
 }
 
@@ -97,7 +98,7 @@
   overflow-y: auto;
   padding: 6px 10px;
   margin-top: 5px;
-  padding-bottom: 0px;
+  // padding-bottom: 0px;
   white-space: break-spaces;
 
   li {
@@ -215,27 +216,25 @@ main {
 }
 
 .white-block {
-  // .line {
-    // margin-bottom: 8px;
-    // .line-item {
-    //   display: inline-flex;
-    // }
-    .ant-col:has(.line-value) {
-      display: inline-flex;
-      margin-bottom: 8px;
-
-      &:last-child {
-        margin-bottom: 0px;
-      }
+  .ant-row {
+    margin-bottom: 8px;
+    &:last-child {
+      margin-bottom: 0px;
     }
-    .line-value {
-      width: calc(100% - 100px);
-      display: inline-block;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      overflow: hidden;
+  }
+  .ant-col {
+    display: inline-flex;
+    .label {
+      width: 85px;
     }
-  // }
+  }
+  .line-value {
+    width: calc(100% - 100px);
+    display: inline-block;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
 }
 
 .ant-form-item {

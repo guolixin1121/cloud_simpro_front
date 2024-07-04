@@ -79,8 +79,8 @@ const sceneLoading = ref(false)
 const getSceneset = async (query?: Object) => {
   const res = await api.scenesets.getList({...query, version: 2, name: searchSceneset.value?.trim()})
   return res.results.map((item: any) => ({
-    id: item.baidu_id,
-    key: item.baidu_id,
+    id: item.id,
+    key: item.id,
     title: item.groupName,
     name: item.groupName,
     isLeaf: item.isLeaf
