@@ -48,7 +48,7 @@ const scenesetList = api.scene.getScenesetList
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景集ID或名称' },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景集ID或名称', defaultValue: useRoute().query.name || '' },
   {
     label: '来源',
     key: 'source',
@@ -103,7 +103,7 @@ const columns = [
         handler: ({ id }: RObject) => gotoSubPage('/scene/?pid=' + id)
       },
       编辑: {
-        validator: (data: any) => isMyScenesetEditable(data),
+        validator: (data: any) => isMyScenesetEditable(data) && data.groupName != '赛目大模型',
         handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
       },
       另存为: (data: RObject) => {

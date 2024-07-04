@@ -26,10 +26,12 @@
           <span :class="'status--' + record.status">{{ getLogicSceneStatusOption(record.status) }}</span>
         </template>
         <template v-if="column.dataIndex == 'result_scene_set'">
-          {{ '我的场景-具体场景-' + record.result_scene_set?.name }}
+          {{ record.result_scene_set ? ('我的场景-具体场景-' + record.result_scene_set?.name) : '--' }}
         </template>
         <template v-if="column.dataIndex == 'scene_count'">
-          <a class="text-link inline-block w-full" @click="() => gotoScene(record)">{{ text }}</a>
+          <a class="text-link inline-block w-full" @click="() => gotoScene(record)">
+            {{ record.result_scene_set ? text : '--' }}
+          </a>
         </template> 
       </template>
     </Table>
@@ -214,9 +216,11 @@ watch(activeKey, () => {
 
 const router = useRouter()
 const gotoScene = (record: RObject) => {
-  SStorage.clear()
-  SStorage.set('logic-sceneset', record.result_scene_set)
-  router.push('/my-sceneset/scene/?pid=' + record.result_scene_set.id)
+  if(record.result_scene_set) {
+    SStorage.clear()
+    SStorage.set('logic-sceneset', record.result_scene_set)
+    router.push('/my-sceneset/scene/?pid=' + record.result_scene_set.id)
+  }
 }
 </script>
 

@@ -17,9 +17,21 @@
       </div>
     </div>
     <Table ref="tableRef" style="margin-top: 0px;" :api="listApi" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect">
-      <template #bodyCell="{ column, record }">
+      <template #bodyCell="{ column, record, text }">
         <template v-if="column.dataIndex == 'status'">
           <span :class="'apply-status--' + record.status">{{ getApplyStatus(record.status) }}</span>
+        </template>
+        <template v-if="column.dataIndex == 'resource_name'">
+          <a-tooltip :title="text" placement="topLeft" v-if="text">
+            <span>{{ text}}</span>
+          </a-tooltip>
+          <span v-else>--</span>
+        </template>
+        <template v-if="column.dataIndex == 'parent_name'">
+          <a-tooltip :title="text" placement="topLeft" v-if="text">
+            <span>{{ text}}</span>
+          </a-tooltip>
+          <span v-else>--</span>
         </template>
       </template>
     </Table>

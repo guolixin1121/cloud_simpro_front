@@ -52,6 +52,7 @@ const user = store.user
 const selectedSceneset = ref() 
 const scenesetId = useRoute().query.pid
 
+const router = useRouter()
 const scenesetLoading = ref(false)
 const loadSceneset = async () => {
   if (scenesetId) {
@@ -65,6 +66,9 @@ const loadSceneset = async () => {
       query.value = { scene_set: data.id}
     } finally {
       scenesetLoading.value = false
+      if(!selectedSceneset.value) {
+        router.push('/my-sceneset/')
+      }
     }
   }
 }
