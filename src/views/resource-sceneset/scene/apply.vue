@@ -7,7 +7,7 @@
   <div class="min-main">
     <span class="title mb-5">申请场景授权</span>
     <a-spin :spinning="dataLoading">
-      <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 55%"
+      <a-form :model="formState" :labelCol ="{ style: { width: '80px' } }"  style="width: 55%"
         @finish="add">
         <a-form-item label="场景ID" name="id" >
           {{ formState.id }}
@@ -16,7 +16,7 @@
           <span class="break-text">{{ formState.name }}</span>
         </a-form-item>
         <a-form-item label="场景描述" name="desc">
-          <span class="break-text">{{ formState.desc }}</span>
+          <span class="break-text">{{ formState.desc || '--' }}</span>
         </a-form-item>
         <a-form-item label="路径" name="path">
           <span class="break-text">场景资源库-具体场景-{{ sceneset.name }}-{{ formState.name }}</span>
@@ -42,7 +42,7 @@
           <a-form-item label="申请说明" name="reason">
             <ch-input type="textarea" v-model:value="formState.reason" :maxlength="255" :rows="4" />
           </a-form-item>
-          <a-form-item :wrapper-col="{ style: { paddingLeft: '100px' }}">
+          <a-form-item :wrapper-col="{ style: { paddingLeft: '80px' }}">
             <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">申请</a-button>
             <a-button @click="goback()">取消</a-button>
           </a-form-item>

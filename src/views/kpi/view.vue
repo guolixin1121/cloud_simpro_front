@@ -25,19 +25,19 @@
                   <span>{{ formState.threshold.threshold_max }}</span>
               </div>
           </template>
-          <template v-if="formState.threshold?.threshold_type == '1'">
+          <template v-else-if="formState.threshold?.threshold_type == '1'">
               <div class="flex">
                   <img src="../../assets/images/icon_dayu.png" style="width: 16px"/>
                   <span>{{ formState.threshold.threshold_min }}</span>
               </div>
           </template>
-          <template v-if="formState.threshold?.threshold_type == '2'" >
+          <template v-else-if="formState.threshold?.threshold_type == '2'" >
               <div class="flex">
                 <img src="../../assets/images/icon_xiaoyu.png" style="width: 16px"/>
                 <span>{{ formState.threshold.threshold_max }}</span>
               </div>
           </template>
-          <template v-if="formState.threshold?.threshold_type == '3'">
+          <template v-else-if="formState.threshold?.threshold_type == '3'">
               <div class="flex">
                   <span style="width:16px">=</span>
                   <span>{{ formState.threshold.threshold_value }}</span>
@@ -47,7 +47,7 @@
           <!-- <template v-if="formState.threshold?.threshold_type == '4'">
               {{ formState.threshold.threshold_value == '0' ? '否' : '是'}}
           </template> -->
-            <span class="ml-2">{{ formState.threshold.threshold_unit }}</span>
+          <span class="ml-2">{{ formState.threshold.threshold_unit }}</span>
           </div>
         </a-form-item>
         <a-form-item label="指标文件地址">

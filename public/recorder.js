@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 (function (window) {
     window.URL = window.URL || window.webkitURL;
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+    navigator.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia;
 
     let HZRecorder = function (stream, config) {
         let context = new (window.webkitAudioContext || window.AudioContext)();
@@ -239,38 +239,41 @@
     //获取录音机
     HZRecorder.get = function (callback, config) {
         if (callback) {
-            if (navigator.getUserMedia) {
-                navigator.getUserMedia({
-                    audio: {
-                        sampleRate: 48000, // 采样率
-                        sampleSize: 16, // 位深
-                        noiseSuppression: true, //尝试降噪
+            // navigator.mediaDevices
+            // .getUserMedia({ audio: true, video:false })
+            // .then(function (mediaStream) {
+            //     console.log(mediaStream)
+            // })
+            // .catch(function (err) {
+            //     console.log(err.name + ": " + err.message);
+            // }); // 总是在最后检查错误
+
+            if (navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({
+                    audio: true,
+                    video: false
+                }).then(stream => {
+                    let rec = new HZRecorder(stream, config);
+                    callback(rec);
+                }).catch( (error) => {
+                    switch (error.code || error.name) {
+                        case 'PERMISSION_DENIED':
+                        case 'PermissionDeniedError':
+                            HZRecorder.throwError('用户拒绝提供信息。');
+                            break;
+                        case 'NOT_SUPPORTED_ERROR':
+                        case 'NotSupportedError':
+                            HZRecorder.throwError('浏览器不支持硬件设备。');
+                            break;
+                        case 'MANDATORY_UNSATISFIED_ERROR':
+                        case 'MandatoryUnsatisfiedError':
+                            HZRecorder.throwError('无法发现指定的硬件设备。');
+                            break;
+                        default:
+                            HZRecorder.throwError('无法打开麦克风。异常信息:' + (error.code || error.name));
+                            break;
                     }
-                } //只启用音频
-                    ,
-                    function (stream) {
-                        let rec = new HZRecorder(stream, config);
-                        callback(rec);
-                    },
-                    function (error) {
-                        switch (error.code || error.name) {
-                            case 'PERMISSION_DENIED':
-                            case 'PermissionDeniedError':
-                                HZRecorder.throwError('用户拒绝提供信息。');
-                                break;
-                            case 'NOT_SUPPORTED_ERROR':
-                            case 'NotSupportedError':
-                                HZRecorder.throwError('浏览器不支持硬件设备。');
-                                break;
-                            case 'MANDATORY_UNSATISFIED_ERROR':
-                            case 'MandatoryUnsatisfiedError':
-                                HZRecorder.throwError('无法发现指定的硬件设备。');
-                                break;
-                            default:
-                                HZRecorder.throwError('无法打开麦克风。异常信息:' + (error.code || error.name));
-                                break;
-                        }
-                    });
+                });
             } else {
                 // HZRecorder.throwError('当前浏览器不支持录音功能。');
                 // return;

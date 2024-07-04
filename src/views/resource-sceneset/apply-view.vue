@@ -8,43 +8,50 @@
   <div class="min-main">
     <span class="title mb-5">任务详情</span>
 
-    <a-form :model="formState" style="width: 80%" :labelCol ="{ style: { width: '80px' } }">
+    <a-form :model="formState" style="width: 65%" :labelCol ="{ style: { width: isSceneset ? '80px' : '65px' } }">
       <p class="sub-title">{{ isSceneset ? '场景集信息' : '场景信息' }}</p>
-      <template v-if="isSceneset">
-        <a-form-item label="场景集ID">{{ formState.data.id }}</a-form-item>
-        <a-form-item label="场景集名称">
-          <span>{{ formState.data.name }}</span></a-form-item>
-        <a-form-item label="场景集描述" name="desc">
-          <span class="break-text">{{ formState.data.desc || '--' }}</span>
+      <template v-if="formState.data">
+        <template v-if="isSceneset">
+          <a-form-item label="场景集ID">{{ formState.data.id }}</a-form-item>
+          <a-form-item label="场景集名称">
+            <span>{{ formState.data.name }}</span></a-form-item>
+          <a-form-item label="场景集描述" name="desc">
+            <span class="break-text">{{ formState.data.desc || '--' }}</span>
+          </a-form-item>
+          <a-form-item label="场景数量" name="scene_count">
+            <span>{{ formState.scene_count }}</span>
+          </a-form-item>
+        </template>
+        <template v-else>
+          <a-form-item label="场景ID">{{ formState.data.id }}</a-form-item>
+          <a-form-item label="场景名称">
+            <span class="break-text">{{ formState.data.name }}</span></a-form-item>
+          <a-form-item label="场景描述" name="desc">
+            <span class="break-text">{{ formState.data.desc || '--' }}</span>
+          </a-form-item>
+          <a-form-item label="路径">
+            <span class="break-text">场景资源库-具体场景-{{ formState.data.scene_set_name }}-{{ formState.data.name }}</span></a-form-item>
+          <a-form-item label="关联地图">{{ formState.data.mapName + '_' + formState.data.mapVersion }}</a-form-item>
+          <a-form-item label="场景文件">
+            <span class="break-text">{{ formState.data.xosc_key }}</span>
+          </a-form-item>
+        </template>
+        <a-form-item label="标签">
+          <ul class="view-list"  v-if="formState.data.labels_detail?.length > 0">
+            <li v-for="item in formState.data.labels_detail as any" :key="item">
+              {{ item.display_name }}
+            </li>
+          </ul>
+          <span v-else>无</span>
         </a-form-item>
-        <a-form-item label="场景数量" name="scene_count">
-          <span>{{ formState.scene_count }}</span>
-        </a-form-item>
+        <a-form-item label="创建时间" name="create_time">{{ formState.data.create_time }}</a-form-item>
       </template>
       <template v-else>
-        <a-form-item label="场景ID">{{ formState.data.id }}</a-form-item>
-        <a-form-item label="场景名称">
-          <span class="break-text">{{ formState.data.name }}</span></a-form-item>
-        <a-form-item label="场景描述" name="desc">
-          <span class="break-text">{{ formState.data.desc || '--' }}</span>
-        </a-form-item>
-        <a-form-item label="路径">
-          <span class="break-text">场景资源库-具体场景-{{ formState.data.scene_set_name }}-{{ formState.data.name }}</span></a-form-item>
-        <a-form-item label="关联地图">{{ formState.data.mapName + '_' + formState.data.mapVersion }}</a-form-item>
-        <a-form-item label="场景文件">
-          <span class="break-text">{{ formState.data.xosc_key }}</span>
-        </a-form-item>
+        <div class="label mb-4">{{ isSceneset ? '该场景集已被删除' : '该场景已被删除' }}</div>
       </template>
-      <a-form-item label="标签">
-        <ul class="view-list"  v-if="formState.data.labels_detail?.length > 0">
-          <li v-for="item in formState.data.labels_detail as any" :key="item">
-            {{ item.display_name }}
-          </li>
-        </ul>
-        <span v-else>无</span>
-      </a-form-item>
-      <a-form-item label="创建时间" name="create_time">{{ formState.data.create_time }}</a-form-item>
-    
+    </a-form>
+
+    <a-form :model="formState" style="width: 65%" :labelCol ="{ style: { width: '65px' } }">
       <p class="sub-title">申请信息</p>
       <a-form-item label="申请原因">
         <span class="break-text">{{ formState.reason || '--' }}</span>
@@ -61,7 +68,7 @@
         <span>{{ formState.comments || '--' }}</span>
        </a-form-item>
         <div class="my-4">
-          <a-button type="primary" class="mr-4" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
+          <a-button type="primary" class="mr-4" v-if="formState.data"  @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
           <a-button @click="goback()">返回</a-button>
         </div>
     </a-form>

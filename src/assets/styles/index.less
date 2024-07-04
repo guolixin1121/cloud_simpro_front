@@ -19,10 +19,10 @@
 }
 .label {
   color: var(--text-second-color); 
-  padding-right: 8px;
+  // padding-right: 8px;
 }
 .break-text {
-  // word-break:break-all; 
+  word-wrap: break-word; 
   // word-wrap:inherit;
   vertical-align: middle;
   white-space: break-spaces;
@@ -78,7 +78,7 @@
     &:after {
       content: '/';
       color: var(--gray-color);
-      padding: 0px 10px;
+      padding: 0px 8px;
     }
   }
   &--current, span:last-child {
@@ -105,6 +105,7 @@
     background-color: var(--gray-globel-bg-color);
     padding: 4px 8px;
     margin-right: 10px;
+    margin-bottom: 4px;
     display: inline-block;
   }
 }
@@ -212,28 +213,6 @@ main {
   .ant-form.white-block {
     padding-bottom: 14px;
     // 底部跟form-item的样式合并一起共24px
-  }
-}
-
-.white-block {
-  .ant-row {
-    margin-bottom: 8px;
-    &:last-child {
-      margin-bottom: 0px;
-    }
-  }
-  .ant-col {
-    display: inline-flex;
-    .label {
-      width: 85px;
-    }
-  }
-  .line-value {
-    width: calc(100% - 100px);
-    display: inline-block;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
   }
 }
 
