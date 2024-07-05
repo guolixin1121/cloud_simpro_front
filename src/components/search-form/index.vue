@@ -2,7 +2,7 @@
   <!-- top作为标记类，用于table计算自身高度以便填充满页面高度 -->
   <div class="white-block search-form" :class="{'opened': isOpened}">
     <a-form ref="form" :class="'col-' + colLimit"
-      layout="inline" :model="formState" v-bind="$attrs" @finish="search">
+      layout="inline" :model="formState" v-bind="$attrs">
       <template v-for="(item, index) in items" :key="item">
       <a-form-item
         :class="{'last-row': isLastRow(index), 'more-row': isMoreRow(index)}"
@@ -41,13 +41,13 @@
       </template>
       <a-form-item class="last-row search-form-button" v-if="items.length < colLimit">
         <a-button @click="reset" class="marginR-8">重置</a-button>
-        <a-button type="primary" html-type="submit">查询</a-button>
+        <a-button type="primary" @click="search">查询</a-button>
       </a-form-item>
     </a-form>
     <div class="search-form-button" v-if="items.length >= colLimit">
       <div>
         <a-button @click="reset" class="marginR-8">重置</a-button>
-        <a-button type="primary" html-type="submit">查询</a-button>
+        <a-button type="primary" @click="search">查询</a-button>
       </div>
       <div class="show-more" @click="showMore" v-if="rowTotal > 2">
         <span>展开更多</span>
