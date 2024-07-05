@@ -3,7 +3,7 @@
     <tree :title="'地图集'" :api="mapsApi.getMapCatalog" :button-handlers="treeBtnHandlers" 
       @select="onTreeSelect"/>
 
-    <div class="main-right">
+    <div class="main-right table-container">
       <a-spin :spinning="catalogLoading">
         <div class="right-title">
           <div class="title-item"><span class="label">地图集名称</span>{{ selectedMapset?.name }}</div>

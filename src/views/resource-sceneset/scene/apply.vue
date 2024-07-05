@@ -33,7 +33,7 @@
               {{ item.display_name }}
             </li>
           </ul>
-          <span v-else>--</span>
+          <span v-else>无</span>
         </a-form-item>
         <a-form-item label="创建时间" name="create_time">
           {{ formState.create_time }}

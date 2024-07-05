@@ -8,7 +8,8 @@
   <div class="flex justify-between" style="height: calc(100% - 20px)">
     <div class="white-block" style="width: 60%; overflow-y: auto">
       <span class="title mb-5">{{ title }}</span>
-      <div>
+
+      <a-spin :spinning="dataLoading">
         <a-form :model="formState" :labelCol ="{ style: { width: '65px' } }">
           <p class="sub-title">申请信息</p>
           <a-form-item label="申请人" >
@@ -63,27 +64,30 @@
             <div class="label">{{ isSceneset ? '该场景集已被删除' : '该场景已被删除' }}</div>
           </template>
         </a-form>
-      </div>
+      </a-spin>
     </div>
     <div class="white-block" style="width: 40%; margin-left: 16px;">
       <span class="title mb-5">审批意见</span>
-      <p v-if="formState.status != '1'">审批状态：<span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></p>
-      <template v-if="isAdmin && !isApproved">
-        <ch-input type="textarea" rows="15" :maxlength="255"
-          placeholder="请输入审批意见" v-model:value="formState.comments" />
-        <div class="my-4">
-          <a-button type="primary" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
-          <a-button class="mx-4" :loading="isRejecting" @click="onApprove(false)">驳回</a-button>
-          <a-button v-if="formState.data" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
-        </div>
-      </template>
-      <template v-else>
-        <p class="comments">{{ formState.comments }}</p>
-        <div class="my-4">
-          <a-button type="primary"  v-if="formState.data" class="mr-4" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
-          <a-button @click="goback()">返回</a-button>
-        </div>
-      </template>
+
+      <a-spin :spinning="dataLoading">
+        <p v-if="formState.status != '1'">审批状态：<span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></p>
+        <template v-if="isAdmin && !isApproved">
+          <ch-input type="textarea" rows="15" :maxlength="255"
+            placeholder="请输入审批意见" v-model:value="formState.comments" />
+          <div class="my-4">
+            <a-button type="primary" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
+            <a-button class="mx-4" :loading="isRejecting" @click="onApprove(false)">驳回</a-button>
+            <a-button v-if="formState.data" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
+          </div>
+        </template>
+        <template v-else>
+          <p class="comments">{{ formState.comments }}</p>
+          <div class="my-4">
+            <a-button type="primary"  v-if="formState.data" class="mr-4" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
+            <a-button @click="goback()">返回</a-button>
+          </div>
+        </template>
+      </a-spin>
     </div>
   </div>
 </template>
@@ -125,6 +129,7 @@ const isSceneset = ref(false)
 const isApproving = ref(false)
 const isRejecting = ref(false)
 const onApprove = async (isAproved: boolean = true) => {
+  debugger
   isAproved ? isApproving.value = true : isRejecting.value = true
 
   const params = {
@@ -133,8 +138,7 @@ const onApprove = async (isAproved: boolean = true) => {
   }
   
   try {
-    await isAproved ? currentApi.approve(params) : currentApi.reject(params)
-
+    isAproved ? await currentApi.approve(params) : await currentApi.reject(params)
     message.info(isAproved ? `任务已批准` : '任务已驳回')
     goback()
   } finally {

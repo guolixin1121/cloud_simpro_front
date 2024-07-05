@@ -1,11 +1,11 @@
 <template>
-  <div class="relative">
-    <form-view :title="sceneName" subtitle="场景详情" :items="formItems" :loading="loading" :labelWidth="80">
-      <router-link to="/resource-logic-sceneset/">逻辑场景</router-link>
-      <a @click='goback()'>{{ sceneset?.name }}</a>
-    </form-view>
-    <a-button class="return-btn" @click="goback()">返回</a-button>
-  </div>
+  <form-view :title="sceneName" subtitle="场景详情" :items="formItems" :loading="loading" :labelWidth="80">
+    <router-link to="/resource-logic-sceneset/">逻辑场景</router-link>
+    <a @click='goback()'>{{ sceneset?.name }}</a>
+    <template v-slot:button>
+      <a-button @click="goback()">返回</a-button>
+    </template>
+  </form-view>
 </template>
 
 <script setup lang="ts">
@@ -42,11 +42,3 @@ const getEditData = async () => {
 }
 getEditData()
 </script>
-
-<style lang="less" scoped>
-.return-btn {
-  position: absolute;
-  right: 24px;
-  top: 55px;
-}
-</style>

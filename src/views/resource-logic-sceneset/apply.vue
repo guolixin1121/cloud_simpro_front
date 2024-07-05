@@ -6,7 +6,7 @@
   <div class="min-main">
     <span class="title mb-5">申请场景集授权</span>
     <a-spin :spinning="dataLoading">
-      <a-form :model="formState" :labelCol ="{ style: { width: '100px' } }"  style="width: 55%"
+      <a-form :model="formState" :labelCol ="{ style: { width: '80px' } }"  style="width: 55%"
         @finish="add">
         <a-form-item label="场景集ID" name="id" >
           <span>{{ id }}</span>
@@ -36,7 +36,7 @@
             <ch-input type="textarea" v-model:value="formState.reason" :maxlength="255" :rows="4"
               placeholder="请输入申请原因" />
           </a-form-item>
-          <a-form-item :wrapper-col="{ style: { paddingLeft: '100px' }}">
+          <a-form-item :wrapper-col="{ style: { paddingLeft: '80px' }}">
             <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">申请</a-button>
             <a-button @click="goback()">取消</a-button>
           </a-form-item>

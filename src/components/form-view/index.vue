@@ -4,8 +4,11 @@
     <span class="breadcrumb--current">{{ title }}</span>
   </div>
   <div class="min-main">
-    <span class="title mb-5">
+    <span class="title mb-5 relative">
       {{ subtitle || title }}
+      <div style="position: absolute; right: 20px;">
+        <slot name="button"></slot>
+      </div>      
     </span>
     <div style="margin-left: 32px" v-if="videoUrl">
       <video width="800"  controls disablePictureInPicture

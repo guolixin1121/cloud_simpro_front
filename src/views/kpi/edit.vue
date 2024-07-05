@@ -68,7 +68,6 @@ const add = async () => {
   loading.value = true
 
   const data = {...formState}
-  debugger
   try {
     isAdd
       ? await currentApi.add( data)

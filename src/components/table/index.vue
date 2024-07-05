@@ -159,7 +159,10 @@ watch(
 const calcateHeight = () => { 
   // table父容器上方所有区域的高度
   let height = 0
-  const tops = document.querySelectorAll('.ant-layout-content > div:not(:last-child)')
+  let tops = document.querySelectorAll('.table-container > div:not(:last-child)')
+  if(tops.length == 0) {
+    tops = document.querySelectorAll('.ant-layout-content > div:not(:last-child)')
+  }
   tops.forEach((top) => height += isNaN(top.clientHeight) ? 0 : (top.clientHeight + 16))
 
   // table父容器高度
