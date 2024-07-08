@@ -42,7 +42,7 @@
           <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">
             {{ '修改' }}
           </a-button>
-          <a-button @click="goback">取消</a-button>
+          <a-button @click="goback()">取消</a-button>
         </a-form-item>
       </a-form>
     </a-spin>

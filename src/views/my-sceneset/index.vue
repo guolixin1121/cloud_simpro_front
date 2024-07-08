@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { MyScenesetSourceOptions, isMyScenesetEditable, getMyScenesetSourceName } from '@/utils/dict'
+import { MyScenesetSourceOptions, isMyScenesetEditable, getMyScenesetSourceName, isDefaultMySceneset } from '@/utils/dict'
 import { gotoSubPage } from '@/utils/tools'
 
 /****** api */
@@ -79,10 +79,10 @@ const modal = reactive({
 })
 
 // 判断是否为旧的场景集，不可被删除和编辑
-const isEditable = ({ groupName }: any) => ['SOTIF', '公共场景集' , '赛目大模型'].indexOf(groupName) == -1 
 const columns = [
-  { dataIndex: 'checkbox', width: 60,
-    validator: (data: any) => isEditable(data),
+  { 
+    dataIndex: 'checkbox', width: 60,
+    validator: (data: any) => !isDefaultMySceneset(data),
    },
   { title: '场景集ID', dataIndex: 'id', width: 120 },
   { title: '场景集名称', dataIndex: 'groupName', ellipsis: true },
@@ -103,7 +103,7 @@ const columns = [
         handler: ({ id }: RObject) => gotoSubPage('/scene/?pid=' + id)
       },
       编辑: {
-        validator: (data: any) => isMyScenesetEditable(data) && data.groupName != '赛目大模型',
+        validator: (data: any) => isMyScenesetEditable(data),
         handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
       },
       另存为: (data: RObject) => {
@@ -113,7 +113,7 @@ const columns = [
       },
       删除: {
         tip: "场景集删除后，关联数据（场景、地图）将会一起删除，是否删除？",
-        validator: (data: any) => isEditable(data),
+        validator: (data: any) => !isDefaultMySceneset(data),
         handler: async ({ id }: { id: string }) => await currentApi.delete(id)
       }
     }

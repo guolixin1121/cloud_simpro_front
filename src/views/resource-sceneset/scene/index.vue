@@ -6,7 +6,7 @@
   <a-spin :spinning="loading">
     <sceneset :sceneset="selectedSceneset"></sceneset>
   </a-spin>
-  <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
+  <search-form v-model:items="formItems" :manual="true" @search="onTableSearch"></search-form>
   <div class="main">
     <div class="title-section">
       <span class="title">具体场景列表</span>
@@ -49,26 +49,9 @@ const user = store.user
 const isAdmin = user.isAdmin()
 const selectedSceneset = ref() // 逻辑场景跳转的默认场景集
 
-const loading = ref(false)
-const loadSceneset = async () => {
-  const scenesetId = useRoute().query.pid
-  if (scenesetId) {
-    try {
-      loading.value = true
-      const data = await api.sceneResource.getSceneset(scenesetId)
-      selectedSceneset.value = data
-      store.catalog.sceneCatalog = data
-      query.value = { scene_set: data.id}
-    } finally {
-      loading.value = false
-    }
-  }
-}
-loadSceneset()
-
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景ID或名称' },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景ID或名称', defaultValue: '' },
   {
     label: '标签',
     key: 'labels',
@@ -81,6 +64,27 @@ const formItems = ref<SearchFormItem[]>([
     multiple: true
   },
 ])
+
+const loading = ref(false)
+const loadSceneset = async () => {
+  const scenesetId = useRoute().query.pid
+  if (scenesetId) {
+    try {
+      loading.value = true
+      const data = await api.sceneResource.getSceneset(scenesetId)
+      selectedSceneset.value = data
+      store.catalog.sceneCatalog = data
+      query.value = { 
+        scene_set: data.id,
+        name: formItems.value[0].searchValue,
+        labels: formItems.value[1].searchValue,
+      }
+    } finally {
+      loading.value = false
+    }
+  }
+}
+loadSceneset()
 
 const query: Query = ref({})
 const onTableSearch = (data: Query) => {

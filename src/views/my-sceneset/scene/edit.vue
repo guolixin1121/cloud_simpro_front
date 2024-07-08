@@ -77,6 +77,7 @@ const baseApi = api
 const currentApi = baseApi.scene
 
 const formState = reactive({
+  adsSource: 0,
   adsName: '',
   desc: '',
   mapCatalog: undefined,
@@ -94,7 +95,7 @@ const goback = () => router.push('/my-sceneset/scene/?pid=' + sceneset.id)
 const add = async () => {
   const { labels } = formState
   const params = {
-    source: 0,
+    source: formState.adsSource,
     desc: formState.desc,
     adsName: formState.adsName,
     baiduSceneSets: sceneset.id,
@@ -148,6 +149,7 @@ const getEditData = async () => {
     formState.mapName = scene.mapName
     formState.adsUrl = scene.adsUrl
     formState.desc = scene.desc
+    formState.adsSource = scene.adsSource
     // formState.scenesets = scene.baiduSceneSets
     // formState.scenesetsName = scene.sceneset_name
   }

@@ -7,7 +7,7 @@
   <a-spin :spinning="scenesetLoading">
     <sceneset :sceneset="selectedSceneset"></sceneset>
   </a-spin>
-  <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
+  <search-form v-model:items="formItems" :manual="true" @search="onTableSearch"></search-form>
   <div class="main">
     <div class="title-section">
       <span class="title">具体场景列表</span>
@@ -63,7 +63,15 @@ const loadSceneset = async () => {
       selectedSceneset.value.isEditable = isMyScenesetEditable(data)
       selectedSceneset.value.sourceName = getMyScenesetSourceName(data.source)
       store.catalog.sceneCatalog = data
-      query.value = { scene_set: data.id}
+      query.value = { 
+        scene_set: data.id,
+        name: formItems.value[0].searchValue,
+        adsSource: formItems.value[1].searchValue,
+        labels: formItems.value[2].searchValue,
+        start_date: formItems.value[3].searchValue?.start_date,
+        end_date: formItems.value[3].searchValue?.end_date
+      }
+      console.log(formItems.value)
     } finally {
       scenesetLoading.value = false
       if(!selectedSceneset.value) {

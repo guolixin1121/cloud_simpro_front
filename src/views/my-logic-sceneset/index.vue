@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-import { MyLogicScenesetSourceOptions, isMyLogicScenesetEditable, getMyLogicScenesetSourceName } from '@/utils/dict'
+import { MyLogicScenesetSourceOptions, isMyLogicScenesetEditable, getMyLogicScenesetSourceName, isDefaultMyLogicSceneset } from '@/utils/dict'
 import { gotoSubPage } from '@/utils/tools'
 
 /****** api */
@@ -79,7 +79,7 @@ const modal = reactive({
   cloneName: '' // 另存为的名字
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60,validator: (data: any) => data.name !== 'SOTIF' },
+  { dataIndex: 'checkbox', width: 60,validator: (data: any) => !isDefaultMyLogicSceneset(data) },
   { title: '场景集ID', dataIndex: 'id', width: 120 },
   { title: '场景集名称', dataIndex: 'name', ellipsis: true },
   { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
@@ -109,7 +109,7 @@ const columns = [
       },
       删除: {
         tip: "场景集删除后，关联数据（场景、地图）将会一起删除，是否删除？",
-        validator: (data: any) => data.name !== 'SOTIF',
+        validator: (data: any) => !isDefaultMyLogicSceneset(data),
         handler: async ({ id }: { id: string }) => await currentApi.delete({id: [id]})
       }
     }

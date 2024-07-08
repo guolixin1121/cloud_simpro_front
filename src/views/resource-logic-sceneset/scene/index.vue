@@ -7,7 +7,7 @@
   <a-spin :spinning="loading">
   <sceneset :sceneset="selectedSceneset"></sceneset>
 </a-spin>
-  <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
+  <search-form v-model:items="formItems" :manual="true" @search="onTableSearch"></search-form>
 
   <div class="main">
     <div class="title-section">
@@ -59,7 +59,11 @@ const loadSceneset = async () => {
       const data = await currentApi.getSceneset(scenesetId)
       selectedSceneset.value = data
       store.catalog.sceneCatalog = data
-      query.value = { logic_scene_set_resource: data.id}
+      query.value = { 
+        logic_scene_set_resource: data.id,
+        name: formItems.value[0].searchValue,
+        labels: formItems.value[1].searchValue,
+      }
     } finally {
       loading.value = false
     }

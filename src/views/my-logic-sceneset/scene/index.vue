@@ -7,7 +7,7 @@
   <a-spin  :spinning="loadingSceneset">
     <sceneset :sceneset="selectedSceneset"></sceneset>
   </a-spin>
-  <search-form class="reactive-form" :manual="true" :items="formItems" @search="onSearch"></search-form>
+  <search-form class="reactive-form" :manual="true" v-model:items="formItems" @search="onSearch"></search-form>
 
   <div class="main">
     <page-title title="逻辑场景列表">
@@ -80,26 +80,7 @@ import { MyLogicSceneSourceOptions, isMyLogicSceneEditable, isMyLogicScenesetEdi
 
 const user = store.user
 const currentApi = api.logicScene
-
 const selectedSceneset = ref() 
-const loadingSceneset = ref(false)
-const loadSceneset = async () => {
-  const scenesetId = useRoute().query.pid
-  if (scenesetId) {
-    try {
-      loadingSceneset.value = true
-      const data = await api.logicScenesets.get(scenesetId)
-      selectedSceneset.value = data
-      selectedSceneset.value.sourceName = getMyLogicScenesetSourceName(data.source)
-      selectedSceneset.value.isEditable = isMyLogicScenesetEditable(data.source)
-      store.catalog.sceneCatalog = data
-      query.value = { logic_scene_set_id: data.id}
-    } finally {
-      loadingSceneset.value = false
-    }
-  }
-}
-loadSceneset()
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
@@ -126,6 +107,30 @@ const formItems = ref<SearchFormItem[]>([
   { label: '创建时间', key: 'create_time', type: 'range-picker' }
 ])
 
+const loadingSceneset = ref(false)
+const loadSceneset = async () => {
+  const scenesetId = useRoute().query.pid
+  if (scenesetId) {
+    try {
+      loadingSceneset.value = true
+      const data = await api.logicScenesets.get(scenesetId)
+      selectedSceneset.value = data
+      selectedSceneset.value.sourceName = getMyLogicScenesetSourceName(data.source)
+      selectedSceneset.value.isEditable = isMyLogicScenesetEditable(data.source)
+      store.catalog.sceneCatalog = data
+      query.value = { 
+        logic_scene_set_id: data.id,
+        name: formItems.value[0].searchValue,
+        source: formItems.value[1].searchValue,
+        labels: formItems.value[2].searchValue,
+      }
+      
+    } finally {
+      loadingSceneset.value = false
+    }
+  }
+}
+loadSceneset()
 const query: Query = ref({})
 const onSearch = (data: Query) => (query.value = { ...data, logic_scene_set_id: selectedSceneset.value.id })
 

@@ -81,7 +81,7 @@ const props = defineProps({
     default: ()=> false
   }
 } as any)
-const emits = defineEmits(['search', 'show-more'])
+const emits = defineEmits(['search', 'show-more', 'update:items'])
 
 // form state, and get default value from props
 const formState = reactive<Record<string, any>>({})
@@ -97,28 +97,40 @@ onMounted(() => {
   const clear = route.query.clear === null
   const isBrowserBack = window.history.state.forward // 是否是浏览器回退
   if (!clear || isBrowserBack) {
-    const storage = SStorage.get(routeName)
-    if(storage) {
-      props.items.forEach((item: any) => {
-        const key = item.key
-        const isTimeKey = key.toLowerCase().indexOf('time') > -1 || key.toLowerCase().indexOf('date') > -1
-        if (isTimeKey) {
-          // 日期控件
-          const timeValue = storage[key]
-          if (timeValue && timeValue[0]) {
-            formState[key] = [dayjs(timeValue[0]), dayjs(timeValue[1])]
-          }
-        } else {
-          formState[key] = storage[key]
-        }
-      })
-    }
+    getDataFromStorage()
     !props.manual && emitSearch(false)
   } else {
     SStorage.clear()
     !props.manual && emitSearch()
   }
 })
+
+function getDataFromStorage() {
+  const storage = SStorage.get(routeName)
+  if(storage) {
+    const items = [...props.items]
+    items.forEach((item: any) => {
+      const key = item.key
+      const isTimeKey = key.toLowerCase().indexOf('time') > -1 || key.toLowerCase().indexOf('date') > -1
+      if (isTimeKey) {
+        // 日期控件
+        const timeValue = storage[key]
+        if (timeValue && timeValue[0]) {
+          formState[key] = [dayjs(timeValue[0]), dayjs(timeValue[1])]
+          item.searchValue = {
+            start_date: timeValue[0],
+            end_date: timeValue[1]
+          }
+        }
+      } else {
+        formState[key] = storage[key]
+        item.searchValue = storage[key]
+      }
+    })
+    // 同步外边默认值，主要解决manual=true时首次搜索时的搜索条件值
+    emits('update:items', items)
+  }
+}
 
 // button events
 const form = ref()

@@ -133,7 +133,9 @@ export const MyScenesetSourceOptions = [
   { label: 'SOTIF', value: 2 },
   { label: '语义生成', value: 3 },
 ]
-export const isMyScenesetEditable = ({ source, name, groupName }: any) => source != 1 && (groupName ? groupName != '赛目大模型场景集' : name != '赛目大模型场景集')
+// 是否是内置场景集
+export const isDefaultMySceneset = ({source} : any) => source === 3
+export const isMyScenesetEditable = ({ source }: any) => source != 1 && source != 3 // && (groupName ? groupName != '赛目大模型场景集' : name != '赛目大模型场景集')
 export const getMyScenesetSourceName = (value: number | string) => MyScenesetSourceOptions.find(v => v.value === value)?.label
 
 export const MySceneSourceOptions = [
@@ -153,6 +155,7 @@ export const MyLogicScenesetSourceOptions = [
   { label: 'SOTIF', value: 1 },
   { label: '场景资源库', value: 2 }
 ]
+export const isDefaultMyLogicSceneset = ({source} : any) => source === 1
 export const isMyLogicScenesetEditable = (value: number | string) => value == 0
 export const getMyLogicScenesetSourceName = (value: number | string) => MyLogicScenesetSourceOptions.find(v => v.value === value)?.label
 
