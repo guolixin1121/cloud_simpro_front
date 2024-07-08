@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 (function (window) {
     window.URL = window.URL || window.webkitURL;
-    if(navigator.mediaDevices) {
-        navigator.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia;
-    } else {
-        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
-    }
+    // if(navigator.mediaDevices) {
+    //     navigator.getUserMedia = navigator.mediaDevices.getUserMedia || navigator.mediaDevices.webkitGetUserMedia || navigator.mediaDevices.mozGetUserMedia || navigator.mediaDevices.msGetUserMedia;
+    // } else {
+    //     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+    // }
     let HZRecorder = function (stream, config) {
         let context = new (window.webkitAudioContext || window.AudioContext)();
         config = config || {};
@@ -238,20 +238,11 @@
         }
     }
     //是否支持录音
-    HZRecorder.canRecording = (navigator.getUserMedia != null);
+    HZRecorder.canRecording = (navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
     //获取录音机
     HZRecorder.get = function (callback, config) {
         if (callback) {
-            // navigator.mediaDevices
-            // .getUserMedia({ audio: true, video:false })
-            // .then(function (mediaStream) {
-            //     console.log(mediaStream)
-            // })
-            // .catch(function (err) {
-            //     console.log(err.name + ": " + err.message);
-            // }); // 总是在最后检查错误
-
-            if (navigator.mediaDevices.getUserMedia) {
+            if (navigator.mediaDevices) {
                 navigator.mediaDevices.getUserMedia({
                     audio: true,
                     video: false
