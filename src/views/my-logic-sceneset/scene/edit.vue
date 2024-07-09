@@ -10,7 +10,7 @@
       <a-form ref="form" :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 55%" @finish="add">
         <a-form-item label="场景名称" name="name"
           :rules="[{ required: true, message: '请输入场景名称'},
-            { min: 2, max: 160, message: '场景名称长度为2到160位' }]"
+            { validator: () => checkChName(formState.name, 160) }]"
         >
           <ch-input v-model:value="formState.name" :maxlength="160" placeholder="请输入场景名称"></ch-input>
         </a-form-item>
@@ -72,7 +72,7 @@
 </template>
 
 <script setup lang="ts">
-import { goback } from "@/utils/tools"
+import { goback, checkChName } from "@/utils/tools"
 
 const id = useRoute().params.id
 const isAdd = id === '0'
@@ -96,6 +96,7 @@ const formState = reactive({
   config_url: '',
   labels: [],
   adsUrl: undefined,
+  source: 0,
 })
 const loading = ref(false)
 
@@ -104,8 +105,8 @@ const add = async () => {
   
   const params = {
     logic_scene_set_id: sceneset.id,
-    source: 0,
-    desc: formState.desc,
+    source: formState.source,
+    desc: formState.desc || '',
     name: formState.name,
     map_id: formState.mapVersion,
     xosc_scene: formState.xosc_scene,
@@ -155,6 +156,7 @@ const getEditData = async () => {
     formState.labels = data.labels_detail
     formState.scene_url = data.scene_url
     formState.config_url = data.config_url
+    formState.source = data.source
   }
 }
 getEditData()

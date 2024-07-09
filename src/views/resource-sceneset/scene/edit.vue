@@ -10,7 +10,7 @@
       <Form :model="formState" @finish="add">
         <a-form-item label="场景名称" name="name"
           :rules="[{ required: true, message: '请输入场景名称' },
-            { min: 2, max: 160, message: '场景名称长度为2到160位' }]"
+            { validator: () => checkChName(formState.name, 160) }]"
         >
           <ch-input v-model:value="formState.name" :maxlength="160" placeholder="请输入场景名称"></ch-input>
         </a-form-item>
@@ -66,6 +66,8 @@
 </template>
 
 <script setup lang="ts">
+import { checkChName } from '@/utils/tools'
+
 const route = useRoute()
 const { id } = route.params
 const isAdd = id === '0'
@@ -147,7 +149,7 @@ const getEditData = async () => {
     formState.mapVersion = scene.mapVersion
     formState.mapName = scene.mapName
     formState.adsUrl = scene.xosc_key
-    formState.desc = scene.desc
+    formState.desc = scene.desc || ''
     formState.can_edit = scene.can_edit
   }
 }

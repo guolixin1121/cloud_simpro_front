@@ -10,7 +10,7 @@
         @finish="add">
         <a-form-item label="场景集名称" name="name" 
           :rules="[{ required: true, message: '请输入场景集名称'},
-          { min: 2, max: 160, message: '场景集名称长度为2到160位' }]">
+          { validator: () => checkChName(formState.name, 160)  }]">
           <ch-input v-model:value="formState.name" :maxlength="160" placeholder="请输入场景集名称"></ch-input>
         </a-form-item>
         <a-form-item label="场景集描述" name="desc">
@@ -37,6 +37,8 @@
 </template>
 
 <script setup lang="ts">
+import { checkChName } from '@/utils/tools'
+
 const id = useRoute().params.id
 const isAdd = !id
 const actionText = isAdd ? '创建' : '修改'
@@ -82,7 +84,7 @@ const getEditData = async () => {
       dataLoading.value = true
       const data = await currentApi.get(id)
       formState.name = data.name
-      formState.desc = data.desc
+      formState.desc = data.desc || ''
       formState.labels = data.labels_detail
     } finally {
       dataLoading.value = false

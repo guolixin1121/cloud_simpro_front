@@ -7,7 +7,7 @@
     <a-form ref="modalForm" :model="modal">
         <a-form-item name="targetSceneset" 
             :rules="[{ required: true, message: '请输入场景集名称'},
-            { min: 2, max: 160, message: '场景集名称长度为2到160位' }
+            { validator: () => checkChName(modal.targetSceneset, 160) }
              ]" v-if="modal.scenesetType == 1">
             <ch-input v-model:value="modal.targetSceneset" :maxlength="160" placeholder="请输入新建场景集名称"></ch-input>
         </a-form-item>
@@ -21,6 +21,7 @@
 </template>
 
 <script setup lang="ts">
+import { checkChName } from '@/utils/tools'
 const props = defineProps({
     isLogicSceneset: {
         type: Boolean,

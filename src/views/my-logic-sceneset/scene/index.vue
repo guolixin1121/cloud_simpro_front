@@ -120,9 +120,9 @@ const loadSceneset = async () => {
       store.catalog.sceneCatalog = data
       query.value = { 
         logic_scene_set_id: data.id,
-        name: formItems.value[0].searchValue,
-        source: formItems.value[1].searchValue,
-        labels: formItems.value[2].searchValue,
+        name: formItems.value[0].cachedValue,
+        source: formItems.value[1].cachedValue,
+        labels: formItems.value[2].cachedValue,
       }
       
     } finally {

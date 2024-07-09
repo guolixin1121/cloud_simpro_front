@@ -82,7 +82,7 @@ const getEditData = async () => {
       dataLoading.value = true
       const data = await currentApi.getSceneset(id)
       formState.name = data.name
-      formState.desc = data.desc
+      formState.desc = data.desc || ''
       formState.labels = data.labels_detail
       formState.can_edit = data.edit_enable
     } finally {

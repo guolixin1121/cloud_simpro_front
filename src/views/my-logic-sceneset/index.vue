@@ -25,7 +25,7 @@
         @finish="onConfirmClone">
         <a-form-item name="cloneName" style="width: 74%"
           :rules="[{ required: true, message: '请输入场景集名称'},
-          { min: 2, max: 160, message: '场景集名称长度为2到160位' }
+          { validator: () => checkChName(modal.cloneName, 160)  }
            ]">
           <span class="mr-2">我的场景-逻辑场景</span>
           <ch-input v-model:value="modal.cloneName" :maxlength="50" placeholder="请输入场景集名称"></ch-input>
@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { MyLogicScenesetSourceOptions, isMyLogicScenesetEditable, getMyLogicScenesetSourceName, isDefaultMyLogicSceneset } from '@/utils/dict'
-import { gotoSubPage } from '@/utils/tools'
+import { gotoSubPage, checkChName } from '@/utils/tools'
 
 /****** api */
 const user = store.user

@@ -65,11 +65,11 @@ const loadSceneset = async () => {
       store.catalog.sceneCatalog = data
       query.value = { 
         scene_set: data.id,
-        name: formItems.value[0].searchValue,
-        adsSource: formItems.value[1].searchValue,
-        labels: formItems.value[2].searchValue,
-        start_date: formItems.value[3].searchValue?.start_date,
-        end_date: formItems.value[3].searchValue?.end_date
+        name: formItems.value[0].cachedValue,
+        adsSource: formItems.value[1].cachedValue,
+        labels: formItems.value[2].cachedValue,
+        start_date: formItems.value[3].cachedValue?.start_date,
+        end_date: formItems.value[3].cachedValue?.end_date
       }
       console.log(formItems.value)
     } finally {

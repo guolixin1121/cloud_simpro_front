@@ -76,8 +76,8 @@ const loadSceneset = async () => {
       store.catalog.sceneCatalog = data
       query.value = { 
         scene_set: data.id,
-        name: formItems.value[0].searchValue,
-        labels: formItems.value[1].searchValue,
+        name: formItems.value[0].cachedValue,
+        labels: formItems.value[1].cachedValue,
       }
     } finally {
       loading.value = false

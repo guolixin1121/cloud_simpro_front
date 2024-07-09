@@ -117,15 +117,16 @@ function getDataFromStorage() {
         const timeValue = storage[key]
         if (timeValue && timeValue[0]) {
           formState[key] = [dayjs(timeValue[0]), dayjs(timeValue[1])]
-          item.searchValue = {
+          item.cachedValue = {
             start_date: timeValue[0],
             end_date: timeValue[1]
           }
         }
       } else {
         formState[key] = storage[key]
-        item.searchValue = storage[key]
+        item.cachedValue = storage[key]
       }
+      // 需要将缓存数据回传给父组件，其他属性value | defaultValue | searchValue都会导致问题，改为采用cachedValue
     })
     // 同步外边默认值，主要解决manual=true时首次搜索时的搜索条件值
     emits('update:items', items)
