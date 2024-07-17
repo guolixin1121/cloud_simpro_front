@@ -70,12 +70,12 @@
       <span class="title mb-5">审批意见</span>
 
       <a-spin :spinning="dataLoading">
-        <p v-if="formState.status != '1'">审批状态：<span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></p>
-        <template v-if="isAdmin && !isApproved">
+        <p v-if="isApproved">审批状态：<span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></p>
+        <template v-if="!isApproved">
           <ch-input type="textarea" rows="15" :maxlength="255"
             placeholder="请输入审批意见" v-model:value="formState.comments" />
           <div class="my-4">
-            <a-button type="primary" class="ant-btn-primary" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
+            <a-button type="primary" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
             <a-button class="mx-4" :loading="isRejecting" @click="onApprove(false)">驳回</a-button>
             <a-button v-if="formState.data" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
           </div>
@@ -110,7 +110,7 @@ const formState = reactive({
   reason: '',
   create_time: '',
   scene_count: '',
-  status: '',  // 1 待审批， 2 已批准 3 已拒绝
+  status: '1',  // 1 待审批， 2 已批准 3 已拒绝
   data: {
     id: '',
     name: '',

@@ -37,7 +37,7 @@
       </a-form>
       <div class="modal-buttons">
         <a-button @click="modal.visible = false">取消</a-button>
-        <a-button @click="onBatchApply" :loading="submitting" type="primary">确定</a-button>
+        <a-button @click="onBatchApply" :loading="submitting" type="primary">申请</a-button>
       </div>
   </a-modal>
 </template>

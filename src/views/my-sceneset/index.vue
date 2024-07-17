@@ -11,8 +11,8 @@
       </div>
     </div>
     <div>
-      <Table ref="tableRef" :query="query" :columns="columns" :api="scenesetList" :fieldNames="{ label: 'groupName', value: 'id' }"
-        :scroll="{ x: 1700, y: 'auto' }" @select="onSelect" >
+      <Table ref="tableRef" :query="query" :columns="columns" :api="listApi"
+        :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
       </Table>
     </div>
   </div>
@@ -44,7 +44,7 @@ import { gotoSubPage, checkChName } from '@/utils/tools'
 /****** api */
 const user = store.user
 const currentApi = api.scenesets
-const scenesetList = api.scene.getScenesetList
+const listApi = api.scenesets.getListV2
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
@@ -140,7 +140,8 @@ const onConfirmClone = () => {
 }
 const tableRef = ref()
 const checkedItems = ref([])
-const onSelect = (data: any) => (checkedItems.value = data)
+const onSelect = (data: any) => checkedItems.value = data
+
 const onBatchDelete = async () => {
   await currentApi.batchDelete({ scene_set_id: checkedItems.value })
   tableRef.value.refresh({ deletedRows: checkedItems.value.length })

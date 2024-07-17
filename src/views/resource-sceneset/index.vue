@@ -15,7 +15,7 @@
       </div>
     </div>
     <div>
-      <Table ref='tableRef' :query="query" :columns="columns" :api="currentApi.getScenesetList" :fieldNames="{ label: 'groupName', value: 'id' }"
+      <Table ref='tableRef' :query="query" :columns="columns" :api="currentApi.getScenesetList"
         :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
       </Table>
     </div>
@@ -35,7 +35,7 @@
       </a-form>
       <div class="modal-buttons">
         <a-button @click="modal.visible = false">取消</a-button>
-        <a-button @click="onBatchApply" :loading="submitting" type="primary">确定</a-button>
+        <a-button @click="onBatchApply" :loading="submitting" type="primary">申请</a-button>
       </div>
   </a-modal>
 </template>

@@ -197,6 +197,7 @@ onMounted(() => {
 
 // 用于删除等操作后，重新加载table
 // slient: 是否显示loading
+// option: { slient: boolean, page: number, deletedRows: number}
 const refresh = (option: any) => {
   loading.value = false
   clearCheckbox()

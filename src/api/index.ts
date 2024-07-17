@@ -18,6 +18,7 @@ export const user = defineApi({
 })()
 
 export const scenesets = defineApi({
+  getListV2: { url: '/scene/v2/scenesets/', method: 'get'},
   getList: { url: '/scene/scenesets/', method: 'get' },
   get: { url: '/scene/scenesets/{sid}', method: 'get' },
   delete: { url: '/scene/scenesets/{sid}/', method: 'delete' },

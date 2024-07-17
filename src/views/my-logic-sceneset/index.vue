@@ -11,7 +11,7 @@
       </div>
     </div>
     <div>
-      <Table ref="tableRef" :query="query" :columns="columns" :api="currentApi.getList" :fieldNames="{ label: 'groupName', value: 'id' }"
+      <Table ref="tableRef" :query="query" :columns="columns" :api="currentApi.getList"
         :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
       </Table>
     </div>
@@ -79,7 +79,7 @@ const modal = reactive({
   cloneName: '' // 另存为的名字
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60,validator: (data: any) => !isDefaultMyLogicSceneset(data) },
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => !isDefaultMyLogicSceneset(data) },
   { title: '场景集ID', dataIndex: 'id', width: 120 },
   { title: '场景集名称', dataIndex: 'name', ellipsis: true },
   { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
