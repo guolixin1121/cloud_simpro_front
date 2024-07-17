@@ -31,7 +31,7 @@
                   {{ val }}
                 </li>
               </ul>
-              <span v-else>无</span>
+              <span v-else>--</span>
             </a-form-item>
           </templage>
         </a-form>

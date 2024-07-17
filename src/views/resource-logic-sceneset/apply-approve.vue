@@ -77,10 +77,10 @@
             <ch-input type="textarea" rows="15" :maxlength="255"
               placeholder="请输入审批意见" v-model:value="formState.comments" />
             <div class="my-4">
-              <a-button type="primary" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
+              <a-button type="primary" class="ant-btn-primary" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
               <a-button class="mx-4" :loading="isRejecting" @click="onApprove(false)">驳回</a-button>
               <a-button v-if="formState.data" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
-            </div>
+            </div>     
           </template>
           <template v-else>
             <p class="comments">{{ formState.comments }}</p>

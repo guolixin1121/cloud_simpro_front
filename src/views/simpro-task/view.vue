@@ -50,7 +50,7 @@
               {{ val.name }}
             </li>
           </ul>
-          <span v-else>无</span>
+          <span v-else>--</span>
         </a-form-item>
         <a-form-item label="评测指标">
           <Table style="margin-top: 0px" :pagination="false" :columns="thresholdColumns" :dataSource="formState.kpi_detail">
@@ -87,7 +87,7 @@
               {{ val.adsName }}
             </li>
           </ul>
-          <span v-else>无</span>
+          <span v-else>--</span>
         </a-form-item>
         <a-form-item label="创建时间">
           {{ formatDate(formState.create_time) }}

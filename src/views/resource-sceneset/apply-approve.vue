@@ -56,7 +56,7 @@
                   {{ item.display_name }}
                 </li>
               </ul>
-              <span v-else>无</span>
+              <span v-else>--</span>
             </a-form-item>
             <a-form-item label="创建时间" name="create_time">{{ formState.data.create_time }}</a-form-item>
           </template>
@@ -75,7 +75,7 @@
           <ch-input type="textarea" rows="15" :maxlength="255"
             placeholder="请输入审批意见" v-model:value="formState.comments" />
           <div class="my-4">
-            <a-button type="primary" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
+            <a-button type="primary" class="ant-btn-primary" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
             <a-button class="mx-4" :loading="isRejecting" @click="onApprove(false)">驳回</a-button>
             <a-button v-if="formState.data" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
           </div>

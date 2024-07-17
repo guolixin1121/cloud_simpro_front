@@ -76,7 +76,7 @@
                 {{ item.display_name }}
               </li>
             </ul>
-            <span v-else>无</span>
+            <span v-else>--</span>
           </template>
         </a-form-item>
         <a-form-item label="描述" name="desc">
