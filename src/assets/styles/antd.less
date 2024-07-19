@@ -563,7 +563,7 @@ button.ant-btn-primary[disabled] {
     .ant-modal-body {
       border-radius: 4px;;
       padding: 0px;
-      color: var(--text-second-color);
+      color: var(--text-main-color);
 
       .modal-content {
         padding: 24px;
@@ -762,5 +762,17 @@ input::placeholder,
   }
   .ant-radio-inner::after {
     background-color: var(--primary-color) !important;
+  }
+}
+
+.ant-dropdown  {
+  min-width: auto !important;
+  .ant-dropdown-menu-item {
+    padding: 6px 16px;
+    cursor: pointer;
+  }
+  .ant-dropdown-menu-item:hover {
+    background-color: #ebfbee;
+    color: var(--primary-color) !important;
   }
 }

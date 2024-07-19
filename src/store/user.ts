@@ -14,7 +14,8 @@ export const useUserStore = defineStore('user', () => {
   const logout = async () => {
     user.value = null
     token.value = null
-    await api.user.logout()
+    await api.auth.logout()
+    // await api.user.logout()
     removeToken()
     LStorage.remove('auth')
     setTimeout(() => {
@@ -48,7 +49,9 @@ export const useUserStore = defineStore('user', () => {
   const getUserInfo = async () => {
     if (user.value) return
 
-    user.value = await userApi.getLoginUser()
+    const localUser = await userApi.getLoginUser() // 本系统用户信息
+    const authUser = await api.auth.getIdentities() // 权限系统的用户信息
+    user.value = { ...localUser, ...authUser }
     LStorage.set('user', user.value.username)
     const permissions = await userApi.getPermissions()
 

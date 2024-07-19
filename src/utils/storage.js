@@ -29,9 +29,11 @@ class MyStorage {
 
   get(key) {
     const value = this.storage.getItem(key)
+    
     if (value) {
-      return JSON.parse(value)
+      return value.indexOf('{') > -1 ? JSON.parse(value) : value
     }
+    return null
   }
 
   getWithPrefix(prefix) {

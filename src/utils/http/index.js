@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css' // 必须引用
-import { getToken } from '@/utils/storage'
+import { getToken, LStorage } from '@/utils/storage'
 import AxiosCanceler from './cancelCancel'
 
 // 处理错误信息
@@ -83,9 +83,9 @@ class AxiosRequest {
       const type = headers['content-type']
 
       Object.assign(headers, {
-        Authorization: `JWT ${getToken()}`,
+        Authorization: url.indexOf('/cloud-pro/') > -1 ? getToken() : `JWT ${getToken()}`,
         'content-type': type || 'application/json',
-        'X-Project-Id': store.user?.user?.project_id || ''
+        'X-Project-Id': store.user?.user?.project_id || LStorage.get('X-Project-Id')  || ''
       })
       if(typeof data == 'object') {
         Object.keys(data).forEach(key => {
@@ -120,9 +120,9 @@ class AxiosRequest {
         .then(res => {
           const { code, data = {}, msg, err } = res.data
 
-          if (code === 0 || code === 200) {
+          if (code == 0 || code == 200) {
             resolve(data)
-          } else if (code === 100) {
+          } else if (code == 100) {
             // token过期跳到登录页
             store.user.gotoLogin()
           } else {
@@ -132,7 +132,7 @@ class AxiosRequest {
         })
         .catch(error => {
           if(axios.isCancel(error)) return
-          if (error.response?.status === 401) {
+          if (error.response?.status == 401) {
             // token过期跳到登录页
             store.user.gotoLogin()
           } else {

@@ -4,9 +4,14 @@
  * note: 使用defineApi定义接口时注意末尾的函数调用
  */
 
-export const table = defineApi({
-  getList: { url: '/scene/scenes/', method: 'get' }
-})() // 注意末尾的括号
+export const auth = defineApi({
+  clue: {url: '/cloud-pro/clue/report', method: 'post'},
+  logout: {url: '/cloud-pro/auth/logout', method: 'post'},
+  getIdentities: {url: '/cloud-pro/user/identities', method: 'post'},
+  getUser: {url: '/cloud-pro/cloud-pro-management/management/user/detail', method: 'get'},
+  editUser: {url: '/cloud-pro/cloud-pro-management/management/user/edit', method: 'post'},
+  changePassword: {url: '/cloud-pro/cloud-pro-management/management/user/edit/password', method: 'post'},
+})()
 
 export const user = defineApi({
   login: { url: '/auth/login/', method: 'post' },

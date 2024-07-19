@@ -1,6 +1,7 @@
 <!-- 可判断中文个数的input组件 -->
 <template>
   <a-input v-if="type == 'input'" 
+    ref="inputRef"
     v-bind="$attrs"
     v-model:value="innerValue" 
     allowClear
@@ -64,5 +65,10 @@ const sliceWord = (text: string, index: number = 1): string => {
 }
 watch(() => props.value, (val) => {
   innerValue.value = val
+})
+
+const inputRef = ref()
+defineExpose({
+  focus: () => inputRef.value.focus(),
 })
 </script>

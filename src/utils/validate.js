@@ -17,3 +17,20 @@ export const isObject = obj => {
   const type = Object.prototype.toString.call(obj)
   return type === '[object Object]'
 }
+
+export const validatePassword = (password) => {
+  const reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/
+  if(!password || reg.test(password)) {
+    return Promise.resolve()
+  } else {
+    return Promise.reject(new Error('密码不符合最低安全要求，请重新输入'))
+  }
+}
+
+export const comparePassword = (formData) => {
+  const { password, confirm_password } = formData
+  if (password.trim().length > 0 && confirm_password.trim().length > 0 && password.trim() !== confirm_password.trim()) {
+      return Promise.reject(new Error('两次密码不一致，请检查'))
+  }
+  return Promise.resolve()
+}
