@@ -24,24 +24,16 @@
       </ul>
     </a-spin>
   </div>
+  <upgrade ref="upgradeModal"></upgrade>
 </template>
 
 <script lang="ts" setup>
 import { gotoVnc } from '@/utils/vnc'
 
 const user = store.user.user
-const list = ref()
-// const list = ref(
-//   [
-//   { name: 'GuangQi - 1', username: '', status: 0 },
-//   { name: 'GuangQi - 2', username: 'test1', status: 1 },
-//   { name: 'GuangQi - 3', username: 'test7', status: 1 },
-//   { name: 'GuangQi - 4', username: '', status: 0 },
-//   { name: 'GuangQi - 5', username: '', status: 0 },
-//   { name: 'GuangQi - 6', username: 'test1', status: 1 }
-//   ]
-// )
+const upgradeModal = ref()
 
+const list = ref()
 const loading = ref(false)
 const loadList = async () => {
   try {
@@ -59,8 +51,12 @@ const loadList = async () => {
 }
 loadList()
 
-// let newWindow: any
 const enterVnc = ({ status, address, username }: any) => {
+  if(upgradeModal.value.isRegisterUser) {
+    upgradeModal.value.show()
+    return
+  }
+
   const hasCurrentUserEntered = list.value.findIndex((item: any) => item.username === user.username) > -1
   if (hasCurrentUserEntered) {
     if (user.username == username) {

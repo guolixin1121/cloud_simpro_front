@@ -56,9 +56,9 @@
       </a-form-item>
     </a-form>
     <div class="modal-buttons">
-        <a-button @click="resetPasswordForm">重置</a-button>
-        <a-button class="login-btn" type="primary" html-type="submit" :loading="loading">提交</a-button>
-      </div>
+      <a-button @click="resetPasswordForm">重置</a-button>
+      <a-button class="login-btn" type="primary" html-type="submit" :loading="loading">提交</a-button>
+    </div>
   </a-modal>
 </template>
 
@@ -109,7 +109,6 @@ const ok = async () => {
 }
 const resetPasswordForm = () => formRef.value.resetFields()
 </script>
-
 
 <style scoped lang="less">
 .username {

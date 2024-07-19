@@ -26,7 +26,6 @@
      visible.value = true
      getData()
      nextTick(() => {
-        console.log(table.value.refresh)
         table.value?.refresh()
      })
  }
