@@ -40,6 +40,8 @@ let menus: Permission[] = store.user.user.permissions
 const route = useRoute()
 let selectedKeys = computed(() => menuPath.value)
 let openKeys = computed(() => {
+  if(collapsed.value) return []
+
   const keys = getParentKeys(menus)
   return !keys ? [] : keys
 })

@@ -81,7 +81,6 @@ class AxiosRequest {
     return new Promise((resolve, reject) => {
       const { url, data = {}, method = 'POST', headers = {} } = params || {}
       const type = headers['content-type']
-
       Object.assign(headers, {
         Authorization: url.indexOf('/cloud-pro/') > -1 ? getToken() : `JWT ${getToken()}`,
         'content-type': type || 'application/json',

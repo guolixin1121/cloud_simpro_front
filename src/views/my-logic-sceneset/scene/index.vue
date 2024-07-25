@@ -11,7 +11,7 @@
 
   <div class="main">
     <page-title title="逻辑场景列表">
-      <a-button :disabled="!selectedItems.length" v-if="user.hasPermission('add')" @click="onBatchClone()">另存为</a-button>
+      <a-button :disabled="!selectedItems.length" v-if="user.hasPermission('save')" @click="onBatchClone()">另存为</a-button>
       <batch-button :disabled="!selectedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
         :tips="'已勾选' + selectedItems.length+ '个场景，是否删除所有勾选场景？'"></batch-button>
       <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isEditable" @click="gotoSubPage('/edit/0')">上传逻辑场景</a-button>
@@ -158,8 +158,8 @@ const columns = [
   { title: '来源', dataIndex: 'source', width: 120, formatter: getMyLogicSceneSourceName },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },
-  { title: '创建者', dataIndex: 'create_user', width: 150 },
-  { title: '修改者', dataIndex: 'update_user', width: 150 },
+  { title: '创建者', dataIndex: 'create_user', width: 180, ellipsis: true  },
+  { title: '修改者', dataIndex: 'update_user', width: 180, ellipsis: true  },
   {
     title: '操作',
     dataIndex: 'actions',

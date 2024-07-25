@@ -1,11 +1,19 @@
-// 数据操作权限的label，value对应关系
+// 表格操作列权限的对应关系，用于权限查询
+// key：按钮名称
+// value：权限系统里的值
 export const Operations = {
-  编辑地图: 'edit',
-  编辑场景: 'edit',
+  新增: 'add',
   编辑: 'edit',
   删除: 'delete',
-  新增: 'add',
-  查看: 'view'
+  查看: 'view',
+  查看结果: 'view',
+  仿真结果: 'view',
+  编辑地图: 'editXodr',
+  编辑场景: 'editXosc',
+  运行: 'run',
+  停止: 'stop',
+  另存为: 'save',
+  申请授权: 'apply',
 }
 
 export const SceneSourceOptions = [

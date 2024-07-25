@@ -1,13 +1,15 @@
 // 左侧菜单权限
 declare type Permission = {
+  id: string,
   title: string
   path: string
   icon: string
   children?: Permission[]
-  actions?: DataAction[]
+  actions?: String[],
+  visible: Boolean
 }
 // 数据的操作权限
-type DataAction = 'add' | 'delete' | 'edit' | 'view'
+// type DataAction = 'add' | 'delete' | 'edit' | 'view'
 
 // 列表搜索项
 interface SearchFormItem {

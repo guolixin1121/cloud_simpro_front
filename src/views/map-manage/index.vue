@@ -14,14 +14,17 @@
         <div class="title-section">
           <span class="title">地图列表</span>
           <div>
-            <batch-button :disabled="!selectedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
-            <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add')" @click="gotoSubPage('/edit/0')">上传地图</a-button>
+            <batch-button v-if="user.hasPermission('delete') && selectedMapset" 
+              :disabled="!selectedItems.length" :api="onBatchDelete"></batch-button>
+            <a-button v-if="user.hasPermission('add') && selectedMapset" 
+              type="primary" :disabled="selectedItems.length > 0" 
+              @click="gotoSubPage('/edit/0')">上传地图</a-button>
           </div>
         </div>
         <Table ref="tableRef" :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 800, y: 'auto' }"
           @select="onSelect" >
           <template #bodyCell="{ column, record }">
-            <template v-if="column.dataIndex == 'versionCount'">
+            <template v-if="column.dataIndex == 'versionCount' && user.hasPermission('version')">
               <a class="text-link inline-block w-full" @click="gotoVersion(record)">
                 {{ record.versionCount }}
               </a>

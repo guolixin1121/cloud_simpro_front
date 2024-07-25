@@ -32,12 +32,13 @@ const hasPermission = (scope: RObject, key: string) => {
   const data = scope.record
   // 是否配置了该页面的操作权限
   const userStore = store.user
-  let permission = userStore.hasPermission(key as DataAction)
+  let permission = userStore.hasPermission(key)
 
   // 是否只允许自己操作
   const operationKeys = Object.keys(Operations)
   // 跳过查看的权限检查，所有用户都可以查看
-  if (props.isOnlyCreator && key != '查看' && operationKeys.includes(key)) {
+  // if (props.isOnlyCreator && key != '查看' && operationKeys.includes(key)) {
+  if (props.isOnlyCreator && operationKeys.includes(key)) {
     const owner = data.createUser || data.create_user || data.username
     const isOwner = owner === userStore.user.username
     permission = permission && isOwner

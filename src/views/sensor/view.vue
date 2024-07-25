@@ -1,6 +1,6 @@
 <template>
   <form-view title="传感器详情" :items="formItems" :loading="loading">
-    <router-link to="/dll/">传感器模型</router-link>
+    <router-link to="/sensor/">传感器模型</router-link>
   </form-view>
 </template>
 

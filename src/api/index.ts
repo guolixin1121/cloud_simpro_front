@@ -14,6 +14,7 @@ export const auth = defineApi({
 })()
 
 export const user = defineApi({
+  project: { url: '/auth/user/project/', method: 'get' },
   login: { url: '/auth/login/', method: 'post' },
   logout: { url: '/auth/logout/', method: 'post' },
   getLoginUser: { url: '/auth/user_info/', method: 'get' },

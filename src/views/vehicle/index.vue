@@ -20,9 +20,6 @@
       :scroll="{ x: 1500, y: 'auto' }"
     >
       <template #bodyCell="{ column, record, index }">
-        <!-- <template v-if="column.dataIndex == 'type'">
-          <span v-if="record.type === 1">导入</span><span v-else-if="record.type === 2">创建</span> <span v-else>全部</span>
-        </template> -->
         <template v-if="column.dataIndex == 'direct'">
           <span v-if="record.direct === 1">简单转向模型</span>
           <span v-else-if="record.direct === 2">C-EPS模型</span>
@@ -147,7 +144,7 @@ const columns = [
   { title: '是否共享', dataIndex: 'is_share', width: 100},
   { title: '创建时间', dataIndex: 'create_date', width: 180 },
   // { title: '修改时间', dataIndex: 'update_date', width: 180, ellipsis: true },
-  { title: '所属用户', dataIndex: 'username', width: 150 },
+  { title: '所属用户', dataIndex: 'username', width: 180, ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',
@@ -210,7 +207,7 @@ const confirmModal = async () => {
   }
 }
 
-const gotoVersion = (record: any) => gotoSubPage('/version/' + record.id)
+const gotoVersion = (record: any) => gotoSubPage('/version/?id=' + record.id)
 
 const cancelModal = () => {
   fileList.value = []

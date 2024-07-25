@@ -99,8 +99,8 @@ const seriesOptions = {
     }
   },
   'pie': {
-    radius: ['45%', '65%'],
-    center: ['50%', '60%'],
+    radius: ['45%', '60%'],
+    center: ['50%', '55%'],
     avoidLabelOverlap: false,
     itemStyle: {
       // borderRadius: 10,

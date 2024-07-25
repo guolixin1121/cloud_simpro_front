@@ -253,7 +253,7 @@ const hasPermission = (column: RObject, row: RObject, key: string) => {
   const data = row
   // 是否配置了该页面的操作权限
   const userStore = store.user
-  let permission = userStore.hasPermission(key as DataAction)
+  let permission = userStore.hasPermission(key)
 
   // 是否只允许自己操作
   if (props.isOnlyCreator && ['编辑', '删除'].includes(key)) {

@@ -1,10 +1,10 @@
 <template>
+  <div class="breadcrumb">
+    <router-link to="/map-manage/">地图管理</router-link>
+    <!-- <a>地图管理</a> -->
+    <span class="breadcrumb--current">地图版本</span>
+  </div>
   <div class="main">
-    <div class="breadcrumb">
-      <router-link to="/map-manage/">地图管理</router-link>
-      <!-- <a>地图管理</a> -->
-      <span class="breadcrumb--current">地图版本</span>
-    </div>
     <a-spin :spinning="loading">
       <Table ref="table" :api="mapsApi.getMapVersion" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }">
         <template #bodyCell="{ column, record }">
@@ -41,7 +41,7 @@ const columns = [
   { title: '地图文件', dataIndex: 'mapFileName', width: 180, ellipsis: true },
   // { title: '地图类型', dataIndex: 'mapType', width: 100 },
   { title: '创建时间', dataIndex: 'importTime', width: 150 },
-  { title: '创建者', dataIndex: 'importUserName', width: 100 },
+  { title: '创建者', dataIndex: 'importUserName', width: 100, ellipsis: true  },
   // { title: '地图文件地址', dataIndex: 'mapUrl', ellipsis: true },
   {
     title: '操作',

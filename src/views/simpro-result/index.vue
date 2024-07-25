@@ -17,7 +17,7 @@
         :api="currentApi.getList"
         :query="query"
         :columns="columns"
-        :scroll="{ x: 2100, y: 'auto' }"
+        :scroll="{ x: 2200, y: 'auto' }"
         @select="onSelect"
       >
         <template #bodyCell="{ column, record }">
@@ -44,6 +44,7 @@
       </Table>
     </a-spin>
   </div>
+  <upgrade ref="upgradeModal" module="simulationManage"></upgrade>
 </template>
 
 <script setup lang="ts">
@@ -52,6 +53,7 @@ import { gotoSubPage, openLink } from '@/utils/tools'
 
 const templateId = useRoute().query.templateId as string
 const user = store.user
+const upgradeModal = ref()
 const currentApi = api.result
 
 const isRunOrWait = (status: number) => status === 2 || status === 1
@@ -102,16 +104,16 @@ const table = ref()
 const columns = [
   { dataIndex: 'checkbox', width: 60, validator: (data: RObject) => isNotRunning(data.status) },
   { title: '任务ID', dataIndex: 'template_number', width: 150 },
-  { title: '运行时序', dataIndex: 'serial', width: 90 },
+  { title: '运行时序', dataIndex: 'serial', width: 100 },
   { title: '仿真任务名称', dataIndex: 'name', width: 200 },
-  { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90 },
+  { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 100 },
   { title: '主车模型', dataIndex: 'vehicle_detail', width: 200 },
   { title: '仿真算法', dataIndex: 'algorithm_detail', width: 200 },
   { title: '评测指标', dataIndex: 'kpi_detail', width: 180, ellipsis: true },
-  { title: '运行状态', dataIndex: 'status', width: 100 },
-  { title: '任务结果', dataIndex: 'results_status', width: 80 },
-  { title: '完成时间', dataIndex: 'finish_time', width: 150 },
-  { title: '所属用户', dataIndex: 'create_user', width: 120 },
+  { title: '运行状态', dataIndex: 'status', width: 120 },
+  { title: '任务结果', dataIndex: 'results_status', width: 100 },
+  { title: '完成时间', dataIndex: 'finish_time', width: 180 },
+  { title: '所属用户', dataIndex: 'create_user', width: 200 },
   {
     title: '操作',
     dataIndex: 'actions',
@@ -132,7 +134,13 @@ const columns = [
       },
       删除: {
         validator: (data: any) => isNotRunning(data.status),
-        handler: async (data: any) => await currentApi.delete(data.id)
+        handler: async (data: any) => {
+          if(user.isRegisterUser()) {
+            upgradeModal.value.show()
+            return
+          }
+          await currentApi.delete(data.id)
+        }
       }
     }
   }

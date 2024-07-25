@@ -59,6 +59,7 @@
       </div>
     </div>
   </div>
+  <upgrade ref="upgradeModal" module="onlineSimulation"></upgrade>
 </template>
 
 <script lang="ts" setup>
@@ -84,8 +85,12 @@ const data = reactive<LLMData>({
   placeholder: '请输入场景描述',
   errorMsg: ''
 })
-
+const upgradeModal = ref()  
 const onSend = async () => {
+  if(store.user.isRegisterUser) {
+    upgradeModal.value.show()
+    return
+  }
   if(data.question.trim().length == 0) {
     data.errorMsg = '请输入文本'
     return

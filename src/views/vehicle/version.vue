@@ -1,10 +1,9 @@
 <template>
+  <div class="breadcrumb">
+    <router-link to="/veticle-model/">动力学模型</router-link>
+    <span class="breadcrumb--current">模型版本</span>
+  </div>
   <div class="main">
-    <div class="breadcrumb">
-      <router-link to="/veticle-model/">动力学模型</router-link>
-      <!-- <a>地图管理</a> -->
-      <span class="breadcrumb--current">模型版本</span>
-    </div>
     <div class="flex justify-between items-center">
       <div class="flex items-center">
         <span class="title mr-4">模型版本列表</span>
@@ -43,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-const { id } = useRoute().params
+const { id } = useRoute().query
 /****** api */
 const currentApi = api.veticleModel
 const user = store.user

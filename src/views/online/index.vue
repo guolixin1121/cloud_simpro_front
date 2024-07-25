@@ -24,7 +24,7 @@
       </ul>
     </a-spin>
   </div>
-  <upgrade ref="upgradeModal"></upgrade>
+  <upgrade ref="upgradeModal" module="onlineSimulation"></upgrade>
 </template>
 
 <script lang="ts" setup>
@@ -52,7 +52,7 @@ const loadList = async () => {
 loadList()
 
 const enterVnc = ({ status, address, username }: any) => {
-  if(upgradeModal.value.isRegisterUser) {
+  if(store.user.isRegisterUser()) {
     upgradeModal.value.show()
     return
   }

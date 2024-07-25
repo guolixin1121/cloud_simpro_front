@@ -3,7 +3,7 @@
     <div class="flex items-center justify-center">
       <a-dropdown>
         <a class="username">
-          <span style="margin-right: 8px;">{{ user?.username }}</span>
+          <span style="margin-right: 8px;">{{ user.user?.username }}</span>
           <svg-icon icon="arrow"/>
         </a>
         <template #overlay>
@@ -24,7 +24,7 @@
               <a href="/helper/" target="_blank">用户手册</a>
             </a-menu-item>
             <a-menu-item>
-              <a @click="logout">退出登录</a>
+              <a @click="user.logout">退出登录</a>
             </a-menu-item>
           </a-menu>
         </template>
@@ -66,23 +66,21 @@
 import Personal from './components/personal.vue'
 import { validatePassword, comparePassword } from '@/utils/validate'
 
-const logout = store.user.logout
-const user = store.user.user
+const user = store.user
 const showChangePassword = ref(false)
 const showPersonal = ref(false)
 
-const hasPermission = (key: string) => !!user.acls.find((item: any) => item.acl == key)
 const managerAcl = computed(() => {
   // 有以下其中一个权限，就展示‘管理中心’
-   const keys = ['cloud:systemManage:enterprise', 'cloud:systemManage:menu', 'cloud:clueManage']
+   const keys = ['system:systemManage:enterprise', 'system:systemManage:menu', 'system:clueManage']
    for(let i = 0; i < keys.length; i++) {
-     if(hasPermission(keys[i])) {
+     if(user.hasAcl(keys[i])) {
        return keys[i]
      }
    }
   return ''
 })
-const memberAcl = computed(() => hasPermission('cloud:memberManage') ? 'cloud:memberManage' : '')
+const memberAcl = computed(() => user.hasAcl('system:memberManage') ? 'system:memberManage' : '')
 
 const formRef = ref()
 const formData = reactive({
@@ -101,7 +99,7 @@ const ok = async () => {
       })
       if(!res.code) {
         message.success('密码修改成功，请重新登录')
-        logout()
+        user.logout()
       }
   } finally {
       loading.value = false

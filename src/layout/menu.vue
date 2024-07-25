@@ -5,26 +5,29 @@ const props = defineProps({
     required: true
   }
 })
+const isSubmenu = (children: Permission[] | undefined) => !children ? false : !!children.find((child: Permission) => child.visible)
 </script>
 
 <template>
   <template v-for="menu in props.menus">
-    <template v-if="!menu.children || !menu.children.length">
-      <a-menu-item :key="menu.path">
-        <!-- icon的class在菜单缩放隐藏菜单名称时需要 -->
-        <svg-icon class="ant-menu-item-icon" :icon="menu.icon || ''"></svg-icon>
-        <span>
-          <router-link :to="menu.path + '?clear'">{{ menu.title }}</router-link>
-        </span>
-      </a-menu-item>
-    </template>
-    <a-sub-menu v-else :key="menu.path">
-      <template #title>
-        <svg-icon class="ant-menu-item-icon" :icon="menu.icon || ''"></svg-icon>
-        <span>{{ menu.title }}</span>
+    <template v-if="menu.visible">
+      <a-sub-menu v-if="isSubmenu(menu.children)" :key="menu.path">
+        <template #title>
+          <svg-icon class="ant-menu-item-icon" :icon="menu.icon || ''"></svg-icon>
+          <span>{{ menu.title }}</span>
+        </template>
+        <Menu :menus="menu.children" />
+      </a-sub-menu>
+      <template v-else>
+        <a-menu-item :key="menu.path">
+          <!-- icon的class在菜单缩放隐藏菜单名称时需要 -->
+          <svg-icon class="ant-menu-item-icon" :icon="menu.icon || ''"></svg-icon>
+          <span>
+            <router-link :to="menu.path + '?clear'">{{ menu.title }}</router-link>
+          </span>
+        </a-menu-item>
       </template>
-      <Menu :menus="menu.children" />
-    </a-sub-menu>
+    </template>
   </template>
 </template>
 

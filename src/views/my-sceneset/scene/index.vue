@@ -12,11 +12,14 @@
     <div class="title-section">
       <span class="title">具体场景列表</span>
       <div>
-        <a-button :disabled="!checkedItems.length" v-if="user.hasPermission('add')" @click="onBatchClone()">另存为</a-button>
-        <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
+        <a-button v-if="user.hasPermission('add')"
+          :disabled="!checkedItems.length"  @click="onBatchClone()">另存为</a-button>
+        <batch-button v-if="user.hasPermission('delete')" 
+          :disabled="!checkedItems.length" :api="onBatchDelete"
           :tips="'已勾选' + checkedItems.length+ '个场景，是否删除所有勾选场景？'"></batch-button>
-        <a-button type="primary" :disabled="checkedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isEditable"
-            @click="gotoSubPage('/edit/')">上传具体场景</a-button>
+        <a-button v-if="user.hasPermission('add') && selectedSceneset?.isEditable"
+          type="primary" :disabled="checkedItems.length > 0"
+          @click="gotoSubPage('/edit/')">上传具体场景</a-button>
       </div>
     </div>
     <a-spin :spinning="loading">
@@ -123,8 +126,8 @@ const columns = [
   { title: '来源', dataIndex: 'adsSource', formatter: getMySceneSourceName, width: 120 },
   { title: '创建时间', dataIndex: 'createTime', width: 180 },
   { title: '修改时间', dataIndex: 'updateTime', width: 180 },
-  { title: '创建者', dataIndex: 'createUser', width: 150 },
-  { title: '修改者', dataIndex: 'updateUser', width: 150 },
+  { title: '创建者', dataIndex: 'createUser', width: 180, ellipsis: true  },
+  { title: '修改者', dataIndex: 'updateUser', width: 180, ellipsis: true  },
   {
     title: '操作',
     dataIndex: 'actions',
