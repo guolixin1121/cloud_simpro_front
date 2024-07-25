@@ -54,13 +54,11 @@ const onChecked = () => (query.value = { ...query.value, owner: isOwner.value ? 
 const toggleMore = () => tableRef.value.calcateHeight()
 
 const onCreate = () => {
-  upgradeModal.value.show()
-  return
-  // if(user.isRegisterUser()) {
-  //   upgradeModal.value.show()
-  //   return
-  // }
-  // router.push('/simpro-task/edit/0')
+  if(user.isRegisterUser()) {
+    upgradeModal.value.show()
+    return
+  }
+  router.push('/simpro-task/edit/0')
 }
 
 /****** 表格区域 */

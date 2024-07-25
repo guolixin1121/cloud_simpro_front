@@ -87,7 +87,7 @@ const data = reactive<LLMData>({
 })
 const upgradeModal = ref()  
 const onSend = async () => {
-  if(store.user.isRegisterUser) {
+  if(store.user.isRegisterUser()) {
     upgradeModal.value.show()
     return
   }
