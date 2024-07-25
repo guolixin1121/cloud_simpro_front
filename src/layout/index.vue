@@ -36,10 +36,17 @@ import Menu from './menu.vue'
 // menus for current login user
 let menus: Permission[] = store.user.user.permissions
 
+const collapsed = ref(false);
+const toggleCollapsed = () => {
+  collapsed.value = !collapsed.value
+}
+
 // set selected menu, and open its parent menu
 const route = useRoute()
 let selectedKeys = computed(() => menuPath.value)
 let openKeys = computed(() => {
+  if(collapsed.value) return []
+
   const keys = getParentKeys(menus)
   return !keys ? [] : keys
 })
@@ -71,12 +78,6 @@ function getParentKeys(list: Permission[], keys: string[] = []): string[] | bool
   }
   return false
 }
-
-const collapsed = ref(false);
-const toggleCollapsed = () => {
-  collapsed.value = !collapsed.value
-}
-
 </script>
 
 <style scoped lang="less">

@@ -4,8 +4,9 @@
 1. master 开发分支
 执行archive生成zip后手动部署
 2. production: 生产分支
-3. yizhuang_dev 亦庄分支  
-在独立的git上   
+3. yizhuang_dev 亦庄01环境分支  
+http://simpro01.saimo.cloud:32450/
+在独立的git上  
 ```
 git remote add yizhuang http://10.9.0.167:22080/cloud-simpro1/cloud_simpro_front   
 账号: cloud-simpro    
