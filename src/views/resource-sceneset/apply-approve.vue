@@ -98,7 +98,7 @@ import { getApplyStatus } from '@/utils/dict'
 const id = useRoute().params.id
 const currentApi = api.grant
 const user = store.user
-const isAdmin = user.isAdmin()
+const isAdmin = user.isAdminProject()
 const title = computed(() => isAdmin && formState.status == '1' ? '任务审批' : '任务详情') 
 
 const router = useRouter()
@@ -129,7 +129,6 @@ const isSceneset = ref(false)
 const isApproving = ref(false)
 const isRejecting = ref(false)
 const onApprove = async (isAproved: boolean = true) => {
-  debugger
   isAproved ? isApproving.value = true : isRejecting.value = true
 
   const params = {

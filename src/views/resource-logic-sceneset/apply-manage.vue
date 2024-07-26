@@ -12,7 +12,7 @@
         <a-tab-pane :key="2" tab="逻辑场景管理">
         </a-tab-pane>
       </a-tabs> 
-      <div v-if="user.isAdmin()">
+      <div v-if="user.isAdminProject() && user.hasPermission('approve')">
         <a-button :disabled="checkedItems.length == 0" type="primary" @click="modalVisible = true">审批</a-button>
       </div>
     </div>
@@ -89,11 +89,11 @@ const columns = computed(() => {
     { title: '所属场景集', dataIndex: 'parent_name', width: 200, ellipsis: true },
   ]
   return [
-    { dataIndex: 'checkbox', width: 60, validator: ({status}: any) => user.isAdmin() && isWaitingForApproval(status) },
+    { dataIndex: 'checkbox', width: 60, validator: ({status}: any) => user.isAdminProject() && isWaitingForApproval(status) },
     { title: '任务ID', dataIndex: 'id', width: 120 },
     ...logicColumns,
     { title: '任务状态', dataIndex: 'status', width: 150 },
-    { title: '申请人', dataIndex: 'apply_username', width: 150 },
+    { title: '申请人', dataIndex: 'apply_username', width: 180, ellipsis: true },
     { title: '申请时间', dataIndex: 'create_time', width: 180 },
     { title: '审批时间', dataIndex: 'operate_time', width: 180 },
     {
@@ -101,7 +101,8 @@ const columns = computed(() => {
       dataIndex: 'actions',
       fixed: 'right',
       width: 80,
-      actions: user.isAdmin() ? {
+      actions: user.isAdminProject() && user.hasPermission('approve') ?
+      {
         审批: { 
           validator: ({status}: any) => isWaitingForApproval(status),
           handler: (data: any) => router.push('/resource-logic-sceneset/apply-approve/' + data.id)
@@ -110,12 +111,14 @@ const columns = computed(() => {
           validator: ({status}: any) => !isWaitingForApproval(status),
           handler: (data: any) => router.push('/resource-logic-sceneset/apply-approve/' + data.id)
         }
-    } : {
+      } : {
         查看: (data: any) => router.push('/resource-logic-sceneset/apply-view/' + data.id)
       }
     }
   ]
 })
+
+console.log(columns)
 
 const tableRef = ref()
 const modalVisible = ref(false)

@@ -217,7 +217,6 @@ const loadMethod = async ({ row }: any) => {
   if (data.length == 0) {
     row.hasChild = false // 子节点为空
   }
-  debugger
   row.children = data
   expandRowKeys.value.push(row)
   return Promise.resolve(data)

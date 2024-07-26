@@ -27,7 +27,7 @@
         </a-form-item>
         <a-form-item label="上级标签：" name="tag_type">
           <tree-select v-if="isAdd" placeholder="请选择上级标签" allowClear v-model:value="formState.parentId" v-model:selectNode="formState.parentNode" :api="tagsListApi" :api-filter="(item: any) => !item.isTag" :check-leaf="false" :fieldNames="{ label: 'display_name', value: 'name' }"> </tree-select>
-          <template v-else>{{ formState.parentNode?.display_name }}</template>
+          <template v-else>{{ formState.parentNode?.display_name || '--' }}</template>
         </a-form-item>
         <a-form-item label="描述" name="desc" :rules="[{ required: false, message: '请输入标签描述' }]">
           <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入描述" :maxlength="255" rows="10"></ch-input>

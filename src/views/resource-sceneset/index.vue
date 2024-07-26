@@ -5,11 +5,11 @@
     <div class="title-section">
       <span class="title">具体场景集列表</span>
       <div>
-        <batch-button v-if="user.hasPermission('delete')"
+        <batch-button v-if="user.isAdminProject() && user.hasPermission('delete')"
           :disabled="!checkedItems.length" :api="onBatchDelete"
           :tips="'已勾选' + checkedItems.length+ '个场景集，是否删除所有勾选场景集及其关联数据？'"></batch-button>
-        <a-button v-if="user.hasPermission('add')" type="primary" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
-        <a-button v-if="user.hasPermission('apply')" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
+          <a-button v-if="user.hasPermission('apply')" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
+        <a-button v-if="user.isAdminProject() && user.hasPermission('add')" type="primary" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
         <a-button type="primary" @click="gotoSubPage('/apply-manage/')">授权任务管理</a-button>
       </div>
     </div>
@@ -70,7 +70,7 @@ const modal = reactive({
   reason: '' // 另存为的名字
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60, validator: (data: any) => data.delete_enable || data.apply_enable },
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => user.isAdminProject() ? (data.delete_enable || data.apply_enable) : data.apply_enable },
   { title: '场景集ID', dataIndex: 'id', width: 150 },
   { title: '场景集名称', dataIndex: 'name', ellipsis: true },
   { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
@@ -81,7 +81,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 150,
+    width: user.hasPermission('apply') ? 200 : 150,
     actions: {
       申请授权: {
         validator: (data : RObject) => data.apply_enable,
@@ -91,12 +91,12 @@ const columns = [
         handler: ({ id }: RObject) => gotoSubPage('/scene/?pid=' + id)
       },
       编辑: {
-        validator: (data : RObject) => data.edit_enable,
+        validator: (data : RObject) => user.isAdminProject() && data.edit_enable,
         handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
       },
       删除: {
         tip: '场景集删除后，关联数据（场景、地图）将会一起删除，是否删除？',
-        validator: (data : RObject) => data.delete_enable,
+        validator: (data : RObject) => user.isAdminProject() && data.delete_enable,
         handler: async ({ id }: { id: string }) => await currentApi.deleteSceneset({id: [id]})
       },
     }

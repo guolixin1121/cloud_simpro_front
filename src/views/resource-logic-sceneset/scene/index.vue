@@ -13,11 +13,11 @@
     <div class="title-section">
       <span class="title">逻辑场景列表</span>
       <div>
-        <batch-button v-if="user.hasPermission('delete')" :disabled="!checkedItems.length" :api="onBatchDelete"
+        <batch-button v-if="user.isAdminProject() && user.hasPermission('delete')" :disabled="!checkedItems.length" :api="onBatchDelete"
           :tips="'已勾选' + checkedItems.length+ '个场景，是否删除所有勾选场景？'"></batch-button>
-        <a-button v-if="user.hasPermission('add') && selectedSceneset?.can_add"  type="primary" :disabled="checkedItems.length > 0"
+        <a-button v-if="user.hasPermission('apply')" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
+        <a-button v-if="user.isAdminProject() && user.hasPermission('add') && selectedSceneset?.can_add"  type="primary" :disabled="checkedItems.length > 0"
             @click="gotoSubPage('/edit/0')">上传逻辑场景</a-button>
-        <a-button type="primary" v-if="user.hasPermission('apply')" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
       </div>
     </div>
     <Table ref="tableRef" :api="currentApi.getSceneList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" />
@@ -100,7 +100,7 @@ const modal = reactive({
   reason: ''
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60, validator: (data: any) => data.can_delete || data.can_apply },
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => user.isAdminProject() ? (data.can_delete || data.can_apply) : data.can_apply },
   { title: '场景ID', dataIndex: 'id', width: 120 },
   { title: '场景名称', dataIndex: 'name', width: 200, ellipsis: true },
   { title: '场景标签', dataIndex: 'labels_detail', apiField: 'display_name',width: 250, ellipsis: true },
@@ -118,12 +118,12 @@ const columns = [
       },
       查看: (data: any) => gotoSubPage('/view/' + data.id),
       编辑: {
-        validator: (data: any) => data.can_edit,
+        validator: (data: any) => user.isAdminProject() && data.can_edit,
         handler: (data: any) => gotoSubPage('/edit/' + data.id)
       },
       删除: {
         tip: '场景删除后不可恢复，是否删除？',
-        validator: (data: any) => data.can_delete,
+        validator: (data: any) => user.isAdminProject() && data.can_delete,
         handler: async ({ id }: { id: string }) => await currentApi.deleteScene({id: [id] })
       }
     }

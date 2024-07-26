@@ -124,7 +124,7 @@ import { VerticalOptions, HorizontalOptions } from '@/utils/dict';
 import KpiList from './components/kpi-list.vue'
 import SceneList from './components/scene-list.vue'
 
-const id = useRoute().params.id
+const id = useRoute().params.id  || '0'
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '仿真任务'

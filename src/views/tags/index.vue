@@ -45,7 +45,7 @@ const onSearch = (params: RObject) => {
 /****** 表格区域 */
 const router = useRouter()
 const columns = [
-  { title: '标签名称', dataIndex: 'display_name' },
+  { title: '标签名称', dataIndex: 'display_name', width: '300px' },
   { title: '标签英文名称', dataIndex: 'name' },
   { title: '标签类别', dataIndex: 'isTag' },
   { title: '创建时间', dataIndex: 'create_time' },
@@ -59,11 +59,11 @@ const columns = [
       查看: ({ id }: RObject) => router.push('/tags/view/' + id),
       编辑: {
         // create_user == 'admin' 代表全局标签，仅有admin可以编辑删除
-        validator: ({create_user}: RObject ) => create_user == 'admin' ? user.isAdmin() : true,
+        validator: ({create_user}: RObject ) => create_user == 'admin' ? user.isAdminProject() : true,
         handler: ({ id }: RObject) => router.push('/tags/edit/' + id + '?tag_type=' + query.value.tag_type)
       },
       删除:{
-        validator: ({create_user}: RObject ) => create_user == 'admin' ? user.isAdmin() : true,
+        validator: ({create_user}: RObject ) => create_user == 'admin' ? user.isAdminProject() : true,
         handler: async ({ id }: { id: string }) => await currentApi.delete(id)
       }
     }

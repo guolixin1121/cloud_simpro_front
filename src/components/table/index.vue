@@ -51,6 +51,11 @@ const props = defineProps({
     // 是否只允许创建者编辑，删除
     type: Boolean,
     default: () => false
+  },
+  // 操作列是否做权限校验
+  enableCheckPermission: {
+    type: Boolean,
+    default: () => true
   }
 })
 const emits = defineEmits(['select'])
@@ -59,6 +64,7 @@ const route = useRoute()
 const current = useSessionStorage(route.path + ':table-page', 1)
 const loading = ref(false)
 const data = ref()
+provide('enableCheckPermission', props.enableCheckPermission)
 
 const run = async (query: any, slient = false) => {
   try {

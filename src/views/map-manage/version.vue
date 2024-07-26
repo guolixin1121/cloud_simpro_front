@@ -24,8 +24,7 @@
 import { gotoVnc} from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
 const vncModal = ref()
-const { id } = useRoute().params
-const { name } = useRoute().query
+const { name, id } = useRoute().query
 const type: any = { 0: '内置', 1: '真实', 2: '虚拟' }
 /****** api */
 const mapsApi = api.maps

@@ -32,7 +32,8 @@ const hasPermission = (scope: RObject, key: string) => {
   const data = scope.record
   // 是否配置了该页面的操作权限
   const userStore = store.user
-  let permission = userStore.hasPermission(key)
+  const enableCheckPermission = inject('enableCheckPermission')
+  let permission = enableCheckPermission ? userStore.hasPermission(key) : true
 
   // 是否只允许自己操作
   const operationKeys = Object.keys(Operations)

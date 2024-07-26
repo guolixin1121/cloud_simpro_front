@@ -5,11 +5,11 @@
     <div class="title-section">
       <span class="title">逻辑场景集列表</span>
       <div>
-        <batch-button v-if="user.hasPermission('delete')"
+        <batch-button v-if="user.isAdminProject() && user.hasPermission('delete')"
           :disabled="!checkedItems.length" :api="onBatchDelete"
           :tips="'已勾选' + checkedItems.length+ '个场景集，是否删除所有勾选场景集及其关联数据？'"></batch-button>
-        <a-button v-if="user.hasPermission('add')" type="primary" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
         <a-button v-if="user.hasPermission('apply')" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
+        <a-button v-if="user.isAdminProject() && user.hasPermission('add')" type="primary" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
         <a-button type="primary" @click="gotoSubPage('/apply-manage/')">授权任务管理</a-button>
       </div>
     </div>
@@ -44,7 +44,7 @@ import { gotoSubPage } from '@/utils/tools'
 
 /****** api */
 const user = store.user
-// const isAdmin = user.isAdmin()
+// const isAdmin = user.isAdminProject()
 const currentApi = api.loginsceneResource
 
 /****** 搜素区域 */
@@ -82,7 +82,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 150,
+    width: user.hasPermission('apply') ? 200 : 150,
     actions: {
       申请授权: {
         validator: (data : RObject) => data.can_apply,
@@ -92,12 +92,12 @@ const columns = [
         handler: ({ id }: RObject) => gotoSubPage('/scene/?pid=' + id)
       },
       编辑: {
-        validator: (data : RObject) => data.can_edit,
+        validator: (data : RObject) => user.isAdminProject() && data.can_edit,
         handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
       },
       删除: {
         tip: '场景集删除后，关联数据（场景、地图）将会一起删除，是否删除？',
-        validator: (data : RObject) => data.can_delete,
+        validator: (data : RObject) => user.isAdminProject() && data.can_delete,
         handler: async ({ id }: { id: string }) => await currentApi.deleteSceneset({id: [id]})
       }
     }

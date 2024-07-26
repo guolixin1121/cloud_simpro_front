@@ -67,10 +67,14 @@ const columns = [
 const dataSource = ref([])
 const loading = ref(false)
 const fetchData = async () => {
-  loading.value = true
-  const res = await api.result.getList()
-  loading.value = false
-  dataSource.value = res.results.slice(0, 4)
+  try {
+    loading.value = true
+    const res = await api.result.getList()
+    loading.value = false
+    dataSource.value = res.results.slice(0, 4)
+  } finally {
+    loading.value = false
+  }
 }
 fetchData()
 </script>

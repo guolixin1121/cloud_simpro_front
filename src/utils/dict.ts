@@ -12,8 +12,11 @@ export const Operations = {
   编辑场景: 'editXosc',
   运行: 'run',
   停止: 'stop',
-  另存为: 'save',
+  另存为: 'saveAs',
   申请授权: 'apply',
+  泛化: 'generalize',
+  泛化结果: 'generalize',
+  审批: 'approve',
 }
 
 export const SceneSourceOptions = [

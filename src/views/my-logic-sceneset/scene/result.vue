@@ -17,6 +17,7 @@
     </a-tabs> 
     <Table ref="table" :api="listApi" 
       :scroll="{x: 1000, y: 'auto'}"
+      :enableCheckPermission="false"
       :columns="activeKey =='1' ? columns : sotifColumns" style="margin-top: 0px;">
       <template #bodyCell="{column, record, text}">
         <template v-if="column.dataIndex == 'name'">

@@ -108,8 +108,8 @@ export const useUserStore = defineStore('user', () => {
     return -1
   }
 
-  const isAdmin = () => user.value?.username == 'admin'  // 是否是场景资源库管理账户
+  const isAdminProject = () => user.value?.enterpriseAccount == 'CloudproManage'  // 是否是管理端
   const isRegisterUser = () => user.value?.type == '0'  // 是否是注册用户
 
-  return { user, token, hasToken, gotoLogin, logout, hasPermission, hasAcl, getUserInfo, isRegisterUser, isAdmin }
+  return { user, token, hasToken, gotoLogin, logout, hasPermission, hasAcl, getUserInfo, isRegisterUser, isAdminProject }
 })

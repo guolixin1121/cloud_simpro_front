@@ -58,7 +58,7 @@ const onCreate = () => {
     upgradeModal.value.show()
     return
   }
-  router.push('/simpro-task/edit/0')
+  router.push('/simpro-task/edit/')
 }
 
 /****** 表格区域 */
@@ -82,6 +82,7 @@ const columns = [
     fixed: 'right',
     width: 180,
     actions: {
+      查看: (data: RObject) => router.push('/simpro-task/view/' + data.id),
       运行: {
         validator: (data: RObject) => canBeRun(data),
         handler: async (data: RObject) => {
@@ -100,7 +101,6 @@ const columns = [
           router.push('/simpro-result/?templateId=' + data.number)
         }
       },
-      查看: (data: RObject) => router.push('/simpro-task/view/' + data.id),
       编辑: (data: RObject) => {
         if(user.isRegisterUser()) {
             upgradeModal.value.show()

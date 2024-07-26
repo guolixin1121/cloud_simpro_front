@@ -11,12 +11,12 @@
     <div class="title-section">
       <span class="title">具体场景列表</span>
       <div>
-        <batch-button v-if="user.hasPermission('delete')" :disabled="!checkedItems.length"
+        <batch-button v-if="user.isAdminProject() && user.hasPermission('delete')" :disabled="!checkedItems.length"
          :tips="'已勾选' + checkedItems.length+ '个场景，是否删除所有勾选场景？'"
          :api="onBatchDelete"></batch-button>
-        <a-button v-if="user.hasPermission('add') && selectedSceneset?.add_enable"  type="primary" :disabled="checkedItems.length > 0"
+        <a-button v-if="user.hasPermission('apply')" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
+        <a-button v-if="user.isAdminProject() && user.hasPermission('add') && selectedSceneset?.add_enable"  type="primary" :disabled="checkedItems.length > 0"
             @click="gotoSubPage('/edit/0')">上传具体场景</a-button>
-        <a-button type="primary" v-if="user.hasPermission('apply')" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
       </div>
     </div>
     <Table ref="tableRef" :api="currentApi.getSceneList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" />
@@ -97,7 +97,7 @@ const modal = reactive({
   reason: ''
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60, validator: (data: any) => data.delete_enable || data.apply_enable },
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => user.isAdminProject() ? (data.delete_enable || data.apply_enable) : data.apply_enable },
   { title: '场景ID', dataIndex: 'id', width: 120 },
   { title: '场景名称', dataIndex: 'name', width: 200, ellipsis: true },
   { title: '场景标签', dataIndex: 'labels_detail', apiField: 'display_name',width: 250, ellipsis: true },
@@ -107,7 +107,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 100,
+    width: user.hasPermission('apply') ? 170 : 100,
     actions: {
       申请授权: {
         validator: (data: any) => data.apply_enable,
@@ -115,12 +115,12 @@ const columns = [
       },
       查看: (data: any) => gotoSubPage('/preview/' + data.id),
       编辑: {
-        validator: (data: any) => data.edit_enable,
+        validator: (data: any) => user.isAdminProject() && data.edit_enable,
         handler: (data: any) => gotoSubPage('/edit/' + data.id)
       },
       删除: {
         tip: '场景删除后不可恢复，是否删除？',
-        validator: (data: any) => data.delete_enable,
+        validator: (data: any) => user.isAdminProject() && data.delete_enable,
         handler: async ({ id }: { id: string }) => await currentApi.deleteScene({id: [id] })
       },
     }

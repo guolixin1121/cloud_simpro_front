@@ -166,6 +166,7 @@ const columns = [
     fixed: 'right',
     width: 300,
     actions: {
+      查看: (data: any) => gotoSubPage('/view/' + data.id),
       泛化: (data: any) => {
         generateModal.visible = true
         generateModal.sourceData = data
@@ -175,7 +176,6 @@ const columns = [
         validator:  ({source}: any) => isMyLogicSceneEditable(source),
         handler: (data: any) => gotoSubPage('/edit/' + data.id)
       },
-      查看: (data: any) => gotoSubPage('/view/' + data.id),
       另存为: (data: any) => {
         cloneModal.title = '另存为'
         cloneModal.desc = ''

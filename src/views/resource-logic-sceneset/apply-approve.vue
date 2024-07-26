@@ -103,7 +103,7 @@ const user = store.user
 const sceneset = store.catalog.sceneCatalog
 const router = useRouter()
 const goback = () => router.push('/resource-logic-sceneset/apply-manage/')
-const isAdmin = user.isAdmin()
+const isAdmin = user.isAdminProject()
 const title = computed(() => isAdmin && formState.status == '1' ? '任务审批' : '任务详情') 
 
 const isApproved = computed(() => formState.status != '1' )

@@ -24,7 +24,7 @@
         <Table ref="tableRef" :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 800, y: 'auto' }"
           @select="onSelect" >
           <template #bodyCell="{ column, record }">
-            <template v-if="column.dataIndex == 'versionCount' && user.hasPermission('version')">
+            <template v-if="column.dataIndex == 'versionCount' && user.hasPermission('versions')">
               <a class="text-link inline-block w-full" @click="gotoVersion(record)">
                 {{ record.versionCount }}
               </a>
@@ -74,7 +74,7 @@ const columns = [
   }
 ]
 
-const gotoVersion = (record: any) => gotoSubPage('/version/' + record.id + '?name=' + encodeURIComponent(record.name))
+const gotoVersion = (record: any) => gotoSubPage('/version/?id=' + record.id + '&&name=' + encodeURIComponent(record.name))
 
 const catalogLoading = ref(false)
 store.catalog.mapCatalog = {}
