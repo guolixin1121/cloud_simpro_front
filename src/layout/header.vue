@@ -38,11 +38,11 @@
     <Personal></Personal>
   </a-modal>
   <a-modal title="修改密码" v-model:visible="showChangePassword" :footer="null" destroy-on-close="true">
-    <a-form ref="formRef" :labelCol="{ style: { width: '75px' } }"  @finish="ok" :model="formData" style="margin: 24px">
+    <a-form ref="formRef" :labelCol="{ style: { width: '75px' } }" :model="formData" style="margin: 24px">
       <a-form-item name="origin_password" label="原密码" :rules="[
           { required: true, message: '请填写原密码' },
           { validator: () => validatePassword(formData.origin_password) } ]">
-        <a-input-password autocomplete="new-password" name="origin_password" v-model:value="formData.origin_password" placeholder="请输入密码"></a-input-password>
+        <a-input-password autocomplete="new-password" name="origin_password" v-model:value="formData.origin_password" placeholder="请填写原密码"></a-input-password>
       </a-form-item>
       <a-form-item name="password" label="新密码" :rules="[{ required: true, message: '请填写原密码' },
         { validator: () => validatePassword(formData.password) }
@@ -57,7 +57,7 @@
     </a-form>
     <div class="modal-buttons">
       <a-button @click="resetPasswordForm">重置</a-button>
-      <a-button class="login-btn" type="primary" html-type="submit" :loading="loading">提交</a-button>
+      <a-button class="login-btn" type="primary" :loading="loading" @click="ok">提交</a-button>
     </div>
   </a-modal>
 </template>
@@ -89,23 +89,31 @@ const formData = reactive({
   confirm_password: ''
 })
 const loading = ref(false)
-const ok = async () => {
-  try {
-      loading.value = true
-      const res = await api.auth.changePassword({ 
-        oldPassword: formData.origin_password, 
-        newPassword: formData.password, 
-        confirmPassword: formData.confirm_password
-      })
-      if(!res.code) {
-        message.success('密码修改成功，请重新登录')
-        user.logout()
-      }
-  } finally {
-      loading.value = false
-  }
+const ok = () => {
+  formRef.value?.validate().then(async () => {
+    try {
+        loading.value = true
+        const res = await api.auth.changePassword({ 
+          oldPassword: formData.origin_password, 
+          newPassword: formData.password, 
+          confirmPassword: formData.confirm_password
+        })
+        if(!res.code) {
+          message.success('密码修改成功，请重新登录')
+          user.logout()
+        }
+    } finally {
+        loading.value = false
+    }
+  })
 }
 const resetPasswordForm = () => formRef.value.resetFields()
+
+watch(formData, () => {
+  formData.origin_password = formData.origin_password.trim()
+  formData.password = formData.password.trim()
+  formData.confirm_password = formData.confirm_password.trim()
+})
 </script>
 
 <style scoped lang="less">

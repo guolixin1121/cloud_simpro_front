@@ -23,7 +23,7 @@
                 <span class="label">状态</span><span>{{ statusName }}</span>
             </div>
             <div>
-                <span class="label">有效期</span><span>{{ userDetail.startTime?.replaceAll('-', '.') }}-{{ userDetail.endTime?.replaceAll('-', '.') }}</span>
+                <span class="label">账号有效期</span><span>{{ userDetail.startTime?.replaceAll('-', '.') }}-{{ userDetail.endTime?.replaceAll('-', '.') }}</span>
             </div>
         </div>
     </a-spin>
@@ -77,7 +77,7 @@ const onEditName = async () => {
     if(userDetail.name.trim().length > 0) {
         try {
             loading.value = true
-            await api.auth.editUser(userDetail)
+            await api.auth.editUser({id: userDetail.id, name: userDetail.name})
         } finally {
             loading.value = false
         }

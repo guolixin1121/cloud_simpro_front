@@ -8,7 +8,10 @@
         <a-checkbox v-model:checked="isOwner" class="table_model" @change="onChecked">我的结果</a-checkbox>
       </div>
       <div>
-        <batch-button :disabled="!selectedRows.length" v-if="user.hasPermission('delete')" :api="batchDelete"></batch-button>
+        <template v-if="user.hasPermission('delete')">
+          <a-button v-if="user.isRegisterUser()" :disabled="!selectedRows.length" @click="beforeHandler">删除</a-button>
+          <batch-button v-else :disabled="!selectedRows.length" :api="batchDelete"></batch-button>
+        </template>
       </div>
     </div>
     <a-spin :spinning="loading">
@@ -100,6 +103,13 @@ const formItems = ref<SearchFormItem[]>([
 const onSearch = (data: Query) => (query.value = { ...data, owner: isOwner.value ? 1 : 0 })
 
 /****** 表格区域 */
+const beforeHandler = () => {
+  if(user.isRegisterUser()) {
+    upgradeModal.value.show()
+    return true
+  }
+  return false
+}
 const table = ref()
 const columns = [
   { dataIndex: 'checkbox', width: 60, validator: (data: RObject) => isNotRunning(data.status) },
@@ -121,6 +131,7 @@ const columns = [
     width: 180,
     actions: {
       停止: {
+        beforeHandler,
         validator: (data: any) => isRunOrWait(data.status),
         handler: (data: any) => onStop(data)
       },
@@ -134,6 +145,7 @@ const columns = [
       },
       删除: {
         validator: (data: any) => isNotRunning(data.status),
+        beforeHandler,
         handler: async (data: any) => {
           if(user.isRegisterUser()) {
             upgradeModal.value.show()

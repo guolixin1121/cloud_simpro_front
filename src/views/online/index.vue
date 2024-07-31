@@ -16,7 +16,7 @@
             <div class="item-logo"><img src="@/assets/images/icon_navlogo_car.png" /></div>
             <div class="item-name">{{ item.name }}</div>
           </div>
-          <div class="item-button text-center mt-2" v-if="user.username === item.username">
+          <div class="item-button text-center mt-2" v-if="user.userId === item.user_id">
             <a-button class="mr-2" @click="quitVnc(item)">释放</a-button>
             <a-button type="primary" @click="enterVnc(item)">进入</a-button>
           </div>
@@ -51,15 +51,15 @@ const loadList = async () => {
 }
 loadList()
 
-const enterVnc = ({ status, address, username }: any) => {
+const enterVnc = ({ status, address, user_id }: any) => {
   if(store.user.isRegisterUser()) {
     upgradeModal.value.show()
     return
   }
 
-  const hasCurrentUserEntered = list.value.findIndex((item: any) => item.username === user.username) > -1
+  const hasCurrentUserEntered = list.value.findIndex((item: any) => item.user_id === user.userId) > -1
   if (hasCurrentUserEntered) {
-    if (user.username == username) {
+    if (user.userId == user_id) {
       gotoVnc({ action: 0, address }, loading, loadList)
     }
   } else if (status == 0) {

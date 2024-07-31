@@ -2,8 +2,10 @@
   <template v-for="key in Object.keys(scope.column.actions || [])" :key="key">
     <template v-if="hasPermission(scope, key)">
       <!-- 删除列 -->
-      <a-popconfirm v-if="key === '删除'"
-        :title="getDeleteTip(scope, key)" @confirm="onHandler(scope, key)">
+      <a v-if="scope.column.actions[key].beforeHandler" class="text-link mr-2" @click="onHandler(scope, key)">
+        {{ key }}
+      </a>
+      <a-popconfirm v-else-if="key == '删除'" :title="getDeleteTip(scope, key)" @confirm="onHandler(scope, key)">
         <a class="text-link mr-2">{{ key }}</a>
       </a-popconfirm>
       <!-- 其他列 -->
@@ -59,6 +61,12 @@ const getDeleteTip = ({ column }: RObject, key: string) => {
 const onHandler = async ({ column, record }: RObject, key: string) => {
   const action = column.actions[key]
   const handler = action.handler || action
+  const beforeHandler = action?.beforeHandler
+  if(beforeHandler) {
+    const isBlocked = beforeHandler()
+    if(isBlocked) return
+  }
+
   const isAync = handler.constructor.name === 'AsyncFunction'
   if (isAync) {
     try {

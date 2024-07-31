@@ -23,14 +23,14 @@ export const validatePassword = (password) => {
   if(!password || reg.test(password)) {
     return Promise.resolve()
   } else {
-    return Promise.reject(new Error('密码不符合最低安全要求，请重新输入'))
+    return Promise.reject(new Error('密码不符合最低安全要求'))
   }
 }
 
 export const comparePassword = (formData) => {
   const { password, confirm_password } = formData
   if (password.trim().length > 0 && confirm_password.trim().length > 0 && password.trim() !== confirm_password.trim()) {
-      return Promise.reject(new Error('两次密码不一致，请检查'))
+      return Promise.reject(new Error('新密码输入两次不一致'))
   }
   return Promise.resolve()
 }

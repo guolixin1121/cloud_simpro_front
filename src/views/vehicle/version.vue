@@ -1,6 +1,6 @@
 <template>
   <div class="breadcrumb">
-    <router-link to="/veticle-model/">动力学模型</router-link>
+    <router-link to="/vehicle/">动力学模型</router-link>
     <span class="breadcrumb--current">模型版本</span>
   </div>
   <div class="main">

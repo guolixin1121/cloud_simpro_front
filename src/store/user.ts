@@ -61,8 +61,8 @@ export const useUserStore = defineStore('user', () => {
   // 新版本检查权限方法，直接查询acl数组
   // action： acl返回的键
   const hasAcl = (acl: string) => {
-    const acls = user.value.acls
-    return !!acls.find((item: {acl: string}) => item.acl == acl)
+    const acls = user.value?.acls
+    return !!acls?.find((item: {acl: string}) => item.acl == acl)
   }
 
   /**
@@ -97,7 +97,7 @@ export const useUserStore = defineStore('user', () => {
       const menu = menuList[i]
       // 避免有多余的'/'造成的不匹配
       if (menu.path.split('/').join('') === currentRoute.split('/').join('')) {
-        return menu.actions?.indexOf(action)
+        return !menu.actions.length ? 0 : menu.actions?.indexOf(action)
       } else {
         const isValid = getPermissionIndex(action, currentRoute, menu.children)
         if (isValid != -1) {

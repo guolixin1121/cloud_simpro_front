@@ -8,8 +8,11 @@
         <a-checkbox v-model:checked="isOwner" class="table_model" @change="onChecked">我的任务</a-checkbox>
       </div>
       <div>
-        <batch-button :disabled="!selectedRunRows.length" v-if="user.hasPermission('run')" :api="batchRun" :double-confirm="false" label="运行"></batch-button>
-        <batch-button :disabled="!selectedDeleteRows.length" v-if="user.hasPermission('delete')" :api="batchDelete"></batch-button>
+        <a-button :disabled="!selectedRunRows.length" v-if="user.hasPermission('run')" @click="batchRun">运行</a-button>
+        <template v-if="user.hasPermission('delete')">
+          <a-button v-if="user.isRegisterUser()" :disabled="!selectedRunRows.length" @click="beforeHandler">删除</a-button>
+          <batch-button v-else :disabled="!selectedDeleteRows.length" :api="batchDelete"></batch-button>
+        </template>
         <a-button type="primary" :disabled="selectedRunRows.length || selectedDeleteRows.length" v-if="user.hasPermission('add')" @click="onCreate">创建任务</a-button>
       </div>
     </div>
@@ -54,14 +57,18 @@ const onChecked = () => (query.value = { ...query.value, owner: isOwner.value ? 
 const toggleMore = () => tableRef.value.calcateHeight()
 
 const onCreate = () => {
-  if(user.isRegisterUser()) {
-    upgradeModal.value.show()
-    return
-  }
+  if(beforeHandler()) return
   router.push('/simpro-task/edit/')
 }
 
 /****** 表格区域 */
+const beforeHandler = () => {
+  if(user.isRegisterUser()) {
+    upgradeModal.value.show()
+    return true
+  }
+  return false
+}
 const tableRef = ref()
 const router = useRouter()
 const columns = [
@@ -85,13 +92,8 @@ const columns = [
       查看: (data: RObject) => router.push('/simpro-task/view/' + data.id),
       运行: {
         validator: (data: RObject) => canBeRun(data),
-        handler: async (data: RObject) => {
-          if(user.isRegisterUser()) {
-            upgradeModal.value.show()
-            return
-          }
-          await currentApi.run({ template_id: data.id })
-        }
+        beforeHandler,
+        handler: async (data: RObject) => await currentApi.run({ template_id: data.id })
       },
       仿真结果: {
         // 此按钮根据‘仿真结果’菜单项的权限来判断
@@ -101,22 +103,20 @@ const columns = [
           router.push('/simpro-result/?templateId=' + data.number)
         }
       },
-      编辑: (data: RObject) => {
-        if(user.isRegisterUser()) {
-            upgradeModal.value.show()
-            return
-          }
-        router.push('/simpro-task/edit/' + data.id)
+      编辑: {
+        beforeHandler,
+        handler: (data: RObject) => {
+          if(user.isRegisterUser()) {
+              upgradeModal.value.show()
+              return
+            }
+          router.push('/simpro-task/edit/' + data.id)
+        }
       },
       删除: {
         validator: (data: RObject) => canBeDelete(data),
-        handler: async ({ id }: RObject) =>{
-          if(user.isRegisterUser()) {
-            upgradeModal.value.show()
-            return
-          }
-          await currentApi.delete(id)
-        }
+        beforeHandler,
+        handler: async ({ id }: RObject) => await currentApi.delete(id)
       }
     }
   }
@@ -130,19 +130,12 @@ const selectedRunRows = computed(() => selectedRows.value.filter((item: any) => 
 const selectedDeleteRows = computed(() => selectedRows.value.filter((item: any) => canBeDelete(item)))
 const onSelect = (_keys: any, data: any) => (selectedRows.value = data)
 const batchRun = async () => {
-  if(user.isRegisterUser()) {
-    upgradeModal.value.show()
-    return
-  }
+  if(beforeHandler()) return
   const templateids = selectedRunRows.value.map((item: any) => item.id)
   await currentApi.run({ template_id: templateids })
   tableRef.value.refresh()
 }
 const batchDelete = async () => {
-  if(user.isRegisterUser()) {
-    upgradeModal.value.show()
-    return
-  }
   const templateids = selectedDeleteRows.value.map((item: any) => item.id)
   await currentApi.batchDelete({ template_id: templateids })
   tableRef.value.refresh({ deletedRows: selectedDeleteRows.value.length })

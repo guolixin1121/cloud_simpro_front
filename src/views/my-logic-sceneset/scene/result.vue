@@ -230,9 +230,9 @@ const gotoScene = (record: RObject) => {
   margin-top: 16px;
 }
 .status--0, .status--1, .status--2 {
-  color: #FF8A03;
+  color: var(--warning-color);
 }
 .status--3, .status--5 {
-  color: #FA2F30;
+  color: var(--alert-color);
 }
 </style>

@@ -21,19 +21,23 @@ import icon_SOTIF from '@/assets/images/icon_SOTIF.png'
 import icon_car from '@/assets/images/icon_car_h.png'
 
 const entries = [
-  { icon: icon_newtask, label: '新增任务', router: '/simpro-task/edit/0' },
+  { icon: icon_newtask, label: '新增任务', router: '/simpro-task/edit' },
   { icon: icon_scenelist, label: '场景列表', router: '/my-sceneset/' },
   { icon: icon_resource, label: '传感器模型', router: '/sensor' },
   { icon: icon_algorithm, label: '算法管理', router: '/algorithm' },
   { icon: icon_SOTIF, label: 'SOTIF分析', router: '/sotif' },
-  { icon: icon_car, label: '动力学模型', router: '/veticle-model' }
+  { icon: icon_car, label: '动力学模型', router: '/vehicle' }
 ]
 
 const router = useRouter()
 const gotoSubPage = (url: string) => router.push(url)
 
 const hasPermission = ({ router, label }: any) => {
-  return store.user.hasPermission(label == '新增任务' ? 'add' : 'view', router)
+  if(label == '新增任务') {
+    return store.user.hasPermission('add', '/simpro-task')
+  } else {
+    return store.user.hasPermission('view', router)
+  }
 }
 </script>
 <style lang="less" scoped>

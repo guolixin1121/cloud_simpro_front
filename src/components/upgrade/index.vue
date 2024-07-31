@@ -76,6 +76,7 @@ defineExpose({
 
 const loading = ref(false)
 const upgrade = async () => {
+    if(loading.value) return
     try {
         loading.value = true
         await api.auth.clue({module: props.module})

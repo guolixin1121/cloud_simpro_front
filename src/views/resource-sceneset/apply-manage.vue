@@ -140,7 +140,7 @@ const sceneColumns = [
         handler: (data: any) => router.push('/resource-sceneset/apply-approve/' + data.id)
       },
       查看: {
-        validator: ({status}: any) => !isWaitingForApproval(status),
+        validator: ({status}: any) => !(user.isAdminProject() && isWaitingForApproval(status)),
         handler: (data: any) => {
           user.isAdminProject() ? router.push('/resource-sceneset/apply-approve/' + data.id)
             : router.push('/resource-sceneset/apply-view/' + data.id)

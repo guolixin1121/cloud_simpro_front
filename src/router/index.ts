@@ -23,10 +23,21 @@ const routes: RouteRecordRaw[] = [
   {
     name: 'login',
     path: '/login',
-    component: async () => await import(/* webpackChunkName: "login" */ '@/views/login/index.vue'),
+    component: async () => await import(/* webpackChunkName: "default" */ '@/views/login/index.vue'),
     meta: {
       auth: false
     }
+  },
+  {
+    path: '/404',
+    component: async () => await import(/* webpackChunkName: "default" */ '@/views/404/index.vue'),
+    meta: {
+      auth: false
+    }
+  },
+  {
+    path: '/:pathMatch(.*)',
+    redirect: '/404'
   }
 ]
 
