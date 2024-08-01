@@ -17,6 +17,7 @@ export const Operations = {
   泛化: 'generalize',
   泛化结果: 'generalize',
   审批: 'approve',
+  复制: 'copy'
 }
 
 export const SceneSourceOptions = [

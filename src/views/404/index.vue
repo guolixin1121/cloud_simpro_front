@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="containers">
         <svg-icon icon="alert"/>
         <span class="title">页面未找到</span>
         <span class="tip">请检查路径后重试或返回首页</span>
@@ -8,17 +8,17 @@
 </template>
 
 <script setup lang="ts">
-const router = useRouter()
-const goback = () => router.push('/')
+// const router = useRouter()
+const goback = () => location.href = '/#/' // router.push('/')
 </script>
 
 <style lang="less" scoped>
-.container {
+.containers {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100%;
-    margin-top: 50px
+    margin-top: 50px;
+    width: 100%;
 }
 .icon {
     font-size: 50px;

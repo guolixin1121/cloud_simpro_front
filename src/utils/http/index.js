@@ -3,7 +3,7 @@ import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css' // 必须引用
 import { getToken, LStorage } from '@/utils/storage'
 import AxiosCanceler from './cancelCancel'
-import router from '@/router'
+// import router from '@/router'
 // 处理错误信息
 // const errorInfo = status => {
 //   const errorMap = new Map([
@@ -124,9 +124,11 @@ class AxiosRequest {
           } else if (code == 100) {
             // token过期跳到登录页
             store.user.gotoLogin()
-          } else if (code == 102) {
-            // 无当前页面的权限，自动跳转到首页
-            router.push('/404')
+          // } else if (code == 102) {
+          //   // 无当前页面的权限，自动跳转到首页
+          //   // router.push('/404')
+          //   message.error(msg || err)
+          //   location.href = '/#/'
           } else {
             message.error(typeof msg === 'string' ? msg : err)
             reject(typeof msg === 'string' ? msg : err)
