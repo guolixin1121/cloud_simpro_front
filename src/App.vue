@@ -2,18 +2,7 @@
 import locale from 'ant-design-vue/es/locale/zh_CN'
 import dayjs from 'dayjs'
 import 'dayjs/locale/zh-cn'
-// import loading from './utils/loading'
-// import { LStorage } from './utils/storage'
-
 dayjs.locale('zh-cn')
-
-// const checkProject = async () => {
-//   const project = await api.user.project(LStorage.get('X-Priject-ID'))
-//   if(project?.data_config_status != '2') {
-//     loading()
-//   }
-// }
-// checkProject()
 </script>
 
 <template>

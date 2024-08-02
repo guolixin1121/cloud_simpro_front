@@ -1,5 +1,5 @@
 // 表格操作列权限的对应关系，用于权限查询
-// key：按钮名称
+// key：按钮文案
 // value：权限系统里的值
 export const Operations = {
   新增: 'add',
