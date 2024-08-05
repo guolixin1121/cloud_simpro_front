@@ -40,6 +40,7 @@
         <a-button @click="onConfirmClone" :loading="submitting" type="primary">确定</a-button>
       </div>
   </a-modal>
+  <upgrade ref="upgradeModal" module="simulationManage"></upgrade>
 </template>
 
 <script setup lang="ts">
@@ -118,6 +119,14 @@ const onTableSearch = (data: Query) => {
 }
 
 /****** 表格区域 */
+const upgradeModal = ref()
+const beforeHandler = () => {
+  if(user.isRegisterUser()) {
+    upgradeModal.value.show()
+    return true
+  }
+  return false
+}
 const columns = [
   { dataIndex: 'checkbox', width: 60 },
   { title: '场景ID', dataIndex: 'id', width: 120 },
@@ -140,6 +149,7 @@ const columns = [
         handler: (data: any) => gotoSubPage('/edit/' + data.id)
       },
       编辑场景: {
+        beforeHandler,
         validator: ({adsSource}: any) => isMySceneEditable(adsSource),
         handler: (data: any) => gotoVnc({ action: 1, value: data.id }, loading, null, () => vncModal.value.show()),
       },

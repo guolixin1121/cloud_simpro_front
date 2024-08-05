@@ -23,7 +23,7 @@ export const validatePassword = (password) => {
   if(!password || reg.test(password)) {
     return Promise.resolve()
   } else {
-    return Promise.reject(new Error('密码不符合最低安全要求'))
+    return Promise.reject(new Error('密码长度为8-16位数，必须包含数字和大小写字母'))
   }
 }
 

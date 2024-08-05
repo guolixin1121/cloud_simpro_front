@@ -63,7 +63,7 @@
 import { formatDate, checkEmpty } from '@/utils/tools'
 
 const id = useRoute().params.id
-const isAdd = id === '0'
+const isAdd = !id || id === '0'
 const title = isAdd ? '创建算法' : '修改算法'
 
 const formState = reactive<any>({
@@ -96,8 +96,8 @@ const add = async () => {
 
 /****** 获取查看数据 */
 const getLookData = async () => {
-  if(id != '0') {
-    const res = await api.algorithm.getList({ id })
+  if(!isAdd) {
+    const res = await api.algorithm.get(id)
     if(res.results?.length == 0 ) return 
 
     const data = res.results[0]

@@ -18,6 +18,7 @@
     </a-spin>
   </div>
   <VncModal ref="vncModal"></VncModal>
+  <upgrade ref="upgradeModal" module="simulationManage"></upgrade>
 </template>
 
 <script setup lang="ts">
@@ -33,6 +34,15 @@ const mapsApi = api.maps
 const loading = ref(false)
 const query: Query = ref({ map: id, name })
 /****** 表格区域 */
+const user = store.user
+const upgradeModal = ref()
+const beforeHandler = () => {
+  if(user.isRegisterUser()) {
+    upgradeModal.value.show()
+    return true
+  }
+  return false
+}
 const router = useRouter()
 const columns = [
   { title: '地图版本ID', dataIndex: 'id', width: 180 },
@@ -50,7 +60,9 @@ const columns = [
     actions: {
       查看: (data: any) => router.push('/map-manage/version-edit/' + data.id + '?type=0'),
       编辑: (data: any) => router.push('/map-manage/version-edit/' + data.id),
-      编辑地图: (data: any) => gotoVnc({
+      编辑地图: {
+        beforeHandler,
+        hanlder: (data: any) => gotoVnc({
           action: 2,
           value: JSON.stringify({
             map_name: data.mapName,
@@ -61,7 +73,8 @@ const columns = [
         }, 
         loading,
         null,
-        () => vncModal.value.show()),
+        () => vncModal.value.show())
+      },
       删除: async ({ id }: { id: string }) => await mapsApi.deleteMapVersion(id)
     }
   }

@@ -10,7 +10,7 @@
           :tips="'已勾选' + checkedItems.length+ '个场景集，是否删除所有勾选场景集及其关联数据？'"></batch-button>
           <a-button v-if="user.hasPermission('apply')" :disabled="!checkedItems.length" @click="modal.visible = true">申请授权</a-button>
         <a-button v-if="user.isAdminProject() && user.hasPermission('add')" type="primary" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
-        <a-button type="primary" @click="gotoSubPage('/apply-manage/')">授权任务管理</a-button>
+        <a-button v-if="user.hasPermission('grants')" type="primary" @click="gotoSubPage('/apply-manage/')">授权任务管理</a-button>
       </div>
     </div>
     <div>
