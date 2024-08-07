@@ -97,10 +97,10 @@ const add = async () => {
 /****** 获取查看数据 */
 const getLookData = async () => {
   if(!isAdd) {
-    const res = await api.algorithm.get(id)
-    if(res.results?.length == 0 ) return 
+    const data = await api.algorithm.get(id)
+    // if(res.results?.length == 0 ) return 
 
-    const data = res.results[0]
+    // const data = res.results[0]
     for(const prop in formState) {
       formState[prop as keyof typeof formState] = data[prop]
     }
