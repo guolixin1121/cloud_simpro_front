@@ -6,7 +6,7 @@
       :row-config="{ isHover: true, keyField: 'id' }" 
       :tree-config="{ transform: true, reserve: true, rowField: 'id', lazy: lazy, loadMethod: loadMethod }" 
       :data="tableData" @toggle-tree-expand="onTreeExpand" @cell-click="onCellClick">
-      <vxe-column v-for="column in columns" :key="column.dataIndex" 
+      <vxe-column v-for="column in columns" :key="column.dataIndex" show-overflow
       :field="column.dataIndex" :title="column.title" :width="column.width" 
       :tree-node="column.dataIndex === treeNode"
       v-bind="column">

@@ -63,7 +63,7 @@
           <span>{{ formState.latestVersion }}</span>
         </a-form-item>
         <a-form-item label="标签">
-          <tree-transfer v-if="isAdd"
+          <tree-transfer v-if="!isView"
             v-model:target-keys="formState.labels"
             :api="baseApi.tags.getList"
             :query="{ tag_type: 4, tree: 1 }"

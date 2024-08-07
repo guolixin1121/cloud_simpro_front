@@ -56,13 +56,13 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 150,
+    width: 160,
     actions: {
       查看: (data: any) => router.push('/map-manage/version-edit/' + data.id + '?type=0'),
       编辑: (data: any) => router.push('/map-manage/version-edit/' + data.id),
       编辑地图: {
         beforeHandler,
-        hanlder: (data: any) => gotoVnc({
+        handler: (data: any) => gotoVnc({
           action: 2,
           value: JSON.stringify({
             map_name: data.mapName,

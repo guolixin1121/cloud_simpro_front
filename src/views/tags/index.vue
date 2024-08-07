@@ -45,8 +45,8 @@ const onSearch = (params: RObject) => {
 /****** 表格区域 */
 const router = useRouter()
 const columns = [
-  { title: '标签名称', dataIndex: 'display_name', width: '300px' },
-  { title: '标签英文名称', dataIndex: 'name' },
+  { title: '标签名称', dataIndex: 'display_name', width: '300px', 'show-overflow': true },
+  { title: '标签英文名称', dataIndex: 'name', 'show-overflow': true  },
   { title: '标签类别', dataIndex: 'isTag' },
   { title: '创建时间', dataIndex: 'create_time' },
   { title: '所属用户', dataIndex: 'create_user' },
