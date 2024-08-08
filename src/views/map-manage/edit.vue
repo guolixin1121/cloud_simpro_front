@@ -46,7 +46,7 @@
           <template v-else>{{ formState.mapTypeName }}</template>
         </a-form-item>
         <a-form-item v-if="!isView" label="地图文件：" name="xodr" :rules="[{ required: isAdd, message: '请上传地图文件'}]">
-          <div class="flex">
+          <div class="flex items-center">
             <single-upload
               accept=".xodr"
               class="inline-block pr-2"
@@ -146,7 +146,7 @@ const add = async () => {
     xodr: formState.xodr,
     desc: formState.desc,
     mapType: formState.mapType,
-    labels: formState.labels?.map((item: any) => item.name)
+    labels: formState.labels?.map((item: any) => item.value || item.name)
   }
   for (const key in params) {
     if (key !== 'desc') {
