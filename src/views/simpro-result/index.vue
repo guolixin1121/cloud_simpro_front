@@ -30,7 +30,6 @@
               <template v-else-if="record.results_status == 0">未通过</template>
               <template v-else-if="record.results_status == 2">N/A</template>
               <template v-else>--</template>
-              <!-- {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '未通过' }} -->
             </div>
           </template>
           <template v-if="column.dataIndex == 'status'">
