@@ -8,6 +8,7 @@
     <a-layout class="layout-main">
       <div class="sidebar" :class="{'collapsed': collapsed}">
         <a-menu
+          class="menu"
           mode="inline"
           :inline-collapsed="collapsed"
           :style="{ height: '100%', borderRight: 0 }"
@@ -104,6 +105,10 @@ const toggleCollapsed = () => {
       width: 64px;
     }
   }
+}
+.ant-menu.menu {
+  overflow-y: auto;
+  height: calc(100% - 50px) !important;
 }
 .toggle-menu {
   position: absolute;
