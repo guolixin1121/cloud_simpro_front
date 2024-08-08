@@ -222,7 +222,8 @@ export const overview = defineApi({
   tasks: { url: '/stats/simtasks/tasks/', method: 'get' },
   reports: { url: '/stats/simresults/reports/', method: 'get' },
   scenes: { url: '/stats/scenes/count/', method: 'get' },
-  status: { url: '/stats/simtask/status/', method: 'get' }
+  status: { url: '/stats/simtask/status/', method: 'get' },
+  results: { url: '/simpro/simtask/overview/', method: 'get' }
 })()
 
 export const sceneResource = defineApi({

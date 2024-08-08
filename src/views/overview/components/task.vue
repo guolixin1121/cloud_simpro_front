@@ -69,7 +69,7 @@ const loading = ref(false)
 const fetchData = async () => {
   try {
     loading.value = true
-    const res = await api.result.getList()
+    const res = await api.overview.results()
     loading.value = false
     dataSource.value = res.results.slice(0, 4)
   } finally {
