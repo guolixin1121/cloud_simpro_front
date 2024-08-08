@@ -39,7 +39,7 @@ const entries = [
 ]
 
 const router = useRouter()
-const gotoSubPage = ({ url, label } : { url: string, label: string}) => {
+const gotoSubPage = ({ url, label }: any) => {
   if(label == '新增任务' && beforeHandler()) return
   router.push(url)
 }
