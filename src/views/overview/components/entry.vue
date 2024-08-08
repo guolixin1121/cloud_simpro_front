@@ -3,13 +3,14 @@
     <div class="title--noborder">快捷入口</div>
     <div class="item-list">
       <template v-for="item in entries" :key="item.label">
-        <div v-if="hasPermission(item)" class="item" @click="gotoSubPage(item.router)">
+        <div v-if="hasPermission(item)" class="item" @click="gotoSubPage(item)">
           <img :src="item.icon" width="24" style="margin-bottom: 12px;" />
           <span class="mt-1">{{ item.label }}</span>
         </div>
       </template>
     </div>
   </div>
+  <upgrade ref="upgradeModal" module="simulationManage"></upgrade>
 </template>
 
 <script lang="ts" setup>
@@ -20,6 +21,14 @@ import icon_algorithm from '@/assets/images/icon_algorithm.png'
 import icon_SOTIF from '@/assets/images/icon_SOTIF.png'
 import icon_car from '@/assets/images/icon_car_h.png'
 
+const upgradeModal = ref()
+const beforeHandler = () => {
+  if(store.user.isRegisterUser()) {
+    upgradeModal.value.show()
+    return true
+  }
+  return false
+}
 const entries = [
   { icon: icon_newtask, label: '新增任务', router: '/simpro-task/edit' },
   { icon: icon_scenelist, label: '场景列表', router: '/my-sceneset/' },
@@ -30,7 +39,10 @@ const entries = [
 ]
 
 const router = useRouter()
-const gotoSubPage = (url: string) => router.push(url)
+const gotoSubPage = ({ url, label } : { url: string, label: string}) => {
+  if(label == '新增任务' && beforeHandler()) return
+  router.push(url)
+}
 
 const hasPermission = ({ router, label }: any) => {
   if(label == '新增任务') {
