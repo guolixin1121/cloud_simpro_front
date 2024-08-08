@@ -3,7 +3,7 @@
     <div class="title--noborder">快捷入口</div>
     <div class="item-list">
       <template v-for="item in entries" :key="item.label">
-        <div v-if="hasPermission(item)" class="item" @click="gotoSubPage(item)">
+        <div class="item" @click="gotoSubPage(item)">
           <img :src="item.icon" width="24" style="margin-bottom: 12px;" />
           <span class="mt-1">{{ item.label }}</span>
         </div>
@@ -39,17 +39,11 @@ const entries = [
 ]
 
 const router = useRouter()
-const gotoSubPage = ({ url, label }: any) => {
-  if(label == '新增任务' && beforeHandler()) return
-  router.push(url)
-}
-
-const hasPermission = ({ router, label }: any) => {
-  if(label == '新增任务') {
-    return store.user.hasPermission('add', '/simpro-task')
-  } else {
-    return store.user.hasPermission('view', router)
+const gotoSubPage = (item: any) => {
+  if(item.label == '新增任务') {
+    if(beforeHandler()) return
   }
+  router.push(item.router)
 }
 </script>
 <style lang="less" scoped>
