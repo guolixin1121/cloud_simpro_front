@@ -4,7 +4,7 @@
       <a @click="goback(-2)">逻辑场景</a>
       <a @click='goback()'>{{ sceneset?.name }}</a>
     </form-view>
-    <a-button class="return-btn" @click="goback()">返回</a-button>
+    <!-- <a-button class="return-btn" @click="goback()">返回</a-button> -->
   </div>
 </template>
 
