@@ -87,9 +87,11 @@ const isCreating = ref(false)
 const confirmAdd = async () => {
   try {
     isCreating.value = true
-    const res = await currentApi.addVersion({ dynamic_model_id: id })
-    gotoVeticlePro(res.id, '?type=add')
+    await currentApi.addVersion({ dynamic_model_id: id })
+    // gotoVeticlePro(res.id, '?type=add')
     showCreateModel.value = false
+    message.success('创建版本成功')
+    table?.value.refresh()
   } finally {
     isCreating.value = false
   }

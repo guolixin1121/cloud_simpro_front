@@ -173,8 +173,10 @@ const changeShare = async (checked: boolean, val: any, index: number) => {
   }
 }
 const add = async (template_id = '') => {
-  const res = await veticleModelApi.add({ template_id })
-  gotoVeticlePro(res.id, '?type=add')
+  await veticleModelApi.add({ template_id })
+  // gotoVeticlePro(res.id, '?type=add')
+  table?.value.refresh()
+  message.success('创建成功')
 }
 
 const table = ref()
