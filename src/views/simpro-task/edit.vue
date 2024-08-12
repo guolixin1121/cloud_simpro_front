@@ -233,7 +233,10 @@ const onMountChanged = () => {
 
 /****** 获取编辑数据 */
 const getEditData = async () => {
-   if(id !== '0') {
+   if(isAdd) {
+    if(!store.user.hasAcl('cloud:simulation:tasks:add'))
+      return message.error('您没有执行该操作的权限')
+   } else {
      const data = await currentApi.get(id)
      formState.name = data.name
      formState.batch = data.batch
