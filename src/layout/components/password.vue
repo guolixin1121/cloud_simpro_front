@@ -54,14 +54,10 @@ const ok = () => {
 }
 const resetPasswordForm = () => formRef.value.resetFields()
 
-watch(() => formData.origin_password, (password: string) => {
-  console.log('changed', password)
-  formData.origin_password = password.trim()
-})
-watch(() => formData.password, (password: string) => {
-  formData.password = password.trim()
-})
-watch(() => formData.confirm_password, (password: string) => {
-  formData.confirm_password = password.trim()
+watch(formData, () => {
+  console.log('changed')
+  formData.origin_password = formData.origin_password.trim()
+  formData.password = formData.password.trim()
+  formData.confirm_password = formData.confirm_password.trim()
 })
 </script>
