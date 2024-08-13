@@ -95,7 +95,7 @@ const columns = [
         handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
       },
       删除: {
-        tip: '场景集删除后，关联数据（场景、地图）将会一起删除，是否删除？',
+        tip: '场景集删除后，关联数据（场景）将会一起删除，是否删除？',
         validator: (data : RObject) => user.isAdminProject() && data.delete_enable,
         handler: async ({ id }: { id: string }) => await currentApi.deleteSceneset({id: [id]})
       },

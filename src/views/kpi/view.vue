@@ -54,7 +54,7 @@
           {{ formState.py_url || '--' }}
         </a-form-item>
         <a-form-item label="描述">
-          {{ formState.desc || '--' }}
+          <span class="break-text">{{ formState.desc || '--' }}</span>
         </a-form-item>
         <a-form-item label="创建时间">
           {{ formatDate(formState.create_date) }}

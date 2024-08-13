@@ -44,7 +44,6 @@ const inputChange = (e: { target: { value: any } }) => {
     value = value.replace(props.exclude, '')
   }
   const totalLength = getWordLength(value)
-  console.log(totalLength, value)
   if(totalLength > +maxlength.value) {
     value = sliceWord(value)
   }

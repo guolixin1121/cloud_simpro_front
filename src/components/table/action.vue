@@ -2,7 +2,7 @@
   <template v-for="key in Object.keys(scope.column.actions || [])" :key="key">
     <template v-if="hasPermission(scope, key)">
       <!-- 删除列 -->
-      <a v-if="user.isRegisterUser()" class="text-link mr-2" @click="onHandler(scope, key)">
+      <a v-if="user.isRegisterUser() && scope.column.actions[key].beforeHandler" class="text-link mr-2" @click="onHandler(scope, key)">
         {{ key }}
       </a>
       <a-popconfirm v-else-if="key == '删除'" :title="getDeleteTip(scope, key)" @confirm="onHandler(scope, key)">
