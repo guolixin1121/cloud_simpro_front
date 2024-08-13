@@ -18,7 +18,7 @@ RUN cnpm install
 COPY . .
 
 # 构建项目
-RUN pnpm run build:docker
+RUN cnpm run build:docker
 
 # 使用一个更小的Nginx镜像作为运行环境
 FROM nginx:1.21-alpine as production-stage

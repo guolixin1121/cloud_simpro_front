@@ -10,7 +10,9 @@
                 @click="onSelect(sceneset)">
                 <div class="name">{{ sceneset?.name }}</div>
                 <div class="count">包含：{{ sceneset?.scene_count }}个场景</div>
-                <a-button type="primary">查看</a-button>
+                <a-button v-if="sceneset.apply_status == 0" type="primary" @click="onSelect(sceneset)">查看</a-button>
+                <span v-if="sceneset.apply_status == 1" style="color: #FF8A03">等待审核中</span>
+                <span v-if="sceneset.apply_status == 2" style="color: #60646E;">已授权</span>
             </div>
         </div>
     </div>
