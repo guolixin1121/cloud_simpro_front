@@ -2,25 +2,16 @@
 <template>
   <div class="white-block sceneset">
     <a-row>
-      <a-col :span="6">
-        <span class="label">场景集ID</span>{{ sceneset?.id }}</a-col>
-      <a-col :span="isFromMySceneset? 7 : 8">
+      <a-col :span="7">
         <span class="label">场景集名称</span>
         <a-tooltip :title="sceneset?.name" placement="topLeft">
           <span class="line-value">{{ sceneset?.name }}</span>
         </a-tooltip>
       </a-col>
-
-      <a-col :span="6">
-        <span class="label" style="width: 65px">创建时间</span>{{ sceneset?.create_time }}
-      </a-col>
-
       <a-col :span="5" v-if="isFromMySceneset">
         <span class="label">场景集来源</span>{{ sceneset?.sourceName }}
       </a-col>
-    </a-row>
-    <a-row>
-      <a-col :span="24">
+      <a-col :span="12">
         <span class="label">场景集描述</span>
         <a-tooltip :title="sceneset?.desc" placement="topLeft">
             <span class="line-value">{{ sceneset?.desc || '--' }}</span>

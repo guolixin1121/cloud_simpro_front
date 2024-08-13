@@ -24,7 +24,7 @@
 
     <!-- 底部buttons -->
     <div class="float-right mt-2">
-      <svg-icon title="创建" icon="add" class="cursor-pointer mr-1" v-if="user.hasPermission('addSet')" @click="onButtonClick('add')"></svg-icon>
+      <svg-icon icon="add" title="创建" class="cursor-pointer mr-1" v-if="user.hasPermission('addSet')" @click="onButtonClick('add')"></svg-icon>
       <svg-icon icon="edit" title="编辑" class="cursor-pointer mr-1" v-if="user.hasPermission('editSet')" :class="isEmpty(selectedNode) ? 'icon--disable' : ''" @click="onButtonClick('edit')"></svg-icon>
       <svg-icon icon="delete" title="删除" class="cursor-pointer mr-1" v-if="user.hasPermission('deleteSet')" :class="isEmpty(selectedNode) ? 'icon--disable' : ''" @click="onButtonClick('delete')"></svg-icon>
     </div>

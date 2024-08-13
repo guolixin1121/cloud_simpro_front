@@ -2,7 +2,7 @@
   <template v-for="key in Object.keys(scope.column.actions || [])" :key="key">
     <template v-if="hasPermission(scope, key)">
       <!-- 删除列 -->
-      <a v-if="scope.column.actions[key].beforeHandler" class="text-link mr-2" @click="onHandler(scope, key)">
+      <a v-if="user.isRegisterUser()" class="text-link mr-2" @click="onHandler(scope, key)">
         {{ key }}
       </a>
       <a-popconfirm v-else-if="key == '删除'" :title="getDeleteTip(scope, key)" @confirm="onHandler(scope, key)">
@@ -20,6 +20,7 @@
 import { Operations } from '@/utils/dict'
 const props = defineProps(['scope', 'isOnlyCreator'])
 const emits = defineEmits(['refresh', 'before-handler'])
+const user = store.user
 
 /**
  * 判断用户是否有某个操作的权限，目前只检查’删除‘、’编辑‘

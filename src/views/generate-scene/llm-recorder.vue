@@ -5,13 +5,20 @@
   </div>
   <div style="height: 100%;">
     <div class="container">
-      <div class="messages" :style="{ height: 'calc(100% - 90px - '+ inputHeight +'px)'}">
+      <div class="messages" :style="{ height: 'calc(100% - 150px - '+ inputHeight +'px)'}">
+        <!-- 欢迎语 -->
+        <div class="message">
+          <div class="message-avatar">赛目</div>
+          <div class="message-body">
+              HI～我是赛目语义场景生成大模型，我可以帮您快速生成仿真场景文件，例如您可以说：主车在高速路上行驶，前方小汽车强行变道。
+          </div>
+        </div>
         <!-- 聊天记录 -->
         <div class="messages-content">
           <div v-for="(chat, index) in data.chats" :key="index" :class="'message message--' + chat.type">
             <template v-if="chat.type == 0">
               <div class="message-body">{{ chat.message }}</div>
-              <div class="message-avatar">{{ user }}</div>
+              <div class="message-avatar">我</div>
             </template>
             <template v-else>
               <div class="message-avatar">赛目</div>
@@ -29,14 +36,21 @@
         </div>
       </div>
       <div class="input-box-wrapper">
-        <div class="flex items-end">
-          <a-textarea ref="inputRef" placeholder="直接输入指令；Shift+回车换行" class="input" 
-            :bordered="false" :auto-size="{ minRows: 1, maxRows: 5 }" :allow-clear="true" :maxlength="500" 
-            v-model:value="data.question" @keydown="onKeyDown" @keyup="onKeyUp"></a-textarea>
+        <a-textarea ref="inputRef" :bordered="false" :auto-size="{ minRows: 1, maxRows: 5 }" :placeholder="data.placeholder" 
+          class="input" v-model:value="data.question"
+          :allow-clear="true" :maxlength="500" @keydown="onKeyDown" @keyup="onKeyUp"></a-textarea>
+        <p class="error" style="margin-left: 8px;" v-if="data.errorMsg">请输入文字</p>
+        <div class="mt-2">
+          <template v-if="canRecording">
+            <svg-icon icon="recorder-stop"  class="recorder" 
+              @click="stopRecording" v-if="data.isRecording"></svg-icon>
+            <svg-icon icon="recorder"
+              :class="'recorder recorder--' + (canStartRecording ? 'disabled' : 'enabled')"
+              @click="startRecording" v-else></svg-icon>
+          </template>
           <a-button type="primary" size="small" class="submit" @click="onSend" :disabled="data.isWriting"
             :loading="data.isSubmitting">发送</a-button>
         </div>
-        <div class="error" style="margin-left: 8px;" v-if="data.errorMsg">请输入文字</div>
       </div>
     </div>
   </div>
@@ -44,24 +58,27 @@
 </template>
 
 <script lang="ts" setup>
-const user = store.user.user?.username.substring(0,3).toUpperCase()
+// const user = store.user.user
+
+let mediaRecorder: MediaRecorder
+HZRecorder.get((rec: MediaRecorder) => mediaRecorder = rec)
+const canRecording = HZRecorder.canRecording
 
 const inputRef = ref()
 const router = useRouter()
 const preview = (chat: Chat) => router.push('/my-sceneset/scene/preview/' + chat.scene?.id)
 const showPath = (chat: Chat) => chat.scene && !data.isWriting
 
-const inputHeight = ref(0)
+const inputHeight = ref(30)
+const defaultPlaceholder = '直接输入指令；Shift+回车换行'
 const data = reactive<LLMData>({
   question: '',            // 问题
   answer: null,            // 答案
-  chats: [{
-    type: 1,
-    message: 'HI～我是赛目语义场景生成大模型，我可以帮您快速生成仿真场景文件，例如您可以输入：主车在高速路上行驶，前方小汽车强行变道。'
-  }],               // 所有对话数据
+  chats: [],               // 所有对话数据
   isWriting: false,        // 是否正在逐行输出结果
   isRecording: false,      // 是否正在语音输入
   isSubmitting: false,     // 是否正在提交到服务器
+  placeholder: defaultPlaceholder,
   errorMsg: ''
 })
 const upgradeModal = ref()  
@@ -155,6 +172,30 @@ const scroll = () => {
   })
 }
 
+// 录音
+const canStartRecording = computed(() => data.isSubmitting || data.isWriting)
+function startRecording() {
+  if(canStartRecording.value) return
+
+  mediaRecorder.start()
+  data.placeholder = '正在录音'
+  data.question = ''
+  data.isRecording = true
+}
+
+async function stopRecording() {
+  mediaRecorder.stop()
+  data.isRecording = false
+
+  data.placeholder = '正在语音转换'
+  const res = await api.llm.audioToText({
+    audio: mediaRecorder.getBlob(),
+    rate: new window.AudioContext().sampleRate
+  })
+  data.placeholder = defaultPlaceholder
+  data.question = res.text
+}
+
 watch(() => data.question, () => {
   inputHeight.value = inputRef.value.resizableTextArea.textArea.clientHeight
   if(data.question.length > 0) {
@@ -209,43 +250,38 @@ watch(() => data.question, () => {
   justify-content: right;
   .message-avatar {
     margin-left: 8px;
-    margin-right: 0px;
-    flex: 0 0 40px;
   }
 
   .message-body {
     color: #fff;
     background: #00AF59;
     border-radius: 10px 0px 10px 10px;
-    margin-left: 48px;
   }
 }
 	
 .input-box-wrapper {
   background-color: #fff;
   padding: 16px;
-  padding-left: 8px;
-  width: 1000px;
+  border-radius: 4px;
+  width: 935px;
+  margin-left: 65px;
   position: absolute;
   bottom: 24px;
-  box-shadow: 0px 0px 10px 0px rgba(1,27,74,0.06);
-  border-radius: 10px;
-  border: 1px solid #DADCE0;
-
-  &:has(:focus) {
-    border-color: #00AF59;
-  }
   .submit {
     color: #fff;
-    width: 70px;
-    height: 32px;
-    border-radius: 6px;
-    margin-left: 16px;
+    width: 80px;
+    height: 38px;
+    float: right;
   }
-}
-</style>
-<style>
-.ant-input:focus {
-  box-shadow: none !important;
+  .recorder {
+    cursor: pointer;
+    float: left;
+    &:hover {
+      color: var(--primary-color)
+    }
+    &--disabled, &--disabled:hover {
+       color: #C9CCD1
+    }
+  }
 }
 </style>
