@@ -227,6 +227,7 @@ export const overview = defineApi({
 })()
 
 export const sceneResource = defineApi({
+  getScenesetListV2: { url: '/resource/v2/concrete/sceneset/', method: 'get' },
   getScenesetList: { url: '/resource/concrete/sceneset/', method: 'get' },
   getSceneset: { url: '/resource/concrete/sceneset/{id}/', method: 'get' },
   deleteSceneset: { url: '/resource/concrete/sceneset/delete/', method: 'delete' },

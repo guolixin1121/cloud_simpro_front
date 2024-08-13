@@ -54,7 +54,7 @@ const onSearch = async () => {
 }
 
 const loadScenesets = async () => {
-    const res = await api.sceneResource.getScenesetList()
+    const res = await api.sceneResource.getScenesetListV2()
     scenesets.value = res.results
 }
 loadScenesets()

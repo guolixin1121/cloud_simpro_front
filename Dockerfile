@@ -5,14 +5,14 @@ FROM node:18 as build-stage2
 WORKDIR /simpro_front
 
 # 安装pnpm
-RUN npm install -g pnpm
+RUN npm install -g cnpm
 
 # 复制package.json和package-lock.json到容器中
 COPY package*.json ./
-COPY pnpm-lock.yaml .
+# COPY pnpm-lock.yaml .
 
 # 安装项目的依赖
-RUN pnpm install
+RUN cnpm install
 
 # 将整个项目复制到容器中
 COPY . .
