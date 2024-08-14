@@ -9,6 +9,7 @@
 ></a-input>
   <a-textarea v-if="type == 'textarea'" 
     style="resize:none"
+    ref="inputRef"
     v-bind="$attrs"
     :value="value" 
     @input="inputChange"
@@ -48,6 +49,8 @@ const inputChange = (e: { target: { value: any } }) => {
     value = sliceWord(value)
   }
   innerValue.value = value
+  inputRef.value.blur()
+  inputRef.value.focus()
   emits('update:value', value)
 }
 
