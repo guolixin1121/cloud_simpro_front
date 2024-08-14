@@ -9,9 +9,10 @@ RUN npm install -g pnpm
 
 # 复制package.json和package-lock.json到容器中
 COPY package*.json ./
-# COPY pnpm-lock.yaml .
+COPY pnpm-lock.yaml .
 
 # 安装项目的依赖
+RUN pnpm config set registry https://registry.npmmirror.com/
 RUN pnpm install
 
 # 将整个项目复制到容器中
