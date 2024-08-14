@@ -11,7 +11,7 @@
     style="resize:none"
     ref="inputRef"
     v-bind="$attrs"
-    :value="value" 
+    v-model::value="innerValue" 
     @input="inputChange"
 ></a-textarea>
 </template>
@@ -38,7 +38,7 @@ const props = defineProps({
 
 const innerValue = ref(props.value)
 const emits = defineEmits(['update:value'])
-const { value, maxlength } = toRefs(props)
+const { maxlength } = toRefs(props)
 const inputChange = (e: { target: { value: any } }) => {
   let value = e.target.value
   if(props.exclude) {
