@@ -11,7 +11,7 @@
     style="resize:none"
     ref="inputRef"
     v-bind="$attrs"
-    v-model::value="innerValue" 
+    v-model:value="innerValue" 
     @input="inputChange"
 ></a-textarea>
 </template>
