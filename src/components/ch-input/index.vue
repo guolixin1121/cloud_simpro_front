@@ -49,8 +49,8 @@ const inputChange = (e: { target: { value: any } }) => {
     value = sliceWord(value)
   }
   innerValue.value = value
-  inputRef.value.blur()
-  inputRef.value.focus()
+  // inputRef.value.blur()
+  // inputRef.value.focus()
   emits('update:value', value)
 }
 
