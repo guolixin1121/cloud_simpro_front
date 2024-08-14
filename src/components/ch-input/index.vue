@@ -5,13 +5,13 @@
     v-bind="$attrs"
     v-model:value="innerValue" 
     allowClear
-    @input="inputChange"
+    @change="inputChange"
 ></a-input>
   <a-textarea v-if="type == 'textarea'" 
     style="resize:none"
     v-bind="$attrs"
     :value="value" 
-    @input="inputChange"
+    @change="inputChange"
 ></a-textarea>
 </template>
 

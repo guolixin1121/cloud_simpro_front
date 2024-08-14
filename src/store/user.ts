@@ -50,7 +50,7 @@ export const useUserStore = defineStore('user', () => {
     if (user.value) return
 
     const localUser = await userApi.getLoginUser() // 本系统用户信息
-    const authUser = await api.auth.getIdentities() // 权限系统的用户信息
+    const authUser = {} // await api.auth.getIdentities() // 权限系统的用户信息
     user.value = { ...localUser, ...authUser }
     LStorage.set('user', user.value.username)
 
