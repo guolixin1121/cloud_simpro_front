@@ -167,11 +167,17 @@ const columns = [
     width: 300,
     actions: {
       查看: (data: any) => gotoSubPage('/view/' + data.id),
-      泛化: (data: any) => {
-        generateModal.visible = true
-        generateModal.sourceData = data
+      泛化: { 
+        validator: ({source} : any) => source !== 1,
+        handler: (data: any) => {
+          generateModal.visible = true
+          generateModal.sourceData = data
+        }
       },
-      泛化结果: (data: any) => gotoSubPage('/result/' + data.id +'?name=' + data.name),
+      泛化结果: {
+        validator: ({source} : any) => source !== 1,
+        handler: (data: any) => gotoSubPage('/result/' + data.id +'?name=' + data.name)
+      },
       编辑: {
         validator:  ({source}: any) => isMyLogicSceneEditable(source),
         handler: (data: any) => gotoSubPage('/edit/' + data.id)

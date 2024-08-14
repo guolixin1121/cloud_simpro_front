@@ -9,7 +9,7 @@ export const auth = defineApi({
   logout: {url: '/cloud-pro/auth/logout', method: 'post'},
   getIdentities: {url: '/cloud-pro/user/identities', method: 'post'},
   getUser: {url: '/cloud-pro/cloud-pro-management/management/user/detail', method: 'get'},
-  editUser: {url: '/cloud-pro/cloud-pro-management/management/user/editUserName', method: 'post'},
+  editUser: {url: '/cloud-pro/management/user/editUserName', method: 'post'},
   changePassword: {url: '/cloud-pro/cloud-pro-management/management/user/edit/password', method: 'post'},
 })()
 

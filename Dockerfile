@@ -5,20 +5,20 @@ FROM node:18 as build-stage2
 WORKDIR /simpro_front
 
 # 安装pnpm
-RUN npm install -g cnpm
+RUN npm install -g pnpm
 
 # 复制package.json和package-lock.json到容器中
 COPY package*.json ./
-# COPY pnpm-lock.yaml .
+COPY pnpm-lock.yaml .
 
 # 安装项目的依赖
-RUN cnpm install
+RUN pnpm install
 
 # 将整个项目复制到容器中
 COPY . .
 
 # 构建项目
-RUN cnpm run build:docker
+RUN pnpm run build:docker
 
 # 使用一个更小的Nginx镜像作为运行环境
 FROM nginx:1.21-alpine as production-stage
