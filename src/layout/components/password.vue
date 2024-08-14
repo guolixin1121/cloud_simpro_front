@@ -3,20 +3,17 @@
       <a-form-item name="origin_password" label="原密码" :rules="[
           { required: true, message: '请填写原密码' },
           { validator: () => validatePassword(formData.origin_password) } ]">
-        <input-password name="origin_password"  v-model:value="formData.origin_password" placeholder="请填写原密码"></input-password>
-        <!-- <a-input-password maxLength="16" name="origin_password" autocomplete="new-password" v-model:value="formData.origin_password" placeholder="请填写原密码"></a-input-password> -->
+        <a-input-password maxLength="16" name="origin_password" autocomplete="new-password" v-model:value="formData.origin_password" placeholder="请填写原密码"></a-input-password>
       </a-form-item>
       <a-form-item name="password" label="新密码" :rules="[{ required: true, message: '请填写新密码' },
         { validator: () => validatePassword(formData.password) }
       ]">
-        <input-password name="password"  v-model:value="formData.password" placeholder="请填写新密码"></input-password>
-        <!-- <a-input-password maxLength="16" name="password" v-model:value="formData.password" placeholder="请填写新密码" autocomplete="new-password"></a-input-password> -->
+        <a-input-password maxLength="16" name="password" v-model:value="formData.password" placeholder="请填写新密码" autocomplete="new-password"></a-input-password>
       </a-form-item>
       <a-form-item name="confirm_password" label="确认密码"
         :rules="[{ required: true, message: '请填写确认密码' }, 
           { validator: () => comparePassword(formData) }]">
-        <input-password name="confirm_password"  v-model:value="formData.confirm_password" placeholder="两次密码必须一致且不能包含空格"></input-password>
-        <!-- <a-input-password maxLength="16" name="confirm_password" v-model:value="formData.confirm_password" placeholder="两次密码必须一致且不能包含空格" autocomplete="new-password"></a-input-password> -->
+        <a-input-password maxLength="16" name="confirm_password" v-model:value="formData.confirm_password" placeholder="两次密码必须一致" autocomplete="new-password"></a-input-password>
       </a-form-item>
     </a-form>
     <div class="modal-buttons">
@@ -56,11 +53,4 @@ const ok = () => {
   })
 }
 const resetPasswordForm = () => formRef.value.resetFields()
-
-// watch(formData, () => {
-//   console.log('changed')
-//   formData.origin_password = formData.origin_password.trim()
-//   formData.password = formData.password.trim()
-//   formData.confirm_password = formData.confirm_password.trim()
-// })
 </script>
