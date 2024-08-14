@@ -99,7 +99,7 @@ export default defineConfig(({ mode }) => {
       outDir: 'dist', // 指定输出路径
       assetsDir: 'static', // 指定生成静态资源的存放路径
       minify: 'terser', // 混淆器,terser构建后文件体积更小
-      sourcemap: false, // 构建后是否生成soutrce map文件
+      sourcemap: true, // 构建后是否生成soutrce map文件
       cssCodeSplit: true, // 如果设置为false，整个项目中的所有 CSS 将被提取到一个 CSS 文件中
       chunkSizeWarningLimit: 1500, //警报门槛，限制大文件大小B为单位
       terserOptions: {
