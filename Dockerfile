@@ -9,7 +9,7 @@ RUN npm install -g pnpm
 
 # 复制package.json和package-lock.json到容器中
 COPY package*.json ./
-COPY pnpm-lock.yaml .
+# COPY pnpm-lock.yaml .
 
 # 安装项目的依赖
 RUN pnpm install
