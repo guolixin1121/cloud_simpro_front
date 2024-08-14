@@ -48,7 +48,7 @@ const router = createRouter({
 
   // 检测项目空间初始化是否完成
 const interval = setInterval(checkProjectStatus, 5000)
-// checkProjectStatus()
+checkProjectStatus()
 async function checkProjectStatus() {
   const project = await api.user.project()
   if(project?.data_config_status == '2') {
