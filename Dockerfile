@@ -5,7 +5,7 @@ FROM node:18 as build-stage2
 WORKDIR /simpro_front
 
 # 安装pnpm
-RUN npm install -g pnpm
+RUN npm install -g pnpm@9.5.0
 
 # 复制package.json和package-lock.json到容器中
 COPY package*.json ./
