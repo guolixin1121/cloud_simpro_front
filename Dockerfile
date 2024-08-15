@@ -5,6 +5,7 @@ FROM node:18 as build-stage2
 WORKDIR /simpro_front
 
 # 安装pnpm
+RUN npm config set registry https://registry.npmmirror.com/
 RUN npm install -g pnpm@8.15.8
 
 # 复制package.json和package-lock.json到容器中
@@ -12,7 +13,6 @@ COPY package*.json ./
 COPY pnpm-lock.yaml .
 
 # 安装项目的依赖
-RUN pnpm config set registry https://registry.npmmirror.com/
 RUN pnpm install
 
 # 将整个项目复制到容器中
