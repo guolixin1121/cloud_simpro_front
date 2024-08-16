@@ -7,7 +7,7 @@
       <a-spin :spinning="scenesetLoading">
         <sceneset :sceneset="selectedSceneset"></sceneset>
       </a-spin>
-      <search-form class="multiline-form" v-model:items="formItems" :colsPerline="3" :manual="true" @search="onTableSearch" @show-more="onTableSearch"></search-form>
+      <search-form class="scene-form" v-model:items="formItems" :colsPerline="3" :manual="true" @search="onTableSearch" @show-more="onTableSearch"></search-form>
       <div class="main">
         <div class="title-section">
           <span class="title">具体场景列表</span>
@@ -283,12 +283,14 @@ const treeBtnHandlers = {
 </script>
 
 <style lang="less">
-.ant-row:not(.last-row) {
-  .ant-form-item-label {
-    width: 40px !important;
+.scene-form {
+  .ant-row:not(.last-row) {
+    .ant-form-item-label {
+      width: 40px !important;
+    }
   }
-}
-.ant-row:first-child .ant-form-item-label {
-  width: 65px !important;
+  .ant-row:first-child .ant-form-item-label {
+    width: 65px !important;
+  }
 }
 </style>

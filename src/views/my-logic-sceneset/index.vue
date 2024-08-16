@@ -6,7 +6,7 @@
       <a-spin  :spinning="loadingSceneset">
         <sceneset :sceneset="selectedSceneset"></sceneset>
       </a-spin>
-      <search-form class="reactive-form" :colsPerline="3" :manual="true" v-model:items="formItems" @search="onSearch"></search-form>
+      <search-form class="scene-form" :colsPerline="3" :manual="true" v-model:items="formItems" @search="onSearch"></search-form>
 
       <div class="main">
         <page-title title="逻辑场景列表">
@@ -330,12 +330,14 @@ const treeBtnHandlers = {
 </script>
 
 <style lang="less">
-.ant-row:not(.last-row) {
-  .ant-form-item-label {
-    width: 40px !important;
+.scene-form {
+  .ant-row:not(.last-row) {
+    .ant-form-item-label {
+      width: 40px !important;
+    }
   }
-}
-.ant-row:first-child .ant-form-item-label {
-  width: 65px !important;
+  .ant-row:first-child .ant-form-item-label {
+    width: 65px !important;
+  }
 }
 </style>
