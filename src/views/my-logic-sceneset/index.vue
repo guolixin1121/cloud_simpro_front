@@ -328,3 +328,14 @@ const treeBtnHandlers = {
   }
 }
 </script>
+
+<style lang="less">
+.ant-row:not(.last-row) {
+  .ant-form-item-label {
+    width: 40px !important;
+  }
+}
+.ant-row:first-child .ant-form-item-label {
+  width: 65px !important;
+}
+</style>
