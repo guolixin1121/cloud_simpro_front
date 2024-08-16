@@ -1,7 +1,9 @@
 <template>
   <div class="left-tree">
     <span class="sub-title">{{ title }}</span>
-    <a-input-search allowClear v-model:value="searchValue" style="margin-bottom: 8px" @search="onSearch" />
+    <a-input-search allowClear v-model:value="searchValue" 
+      style="margin-bottom: 8px" placeholder="全部"
+      @search="onSearch" />
     <div class="tree-container">
       <a-spin :spinning="loading" style="min-height: 50px">
         <!-- 视觉占位 -->
@@ -23,10 +25,11 @@
     </div>
 
     <!-- 底部buttons -->
-    <div class="float-right mt-2">
-      <svg-icon icon="add" title="创建" class="cursor-pointer mr-1" v-if="user.hasPermission('addSet')" @click="onButtonClick('add')"></svg-icon>
-      <svg-icon icon="edit" title="编辑" class="cursor-pointer mr-1" v-if="user.hasPermission('editSet')" :class="isEmpty(selectedNode) ? 'icon--disable' : ''" @click="onButtonClick('edit')"></svg-icon>
-      <svg-icon icon="delete" title="删除" class="cursor-pointer mr-1" v-if="user.hasPermission('deleteSet')" :class="isEmpty(selectedNode) ? 'icon--disable' : ''" @click="onButtonClick('delete')"></svg-icon>
+    <div class="bottom-btns">
+      <svg-icon icon="add" title="创建" v-if="user.hasPermission('addSet')" @click="onButtonClick('add')"></svg-icon>
+      <svg-icon icon="edit" title="编辑" v-if="user.hasPermission('editSet')" :class="isDisabled('edit') ? 'icon--disable' : ''" @click="onButtonClick('edit')"></svg-icon>
+      <svg-icon icon="saveas" title="另存为" v-if="user.hasPermission('saveAsSet')" :class="isDisabled('saveAs') ? 'icon--disable' : ''" @click="onButtonClick('saveAs')"></svg-icon>
+      <svg-icon icon="delete" title="删除" v-if="user.hasPermission('deleteSet')" :class="isDisabled('delete') ? 'icon--disable' : ''" @click="onButtonClick('delete')"></svg-icon>
     </div>
     <!-- 调整组件大小 -->
     <div class="resize-handler" @mousedown="onResizeStart"></div>
@@ -36,7 +39,8 @@
   <a-modal v-model:visible="showDeleteConfirm" :closable="false" :footer="null">
     <div class="modal-content">
       <!-- <svg-icon style="color: #faad14" icon="alert"></svg-icon> -->
-      <span style="font-size: 16px">删除后，关联数据(场景、地图等)将会一起删除，是否删除？</span>
+      <span style="font-size: 16px" v-if="title=='地图集'">删除后，关联数据（场景、地图等）将会一起删除，是否删除？</span>
+      <span style="font-size: 16px" v-else>删除后，关联数据（场景）将会一起删除，是否删除？</span>
     </div>
     <div class="modal-buttons">
       <a-button @click="closeDeleteConfirm">取消</a-button>
@@ -64,6 +68,10 @@ const props = defineProps({
     type: Object,
     default: () => ({})
   },
+  defaultValue: {
+    type: Object,
+    default: () => null
+  },
   filedNames: {
     type: Object,
     default: () => ({ label: 'name', value: 'id' })
@@ -85,7 +93,6 @@ const props = defineProps({
   }
 })
 const emits = defineEmits(['select', 'btn-click'])
-
 const routeName = useRoute().path.replaceAll('/', '')
 const searchValue = useSessionStorage(routeName + ': tree-search', '')
 const searchQuery = ref()
@@ -134,23 +141,32 @@ const onResize = (event: any) => {
 const onResizeEnd = () => (isMouseDown = false)
 
 // 底部按钮的click
+const isDisabled = (type: string) => {
+  if(!selectedNode.value || isEmpty(selectedNode.value)) return true
+  const func = props.buttonHandlers?.[type]
+  const isInvalid = func?.validator ? !func.validator(selectedNode.value) : false
+  return isInvalid  // user.hasPermission(type + 'Set')
+}
 const showDeleteConfirm = ref(false)
 const onButtonClick = (type: string) => {
   if (type != 'add' && isEmpty(selectedNode.value)) return
 
-  const { buttonHandlers } = props
-  if (!buttonHandlers) return
+  const func = props.buttonHandlers?.[type]
+  if(!func) return
 
-  if (type == 'add') buttonHandlers.add()
-  if (type == 'edit') buttonHandlers.edit(selectedNode.value)
-  if (type == 'delete') showDeleteConfirm.value = true
+  if (type == 'delete') {
+    showDeleteConfirm.value = true
+  } else {
+    const handler = func.handler || func
+    handler(selectedNode.value)
+  }
 }
 
 const closeDeleteConfirm = () => (showDeleteConfirm.value = false)
 const onDeleteConfirm = async () => {
   closeDeleteConfirm()
-
-  const handler = props.buttonHandlers?.delete
+  const func = props.buttonHandlers?.delete
+  const handler = func.handler || func
   if (handler) {
     // delete
     loading.value = true
@@ -163,7 +179,7 @@ const onDeleteConfirm = async () => {
       emits('select', {})
     }
     expandRowKeys.value = expandRowKeys.value.filter((item: any) => item.id != selectedNode.value?.id)
-    selectedNode.value = null
+    selectedNode.value = {}
     refresh()
   }
 }
@@ -232,13 +248,13 @@ const refreshSelectedNode = (data: any = treeData.value) => {
 const transformData = (data: any = []) => {
   const { label, value } = props.filedNames
   return data.map((item: any) => ({
+    ...item,
     id: item[value],
     key: item[value],
     title: item[label],
     name: item[label],
-    isLeaf: item.isLeaf == 1,
-
-    children: props.lazy ? null : transformData(item.children)
+    isLeaf: item.isLeaf == undefined ? true : item.isLeaf,
+    children: props.lazy ? null : transformData(item.children),
   }))
 }
 
@@ -277,7 +293,7 @@ const onSearch = () => {
   isRecurse.value = false
   // reset query
   searchQuery.value = { ...props.query, name: searchValue.value }
-  delete searchQuery.value.baidu_id // 仅跳转过来时支持紧缺搜索，手动搜索时需要删掉
+  delete searchQuery.value.baidu_id // 仅跳转过来时支持精确搜索，手动搜索时需要删掉
 }
 
 // 节点选中：展开或触发外部选中事件
@@ -309,12 +325,29 @@ const expandRowKeys = useSessionStorage<string[]>(routeName + ': tree-expand', [
 const onExpand = (expandedKeys: string[]) => (expandRowKeys.value = expandedKeys)
 
 watch(searchQuery, refresh)
+
+// 监控默认选中值的变化
+watch(() => props.defaultValue, (val: any) => {
+  if(isEmpty(val)) return
+  selectedNode.value = val
+  selectedRowKeys.value = [val.id]
+})
+
+defineExpose({ refresh })
 </script>
 
 <style lang="less" scoped>
 @import '../../assets/styles/variable.less';
 .left-tree {
   position: relative;
+
+  .bottom-btns {
+    float: right;
+    margin-top: 8px;
+    .icon {
+      cursor: pointer;
+    }
+  }
 
   .icon--disable {
     color: #d9d9d9;

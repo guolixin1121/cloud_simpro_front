@@ -19,7 +19,7 @@
                 {{ chat.message }}
                 <div class="message-footer" v-if="showPath(chat)">
                   <div>
-                    场景文件保存路径：我的场景-具体场景-{{chat.scene?.sceneset_name}}-{{chat.scene?.adsName }}
+                    场景文件保存路径：我的场景/具体场景/场景集：{{chat.scene?.sceneset_name}}/场景：{{chat.scene?.adsName }}
                   </div>
                   <a class="text-link" @click="preview(chat)">查看</a>
                 </div>
@@ -30,10 +30,10 @@
       </div>
       <div class="input-box-wrapper">
         <div class="flex items-end">
-          <a-textarea ref="inputRef" placeholder="直接输入指令；Shift+回车换行" class="input" 
+          <a-textarea ref="inputRef" placeholder="请输入场景描述" class="input" 
             :bordered="false" :auto-size="{ minRows: 1, maxRows: 5 }" :allow-clear="true" :maxlength="500" 
             v-model:value="data.question" @keydown="onKeyDown" @keyup="onKeyUp"></a-textarea>
-          <a-button type="primary" size="small" class="submit" @click="onSend" :disabled="data.isWriting"
+          <a-button type="primary" size="small" class="submit" @click="onSend" :disabled="data.isWriting || data.question.length == 0"
             :loading="data.isSubmitting">发送</a-button>
         </div>
         <div class="error" style="margin-left: 8px;" v-if="data.errorMsg">请输入文字</div>
@@ -44,11 +44,15 @@
 </template>
 
 <script lang="ts" setup>
+import { openLink} from '@/utils/tools'
 const user = store.user.user?.username.substring(0,3).toUpperCase()
 
 const inputRef = ref()
-const router = useRouter()
-const preview = (chat: Chat) => router.push('/my-sceneset/scene/preview/' + chat.scene?.id)
+// const router = useRouter()
+const preview = (chat: Chat) => {
+  openLink('/scene-simulation-client/#/overview/?type=2&id=' + chat.scene?.id)
+  // router.push('/my-sceneset/scene/preview/' + chat.scene?.id)
+}
 const showPath = (chat: Chat) => chat.scene && !data.isWriting
 
 const inputHeight = ref(0)
@@ -57,7 +61,7 @@ const data = reactive<LLMData>({
   answer: null,            // 答案
   chats: [{
     type: 1,
-    message: 'HI～我是赛目语义场景生成大模型，我可以帮您快速生成仿真场景文件，例如您可以输入：主车在高速路上行驶，前方小汽车强行变道。'
+    message: 'HI ~ 我是赛目语义场景生成大模型，我可以帮您快速生成仿真场景文件，例如您可以输入：主车在高速公路上行驶，前方小汽车强行变道。'
   }],               // 所有对话数据
   isWriting: false,        // 是否正在逐行输出结果
   isRecording: false,      // 是否正在语音输入
@@ -156,10 +160,11 @@ const scroll = () => {
 }
 
 watch(() => data.question, () => {
-  inputHeight.value = inputRef.value.resizableTextArea.textArea.clientHeight
   if(data.question.length > 0) {
     data.errorMsg = ''
   }
+  // 等待输入框实际变化后再计算
+  setTimeout(() => inputHeight.value = inputRef.value.resizableTextArea.textArea.clientHeight, 20)
 })
 </script>
 

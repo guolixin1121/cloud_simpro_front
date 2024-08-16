@@ -189,9 +189,3 @@ export const ApplyStatusOptions = [
   { label: '已拒绝', value: 3 }
 ]
 export const getApplyStatus = (value: number | string) => ApplyStatusOptions.find(v => v.value == value)?.label
-
-export const ResourceApplyStatus = [
-  { label: '未申请', value: 0 },
-  { label: '审核中', value: 1 },
-  { label: '已通过', value: 2 }
-]

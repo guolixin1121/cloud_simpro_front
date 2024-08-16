@@ -1,7 +1,7 @@
 <template>
   <div class="breadcrumb">
     <router-link to="/my-sceneset/">具体场景</router-link>
-    <a @click='goback()'>{{ sceneset?.name }}</a>
+    <!-- <a @click='goback()'>{{ sceneset?.name }}</a> -->
     <span>{{ title }}</span>
   </div>
   <div class="min-main">
@@ -9,6 +9,9 @@
 
     <a-spin :spinning="dataLoading">
       <Form :model="formState" @finish="add">
+        <!-- <a-form-item label="场景集名称">
+          {{ sceneset?.name }}
+        </a-form-item> -->
         <a-form-item label="场景名称" name="adsName"
           :rules="[{ required: true, message: '请输入场景名称' },
             { validator: () => checkChName(formState.adsName, 160)  }]"
@@ -91,7 +94,7 @@ const formState = reactive({
 })
 const loading = ref(false)
 const router = useRouter()
-const goback = () => router.push('/my-sceneset/scene/?pid=' + sceneset.id)
+const goback = () => router.push('/my-sceneset') ///scene/?pid=' + sceneset.id)
 
 const add = async () => {
   const { labels } = formState

@@ -79,6 +79,10 @@ const props = defineProps({
     // 是否手动触发首次搜索
     type: Boolean,
     default: ()=> false
+  },
+  colsPerline: {
+    type: Number,
+    default: 4
   }
 } as any)
 const emits = defineEmits(['search', 'show-more', 'update:items'])
@@ -235,7 +239,8 @@ watch(
 
 /**** 3列或4列布局 *****/
 // 根据总共多少列计算每列width，css里使用
-const colLimit = props.items.length > 4 ? 3 : props.items.length == 4 ? 4 : 3 // 每行几个
+const colsPerline = props.colsPerline || 4
+const colLimit = props.items.length > colsPerline ? 3 : props.items.length == colsPerline ? colsPerline : 3 // 每行几个
 const rowTotal = computed(() => Math.ceil(props.items.length / colLimit)) // 总行数
 // 当前显示总行数
 const showRowTotal = computed(() => {

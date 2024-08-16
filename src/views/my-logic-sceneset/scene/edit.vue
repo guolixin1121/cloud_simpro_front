@@ -1,13 +1,16 @@
 <template>
   <div class="breadcrumb">
-    <a @click="goback(-2)">逻辑场景</a>
-    <a @click='goback()'>{{ sceneset?.name }}</a>
+    <a @click="goback(-1)">逻辑场景</a>
+    <!-- <a @click='goback()'>{{ sceneset?.name }}</a> -->
     <span>{{ title }}</span>
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading">
       <a-form ref="form" :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 55%" @finish="add">
+        <!-- <a-form-item label="场景集名称">
+          {{ sceneset?.name }}
+        </a-form-item> -->
         <a-form-item label="场景名称" name="name"
           :rules="[{ required: true, message: '请输入场景名称'},
             { validator: () => checkChName(formState.name, 160) }]"

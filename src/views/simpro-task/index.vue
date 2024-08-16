@@ -1,5 +1,5 @@
 <template>
-  <search-form class="multiline-form " :items="formItems" @search="onSearch" @show-more="toggleMore"></search-form>
+  <search-form :items="formItems" @search="onSearch" @show-more="toggleMore"></search-form>
 
   <div class="main">
     <div class="title-section">

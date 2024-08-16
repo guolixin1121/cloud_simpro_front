@@ -1,8 +1,8 @@
 <template>
   <div class="relative">
     <form-view :title="sceneName" subtitle="场景详情" :items="formItems" :loading="loading" :labelWidth="80">
-      <a @click="goback(-2)">逻辑场景</a>
-      <a @click='goback()'>{{ sceneset?.name }}</a>
+      <a @click="goback(-1)">逻辑场景</a>
+      <!-- <a @click='goback()'>{{ sceneset?.name }}</a> -->
     </form-view>
     <!-- <a-button class="return-btn" @click="goback()">返回</a-button> -->
   </div>
@@ -22,6 +22,7 @@ const getEditData = async () => {
     // sceneset.value = data.logic_scene_set
     sceneName.value = data.name
     formItems.value = [
+      // { label: '所属场景集', value: sceneset?.name },
       { label: '场景ID', value: data.id },
       { label: '场景名称', value: data.name, isBreak: true },
       { label: '场景描述', value: data.desc },
