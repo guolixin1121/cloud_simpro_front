@@ -3,7 +3,7 @@
         :visible="visible" :footer="null" width="100%" :closable="false" :destroy-on-close="true">
         <svg-icon icon="close" class="close" @click="hide"/>
         <div class="content"></div>
-        <div class="upgrade-btn">
+        <div class="button">
             <img src="@/assets/images/upgrade-btn.png" @click="upgrade" />
         </div>
     </a-modal>
@@ -52,16 +52,17 @@ const upgrade = async () => {
     cursor: pointer;
     color: var(--text-second-color)
 }
-.upgrade-btn {
-    position: absolute;
-    bottom: 0px;
+.button {
     width: 100%;
-    padding: 24px;
     text-align: center;
     img {
         cursor: pointer;
         height: 44px;
     }
+}
+
+@media screen and (max-width: 1660px) {
+   .button img { height: 38px;}
 }
 </style>
 <style lang="less">
@@ -81,6 +82,8 @@ const upgrade = async () => {
     flex: 1;
     background-image: url('@/assets/images/upgrade-bg.png');
     background-size: 100% 100%;
+    min-height: 768px;
+    min-width: 1368px;
   }
 }
 </style>
