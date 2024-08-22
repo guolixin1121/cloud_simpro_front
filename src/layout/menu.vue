@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { getToken, LStorage } from '@/utils/storage'
+// import { getToken, LStorage } from '@/utils/storage'
 const props = defineProps({
   menus: {
     type: Array<Permission>,
@@ -9,8 +9,8 @@ const props = defineProps({
 const isSubmenu = (children: Permission[] | undefined) => !children ? false : !!children.find((child: Permission) => child.visible)
 const isOuterlink = (url: string) => url.indexOf('http') > -1
 const openOuterlink = (url: string) => {
-  const params = '?token=' + getToken() + '&X-Project-Id=' + LStorage.get('X-Project-Id')
-  window.open(url + params, 'traffic')
+  // const params = '?token=' + getToken() + '&X-Project-Id=' + LStorage.get('X-Project-Id')
+  window.open(url, 'traffic')
 }
 </script>
 

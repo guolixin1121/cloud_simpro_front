@@ -1,7 +1,8 @@
 <template>
     <a-modal title="" wrap-class-name="full-modal" 
         :visible="visible" :footer="null" width="100%" :closable="false" :destroy-on-close="true">
-        <svg-icon icon="close" class="close" @click="hide"/>
+        <!-- <svg-icon icon="close" class="close" @click="hide"/> -->
+        <img class="close" src="@/assets/images/icon_close.png" />
         <div class="content"></div>
         <div class="button">
             <img src="@/assets/images/upgrade-btn.png" @click="upgrade" />
@@ -39,7 +40,8 @@ const upgrade = async () => {
 <style lang="less" scoped>
 .content {
     width: 100%;
-    height: calc(100% - 65px);
+    height: calc(100% - 86px);
+    margin-top: 26px;
     background-image: url('@/assets/images/upgrade.png');
     background-size: contain;
     background-repeat: no-repeat;
