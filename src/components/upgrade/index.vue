@@ -2,7 +2,7 @@
     <a-modal title="" wrap-class-name="full-modal" 
         :visible="visible" :footer="null" width="100%" :closable="false" :destroy-on-close="true">
         <!-- <svg-icon icon="close" class="close" @click="hide"/> -->
-        <img class="close" src="@/assets/images/icon_close.png" />
+        <img class="close" src="@/assets/images/icon_close.png" @click="hide" />
         <div class="content"></div>
         <div class="button">
             <img src="@/assets/images/upgrade-btn.png" @click="upgrade" />
