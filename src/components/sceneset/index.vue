@@ -44,7 +44,7 @@ defineProps({
 })
 const getTips = (set: any) => {
   let tips = ''
-  set.labels_detail.forEach(item =>  tips += ' ' + item.display_name)
+  set.labels_detail.forEach((item: any) =>  tips += ' ' + item.display_name)
   return tips
 }
 </script>

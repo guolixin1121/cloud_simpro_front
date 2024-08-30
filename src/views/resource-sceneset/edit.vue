@@ -71,7 +71,9 @@ const add = async () => {
     poster: formState.poster,
     labels: formState.labels?.map((item: any) => item.value || item.name)
   }
-  if(typeof(params.poster) == 'string') delete params.poster
+  if(typeof(params.poster) == 'string') {
+    delete params['poster']
+  }
   
   try {
     isAdd ? await currentApi.addSceneset(params) : await currentApi.editSceneset({ id, data: params })
