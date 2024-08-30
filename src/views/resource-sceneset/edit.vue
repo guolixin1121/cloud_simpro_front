@@ -65,7 +65,7 @@ const loading = ref(false)
 const add = async () => {
   loading.value = true
 
-  const params = {
+  const params: any = {
     name: formState.name,
     desc: formState.desc,
     poster: formState.poster,
