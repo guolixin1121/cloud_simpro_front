@@ -1,7 +1,7 @@
 <template>
   <div class="breadcrumb">
     <a @click="goback(-1)">逻辑场景</a>
-    <!-- <a @click='goback()'>{{ sceneset?.name }}</a> -->
+    <a class=" cursor-auto">{{ sceneset?.name }}</a>
     <span>{{ title }}</span>
   </div>
   <div class="min-main">

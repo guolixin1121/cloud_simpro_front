@@ -1,7 +1,7 @@
 <template>
   <div class="main-tree">
-    <tree ref="scenesetTreeRef" :title="'场景集'" :api="scenesetApi" :lazy="true" :button-handlers="treeBtnHandlers" 
-      @select="onTreeSelect" />
+    <tree ref="scenesetTreeRef" :title="'场景集'" :pagination="true" :api="scenesetApi" :lazy="true" 
+      :button-handlers="treeBtnHandlers" @select="onTreeSelect" />
     <div class="main-right table-container">
       <a-spin  :spinning="loadingSceneset">
         <sceneset :sceneset="selectedSceneset"></sceneset>

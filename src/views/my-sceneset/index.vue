@@ -1,6 +1,6 @@
 <template>
   <div class="main-tree">
-    <tree ref="scenesetTreeRef" :title="'场景集'" :api="scenesetApi" :lazy="true" 
+    <tree ref="scenesetTreeRef" :title="'场景集'" :pagination="true" :api="scenesetApi" :lazy="true" 
       :filedNames="{ label: 'groupName', value: 'id' }" :button-handlers="treeBtnHandlers" 
       :default-value="selectedSceneset" @select="onTreeSelect" />
     <div class="main-right table-container">
@@ -276,7 +276,10 @@ const treeBtnHandlers = {
   },
   delete: {
     validator: (data: any) => !isDefaultMySceneset(data),
-    handler: api.scenesets.delete
+    handler: async (id: string) => {
+      await api.scenesets.delete(id)
+      scenesetTreeRef.value.refresh()
+    }
   }
 }
 </script>

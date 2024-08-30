@@ -1,7 +1,7 @@
 <template>
    <div class="breadcrumb">
     <a @click="goback(-1)">逻辑场景</a>
-    <!-- <a @click='goback()'>{{ sceneset?.name }}</a> -->
+    <a class="cursor-auto">{{ sceneset?.name }}</a>
     <span>泛化任务</span>
   </div>
   <div class="min-main">
@@ -58,7 +58,7 @@ const { name } = route.query
 const currentApi = api.logicScene
 const listApi = (args:any) => currentApi.getResultList({ ...args, source: activeKey.value === '1' ? 0 : 1, logic_scene_id: id })
 
-// const sceneset = store.catalog.sceneCatalog
+const sceneset = store.catalog.sceneCatalog
 const showModal = ref(false)
 const chartOptions = ref({})
 

@@ -38,9 +38,8 @@
   <!-- 删除确认弹窗 -->
   <a-modal v-model:visible="showDeleteConfirm" :closable="false" :footer="null">
     <div class="modal-content">
-      <!-- <svg-icon style="color: #faad14" icon="alert"></svg-icon> -->
       <span style="font-size: 16px" v-if="title=='地图集'">地图集删除后，关联数据（场景、地图等）将会一起删除，是否删除？</span>
-      <span style="font-size: 16px" v-else>场景集删除后，关联数据（场景）将会一起删除，是否删除？</span>
+      <span style="font-size: 16px" v-else>场景集删除后，关联数据将会一起删除，是否删除？</span>
     </div>
     <div class="modal-buttons">
       <a-button @click="closeDeleteConfirm">取消</a-button>
@@ -53,20 +52,16 @@
 import { DownOutlined } from '@ant-design/icons-vue'
 import { useSessionStorage } from '@vueuse/core'
 import { isEmpty } from 'lodash'
+import { SStorage } from '@/utils/storage'
 
 const user = store.user
-
 const props = defineProps({
-  title: {
-    type: String
-  },
   api: {
     type: Function,
     required: true
   },
-  query: {
-    type: Object,
-    default: () => ({})
+  buttonHandlers: {
+    type: Object
   },
   defaultValue: {
     type: Object,
@@ -80,8 +75,9 @@ const props = defineProps({
     type: Boolean,
     default: () => false
   },
-  buttonHandlers: {
-    type: Object
+  query: {
+    type: Object,
+    default: () => ({})
   },
   isRecurse: {
     type: Boolean,
@@ -90,12 +86,21 @@ const props = defineProps({
   isFolderSelectable: {
     type: Boolean,
     default: () => false
+  },
+  title: {
+    type: String
   }
 })
 const emits = defineEmits(['select', 'btn-click'])
 const routeName = useRoute().path.replaceAll('/', '')
-const searchValue = useSessionStorage(routeName + ': tree-search', '')
+const searchValue = useSessionStorage(routeName + ':tree-search', '')
+
 const searchQuery = ref()
+const loading = ref(false)
+const treeData = ref([])
+
+let page = 1
+let isDataAllLoaded = false
 
 onMounted(async () => {
   // 恢复缓存的搜索、选中数据
@@ -109,10 +114,22 @@ onMounted(async () => {
     searchValue.value = props.query.name
   }
   searchQuery.value = query
-  selectedRowKeys.value = [selectedNode.value?.id]
+  // selectedRowKeys.value = [selectedNode.value?.id]
 
   document.addEventListener('mouseup', onResizeEnd)
   document.addEventListener('mousemove', onResize)
+  // 滚动分页
+  const treeContainer = document.querySelector('.tree-container')
+  treeContainer?.addEventListener('scroll', async (e: any)=> {
+      if(isDataAllLoaded) return
+      const { target } = e
+      
+      // 触发翻页
+      if (target.scrollTop + target.offsetHeight >= (target.scrollHeight - 50) && !loading.value) {
+        page += 1
+        refresh()
+      }
+    })
 })
 
 // 更改树宽度
@@ -149,10 +166,13 @@ const isDisabled = (type: string) => {
 }
 const showDeleteConfirm = ref(false)
 const onButtonClick = (type: string) => {
-  if (type != 'add' && isEmpty(selectedNode.value)) return
+  if (type != 'add' && isEmpty(selectedNode.value) ) return
+  if (type != 'add' && isDisabled(type)) return 
 
   const func = props.buttonHandlers?.[type]
   if(!func) return
+  
+  cachScrollTop()
 
   if (type == 'delete') {
     showDeleteConfirm.value = true
@@ -184,21 +204,28 @@ const onDeleteConfirm = async () => {
   }
 }
 
-/******* table ******/
-const loading = ref(false)
-const treeData = ref([])
-
 const refresh = async () => {
   try {
     loading.value = true
-    const data = await getOptions()
-    treeData.value = data
+
+    const { data, count } = await getOptions()
+    treeData.value = page == 1 ? data : treeData.value.concat(data)
+    isDataAllLoaded = treeData.value.length >= count
+
+    nextTick(() => {
+      const scrollTop = SStorage.get(routeName + ':tree-scroll')
+      if(!scrollTop) return 
+
+      const treeContainer = document.querySelector('.tree-container')
+      treeContainer!.scrollTop = scrollTop
+    })
+    
 
     // 只有一个根节点，默认展开并选中
     if (data.length == 1 && expandRowKeys.value.length == 0) {
       expandRowKeys.value = [data[0].id]
       if (props.isFolderSelectable) {
-        selectedRowKeys.value = [data[0].id]
+        // selectedRowKeys.value = [data[0].id]
         selectedNode.value = data[0]
         emits('select', selectedNode.value)
       }
@@ -211,7 +238,9 @@ const refresh = async () => {
 const getOptions = async (query: any = {}) => {
   const res = await props.api({
     ...searchQuery.value,
-    ...query
+    ...query,
+    page,
+    size: 20
   })
   recurse(res.results)
   const data = transformData(res.results)
@@ -219,7 +248,7 @@ const getOptions = async (query: any = {}) => {
   // 更新缓存的选中节点数据
   refreshSelectedNode(data)
 
-  return data
+  return { data, count: res.count }
 }
 
 const refreshSelectedNode = (data: any = treeData.value) => {
@@ -265,7 +294,7 @@ const recurse = (results: any) => {
     const firstChild = results[0]
     expandRowKeys.value.push(firstChild.id)
     if (firstChild.isLeaf) {
-      selectedRowKeys.value = [firstChild.id]
+      // selectedRowKeys.value = [firstChild.id]
       selectedNode.value = firstChild
       emits('select', selectedNode.value)
     }
@@ -280,7 +309,7 @@ const loadData = async (treeNode: any) => {
       return
     }
     getOptions({ parent: treeNode.key }).then(res => {
-      treeNode.dataRef.children = res
+      treeNode.dataRef.children = res.data
       treeData.value = [...treeData.value]
       resolve()
     })
@@ -288,6 +317,8 @@ const loadData = async (treeNode: any) => {
 }
 
 const onSearch = () => {
+  page = 1
+  selectedNode.value = {}
   // clear tree
   expandRowKeys.value = []
   isRecurse.value = false
@@ -297,8 +328,8 @@ const onSearch = () => {
 }
 
 // 节点选中：展开或触发外部选中事件
-const selectedNode = useSessionStorage(routeName + ': tree-select', {} as any)
-const selectedRowKeys = ref()
+const selectedNode = useSessionStorage(routeName + ':tree-select', {} as any)
+const selectedRowKeys = computed(() => [selectedNode.value?.id])
 
 const onSelect = (keys: string[], { selected, selectedNodes }: any) => {
   const node = selected ? selectedNodes[0] : selectedNode.value
@@ -317,23 +348,35 @@ const onSelect = (keys: string[], { selected, selectedNodes }: any) => {
   }
 
   selectedNode.value = node
-  selectedRowKeys.value = [node.id]
+  // selectedRowKeys.value = [node.id]
 }
 
 // 节点展开
-const expandRowKeys = useSessionStorage<string[]>(routeName + ': tree-expand', [])
+const expandRowKeys = useSessionStorage<string[]>(routeName + ':tree-expand', [])
 const onExpand = (expandedKeys: string[]) => (expandRowKeys.value = expandedKeys)
 
-watch(searchQuery, refresh)
+const cachScrollTop = () => {
+  // 缓存滚动条位置，刷新页面时恢复滚动条
+  const treeContainer = document.querySelector('.tree-container')
+  SStorage.set(routeName + ':tree-scroll', treeContainer!.scrollTop + 50)
+}
+watch(searchQuery, () => 
+  refresh()
+)
 
 // 监控默认选中值的变化
 watch(() => props.defaultValue, (val: any) => {
   if(isEmpty(val)) return
   selectedNode.value = val
-  selectedRowKeys.value = [val.id]
+  // selectedRowKeys.value = [val.id]
 })
 
-defineExpose({ refresh })
+defineExpose({ refresh: () => {
+  page = 1
+  refresh()
+} })
+
+onBeforeUnmount(cachScrollTop)
 </script>
 
 <style lang="less" scoped>

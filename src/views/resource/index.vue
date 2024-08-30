@@ -150,7 +150,7 @@ const onApply = async () => {
     padding: 0 24px;
 }
 .sceneset-list {
-    min-height: 500px;
+    min-height: 200px;
     display: flex;
     flex-wrap: wrap;
 }
