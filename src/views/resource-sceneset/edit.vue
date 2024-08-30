@@ -15,7 +15,7 @@
           <ch-input v-model:value="formState.name" :maxlength="160" placeholder="请输入场景集名称"></ch-input>
         </a-form-item>
         <a-form-item label="宣传图片" name="poster" 
-          :rules="[{ required: true, message: '请选择宣传图片'}]">
+          :rules="[{ required: isAdd, message: '请选择宣传图片'}]">
           <single-upload accept=".jpg,.png" :max-size="2" text="选择图片" v-model:value="formState.poster"></single-upload>
           <span class="ml-4" v-if="!formState.poster">{{ formState.poster_name }}</span>
         </a-form-item>
@@ -71,6 +71,7 @@ const add = async () => {
     poster: formState.poster,
     labels: formState.labels?.map((item: any) => item.value || item.name)
   }
+  if(typeof(params.poster) == 'string') delete params.poster
   
   try {
     isAdd ? await currentApi.addSceneset(params) : await currentApi.editSceneset({ id, data: params })

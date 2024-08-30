@@ -97,7 +97,7 @@ const modal = reactive({
   reason: ''
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60, validator: (data: any) => user.isAdminProject() ? (data.delete_enable || data.apply_enable) : data.apply_enable },
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => data.delete_enable },
   { title: '场景ID', dataIndex: 'id', width: 120 },
   { title: '场景名称', dataIndex: 'name', width: 200, ellipsis: true },
   { title: '场景标签', dataIndex: 'labels_detail', apiField: 'display_name',width: 250, ellipsis: true },
@@ -107,12 +107,12 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: user.hasPermission('apply') ? 170 : 100,
+    width: 100,
     actions: {
-      申请授权: {
-        validator: (data: any) => data.apply_enable,
-        handler: (data: any) => gotoSubPage('/apply/' + data.id)
-      },
+      // 申请授权: {
+      //   validator: (data: any) => data.apply_enable,
+      //   handler: (data: any) => gotoSubPage('/apply/' + data.id)
+      // },
       查看: (data: any) => gotoSubPage('/preview/' + data.id),
       编辑: {
         validator: (data: any) => user.isAdminProject() && data.edit_enable,

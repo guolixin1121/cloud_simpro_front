@@ -2,7 +2,7 @@
   <div class="left-tree">
     <span class="sub-title">{{ title }}</span>
     <a-input-search allowClear v-model:value="searchValue" 
-      style="margin-bottom: 8px" placeholder="全部"
+      style="margin-bottom: 8px" :placeholder="'请输入' + title + '名称'"
       @search="onSearch" />
     <div class="tree-container">
       <a-spin :spinning="loading" style="min-height: 50px">
@@ -39,8 +39,8 @@
   <a-modal v-model:visible="showDeleteConfirm" :closable="false" :footer="null">
     <div class="modal-content">
       <!-- <svg-icon style="color: #faad14" icon="alert"></svg-icon> -->
-      <span style="font-size: 16px" v-if="title=='地图集'">删除后，关联数据（场景、地图等）将会一起删除，是否删除？</span>
-      <span style="font-size: 16px" v-else>删除后，关联数据（场景）将会一起删除，是否删除？</span>
+      <span style="font-size: 16px" v-if="title=='地图集'">地图集删除后，关联数据（场景、地图等）将会一起删除，是否删除？</span>
+      <span style="font-size: 16px" v-else>场景集删除后，关联数据（场景）将会一起删除，是否删除？</span>
     </div>
     <div class="modal-buttons">
       <a-button @click="closeDeleteConfirm">取消</a-button>

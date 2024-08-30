@@ -71,7 +71,7 @@ const modal = reactive({
   reason: '' // 另存为的名字
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60, validator: (data: any) => data.can_delete || data.can_apply },
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => data.can_delete },
   { title: '场景集ID', dataIndex: 'id', width: 150 },
   { title: '场景集名称', dataIndex: 'name', ellipsis: true },
   { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
@@ -84,10 +84,6 @@ const columns = [
     fixed: 'right',
     width: user.hasPermission('apply') ? 200 : 150,
     actions: {
-      申请授权: {
-        validator: (data : RObject) => data.can_apply,
-        handler: ({ id }: RObject) => gotoSubPage('/apply/' + id)
-      },
       查看: {
         handler: ({ id }: RObject) => gotoSubPage('/scene/?pid=' + id)
       },

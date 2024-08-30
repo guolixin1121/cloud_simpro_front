@@ -46,7 +46,6 @@
     :footer="null" :destroyOnClose="true">
       <a-form ref="scenesetCloneForm" class="modal-content" :model="scenesetModal" 
         :labelCol ="{ style: { width: '100px' } }" 
-        style="padding-bottom: 0px"
         @finish="onConfirmCloneSceneset">
           <a-form-item name="cloneName" style="width: 74%"
             :rules="[{ required: true, message: '请输入另存为场景集名称'},

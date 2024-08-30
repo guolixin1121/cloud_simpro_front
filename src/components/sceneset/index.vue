@@ -11,11 +11,13 @@
       <a-col :span="18">
         <span class="label">场景集标签</span>
         <span v-if="!sceneset || (sceneset.labels_detail && sceneset.labels_detail.length == 0)">--</span>
-        <ul class="line-value" style="margin: 0px; max-height: 80px" v-else>
-          <li class=" inline-block mr-2" v-for="item in sceneset?.labels_detail" :key="item.name">
-            {{ item.display_name }}
-          </li>
-        </ul>
+        <a-tooltip v-else class="line-value" :title="getTips(sceneset)" placement="topLeft">
+          <ul style="margin: 0px; max-height: 80px">
+            <li class=" inline-block mr-2" v-for="item in sceneset?.labels_detail" :key="item.name">
+              {{ item.display_name }}
+            </li>
+          </ul>
+        </a-tooltip>
       </a-col>
     </a-row>
     <a-row style="margin-bottom: 0px;">
@@ -40,6 +42,11 @@ defineProps({
       type: Object
   }
 })
+const getTips = (set: any) => {
+  let tips = ''
+  set.labels_detail.forEach(item =>  tips += ' ' + item.display_name)
+  return tips
+}
 </script>
 
 <style lang="less">

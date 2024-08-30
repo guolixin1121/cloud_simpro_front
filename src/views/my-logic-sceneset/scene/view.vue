@@ -1,11 +1,7 @@
 <template>
-  <div class="relative">
     <form-view :title="sceneName" subtitle="场景详情" :items="formItems" :loading="loading" :labelWidth="80">
       <a @click="goback(-1)">逻辑场景</a>
-      <!-- <a @click='goback()'>{{ sceneset?.name }}</a> -->
     </form-view>
-    <!-- <a-button class="return-btn" @click="goback()">返回</a-button> -->
-  </div>
 </template>
 
 <script setup lang="ts">

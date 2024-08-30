@@ -77,8 +77,7 @@
   <a-modal v-model:visible="scenesetModal.cloneVisible" title="另存为"
     :footer="null" :destroyOnClose="true">
       <a-form ref="scenesetCloneForm" class="modal-content" :model="scenesetModal" 
-        :labelCol ="{ style: { width: '100px' } }" 
-        style="padding-bottom: 0px"
+        :labelCol ="{ style: { width: '100px' } }"
         @finish="onConfirmCloneSceneset">
         <a-form-item name="cloneName" style="width: 74%"
           :rules="[{ required: true, message: '请输入场景集名称'},
@@ -193,11 +192,16 @@ const columns = [
     width: 300,
     actions: {
       查看: (data: any) => gotoSubPage('/scene/view/' + data.id),
-      泛化: (data: any) => {
-        generateModal.visible = true
-        generateModal.sourceData = data
+      泛化: {
+        validator: ({ source }: any) => source !== 1,
+        handler: (data: any) => {
+          generateModal.visible = true
+          generateModal.sourceData = data
+      }},
+      泛化结果: {
+        validator: ({ source }: any) => source !== 1,
+        handler: (data: any) => gotoSubPage('/scene/result/' + data.id +'?name=' + data.name)
       },
-      泛化结果: (data: any) => gotoSubPage('/scene/result/' + data.id +'?name=' + data.name),
       编辑: {
         validator:  ({source}: any) => isMyLogicSceneEditable(source),
         handler: (data: any) => gotoSubPage('/scene/edit/' + data.id)
