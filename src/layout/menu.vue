@@ -1,4 +1,14 @@
 <script setup lang="ts">
+import { SStorage } from '@/utils/storage'
+const route = useRoute()
+watch(route, () => {
+  const clear = route.query.clear === null
+  const isBrowserBack = window.history.state.forward // 是否是浏览器回退
+  if (clear && !isBrowserBack) {
+    SStorage.clear()
+  }
+})
+
 // import { getToken, LStorage } from '@/utils/storage'
 const props = defineProps({
   menus: {

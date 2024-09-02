@@ -3,7 +3,7 @@
         <div class="flex justify-between" style="padding: 24px; padding-bottom: 0px">
             <span class="title">场景资源库</span>
             <a-input-search style="width: 350px" placeholder="请输入场景集名称" :allowClear="true"
-                v-model:value="query" @search="loadSceneset(1)" @clear="loadSceneset(1)"></a-input-search>
+                v-model:value="query" @search="loadSceneset()" @clear="loadSceneset()"></a-input-search>
         </div>
         <a-spin ref="container" :spinning="loading">
             <div class="sceneset-list">
@@ -74,6 +74,8 @@ const loadSceneset = async (page: number = 1) => {
         })
         if(page ==1 && res.results.length == 0) {
             message.info('很抱歉，没有找到您想要搜索的场景集')
+            query.value = ''
+            await loadSceneset()
             return
         }
         currentPage = page

@@ -104,7 +104,6 @@ onMounted(() => {
     getDataFromStorage()
     !props.manual && emitSearch(false)
   } else {
-    SStorage.clear()
     !props.manual && emitSearch()
   }
 })

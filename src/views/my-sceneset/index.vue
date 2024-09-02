@@ -12,7 +12,7 @@
         <div class="title-section">
           <span class="title">具体场景列表</span>
           <div>
-            <a-button v-if="user.hasPermission('add')"
+            <a-button v-if="user.hasPermission('saveAs')"
               :disabled="!checkedItems.length"  @click="onBatchClone()">另存为</a-button>
             <batch-button v-if="user.hasPermission('delete')" 
               :disabled="!checkedItems.length" :api="onBatchDelete"
