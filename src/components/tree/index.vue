@@ -110,16 +110,16 @@ let page = 1
 let isDataAllLoaded = false
 
 onMounted(async () => {
-  // 恢复缓存的搜索、选中数据
-  const query = { ...props.query, name: searchText.value } as any
-  if(searchText.value) {
-  //   // 如果有了搜索条件，表示从二级页面返回的，则清空指定场景集的查询条件
-    delete query.id
-  } else {
-    // 直接访问或跳转到该页面，直接获取父节点的查询条件
-    searchText.value = props.query.name
-  }
-  searchQuery.value = query
+  // 恢复缓存的搜索
+  // const query = { ...props.query, name: searchText.value } as any
+  // if(searchText.value) {
+  // //   // 如果有了搜索条件，表示从二级页面返回的，则清空指定场景集的查询条件
+  //   delete query.id
+  // } else {
+  //   // 直接访问或跳转到该页面，直接获取父节点的查询条件
+  //   searchText.value = props.query.name
+  // }
+  searchQuery.value = { ...props.query, name: searchText.value }
   
   // 调整树宽度
   document.addEventListener('mouseup', onResizeEnd)
@@ -367,6 +367,7 @@ watch(searchQuery, () =>
 watch(() => props.defaultValue, (val: any) => {
   if(isEmpty(val)) return
   selectedNode.value = val
+  // 是否为通过id进行精确搜索
   if(val.isAccurate) {
     searchText.value = val.name
     searchQuery.value = {...props.query, id: val.id}
