@@ -113,13 +113,22 @@ onMounted(async () => {
   // 恢复缓存的搜索
   // const query = { ...props.query, name: searchText.value } as any
   // if(searchText.value) {
-  // //   // 如果有了搜索条件，表示从二级页面返回的，则清空指定场景集的查询条件
+  //   // 如果有了搜索条件，表示从二级页面返回的，则清空指定场景集的查询条件
   //   delete query.id
   // } else {
   //   // 直接访问或跳转到该页面，直接获取父节点的查询条件
   //   searchText.value = props.query.name
   // }
-  searchQuery.value = { ...props.query, name: searchText.value }
+
+  // if(selectedNode.value) {
+  //   selecteNode.value
+  // }
+  //
+  const isAccruate = !!useRoute().query.id
+  // !isAccruate && refresh()
+  searchQuery.value = selectedNode.value?.isAccruate && isAccruate ? 
+    { ...props.query, id: selectedNode.value.id } :
+    { ...props.query, name: selectedNode.value.name }
   
   // 调整树宽度
   document.addEventListener('mouseup', onResizeEnd)
@@ -252,11 +261,13 @@ const getOptions = async (query: any = {}) => {
   const data = transformData(res.results)
 
   // 更新缓存的选中节点数据
-  refreshSelectedNode(data)
+  emits('select', selectedNode.value)
+  // refreshSelectedNode(data)
 
   return { data, count: res.count }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const refreshSelectedNode = (data: any = treeData.value) => {
   const selectedId = selectedNode.value?.id
   if (!selectedId) return
@@ -329,7 +340,7 @@ const onSearch = () => {
   // isRecurse.value = false
   // reset query
   searchQuery.value = { ...props.query, name: searchText.value }
-  delete searchQuery.value.id // 仅跳转过来时支持精确搜索，手动搜索时需要删掉
+  // delete searchQuery.value.id // 仅跳转过来时支持精确搜索，手动搜索时需要删掉
 }
 
 const onSelect = (keys: string[], { selected, selectedNodes }: any) => {

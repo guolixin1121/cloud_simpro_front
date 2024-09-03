@@ -95,7 +95,6 @@ const loadSceneset = async (scenesetId: string) => {
       selectedSceneset.value.isEditable = isMyScenesetEditable(data)
       selectedSceneset.value.sourceName = getMyScenesetSourceName(data.source)
 
-      scenesetIdFromResource && (selectedSceneset.value.isAccurate = true) // 树结构根据id精确搜索
       store.catalog.sceneCatalog = data
       query.value = { 
         ...query.value,
@@ -107,9 +106,16 @@ const loadSceneset = async (scenesetId: string) => {
   }
 }
 
-if(scenesetIdFromResource) {
-  loadSceneset(scenesetIdFromResource)
+const load = async () => {
+  if(scenesetIdFromResource) {
+    await loadSceneset(scenesetIdFromResource)
+    selectedSceneset.value = {
+      ...selectedSceneset.value,
+      isAccurate: true
+    }
+  }
 }
+load()
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
