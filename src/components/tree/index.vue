@@ -111,17 +111,16 @@ let isDataAllLoaded = false
 
 onMounted(async () => {
   // 恢复缓存的搜索、选中数据
-  // const query = { ...props.query, name: searchText.value } as any
-  // if(searchText.value) {
+  const query = { ...props.query, name: searchText.value } as any
+  if(searchText.value) {
   //   // 如果有了搜索条件，表示从二级页面返回的，则清空指定场景集的查询条件
-  //   delete query.id
-  // } else {
-  //   // 直接访问或跳转到该页面，直接获取父节点的查询条件
-  //   searchText.value = props.query.name
-  // }
-  // searchQuery.value = query
-  refresh()
-
+    delete query.id
+  } else {
+    // 直接访问或跳转到该页面，直接获取父节点的查询条件
+    searchText.value = props.query.name
+  }
+  searchQuery.value = query
+  
   // 调整树宽度
   document.addEventListener('mouseup', onResizeEnd)
   document.addEventListener('mousemove', onResize)
@@ -330,7 +329,7 @@ const onSearch = () => {
   // isRecurse.value = false
   // reset query
   searchQuery.value = { ...props.query, name: searchText.value }
-  delete searchQuery.value.baidu_id // 仅跳转过来时支持精确搜索，手动搜索时需要删掉
+  delete searchQuery.value.id // 仅跳转过来时支持精确搜索，手动搜索时需要删掉
 }
 
 const onSelect = (keys: string[], { selected, selectedNodes }: any) => {
