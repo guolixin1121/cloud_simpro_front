@@ -1,7 +1,7 @@
 <template>
   <div class="left-tree">
     <span class="sub-title">{{ title }}</span>
-    <a-input-search allowClear v-model:value="searchValue" 
+    <a-input-search allowClear v-model:value="searchText" 
       style="margin-bottom: 8px" :placeholder="'请输入' + title + '名称'"
       @search="onSearch" />
     <div class="tree-container">
@@ -79,10 +79,10 @@ const props = defineProps({
     type: Object,
     default: () => ({})
   },
-  isRecurse: {
-    type: Boolean,
-    default: () => false
-  },
+  // isRecurse: {
+  //   type: Boolean,
+  //   default: () => false
+  // },
   isFolderSelectable: {
     type: Boolean,
     default: () => false
@@ -93,31 +93,39 @@ const props = defineProps({
 })
 const emits = defineEmits(['select', 'btn-click'])
 const routeName = useRoute().path.replaceAll('/', '')
-const searchValue = useSessionStorage(routeName + ':tree-search', '')
+// 缓存节点选中：展开或触发外部选中事件
+const selectedNode = useSessionStorage(routeName + ':tree-select', {} as any)
+const selectedRowKeys = computed(() => [selectedNode.value?.id])
+// 缓存节点展开数据
+const expandRowKeys = useSessionStorage<string[]>(routeName + ':tree-expand', [])
+// 缓存数据用于从二级页面返回时
 
-const searchQuery = ref()
+// 搜索变量
+const searchText = useSessionStorage(routeName + ':tree-search', '') // 搜索框里显示
+const searchQuery = ref() // 实际执行搜索的搜索条件
+
 const loading = ref(false)
 const treeData = ref([])
-
 let page = 1
 let isDataAllLoaded = false
 
 onMounted(async () => {
   // 恢复缓存的搜索、选中数据
-  const query = { ...props.query, name: searchValue.value } as any
-  if(searchValue.value) {
-    // 如果有了搜索条件，表示从二级页面返回的，则清空父节点对指定场景集的查询条件
-    delete query.baidu_id
-    delete query.id
-  } else {
-    // 直接访问或跳转到该页面，直接获取父节点的查询条件
-    searchValue.value = props.query.name
-  }
-  searchQuery.value = query
-  // selectedRowKeys.value = [selectedNode.value?.id]
+  // const query = { ...props.query, name: searchText.value } as any
+  // if(searchText.value) {
+  //   // 如果有了搜索条件，表示从二级页面返回的，则清空指定场景集的查询条件
+  //   delete query.id
+  // } else {
+  //   // 直接访问或跳转到该页面，直接获取父节点的查询条件
+  //   searchText.value = props.query.name
+  // }
+  // searchQuery.value = query
+  refresh()
 
+  // 调整树宽度
   document.addEventListener('mouseup', onResizeEnd)
   document.addEventListener('mousemove', onResize)
+
   // 滚动分页
   const treeContainer = document.querySelector('.tree-container')
   treeContainer?.addEventListener('scroll', async (e: any)=> {
@@ -172,7 +180,7 @@ const onButtonClick = (type: string) => {
   const func = props.buttonHandlers?.[type]
   if(!func) return
   
-  cachScrollTop()
+  cacheScrollTop()
 
   if (type == 'delete') {
     showDeleteConfirm.value = true
@@ -225,7 +233,6 @@ const refresh = async () => {
     if (data.length == 1 && expandRowKeys.value.length == 0) {
       expandRowKeys.value = [data[0].id]
       if (props.isFolderSelectable) {
-        // selectedRowKeys.value = [data[0].id]
         selectedNode.value = data[0]
         emits('select', selectedNode.value)
       }
@@ -240,9 +247,9 @@ const getOptions = async (query: any = {}) => {
     ...searchQuery.value,
     ...query,
     page,
-    size: 50
+    size: 20
   })
-  recurse(res.results)
+  // recurse(res.results)
   const data = transformData(res.results)
 
   // 更新缓存的选中节点数据
@@ -288,18 +295,17 @@ const transformData = (data: any = []) => {
 }
 
 // 含id的精确搜索，自动循环展开各级
-const isRecurse = ref(props.isRecurse)
-const recurse = (results: any) => {
-  if (isRecurse.value && searchValue.value && results.length) {
-    const firstChild = results[0]
-    expandRowKeys.value.push(firstChild.id)
-    if (firstChild.isLeaf) {
-      // selectedRowKeys.value = [firstChild.id]
-      selectedNode.value = firstChild
-      emits('select', selectedNode.value)
-    }
-  }
-}
+// const isRecurse = ref(props.isRecurse)
+// const recurse = (results: any) => {
+//   if (isRecurse.value && searchText.value && results.length) {
+//     const firstChild = results[0]
+//     expandRowKeys.value.push(firstChild.id)
+//     if (firstChild.isLeaf) {
+//       selectedNode.value = firstChild
+//       emits('select', selectedNode.value)
+//     }
+//   }
+// }
 
 // 动态获取子节点
 const loadData = async (treeNode: any) => {
@@ -321,15 +327,11 @@ const onSearch = () => {
   selectedNode.value = {}
   // clear tree
   expandRowKeys.value = []
-  isRecurse.value = false
+  // isRecurse.value = false
   // reset query
-  searchQuery.value = { ...props.query, name: searchValue.value }
+  searchQuery.value = { ...props.query, name: searchText.value }
   delete searchQuery.value.baidu_id // 仅跳转过来时支持精确搜索，手动搜索时需要删掉
 }
-
-// 节点选中：展开或触发外部选中事件
-const selectedNode = useSessionStorage(routeName + ':tree-select', {} as any)
-const selectedRowKeys = computed(() => [selectedNode.value?.id])
 
 const onSelect = (keys: string[], { selected, selectedNodes }: any) => {
   const node = selected ? selectedNodes[0] : selectedNode.value
@@ -348,14 +350,12 @@ const onSelect = (keys: string[], { selected, selectedNodes }: any) => {
   }
 
   selectedNode.value = node
-  // selectedRowKeys.value = [node.id]
 }
 
 // 节点展开
-const expandRowKeys = useSessionStorage<string[]>(routeName + ':tree-expand', [])
 const onExpand = (expandedKeys: string[]) => (expandRowKeys.value = expandedKeys)
 
-const cachScrollTop = () => {
+const cacheScrollTop = () => {
   // 缓存滚动条位置，刷新页面时恢复滚动条
   const treeContainer = document.querySelector('.tree-container')
   SStorage.set(routeName + ':tree-scroll', treeContainer!.scrollTop + 50)
@@ -368,7 +368,10 @@ watch(searchQuery, () =>
 watch(() => props.defaultValue, (val: any) => {
   if(isEmpty(val)) return
   selectedNode.value = val
-  // selectedRowKeys.value = [val.id]
+  if(val.isAccurate) {
+    searchText.value = val.name
+    searchQuery.value = {...props.query, id: val.id}
+  }
 })
 
 defineExpose({ refresh: () => {
@@ -376,7 +379,7 @@ defineExpose({ refresh: () => {
   refresh()
 } })
 
-onBeforeUnmount(cachScrollTop)
+onBeforeUnmount(cacheScrollTop)
 </script>
 
 <style lang="less" scoped>
