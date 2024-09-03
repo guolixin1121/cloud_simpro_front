@@ -198,10 +198,7 @@ const columns = [
           generateModal.visible = true
           generateModal.sourceData = data
       }},
-      泛化结果: {
-        validator: ({ source }: any) => source !== 1,
-        handler: (data: any) => gotoSubPage('/scene/result/' + data.id +'?name=' + data.name)
-      },
+      泛化结果: (data: any) => gotoSubPage('/scene/result/' + data.id +'?name=' + data.name),
       编辑: {
         validator:  ({source}: any) => isMyLogicSceneEditable(source),
         handler: (data: any) => gotoSubPage('/scene/edit/' + data.id)
