@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { SStorage } from '@/utils/storage'
+const upgradeModal = ref()
 const route = useRoute()
 watch(route, () => {
   const clear = route.query.clear === null
@@ -19,8 +20,11 @@ const props = defineProps({
 const isSubmenu = (children: Permission[] | undefined) => !children ? false : !!children.find((child: Permission) => child.visible)
 const isOuterlink = (url: string) => url.indexOf('http') > -1
 const openOuterlink = (url: string) => {
-  // const params = '?token=' + getToken() + '&X-Project-Id=' + LStorage.get('X-Project-Id')
-  window.open(url, 'traffic')
+  if(store.user.isRegisterUser()) {
+    upgradeModal.value.show()
+  } else {
+     window.open(url, 'new')
+  }
 }
 </script>
 
@@ -46,6 +50,7 @@ const openOuterlink = (url: string) => {
       </template>
     </template>
   </template>
+  <upgrade ref="upgradeModal" module="simulationManage"></upgrade>
 </template>
 
 <style lang="less">
