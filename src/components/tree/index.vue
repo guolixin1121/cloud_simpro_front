@@ -236,7 +236,7 @@ const getOptions = async (query: any = {}) => {
     ...searchQuery.value,
     ...query,
     page,
-    size: 20
+    size: 50
   })
   const data = transformData(res.results)
 
