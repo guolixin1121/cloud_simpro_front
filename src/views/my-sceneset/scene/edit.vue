@@ -1,6 +1,7 @@
 <template>
   <div class="breadcrumb">
-    <router-link to="/my-sceneset/">具体场景</router-link>
+    <a @click="goback()">具体场景</a>
+    <!-- <router-link to="/my-sceneset/">具体场景</router-link> -->
     <!-- <a @click='goback()'>{{ sceneset?.name }}</a> -->
     <span>{{ title }}</span>
   </div>
@@ -70,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { checkChName } from '@/utils/tools'
+import { checkChName, goback } from '@/utils/tools'
 const route = useRoute()
 const { id } = route.params
 const isAdd = !id
@@ -93,8 +94,6 @@ const formState = reactive({
   adsUrl: undefined,
 })
 const loading = ref(false)
-const router = useRouter()
-const goback = () => router.push('/my-sceneset') ///scene/?pid=' + sceneset.id)
 
 const add = async () => {
   const { labels } = formState

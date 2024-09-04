@@ -79,10 +79,6 @@ const props = defineProps({
     type: Object,
     default: () => ({})
   },
-  // isRecurse: {
-  //   type: Boolean,
-  //   default: () => false
-  // },
   isFolderSelectable: {
     type: Boolean,
     default: () => false
@@ -102,7 +98,10 @@ const expandRowKeys = useSessionStorage<string[]>(routeName + ':tree-expand', []
 
 // 搜索变量
 const searchText = useSessionStorage(routeName + ':tree-search', '') // 搜索框里显示
+const isSearched = useSessionStorage(routeName + ':tree-isSearched', false)
 const searchQuery = ref() // 实际执行搜索的搜索条件
+let searchID = useRoute().query.id // 是否是id精确搜索
+
 
 const loading = ref(false)
 const treeData = ref([])
@@ -110,26 +109,8 @@ let page = 1
 let isDataAllLoaded = false
 
 onMounted(async () => {
-  // 恢复缓存的搜索
-  // const query = { ...props.query, name: searchText.value } as any
-  // if(searchText.value) {
-  //   // 如果有了搜索条件，表示从二级页面返回的，则清空指定场景集的查询条件
-  //   delete query.id
-  // } else {
-  //   // 直接访问或跳转到该页面，直接获取父节点的查询条件
-  //   searchText.value = props.query.name
-  // }
+  initSearchQuery()
 
-  // if(selectedNode.value) {
-  //   selecteNode.value
-  // }
-  //
-  const isAccruate = !!useRoute().query.id
-  // !isAccruate && refresh()
-  searchQuery.value = selectedNode.value?.isAccruate && isAccruate ? 
-    { ...props.query, id: selectedNode.value.id } :
-    { ...props.query, name: selectedNode.value.name }
-  
   // 调整树宽度
   document.addEventListener('mouseup', onResizeEnd)
   document.addEventListener('mousemove', onResize)
@@ -236,15 +217,15 @@ const refresh = async () => {
       treeContainer!.scrollTop = scrollTop
     })
     
-
     // 只有一个根节点，默认展开并选中
     if (data.length == 1 && expandRowKeys.value.length == 0) {
       expandRowKeys.value = [data[0].id]
       if (props.isFolderSelectable) {
         selectedNode.value = data[0]
-        emits('select', selectedNode.value)
+        // emits('select', selectedNode.value)
       }
     }
+    emits('select', selectedNode.value)
   } finally {
     loading.value = false
   }
@@ -255,13 +236,12 @@ const getOptions = async (query: any = {}) => {
     ...searchQuery.value,
     ...query,
     page,
-    size: 50
+    size: 20
   })
-  // recurse(res.results)
   const data = transformData(res.results)
 
   // 更新缓存的选中节点数据
-  emits('select', selectedNode.value)
+  // emits('select', selectedNode.value)
   // refreshSelectedNode(data)
 
   return { data, count: res.count }
@@ -304,18 +284,6 @@ const transformData = (data: any = []) => {
   }))
 }
 
-// 含id的精确搜索，自动循环展开各级
-// const isRecurse = ref(props.isRecurse)
-// const recurse = (results: any) => {
-//   if (isRecurse.value && searchText.value && results.length) {
-//     const firstChild = results[0]
-//     expandRowKeys.value.push(firstChild.id)
-//     if (firstChild.isLeaf) {
-//       selectedNode.value = firstChild
-//       emits('select', selectedNode.value)
-//     }
-//   }
-// }
 
 // 动态获取子节点
 const loadData = async (treeNode: any) => {
@@ -334,13 +302,12 @@ const loadData = async (treeNode: any) => {
 
 const onSearch = () => {
   page = 1
-  selectedNode.value = {}
+  // selectedNode.value = {}
   // clear tree
   expandRowKeys.value = []
-  // isRecurse.value = false
   // reset query
+  isSearched.value = true
   searchQuery.value = { ...props.query, name: searchText.value }
-  // delete searchQuery.value.id // 仅跳转过来时支持精确搜索，手动搜索时需要删掉
 }
 
 const onSelect = (keys: string[], { selected, selectedNodes }: any) => {
@@ -377,13 +344,21 @@ watch(searchQuery, () =>
 // 监控默认选中值的变化
 watch(() => props.defaultValue, (val: any) => {
   if(isEmpty(val)) return
-  selectedNode.value = val
+
   // 是否为通过id进行精确搜索
-  if(val.isAccurate) {
+  if(!isSearched.value && searchID) {
+    selectedNode.value = val
     searchText.value = val.name
-    searchQuery.value = {...props.query, id: val.id}
+    initSearchQuery()
   }
 })
+
+const initSearchQuery = () => {
+  searchQuery.value = isSearched.value  
+    ? { ...props.query, name: searchText.value } :
+    searchID 
+    ? { ...props.query, id: searchID } : props.query
+}
 
 defineExpose({ refresh: () => {
   page = 1

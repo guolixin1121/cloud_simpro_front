@@ -78,12 +78,11 @@ const scenesetApi = api.scenesets.getListV2
 const onTreeSelect = (sceneset: any) => {
   if(sceneset.id == selectedSceneset.value?.id) return
 
-  query.value = { ...query.value, page: 1 } // 切换到第一页
   selectedSceneset.value = sceneset
   loadSceneset(sceneset.id)
+  query.value = { ...query.value, page: 1 } // 切换到第一页
 }
 
-const scenesetIdFromResource = useRoute().query.id as string
 const router = useRouter()
 const scenesetLoading = ref(false)
 const loadSceneset = async (scenesetId: string) => {
@@ -106,16 +105,11 @@ const loadSceneset = async (scenesetId: string) => {
   }
 }
 
-const load = async () => {
-  if(scenesetIdFromResource) {
-    await loadSceneset(scenesetIdFromResource)
-    selectedSceneset.value = {
-      ...selectedSceneset.value,
-      isAccurate: true
-    }
-  }
+// 判断url是否带特定场景集的id，有场景集则需要进行精确筛选
+const scenesetIdFromResource = useRoute().query.id as string
+if(scenesetIdFromResource) {
+  loadSceneset(scenesetIdFromResource)
 }
-load()
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
