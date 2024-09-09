@@ -12,7 +12,7 @@
         <a-tab-pane :key="2" tab="逻辑场景管理">
         </a-tab-pane>
       </a-tabs> 
-      <div v-if="user.isAdminProject() && user.hasPermission('approve')">
+      <div style="margin-top: -14px" v-if="user.isAdminProject() && user.hasPermission('approve')">
         <a-button :disabled="checkedItems.length == 0" type="primary" @click="modalVisible = true">审批</a-button>
       </div>
     </div>
@@ -37,7 +37,7 @@
     </Table>
   </div>
 
-  <a-modal title="批量审批" v-model:visible="modalVisible" :footer="null">
+  <a-modal title="批量审批" v-model:visible="modalVisible" :footer="null" width="480px">
     <div class="modal-content">
       <p>已勾选{{ checkedItems.length }}个任务，是否批准全部任务申请？审批之后无法修改，请谨慎操作。</p>
     </div>

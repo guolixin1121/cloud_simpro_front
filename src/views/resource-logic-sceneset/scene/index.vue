@@ -20,7 +20,7 @@
             @click="gotoSubPage('/edit/0')">上传逻辑场景</a-button>
       </div>
     </div>
-    <Table ref="tableRef" :api="currentApi.getSceneList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" />
+    <Table ref="tableRef" :api="currentApi.getSceneList" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }" @select="onSelect" />
   </div>
 
   <a-modal ref="modalForm" v-model:visible="modal.visible" title="批量申请场景授权"
@@ -100,9 +100,9 @@ const modal = reactive({
   reason: ''
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60, validator: (data: any) => data.can_delete },
+  { dataIndex: 'checkbox', width: 40, validator: (data: any) => data.can_delete },
   { title: '场景ID', dataIndex: 'id', width: 120 },
-  { title: '场景名称', dataIndex: 'name', width: 200, ellipsis: true },
+  { title: '场景名称', dataIndex: 'name', width: 250, ellipsis: true },
   { title: '场景标签', dataIndex: 'labels_detail', apiField: 'display_name',width: 250, ellipsis: true },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },

@@ -34,7 +34,7 @@
   <a-modal v-model:visible="cloneModal.cloneVisible" :title="cloneModal.title"
     :footer="null" :destroyOnClose="true">
       <div class="modal-content">
-        <p><span v-if="cloneModal.desc">{{cloneModal.desc}}</span>请选择场景的保存路径</p>
+        <div style="margin-bottom: 10px;"><span v-if="cloneModal.desc">{{cloneModal.desc}}</span>请选择场景的保存路径</div>
         <select-sceneset ref="cloneSceneset" v-model:value="cloneModal.targetSceneset"></select-sceneset>
       </div>
       <div class="modal-buttons">

@@ -36,6 +36,10 @@ const openOuterlink = (url: string) => {
           <svg-icon class="ant-menu-item-icon" :icon="menu.icon || ''"></svg-icon>
           <span>{{ menu.title }}</span>
         </template>
+        <template #expandIcon="{isOpen}">
+          <img v-if="isOpen" class="ant-menu-submenu-arrow" src="@/assets/images/icon_arrow_up.png" />
+          <img v-else class="ant-menu-submenu-arrow" src="@/assets/images/icon_arrow_down.png" />
+        </template>
         <Menu :menus="menu.children" />
       </a-sub-menu>
       <template v-else>

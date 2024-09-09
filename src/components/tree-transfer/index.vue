@@ -5,15 +5,19 @@
         <span>{{ titles[0] }}</span>
         <!-- <span class=" text-link cursor-pointer" @click="onCheckedAll">全选</span> -->
       </div>
-      <a-input-search class="my-2" placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
-      <div style="height: calc(100% - 40px); overflow: auto" @scroll="onScroll">
-        <a-tree checkable :tree-data="treeData" v-model:checkedKeys="checkedKeys" @check="onChecked"></a-tree>
+      <a-input-search style="padding: 12px 12px 16px 12px" placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
+      <div style="height: calc(100% - 40px); overflow: auto" class="thin-scrollbar" @scroll="onScroll">
+        <a-tree checkable :showIcon="true" :tree-data="treeData" v-model:checkedKeys="checkedKeys" @check="onChecked">
+          <template #icon="{checkable}">
+           <img v-if="!checkable" src="@/assets/images/icon_folder.png" />
+          </template>
+        </a-tree>
         <a-spin :spinning="loading" style="width: 100%; padding-top: 20px"></a-spin>
       </div>
     </div>
 
     <div class="ant-transfer-list">
-      <div class="ant-transfer-list-title mt-1 flex justify-between">
+      <div class="ant-transfer-list-title flex justify-between">
         <span>{{ titles[1] }}({{ selectedNodes?.length }})</span>
         <span class="text-link cursor-pointer" @click="onRemoveAll">删除全部</span>
       </div>
@@ -85,7 +89,8 @@ const treeTransfer = (data: any): TreeDataItem[] => {
     key: item[value],
     children: treeTransfer(item.children || []),
     name: item.name,
-    isTag: item.isTag
+    isTag: item.isTag,
+    checkable: item.isTag,
   }))
   return options
 }
@@ -220,9 +225,19 @@ getOptions()
 </script>
 
 <style lang="less" scoped>
+.ant-transfer-list {
+  padding: 0px;
+}
+.ant-transfer-list:first-child {
+  border-right: 0px
+}
 .ant-transfer-list-title {
   padding-bottom: 8px;
   border-bottom: 1px solid #e6e7eb;
+  margin: 8px 12px;
+}
+.scroll-box {
+  margin: 0px 12px;
 }
 .transfer-checked-item {
   line-height: 20px;
@@ -234,10 +249,29 @@ getOptions()
     white-space: break-spaces;
   }
   &:hover {
-    background: var(--gray-globel-bg-color);
+    background: var(--gray-global-bg-color);
   }
   .delete-icon {
     cursor: pointer;
+  }
+}
+</style>
+<style lang="less">
+.ant-tree {
+  padding: 0 8px;
+
+  .ant-tree-treenode {
+    width: 100%;
+    padding: 4px 0;
+    &:hover {
+      background-color: var(--gray-global-bg-color);
+    }
+  }
+  .ant-tree-switcher-noop {
+    display: none;
+  }
+  .ant-tree-checkbox {
+    margin-left: 4px;
   }
 }
 </style>

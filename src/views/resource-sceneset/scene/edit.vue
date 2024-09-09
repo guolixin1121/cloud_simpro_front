@@ -19,16 +19,16 @@
         </a-form-item>
         <a-form-item label="关联地图" name="mapVersion" :rules="[{ required: isAdd, message: '请选择关联地图' }]">
           <a-form-item-rest v-if="isAdd" >
-            <div class="flex justify-between w-full">
+            <div class="flex w-full">
               <tree-select v-model:value="formState.mapCatalog" 
                 :api="baseApi.maps.getMapCatalog" 
                 placeholder="请选择地图目录" @change="onMapCateogryChanged"
-                style="width: 33%;"></tree-select>
+                style="width: 33%;margin-right: 10px;"></tree-select>
               <scroll-select v-model:value="formState.map"
                 placeholder="请选择地图"
                 label-in-value
                 :api="getMaps"
-                style="width: 33%;"
+                style="width: 33%;margin-right: 10px;"
                 @change="onMapChanged"></scroll-select>
               <scroll-select v-model:value="formState.mapVersion" 
                 placeholder="请选择地图版本"

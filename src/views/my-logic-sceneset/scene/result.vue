@@ -227,7 +227,10 @@ const gotoScene = (record: RObject) => {
 
 <style lang="less" scoped>
 .tabs {
-  margin-top: 16px;
+  margin-top: 14px;
+  .ant-tabs-nav {
+    border-bottom: 1px solid var(--border-color);
+  }
 }
 .status--0, .status--1, .status--2 {
   color: var(--warning-color);

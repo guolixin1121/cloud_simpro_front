@@ -3,18 +3,19 @@
         <div class="flex justify-between" style="padding: 24px; padding-bottom: 0px">
             <span class="title">场景资源库</span>
             <a-input-search style="width: 350px" placeholder="请输入场景集名称" :allowClear="true"
-                v-model:value="query" @search="loadSceneset()" @clear="loadSceneset()"></a-input-search>
+                v-model:value="query" @search="loadSceneset()" @clear="loadSceneset()">
+            </a-input-search>
         </div>
         <a-spin ref="container" :spinning="loading">
             <div class="sceneset-list">
                 <div v-for="(sceneset, index) in scenesets" :key="index" class="sceneset"
                     :class="'sceneset--' + sceneset?.apply_status" @click="onSelect(sceneset)">
-                        <img :src="sceneset?.poster_image" style="width: 100%; height: 185px;" />
+                        <img :src="sceneset?.poster_image" style="width: 100%; height: 185px; border-radius: 2px;" />
                         <div style="padding: 16px;">
                         <div class="name">{{ sceneset?.name }}</div>
                         <div class="count">包含：{{ sceneset?.scene_count }}个场景</div>
                         <a-button v-if="sceneset?.apply_status == 0" type="primary" size="small"
-                            style="width: 56px" @click="onView(sceneset)">查看</a-button>
+                            style="width: 56px; font-size: 12px;" @click="onView(sceneset)">查看</a-button>
                         <span v-if="sceneset?.apply_status == 1" style="color: #FF8A03">等待授权中</span>
                         <span v-if="sceneset?.apply_status == 2" style="color: #60646E;">已授权</span>
                     </div>
@@ -47,7 +48,7 @@
             <a-button type="primary" :loading="submitting" @click="onApply">申请</a-button>
         </div>
         <div class="modal-buttons" v-else>
-            <a-button type="primary" @click="modal.visible = false">确定</a-button>
+            <a-button type="primary" style="margin-right: 0px;" @click="modal.visible = false">确定</a-button>
         </div>
     </a-modal>
 </template>
@@ -73,7 +74,7 @@ const loadSceneset = async (page: number = 1) => {
             size: 15
         })
         if(page ==1 && res.results.length == 0) {
-            message.info('很抱歉，没有找到您想要搜索的场景集')
+            message.error('很抱歉，没有找到您想要搜索的场景集')
             query.value = ''
             await loadSceneset()
             return
@@ -130,7 +131,7 @@ const onApply = async () => {
             id: [selectedSceneset.value.id],
             type: 3
         })
-        message.success('申请已提交')
+        message.success('申请已提交', 10000)
         modal.visible = false
         // loadSceneset()
         selectedSceneset.value.apply_status = 1
@@ -160,7 +161,7 @@ const onApply = async () => {
     border: 1px solid #E8EAEC;
     border-radius: 4px;
     margin-right: 16px;
-    margin-bottom: 16px;
+    margin-top: 16px;
     cursor: pointer;
 
     &.sceneset--0 {
@@ -171,7 +172,7 @@ const onApply = async () => {
     }
     .name {
         font-weight: bold;
-        font-size: 16px;
+        font-size: 14px;
         text-overflow: ellipsis;
         white-space: nowrap;
         overflow: hidden;
@@ -189,6 +190,9 @@ const onApply = async () => {
     .sceneset:nth-child(3n) {
         margin-right: 0px;
     }
+    .sceneset:nth-child(1), .sceneset:nth-child(2), .sceneset:nth-child(3){
+        margin-top: 0px;
+    }
 }
 @media screen and (min-width: 1661px) and (max-width: 1980px) {
     .sceneset {
@@ -197,6 +201,9 @@ const onApply = async () => {
     .sceneset:nth-child(4n) {
         margin-right: 0px;
     }
+    .sceneset:nth-child(1), .sceneset:nth-child(2), .sceneset:nth-child(3), .sceneset:nth-child(4){
+        margin-top: 0px;
+    }
 }
 @media screen and (min-width: 1981px) {
     .sceneset {
@@ -204,6 +211,9 @@ const onApply = async () => {
     }
     .sceneset:nth-child(5n) {
         margin-right: 0px;
+    }
+    .sceneset:nth-child(1), .sceneset:nth-child(2), .sceneset:nth-child(3), .sceneset:nth-child(4), .sceneset:nth-child(5) {
+        margin-top: 0px;
     }
 }
 

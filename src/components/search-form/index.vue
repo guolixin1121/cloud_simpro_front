@@ -8,7 +8,7 @@
         :class="{'last-row': isLastRow(index), 'more-row': isMoreRow(index)}"
         :label="item.label"
         :name="item.key"
-        style="margin-bottom: 10px"
+        style="margin-bottom: 16px"
         :rules="[{ required: item.required }]"
       >
         <scroll-select
@@ -330,5 +330,10 @@ defineExpose({ reset })
       }
     }
   }
+}
+</style>
+<style lang="less">
+.search-form  .ant-form-item-label label {
+  color: var(--text-main-color);
 }
 </style>

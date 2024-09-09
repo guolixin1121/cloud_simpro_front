@@ -211,7 +211,7 @@ getOptions()
   white-space: break-spaces;
   margin-top: 2px;
   &:hover {
-    background: var(--gray-globel-bg-color);
+    background: var(--gray-global-bg-color);
   }
   .delete-icon {
     cursor: pointer;

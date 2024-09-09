@@ -17,7 +17,7 @@
         <a-form-item label="宣传图片" name="poster" 
           :rules="[{ required: isAdd, message: '请选择宣传图片'}]">
           <single-upload accept=".jpg,.png" :max-size="2" text="选择图片" v-model:value="formState.poster"></single-upload>
-          <span class="ml-4" v-if="!formState.poster">{{ formState.poster_name }}</span>
+          <span style="margin-left: 8px;" v-if="!formState.poster">{{ formState.poster_name }}</span>
         </a-form-item>
         <a-form-item label="场景集描述" name="desc">
           <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入场景集描述" :maxlength="1000" rows="5"></ch-input>

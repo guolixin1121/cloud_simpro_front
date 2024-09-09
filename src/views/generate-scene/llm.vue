@@ -3,41 +3,39 @@
     <router-link to="/generate-scene/">场景生成</router-link>
     <span>语义生成</span>
   </div>
-  <div style="height: 100%;">
-    <div class="container">
-      <div class="messages" :style="{ height: 'calc(100% - 90px - '+ inputHeight +'px)'}">
-        <!-- 聊天记录 -->
-        <div class="messages-content">
-          <div v-for="(chat, index) in data.chats" :key="index" :class="'message message--' + chat.type">
-            <template v-if="chat.type == 0">
-              <div class="message-body">{{ chat.message }}</div>
-              <div class="message-avatar">{{ user }}</div>
-            </template>
-            <template v-else>
-              <div class="message-avatar">赛目</div>
-              <div class="message-body">
-                {{ chat.message }}
-                <div class="message-footer" v-if="showPath(chat)">
-                  <div>
-                    场景文件保存路径：我的场景/具体场景/场景集：{{chat.scene?.sceneset_name}}/场景：{{chat.scene?.adsName }}
-                  </div>
-                  <a class="text-link" @click="preview(chat)">查看</a>
+  <div class="wrapper">
+    <div class="messages" :style="{ height: 'calc(100% - 94px - '+ inputHeight +'px)'}">
+      <!-- 聊天记录 -->
+      <div class="messages-content">
+        <div v-for="(chat, index) in data.chats" :key="index" :class="'message message--' + chat.type">
+          <template v-if="chat.type == 0">
+            <div class="message-body">{{ chat.message }}</div>
+            <div class="message-avatar">{{ user }}</div>
+          </template>
+          <template v-else>
+            <div class="message-avatar">赛目</div>
+            <div class="message-body">
+              {{ chat.message }}
+              <div class="message-footer" v-if="showPath(chat)">
+                <div>
+                  场景文件保存路径：我的场景/具体场景/场景集：{{chat.scene?.sceneset_name}}/场景：{{chat.scene?.adsName }}
                 </div>
+                <a class="text-link" @click="preview(chat)">查看</a>
               </div>
-            </template>
-          </div>
+            </div>
+          </template>
         </div>
       </div>
-      <div class="input-box-wrapper">
-        <div class="flex items-end">
-          <a-textarea ref="inputRef" placeholder="请输入场景描述" class="input" 
-            :bordered="false" :auto-size="{ minRows: 1, maxRows: 5 }" :allow-clear="true" :maxlength="500" 
-            v-model:value="data.question" @keydown="onKeyDown" @keyup="onKeyUp"></a-textarea>
-          <a-button type="primary" size="small" class="submit" @click="onSend" :disabled="data.isWriting || data.question.length == 0"
-            :loading="data.isSubmitting">发送</a-button>
-        </div>
-        <div class="error" style="margin-left: 8px;" v-if="data.errorMsg">请输入文字</div>
+    </div>
+    <div class="input-box-wrapper">
+      <div class="flex justify-between items-end">
+        <a-textarea ref="inputRef" placeholder="请输入场景描述" class="input" 
+          :bordered="false" :auto-size="{ minRows: 1, maxRows: 5 }" :allow-clear="true" :maxlength="500" 
+          v-model:value="data.question" @keydown="onKeyDown" @keyup="onKeyUp"></a-textarea>
+        <a-button type="primary" size="small" class="submit" @click="onSend" :disabled="data.isWriting || data.question.length == 0"
+          :loading="data.isSubmitting">发送</a-button>
       </div>
+      <div class="error" style="margin-left: 8px;" v-if="data.errorMsg">请输入文字</div>
     </div>
   </div>
   <upgrade ref="upgradeModal" module="onlineSimulation"></upgrade>
@@ -169,20 +167,26 @@ watch(() => data.question, () => {
 </script>
 
 <style lang="less" scoped>
-.container {
-  width: 1000px;
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   height: 100%;
-  margin: 16px auto;
 }
 .messages {
-    overflow-y: auto;
+  width: 100%;
+  overflow-y: auto;
 }
-.message-content {
-    height: calc(100% - 50px)
+.messages-content {
+  width: 1000px;
+  margin: 0 auto;
 }
 .message {
     display: flex;
     margin-bottom: 16px;
+    &:last-child {
+      margin-bottom: 0px;
+    }
     .message-avatar {
       width: 40px;
       height: 40px;
@@ -203,10 +207,11 @@ watch(() => data.question, () => {
 
       .message-footer {
         display: flex;
-        border-top: 1px solid #E6E7EB;
+        border-top: 1px dashed #E6E7EB;
         background-color: #fff;
         justify-content: space-between;
         padding-top: 16px;
+        color: var(--text-second-color);
       }
     }
 }
@@ -223,13 +228,19 @@ watch(() => data.question, () => {
     background: #00AF59;
     border-radius: 10px 0px 10px 10px;
     margin-left: 48px;
+    &::selection {
+      background-color: fade(#fff, 15);
+    }
   }
+}
+.message--1 {
+  margin-right: 48px;
 }
 	
 .input-box-wrapper {
   background-color: #fff;
   padding: 16px;
-  padding-left: 8px;
+  padding-left: 16px;
   width: 1000px;
   position: absolute;
   bottom: 24px;
@@ -238,14 +249,19 @@ watch(() => data.question, () => {
   border: 1px solid #DADCE0;
 
   &:has(:focus) {
-    border-color: #00AF59;
+    border-image: linear-gradient(90deg, rgba(33, 204, 170, 1), rgba(102, 210, 127, 1)) 1 1;
+  }
+  .input {
+    margin-left: -8px;
+    width: calc(100% - 65px);
   }
   .submit {
     color: #fff;
-    width: 70px;
+    width: 60px;
     height: 32px;
+    border: none;
     border-radius: 6px;
-    margin-left: 16px;
+    // margin-left: 8px;
   }
 }
 </style>

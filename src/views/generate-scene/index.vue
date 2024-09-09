@@ -4,7 +4,7 @@
     <ul class="list">
       <template v-for="item in list"  :key="item.name">
         <li v-if="hasPermission(item.key)" class="item" @click="() => gotoPage(item.url)">
-            <div class="item-logo"><img :src="item.image" /></div>
+            <div class="item-logo"><img :src="item.image" style="width: 72px;"/></div>
             <div class="item-name">{{ item.name }}</div>
             <div class="item-desc">{{ item.desc }}</div>
         </li>
@@ -20,6 +20,7 @@ import generate_data from '@/assets/images/generate_data.png'
 import generate_semantic from '@/assets/images/generate_semantic.png'
 import generate_3d from '@/assets/images/generate_3d.png'
 import generate_editor from '@/assets/images/generate_editor.png'
+import icon from '@/assets/images/icon_tip.png'
 
 const hasPermission = (key: string | undefined) =>  key ? store.user.hasPermission(key) : true
 const list = [
@@ -33,8 +34,14 @@ const gotoPage = (url: string) => {
   if(url) {
     gotoSubPage(url)
   } else {
-    Modal.info({
-      title: '该模块正在更新中',
+    Modal.warn({
+      width: "326px",
+      title: '',
+      content: h('div', { style: 'display: flex; align-items: center; margin-top: -8px;' }, [
+        h('img', { src: icon, alt: 'icon', style: 'margin-right: 8px;' }),
+        h('span', { style: 'font-weight: 600; font-size: 16px; color: #1E2229;' }, '该模块正在更新中')
+      ]),
+      icon: '',
       okText: '确定'
     })
   }
@@ -51,10 +58,10 @@ const gotoPage = (url: string) => {
   flex-wrap: wrap;
 
   .item {
-    width: 23%;
+    width: calc((calc(100% - 72px))/4);
     height: 300px;
-    margin-right: 28px;
-    margin-top: 18px;
+    margin-right: 24px;
+    margin-top: 16px;
     border-radius: 4px;
     border: 1px solid #e8eaec;
     cursor: pointer;
@@ -68,13 +75,16 @@ const gotoPage = (url: string) => {
     &-logo {
       text-align: center;
       margin-top: 40px;
-      margin-bottom: 30px;
+      margin-bottom: 24px;
     }
     &-name {
       text-align: center;
       font-size: 16px;
       font-weight: bold;
       margin-bottom: 16px;
+    }
+    &-desc {
+      text-align: center;
     }
   }
 }

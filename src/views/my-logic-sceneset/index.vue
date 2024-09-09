@@ -28,7 +28,7 @@
     </div>
   </div>
 
-  <a-modal v-model:visible="generateModal.visible" title="泛化" 
+  <a-modal v-model:visible="generateModal.visible" title="泛化" width="480px"
       :footer="null"  :destroyOnClose="true">
       <template v-if="generateModal.step == 1">
         <template v-if="generateModal.sourceData.config_result_count <= 10000">
@@ -65,7 +65,7 @@
   <a-modal v-model:visible="cloneModal.cloneVisible" :title="cloneModal.title"
     :footer="null" :destroyOnClose="true">
       <div class="modal-content">
-        <p><span v-if="cloneModal.desc">{{ cloneModal.desc }}</span>请选择场景的保存路径</p>
+        <div style="margin-bottom: 10px;"><span v-if="cloneModal.desc">{{ cloneModal.desc }}</span>请选择场景的保存路径</div>
         <select-sceneset ref="cloneSceneset" :isLogicSceneset="true" v-model:value="cloneModal.targetSceneset"></select-sceneset>
       </div>
       <div class="modal-buttons">

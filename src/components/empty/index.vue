@@ -1,6 +1,6 @@
 <template>
 <div class="ant-empty ant-empty-normal">
-    <div class="ant-empty-image">
+    <!-- <div class="ant-empty-image">
         <svg class="ant-empty-img-simple" width="64" height="41" viewBox="0 0 64 41">
         <g transform="translate(0 1)" fill="none" fill-rule="evenodd">
             <ellipse class="ant-empty-img-simple-ellipse" fill="#F5F5F5" cx="32" cy="33" rx="32" ry="7"></ellipse>
@@ -10,7 +10,8 @@
             </g>
         </g>
         </svg>
-    </div>
-    <p class="ant-empty-description">暂无数据</p>
+    </div> -->
+    <img src="@/assets/images/icon_nothing.png" />
+    <p class="description">暂无数据</p>
 </div>
 </template>

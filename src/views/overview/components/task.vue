@@ -99,7 +99,7 @@ fetchData()
     }
   }
   .ant-table-thead > tr > th {
-    background: var(--gray-globel-bg-color);
+    background: var(--gray-global-bg-color);
   }
   .ant-table-cell {
     height: 38px;
