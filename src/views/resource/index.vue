@@ -74,7 +74,7 @@ const loadSceneset = async (page: number = 1) => {
             size: 15
         })
         if(page ==1 && res.results.length == 0) {
-            message.error('很抱歉，没有找到您想要搜索的场景集')
+            message.warn('很抱歉，没有找到您想要搜索的场景集')
             query.value = ''
             await loadSceneset()
             return
