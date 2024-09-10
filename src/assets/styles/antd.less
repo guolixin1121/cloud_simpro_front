@@ -389,13 +389,14 @@ button.ant-btn-primary[disabled] {
     margin-top: 0px;
   }
   .ant-table-body {
-    overflow: scroll !important;
+    overflow-y: scroll !important;
+    overflow-x: auto !important;
   }
   .ant-table-tbody > tr.ant-table-row-selected > td{
     background-color: var(--active-color);
   }
   .ant-table-tbody > tr:last-child td {
-    border-bottom: none;;
+    border-bottom-color: transparent;
   }
   .ant-table-row:hover > td {
     background-color: var(--table-hover-color) !important;
