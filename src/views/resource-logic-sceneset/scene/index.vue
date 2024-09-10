@@ -20,7 +20,7 @@
             @click="gotoSubPage('/edit/0')">上传逻辑场景</a-button>
       </div>
     </div>
-    <Table ref="tableRef" :api="currentApi.getSceneList" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }" @select="onSelect" />
+    <Table ref="tableRef" :api="currentApi.getSceneList" :query="query" :columns="columns" :scroll="{ x: 1400, y: 'auto' }" @select="onSelect" />
   </div>
 
   <a-modal ref="modalForm" v-model:visible="modal.visible" title="批量申请场景授权"
@@ -110,7 +110,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 100,
+    width: 120,
     actions: {
       // 申请授权: {
       //   validator: (data: any) => data.can_apply,

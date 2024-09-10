@@ -70,7 +70,7 @@
       <span class="title" style="margin-bottom: 16px;">审批意见</span>
 
       <a-spin :spinning="dataLoading">
-        <p v-if="isApproved"><span class="label" style="margin-right: 8px;">审批状态</span><span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></p>
+        <div v-if="isApproved"><span class="label" style="margin-right: 8px;margin-bottom: 16px;">审批状态</span><span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></div>
         <template v-if="!isApproved">
           <ch-input type="textarea" rows="15" :maxlength="255"
             placeholder="请输入审批意见" v-model:value="formState.comments" />

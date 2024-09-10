@@ -16,9 +16,8 @@
       </a-tab-pane>
     </a-tabs> 
     <Table ref="table" :api="listApi" 
-      :scroll="{x: 1000, y: 'auto'}"
       :enableCheckPermission="false"
-      :columns="activeKey =='1' ? columns : sotifColumns" style="margin-top: 0px;">
+      :columns="activeKey =='1' ? columns : sotifColumns" style="margin-top: 8px;">
       <template #bodyCell="{column, record, text}">
         <template v-if="column.dataIndex == 'name'">
           {{ name }}
@@ -226,16 +225,18 @@ const gotoScene = (record: RObject) => {
 </script>
 
 <style lang="less" scoped>
-.tabs {
-  margin-top: 14px;
-  .ant-tabs-nav {
-    border-bottom: 1px solid var(--border-color);
-  }
-}
 .status--0, .status--1, .status--2 {
   color: var(--warning-color);
 }
 .status--3, .status--5 {
   color: var(--alert-color);
+}
+</style>
+<style lang="less">
+.tabs {
+  margin-top: 14px;
+  .ant-tabs-nav {
+    border-bottom: 1px solid var(--border-color);
+  }
 }
 </style>
