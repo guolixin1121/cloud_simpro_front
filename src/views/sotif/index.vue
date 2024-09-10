@@ -17,7 +17,7 @@
         <a-button type="primary" @click="()=> gotoSotif()">进入SOTIF分析工具</a-button>
       </div>
     </div>
-    <Table style="margin-top: 0px;" v-if="activeKey == 1" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
+    <Table style="margin-top: 8px;" v-if="activeKey == 1" :api="currentApi.getList" :query="query" :columns="columns" :scroll="{ x: 1200, y: 'auto' }">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'projectStatus'">
           <span>{{  getSotifStatus(record.projectStatus) }}</span>

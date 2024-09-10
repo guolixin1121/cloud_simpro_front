@@ -1,6 +1,7 @@
 <template>
   <a-spin :spinning="loading">
     <vxe-table stripe ref="table" 
+      style="margin-top: 16px;"
       :scroll-x="{enabled: true, gt: 0 }"
       :border="isTree ? 'none' : 'full'" :show-header="isTree ? false : true" 
       :row-config="{ isHover: true, keyField: 'id' }" 
@@ -36,9 +37,7 @@
       </vxe-column>
     </vxe-table>
   </a-spin>
-  <div class="float-right mt-4 mr-4">
-    <a-pagination v-if="page.hasPagination" :total="page.total" :show-total="(total: number) => `共 ${total} 条`" :page-size="page.size" v-model:current="current" @change="onPageChange" />
-  </div>
+  <a-pagination v-if="page.hasPagination" :total="page.total" :show-total="(total: number) => `共 ${total} 条`" :page-size="page.size" v-model:current="current" @change="onPageChange" />
 </template>
 
 <script setup lang="ts">
@@ -225,8 +224,12 @@ const loadMethod = async ({ row }: any) => {
 const calcateHeight = () => {
   if (props.isTree) return
 
-  let height = document.getElementsByClassName('top')?.[0]?.clientHeight
-  height = isNaN(height) ? 0 : height + 16 // + 16的padding高度
+  let height = 0
+  let tops = document.querySelectorAll('.table-container > div:not(:last-child)')
+  if(tops.length == 0) {
+    tops = document.querySelectorAll('.ant-layout-content > div:not(:last-child)')
+  }
+  tops.forEach((top) => height += isNaN(top.clientHeight) ? 0 : (top.clientHeight + 16))
 
   // 设置表格内容的高度
   let tableHeight = height + 278

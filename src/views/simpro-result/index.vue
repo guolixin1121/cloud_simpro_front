@@ -14,7 +14,6 @@
         </template>
       </div>
     </div>
-    <a-spin :spinning="loading">
       <Table
         ref="table"
         :api="currentApi.getList"
@@ -44,7 +43,6 @@
           </template>
         </template>
       </Table>
-    </a-spin>
   </div>
   <upgrade ref="upgradeModal" module="simulationManage"></upgrade>
 </template>

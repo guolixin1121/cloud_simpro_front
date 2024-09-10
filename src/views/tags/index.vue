@@ -6,15 +6,13 @@
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/tags/edit/0?tag_type=' + query.tag_type)">创建标签</a-button>
     </div>
 
-    <div class="mt-4 overflow-auto">
-      <tree-table :query="query" :columns="columns" :api="currentApi.getList" :tree-node="'display_name'">
-        <template #default="{ column, row }">
-          <template v-if="column.dataIndex == 'isTag'">
-            {{ row.isTag ? '标签' : '标签目录' }}
-          </template>
+    <tree-table style="margin-top: 16px" :query="query" :columns="columns" :api="currentApi.getList" :tree-node="'display_name'">
+      <template #default="{ column, row }">
+        <template v-if="column.dataIndex == 'isTag'">
+          {{ row.isTag ? '标签' : '标签目录' }}
         </template>
-      </tree-table>
-    </div>
+      </template>
+    </tree-table>
   </div>
 </template>
 

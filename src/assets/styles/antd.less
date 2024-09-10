@@ -297,6 +297,10 @@ button.ant-btn-primary[disabled] {
 }
 
 .ant-pagination {
+  position: absolute;
+  bottom: 24px;
+  right: 24px;
+  display: flex;
   .ant-pagination-jump-prev,
   .ant-pagination-jump-next,
   .ant-pagination-prev,
@@ -376,6 +380,16 @@ button.ant-btn-primary[disabled] {
 }
 .ant-pagination-options {
   display: none !important;
+}
+.ant-spin-nested-loading:has(.ant-pagination) {
+  height: calc(100% - 32px);
+  & > .ant-spin-container {
+    height: calc(100% - 16px);
+  }
+  .ant-pagination {
+    right: 0px;
+    bottom: 0px;
+  }
 }
 
 .ant-table {
@@ -474,7 +488,7 @@ button.ant-btn-primary[disabled] {
 
 .ant-upload-list {
   display: inline-block;
-  margin-left: 16px;
+  // margin-left: 16px;
   .ant-upload-list-item-card-actions,
   .ant-upload-list-item-name {
     word-wrap: break-word;
@@ -915,4 +929,9 @@ input::placeholder,
   .ant-picker-cell-disabled::before {
     background-color: var(--gray-global-bg-color);
   }
+}
+
+.ant-message-custom-content {
+  display: flex;
+  align-items: center;
 }

@@ -13,11 +13,9 @@
         <a-button v-if="user.hasPermission('grants')" type="primary" @click="gotoSubPage('/apply-manage/')">授权任务管理</a-button>
       </div>
     </div>
-    <div>
-      <Table ref='tableRef' :query="query" :columns="columns" :api="currentApi.getScenesetList" :fieldNames="{ label: 'groupName', value: 'id' }"
-        :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
-      </Table>
-    </div>
+    <Table ref='tableRef' :query="query" :columns="columns" :api="currentApi.getScenesetList" :fieldNames="{ label: 'groupName', value: 'id' }"
+      :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
+    </Table>
   </div>
 
   <a-modal v-model:visible="modal.visible" title="批量申请场景集授权"
