@@ -1,20 +1,20 @@
 <template>
   <div class="left-tree">
-    <span class="sub-title">{{ title }}</span>
+    <span class="sub-title" style="margin-bottom: 10px;">{{ title }}</span>
     <a-input-search allowClear v-model:value="searchText" 
-      style="margin-bottom: 8px" :placeholder="'请输入' + title + '名称'"
+      style="margin-bottom: 16px" :placeholder="'请输入' + title + '名称'"
       @search="onSearch" />
     <div class="tree-container">
       <a-spin :spinning="loading" style="min-height: 50px">
         <!-- 视觉占位 -->
-        <a-tree v-if="loading" :show-icon="true" :load-data="lazy ? loadData : null" :tree-data="treeData" :expandedKeys="expandRowKeys" :selectedKeys="selectedRowKeys" @expand="onExpand" @select="onSelect">
+        <a-tree v-if="loading" :show-icon="showIcon" :load-data="lazy ? loadData : null" :tree-data="treeData" :expandedKeys="expandRowKeys" :selectedKeys="selectedRowKeys" @expand="onExpand" @select="onSelect">
           <template #icon="{ isLeaf }">
             <svg-icon :icon="isLeaf ? 'leaf' : 'folder'"></svg-icon>
           </template>
         </a-tree>
       </a-spin>
       <!-- 刷新数据需要重新渲染，否则展开节点会有bug -->
-      <a-tree v-if="!loading" :show-icon="true" :load-data="lazy ? loadData : null" :tree-data="treeData" :expandedKeys="expandRowKeys" :selectedKeys="selectedRowKeys" @expand="onExpand" @select="onSelect">
+      <a-tree v-if="!loading" :show-icon="showIcon" :load-data="lazy ? loadData : null" :tree-data="treeData" :expandedKeys="expandRowKeys" :selectedKeys="selectedRowKeys" @expand="onExpand" @select="onSelect">
         <template #icon="{ isLeaf }">
           <svg-icon :icon="isLeaf ? 'leaf' : 'folder'"></svg-icon>
         </template>
@@ -85,6 +85,10 @@ const props = defineProps({
   },
   title: {
     type: String
+  },
+  showIcon: {
+    type: Boolean,
+    default: () => false
   }
 })
 const emits = defineEmits(['select', 'btn-click'])

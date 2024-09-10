@@ -1,6 +1,6 @@
 <template>
   <div class="main-tree">
-    <tree :title="'地图集'" :api="mapsApi.getMapCatalog" :button-handlers="treeBtnHandlers" 
+    <tree :title="'地图集'" :show-icon="true" :api="mapsApi.getMapCatalog" :button-handlers="treeBtnHandlers" 
       @select="onTreeSelect"/>
 
     <div class="main-right table-container">
