@@ -37,8 +37,8 @@ const openOuterlink = (url: string) => {
           <span>{{ menu.title }}</span>
         </template>
         <template #expandIcon="{isOpen}">
-          <img v-if="isOpen" class="ant-menu-submenu-arrow" style="margin-top:-3px" src="@/assets/images/icon_arrow_up.png" />
-          <img v-else class="ant-menu-submenu-arrow" src="@/assets/images/icon_arrow_down.png" />
+          <img v-if="isOpen" width="14px" class="ant-menu-submenu-arrow" style="margin-top:-3px; width: 14px" src="@/assets/images/icon_arrow_up.png" />
+          <img v-else class="ant-menu-submenu-arrow"  style=" width: 14px" src="@/assets/images/icon_arrow_down.png" />
         </template>
         <Menu :menus="menu.children" />
       </a-sub-menu>

@@ -226,10 +226,10 @@ const refresh = async () => {
       expandRowKeys.value = [data[0].id]
       if (props.isFolderSelectable) {
         selectedNode.value = data[0]
-        // emits('select', selectedNode.value)
+        emits('select', selectedNode.value)
       }
     }
-    emits('select', selectedNode.value)
+    if(!isEmpty(selectedNode.value)) emits('select', selectedNode.value)
   } finally {
     loading.value = false
   }

@@ -44,7 +44,7 @@
   </a-modal>
   <a-modal v-model:visible="scenesetModal.cloneVisible" title="另存为"
     :footer="null" :destroyOnClose="true">
-      <a-form ref="scenesetCloneForm" class="modal-content" :model="scenesetModal" 
+      <a-form ref="scenesetCloneForm" class="modal-content save-modal" :model="scenesetModal" 
         :labelCol ="{ style: { width: '100px' } }" 
         @finish="onConfirmCloneSceneset">
           <a-form-item name="cloneName" style="width: 74%"
@@ -295,6 +295,11 @@ const treeBtnHandlers = {
   }
   .ant-row:first-child .ant-form-item-label {
     width: 65px !important;
+  }
+}
+.save-modal {
+  .ant-form-item-explain-error {
+    margin-left: 125px;
   }
 }
 </style>

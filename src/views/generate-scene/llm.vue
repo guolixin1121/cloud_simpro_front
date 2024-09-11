@@ -146,7 +146,7 @@ const writeLine = (index: number) => {
     scroll()
   }, 20)
 }
-
+message.success('test this is a testing', 100000)
 const scroll = () => {
   nextTick(() => {
     const container = document.querySelector('.messages')
@@ -249,7 +249,11 @@ watch(() => data.question, () => {
   border: 1px solid #DADCE0;
 
   &:has(:focus) {
-    border-image: linear-gradient(90deg, rgba(33, 204, 170, 1), rgba(102, 210, 127, 1)) 1 1;
+    border: 1px solid transparent;
+    background-clip: padding-box, border-box;
+    // background-origin: padding-box, border-box;
+    background-image: linear-gradient(to right, #fff, #fff), linear-gradient(90deg, rgba(33, 204, 170, 1), rgba(102, 210, 127, 1));
+    // border-image: linear-gradient(90deg, rgba(33, 204, 170, 1), rgba(102, 210, 127, 1)) 1 1;
   }
   .input {
     margin-left: -8px;

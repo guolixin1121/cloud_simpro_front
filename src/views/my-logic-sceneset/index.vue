@@ -76,11 +76,11 @@
 
   <a-modal v-model:visible="scenesetModal.cloneVisible" title="另存为"
     :footer="null" :destroyOnClose="true">
-      <a-form ref="scenesetCloneForm" class="modal-content" :model="scenesetModal" 
+      <a-form ref="scenesetCloneForm" class="modal-content save-modal" :model="scenesetModal" 
         :labelCol ="{ style: { width: '100px' } }"
         @finish="onConfirmCloneSceneset">
         <a-form-item name="cloneName" style="width: 74%"
-          :rules="[{ required: true, message: '请输入场景集名称'},
+          :rules="[{ required: true, message: '请输入另存为场景集名称'},
           { validator: () => checkChName(scenesetModal.cloneName, 160)  }
            ]">
           <span class="mr-2">我的场景-逻辑场景</span>
@@ -339,6 +339,11 @@ const treeBtnHandlers = {
   }
   .ant-row:first-child .ant-form-item-label {
     width: 65px !important;
+  }
+}
+.save-modal {
+  .ant-form-item-explain-error {
+    margin-left: 125px;
   }
 }
 </style>

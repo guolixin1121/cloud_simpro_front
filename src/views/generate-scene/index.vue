@@ -39,7 +39,7 @@ const gotoPage = (url: string) => {
       title: '',
       content: h('div', { style: 'display: flex; align-items: center; margin-top: -8px;' }, [
         h('img', { src: icon, alt: 'icon', style: 'margin-right: 8px;' }),
-        h('span', { style: 'font-weight: 600; font-size: 16px; color: #1E2229;' }, '该模块正在更新中')
+        h('span', { style: 'font-size: 16px; color: #1E2229;' }, '该模块正在更新中')
       ]),
       icon: '',
       okText: '确定'
