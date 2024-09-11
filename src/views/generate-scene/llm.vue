@@ -146,7 +146,7 @@ const writeLine = (index: number) => {
     scroll()
   }, 20)
 }
-message.success('test this is a testing', 100000)
+
 const scroll = () => {
   nextTick(() => {
     const container = document.querySelector('.messages')
