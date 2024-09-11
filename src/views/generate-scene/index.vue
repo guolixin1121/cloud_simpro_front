@@ -38,7 +38,7 @@ const gotoPage = (url: string) => {
       width: "326px",
       title: '',
       content: h('div', { style: 'display: flex; align-items: center; margin-top: -8px;' }, [
-        h('img', { src: icon, alt: 'icon', style: 'margin-right: 8px;' }),
+        h('img', { src: icon, alt: 'icon', style: 'width: 18px; margin-right: 8px;' }),
         h('span', { style: 'font-size: 16px; color: #1E2229;' }, '该模块正在更新中')
       ]),
       icon: '',
