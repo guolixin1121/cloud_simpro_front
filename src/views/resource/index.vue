@@ -10,7 +10,7 @@
             <div class="sceneset-list">
                 <div v-for="(sceneset, index) in scenesets" :key="index" class="sceneset"
                     :class="'sceneset--' + sceneset?.apply_status" @click="onSelect(sceneset)">
-                        <img :src="sceneset?.poster_image" style="width: 100%; height: 185px; border-radius: 4px 4px 0 0;" />
+                        <img :src="sceneset?.poster_image" style="width: 100%; height: 185px; border-radius: 3px 3px 0 0;" />
                         <div style="padding: 16px;">
                         <div class="name">{{ sceneset?.name }}</div>
                         <div class="count">包含：{{ sceneset?.scene_count }}个场景</div>
