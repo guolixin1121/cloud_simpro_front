@@ -189,7 +189,7 @@ const calcateHeight = () => {
   const tableTop = document.querySelectorAll('.main > div:not(.ant-table-wrapper):not(:last-child)')
   tableTop.forEach((top) => tableHeight += isNaN(top.clientHeight) ? 0 : (top.clientHeight + 16))
   
-  tableHeight = tableHeight + 240
+  tableHeight = tableHeight + 246
   if(document.body.scrollWidth <= 1440) {
     // App.vue定义的页面最小宽度1440
     // 小于这个宽度出现滚动条时，计算表格高度时要加上滚动条高度，以确保分页符离底部总是最小24px
@@ -260,7 +260,7 @@ defineExpose({ refresh, calcateHeight })
 }
 
 .ant-table-striped :deep(.ant-table) {
-  border: 1px solid #f0f0f0;
+  border: 1px solid #E6E7EB;
 }
 :global(.ant-table-tbody > tr.ant-table-row-selected > td) {
   background: transparent;

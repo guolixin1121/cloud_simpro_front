@@ -10,12 +10,12 @@
             <div class="sceneset-list">
                 <div v-for="(sceneset, index) in scenesets" :key="index" class="sceneset"
                     :class="'sceneset--' + sceneset?.apply_status" @click="onSelect(sceneset)">
-                        <img :src="sceneset?.poster_image" style="width: 100%; height: 185px; border-radius: 2px;" />
+                        <img :src="sceneset?.poster_image" style="width: 100%; height: 185px; border-radius: 4px 4px 0 0;" />
                         <div style="padding: 16px;">
                         <div class="name">{{ sceneset?.name }}</div>
                         <div class="count">包含：{{ sceneset?.scene_count }}个场景</div>
                         <a-button v-if="sceneset?.apply_status == 0" type="primary" size="small"
-                            style="width: 56px; font-size: 12px;" @click="onView(sceneset)">查看</a-button>
+                            style="width: 52px; font-size: 12px;" @click="onView(sceneset)">查看</a-button>
                         <span v-if="sceneset?.apply_status == 1" style="color: #FF8A03">等待授权中</span>
                         <span v-if="sceneset?.apply_status == 2" style="color: #60646E;">已授权</span>
                     </div>

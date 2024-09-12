@@ -383,6 +383,12 @@ onBeforeUnmount(cacheScrollTop)
     .icon {
       cursor: pointer;
     }
+    .icon:hover {
+      color: var(--primary-color)
+    }
+    .icon--disable:hover {
+      color: #d9d9d9;
+    }
   }
 
   .icon--disable {

@@ -11,7 +11,8 @@
         </g>
         </svg>
     </div> -->
-    <img src="@/assets/images/icon_nothing.png" />
+    <!-- <img src="@/assets/images/icon_nothing.png" /> -->
+    <svg-icon icon="nothing" />
     <p class="description">暂无数据</p>
 </div>
 </template>

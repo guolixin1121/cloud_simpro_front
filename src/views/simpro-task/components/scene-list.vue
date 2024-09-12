@@ -239,7 +239,7 @@ onMounted(onScenesetSearch)
 @import '@/assets/styles/variable.less';
 .ant-transfer-list-title {
   padding-bottom: 8px;
-  border-bottom: 1px solid #e6e7eb;
+  border-bottom: 1px solid var(--table-border-color);
 }
 </style>
 <style lang="less">

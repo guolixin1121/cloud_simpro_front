@@ -36,13 +36,13 @@ const gotoPage = (url: string) => {
   } else {
     Modal.warn({
       width: "326px",
-      title: '',
-      content: h('div', { style: 'display: flex; align-items: center; margin-top: -8px;' }, [
+      title: h('div', { style: 'display: flex; align-items: center;' }, [
         h('img', { src: icon, alt: 'icon', style: 'width: 18px; margin-right: 8px;' }),
-        h('span', { style: 'font-size: 16px; color: #1E2229;' }, '该模块正在更新中')
+        h('span', { style: 'font-size: 16px; color: #1E2229;' }, '模块更新中')
       ]),
+      content: h('span', { style: 'color: #60656E;' } , ['由于功能升级改造，暂时无法使用该功能，敬请期待！']),
       icon: '',
-      okText: '确定'
+      okText: '我已知悉'
     })
   }
 }

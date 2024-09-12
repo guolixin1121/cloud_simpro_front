@@ -6,7 +6,7 @@
   <search-form ref="searchFormRef" :items="formItems" @search="onSearch"></search-form>
   <div class="main">
     <div class="title-section">
-      <a-tabs class="tabs" v-model:activeKey="activeKey" >
+      <a-tabs v-model:activeKey="activeKey" >
         <a-tab-pane :key="1" tab="场景集管理">
         </a-tab-pane>
         <a-tab-pane :key="2" tab="具体场景管理">

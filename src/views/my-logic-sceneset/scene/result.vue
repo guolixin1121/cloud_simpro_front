@@ -15,9 +15,9 @@
       <a-tab-pane key="2" tab="SOTIF泛化">
       </a-tab-pane>
     </a-tabs> 
-    <Table ref="table" :api="listApi" 
+    <Table ref="table" style="margin-top: 0px" :api="listApi" 
       :enableCheckPermission="false"
-      :columns="activeKey =='1' ? columns : sotifColumns" style="margin-top: 8px;">
+      :columns="activeKey =='1' ? columns : sotifColumns">
       <template #bodyCell="{column, record, text}">
         <template v-if="column.dataIndex == 'name'">
           {{ name }}
@@ -234,9 +234,9 @@ const gotoScene = (record: RObject) => {
 </style>
 <style lang="less">
 .tabs {
-  margin-top: 14px;
+  margin-top: 16px;
   .ant-tabs-nav {
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: 1px solid var(--table-border-color);
   }
 }
 </style>
