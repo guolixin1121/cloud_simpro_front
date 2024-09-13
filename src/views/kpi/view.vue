@@ -6,7 +6,7 @@
   <div class="min-main">
     <span class="title mb-5">评测指标详情</span>
     <a-spin :spinning="loading">
-      <a-form :labelCol ="{ style: { width: '100px' } }"  style="width: 55%">
+      <a-form class="view-form" :labelCol ="{ style: { width: '100px' } }"  style="width: 55%">
         <a-form-item label="评测指标ID">
           {{ formState.id }}
         </a-form-item>

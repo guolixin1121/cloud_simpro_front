@@ -6,7 +6,7 @@
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading"> 
-      <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 55%" @finish="add">
+      <a-form :class="isView ? 'view-form' : ''" :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 55%" @finish="add">
         <a-form-item label="所属地图集：" name="catalog" :rules="[{ required: isAdd, message: '请选择地图集'}]">
           <tree-select
             v-if="isAdd"

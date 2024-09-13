@@ -10,7 +10,7 @@
       <span class="title mb-5">{{ title }}</span>
 
       <a-spin :spinning="dataLoading">
-        <a-form :model="formState" :labelCol ="{ style: { width: '65px' } }">
+        <a-form class="view-form" :model="formState" :labelCol ="{ style: { width: '65px' } }">
           <p class="sub-title">申请信息</p>
           <a-form-item label="申请人" >
             {{ formState.apply_username }}
@@ -22,8 +22,8 @@
             <span class="break-text">{{ formState.reason || '--' }}</span>
           </a-form-item>
           </a-form>
-        <a-form :model="formState" :labelCol ="{ style: { width: isSceneset ? '80px' : '65px' } }">
-          <p class="sub-title" style="margin-top: 8px">{{ isSceneset ? '场景集信息' : '场景信息' }}</p>
+        <a-form class="view-form" :model="formState" :labelCol ="{ style: { width: isSceneset ? '80px' : '65px' } }">
+          <p class="sub-title" style="margin-top: 24px">{{ isSceneset ? '场景集信息' : '场景信息' }}</p>
           <template v-if="formState.data">
             <template v-if="isSceneset">
               <a-form-item label="场景集ID">{{ formState.data.id }}</a-form-item>
@@ -171,7 +171,7 @@ getEditData()
 
 <style>
 .comments {
-  width: 100%; height: 400px; padding: 8px; border: 1px solid #d3d3d3;
+  width: 100%; height: 220px; padding: 8px; border: 1px solid #d3d3d3;
   word-break: break-all;
 }
 </style>

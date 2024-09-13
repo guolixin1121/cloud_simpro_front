@@ -13,7 +13,7 @@
   }
 }
 
-button.ant-btn {
+button.ant-btn:not(.ant-btn-primary):not(.ant-btn-link):not(.ant-btn-text) {
   color: var(--text-main-color);
   box-shadow: none;
   &:focus {
@@ -47,21 +47,25 @@ button.ant-btn-primary:not([disabled]) {
     color: #fff !important;
   }
 }
-button.ant-btn[disabled] {
-  color: var(--gray-color);
-  background-color: var(--gray-global-bg-color);
-  border-color: var(--border-color);
-}
-button.ant-btn-primary[disabled] {
-  color: #fff !important;
-  background-color:  #C9CCD1 !important;
-}
+// button.ant-btn[disabled] {
+//   color: var(--gray-color);
+//   background-color: var(--gray-global-bg-color);
+//   border-color: var(--border-color);
+// }
+// button.ant-btn-primary[disabled] {
+//   color: #fff !important;
+//   background-color:  #C9CCD1 !important;
+// }
 
 /**** ant-form ****/
 // 基本配置
 .ant-form {
   .ant-form-item {
-    margin-bottom: 14px;
+    margin-bottom: 16px;
+
+    &:last-child {
+      margin-bottom: 0px;
+    }
   }
   .ant-form-item-label,
   .ant-form-item-label label {
@@ -76,23 +80,24 @@ button.ant-btn-primary[disabled] {
     color: var(--text-main-color);
     white-space: nowrap;
   }
+
+  .ant-form-item-label > label,
+  .ant-form-item-control-input {
+    min-height: auto;
+    height: auto;
+  }
+
+  .ant-form-item:has(input),
+  .ant-form-item:has(textarea) {
+    .ant-form-item-label > label {
+      height: 32px;
+    }
+  } 
 }
 // 详情页的form label
-.ant-form .ant-form-item-label label {
-  color: var(--text-second-color);
-}
-
-// 固定宽度保证label右对齐
-.ant-form.multiline-form {
-  .ant-form-item-label {
-    // width: 65px; 
-  }
-}
-.ant-form {
-  .ant-form-item:not(.last-row) {
-    .ant-form-item-label {
-      width: 65px; 
-    }
+.view-form.ant-form {
+  .ant-form-item-label label {
+    color: var(--text-second-color);
   }
 }
 // 筛选栏
@@ -110,6 +115,11 @@ button.ant-btn-primary[disabled] {
 
       &.last-row {
         margin-bottom: 0px !important;
+      }
+    }
+    .ant-form-item:not(.last-row) {
+      .ant-form-item-label {
+        width: 65px; 
       }
     }
   //   // 每行三列或四列
@@ -270,7 +280,7 @@ button.ant-btn-primary[disabled] {
 }
 
 .ant-popover-inner {
-  min-width: 226px;
+  min-width: 260px;
   border-radius: 4px !important;
   // position: relative;
   // top: -10px;
@@ -553,6 +563,7 @@ button.ant-btn-primary[disabled] {
 .ant-tree {
   .ant-tree-node-content-wrapper {
     white-space: nowrap;
+    width: 100%;
     // padding: 0px 4px !important;
     // margin-left: -6px !important;
     // width: 98%;
@@ -670,13 +681,6 @@ button.ant-btn-primary[disabled] {
           margin-left: 24px;
           margin-bottom: 0px;
         }
-        .ant-form-item {
-          margin-bottom: 4px;
-
-          &:last-child {
-            margin-bottom: 0px;
-          }
-        }
       }
       .modal-buttons {
         padding: 16px 24px;
@@ -740,10 +744,33 @@ button.ant-btn-primary[disabled] {
     background-color: transparent !important;
   }
 }
+  
+.ant-select-dropdown.ant-tree-select-dropdown {
+  padding: 0px;
+  .ant-select-tree-treenode {
+    padding: 0 16px;
+  }
+  .ant-select-tree-switcher {
+    line-height: 32px;;
+    width: 10px;
+  }
+  .ant-select-tree-switcher-noop {
+    width: 0px;
+  }
+  .ant-select-tree-node-content-wrapper {
+    padding: 0px;
+    height: 32px;
+    line-height: 32px;
+    padding-left: 4px;
+  }
+  .ant-select-tree-node-content-wrapper-normal {
+    padding-left: 0px;
+  }
+}
 
 // hover
 .ant-picker {
-  .ant-picker-suffix {
+  .ant-picker-suffix, .ant-picker-clear {
     width: 12px;
     height: 12px;
     font-size: 12px;;
@@ -971,27 +998,4 @@ input::placeholder,
 .ant-message-custom-content {
   display: flex;
   align-items: center;
-}
-
-.ant-select-dropdown.ant-tree-select-dropdown {
-  padding: 0px;
-  .ant-select-tree-treenode {
-    padding: 0 16px;
-  }
-  .ant-select-tree-switcher {
-    line-height: 32px;;
-    width: 10px;
-  }
-  .ant-select-tree-switcher-noop {
-    width: 0px;
-  }
-  .ant-select-tree-node-content-wrapper {
-    padding: 0px;
-    height: 32px;
-    line-height: 32px;
-    padding-left: 2px;
-  }
-  .ant-select-tree-node-content-wrapper-normal {
-    padding-left: 0px;
-  }
 }

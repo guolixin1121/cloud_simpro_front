@@ -12,7 +12,7 @@
     </span>
     <div style="width: 55%">
       <a-spin :spinning="loading">
-        <a-form :labelCol ="{ style: { width: labelWidth + 'px' } }">
+        <a-form class="view-form" :labelCol ="{ style: { width: labelWidth + 'px' } }">
           <template v-for="(item, index) in items" :key="index">
             <a-form-item :label="item.label" v-if="item.isShow == undefined || item.isShow" >
               <span v-if="!Array.isArray(item.value)"

@@ -5,7 +5,9 @@
       <a v-if="user.isRegisterUser() && scope.column.actions[key].beforeHandler" class="text-link mr-2" @click="onHandler(scope, key)">
         {{ key }}
       </a>
-      <a-popconfirm v-else-if="key == '删除'" :title="getDeleteTip(scope, key)" @confirm="onHandler(scope, key)">
+      <a-popconfirm placement="topRight" v-else-if="key == '删除'" :title="getDeleteTip(scope, key)" 
+        :okButtonProps="{type: 'link'}" :cancelButtonProps="{type: 'text'}"
+        @confirm="onHandler(scope, key)">
         <a class="text-link mr-2">{{ key }}</a>
       </a-popconfirm>
       <!-- 其他列 -->

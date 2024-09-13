@@ -7,7 +7,7 @@
     <span class="title mb-5">仿真任务详情</span>
     <a-spin :spinning="loading">
       
-      <a-form :labelCol ="{ style: { width: labelWidth + 'px' } }"  style="width: 55%">
+      <a-form class="view-form" :labelCol ="{ style: { width: labelWidth + 'px' } }"  style="width: 55%">
         <a-form-item label="任务ID">
           {{ formState.number }}
         </a-form-item>

@@ -8,7 +8,7 @@
   <div class="min-main">
     <span class="title mb-5">任务详情</span>
 
-    <a-form :model="formState" style="width: 65%" :labelCol ="{ style: { width: isSceneset ? '80px' : '65px' } }">
+    <a-form class="view-form" :model="formState" style="width: 65%" :labelCol ="{ style: { width: isSceneset ? '80px' : '65px' } }">
       <p class="sub-title">{{ isSceneset ? '场景集信息' : '场景信息' }}</p>
       <template v-if="formState.data">
         <template v-if="isSceneset">
@@ -51,7 +51,7 @@
       </template>
     </a-form>
 
-    <a-form :model="formState" style="width: 65%" :labelCol ="{ style: { width: '65px' } }">
+    <a-form class="view-form" :model="formState" style="width: 65%" :labelCol ="{ style: { width: '65px' } }">
       <p class="sub-title">申请信息</p>
       <a-form-item label="申请原因">
         <span class="break-text">{{ formState.reason || '--' }}</span>

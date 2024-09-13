@@ -8,7 +8,7 @@
   <div class="min-main">
     <span class="title mb-5">任务详情</span>
     <a-spin :spinning="dataLoading">
-    <a-form :model="formState" :labelCol ="{ style: { width: isSceneset ? '80px' : '65px' } }" style="width: 65%">
+    <a-form class="view-form" :model="formState" :labelCol ="{ style: { width: isSceneset ? '80px' : '65px' } }" style="width: 65%">
       <p class="sub-title">{{ isSceneset ? '场景集信息' : '场景信息' }}</p>
       <template v-if="formState.data">
         <template v-if="isSceneset">
@@ -53,7 +53,7 @@
         <div class="label mb-4">{{ isSceneset ? '该场景集已被删除' : '该场景已被删除' }}</div>
       </template>
     </a-form>
-    <a-form :model="formState" :labelCol ="{ style: { width: '65px' } }" style="width: 65%">
+    <a-form class="view-form" :model="formState" :labelCol ="{ style: { width: '65px' } }" style="width: 65%">
       <p  class="sub-title">申请信息</p>
       <a-form-item label="申请原因">
         <span class="break-text">{{ formState.reason || '--' }}</span>
