@@ -720,6 +720,9 @@ button.ant-btn-primary[disabled] {
 
 .ant-select-tree {
   .ant-select-tree-node-content-wrapper  {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     padding: 0px;
   }
   .ant-select-tree-switcher-noop {
@@ -739,6 +742,13 @@ button.ant-btn-primary[disabled] {
 }
 
 // hover
+.ant-picker {
+  .ant-picker-suffix {
+    width: 12px;
+    height: 12px;
+    font-size: 12px;;
+  }
+}
 .ant-picker-header-view button:hover {
   color: var(--primary-color) !important;
 }

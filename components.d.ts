@@ -66,6 +66,7 @@ declare module '@vue/runtime-core' {
     SearchForm: typeof import('./src/components/search-form/index.vue')['default']
     SelectSceneset: typeof import('./src/components/select-sceneset/index.vue')['default']
     SingleUpload: typeof import('./src/components/single-upload/index.vue')['default']
+    SmileOutlined: typeof import('@ant-design/icons-vue')['SmileOutlined']
     SvgIcon: typeof import('./src/components/svg-icon/index.vue')['default']
     Table: typeof import('./src/components/table/index.vue')['default']
     Tree: typeof import('./src/components/tree/index.vue')['default']

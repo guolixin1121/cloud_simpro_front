@@ -123,7 +123,7 @@ const formItems = ref<SearchFormItem[]>([
     defaultValue: ''
   },
   {
-    label: '标签1',
+    label: '标签',
     key: 'labels',
     type: 'tree-select',
     // mode: 'multiple',

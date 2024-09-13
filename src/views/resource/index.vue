@@ -71,7 +71,7 @@ const loadSceneset = async (page: number = 1) => {
         const res = await api.sceneResource.getScenesetListV2({
             name: query.value,
             page,
-            size: 15
+            size: 16
         })
         if(page ==1 && res.results.length == 0) {
             message.warn('很抱歉，没有找到您想要搜索的场景集')

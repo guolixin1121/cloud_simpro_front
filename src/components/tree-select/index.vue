@@ -1,8 +1,9 @@
 <template>
   <a-tree-select
     placeholder="请选择"
-    showSearch
-    :maxTagCount="2"
+    showArrow
+    allow-clear
+    :maxTagCount="1"
     :treeNodeFilterProp="'title'"
     :treeData="treeData"
     :not-found-content="loading ? '数据加载中...' : '暂无数据'"
