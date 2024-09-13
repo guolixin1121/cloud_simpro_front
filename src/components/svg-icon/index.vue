@@ -27,6 +27,7 @@ getIcon()
 .icon {
   vertical-align: middle;
   display: inline-block;
+  // align-items: center;
   color: var(--text-second-color);
 }
 

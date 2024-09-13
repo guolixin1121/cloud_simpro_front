@@ -241,8 +241,6 @@ getOptions()
 </script>
 <style lang="less">
 .ant-transfer-list {
-  padding: 8px 12px;
-
   .ant-input,
   .ant-input-number,
   .ant-select .ant-select-selector {

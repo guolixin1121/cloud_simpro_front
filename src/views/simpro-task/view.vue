@@ -138,7 +138,7 @@ const getEditData = async () => {
     for(let prop in formState) {
       formState[prop as keyof typeof formState] = data[prop]
     }
-    labelWidth.value = data.mount == '1' ? 150 : 100
+    labelWidth.value = data.mount == '1' ? 150 : 80
     // formItems.value = [
     //   { label: '评测指标ID', value: data.id },
     //   { label: '评测指标名称', value: data.name },

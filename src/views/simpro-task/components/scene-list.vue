@@ -235,13 +235,6 @@ watch(selectedScenes, (newVal, oldVal) => {
 onMounted(onScenesetSearch)
 </script>
 
-<style lang="less" scoped>
-@import '@/assets/styles/variable.less';
-.ant-transfer-list-title {
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--table-border-color);
-}
-</style>
 <style lang="less">
 .ant-transfer-list .ant-tree {
   .ant-tree-treenode {

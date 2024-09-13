@@ -5,7 +5,7 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
-    <a-form ref="form" :model="formState" :labelCol ="{ style: { width: '200px'} }"  style="width: 70%"
+    <a-form ref="form" :model="formState" :labelCol ="{ style: { width: labelWidth}}"  style="width: 70%"
       @finish="add">
       <a-form-item label="任务名称" name="name" :rules="[
         { required: true, message: '请输入任务名称'}, 
@@ -151,6 +151,7 @@ const formState = reactive({
   kpi: [],
   test: false
 })
+let labelWidth = computed(() => formState.is_in_ring == '1' ? '150px' : '80px')
 
 const loading = ref(false)
 const router = useRouter()
@@ -217,7 +218,6 @@ const onRingChanged = () => {
     formState.vehicle_horizontal = 0
     formState.vehicle_vertical = 0
     formState.dynamic_vehicle = undefined
-    // formState.dynamic_lib = ''
   }
 }
 const onMountChanged = () => {

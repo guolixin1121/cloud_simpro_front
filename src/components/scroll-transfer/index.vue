@@ -21,7 +21,7 @@
         <ul class="scroll-box" style="height: calc(100% - 40px); overflow: auto">
           <li class="transfer-checked-item flex justify-between items-center" v-for="item in selectedNodes" :key="item.value">
             {{ item.label }}
-            <svg-icon icon="close" class="text-gray-400 cursor-pointer" @click="onRemove(item)" />
+            <svg-icon icon="close" style="height: 16px;" class="text-gray-400 cursor-pointer" @click="onRemove(item)" />
           </li>
         </ul>
       </div>
@@ -190,20 +190,7 @@ watch(
 
 getOptions()
 </script>
-<style lang="less">
-.ant-transfer-list {
-  padding: 8px 12px;
-}
-.scroll-box .ant-checkbox-wrapper {
-  display: flex;
-  margin-top: 4px;
-}
-</style>
 <style lang="less" scoped>
-.ant-transfer-list-title {
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--table-border-color);
-}
 .transfer-checked-item {
   line-height: 20px;
   padding: 6px 12px;

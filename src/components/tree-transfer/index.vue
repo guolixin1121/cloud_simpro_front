@@ -6,10 +6,11 @@
         <!-- <span class=" text-link cursor-pointer" @click="onCheckedAll">全选</span> -->
       </div>
       <a-input-search style="padding: 12px 12px 16px 12px" placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
-      <div style="height: calc(100% - 40px); overflow: auto" class="thin-scrollbar" @scroll="onScroll">
+      <div class="thin-scrollbar tree-container" @scroll="onScroll">
         <a-tree checkable :showIcon="true" :tree-data="treeData" v-model:checkedKeys="checkedKeys" @check="onChecked">
           <template #icon="{checkable}">
-           <img v-if="!checkable" src="@/assets/images/icon_folder.png" />
+            <svg-icon icon="folder" v-if="!checkable"></svg-icon>
+           <!-- <img v-if="!checkable" src="@/assets/images/icon_folder.png" /> -->
           </template>
         </a-tree>
         <a-spin :spinning="loading" style="width: 100%; padding-top: 20px"></a-spin>
@@ -24,7 +25,7 @@
       <ul class="scroll-box" style="height: calc(100% - 40px); overflow: auto">
         <li class="transfer-checked-item flex justify-between items-center" v-for="item in selectedNodes" :key="item.key">
           <span class="label">{{ item.title }}</span>
-          <svg-icon icon="close" class="text-gray-400 cursor-pointer" @click="onRemove(item)" />
+          <svg-icon icon="close" style="height: 16px;" class="cursor-pointer" @click="onRemove(item)" />
         </li>
       </ul>
     </div>
@@ -228,14 +229,6 @@ getOptions()
 .ant-transfer-list {
   padding: 0px;
 }
-.ant-transfer-list:first-child {
-  border-right: 0px
-}
-.ant-transfer-list-title {
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--table-border-color);
-  margin: 8px 12px;
-}
 .scroll-box {
   margin: 0px 12px;
 }
@@ -258,8 +251,6 @@ getOptions()
 </style>
 <style lang="less">
 .ant-tree {
-  padding: 0 8px;
-
   .ant-tree-treenode {
     width: 100%;
     padding: 4px 0;
