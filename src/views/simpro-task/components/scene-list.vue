@@ -5,8 +5,8 @@
         <div class="flex justify-between ant-transfer-list-title">
           <span>场景集</span>
         </div>
-        <a-input-search class="my-2" v-model:value="searchSceneset" placeholder="请输入搜索内容" allowClear @search="onScenesetSearch" @pressEnter="onScenesetSearch"></a-input-search>
-        <div style="height: calc(100% - 40px); overflow: auto">
+        <a-input-search v-model:value="searchSceneset" placeholder="请输入搜索内容" allowClear @search="onScenesetSearch" @pressEnter="onScenesetSearch"></a-input-search>
+        <div class="scroll-box" style="height: calc(100% - 40px); overflow: auto">
           <a-tree v-if="!scenesetLoading" :tree-data="scenesets" :load-data="loadSubSceneset" 
             v-model:checkedKeys="selectedSceneset" 
             @select="onScenesetSelected"></a-tree>
@@ -20,7 +20,7 @@
           <span class="text-link cursor-pointer" v-if="!isAllChecked" @click="onAllChecked">全选</span>
           <span class="text-link cursor-pointer" v-else @click="onAllUnchecked">取消选中</span>
         </div>
-        <div class="scroll-box" style="height: calc(100% - 70px); overflow: auto">
+        <div class="scroll-box scroll-box-right" style="height: calc(100% - 70px); overflow: auto">
           <a-spin :spinning="sceneLoading" v-if="scenes.length" >
             <a-checkbox-group v-model:value="currentSelectedScenes">
               <a-checkbox v-for="item in scenes" :key="item.id" :value="item.id" style="margin-left: 0"
@@ -34,12 +34,13 @@
           </div>
         </div>
         <!-- 全选 -->
-        <div class="flex justify-between" style="margin-top: 8px"  v-if="pagination.total > 0" >
+        <div class="flex justify-between items-center" style="margin: 8px 12px 0px 12px;"  v-if="pagination.total > 0" >
           <a-checkbox v-model:checked="isCurrentAllChecked"
               :indeterminate="indeterminate"
               @change="onCurrentAllChecked">当前页面已选中{{currentSelectedScenes.length}}项</a-checkbox>
           <a-pagination
               class="flex"
+              size="small"
               v-model:pageSize="pagination.size" 
               v-model:current="pagination.current" 
               :total="pagination.total"
@@ -236,16 +237,16 @@ onMounted(onScenesetSearch)
 </script>
 
 <style lang="less">
-.ant-transfer-list .ant-tree {
-  .ant-tree-treenode {
-    padding: 2px 0px !important;
-    width: 100%;
-  }
-  .ant-tree-treenode-selected {
-    background-color: var(--menu-active-bg-color);
-  }
-}
-.ant-transfer-list .ant-spin-nested-loading .ant-spin .ant-spin-dot {
-  top: 20%;
-}
+// .ant-transfer-list .ant-tree {
+//   .ant-tree-treenode {
+//     padding: 2px 0px !important;
+//     width: 100%;
+//   }
+//   .ant-tree-treenode-selected {
+//     background-color: var(--menu-active-bg-color);
+//   }
+// }
+// .ant-transfer-list .ant-spin-nested-loading .ant-spin .ant-spin-dot {
+//   top: 20%;
+// }
 </style>

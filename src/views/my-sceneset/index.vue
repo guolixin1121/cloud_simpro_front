@@ -50,7 +50,7 @@
           <a-form-item name="cloneName" style="width: 74%"
             :rules="[{ required: true, message: '请输入另存为场景集名称'},
             { validator: () => checkChName(scenesetModal.cloneName, 160) } ]">
-            <span class="mr-2">我的场景-具体场景</span>
+            <span>我的场景-具体场景</span>
             <ch-input v-model:value="scenesetModal.cloneName" :maxlength="160" placeholder="请输入另存为场景集名称"></ch-input>
           </a-form-item>
       </a-form>

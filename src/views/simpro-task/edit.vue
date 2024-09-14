@@ -108,7 +108,7 @@
           </li>
         </ul>
       </a-form-item>
-      <a-form-item :wrapper-col="{ style: { paddingLeft: '150px' }}">
+      <a-form-item :wrapper-col="{ style: { paddingLeft: labelWidth } }">
         <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">
           {{ isAdd ? '创建' : '修改' }}
         </a-button>
