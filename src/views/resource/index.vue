@@ -25,7 +25,7 @@
     </div>
     <a-modal :title="modal.title" v-model:visible="modal.visible" :footer="null"
         :destroy-on-close="true" @close="modal.visible = false">
-        <a-form class="modal-content" :labelCol="{ style: { width: '80px' } }">
+        <a-form class="modal-content view-form" :labelCol="{ style: { width: '80px' } }">
             <a-form-item label="场景集名称">
                 <div class="break-text thin-scrollbar">{{ selectedSceneset.name }}</div>
             </a-form-item>

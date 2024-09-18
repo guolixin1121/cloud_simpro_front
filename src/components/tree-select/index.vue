@@ -3,7 +3,7 @@
     placeholder="请选择"
     showArrow
     allow-clear
-    :maxTagCount="1"
+    max-tag-count="responsive"
     :treeNodeFilterProp="'title'"
     :treeData="treeData"
     :not-found-content="loading ? '数据加载中...' : '暂无数据'"

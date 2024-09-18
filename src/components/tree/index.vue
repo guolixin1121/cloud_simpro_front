@@ -2,7 +2,7 @@
   <div class="left-tree">
     <span class="sub-title" style="margin-bottom: 10px;">{{ title }}</span>
     <a-input-search allowClear v-model:value="searchText" 
-      style="margin-bottom: 16px" :placeholder="'请输入' + title + '名称'"
+      style="margin-bottom: 10px" :placeholder="'请输入' + title + '名称'"
       @search="onSearch" />
     <div class="tree-container">
       <a-spin :spinning="loading" style="min-height: 50px">
@@ -36,14 +36,18 @@
   </div>
 
   <!-- 删除确认弹窗 -->
-  <a-modal v-model:visible="showDeleteConfirm" :closable="false" :footer="null">
-    <div class="modal-content">
-      <span style="font-size: 16px" v-if="title=='地图集'">地图集删除后，关联数据（场景、地图等）将会一起删除，是否删除？</span>
-      <span style="font-size: 16px" v-else>场景集删除后，关联数据将会一起删除，是否删除？</span>
+  <a-modal v-model:visible="showDeleteConfirm" width="260px" :closable="false" :footer="null">
+    <div class="ant-popover-inner">
+      <div class="ant-popover-inner-content">
+      <div class="ant-popover-message">
+        <span v-if="title=='地图集'">地图集删除后，关联数据（场景、地图等）将会一起删除，是否删除？</span>
+        <span v-else>场景集删除后，关联数据将会一起删除，是否删除？</span>
+      </div>
+      <div class="ant-popover-buttons" style="position: relative; left: 7px;">
+        <a-button type="text" size="small" @click="closeDeleteConfirm">取消</a-button>
+        <a-button type="link" size="small" @click="onDeleteConfirm" >确定</a-button>
+      </div>
     </div>
-    <div class="modal-buttons">
-      <a-button @click="closeDeleteConfirm">取消</a-button>
-      <a-button @click="onDeleteConfirm" type="primary">确定</a-button>
     </div>
   </a-modal>
 </template>

@@ -8,7 +8,7 @@
           <span class="line-value">{{ sceneset?.name || '--' }}</span>
         </a-tooltip>
       </a-col>
-      <a-col :span="18">
+      <a-col :span="18" style="padding-left: 24px;">
         <span class="label">场景集标签</span>
         <span v-if="!sceneset || (sceneset.labels_detail && sceneset.labels_detail.length == 0)">--</span>
         <a-tooltip v-else class="line-value" :title="getTips(sceneset)" placement="topLeft">
@@ -25,7 +25,7 @@
         <span class="label">场景集来源</span>
         <span class="line-value">{{ sceneset?.sourceName || '--' }}</span>
       </a-col>
-      <a-col :span="18">
+      <a-col :span="18" style="padding-left: 24px;">
         <span class="label">场景集描述</span>
         <a-tooltip :title="sceneset?.desc" placement="topLeft">
             <span class="line-value">{{ sceneset?.desc || '--' }}</span>
