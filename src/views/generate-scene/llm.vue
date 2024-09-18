@@ -172,6 +172,7 @@ watch(() => data.question, () => {
   flex-direction: column;
   align-items: center;
   height: 100%;
+  margin: 0px -16px;
 }
 .messages {
   width: 100%;

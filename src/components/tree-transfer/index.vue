@@ -6,7 +6,7 @@
         <!-- <span class=" text-link cursor-pointer" @click="onCheckedAll">全选</span> -->
       </div>
       <a-input-search placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
-      <div class="thin-scrollbar tree-container" @scroll="onScroll">
+      <div class="tree-container" @scroll="onScroll">
         <a-tree checkable :showIcon="true" :tree-data="treeData" v-model:checkedKeys="checkedKeys" @check="onChecked">
           <template #icon="{checkable}">
             <svg-icon icon="folder" v-if="!checkable"></svg-icon>

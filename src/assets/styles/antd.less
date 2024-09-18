@@ -288,7 +288,7 @@ button.ant-btn-primary[disabled] {
 }
 
 .ant-popover-inner {
-  min-width: 260px;
+  width: 260px;
   border-radius: 4px !important;
   // position: relative;
   // top: -10px;
@@ -514,10 +514,10 @@ button.ant-btn-primary[disabled] {
     padding-bottom: 16px;
     &:first-child {
       border-right: 0px;
-      border-radius: 4px 0px 0px 4px; 
+      border-radius: 2px 0px 0px 2px; 
     }
     &:last-child {
-      border-radius: 0px 4px 4px 0px; 
+      border-radius: 0px 2px 2px 0px; 
     }
   }
   .ant-input-search {
@@ -531,9 +531,9 @@ button.ant-btn-primary[disabled] {
   }
 
   .scroll-box {
-    margin: 10px 12px;
-    margin-top: 10px;
-    margin-bottom: 0px;
+    margin: 10px 0px;
+    margin-right: -12px;
+    padding-right: 8px;
     overflow: auto;
     .ant-checkbox-group { width: 100%; }
     .ant-checkbox-group-item,
@@ -559,6 +559,7 @@ button.ant-btn-primary[disabled] {
       margin-top: 2px;
       .label {
         white-space: break-spaces;
+        color: var(--text-main-color);
       }
       &:hover {
         background: var(--gray-global-bg-color);
@@ -569,7 +570,6 @@ button.ant-btn-primary[disabled] {
     }
   }
   .scroll-box-right {
-    margin: 0px;
     margin-top: 10px;
     // .ant-checkbox-wrapper {
     //   padding-left: 0px;
@@ -578,7 +578,8 @@ button.ant-btn-primary[disabled] {
   .tree-container {
     height: 174px;
     overflow: auto;
-    padding: 0px;
+    padding: 0px 12px;
+    margin: 0px -12px;
     margin-top: 10px;
   }
   .checkbox-container {
@@ -589,9 +590,10 @@ button.ant-btn-primary[disabled] {
     }
   }
   .ant-tree {
+    color: var(--text-main-color);
     .ant-tree-treenode {
       width: 100%;
-      padding: 2px 12px;
+      padding: 4px 12px;
     }
     .ant-tree-indent-unit {
       width: 18px;

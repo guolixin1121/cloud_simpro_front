@@ -29,7 +29,7 @@
   </div>
 
   <a-modal v-model:visible="generateModal.visible" title="泛化" width="480px"
-      :footer="null"  :destroyOnClose="true">
+      :footer="null"  :destroy-on-close="true">
       <template v-if="generateModal.step == 1">
         <template v-if="generateModal.sourceData.config_result_count <= 10000">
           <div class="modal-content">
@@ -52,7 +52,7 @@
       </template>
       <template v-else>
         <div class="modal-content">
-          <p>请选择泛化生成的具体场景的保存路径</p>
+          <div style="margin-bottom: 10px;">请选择泛化生成的具体场景的保存路径</div>
           <select-sceneset ref="generateSceneset" v-model:value="generateModal.targetSceneset"></select-sceneset>
         </div>
         <div class="modal-buttons">

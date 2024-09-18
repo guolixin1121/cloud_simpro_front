@@ -7,10 +7,10 @@
 ## 分支说明
 1. master 开发分支
 执行archive生成zip后手动部署
-2. production: 生产分支
-3. yizhuang_v2 亦庄-场景管理优化需求  
+2. production: 生产分支 
 3. yizhuang_dev 亦庄01分支  
 4. hengrun_dev 亦庄02分支  
+4. test_dev 亦庄03分支  
 在独立的git上   
 ```
 git remote add yizhuang http://10.9.0.167:22080/cloud-simpro1/cloud_simpro_front  

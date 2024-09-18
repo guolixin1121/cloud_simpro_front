@@ -29,27 +29,16 @@
       <svg-icon icon="add" title="创建" v-if="user.hasPermission('addSet')" @click="onButtonClick('add')"></svg-icon>
       <svg-icon icon="edit" title="编辑" v-if="user.hasPermission('editSet')" :class="isDisabled('edit') ? 'icon--disable' : ''" @click="onButtonClick('edit')"></svg-icon>
       <svg-icon icon="saveas" title="另存为" v-if="user.hasPermission('saveAsSet')" :class="isDisabled('saveAs') ? 'icon--disable' : ''" @click="onButtonClick('saveAs')"></svg-icon>
-      <svg-icon icon="delete" title="删除" v-if="user.hasPermission('deleteSet')" :class="isDisabled('delete') ? 'icon--disable' : ''" @click="onButtonClick('delete')"></svg-icon>
+      <a-popconfirm placement="topRight" v-if="user.hasPermission('deleteSet')"  
+        :title="title=='地图集' ? '地图集删除后，关联数据（场景、地图等）将会一起删除，是否删除？' : '场景集删除后，关联数据将会一起删除，是否删除？'" 
+        :okButtonProps="{type: 'link'}" :cancelButtonProps="{type: 'text'}"
+        @confirm="onDeleteConfirm">
+        <svg-icon icon="delete" title="删除" v-if="user.hasPermission('deleteSet')" :class="isDisabled('delete') ? 'icon--disable' : ''"></svg-icon>
+      </a-popconfirm>
     </div>
     <!-- 调整组件大小 -->
     <div class="resize-handler" @mousedown="onResizeStart"></div>
   </div>
-
-  <!-- 删除确认弹窗 -->
-  <a-modal v-model:visible="showDeleteConfirm" width="260px" :closable="false" :footer="null">
-    <div class="ant-popover-inner">
-      <div class="ant-popover-inner-content">
-      <div class="ant-popover-message">
-        <span v-if="title=='地图集'">地图集删除后，关联数据（场景、地图等）将会一起删除，是否删除？</span>
-        <span v-else>场景集删除后，关联数据将会一起删除，是否删除？</span>
-      </div>
-      <div class="ant-popover-buttons" style="position: relative; left: 7px;">
-        <a-button type="text" size="small" @click="closeDeleteConfirm">取消</a-button>
-        <a-button type="link" size="small" @click="onDeleteConfirm" >确定</a-button>
-      </div>
-    </div>
-    </div>
-  </a-modal>
 </template>
 
 <script setup lang="ts">
@@ -179,12 +168,8 @@ const onButtonClick = (type: string) => {
   
   cacheScrollTop()
 
-  if (type == 'delete') {
-    showDeleteConfirm.value = true
-  } else {
-    const handler = func.handler || func
+  const handler = func.handler || func
     handler(selectedNode.value)
-  }
 }
 
 const closeDeleteConfirm = () => (showDeleteConfirm.value = false)

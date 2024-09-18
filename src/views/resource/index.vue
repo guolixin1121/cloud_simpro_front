@@ -27,13 +27,13 @@
         :destroy-on-close="true" @close="modal.visible = false">
         <a-form class="modal-content view-form" :labelCol="{ style: { width: '80px' } }">
             <a-form-item label="场景集名称">
-                <div class="break-text thin-scrollbar">{{ selectedSceneset.name }}</div>
+                <div class="break-text">{{ selectedSceneset.name }}</div>
             </a-form-item>
             <a-form-item label="场景集描述">
-                <div style="max-height: 150px; overflow: auto;" class="break-text desc thin-scrollbar">{{ selectedSceneset.desc || '--' }}</div>
+                <div style="max-height: 150px; overflow: auto;" class="break-text desc">{{ selectedSceneset.desc || '--' }}</div>
             </a-form-item>
             <a-form-item label="标签">
-                <div class="labels thin-scrollbar" v-if="selectedSceneset.labels_detail.length > 0">
+                <div class="labels" v-if="selectedSceneset.labels_detail.length > 0">
                     <span v-for="label in selectedSceneset.labels_detail" :key="label.name"
                         class="inline-block mr-2">
                         {{ label.display_name }}
