@@ -54,7 +54,7 @@ defineProps({
   },
   labelWidth: {
     type: Number,
-    default: () => 100
+    default: () => 65
   }
 })
 </script>

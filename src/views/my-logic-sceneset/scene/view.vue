@@ -1,5 +1,5 @@
 <template>
-    <form-view :title="sceneName" subtitle="场景详情" :items="formItems" :loading="loading" :labelWidth="80">
+    <form-view :title="sceneName" subtitle="场景详情" :items="formItems" :loading="loading">
       <a @click="goback(-1)">逻辑场景</a>
       <a class="cursor-auto">{{ sceneset?.name }}</a>
     </form-view>

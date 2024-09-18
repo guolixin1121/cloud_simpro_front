@@ -1,5 +1,4 @@
 <template>
-  <!-- top作为标记类，用于table计算自身高度以便填充满页面高度 -->
   <div class="white-block search-form" :class="{'opened': isOpened}">
     <a-form ref="form" :class="'col-' + colLimit"
       layout="inline" :model="formState" v-bind="$attrs">
@@ -28,6 +27,25 @@
           @change="(value: string|string[]) => onTreeSelectChange(item.key, value)"
         >
         </tree-select>
+        <a-range-picker
+          v-else-if="item.type == 'range-picker'"
+          allowClear
+          v-model:value="formState[item.key]"
+          v-on="item"
+         >
+          <template #nextIcon>
+            <svg-icon icon="arrow_right"></svg-icon>
+          </template>
+          <template #prevIcon>
+            <svg-icon icon="arrow_left"></svg-icon>
+          </template>
+          <template #superNextIcon>
+            <svg-icon icon="arrow_doubleright"></svg-icon>
+          </template>
+          <template #superPrevIcon>
+            <svg-icon icon="arrow_doubleleft"></svg-icon>
+          </template>
+        </a-range-picker>
         <component
           v-else
           :is="Ant[getComponent(item.type)]"
@@ -190,9 +208,9 @@ const getComponent = (name: string) =>
  */
 const getDefaultStyle = (name: string) => {
   const styleMap = {
-    'range-picker': {
-      // 'value-format': 'YYYY-MM-DD'  // 重置时组件会出现invalid date的bug，换成取值时自己转换
-    },
+    // 'range-picker': {
+    //   // 'value-format': 'YYYY-MM-DD'  // 重置时组件会出现invalid date的bug，换成取值时自己转换
+    // },
     select: {
       'max-tag-count': 1,
       'max-tag-text-length': 4

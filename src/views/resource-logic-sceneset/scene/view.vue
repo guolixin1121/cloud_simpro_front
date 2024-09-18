@@ -1,5 +1,5 @@
 <template>
-  <form-view :title="sceneName" subtitle="场景详情" :items="formItems" :loading="loading" :labelWidth="80">
+  <form-view :title="sceneName" subtitle="场景详情" :items="formItems" :loading="loading">
     <router-link to="/resource-logic-sceneset/">逻辑场景</router-link>
     <a @click='goback()'>{{ sceneset?.name }}</a>
     <!-- <template v-slot:button>

@@ -537,7 +537,7 @@ button.ant-btn-primary[disabled] {
   .scroll-box {
     margin: 10px 0px;
     margin-right: -12px;
-    padding-right: 8px;
+    padding-right: 12px;
     overflow: auto;
     .ant-checkbox-group { width: 100%; }
     .ant-checkbox-group-item,
@@ -1069,7 +1069,12 @@ input::placeholder,
     border-bottom-color: fade(#171f26, 10)
   }
   .ant-picker-range-arrow { display: none !important; }
-
+  &.ant-picker-dropdown-range { padding: 0px !important; }
+  .ant-picker-cell-range-end { color: var(--text-second-color); }
+  .ant-picker-cell-today:before {
+    background-color: #fff !important;
+  }
+  // .ant-picker-cell-disabled { color: var(--text-second-color)}
   // .ant-picker-cell-in-view.ant-picker-cell-range-start:not(.ant-picker-cell-range-start-single)::before {
   //   background-color: var(--active-color);
   // }
