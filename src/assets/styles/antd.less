@@ -868,6 +868,9 @@ button.ant-btn-primary[disabled] {
   .ant-select-tree-node-content-wrapper:hover {
     background-color: transparent !important;
   }
+  .ant-select-tree-list-scrollbar {
+    width: 4px !important;
+  }
 }
   
 .ant-select-dropdown.ant-tree-select-dropdown {
@@ -1070,7 +1073,7 @@ input::placeholder,
   }
   .ant-picker-range-arrow { display: none !important; }
   &.ant-picker-dropdown-range { padding: 0px !important; }
-  .ant-picker-cell-range-end { color: var(--text-second-color); }
+  .ant-picker-cell-range-end, .ant-picker-cell-range-start { color: var(--text-second-color); }
   .ant-picker-cell-today:before {
     background-color: #fff !important;
   }
@@ -1105,25 +1108,6 @@ input::placeholder,
     background-color: var(--active-color);
     width: 100%;
   }
-  // tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:last-child::after,
-  // tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover-start:last-child::after,
-  // .ant-picker-cell-in-view.ant-picker-cell-end.ant-picker-cell-range-hover-edge-end.ant-picker-cell-range-hover-edge-end-near-range::after,
-  // .ant-picker-cell-in-view.ant-picker-cell-range-hover-edge-end:not(.ant-picker-cell-range-hover-edge-end-near-range)::after,
-  // .ant-picker-cell-in-view.ant-picker-cell-range-hover-end::after {
-  //   border-right: 1px dashed #e6f7ff;
-  // }
-  // tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after,
-  // tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover-end:first-child::after,
-  // .ant-picker-cell-in-view.ant-picker-cell-start.ant-picker-cell-range-hover-edge-start.ant-picker-cell-range-hover-edge-start-near-range::after,
-  // .ant-picker-cell-in-view.ant-picker-cell-range-hover-edge-start:not(.ant-picker-cell-range-hover-edge-start-near-range)::after,
-  // .ant-picker-cell-in-view.ant-picker-cell-range-hover-start::after,
-  // tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover:first-child::after,
-  // tr > .ant-picker-cell-in-view.ant-picker-cell-range-hover-end:first-child::after,
-  // .ant-picker-year-panel .ant-picker-cell-range-hover-start::after,
-  // .ant-picker-quarter-panel .ant-picker-cell-range-hover-start::after,
-  // .ant-picker-month-panel .ant-picker-cell-range-hover-start::after {
-  //   border-left: 1px dashed #e6f7ff;
-  // }
   .ant-picker-cell-disabled::before {
     background-color: var(--gray-global-bg-color);
   }
