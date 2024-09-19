@@ -108,7 +108,6 @@ let isDataAllLoaded = false
 
 onMounted(async () => {
   treeHeight.value = document.querySelector('.tree-container')?.clientHeight
-  alert(treeHeight.value)
   initSearchQuery()
 
   // 调整树宽度
