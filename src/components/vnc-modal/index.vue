@@ -56,3 +56,10 @@ const getData = async () => {
      }
  }
  </script>
+ <style lang="less">
+.ant-table-bordered {
+    .ant-table-tbody tr:last-child td {
+        border-bottom-color: var(--table-border-color);
+    }
+}
+</style>

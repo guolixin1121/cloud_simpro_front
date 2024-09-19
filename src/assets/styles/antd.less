@@ -12,7 +12,9 @@
     padding: 16px;
   }
 }
-
+.ant-row {
+  align-items: center;
+}
 button.ant-btn:not(.ant-btn-primary):not(.ant-btn-link):not(.ant-btn-text) {
   color: var(--text-main-color);
   box-shadow: none;
@@ -870,6 +872,12 @@ button.ant-btn-primary[disabled] {
   }
   .ant-select-tree-list-scrollbar {
     width: 4px !important;
+    .ant-select-tree-list-scrollbar-thumb {
+      background-color: rgba(96,102,110,0.5) !important;
+      &:hover {
+        background: rgba(96,102,110,0.9) !important;
+      }
+    }
   }
 }
   
