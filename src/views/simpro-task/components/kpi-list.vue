@@ -33,7 +33,7 @@
         <div class="scroll-box scroll-box-right" style="height: calc(100% - 40px)">
           <ul>
             <li class="transfer-checked-item flex justify-between items-center" v-for="item in selectedNodes" :key="item.value">
-              <div>{{ item.name }}</div>
+              <div style="width: 70%">{{ item.name }}</div>
               <div>
                 <template v-if="item.threshold?.threshold_type == 0">
                   <div class="flex">

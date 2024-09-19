@@ -12,9 +12,6 @@
     padding: 16px;
   }
 }
-.ant-row {
-  align-items: center;
-}
 button.ant-btn:not(.ant-btn-primary):not(.ant-btn-link):not(.ant-btn-text) {
   color: var(--text-main-color);
   box-shadow: none;
@@ -90,8 +87,8 @@ button.ant-btn-primary[disabled] {
 
   .ant-form-item-label > label,
   .ant-form-item-control-input {
-    min-height: 20px;
-    height: 20px;
+    min-height: auto;
+    height: auto;
   }
 
   .ant-form-item:has(input),
@@ -322,7 +319,7 @@ button.ant-btn-primary[disabled] {
   }
 }
 
-.ant-table-wrapper + .ant-pagination {
+.ant-pagination {
   position: absolute;
   bottom: 24px;
   right: 24px;
@@ -699,6 +696,15 @@ button.ant-btn-primary[disabled] {
       display: inline-flex !important;
       justify-content: center !important;
       align-items: center !important;
+    }
+  }
+  .ant-tree-list-scrollbar {
+    width: 4px !important;
+    .ant-tree-list-scrollbar-thumb {
+      background-color: rgba(96,102,110,0.5) !important;
+      &:hover {
+        background: rgba(96,102,110,0.9) !important;
+      }
     }
   }
 }

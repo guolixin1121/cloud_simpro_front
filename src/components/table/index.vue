@@ -25,7 +25,7 @@
       </template>
     </template>
   </a-table>
-  <a-pagination v-model:current="pagination.current" :page-size="pagination.size" :total="pagination.total" :show-total="pagination['show-total']" @change="onChange"/>
+  <a-pagination v-if="$attrs.pagination" v-model:current="pagination.current" :page-size="pagination.size" :total="pagination.total" :show-total="pagination['show-total']" @change="onChange"/>
 </template>
 
 <script setup lang="ts">

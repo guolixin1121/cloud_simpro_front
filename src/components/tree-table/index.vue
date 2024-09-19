@@ -1,4 +1,5 @@
 <template>
+  <div class="relative" style="height: calc(100% - 24px)">
   <a-spin :spinning="loading">
     <vxe-table stripe ref="table" 
       style="margin-top: 16px;"
@@ -38,6 +39,7 @@
     </vxe-table>
   </a-spin>
   <a-pagination v-if="page.hasPagination" :total="page.total" :show-total="(total: number) => `共 ${total} 条`" :page-size="page.size" v-model:current="current" @change="onPageChange" />
+  </div>
 </template>
 
 <script setup lang="ts">

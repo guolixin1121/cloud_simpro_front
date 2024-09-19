@@ -14,7 +14,8 @@
         </a-tree>
       </a-spin>
       <!-- 刷新数据需要重新渲染，否则展开节点会有bug -->
-      <a-tree v-if="!loading" :show-icon="showIcon" :load-data="lazy ? loadData : null" :tree-data="treeData" :expandedKeys="expandRowKeys" :selectedKeys="selectedRowKeys" @expand="onExpand" @select="onSelect">
+      <a-tree v-if="!loading" :show-icon="showIcon" :load-data="lazy ? loadData : null" 
+        :height="treeHeight" :tree-data="treeData" :expandedKeys="expandRowKeys" :selectedKeys="selectedRowKeys" @expand="onExpand" @select="onSelect">
         <template #icon="{ isLeaf }">
           <svg-icon :icon="isLeaf ? 'leaf' : 'folder'"></svg-icon>
         </template>
@@ -98,7 +99,7 @@ const searchText = useSessionStorage(routeName + ':tree-search', '') // 搜索�
 const isSearched = useSessionStorage(routeName + ':tree-isSearched', false)
 const searchQuery = ref() // 实际执行搜索的搜索条件
 let searchID = useRoute().query.id // 是否是id精确搜索
-
+const treeHeight = ref()
 
 const loading = ref(false)
 const treeData = ref([])
@@ -106,6 +107,8 @@ let page = 1
 let isDataAllLoaded = false
 
 onMounted(async () => {
+  treeHeight.value = document.querySelector('.tree-container')?.clientHeight
+  alert(treeHeight.value)
   initSearchQuery()
 
   // 调整树宽度
