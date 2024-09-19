@@ -2,7 +2,7 @@
   <a-layout>
     <a-layout-header class="flex justify-between items-center">
       <!-- <i class="logo"></i> -->
-       <svg-icon icon="home" style="padding-top: 14px"></svg-icon>
+       <svg-icon icon="home" style="display: flex;"></svg-icon>
       <!-- <img src="../assets/images/icon_navlogo_home.png" alt="logo"/> -->
       <Header />
     </a-layout-header>
