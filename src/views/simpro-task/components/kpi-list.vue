@@ -8,8 +8,8 @@
         </div>
         <a-input-search placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
         <div class="scroll-box" style="height: calc(100% - 40px);" @scroll="(e: Event) => onScroll(e)">
-          <a-spin v-if="loading" style="width: 100%; padding-top: 20px"></a-spin>
-          <a-checkbox-group v-else v-model:value="leftState.checkedKeys" @change="onChecked">
+          <a-spin :spinning="loading" style="width: 100%; padding-top: 20px"></a-spin>
+          <a-checkbox-group v-model:value="leftState.checkedKeys" @change="onChecked">
             <template v-for="item in leftState.dataSource" :key="item.key" >
               <div class="checkbox-container">
                 <a-checkbox style="width: calc(100% - 24px)" class="ant-checkbox-group-item" :value="item.value" >
@@ -20,7 +20,6 @@
                 </a-tooltip>
               </div>
               </template>
-              
           </a-checkbox-group>
         </div>
       </div>

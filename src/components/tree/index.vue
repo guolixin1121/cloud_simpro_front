@@ -15,7 +15,7 @@
       </a-spin>
       <!-- 刷新数据需要重新渲染，否则展开节点会有bug -->
       <a-tree v-if="!loading" :show-icon="showIcon" :load-data="lazy ? loadData : null" 
-        :height="treeHeight" :tree-data="treeData" :expandedKeys="expandRowKeys" :selectedKeys="selectedRowKeys" @expand="onExpand" @select="onSelect">
+        :tree-data="treeData" :expandedKeys="expandRowKeys" :selectedKeys="selectedRowKeys" @expand="onExpand" @select="onSelect">
         <template #icon="{ isLeaf }">
           <svg-icon :icon="isLeaf ? 'leaf' : 'folder'"></svg-icon>
         </template>

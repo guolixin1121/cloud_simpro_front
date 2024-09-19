@@ -9,7 +9,7 @@
         <a-input-search placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
         <div class="scroll-box" style="height: calc(100% - 40px); overflow: auto" @scroll="(e: Event) => onScroll(e)">
           <a-spin v-if="loading" style="width: 100%; padding-top: 20px"></a-spin>
-          <a-checkbox-group v-else v-model:value="leftState.checkedKeys" :options="leftState.dataSource" @change="onChecked"> </a-checkbox-group>
+          <a-checkbox-group v-model:value="leftState.checkedKeys" :options="leftState.dataSource" @change="onChecked"> </a-checkbox-group>
         </div>
       </div>
       <!-- 右侧 -->
