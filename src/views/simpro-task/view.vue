@@ -53,7 +53,7 @@
           <span v-else>--</span>
         </a-form-item>
         <a-form-item label="评测指标">
-          <a-table style="margin-top: 0px" :pagination="false" :columns="thresholdColumns" :dataSource="formState.kpi_detail">
+          <a-table bordered style="margin-top: 0px" :pagination="false" :columns="thresholdColumns" :dataSource="formState.kpi_detail">
             <template #bodyCell="{record, column}">
               <template v-if="column.dataIndex == 'threshold_type'">
                 <template v-if="record.threshold_type == 0">

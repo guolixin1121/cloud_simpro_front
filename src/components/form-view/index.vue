@@ -10,6 +10,7 @@
         <slot name="button"></slot>
       </div>      
     </span>
+
     <div style="width: 55%">
       <a-spin :spinning="loading">
         <a-form class="view-form" :labelCol ="{ style: { width: labelWidth + 'px' } }">

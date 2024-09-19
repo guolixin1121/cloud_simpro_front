@@ -47,11 +47,11 @@
       <a-form ref="scenesetCloneForm" class="modal-content save-modal" :model="scenesetModal" 
         :labelCol ="{ style: { width: '100px' } }" 
         @finish="onConfirmCloneSceneset">
-          <a-form-item name="cloneName" style="width: 74%"
+          <a-form-item name="cloneName"
             :rules="[{ required: true, message: '请输入另存为场景集名称'},
             { validator: () => checkChName(scenesetModal.cloneName, 160) } ]">
-            <span>我的场景-具体场景</span>
-            <ch-input v-model:value="scenesetModal.cloneName" :maxlength="160" placeholder="请输入另存为场景集名称"></ch-input>
+            <span style="padding-right: 10px;">我的场景-具体场景</span>
+            <ch-input style="width: calc(100% - 128px)" v-model:value="scenesetModal.cloneName" :maxlength="160" placeholder="请输入另存为场景集名称"></ch-input>
           </a-form-item>
       </a-form>
       <div class="modal-buttons">
