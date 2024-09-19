@@ -96,7 +96,7 @@ const columns = [
 // const loopVnc = async (id: String) => {
 //   if(count >= 8) {
 //     loading.value = false
-//     message.info('连接服务器失败')
+//     message.success('连接服务器失败')
 //     return
 //   }
 //   try {

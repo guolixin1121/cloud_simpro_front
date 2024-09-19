@@ -16,7 +16,7 @@ export default function useSubmit() {
         try {
             isAdd ? await api.add(params) : await api.edit(params)
     
-            message.info(isAdd ? '创建成功' : '修改成功')
+            message.success(isAdd ? '创建成功' : '修改成功')
             goback()
         } finally {
             loading.value = false

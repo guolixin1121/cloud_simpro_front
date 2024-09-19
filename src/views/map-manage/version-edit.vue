@@ -69,7 +69,7 @@ const add = async () => {
   try {
     await mapApi.editMapVersion({ id, data: { ...params } })
     loading.value = false
-    message.info('修改成功')
+    message.success('修改成功')
     goback()
   } catch {
     loading.value = false

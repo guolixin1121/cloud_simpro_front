@@ -70,7 +70,7 @@ const add = async () => {
   try {
     isAdd ? await currentApi.addSceneset(params) : await currentApi.editSceneset({ id, data: params })
 
-    message.info(`${actionText}成功`)
+    message.success(`${actionText}成功`)
     goback()
   } finally {
     loading.value = false

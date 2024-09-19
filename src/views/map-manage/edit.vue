@@ -156,7 +156,7 @@ const add = async () => {
   try {
     isAdd ? await mapApi.addMaps({ ...params }) : await mapApi.editMaps({ id, data: { ...params } })
     loading.value = false
-    message.info(isAdd ? '上传成功' : '修改成功')
+    message.success(isAdd ? '上传成功' : '修改成功')
     goback()
   } catch {
     loading.value = false

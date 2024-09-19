@@ -100,9 +100,9 @@ button.ant-btn-primary[disabled] {
 }
 // 详情页的form label
 .view-form.ant-form {
-  .ant-form-item {
-    margin-bottom: 14px;
-  }
+  // .ant-form-item {
+  //   margin-bottom: 14px;
+  // }
   .ant-form-item-label label {
     color: var(--text-second-color);
   }
@@ -718,7 +718,7 @@ button.ant-btn-primary[disabled] {
 .left-tree .ant-tree {
   .ant-tree-switcher {
     position: absolute;
-    right: 5px;
+    right: 24px;
     color: var(--gray-color);
     transition: transform 0.3s cubic-bezier(0.645, 0.045, 0.355, 1)
   }
@@ -788,6 +788,9 @@ button.ant-btn-primary[disabled] {
       padding: 12px 24px;
       border-radius: 4px 4px 0 0;
       border-color: var(--gray-bg-color);
+    }
+    .ant-modal-close {
+      right: 5px;
     }
     .ant-modal-close-x {
       width: 49px;
@@ -870,6 +873,9 @@ button.ant-btn-primary[disabled] {
   }
   .ant-select-tree-switcher-noop {
     width: 8px;
+  }
+  .ant-select-tree-indent-unit {
+    width: 12px;
   }
   .ant-select-tree-treenode:hover {
     background-color: var(--gray-global-bg-color) !important;

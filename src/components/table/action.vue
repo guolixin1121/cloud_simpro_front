@@ -75,7 +75,7 @@ const onHandler = async ({ column, record }: RObject, key: string) => {
     try {
       key != '删除' && emits('before-handler') // 操作时将table设置为loading，避免重复操作
       await handler(record)
-      message.info(key + '成功')
+      message.success(key + '成功')
     } finally {
       emits('refresh')
     }

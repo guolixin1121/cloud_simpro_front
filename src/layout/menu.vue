@@ -37,7 +37,7 @@ const openOuterlink = (url: string) => {
           <span>{{ menu.title }}</span>
         </template>
         <template #expandIcon="{isOpen}">
-          <span style="position: absolute; right: 6px; top: -2px">
+          <span class="submenu-arrow">
             <svg-icon v-if="isOpen" icon="arrow-up"></svg-icon>
             <svg-icon v-else icon="arrow-down"></svg-icon>
           </span>
@@ -69,5 +69,11 @@ const openOuterlink = (url: string) => {
     top: 2px;
     margin-right: 3px;
   }
+}
+.submenu-arrow {
+  position: absolute; right: 6px; top: -2px
+}
+.ant-menu-inline-collapsed {
+  .submenu-arrow { display: none; }
 }
 </style>

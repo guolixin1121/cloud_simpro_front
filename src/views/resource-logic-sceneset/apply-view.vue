@@ -54,15 +54,17 @@
       </template>
     </a-form>
     <a-form class="view-form" :model="formState" :labelCol ="{ style: { width: '65px' } }" style="width: 65%">
-      <p  class="sub-title">申请信息</p>
+      <p  class="sub-title" style="margin-top: 24px">申请信息</p>
       <a-form-item label="申请原因">
         <span class="break-text">{{ formState.reason || '--' }}</span>
       </a-form-item>
       <a-form-item label="申请时间">
         {{ formState.create_time }}
       </a-form-item>
+    </a-form>
 
-      <p class="sub-title">审批结果</p>
+    <a-form class="view-form" :model="formState" style="width: 65%" :labelCol ="{ style: { width: '65px' } }">
+      <p class="sub-title" style="margin-top: 24px">审批结果</p>
       <a-form-item label="任务状态">
         <span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></a-form-item>
       <a-form-item label="审批意见">

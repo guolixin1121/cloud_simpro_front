@@ -104,7 +104,7 @@ const add = async () => {
   try {
     isAdd ? await sensorApi.add({ ...params }) : await sensorApi.edit({ id, data: { ...params } })
     loading.value = false
-    message.info(isAdd ? '新建成功' : '修改成功')
+    message.success(isAdd ? '新建成功' : '修改成功')
     goback()
   } catch {
     loading.value = false

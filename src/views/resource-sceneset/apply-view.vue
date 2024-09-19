@@ -52,25 +52,27 @@
     </a-form>
 
     <a-form class="view-form" :model="formState" style="width: 65%" :labelCol ="{ style: { width: '65px' } }">
-      <p class="sub-title">申请信息</p>
+      <p class="sub-title" style="margin-top: 24px">申请信息</p>
       <a-form-item label="申请原因">
         <span class="break-text">{{ formState.reason || '--' }}</span>
       </a-form-item>
       <a-form-item label="申请时间">
         {{ formState.create_time }}
       </a-form-item>
+    </a-form>
 
-       <p class="sub-title">审批结果</p>
+    <a-form class="view-form" :model="formState" style="width: 65%" :labelCol ="{ style: { width: '65px' } }">
+       <p class="sub-title" style="margin-top: 24px">审批结果</p>
        <a-form-item label="任务状态" name="status">
         <span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span>
        </a-form-item>
        <a-form-item label="审批意见" name="comments">
         <span>{{ formState.comments || '--' }}</span>
        </a-form-item>
-        <div class="my-4">
+        <a-form-item>
           <a-button type="primary" class="mr-4" v-if="formState.data"  @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
           <a-button @click="goback()">返回</a-button>
-        </div>
+        </a-form-item>
     </a-form>
   </div>
 </template>

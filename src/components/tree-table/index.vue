@@ -206,7 +206,7 @@ const onHandler = async (column: any, record: RObject, key: string) => {
   const isAync = handler.constructor.name === 'AsyncFunction'
   if (isAync) {
     await handler(record)
-    message.info(key + '成功')
+    message.success(key + '成功')
     refresh()
   } else {
     handler(record)

@@ -160,7 +160,7 @@ const onStop = async (record: RObject) => {
   try {
     loading.value = true
     await api.task.cancel({ sim_task_id: record.id })
-    message.info('停止成功')
+    message.success('停止成功')
     table.value.refresh()
   } finally {
     loading.value = false

@@ -117,7 +117,7 @@ const add = async () => {
       ? await currentApi.addScene(params)
       : await currentApi.editScene({ id, data: params })
 
-    message.info(`${actionText}成功`)
+    message.success(`${actionText}成功`)
     goback()
   } finally {
     loading.value = false

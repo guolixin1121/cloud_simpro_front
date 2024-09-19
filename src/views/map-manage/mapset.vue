@@ -84,7 +84,7 @@ const add = async () => {
       ? await currentApi.add(formState)
       : await currentApi.edit({ id, data: {...formState} })
 
-    message.info(`${actionText}成功`)
+    message.success(`${actionText}成功`)
     goback()
   } finally {
     loading.value = false

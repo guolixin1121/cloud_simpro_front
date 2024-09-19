@@ -39,7 +39,8 @@
   <a-modal v-model:visible="showModal" title="泛化结果分布" :footer="null" width="50%"
     :destroyOnClose="true">
     <div class="modal-content">
-      <chart style="height: 500px" :option="chartOptions"> </chart>
+      <empty v-if="!chartOptions"></empty>
+      <chart v-else style="height: 500px" :option="chartOptions"> </chart>
     </div>
   </a-modal>
 </template>
@@ -59,7 +60,7 @@ const listApi = (args:any) => currentApi.getResultList({ ...args, source: active
 
 const sceneset = store.catalog.sceneCatalog
 const showModal = ref(false)
-const chartOptions = ref({})
+const chartOptions = ref()
 
 /****** 表格区域 */
 const columns = [
@@ -75,7 +76,7 @@ const columns = [
     actions: {
       '泛化结果分布': (record:any) => {
         showModal.value = true
-        chartOptions.value = []
+        chartOptions.value = null
         const distribution = record.result_params_distribution?.[0]
         if(!distribution) return
 

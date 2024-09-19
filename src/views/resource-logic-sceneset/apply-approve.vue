@@ -145,7 +145,7 @@ const onApprove = async (isAproved: boolean = true) => {
   try {
     isAproved ? await currentApi.approve(params) : await currentApi.reject(params)
 
-    message.info(isAproved ? `任务已批准` : '任务已驳回')
+    message.success(isAproved ? `任务已批准` : '任务已驳回')
     goback()
   } finally {
     isAproved ? isApproving.value = false : isRejecting.value = false
