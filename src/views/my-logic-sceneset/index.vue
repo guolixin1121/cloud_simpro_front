@@ -343,7 +343,7 @@ const treeBtnHandlers = {
 }
 .save-modal {
   .ant-form-item-explain-error {
-    margin-left: 125px;
+    margin-left: 128px;
   }
 }
 </style>
