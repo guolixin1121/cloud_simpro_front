@@ -99,7 +99,7 @@ const columns = [
         // 此按钮根据‘仿真结果’菜单项的权限来判断
         validator: () => user.hasAcl('cloud:simulation:results'),
         handler: (data: RObject) => {
-          SStorage.remove('simpro-result')
+          SStorage.remove('/simpro-result/')
           router.push('/simpro-result/?templateId=' + data.number)
         }
       },
