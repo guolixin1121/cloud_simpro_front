@@ -17,9 +17,7 @@
             <div class="message-body">
               {{ chat.message }}
               <div class="message-footer" v-if="showPath(chat)">
-                <div>
-                  场景文件保存路径：我的场景/具体场景/场景集：{{chat.scene?.sceneset_name}}/场景：{{chat.scene?.adsName }}
-                </div>
+                <div>场景文件保存路径：我的场景/具体场景/场景集：{{chat.scene?.sceneset_name}}/场景：{{chat.scene?.adsName }}</div>
                 <a class="text-link" @click="preview(chat)">查看</a>
               </div>
             </div>
