@@ -6,11 +6,11 @@
   </div>
 
   <div class="flex justify-between" style="height: calc(100% - 20px)">
-    <div class="white-block" style="width: 60%; overflow-y: auto">
+    <div class="white-block" style="width: calc(100% - 436px); overflow-y: auto">
       <span class="title mb-5">{{ title }}</span>
 
       <a-spin :spinning="dataLoading">
-        <a-form :model="formState" :labelCol ="{ style: { width: '65px' } }">
+        <a-form class="view-form" :model="formState" :labelCol ="{ style: { width: '65px' } }">
           <p class="sub-title">申请信息</p>
           <a-form-item label="申请人" >
             {{ formState.apply_username }}
@@ -22,8 +22,8 @@
             <span class="break-text">{{ formState.reason || '--' }}</span>
           </a-form-item>
           </a-form>
-        <a-form :model="formState" :labelCol ="{ style: { width: isSceneset ? '80px' : '65px' } }">
-          <p class="sub-title" style="margin-top: 8px">{{ isSceneset ? '场景集信息' : '场景信息' }}</p>
+        <a-form class="view-form" :model="formState" :labelCol ="{ style: { width: isSceneset ? '80px' : '65px' } }">
+          <p class="sub-title" style="margin-top: 24px">{{ isSceneset ? '场景集信息' : '场景信息' }}</p>
           <template v-if="formState.data">
             <template v-if="isSceneset">
               <a-form-item label="场景集ID">{{ formState.data.id }}</a-form-item>
@@ -66,15 +66,15 @@
         </a-form>
       </a-spin>
     </div>
-    <div class="white-block" style="width: 40%; margin-left: 16px;">
-      <span class="title mb-5">审批意见</span>
+    <div class="white-block" style="width: 436px; margin-left: 16px;">
+      <span class="title" style="margin-bottom: 16px;">审批意见</span>
 
       <a-spin :spinning="dataLoading">
-        <p v-if="isApproved">审批状态：<span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></p>
+        <div v-if="isApproved"><span class="label" style="margin-right: 8px;margin-bottom: 16px;">审批状态</span><span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></div>
         <template v-if="!isApproved">
-          <ch-input type="textarea" rows="15" :maxlength="255"
+          <ch-input type="textarea" style="height: 220px" :maxlength="255"
             placeholder="请输入审批意见" v-model:value="formState.comments" />
-          <div class="my-4">
+          <div style="margin-top: 16px;">
             <a-button type="primary" :loading="isApproving"  @click="onApprove(true)">批准</a-button>
             <a-button class="mx-4" :loading="isRejecting" @click="onApprove(false)">驳回</a-button>
             <a-button v-if="formState.data" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
@@ -82,7 +82,7 @@
         </template>
         <template v-else>
           <p class="comments">{{ formState.comments }}</p>
-          <div class="my-4">
+          <div style="margin-top: 16px;">
             <a-button type="primary"  v-if="formState.data" class="mr-4" @click="gotoPage()">{{isSceneset ? '查看场景集' : '查看场景'}}</a-button>
             <a-button @click="goback()">返回</a-button>
           </div>
@@ -138,7 +138,7 @@ const onApprove = async (isAproved: boolean = true) => {
   
   try {
     isAproved ? await currentApi.approve(params) : await currentApi.reject(params)
-    message.info(isAproved ? `任务已批准` : '任务已驳回')
+    message.success(isAproved ? `任务已批准` : '任务已驳回')
     goback()
   } finally {
     isAproved ? isApproving.value = false : isRejecting.value = false
@@ -171,7 +171,7 @@ getEditData()
 
 <style>
 .comments {
-  width: 100%; height: 400px; padding: 8px; border: 1px solid #d3d3d3;
+  width: 100%; height: 220px; padding: 8px; border: 1px solid #d3d3d3;
   word-break: break-all;
 }
 </style>

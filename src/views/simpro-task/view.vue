@@ -7,7 +7,7 @@
     <span class="title mb-5">仿真任务详情</span>
     <a-spin :spinning="loading">
       
-      <a-form :labelCol ="{ style: { width: labelWidth + 'px' } }"  style="width: 55%">
+      <a-form class="view-form" :labelCol ="{ style: { width: labelWidth + 'px' } }"  style="width: 55%">
         <a-form-item label="任务ID">
           {{ formState.number }}
         </a-form-item>
@@ -53,7 +53,7 @@
           <span v-else>--</span>
         </a-form-item>
         <a-form-item label="评测指标">
-          <Table style="margin-top: 0px" :pagination="false" :columns="thresholdColumns" :dataSource="formState.kpi_detail">
+          <a-table bordered style="margin-top: 0px" :pagination="false" :columns="thresholdColumns" :dataSource="formState.kpi_detail">
             <template #bodyCell="{record, column}">
               <template v-if="column.dataIndex == 'threshold_type'">
                 <template v-if="record.threshold_type == 0">
@@ -79,7 +79,7 @@
                 </template>
               </template>
             </template>
-          </Table>
+          </a-table>
         </a-form-item>
         <a-form-item label="场景">
           <ul v-if="formState.scenes_detail.length > 0" class="view-list">
@@ -138,18 +138,7 @@ const getEditData = async () => {
     for(let prop in formState) {
       formState[prop as keyof typeof formState] = data[prop]
     }
-    labelWidth.value = data.mount == '1' ? 150 : 100
-    // formItems.value = [
-    //   { label: '评测指标ID', value: data.id },
-    //   { label: '评测指标名称', value: data.name },
-    //   { label: '评测指标类型', value: data.category_name },
-    //   { label: '指标文件地址', value: data.py_url },
-    //   { label: '指标值', value: data.threshold?.threshold_unit },
-    //   { label: '描述', value: data.desc },
-    //   { label: '创建时间', value: data.create_date },
-    //   { label: '修改时间', value: data.update_time },
-    //   { label: '所属用户', value: data.create_user },
-    // ]
+    labelWidth.value = data.mount == '1' ? 130 : 65
   } finally {
     loading.value = false
   }

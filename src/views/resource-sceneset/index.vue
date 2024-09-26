@@ -13,11 +13,9 @@
         <a-button v-if="user.hasPermission('grants')" type="primary" @click="gotoSubPage('/apply-manage/')">授权任务管理</a-button>
       </div>
     </div>
-    <div>
-      <Table ref='tableRef' :query="query" :columns="columns" :api="currentApi.getScenesetList"
-        :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
-      </Table>
-    </div>
+    <Table ref='tableRef' :query="query" :columns="columns" :api="currentApi.getScenesetList"
+      :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
+    </Table>
   </div>
 
   <a-modal v-model:visible="modal.visible" title="批量申请场景集授权"
@@ -70,7 +68,7 @@ const modal = reactive({
   reason: '' // 另存为的名字
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60, validator: (data: any) => user.isAdminProject() ? (data.delete_enable || data.apply_enable) : data.apply_enable },
+  { dataIndex: 'checkbox', width: 60, validator: (data: any) => data.delete_enable },
   { title: '场景集ID', dataIndex: 'id', width: 150 },
   { title: '场景集名称', dataIndex: 'name', ellipsis: true },
   { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
@@ -81,12 +79,12 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: user.hasPermission('apply') ? 200 : 150,
+    width: 150,
     actions: {
-      申请授权: {
-        validator: (data : RObject) => data.apply_enable,
-        handler: ({ id }: RObject) => gotoSubPage('/apply/' + id)
-      },
+      // 申请授权: {
+      //   validator: (data : RObject) => data.apply_enable,
+      //   handler: ({ id }: RObject) => gotoSubPage('/apply/' + id)
+      // },
       查看: {
         handler: ({ id }: RObject) => gotoSubPage('/scene/?pid=' + id)
       },

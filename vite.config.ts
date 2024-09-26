@@ -33,8 +33,7 @@ export default defineConfig(({ mode }) => {
       preprocessorOptions: {
         less: {
           modifyVars: {
-            'primary-color': '#00AF59',
-            'link-color': '#00AF59',
+            hack: 'true; @import "@/assets/styles/variable.less"'
           },
           javascriptEnabled: true,
         }

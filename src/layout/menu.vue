@@ -1,4 +1,16 @@
 <script setup lang="ts">
+import { SStorage } from '@/utils/storage'
+const upgradeModal = ref()
+const route = useRoute()
+watch(route, () => {
+  const clear = route.query.clear === null
+  const isBrowserBack = window.history.state.forward // 是否是浏览器回退
+  if (clear && !isBrowserBack) {
+    SStorage.clear()
+  }
+})
+
+// import { getToken, LStorage } from '@/utils/storage'
 const props = defineProps({
   menus: {
     type: Array<Permission>,
@@ -6,6 +18,14 @@ const props = defineProps({
   }
 })
 const isSubmenu = (children: Permission[] | undefined) => !children ? false : !!children.find((child: Permission) => child.visible)
+const isOuterlink = (url: string) => url.indexOf('http') > -1
+const openOuterlink = (url: string) => {
+  if(store.user.isRegisterUser()) {
+    upgradeModal.value.show()
+  } else {
+     window.open(url, 'new')
+  }
+}
 </script>
 
 <template>
@@ -16,6 +36,14 @@ const isSubmenu = (children: Permission[] | undefined) => !children ? false : !!
           <svg-icon class="ant-menu-item-icon" :icon="menu.icon || ''"></svg-icon>
           <span>{{ menu.title }}</span>
         </template>
+        <template #expandIcon="{isOpen}">
+          <span class="submenu-arrow">
+            <svg-icon v-if="isOpen" icon="arrow-up"></svg-icon>
+            <svg-icon v-else icon="arrow-down"></svg-icon>
+          </span>
+          <!-- <img v-if="isOpen" width="14px" class="ant-menu-submenu-arrow" style="margin-top:-3px; width: 14px" src="@/assets/images/icon_arrow_up.png" />
+          <img v-else class="ant-menu-submenu-arrow"  style=" width: 14px" src="@/assets/images/icon_arrow_down.png" /> -->
+        </template>
         <Menu :menus="menu.children" />
       </a-sub-menu>
       <template v-else>
@@ -23,12 +51,14 @@ const isSubmenu = (children: Permission[] | undefined) => !children ? false : !!
           <!-- icon的class在菜单缩放隐藏菜单名称时需要 -->
           <svg-icon class="ant-menu-item-icon" :icon="menu.icon || ''"></svg-icon>
           <span>
-            <router-link :to="menu.path + '?clear'">{{ menu.title }}</router-link>
+            <a v-if="isOuterlink(menu.path)" @click="openOuterlink(menu.path)">{{ menu.title }}</a>
+            <router-link  v-else :to="menu.path + '?clear'">{{ menu.title }}</router-link>
           </span>
         </a-menu-item>
       </template>
     </template>
   </template>
+  <upgrade ref="upgradeModal" module="simulationManage"></upgrade>
 </template>
 
 <style lang="less">
@@ -39,5 +69,11 @@ const isSubmenu = (children: Permission[] | undefined) => !children ? false : !!
     top: 2px;
     margin-right: 3px;
   }
+}
+.submenu-arrow {
+  position: absolute; right: 6px; top: -2px
+}
+.ant-menu-inline-collapsed {
+  .submenu-arrow { display: none; }
 }
 </style>

@@ -75,13 +75,3 @@ const emitSelect = () => {
 const clear = () => state.checkedList = []
 defineExpose({ clear })
 </script>
-
-<style lang="less">
-.ant-transfer-list {
-  padding: 8px 12px;
-}
-.ant-checkbox-wrapper {
-  display: flex;
-  margin-top: 4px;
-}
-</style>

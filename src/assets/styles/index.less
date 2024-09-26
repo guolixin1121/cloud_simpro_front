@@ -9,7 +9,9 @@
 .marginR-16 {
   margin-right: 16px;
 }
-
+.mb-5 {
+  margin-bottom: 16px;
+}
 .error {
   display: block;
   color: red;
@@ -18,13 +20,14 @@
   font-size: 12px;
 }
 .label {
+  display: inline-block;
   color: var(--text-second-color); 
   // padding-right: 8px;
 }
 .break-text {
   word-wrap: break-word; 
   // word-wrap:inherit;
-  vertical-align: middle;
+  // vertical-align: middle;
   white-space: break-spaces;
 }
 
@@ -93,33 +96,41 @@
 .view-list {
   border: 1px solid #e6e7eb;
   border-radius: 2px;
-  max-height: 120px;
+  max-height: 124px;
   width: 100%;
   overflow-y: auto;
-  padding: 6px 10px;
-  margin-top: 5px;
-  // padding-bottom: 0px;
+  padding: 8px 10px;
+  padding-bottom: 0px;
+  // margin-top: 5px;
+  margin-bottom: 0px;
   white-space: break-spaces;
 
   li {
-    background-color: var(--gray-globel-bg-color);
-    padding: 4px 8px;
+    background-color: var(--gray-global-bg-color);
+    padding: 4px 16px;
     margin-right: 10px;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
+    border-radius: 2px;
     display: inline-block;
   }
 }
 .ant-table {
   .label {
-    background-color: var(--gray-globel-bg-color);
+    background-color: var(--label-bg-color);
+    height: 24px;
+    border-radius: 2px;
     padding: 0px 8px;
-    margin-right: 8px;
+    margin-right: 4px;
     display: inline-block;
   }
 
   .table-striped {
     .label {
-      background: #E6E7EB;
+      background: #EBECF0;
+      margin-right: 4px;
+      height: 24px;
+      line-height: 24px;
+      border-radius: 2px;
     }
   }
 }
@@ -131,6 +142,7 @@
   border-radius: 4px;
   height: 100%;
   overflow: auto;
+  position: relative;
 
   .title-section {
     display: flex;
@@ -152,7 +164,6 @@
 }
 .main-tree {
   height: 100%;
-  overflow: auto;
   padding: 0;
   display: flex;
   width: 100% !important;
@@ -194,11 +205,9 @@
     .tree-container {
       overflow-y: auto;
       height: calc(100% - 100px);
+      margin: 0 -16px;
+      padding-left: 16px;
     }
-  }
-  .main-right {
-    // width: calc(100% - 232px - 16px);
-    // text-align: right;
   }
 }
 main {
@@ -216,10 +225,6 @@ main {
   }
 }
 
-.ant-form-item {
-  margin-bottom: 16px;
-}
-
 .ant-form-item-control {
   .ant-form-item-children {
     .ant-input {
@@ -233,7 +238,7 @@ main {
   margin-top: 16px;
   thead tr {
     text-align: left;
-    background: var(--gray-globel-bg-color);
+    background: var(--gray-global-bg-color);
   }
   tr {
     background-color: #fcfdff;

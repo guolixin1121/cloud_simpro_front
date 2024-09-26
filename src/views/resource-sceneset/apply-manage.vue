@@ -6,13 +6,13 @@
   <search-form ref="searchFormRef" :items="formItems" @search="onSearch"></search-form>
   <div class="main">
     <div class="title-section">
-      <a-tabs class="tabs" v-model:activeKey="activeKey" >
+      <a-tabs v-model:activeKey="activeKey" >
         <a-tab-pane :key="1" tab="场景集管理">
         </a-tab-pane>
         <a-tab-pane :key="2" tab="具体场景管理">
         </a-tab-pane>
       </a-tabs> 
-      <div v-if="user.isAdminProject() && user.hasPermission('approve')">
+      <div style="margin-top: -14px;" v-if="user.isAdminProject() && user.hasPermission('approve')">
         <a-button :disabled="checkedItems.length == 0" @click="modalVisible = true">审批</a-button>
       </div>
     </div>
@@ -37,7 +37,7 @@
     </Table>
   </div>
 
-  <a-modal title="批量审批" v-model:visible="modalVisible" :footer="null">
+  <a-modal title="批量审批" v-model:visible="modalVisible" :footer="null" width="480px">
     <div class="modal-content">
       <p>已勾选{{ checkedItems.length }}个任务，是否批准全部任务申请？审批之后无法修改，请谨慎操作。</p>
     </div>

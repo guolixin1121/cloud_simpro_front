@@ -1,17 +1,19 @@
 <template>
   <div class="breadcrumb">
-    <router-link to="/my-sceneset/">具体场景</router-link>
-    <a @click='goback()'>{{ sceneset?.name }}</a>
+    <a @click="goback()">具体场景</a>
+    <!-- <router-link to="/my-sceneset/">具体场景</router-link> -->
+    <a class="cursor-auto">{{ sceneset?.name }}</a>
     <span>{{ sceneName }}</span>
   </div>
   <iframe :src="previewUrl"></iframe>
 </template>
 
 <script setup lang="ts">
+import { goback } from '@/utils/tools'
 const { id } = useRoute().params
 let sceneset: any = null //store.catalog.sceneCatalog
-const router = useRouter()
-const goback = () => router.push('/my-sceneset/scene/?pid=' + sceneset.id)
+// const router = useRouter()
+// const goback = () => router.push('/my-sceneset/scene/?pid=' + sceneset.id)
 
 const sceneName = ref()
 const previewUrl = '/scene-simulation-client/#/overview/?type=2&id=' + id

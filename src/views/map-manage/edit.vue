@@ -6,7 +6,7 @@
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading"> 
-      <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 55%" @finish="add">
+      <a-form :class="isView ? 'view-form' : ''" :model="formState" :labelCol="{ style: { width: '95px' } }" style="width: 55%" @finish="add">
         <a-form-item label="所属地图集：" name="catalog" :rules="[{ required: isAdd, message: '请选择地图集'}]">
           <tree-select
             v-if="isAdd"
@@ -156,7 +156,7 @@ const add = async () => {
   try {
     isAdd ? await mapApi.addMaps({ ...params }) : await mapApi.editMaps({ id, data: { ...params } })
     loading.value = false
-    message.info(isAdd ? '上传成功' : '修改成功')
+    message.success(isAdd ? '上传成功' : '修改成功')
     goback()
   } catch {
     loading.value = false

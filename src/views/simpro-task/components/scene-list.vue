@@ -5,9 +5,9 @@
         <div class="flex justify-between ant-transfer-list-title">
           <span>场景集</span>
         </div>
-        <a-input-search class="my-2" v-model:value="searchSceneset" placeholder="请输入搜索内容" allowClear @search="onScenesetSearch" @pressEnter="onScenesetSearch"></a-input-search>
-        <div style="height: calc(100% - 40px); overflow: auto">
-          <a-tree v-if="!scenesetLoading" :tree-data="scenesets" :load-data="loadSubSceneset" 
+        <a-input-search v-model:value="searchSceneset" placeholder="请输入搜索内容" allowClear @search="onScenesetSearch" @pressEnter="onScenesetSearch"></a-input-search>
+        <div class="scroll-box" style="height: calc(100% - 40px); overflow: auto" @scroll="(e: Event) => onScroll(e)">
+          <a-tree :tree-data="scenesets"
             v-model:checkedKeys="selectedSceneset" 
             @select="onScenesetSelected"></a-tree>
           <a-spin :spinning="scenesetLoading" style="width: 100%; padding-top: 20px"></a-spin>
@@ -20,28 +20,26 @@
           <span class="text-link cursor-pointer" v-if="!isAllChecked" @click="onAllChecked">全选</span>
           <span class="text-link cursor-pointer" v-else @click="onAllUnchecked">取消选中</span>
         </div>
-        <div class="scroll-box" style="height: calc(100% - 70px); overflow: auto">
-          <a-spin :spinning="sceneLoading" v-if="scenes.length" >
-            <a-checkbox-group v-model:value="currentSelectedScenes">
-              <a-checkbox v-for="item in scenes" :key="item.id" :value="item.id" style="margin-left: 0"
-                @change="onSceneChecked">
-                <span class="label">{{ item.adsName }}</span>
-              </a-checkbox>
-            </a-checkbox-group>
-          </a-spin>
-          <div v-else>
-              <empty style="margin-top: 12%"/>
-          </div>
+        <div class="scroll-box scroll-box-right" style="height: calc(100% - 70px); overflow: auto">
+          <a-spin :spinning="sceneLoading" v-if="scenes.length" ></a-spin>
+          <a-checkbox-group v-model:value="currentSelectedScenes">
+            <a-checkbox v-for="item in scenes" :key="item.id" :value="item.id" style="margin-left: 0"
+              @change="onSceneChecked">
+              <span class="label">{{ item.adsName }}</span>
+            </a-checkbox>
+          </a-checkbox-group>
         </div>
         <!-- 全选 -->
-        <div class="flex justify-between" style="margin-top: 8px"  v-if="pagination.total > 0" >
+        <div class="relative flex justify-between items-center" style="margin: 8px 12px 0px 12px;"  v-if="pagination.total > 0" >
           <a-checkbox v-model:checked="isCurrentAllChecked"
               :indeterminate="indeterminate"
               @change="onCurrentAllChecked">当前页面已选中{{currentSelectedScenes.length}}项</a-checkbox>
           <a-pagination
               class="flex"
+              style="right: 0; bottom: 0"
+              size="small"
               v-model:pageSize="pagination.size" 
-              v-model:current="pagination.current" 
+              v-model:current="pagination.page" 
               :total="pagination.total"
               @change="onScenePageChanged"></a-pagination>
         </div>
@@ -58,13 +56,17 @@ type Scene = {
   id: string,
   adsName: string,
 }
-const scenesets = ref([]) // 场景集列表
+const scenesets = ref<any[]>([]) // 场景集列表
 const selectedSceneset = ref<string[]>([]) // 选中的场景集
 const searchSceneset = ref()
-
-let pagination = reactive({
+const scenesetPage = reactive({
+  isAllLoaded: false,
+  page: 1,
+  size: 10,
+})
+const pagination = reactive({
   total: 0,
-  current: 1,
+  page: 1,
   size: 20
 })
 const scenes = ref<Scene[]>([]) // 场景列表
@@ -77,20 +79,32 @@ const scenesetLoading = ref(false)
 const sceneLoading = ref(false)
 
 const getSceneset = async (query?: Object) => {
-  const res = await api.scenesets.getList({...query, version: 2, name: searchSceneset.value?.trim()})
-  return res.results.map((item: any) => ({
-    id: item.id,
-    key: item.id,
-    title: item.groupName,
-    name: item.groupName,
-    isLeaf: item.isLeaf
-  }))
+  try {
+    scenesetLoading.value = true
+    const res = await api.scenesets.getListV2({
+      ...query, 
+      name: searchSceneset.value?.trim(),
+      page: scenesetPage.page,
+      size: scenesetPage.size
+    })
+    const results = res.results.map((item: any) => ({
+      id: item.id,
+      key: item.id,
+      title: item.groupName,
+      name: item.groupName,
+      isLeaf: item.isLeaf
+    }))
+    scenesets.value.push(...results)
+    console.log(scenesets.value)
+  }  finally {
+    scenesetLoading.value = false
+  }
 }
 
 const getScenes = async (query?: Object) => {
   const res = await api.scene.getList({
     scene_set: selectedSceneset.value[0],
-    page: pagination.current,
+    page: pagination.page,
     size: pagination.size,
     ...query
   })
@@ -107,35 +121,41 @@ const loadScene = async (query: Object = {}) => {
   }
 }
 
-const loadSubSceneset = async (treeNode: any) => {
-  return new Promise((resolve: (value?: unknown) => void) => {
-    if (treeNode.dataRef.children) {
-      resolve();
-      return;
-    }
-    getSceneset({parent: treeNode.key}).then((res) => {
-      if(res.length == 0) {
-        treeNode.dataRef.isLeaf = true
-      }
-      treeNode.dataRef.children = res 
-      scenesets.value = [...scenesets.value]
-      resolve()
-    })
-  })
-}
+// const loadSubSceneset = async (treeNode: any) => {
+//   return new Promise((resolve: (value?: unknown) => void) => {
+//     if (treeNode.dataRef.children) {
+//       resolve();
+//       return;
+//     }
+//     getSceneset({parent: treeNode.key}).then((res) => {
+//       if(res.length == 0) {
+//         treeNode.dataRef.isLeaf = true
+//       }
+//       treeNode.dataRef.children = res 
+//       scenesets.value = [...scenesets.value]
+//       resolve()
+//     })
+//   })
+// }
 
 const onScenesetSearch = async () => {
-   try {
-    scenesetLoading.value = true
-    scenesets.value = await getSceneset()
-  } finally {
-    scenesetLoading.value = false
-  }
+  scenesetPage.page = 1
+  scenesets.value = []
+  getSceneset()
 }
 
+const onScroll = (e: any) => {
+  if (!scenesetPage.isAllLoaded) {
+    const { target } = e
+    if (target.scrollTop + target.offsetHeight >= target.scrollHeight - 50 && !scenesetLoading.value) {
+      scenesetPage.page = scenesetPage.page + 1
+      getSceneset()
+    }
+  }
+}
 // 切换场景集，重置所有数据
 // const onScenesetChecked = (checkedKeys: string[]) => {
-//   pagination.current = 1
+//   pagination.page = 1
 //   selectedSceneset.value = checkedKeys
 //   selectedScenes.value = []
 //   currentSelectedScenes.value = []
@@ -145,7 +165,7 @@ const onScenesetSearch = async () => {
 
 // 切换场景集: 重置所有数据, cancel other request
 const onScenesetSelected = async (selectedKeys: string[]) => {
-  pagination.current = 1
+  pagination.page = 1
   pagination.total = 0
   selectedSceneset.value = selectedKeys
   selectedScenes.value = []
@@ -156,7 +176,7 @@ const onScenesetSelected = async (selectedKeys: string[]) => {
 
 // 场景列表分页
 const onScenePageChanged = async (page: number) => {
-  pagination.current = page
+  pagination.page = page
   await loadScene()
   // 从全局选中数据中恢复当前选中数据
   currentSelectedScenes.value = selectedScenes.value.filter((item: any) => scenes.value.find((scene: any) => scene.id === item))
@@ -235,24 +255,17 @@ watch(selectedScenes, (newVal, oldVal) => {
 onMounted(onScenesetSearch)
 </script>
 
-<style lang="less" scoped>
-@import '@/assets/styles/variable.less';
-.ant-transfer-list-title {
-  padding-bottom: 8px;
-  border-bottom: 1px solid #e6e7eb;
-}
-</style>
 <style lang="less">
-.ant-transfer-list .ant-tree {
-  .ant-tree-treenode {
-    padding: 2px 0px !important;
-    width: 100%;
-  }
-  .ant-tree-treenode-selected {
-    background-color: var(--menu-active-bg-color);
-  }
-}
-.ant-transfer-list .ant-spin-nested-loading .ant-spin .ant-spin-dot {
-  top: 20%;
-}
+// .ant-transfer-list .ant-tree {
+//   .ant-tree-treenode {
+//     padding: 2px 0px !important;
+//     width: 100%;
+//   }
+//   .ant-tree-treenode-selected {
+//     background-color: var(--menu-active-bg-color);
+//   }
+// }
+// .ant-transfer-list .ant-spin-nested-loading .ant-spin .ant-spin-dot {
+//   top: 20%;
+// }
 </style>

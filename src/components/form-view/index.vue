@@ -10,19 +10,13 @@
         <slot name="button"></slot>
       </div>      
     </span>
-    <div style="margin-left: 32px" v-if="videoUrl">
-      <video width="800"  controls disablePictureInPicture
-        controlslist="nodownload noremoteplaybakc noplaybackrate">
-        <source :src="videoUrl" type="video/mp4">
-        <!-- 您的浏览器不支持视频标签。 -->
-      </video>
-    </div>
+
     <div style="width: 55%">
       <a-spin :spinning="loading">
-        <a-form :labelCol ="{ style: { width: labelWidth + 'px' } }">
-          <templage v-for="(item, index) in items" :key="index">
+        <a-form class="view-form" :labelCol ="{ style: { width: labelWidth + 'px' } }">
+          <template v-for="(item, index) in items" :key="index">
             <a-form-item :label="item.label" v-if="item.isShow == undefined || item.isShow" >
-              <span v-if="!Array.isArray(item.value)" 
+              <span v-if="!Array.isArray(item.value)"
                 :class="item.isBreak == undefined || item.isBreak || item.label == '描述' ? 'break-text' : ''">
                 {{ !item.value ? '--' : item.label.indexOf('时间') > -1 ? formatDate(item.value) : item.value }}
               </span>
@@ -33,7 +27,7 @@
               </ul>
               <span v-else>--</span>
             </a-form-item>
-          </templage>
+          </template>
         </a-form>
       </a-spin>
     </div>
@@ -61,7 +55,7 @@ defineProps({
   },
   labelWidth: {
     type: Number,
-    default: () => 100
+    default: () => 65
   }
 })
 </script>

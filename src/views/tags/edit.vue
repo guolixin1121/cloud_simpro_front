@@ -94,7 +94,7 @@ const add = async () => {
     loading.value = true
     isAdd ? await tagsApi.add({ ...params }) : await tagsApi.edit({ id, data: { ...params } })
     loading.value = false
-    message.info(isAdd ? '创建成功' : '修改成功')
+    message.success(isAdd ? '创建成功' : '修改成功')
     goback()
   } catch {
     loading.value = false

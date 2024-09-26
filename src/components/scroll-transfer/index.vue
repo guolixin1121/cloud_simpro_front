@@ -2,26 +2,26 @@
   <div class="ant-transfer">
     <a-form-item-rest>
       <div class="ant-transfer-list">
-        <div class="flex justify-between">
+        <div class="flex justify-between  ant-transfer-list-title">
           <span>{{ titles[0] }}</span>
           <!-- <span class=" text-link cursor-pointer" @click="() => onCheckedAll()">全选</span> -->
         </div>
-        <a-input-search class="my-2" placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
+        <a-input-search placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
         <div class="scroll-box" style="height: calc(100% - 40px); overflow: auto" @scroll="(e: Event) => onScroll(e)">
-          <a-checkbox-group v-model:value="leftState.checkedKeys" :options="leftState.dataSource" @change="onChecked"> </a-checkbox-group>
           <a-spin v-if="loading" style="width: 100%; padding-top: 20px"></a-spin>
+          <a-checkbox-group v-model:value="leftState.checkedKeys" :options="leftState.dataSource" @change="onChecked"> </a-checkbox-group>
         </div>
       </div>
       <!-- 右侧 -->
       <div class="ant-transfer-list">
-        <div class="ant-transfer-list-title mt-1 flex justify-between">
+        <div class="ant-transfer-list-title flex justify-between">
           <span>{{ titles[1] }}</span>
           <span class="text-link cursor-pointer" @click="onRemoveAll">删除全部</span>
         </div>
-        <ul class="scroll-box" style="height: calc(100% - 40px); overflow: auto">
+        <ul class="scroll-box scroll-box-right">
           <li class="transfer-checked-item flex justify-between items-center" v-for="item in selectedNodes" :key="item.value">
             {{ item.label }}
-            <svg-icon icon="close" class="text-gray-400 cursor-pointer" @click="onRemove(item)" />
+            <svg-icon icon="close" style="height: 16px;" class="text-gray-400 cursor-pointer" @click="onRemove(item)" />
           </li>
         </ul>
       </div>
@@ -190,28 +190,14 @@ watch(
 
 getOptions()
 </script>
-<style lang="less">
-.ant-transfer-list {
-  padding: 8px 12px;
-}
-.scroll-box .ant-checkbox-wrapper {
-  display: flex;
-  margin-top: 4px;
-}
-</style>
 <style lang="less" scoped>
-.ant-transfer-list-title {
-  padding-bottom: 8px;
-  border-bottom: 1px solid #e6e7eb;
-}
 .transfer-checked-item {
   line-height: 20px;
-  padding: 6px 12px;
+  padding: 6px 0px;
   word-break: break-word;
   white-space: break-spaces;
-  margin-top: 2px;
   &:hover {
-    background: var(--gray-globel-bg-color);
+    background: var(--gray-global-bg-color);
   }
   .delete-icon {
     cursor: pointer;

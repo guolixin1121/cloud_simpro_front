@@ -23,11 +23,11 @@
   <!-- 值为数组： 默认获取name值，可通过label指定字段 -->
   <template v-else-if="Array.isArray(dataValue)">
     <a-tooltip v-if="column.ellipsis" placement="topLeft" :title="dataValue.map((d: any) => d[column.apiField]|| d.name).join('&nbsp;&nbsp;')">
-      <span v-for="label in dataValue" :key="label.id" class="label mr-2">
+      <span v-for="label in dataValue" :key="label.id" class="label">
         {{ label[column.apiField] || label.name }}
       </span>
     </a-tooltip>
-    <span v-else v-for="label in dataValue" :key="label.id" class="label mr-2">
+    <span v-else v-for="label in dataValue" :key="label.id" class="label">
       {{ label[column.apiField] || label.name }}
     </span>
   </template>

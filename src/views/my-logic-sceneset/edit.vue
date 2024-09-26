@@ -67,7 +67,7 @@ const add = async () => {
   try {
     isAdd ? await currentApi.add(params) : await currentApi.edit({ id, data: params })
 
-    message.info(`${actionText}成功`)
+    message.success(`${actionText}成功`)
     goback()
   } finally {
     loading.value = false

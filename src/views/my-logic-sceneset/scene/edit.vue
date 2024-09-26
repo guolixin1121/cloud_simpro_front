@@ -1,13 +1,16 @@
 <template>
   <div class="breadcrumb">
-    <a @click="goback(-2)">逻辑场景</a>
-    <a @click='goback()'>{{ sceneset?.name }}</a>
+    <a @click="goback(-1)">逻辑场景</a>
+    <a class=" cursor-auto">{{ sceneset?.name }}</a>
     <span>{{ title }}</span>
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading">
       <a-form ref="form" :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 55%" @finish="add">
+        <!-- <a-form-item label="场景集名称">
+          {{ sceneset?.name }}
+        </a-form-item> -->
         <a-form-item label="场景名称" name="name"
           :rules="[{ required: true, message: '请输入场景名称'},
             { validator: () => checkChName(formState.name, 160) }]"
@@ -22,9 +25,9 @@
         </a-form-item>
         <a-form-item label="关联地图" v-if="isAdd" name="mapVersion" :rules="[{ required: true, message: '请选择关联地图' }]">
           <a-form-item-rest>
-            <div class="flex justify-between">
+            <div class="flex">
               <tree-select 
-                style="width: 33%;"
+                style="width: 33%; margin-right: 10px;"
                 v-model:value="formState.mapCatalog" 
                 :api="baseApi.maps.getMapCatalog" 
                 placeholder="请选择地图目录" 
@@ -33,7 +36,7 @@
                 placeholder="请选择地图"
                 label-in-value
                 :api="getMaps"
-                style="width: 33%;"
+                style="width: 33%; margin-right: 10px;"
                 @change="onMapChanged"></scroll-select>
               <scroll-select v-model:value="formState.mapVersion" 
                 placeholder="请选择地图版本"
@@ -123,7 +126,7 @@ const add = async () => {
       ? await currentApi.add(params)
       : await currentApi.edit({ id, data: params })
 
-    message.info(`${actionText}成功`)
+    message.success(`${actionText}成功`)
     goback()
   } finally {
     loading.value = false

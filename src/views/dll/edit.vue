@@ -63,7 +63,7 @@ const add = async () => {
   try {
     isAdd ? await dllApi.add({ ...params }) : await dllApi.edit({ id, data: { ...params } })
     loading.value = false
-    message.info(isAdd ? '新建成功' : '修改成功')
+    message.success(isAdd ? '新建成功' : '修改成功')
     goback()
   } catch {
     loading.value = false

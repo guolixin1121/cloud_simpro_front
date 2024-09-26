@@ -22,9 +22,9 @@
         </a-form-item>
         <a-form-item label="关联地图" v-if="isAdd" name="mapVersion"  :rules="[{ required: true, message: '请选择关联地图' }]">
           <a-form-item-rest>
-            <div class="flex justify-between">
+            <div class="flex">
               <tree-select 
-                style="width: 33%;"
+                style="width: 33%; margin-right: 10px;"
                 v-model:value="formState.mapCatalog" 
                 :api="baseApi.maps.getMapCatalog" 
                 placeholder="请选择地图目录" 
@@ -33,7 +33,7 @@
                 placeholder="请选择地图"
                 label-in-value
                 :api="getMaps"
-                style="width: 33%;"
+                style="width: 33%; margin-right: 10px;"
                 @change="onMapChanged"></scroll-select>
               <scroll-select v-model:value="formState.mapVersion" 
                 placeholder="请选择地图版本"
@@ -125,7 +125,7 @@ const add = async () => {
       ? await currentApi.addScene(params)
       : await currentApi.editScene({ id, data: params })
 
-    message.info(`${actionText}成功`)
+    message.success(`${actionText}成功`)
     goback()
   } finally {
     loading.value = false

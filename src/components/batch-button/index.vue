@@ -4,10 +4,11 @@
   <a-modal v-model:visible="showConfirm"
     :closable="false"
     :footer="null"
-    width="250px">
+    width="320px">
     <div class="modal-content">
       <!-- <svg-icon style="color: #faad14" icon="alert"></svg-icon> -->
-      <span style="font-size: 16px">{{tips || '是否' + label + '?'}}</span>
+      <!-- <span class="confirm-title">{{'批量' + label + '?'}}</span> -->
+      <div class="confirm-content">{{tips || '是否' + label + '?'}}</div>
     </div>
     <div class="modal-buttons" style="border: 0px; padding-top: 0px;">
       <a-button @click="showConfirm = false">取消</a-button>
@@ -55,10 +56,21 @@ const onBatch = async () =>{
   try {
     loading.value = true
     await api()
-    message.info('批量'+ props.label + '成功')
+    message.success('批量'+ props.label + '成功')
     showConfirm.value = false
   } finally {
     loading.value = false
   }
 }
 </script>
+
+<style lang="less" scoped>
+.confirm-title {
+  font-size: 16px;
+  font-weight: bold;
+}
+.confirm-content {
+  font-size: 16px;
+  color: var(--text-secondary-color);
+}
+</style>

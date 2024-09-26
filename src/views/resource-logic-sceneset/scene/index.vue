@@ -20,7 +20,7 @@
             @click="gotoSubPage('/edit/0')">上传逻辑场景</a-button>
       </div>
     </div>
-    <Table ref="tableRef" :api="currentApi.getSceneList" :query="query" :columns="columns" :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" />
+    <Table ref="tableRef" :api="currentApi.getSceneList" :query="query" :columns="columns" :scroll="{ x: 1400, y: 'auto' }" @select="onSelect" />
   </div>
 
   <a-modal ref="modalForm" v-model:visible="modal.visible" title="批量申请场景授权"
@@ -100,9 +100,9 @@ const modal = reactive({
   reason: ''
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60, validator: (data: any) => user.isAdminProject() ? (data.can_delete || data.can_apply) : data.can_apply },
+  { dataIndex: 'checkbox', width: 40, validator: (data: any) => data.can_delete },
   { title: '场景ID', dataIndex: 'id', width: 120 },
-  { title: '场景名称', dataIndex: 'name', width: 200, ellipsis: true },
+  { title: '场景名称', dataIndex: 'name', width: 250, ellipsis: true },
   { title: '场景标签', dataIndex: 'labels_detail', apiField: 'display_name',width: 250, ellipsis: true },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },
@@ -110,12 +110,12 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 150,
+    width: 120,
     actions: {
-      申请授权: {
-        validator: (data: any) => data.can_apply,
-        handler: (data: any) => gotoSubPage('/apply/' + data.id)
-      },
+      // 申请授权: {
+      //   validator: (data: any) => data.can_apply,
+      //   handler: (data: any) => gotoSubPage('/apply/' + data.id)
+      // },
       查看: (data: any) => gotoSubPage('/view/' + data.id),
       编辑: {
         validator: (data: any) => user.isAdminProject() && data.can_edit,

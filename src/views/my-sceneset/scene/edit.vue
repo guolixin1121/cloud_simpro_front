@@ -1,7 +1,8 @@
 <template>
   <div class="breadcrumb">
-    <router-link to="/my-sceneset/">具体场景</router-link>
-    <a @click='goback()'>{{ sceneset?.name }}</a>
+    <a @click="goback()">具体场景</a>
+    <!-- <router-link to="/my-sceneset/">具体场景</router-link> -->
+    <!-- <a @click='goback()'>{{ sceneset?.name }}</a> -->
     <span>{{ title }}</span>
   </div>
   <div class="min-main">
@@ -9,6 +10,9 @@
 
     <a-spin :spinning="dataLoading">
       <Form :model="formState" @finish="add">
+        <!-- <a-form-item label="场景集名称">
+          {{ sceneset?.name }}
+        </a-form-item> -->
         <a-form-item label="场景名称" name="adsName"
           :rules="[{ required: true, message: '请输入场景名称' },
             { validator: () => checkChName(formState.adsName, 160)  }]"
@@ -20,16 +24,16 @@
         </a-form-item>
         <a-form-item label="关联地图" name="mapVersion" :rules="[{ required: isAdd, message: '请选择关联地图' }]">
           <a-form-item-rest v-if="isAdd" >
-            <div class="flex justify-between w-full">
+            <div class="flex  w-full">
               <tree-select v-model:value="formState.mapCatalog" 
                 :api="baseApi.maps.getMapCatalog" 
                 placeholder="请选择地图目录" @change="onMapCateogryChanged"
-                style="width: 33%;"></tree-select>
+                style="width: 33%; margin-right: 10px;"></tree-select>
               <scroll-select v-model:value="formState.map"
                 placeholder="请选择地图"
                 label-in-value
                 :api="getMaps"
-                style="width: 33%;"
+                style="width: 33%; margin-right: 10px;"
                 @change="onMapChanged"></scroll-select>
               <scroll-select v-model:value="formState.mapVersion" 
                 placeholder="请选择地图版本"
@@ -67,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { checkChName } from '@/utils/tools'
+import { checkChName, goback } from '@/utils/tools'
 const route = useRoute()
 const { id } = route.params
 const isAdd = !id
@@ -90,8 +94,6 @@ const formState = reactive({
   adsUrl: undefined,
 })
 const loading = ref(false)
-const router = useRouter()
-const goback = () => router.push('/my-sceneset/scene/?pid=' + sceneset.id)
 
 const add = async () => {
   const { labels } = formState
@@ -117,7 +119,7 @@ const add = async () => {
       ? await currentApi.add(params)
       : await currentApi.edit({ id, data: params })
 
-    message.info(`${actionText}成功`)
+    message.success(`${actionText}成功`)
     goback()
   } finally {
     loading.value = false

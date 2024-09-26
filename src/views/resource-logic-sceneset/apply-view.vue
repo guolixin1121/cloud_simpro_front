@@ -8,7 +8,7 @@
   <div class="min-main">
     <span class="title mb-5">任务详情</span>
     <a-spin :spinning="dataLoading">
-    <a-form :model="formState" :labelCol ="{ style: { width: isSceneset ? '80px' : '65px' } }" style="width: 65%">
+    <a-form class="view-form" :model="formState" :labelCol ="{ style: { width: isSceneset ? '80px' : '65px' } }" style="width: 65%">
       <p class="sub-title">{{ isSceneset ? '场景集信息' : '场景信息' }}</p>
       <template v-if="formState.data">
         <template v-if="isSceneset">
@@ -53,16 +53,18 @@
         <div class="label mb-4">{{ isSceneset ? '该场景集已被删除' : '该场景已被删除' }}</div>
       </template>
     </a-form>
-    <a-form :model="formState" :labelCol ="{ style: { width: '65px' } }" style="width: 65%">
-      <p  class="sub-title">申请信息</p>
+    <a-form class="view-form" :model="formState" :labelCol ="{ style: { width: '65px' } }" style="width: 65%">
+      <p  class="sub-title" style="margin-top: 24px">申请信息</p>
       <a-form-item label="申请原因">
         <span class="break-text">{{ formState.reason || '--' }}</span>
       </a-form-item>
       <a-form-item label="申请时间">
         {{ formState.create_time }}
       </a-form-item>
+    </a-form>
 
-      <p class="sub-title">审批结果</p>
+    <a-form class="view-form" :model="formState" style="width: 65%" :labelCol ="{ style: { width: '65px' } }">
+      <p class="sub-title" style="margin-top: 24px">审批结果</p>
       <a-form-item label="任务状态">
         <span :class="'apply-status--' + formState.status">{{ getApplyStatus(formState.status) }}</span></a-form-item>
       <a-form-item label="审批意见">

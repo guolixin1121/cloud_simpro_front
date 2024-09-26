@@ -72,7 +72,7 @@ const gotoSubPage = (item: any) => {
     }
 
     &:hover {
-      background: var(--gray-globel-bg-color);
+      background: var(--gray-global-bg-color);
       border-radius: 2px;
     }
   }

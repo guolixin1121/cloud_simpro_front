@@ -87,7 +87,7 @@ const add = async () => {
     loading.value = true
     isAdd ? await currentApi.add({ ...formState }) : await currentApi.edit({ id, data: { ...formState } })
     loading.value = false
-    message.info(isAdd ? '创建成功' : '修改成功')
+    message.success(isAdd ? '创建成功' : '修改成功')
     goback()
   } catch {
     loading.value = false

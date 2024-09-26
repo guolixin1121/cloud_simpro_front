@@ -74,7 +74,7 @@ const add = async () => {
   try {
     await api.grant.apply(params)
 
-    message.info(`任务已提交，请前往授权任务管理查看任务状态。`)
+    message.success(`任务已提交，请前往授权任务管理查看任务状态。`)
     goback()
   } finally {
     loading.value = false

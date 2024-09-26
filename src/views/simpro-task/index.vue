@@ -1,5 +1,5 @@
 <template>
-  <search-form class="multiline-form " :items="formItems" @search="onSearch" @show-more="toggleMore"></search-form>
+  <search-form :items="formItems" @search="onSearch" @show-more="toggleMore"></search-form>
 
   <div class="main">
     <div class="title-section">
@@ -41,7 +41,7 @@ const upgradeModal = ref()
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入仿真任务名称或主车模型' },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入仿真任务名称' },
   { label: '任务ID', key: 'number', type: 'input', placeholder: '请输入仿真任务ID' },
   { label: '任务来源', key: 'source', type: 'select', options: TaskSourceOptions, defaultValue: '' },
   { label: '运行状态', key: 'status', type: 'select', options: resultStatus, defaultValue: '' },
@@ -99,7 +99,7 @@ const columns = [
         // 此按钮根据‘仿真结果’菜单项的权限来判断
         validator: () => user.hasAcl('cloud:simulation:results'),
         handler: (data: RObject) => {
-          SStorage.remove('simpro-result')
+          SStorage.remove('/simpro-result/')
           router.push('/simpro-result/?templateId=' + data.number)
         }
       },

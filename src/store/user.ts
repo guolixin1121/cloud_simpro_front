@@ -97,7 +97,7 @@ export const useUserStore = defineStore('user', () => {
       const menu = menuList[i]
       // 避免有多余的'/'造成的不匹配
       if (menu.path.split('/').join('') === currentRoute.split('/').join('')) {
-        return !menu.actions.length ? 0 : menu.actions?.indexOf(action)
+        return menu.actions?.indexOf(action)
       } else {
         const isValid = getPermissionIndex(action, currentRoute, menu.children)
         if (isValid != -1) {

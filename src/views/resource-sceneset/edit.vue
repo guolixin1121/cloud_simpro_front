@@ -14,6 +14,11 @@
           ]">
           <ch-input v-model:value="formState.name" :maxlength="160" placeholder="请输入场景集名称"></ch-input>
         </a-form-item>
+        <a-form-item label="宣传图片" name="poster" 
+          :rules="[{ required: isAdd, message: '请选择宣传图片'}]">
+          <single-upload accept=".jpg,.png" :max-size="2" text="选择图片" v-model:value="formState.poster"></single-upload>
+          <span style="margin-left: 8px;" v-if="!formState.poster">{{ formState.poster_name }}</span>
+        </a-form-item>
         <a-form-item label="场景集描述" name="desc">
           <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入场景集描述" :maxlength="1000" rows="5"></ch-input>
         </a-form-item>
@@ -49,6 +54,8 @@ const currentApi = api.sceneResource
 const formState = reactive({
   name: '',
   desc: '',
+  poster: '',
+  poster_name: '',
   labels: [],
   can_edit: true
 })
@@ -58,16 +65,20 @@ const loading = ref(false)
 const add = async () => {
   loading.value = true
 
-  const params = {
+  const params: any = {
     name: formState.name,
     desc: formState.desc,
+    poster: formState.poster,
     labels: formState.labels?.map((item: any) => item.value || item.name)
+  }
+  if(typeof(params.poster) == 'string') {
+    delete params['poster']
   }
   
   try {
     isAdd ? await currentApi.addSceneset(params) : await currentApi.editSceneset({ id, data: params })
 
-    message.info(`${actionText}成功`)
+    message.success(`${actionText}成功`)
     goback()
   } finally {
     loading.value = false
@@ -77,7 +88,7 @@ const add = async () => {
 /****** 获取编辑数据 */
 const dataLoading = ref(false)
 const getEditData = async () => {
-  if(id !== '0') {
+  if(!isAdd) {
     try {
       dataLoading.value = true
       const data = await currentApi.getSceneset(id)
@@ -85,6 +96,11 @@ const getEditData = async () => {
       formState.desc = data.desc || ''
       formState.labels = data.labels_detail
       formState.can_edit = data.edit_enable
+
+      const poster = data.poster.split('/')
+      if(poster) {
+        formState.poster_name = poster[poster.length - 1]
+      }
     } finally {
       dataLoading.value = false
     }

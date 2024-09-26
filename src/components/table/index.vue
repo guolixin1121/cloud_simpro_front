@@ -1,6 +1,6 @@
 <!-- 封装了 - 日期格式化、操作列（有操作权限时才展示操作按钮） -->
 <template>
-  <a-table class="ant-table-striped" v-bind="$attrs" v-on="$attrs" :loading="loading" :dataSource="dataSource" :columns="columns" :row-class-name="(_record: any, index: number) => (index % 2 === 1 ? 'table-striped' : null)" :defaultExpandAllRows="true" :pagination="pagination" @change="onChange">
+  <a-table class="ant-table-striped" v-bind="$attrs" v-on="$attrs" :loading="loading" :dataSource="dataSource" :columns="columns" :row-class-name="(_record: any, index: number) => (index % 2 === 1 ? 'table-striped' : null)" :defaultExpandAllRows="true" :pagination="false" @change="onChange">
     <template #emptyText>
       <!-- loading时不显示暂无数据 -->
       <div v-if="loading" style="height: 100px"></div>
@@ -25,6 +25,7 @@
       </template>
     </template>
   </a-table>
+  <a-pagination v-model:current="pagination.current" :page-size="pagination.size" :total="pagination.total" :show-total="pagination['show-total']" @change="onChange"/>
 </template>
 
 <script setup lang="ts">
@@ -60,8 +61,8 @@ const props = defineProps({
 })
 const emits = defineEmits(['select'])
 const route = useRoute()
-// const routeName = route.path.replaceAll('/', '')
-const current = useSessionStorage(route.path + ':table-page', 1)
+const routeName = route.path.replaceAll('/', '')
+const current = useSessionStorage(routeName + ':table-page', 1)
 const loading = ref(false)
 const data = ref()
 provide('enableCheckPermission', props.enableCheckPermission)
@@ -82,7 +83,7 @@ const run = async (query: any, slient = false) => {
 }
 const dataSource = ref([])
 const pagination = computed(() => ({
-  size: 10,
+  size: 50,
   current: current.value,
   total: data.value?.count,
   'show-total': (total: number) => `共 ${total} 条`
@@ -139,9 +140,15 @@ const clearCheckbox = () => {
 }
 
 // 页面切换 event handler
-const onChange = (params: any) => {
+// const onChange = (params: any) => {
+//   clearCheckbox()
+//   current.value = params.current
+//   run({ ...props.query, page: current.value, size })
+//   emits('select', [], [])
+// }
+const onChange = (pageNumber: number) => {
   clearCheckbox()
-  current.value = params.current
+  current.value = pageNumber
   run({ ...props.query, page: current.value, size })
   emits('select', [], [])
 }
@@ -178,10 +185,11 @@ const calcateHeight = () => {
   }
   
   // table上方所有区域的高度
-  let tableHeight = height + 230
-  const tableTop = document.querySelectorAll('.main > div:not(:last-child)')
+  let tableHeight = height
+  const tableTop = document.querySelectorAll('.main > div:not(.ant-table-wrapper):not(:last-child)')
   tableTop.forEach((top) => tableHeight += isNaN(top.clientHeight) ? 0 : (top.clientHeight + 16))
-
+  
+  tableHeight = tableHeight + 246
   if(document.body.scrollWidth <= 1440) {
     // App.vue定义的页面最小宽度1440
     // 小于这个宽度出现滚动条时，计算表格高度时要加上滚动条高度，以确保分页符离底部总是最小24px
@@ -252,7 +260,7 @@ defineExpose({ refresh, calcateHeight })
 }
 
 .ant-table-striped :deep(.ant-table) {
-  border: 1px solid #f0f0f0;
+  border: 1px solid #E6E7EB;
 }
 :global(.ant-table-tbody > tr.ant-table-row-selected > td) {
   background: transparent;

@@ -1,5 +1,5 @@
 <template>
-  <form-view title="标签详情" :items="formItems" :loading="loading">
+  <form-view title="标签详情" :items="formItems" :loading="loading" label-width="90">
     <router-link to="/tags/">标签管理</router-link>
   </form-view>
 </template>

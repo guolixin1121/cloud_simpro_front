@@ -1,7 +1,7 @@
 <template>
    <div class="breadcrumb">
-    <a @click="goback(-2)">逻辑场景</a>
-    <a @click='goback()'>{{ sceneset?.name }}</a>
+    <a @click="goback(-1)">逻辑场景</a>
+    <a class="cursor-auto">{{ sceneset?.name }}</a>
     <span>泛化任务</span>
   </div>
   <div class="min-main">
@@ -15,10 +15,9 @@
       <a-tab-pane key="2" tab="SOTIF泛化">
       </a-tab-pane>
     </a-tabs> 
-    <Table ref="table" :api="listApi" 
-      :scroll="{x: 1000, y: 'auto'}"
+    <Table ref="table" style="margin-top: 0px" :api="listApi" 
       :enableCheckPermission="false"
-      :columns="activeKey =='1' ? columns : sotifColumns" style="margin-top: 0px;">
+      :columns="activeKey =='1' ? columns : sotifColumns">
       <template #bodyCell="{column, record, text}">
         <template v-if="column.dataIndex == 'name'">
           {{ name }}
@@ -40,7 +39,8 @@
   <a-modal v-model:visible="showModal" title="泛化结果分布" :footer="null" width="50%"
     :destroyOnClose="true">
     <div class="modal-content">
-      <chart style="height: 500px" :option="chartOptions"> </chart>
+      <empty v-if="!chartOptions"></empty>
+      <chart v-else style="height: 500px" :option="chartOptions"> </chart>
     </div>
   </a-modal>
 </template>
@@ -60,7 +60,7 @@ const listApi = (args:any) => currentApi.getResultList({ ...args, source: active
 
 const sceneset = store.catalog.sceneCatalog
 const showModal = ref(false)
-const chartOptions = ref({})
+const chartOptions = ref()
 
 /****** 表格区域 */
 const columns = [
@@ -76,7 +76,7 @@ const columns = [
     actions: {
       '泛化结果分布': (record:any) => {
         showModal.value = true
-        chartOptions.value = []
+        chartOptions.value = null
         const distribution = record.result_params_distribution?.[0]
         if(!distribution) return
 
@@ -220,19 +220,24 @@ const gotoScene = (record: RObject) => {
   if(record.result_scene_set) {
     SStorage.clear()
     SStorage.set('logic-sceneset', record.result_scene_set)
-    router.push('/my-sceneset/scene/?pid=' + record.result_scene_set.id)
+    router.push('/my-sceneset/?id=' + record.result_scene_set.id)
   }
 }
 </script>
 
 <style lang="less" scoped>
-.tabs {
-  margin-top: 16px;
-}
 .status--0, .status--1, .status--2 {
   color: var(--warning-color);
 }
 .status--3, .status--5 {
   color: var(--alert-color);
+}
+</style>
+<style lang="less">
+.tabs {
+  margin-top: 16px;
+  .ant-tabs-nav {
+    border-bottom: 1px solid var(--table-border-color);
+  }
 }
 </style>

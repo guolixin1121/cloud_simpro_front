@@ -1,60 +1,124 @@
 <template>
-  <search-form :items="formItems" @search="onSearch"></search-form>
+  <div class="main-tree">
+    <tree ref="scenesetTreeRef" :title="'场景集'" :pagination="true" :api="scenesetApi" :lazy="true" 
+      :button-handlers="treeBtnHandlers" @select="onTreeSelect" />
+    <div class="main-right table-container">
+      <a-spin  :spinning="loadingSceneset">
+        <sceneset :sceneset="selectedSceneset"></sceneset>
+      </a-spin>
+      <search-form class="scene-form" :colsPerline="3" :manual="true" v-model:items="formItems" @search="onSearch"></search-form>
 
-  <div class="main">
-    <div class="title-section">
-      <span class="title">逻辑场景集列表</span>
-      <div>
-        <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
-          :tips="'已勾选' + checkedItems.length+ '个场景集，是否删除所有勾选场景集及其关联数据？'"></batch-button>
-        <a-button type="primary" v-if="user.hasPermission('add')" @click="gotoSubPage('/edit/0')">创建场景集</a-button>
+      <div class="main">
+        <page-title title="逻辑场景列表">
+          <a-button :disabled="!selectedItems.length" v-if="user.hasPermission('saveAs')" @click="onBatchClone()">另存为</a-button>
+          <batch-button :disabled="!selectedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
+            :tips="'已勾选' + selectedItems.length+ '个场景，是否删除所有勾选场景？'"></batch-button>
+          <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isEditable" @click="gotoSubPage('/scene/edit/0')">上传逻辑场景</a-button>
+        </page-title>
+
+        <Table 
+          ref="tableRef" 
+          :api="currentApi.getList" 
+          :query="query" 
+          :columns="columns" 
+          :scroll="{ x: 1300, y: 'auto' }"
+          @select="onSelect">
+        </Table>
       </div>
-    </div>
-    <div>
-      <Table ref="tableRef" :query="query" :columns="columns" :api="currentApi.getList"
-        :scroll="{ x: 1500, y: 'auto' }" @select="onSelect" >
-      </Table>
     </div>
   </div>
 
-  <a-modal v-model:visible="modal.cloneVisible" title="另存为"
+  <a-modal v-model:visible="generateModal.visible" title="泛化" width="480px"
+      :footer="null"  :destroy-on-close="true">
+      <template v-if="generateModal.step == 1">
+        <template v-if="generateModal.sourceData.config_result_count <= 10000">
+          <div class="modal-content">
+              是否要对此逻辑场景进行泛化？泛化结果为{{ generateModal.sourceData.config_result_count }}个具体场景。
+          </div>
+          <div class="modal-buttons">
+            <a-button @click="closeRunConfirm">取消</a-button>
+            <a-button @click="generateModal.step = 2" :loading="isSubmitting" type="primary">下一步</a-button>
+          </div>
+        </template>
+        <template v-else>
+          <div class="modal-content">
+            <svg-icon style="color: #faad14" icon="alert"></svg-icon>
+            <span class="modal-title">泛化数量超过上限（10000）</span>
+          </div>
+          <div class="modal-buttons">
+              <a-button @click="closeRunConfirm">关闭</a-button>
+            </div>
+        </template>
+      </template>
+      <template v-else>
+        <div class="modal-content">
+          <div style="margin-bottom: 10px;">请选择泛化生成的具体场景的保存路径</div>
+          <select-sceneset ref="generateSceneset" v-model:value="generateModal.targetSceneset"></select-sceneset>
+        </div>
+        <div class="modal-buttons">
+            <a-button @click="generateModal.step = 1">上一步</a-button>
+            <a-button @click="runConfirm" :loading="isSubmitting" type="primary">确定</a-button>
+          </div>
+      </template>
+  </a-modal>
+
+  <a-modal v-model:visible="cloneModal.cloneVisible" :title="cloneModal.title"
     :footer="null" :destroyOnClose="true">
-      <a-form ref="cloneForm" class="modal-content" :model="modal" 
-        :labelCol ="{ style: { width: '100px' } }" 
-        style="padding-bottom: 0px"
-        @finish="onConfirmClone">
-        <a-form-item name="cloneName" style="width: 74%"
-          :rules="[{ required: true, message: '请输入场景集名称'},
-          { validator: () => checkChName(modal.cloneName, 160)  }
+      <div class="modal-content">
+        <div style="margin-bottom: 10px;"><span v-if="cloneModal.desc">{{ cloneModal.desc }}</span>请选择场景的保存路径</div>
+        <select-sceneset ref="cloneSceneset" :isLogicSceneset="true" v-model:value="cloneModal.targetSceneset"></select-sceneset>
+      </div>
+      <div class="modal-buttons">
+        <a-button @click="cloneModal.cloneVisible = false">取消</a-button>
+        <a-button @click="onConfirmClone" :loading="submitting" type="primary">确定</a-button>
+      </div>
+  </a-modal>
+
+  <a-modal v-model:visible="scenesetModal.cloneVisible" title="另存为"
+    :footer="null" :destroyOnClose="true">
+      <a-form ref="scenesetCloneForm" class="modal-content save-modal" :model="scenesetModal" 
+        :labelCol ="{ style: { width: '100px' } }"
+        @finish="onConfirmCloneSceneset">
+        <a-form-item name="cloneName"
+          :rules="[{ required: true, message: '请输入另存为场景集名称'},
+          { validator: () => checkChName(scenesetModal.cloneName, 160)  }
            ]">
-          <span class="mr-2">我的场景-逻辑场景</span>
-          <ch-input v-model:value="modal.cloneName" :maxlength="50" placeholder="请输入场景集名称"></ch-input>
+          <span style="padding-right: 10px;">我的场景-逻辑场景</span>
+          <ch-input style="width: calc(100% - 128px)" v-model:value="scenesetModal.cloneName" :maxlength="50" placeholder="请输入场景集名称"></ch-input>
         </a-form-item>
       </a-form>
       <div class="modal-buttons">
-        <a-button @click="modal.cloneVisible = false">取消</a-button>
-        <a-button @click="onConfirmClone" :loading="submitting" type="primary">确定</a-button>
+        <a-button @click="scenesetModal.cloneVisible = false">取消</a-button>
+        <a-button @click="onConfirmCloneSceneset" :loading="scenesetSubmitting" type="primary">确定</a-button>
       </div>
   </a-modal>
 </template>
 
 <script setup lang="ts">
-import { MyLogicScenesetSourceOptions, isMyLogicScenesetEditable, getMyLogicScenesetSourceName, isDefaultMyLogicSceneset } from '@/utils/dict'
 import { gotoSubPage, checkChName } from '@/utils/tools'
+import { MyLogicSceneSourceOptions, isMyLogicSceneEditable, isMyLogicScenesetEditable, getMyLogicSceneSourceName, getMyLogicScenesetSourceName, isDefaultMyLogicSceneset } from '@/utils/dict'
 
-/****** api */
 const user = store.user
-const currentApi = api.logicScenesets
+const currentApi = api.logicScene
+const selectedSceneset = ref() 
+const scenesetApi = api.logicScenesets.getList
+
+const onTreeSelect = (sceneset: any) => {
+  if(sceneset.id == selectedSceneset.value?.id) return
+
+  query.value = { ...query.value, page: 1 } // 切换到第一页
+  selectedSceneset.value = sceneset
+  loadSceneset(sceneset.id)
+}
 
 /****** 搜素区域 */
 const formItems = ref<SearchFormItem[]>([
-  { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景集ID或名称' },
+  { label: '名称', key: 'name', type: 'input', placeholder: '请输入场景ID或名称' },
   {
     label: '来源',
     key: 'source',
     type: 'select',
-    options: MyLogicScenesetSourceOptions,
-    placeholder: '请选择场景来源',
+    options: MyLogicSceneSourceOptions,
     defaultValue: ''
   },
   {
@@ -63,28 +127,60 @@ const formItems = ref<SearchFormItem[]>([
     type: 'tree-select',
     mode: 'multiple',
     api: api.tags.getList,
-    query: { tree: 1, tag_type: 2, size: 100 }, // tree无法分页，一次性获取所有
+    query: { tree: 1, tag_type: 3, size: 100 }, // tree无法分页，一次性获取所有
     placeholder: '请选择标签，最多选择9个',
     fieldNames: { label: 'display_name', value: 'name' },
     defaultValue: [''],
     multiple: true
-  }])
-const query = ref({})
-const onSearch = (data: Query) => (query.value = data)
+  },
+  { label: '创建时间', key: 'create_time', type: 'range-picker' }
+])
+
+const loadingSceneset = ref(false)
+const loadSceneset = async (scenesetId: string) => {
+  if (scenesetId) {
+    try {
+      loadingSceneset.value = true
+      const data = await api.logicScenesets.get(scenesetId)
+      selectedSceneset.value = data
+      selectedSceneset.value.sourceName = getMyLogicScenesetSourceName(data.source)
+      selectedSceneset.value.isEditable = isMyLogicScenesetEditable(data.source)
+      store.catalog.sceneCatalog = data
+      query.value = { 
+        ...query.value,
+        logic_scene_set_id: data.id
+      }
+      
+    } finally {
+      loadingSceneset.value = false
+    }
+  }
+}
+const query: Query = ref({})
+const onSearch = (data: Query) => (query.value = { ...data, logic_scene_set_id: selectedSceneset.value.id })
 
 /****** 表格区域 */
-const modal = reactive({
+const tableRef = ref()
+const generateModal = reactive({
+  visible: false,
+  step: 1,
+  targetSceneset: { sceneset: '', scenesetType: 1 }, // 另存为的场景
+  sourceData: { logic_scene_version_id: '', config_result_count: 0 }
+}) // 泛化
+const cloneModal = reactive({
+  title: '',
+  desc: '',
   cloneVisible: false,
-  sourceData: {} as RObject,
-  cloneName: '' // 另存为的名字
+  sourceData: [{id: ''}],
+  targetSceneset: { sceneset: '', scenesetType: 1 } // 另存为的场景
 })
 const columns = [
-  { dataIndex: 'checkbox', width: 60, validator: (data: any) => !isDefaultMyLogicSceneset(data) },
-  { title: '场景集ID', dataIndex: 'id', width: 120 },
-  { title: '场景集名称', dataIndex: 'name', ellipsis: true },
-  { title: '场景集标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
-  { title: '来源', dataIndex: 'source', formatter: getMyLogicScenesetSourceName, width: 120 },
-  { title: '场景数量', dataIndex: 'count', width: 100 },
+  { dataIndex: 'checkbox', width: 60 },
+  { title: '场景ID', dataIndex: 'id', width: 90 },
+  { title: '场景名称', dataIndex: 'name', width: 250, ellipsis: true },
+  { title: '关联场景数', dataIndex: 'result_scene_count', width: 150 },
+  { title: '场景标签', dataIndex: 'labels_detail', width: 200,  apiField: 'display_name', ellipsis: true },
+  { title: '来源', dataIndex: 'source', width: 120, formatter: getMyLogicSceneSourceName },
   { title: '创建时间', dataIndex: 'create_time', width: 180 },
   { title: '修改时间', dataIndex: 'update_time', width: 180 },
   { title: '创建者', dataIndex: 'create_user', width: 180, ellipsis: true  },
@@ -93,52 +189,161 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 200,
+    width: 300,
     actions: {
-      查看: {
-        handler: ({ id }: RObject) => gotoSubPage('/scene/?pid=' + id)
-      },
+      查看: (data: any) => gotoSubPage('/scene/view/' + data.id),
+      泛化: {
+        validator: ({ source }: any) => source !== 1,
+        handler: (data: any) => {
+          generateModal.visible = true
+          generateModal.sourceData = data
+      }},
+      泛化结果: (data: any) => gotoSubPage('/scene/result/' + data.id +'?name=' + data.name),
       编辑: {
-        validator: ({source}: RObject) => isMyLogicScenesetEditable(source),
-        handler: ({ id }: RObject) => gotoSubPage('/edit/' + id)
+        validator:  ({source}: any) => isMyLogicSceneEditable(source),
+        handler: (data: any) => gotoSubPage('/scene/edit/' + data.id)
       },
-      另存为: (data: RObject) => {
-        modal.cloneVisible = true
-        modal.sourceData = data
-        modal.cloneName = ''
+      另存为: (data: any) => {
+        cloneModal.title = '另存为'
+        cloneModal.desc = ''
+        cloneModal.sourceData = [data.id]
+        cloneModal.cloneVisible = true
       },
       删除: {
-        tip: "场景集删除后，关联数据（场景）将会一起删除，是否删除？",
-        validator: (data: any) => !isDefaultMyLogicSceneset(data),
-        handler: async ({ id }: { id: string }) => await currentApi.delete({id: [id]})
+        tip: '场景删除后不可恢复，是否删除？',
+        // validator: ({createUser}: any) => user.user.username == createUser,
+        handler: async ({ id }: { id: string }) => await currentApi.delete(id)
       }
     }
   }
 ]
 
-const cloneForm = ref()
+// 泛化
+const generateSceneset = ref()
+const isSubmitting = ref(false)
+const closeRunConfirm = () => generateModal.visible = false
+const runConfirm = () => {
+  generateSceneset.value.validate().then(async () => {
+    try {
+      isSubmitting.value = true
+      const { sceneset, scenesetType } = generateModal.targetSceneset
+      const params = scenesetType == 1 ? { result_scene_set_name: sceneset } 
+          : { result_scene_set_id: sceneset }
+        
+      await currentApi.run({
+        source: 0,
+        ...params,
+        data: [{
+          logic_scene_version_id: generateModal.sourceData.logic_scene_version_id
+      }]})
+      closeRunConfirm()
+      tableRef.value.refresh()
+      message.success('泛化成功')
+    } finally {
+      isSubmitting.value = false
+    }
+  })
+}
+
+// 另存为
+const cloneSceneset = ref()
 const submitting = ref(false)
 const onConfirmClone = () => {
-  cloneForm.value.validate().then(async () => {
+  cloneSceneset.value.validate().then(async() => {
     try {
       submitting.value = true
+    
+      const { sceneset, scenesetType } = cloneModal.targetSceneset
+      const params = scenesetType == 1 ? { logic_scene_set_name: sceneset} 
+        : { logic_scene_set_id: sceneset }
       await currentApi.clone({
-        name: modal.cloneName,
-        logic_scene_set_id: modal.sourceData.id
+        logic_scene_ids: cloneModal.sourceData,
+        ...params
       })
       message.success('已另存')
-      modal.cloneVisible = false
-      tableRef.value.refresh()
+      cloneModal.cloneVisible = false
+      scenesetTreeRef.value.refresh()
     } finally {
       submitting.value = false
     }
   })
 }
-const tableRef = ref()
-const checkedItems = ref([])
-const onSelect = (data: any) => (checkedItems.value = data)
+
+// 批量另存为
+const onBatchClone = () => {
+  cloneModal.title = '批量另存为'
+  cloneModal.desc = '您已选择' + selectedItems.value.length + '个场景，'
+  cloneModal.cloneVisible = true
+  cloneModal.sourceData = selectedItems.value
+  scenesetTreeRef.value.refresh()
+}
+
+// 批量删除
+const selectedItems = ref([])
+const onSelect = (data: any) => selectedItems.value = data
 const onBatchDelete = async () => {
-  await currentApi.delete({ id: checkedItems.value })
-  tableRef.value.refresh({ deletedRows: checkedItems.value.length })
+  await currentApi.batchDelete({logic_scene_ids: selectedItems.value})
+  tableRef.value.refresh({ deletedRows: selectedItems.value.length })
+}
+
+// 场景集
+const scenesetModal = reactive({
+  cloneVisible: false,
+  sourceData: {} as RObject,
+  cloneName: '' // 另存为的名字
+})
+const scenesetTreeRef = ref()
+const scenesetCloneForm = ref()
+const scenesetSubmitting = ref(false)
+const onConfirmCloneSceneset = () => {
+  scenesetCloneForm.value.validate().then(async () => {
+    try {
+      scenesetSubmitting.value = true
+      await api.logicScenesets.clone({
+        name: scenesetModal.cloneName,
+        logic_scene_set_id: scenesetModal.sourceData.id
+      })
+      message.success('已另存')
+      scenesetModal.cloneVisible = false
+      scenesetTreeRef.value.refresh()
+    } finally {
+      scenesetSubmitting.value = false
+    }
+  })
+}
+const router = useRouter()
+const treeBtnHandlers = {
+  add: () => router.push('/my-logic-sceneset/edit/0'),
+  edit: {
+    validator: (data: any) => isMyLogicScenesetEditable(data.source),
+    handler: (data: any) => router.push('/my-logic-sceneset/edit/' + data.id)
+  },
+  saveAs: (data: RObject) => {
+    scenesetModal.cloneVisible = true
+    scenesetModal.sourceData = data
+    scenesetModal.cloneName = ''
+  },
+  delete: {
+    validator: (data: any) => !isDefaultMyLogicSceneset(data),
+    handler: async (id: String) => await api.logicScenesets.delete({id: [id]})
+  }
 }
 </script>
+
+<style lang="less">
+.scene-form {
+  .ant-row:not(.last-row) {
+    .ant-form-item-label {
+      width: 40px !important;
+    }
+  }
+  .ant-row:first-child .ant-form-item-label {
+    width: 65px !important;
+  }
+}
+.save-modal {
+  .ant-form-item-explain-error {
+    margin-left: 128px;
+  }
+}
+</style>

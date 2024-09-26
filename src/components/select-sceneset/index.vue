@@ -1,9 +1,9 @@
 <template>
-    <a-radio-group v-model:value="modal.scenesetType" name="radioGroup" class="mt-2">
+    <a-radio-group v-model:value="modal.scenesetType" name="radioGroup">
         <a-radio :value="1">新建场景集</a-radio>
         <a-radio :value="2">已有场景集</a-radio>
     </a-radio-group>
-    <p style="margin: 16px 0 8px;">{{ label }}</p>
+    <p style="margin: 16px 0 10px;">{{ label }}</p>
     <a-form ref="modalForm" :model="modal">
         <a-form-item name="targetSceneset" 
             :rules="[{ required: true, message: '请输入场景集名称'},

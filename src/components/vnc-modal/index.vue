@@ -3,11 +3,11 @@
      title="在线仿真"
      @cancel="visible=false" @ok="onConfirm">
         <div class="modal-content">
-            <div class="flex items-center mb-2">
-                <svg-icon style="color: #faad14" icon="alert"></svg-icon>
+            <div class="flex items-center" style="margin-bottom: 10px">
+                <svg-icon style="color: #faad14; position:relative; top: 1px;" icon="alert"></svg-icon>
                 <span class="ml-2 font-medium">在线仿真资源已满，暂时无法{{ title }}</span>
             </div>
-            <a-table :pagination="false" ref="table" :columns="columns" :dataSource="dataSource" :loading="loading">
+            <a-table bordered :pagination="false" ref="table" :columns="columns" :dataSource="dataSource" :loading="loading">
             </a-table>
         </div>
      </a-modal>
@@ -56,3 +56,10 @@ const getData = async () => {
      }
  }
  </script>
+ <style lang="less">
+.ant-table-bordered {
+    .ant-table-tbody tr:last-child td {
+        border-bottom-color: var(--table-border-color);
+    }
+}
+</style>

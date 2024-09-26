@@ -1,5 +1,4 @@
 <template>
-  <!-- top作为标记类，用于table计算自身高度以便填充满页面高度 -->
   <div class="white-block search-form" :class="{'opened': isOpened}">
     <a-form ref="form" :class="'col-' + colLimit"
       layout="inline" :model="formState" v-bind="$attrs">
@@ -8,7 +7,7 @@
         :class="{'last-row': isLastRow(index), 'more-row': isMoreRow(index)}"
         :label="item.label"
         :name="item.key"
-        style="margin-bottom: 10px"
+        style="margin-bottom: 16px"
         :rules="[{ required: item.required }]"
       >
         <scroll-select
@@ -28,6 +27,25 @@
           @change="(value: string|string[]) => onTreeSelectChange(item.key, value)"
         >
         </tree-select>
+        <a-range-picker
+          v-else-if="item.type == 'range-picker'"
+          allowClear
+          v-model:value="formState[item.key]"
+          v-on="item"
+         >
+          <template #nextIcon>
+            <svg-icon icon="arrow_right"></svg-icon>
+          </template>
+          <template #prevIcon>
+            <svg-icon icon="arrow_left"></svg-icon>
+          </template>
+          <template #superNextIcon>
+            <svg-icon icon="arrow_doubleright"></svg-icon>
+          </template>
+          <template #superPrevIcon>
+            <svg-icon icon="arrow_doubleleft"></svg-icon>
+          </template>
+        </a-range-picker>
         <component
           v-else
           :is="Ant[getComponent(item.type)]"
@@ -79,6 +97,10 @@ const props = defineProps({
     // 是否手动触发首次搜索
     type: Boolean,
     default: ()=> false
+  },
+  colsPerline: {
+    type: Number,
+    default: 4
   }
 } as any)
 const emits = defineEmits(['search', 'show-more', 'update:items'])
@@ -100,7 +122,6 @@ onMounted(() => {
     getDataFromStorage()
     !props.manual && emitSearch(false)
   } else {
-    SStorage.clear()
     !props.manual && emitSearch()
   }
 })
@@ -187,9 +208,9 @@ const getComponent = (name: string) =>
  */
 const getDefaultStyle = (name: string) => {
   const styleMap = {
-    'range-picker': {
-      // 'value-format': 'YYYY-MM-DD'  // 重置时组件会出现invalid date的bug，换成取值时自己转换
-    },
+    // 'range-picker': {
+    //   // 'value-format': 'YYYY-MM-DD'  // 重置时组件会出现invalid date的bug，换成取值时自己转换
+    // },
     select: {
       'max-tag-count': 1,
       'max-tag-text-length': 4
@@ -235,7 +256,8 @@ watch(
 
 /**** 3列或4列布局 *****/
 // 根据总共多少列计算每列width，css里使用
-const colLimit = props.items.length > 4 ? 3 : props.items.length == 4 ? 4 : 3 // 每行几个
+const colsPerline = props.colsPerline || 4
+const colLimit = props.items.length > colsPerline ? 3 : props.items.length == colsPerline ? colsPerline : 3 // 每行几个
 const rowTotal = computed(() => Math.ceil(props.items.length / colLimit)) // 总行数
 // 当前显示总行数
 const showRowTotal = computed(() => {
@@ -326,5 +348,10 @@ defineExpose({ reset })
       }
     }
   }
+}
+</style>
+<style lang="less">
+.search-form  .ant-form-item-label label {
+  color: var(--text-main-color);
 }
 </style>
