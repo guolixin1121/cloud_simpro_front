@@ -5,10 +5,7 @@ FROM node:18 as build-stage2
 WORKDIR /simpro_front
 
 # 安装pnpm
-<<<<<<< HEAD
-=======
 RUN npm config set registry https://registry.npmmirror.com/
->>>>>>> hengrun_dev
 RUN npm install -g pnpm@8.15.8
 
 # 复制package.json和package-lock.json到容器中
