@@ -1,5 +1,5 @@
 <template>
-  <form-view title="算法详情" :items="formItems" :loading="loading">
+  <form-view title="算法详情" :items="formItems" :loading="loading" :label-width="100">
     <router-link to="/algorithm/">算法管理</router-link>
   </form-view>
 </template>

@@ -74,7 +74,7 @@ const title = isAdd ? '创建算法' : '修改算法'
 
 const formState = reactive<any>({
   name: undefined,
-  interface: '',
+  interface: undefined,
   version: '1',
   docker_path: undefined,
   cmd: undefined,
