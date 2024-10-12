@@ -282,6 +282,7 @@ onMounted(() => {
   nextTick(calcateHeight)
   window.addEventListener('resize', calcateHeight)
 })
+onUnmounted(() => window.removeEventListener('resize', calcateHeight))
 
 defineExpose({ refresh })
 </script>

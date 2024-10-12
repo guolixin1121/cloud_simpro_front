@@ -286,8 +286,6 @@ const showMore = () => {
     emits('show-more', isOpened.value)
   })
 }
-// window.addEventListener('resize', () => colLimit.value = document.body.clientWidth < 1920 ? 3 : 4)
-// onMounted(() => colLimit.value = document.body.clientWidth < 1920 ? 3 : 4 )
 defineExpose({ reset })
 </script>
 

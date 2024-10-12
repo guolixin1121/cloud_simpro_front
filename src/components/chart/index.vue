@@ -11,8 +11,7 @@ import factory from './factory'
 const props = defineProps(['option', 'title'])
 const chartElement = ref()
 let chartInstance: echarts.ECharts | null = null
-
-onMounted(render)
+const controller = new AbortController()
 
 watch(() => props.option, render)
 
@@ -24,10 +23,9 @@ function render() {
   const option = produceOption(props.option)
   
   chartInstance.setOption(option, true)
-  window.addEventListener('resize', () => {
-    chartInstance?.resize()
-  })
+  window.addEventListener('resize', () => chartInstance?.resize(), {signal: controller.signal})
 }
+onUnmounted(() => controller.abort())
 
 const produceOption = (option: any) => {
   if (typeof option !== 'object') return
@@ -41,8 +39,6 @@ const produceOption = (option: any) => {
   const fact = (factory as Record<string, any>)[type] || factory['option']
   return fact(option)
 }
-
-onUnmounted(() => window.removeEventListener('resize', () => chartInstance?.resize))
 </script>
 
 <style lang="less" scoped>

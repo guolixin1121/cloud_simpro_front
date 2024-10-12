@@ -206,8 +206,9 @@ onMounted(() => {
   // form筛选区域为单行时，因为有默认的padding，有时会一开始计算成两行
   // nexttick保证获取筛选区域的最终高度
   nextTick(calcateHeight)
-  window.addEventListener('resize', calcateHeight)
+  window.addEventListener('resize', calcateHeight )
 })
+onUnmounted(() => window.removeEventListener('resize', calcateHeight))
 
 // 用于删除等操作后，重新加载table
 // slient: 是否显示loading
