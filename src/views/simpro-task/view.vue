@@ -142,7 +142,7 @@ const getEditData = async () => {
     for(let prop in formState) {
       formState[prop as keyof typeof formState] = data[prop] || ''
     }
-    labelWidth.value = data.mount == '1' ? 130 : 65
+    labelWidth.value = data.mount == '1' ? 130 : 110
   } finally {
     loading.value = false
   }
