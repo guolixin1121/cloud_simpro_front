@@ -5,7 +5,7 @@
     <a class="cursor-auto">{{ sceneset?.name }}</a>
     <span>{{ sceneName }}</span>
   </div>
-  <iframe :src="previewUrl" style="margin: -16px; margin-top: 0px; width: calc(100% + 32px); height: calc(100% + 16px)"></iframe>
+  <iframe :src="previewUrl" style="margin: -16px; margin-top: 0px; width: calc(100% + 32px); height: calc(100% - 22px)"></iframe>
 </template>
 
 <script setup lang="ts">
