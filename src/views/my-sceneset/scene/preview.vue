@@ -12,8 +12,6 @@
 import { goback } from '@/utils/tools'
 const { id } = useRoute().params
 let sceneset: any = null //store.catalog.sceneCatalog
-// const router = useRouter()
-// const goback = () => router.push('/my-sceneset/scene/?pid=' + sceneset.id)
 
 const sceneName = ref()
 const previewUrl = '/scene-simulation-client/#/overview/?type=2&id=' + id
