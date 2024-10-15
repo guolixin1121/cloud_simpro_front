@@ -1,7 +1,6 @@
 <template>
   <div class="breadcrumb">
     <a @click="goback()">具体场景</a>
-    <!-- <router-link to="/my-sceneset/">具体场景</router-link> -->
     <a class="cursor-auto">{{ sceneset?.name }}</a>
     <span>{{ sceneName }}</span>
   </div>
