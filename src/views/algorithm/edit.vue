@@ -5,12 +5,18 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
-    <a-form :model="formState" :labelCol="{ style: { width: '80px' } }" style="width: 55%" @finish="add">
+    <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 55%" @finish="add">
       <a-form-item label="算法名称" name="name"
         :rules="[{ required: true, message: '请输入算法名称' }]"
       >
         <ch-input v-if="isAdd" v-model:value="formState.name" :maxlength="50" placeholder="请输入算法名称"></ch-input>
         <span v-else>{{ formState.name }}</span>
+      </a-form-item>
+      <a-form-item label="联仿接口类型" name="interface" :rules="[{ required: true, message: '请选择联仿接口类型' }]">
+        <a-select v-model:value="formState.interface" placeholder="请选择联仿接口类型">
+          <a-select-option key="1" value="CAPI">CAPI</a-select-option>
+          <a-select-option key="0" value="OSI">OSI</a-select-option>
+        </a-select>
       </a-form-item>
       <a-form-item
         label="镜像地址"
@@ -68,6 +74,7 @@ const title = isAdd ? '创建算法' : '修改算法'
 
 const formState = reactive<any>({
   name: undefined,
+  interface: undefined,
   version: '1',
   docker_path: undefined,
   cmd: undefined,

@@ -27,7 +27,7 @@
           <a-select-option key="0" value="0">外部</a-select-option>
         </a-select>
       </a-form-item>
-      <div v-show="formState.mount == '1'">
+      <template v-if="formState.mount == '1'">
         <!-- <a-form-item label="动力学动态库" name="dynamic_lib"
           :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择动力学动态库' }]">
           <scroll-select v-model:value="formState.dynamic_lib" 
@@ -56,20 +56,24 @@
             :api="baseApi.vehicle.getDrivers"
             placeholder="请选择驾驶员模型"></scroll-select>
         </a-form-item> -->
-      <a-form-item label="动力学横向控制方式" name="vehicle_horizontal" 
-        :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择横向控制方式' }]">
-          <a-select v-model:value="formState.vehicle_horizontal" :options="HorizontalOptions" placeholder="请选择横向控制方式"></a-select>
-        </a-form-item>
-      <a-form-item label="动力学纵向控制方式" name="vehicle_vertical" 
-        :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择纵向控制方式' }]">
-          <a-select v-model:value="formState.vehicle_vertical" :options="VerticalOptions" placeholder="请选择纵向控制方式"></a-select>
-        </a-form-item>
-      </div>
+        <a-form-item label="动力学横向控制方式" name="vehicle_horizontal" 
+          :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择横向控制方式' }]">
+            <a-select v-model:value="formState.vehicle_horizontal" :options="HorizontalOptions" placeholder="请选择横向控制方式"></a-select>
+          </a-form-item>
+        <a-form-item label="动力学纵向控制方式" name="vehicle_vertical" 
+          :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择纵向控制方式' }]">
+            <a-select v-model:value="formState.vehicle_vertical" :options="VerticalOptions" placeholder="请选择纵向控制方式"></a-select>
+          </a-form-item>
+      </template>
       <!-- <a-form-item label="任务执行次数" name="batch" :rules="[{ required: true, message: '请输入任务执行次数'}]">
         <a-input-number readonly v-model:value="formState.batch" min="1" max="9999" placeholder="请输入任务执行次数"></a-input-number>
       </a-form-item> -->
       <a-form-item label="仿真频率" name="frequency" :rules="[{ required: true, message: '请输入仿真频率'}]">
         <a-input-number v-model:value="formState.frequency" :precision="0" min="10" max="200" placeholder="请输入仿真频率"></a-input-number>
+      </a-form-item>
+      <a-form-item label="单场景仿真时长" name="single_sim_time" :rules="[{ required: true, message: '请输入单场景仿真时长'}]">
+        <a-input-number v-model:value="formState.single_sim_time" :precision="0" min="10" max="1000" placeholder="请输入单场景仿真时长" style="width: calc(100% - 18px); margin-right: 4px;"></a-input-number>
+        <span>秒</span>
       </a-form-item>
       <a-form-item label="感知在环" name="is_sensor" :rules="[{ required: true, message: '请选择感知在环' }]">
         <a-select v-model:value="formState.is_sensor">
@@ -141,6 +145,7 @@ const formState = reactive({
   sensors: [],
   is_in_ring: '0',
   is_sensor: '1',
+  single_sim_time: 60,
   mount: '',
   driver: undefined,
   algorithm: undefined,
@@ -151,7 +156,7 @@ const formState = reactive({
   kpi: [],
   test: false
 })
-let labelWidth = computed(() => formState.is_in_ring == '1' ? '150px' : '80px')
+let labelWidth = computed(() => formState.is_in_ring == '1' ? '150px' : '114px')
 
 const loading = ref(false)
 const router = useRouter()
@@ -163,6 +168,7 @@ const add = async () => {
     source: 0,
     name: formState.name,
     algorithm: formState.algorithm,
+    single_sim_time: formState.single_sim_time,
     // dynamic_lib: formState.dynamic_lib,
     dynamic_vehicle: formState.dynamic_vehicle,
     vehicle_horizontal: formState.vehicle_horizontal,
@@ -240,6 +246,7 @@ const getEditData = async () => {
      const data = await currentApi.get(id)
      formState.name = data.name
      formState.batch = data.batch
+     formState.single_sim_time = data.single_sim_time
      formState.algorithm = data.algorithm_detail.id
     //  formState.dynamic_lib = data.dynamic_lib_detail?.id
      formState.dynamic_model_id = data.vehicle_detail?.dynamic_model_id

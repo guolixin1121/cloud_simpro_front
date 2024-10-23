@@ -41,6 +41,9 @@
         <a-form-item label="仿真频率">
           {{ formState.frequency }}
         </a-form-item>
+        <a-form-item label="单场景仿真时长">
+          {{ formState.single_sim_time + '秒' }}
+        </a-form-item>
         <a-form-item label="感知在环">
           {{ formState.sensors_detail.length ? '是' : '否'  }}
         </a-form-item>
@@ -113,6 +116,7 @@ const formState = reactive({
   is_in_ring: '',
   algorithm_detail: { name: '' },
   mount: '0',
+  single_sim_time: '',
   dynamic_lib_detail: { name: ''},
   vehicle_detail:  { dynamic_model_name: '', version: ''},
   vehicle_horizontal: '',
@@ -136,9 +140,9 @@ const getEditData = async () => {
     loading.value = true
     const data = await api.task.get(useRoute().params.id)
     for(let prop in formState) {
-      formState[prop as keyof typeof formState] = data[prop]
+      formState[prop as keyof typeof formState] = data[prop] || ''
     }
-    labelWidth.value = data.mount == '1' ? 130 : 65
+    labelWidth.value = data.mount == '1' ? 130 : 110
   } finally {
     loading.value = false
   }
