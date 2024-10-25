@@ -271,13 +271,14 @@ const getEditData = async () => {
      formState.mount = data.mount.toString()
 
      // dynamic_model_id为必填项，非空时再赋值
-     if(formState.dynamic_model_id) {
-      getVehicleVersions.value = (args: any)  => api.veticleModel.getVersions({dynamic_model_id: formState.dynamic_model_id, ...args})
-     }
+     
 
     nextTick(() => {
       formState.dynamic_model_id = data.vehicle_detail?.dynamic_model_id
-        formState.dynamic_vehicle = data.vehicle_detail?.id
+      formState.dynamic_vehicle = data.vehicle_detail?.id
+      if(formState.dynamic_model_id) {
+        getVehicleVersions.value = (args: any)  => api.veticleModel.getVersions({dynamic_model_id: formState.dynamic_model_id, ...args})
+     }
     })
    }
    // 无论新建还是编辑都要默认加载算法
