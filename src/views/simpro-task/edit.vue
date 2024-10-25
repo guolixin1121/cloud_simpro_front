@@ -249,8 +249,6 @@ const getEditData = async () => {
      formState.single_sim_time = data.single_sim_time
      formState.algorithm = data.algorithm_detail.id
     //  formState.dynamic_lib = data.dynamic_lib_detail?.id
-     formState.dynamic_model_id = data.vehicle_detail?.dynamic_model_id
-     formState.dynamic_vehicle = data.vehicle_detail?.id
      formState.vehicle_horizontal = data.vehicle_horizontal
      formState.vehicle_vertical = data.vehicle_vertical
      formState.is_sensor = data.sensors_detail.length ? '1' : '0'
@@ -276,6 +274,11 @@ const getEditData = async () => {
      if(formState.dynamic_model_id) {
       getVehicleVersions.value = (args: any)  => api.veticleModel.getVersions({dynamic_model_id: formState.dynamic_model_id, ...args})
      }
+
+    nextTick(() => {
+      formState.dynamic_model_id = data.vehicle_detail?.dynamic_model_id
+        formState.dynamic_vehicle = data.vehicle_detail?.id
+    })
    }
    // 无论新建还是编辑都要默认加载算法
    getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})
