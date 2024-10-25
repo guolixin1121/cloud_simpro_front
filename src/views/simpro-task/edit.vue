@@ -5,7 +5,7 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
-    <a-form ref="form" :model="formState" :labelCol ="{ style: { width: '150px' } }"  style="width: 70%"
+    <a-form ref="form" :model="formState" :labelCol ="{ style: { width: labelWidth } }"  style="width: 70%"
       @finish="add">
       <a-form-item label="任务名称" name="name" :rules="[
         { required: true, message: '请输入任务名称'}, 
@@ -151,7 +151,7 @@ const formState = reactive({
   kpi: [],
   test: false
 })
-
+const labelWidth = computed(() => formState.mount == '1' ? '150px' : '90px')
 const loading = ref(false)
 const router = useRouter()
 const goback = () => router.push('/simpro-task')

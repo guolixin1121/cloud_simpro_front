@@ -5,6 +5,7 @@
     :options="options"
     placeholder="请选择"
     showSearch
+    :dropdownMatchSelectWidth="false"
     :not-found-content="loading ? '数据加载中...' :'暂无数据'"
     :filter-option="filterOption"
     @search="onSearch"
