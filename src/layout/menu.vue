@@ -23,7 +23,7 @@ const openOuterlink = (url: string) => {
   if(store.user.isRegisterUser()) {
     upgradeModal.value.show()
   } else {
-     window.open(url, 'new')
+     window.open(url, '_blank')
   }
 }
 </script>
