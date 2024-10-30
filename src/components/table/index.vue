@@ -61,7 +61,7 @@ const props = defineProps({
 })
 const emits = defineEmits(['select'])
 const route = useRoute()
-const routeName = route.path.replaceAll('/', '')
+const routeName = route.path // .replaceAll('/', '')
 const current = useSessionStorage(routeName + ':table-page', 1)
 const loading = ref(false)
 const data = ref()
