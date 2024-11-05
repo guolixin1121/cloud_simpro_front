@@ -140,17 +140,13 @@ const clearCheckbox = () => {
 }
 
 // 页面切换 event handler
-// const onChange = (params: any) => {
-//   clearCheckbox()
-//   current.value = params.current
-//   run({ ...props.query, page: current.value, size })
-//   emits('select', [], [])
-// }
 const onChange = (pageNumber: number) => {
   clearCheckbox()
   current.value = pageNumber
   run({ ...props.query, page: current.value, size })
   emits('select', [], [])
+  const tableBody = document.querySelector<HTMLElement>('.ant-table-body')
+  tableBody!.scrollTo({ top: 0})
 }
 
 // 查询

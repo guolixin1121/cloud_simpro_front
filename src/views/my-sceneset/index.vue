@@ -76,11 +76,12 @@ const selectedSceneset = ref()
 const scenesetApi = api.scenesets.getListV2
 
 const onTreeSelect = (sceneset: any) => {
+  const isScenetSetChanged = selectedSceneset.value?.id && selectedSceneset.value.id != sceneset.id
   if(sceneset.id == selectedSceneset.value?.id) return
 
   selectedSceneset.value = sceneset
   loadSceneset(sceneset.id)
-  query.value = { ...query.value, page: 1 } // 切换到第一页
+  isScenetSetChanged && (query.value = { ...query.value, page: 1 }) // 切换到第一页
 }
 
 const router = useRouter()
