@@ -90,7 +90,7 @@ const columns = [
               show: false
             },
             grid: {
-              left: '15%',
+              left: 0,
               top: 10
             },
             tooltip: {
@@ -145,39 +145,42 @@ const columns = [
             xAxis: { show: false },
             parallelAxis: schema.map(((item: any, index: number) => ({
               dim: index,
-              name: item
+              name: item,
+              nameTruncate: schema.length <= 2 ? { maxWidth: 150 } : {}
             }))),
             parallel: {
-                bottom: 50,
-                top: 10,
-                axisExpandable: false,
-                axisExpandCenter: 5,
-                axisExpandCount: 10,
-                axisExpandWidth: 80,
-                parallelAxisDefault: {
-                  type: 'value',
-                  nameLocation: 'start',
-                  nameTextStyle: {
-                    color: '#1e2229',
-                    fontSize: 12
-                  },
-                  axisLine: {
-                    lineStyle: {
-                      color: '#DADCE0'
-                    }
-                  },
-                  axisTick: {
-                    lineStyle: {
-                      color: '#DADCE0'
-                    }
-                  },
-                  splitLine: {
-                    show: false
-                  },
-                  axisLabel: {
-                    color: '#1e2229'
+              bottom: 50,
+              top: 10,
+              // left: 50,
+              // right: 50,
+              axisExpandable: false,
+              axisExpandCenter: 5,
+              axisExpandCount: 10,
+              axisExpandWidth: 80,
+              parallelAxisDefault: {
+                type: 'value',
+                nameLocation: 'start',
+                nameTextStyle: {
+                  color: '#1e2229',
+                  fontSize: 12
+                },
+                axisLine: {
+                  lineStyle: {
+                    color: '#DADCE0'
                   }
+                },
+                axisTick: {
+                  lineStyle: {
+                    color: '#DADCE0'
+                  }
+                },
+                splitLine: {
+                  show: false
+                },
+                axisLabel: {
+                  color: '#1e2229'
                 }
+              }
             },
             series: [
               {
@@ -187,6 +190,7 @@ const columns = [
               }
             ]
           }
+          console.log(chartOptions.value)
       }
       }
     }
