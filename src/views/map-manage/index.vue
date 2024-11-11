@@ -24,10 +24,11 @@
         <Table ref="tableRef" :api="mapsApi.getMaps" :query="query" :columns="columns" :scroll="{ x: 800, y: 'auto' }"
           @select="onSelect" >
           <template #bodyCell="{ column, record }">
-            <template v-if="column.dataIndex == 'versionCount' && user.hasPermission('versions')">
-              <a class="text-link inline-block w-full" @click="gotoVersion(record)">
+            <template v-if="column.dataIndex == 'versionCount'">
+              <a  v-if="user.hasPermission('versions')" class="text-link inline-block w-full" @click="gotoVersion(record)">
                 {{ record.versionCount }}
               </a>
+              <span v-else></span>
             </template>
           </template>
         </Table>

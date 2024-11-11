@@ -15,7 +15,11 @@ const controller = new AbortController()
 
 watch(() => props.option, render)
 
+onMounted(render)
+
 function render() {
+  if(!chartElement.value) return
+  
   chartInstance?.clear()
   if(!chartInstance) {
     chartInstance = echarts.init(chartElement.value)
