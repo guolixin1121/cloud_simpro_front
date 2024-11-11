@@ -77,13 +77,14 @@ ol {
   margin-left: 5px;
   width: 4px;
   height:4px;
+  // display: none;
 }
-::-webkit-scrollbar-thumb {
+&::-webkit-scrollbar-thumb {
   border-radius: 100px;
-  background: rgba(96,102,110,0.5);
+  background: transparent
 }
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(96,102,110,0.9);
+&:hover::-webkit-scrollbar-thumb {
+  background: rgba(96,102,110,0.5);
 }
 ::-webkit-scrollbar-corner {
   background: transparent;

@@ -389,7 +389,7 @@ onBeforeUnmount(cacheScrollTop)
   .resize-handler {
     cursor: col-resize;
     position: absolute;
-    right: 0;
+    right: 4px;
     top: 0;
     width: 16px;
     height: 100%;
