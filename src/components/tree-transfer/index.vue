@@ -3,29 +3,34 @@
     <div class="ant-transfer-list">
       <div class="flex justify-between ant-transfer-list-title">
         <span>{{ titles[0] }}</span>
-        <!-- <span class=" text-blue cursor-pointer" @click="onCheckedAll">全选</span> -->
+        <!-- <span class=" text-link cursor-pointer" @click="onCheckedAll">全选</span> -->
       </div>
-      <a-input-search class="my-2" placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
-      <div style="height: calc(100% - 40px); overflow: auto" @scroll="onScroll">
-        <a-tree checkable :tree-data="treeData" v-model:checkedKeys="checkedKeys" @check="onChecked"></a-tree>
+      <a-input-search placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
+      <div class="tree-container" @scroll="onScroll">
+        <a-tree checkable :showIcon="true" :tree-data="treeData" v-model:checkedKeys="checkedKeys" @check="onChecked">
+          <template #icon="{checkable}">
+            <svg-icon icon="folder" v-if="!checkable"></svg-icon>
+           <!-- <img v-if="!checkable" src="@/assets/images/icon_folder.png" /> -->
+          </template>
+        </a-tree>
         <a-spin :spinning="loading" style="width: 100%; padding-top: 20px"></a-spin>
       </div>
     </div>
 
     <div class="ant-transfer-list">
-      <div class="ant-transfer-list-title mt-1 flex justify-between">
+      <div class="ant-transfer-list-title flex justify-between">
         <span>{{ titles[1] }}({{ selectedNodes?.length }})</span>
-        <span class="text-blue cursor-pointer" @click="onRemoveAll">删除全部</span>
+        <span class="text-link cursor-pointer" @click="onRemoveAll">删除全部</span>
       </div>
-      <ul class="scroll-box" style="height: calc(100% - 40px); overflow: auto">
+      <ul class="scroll-box scroll-box-right" style="height: calc(100% - 40px);">
         <li class="transfer-checked-item flex justify-between items-center" v-for="item in selectedNodes" :key="item.key">
           <span class="label">{{ item.title }}</span>
-          <svg-icon icon="close" class="text-gray-400 cursor-pointer" @click="onRemove(item)" />
+          <svg-icon icon="close" style="height: 16px;" class="cursor-pointer" @click="onRemove(item)" />
         </li>
       </ul>
     </div>
   </div>
-  <div v-if="isExceedLimit" style="color: #ff4d4f">最多选择9个</div>
+  <div v-if="isExceedLimit" style="color: #ff4d4f">最多选择{{maxCount}}个</div>
 </template>
 
 <script lang="ts" setup>
@@ -33,6 +38,7 @@ import { watchOnce } from '@vueuse/core'
 import 'ant-design-vue/es/transfer/style/index.css'
 import { TreeDataItem } from 'ant-design-vue/lib/tree'
 
+const maxCount = 50
 const emits = defineEmits(['update:targetKeys'])
 const props = defineProps({
   titles: {
@@ -84,7 +90,8 @@ const treeTransfer = (data: any): TreeDataItem[] => {
     key: item[value],
     children: treeTransfer(item.children || []),
     name: item.name,
-    isTag: item.isTag
+    isTag: item.isTag,
+    checkable: item.isTag,
   }))
   return options
 }
@@ -94,7 +101,7 @@ const onChecked = (_checkedKeys: any, e: any) => {
   isExceedLimit.value = false
   let checkedNodes = e.checkedNodes.filter((item: any) => item.isTag)
   checkedNodes = getSelectedNode(checkedNodes)
-  if (checkedNodes.length > 9) {
+  if (checkedNodes.length > maxCount) {
     isExceedLimit.value = true
     checkedKeys.value = [...checkedKeysBackup.value]
   } else {
@@ -218,25 +225,20 @@ const onScroll = (e: any) => {
 getOptions()
 </script>
 
-<style lang="less" scoped>
-.ant-transfer-list-title {
-  padding-bottom: 8px;
-  border-bottom: 1px solid #e6e7eb;
-}
-.transfer-checked-item {
-  line-height: 20px;
-  padding: 6px 12px;
-  word-break: break-word;
-  white-space: break-spaces;
-  margin-top: 2px;
-  .label {
-    white-space: break-spaces;
+<style lang="less">
+.ant-tree {
+  .ant-tree-treenode {
+    width: 100%;
+    padding: 4px 0;
+    &:hover {
+      background-color: var(--gray-global-bg-color);
+    }
   }
-  &:hover {
-    background: var(--gray-globel-bg-color);
+  .ant-tree-switcher-noop {
+    display: none;
   }
-  .delete-icon {
-    cursor: pointer;
+  .ant-tree-checkbox {
+    margin-left: 4px;
   }
 }
 </style>

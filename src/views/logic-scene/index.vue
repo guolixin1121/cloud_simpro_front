@@ -4,7 +4,7 @@
   <div class="main">
     <page-title title="逻辑场景列表">
       <batch-button :disabled="!selectedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
-      <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add')" @click="router.push('/logic-scene/edit/0')">上传逻辑场景</a-button>
+      <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add')" @click="gotoSubPage('/edit/0')">上传逻辑场景</a-button>
     </page-title>
 
     <Table 
@@ -28,7 +28,7 @@
             <p class="description">泛化结果为{{ runScene.config_result_count }}个具体场景</p>
           </div>
           <div class="modal-buttons">
-            <a-button @click="closeRunConfirm" class="marginR-16">取消</a-button>
+            <a-button @click="closeRunConfirm">取消</a-button>
             <a-button @click="runConfirm" :loading="isSubmitting" type="primary">确定</a-button>
           </div>
         </template>
@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { SStorage } from '@/utils/storage'
+import { gotoSubPage } from '@/utils/tools'
 
 const user = store.user
 const currentApi = api.logicScene
@@ -82,7 +82,6 @@ const onSearch = (data: Query) => (query.value = { ...data })
 const showRunConfirm = ref(false)
 const runScene = ref<any>() // 要运行的数据
 const tableRef = ref()
-const router = useRouter()
 const columns = [
   { dataIndex: 'checkbox', width: 60 },
   { title: '场景ID', dataIndex: 'id', width: 90 },
@@ -102,13 +101,9 @@ const columns = [
         showRunConfirm.value = true
         runScene.value = data
       },
-      泛化结果: (data: any) => {
-        const versionUrlPath = '/logic-scene/result/' + data.id
-        SStorage.remove(versionUrlPath + ':table-page')
-        router.push('/logic-scene/result/' + data.id +'?name=' + data.name)
-      },
-      查看: (data: any) => router.push('/logic-scene/view/' + data.id),
-      编辑: (data: any) => router.push('/logic-scene/edit/' + data.id),
+      泛化结果: (data: any) => gotoSubPage('/result/' + data.id +'?name=' + data.name),
+      查看: (data: any) => gotoSubPage('/view/' + data.id),
+      编辑: (data: any) => gotoSubPage('/edit/' + data.id),
       删除: async ({ id }: { id: string }) => await currentApi.delete(id)
     }
   }

@@ -6,7 +6,7 @@
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading"> 
-      <a-form :model="formState" :labelCol="{ style: { width: '100px' } }" style="width: 55%" @finish="add">
+      <a-form :class="isView ? 'view-form' : ''" :model="formState" :labelCol="{ style: { width: '95px' } }" style="width: 55%" @finish="add">
         <a-form-item label="所属地图集：" name="catalog" :rules="[{ required: isAdd, message: '请选择地图集'}]">
           <tree-select
             v-if="isAdd"
@@ -46,7 +46,7 @@
           <template v-else>{{ formState.mapTypeName }}</template>
         </a-form-item>
         <a-form-item v-if="!isView" label="地图文件：" name="xodr" :rules="[{ required: isAdd, message: '请上传地图文件'}]">
-          <div class="flex">
+          <div class="flex items-center">
             <single-upload
               accept=".xodr"
               class="inline-block pr-2"
@@ -63,7 +63,7 @@
           <span>{{ formState.latestVersion }}</span>
         </a-form-item>
         <a-form-item label="标签">
-          <tree-transfer v-if="isAdd"
+          <tree-transfer v-if="!isView"
             v-model:target-keys="formState.labels"
             :api="baseApi.tags.getList"
             :query="{ tag_type: 4, tree: 1 }"
@@ -72,17 +72,17 @@
           ></tree-transfer>
           <template v-else>
             <ul class="view-list" v-if="formState.labels?.length > 0">
-              <li class="mb-2" v-for="item in formState.labels as any" :key="item.name">
+              <li v-for="item in formState.labels as any" :key="item.name">
                 {{ item.display_name }}
               </li>
             </ul>
-            <span v-else>无</span>
+            <span v-else>--</span>
           </template>
         </a-form-item>
         <a-form-item label="描述" name="desc">
           <ch-input v-if="!isView" type="textarea" v-model:value="formState.desc" placeholder="请输入描述" :maxlength="160" rows="10"></ch-input>
           <template v-else>
-            <span style="word-wrap: break-word; white-space: break-spaces;">{{ formState.desc }}</span>
+            <span style="word-wrap: break-word; white-space: break-spaces;">{{ formState.desc || '--' }}</span>
           </template>
         </a-form-item>
         <template v-if="isView">
@@ -146,7 +146,7 @@ const add = async () => {
     xodr: formState.xodr,
     desc: formState.desc,
     mapType: formState.mapType,
-    labels: formState.labels?.map((item: any) => item.name)
+    labels: formState.labels?.map((item: any) => item.value || item.name)
   }
   for (const key in params) {
     if (key !== 'desc') {
@@ -156,7 +156,7 @@ const add = async () => {
   try {
     isAdd ? await mapApi.addMaps({ ...params }) : await mapApi.editMaps({ id, data: { ...params } })
     loading.value = false
-    message.info(isAdd ? '上传成功' : '修改成功')
+    message.success(isAdd ? '上传成功' : '修改成功')
     goback()
   } catch {
     loading.value = false

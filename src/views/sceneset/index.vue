@@ -43,8 +43,6 @@ const onSearch = (params: RObject) => (query.value = { ...params, version: 2 })
 const router = useRouter()
 const columns = [
   { title: '场景集名称', dataIndex: 'groupName', ellipsis: true },
-  // { title: '路径', dataIndex: 'path', ellipsis: true },
-  // { title: '场景数量', dataIndex: 'count', width: 150 },
   { title: '类型', dataIndex: 'isLeaf', width: 150 },
   {
     title: '操作',

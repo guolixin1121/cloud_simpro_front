@@ -6,7 +6,7 @@
   <div class="min-main">
     <span class="title mb-5">评测指标详情</span>
     <a-spin :spinning="loading">
-      <a-form :labelCol ="{ style: { width: '100px' } }"  style="width: 55%">
+      <a-form class="view-form" :labelCol ="{ style: { width: '95px' } }"  style="width: 55%">
         <a-form-item label="评测指标ID">
           {{ formState.id }}
         </a-form-item>
@@ -25,38 +25,36 @@
                   <span>{{ formState.threshold.threshold_max }}</span>
               </div>
           </template>
-          <template v-if="formState.threshold?.threshold_type == '1'">
+          <template v-else-if="formState.threshold?.threshold_type == '1'">
               <div class="flex">
                   <img src="../../assets/images/icon_dayu.png" style="width: 16px"/>
                   <span>{{ formState.threshold.threshold_min }}</span>
               </div>
           </template>
-          <template v-if="formState.threshold?.threshold_type == '2'" >
+          <template v-else-if="formState.threshold?.threshold_type == '2'" >
               <div class="flex">
                 <img src="../../assets/images/icon_xiaoyu.png" style="width: 16px"/>
                 <span>{{ formState.threshold.threshold_max }}</span>
               </div>
           </template>
-          <template v-if="formState.threshold?.threshold_type == '3'">
+          <template v-else-if="formState.threshold?.threshold_type == '3'">
               <div class="flex">
                   <span style="width:16px">=</span>
                   <span>{{ formState.threshold.threshold_value }}</span>
               </div>
           </template>
-          <template v-else>
-            -
-          </template>
+          <template v-else>--</template>
           <!-- <template v-if="formState.threshold?.threshold_type == '4'">
               {{ formState.threshold.threshold_value == '0' ? '否' : '是'}}
           </template> -->
-            <span class="ml-2">{{ formState.threshold.threshold_unit }}</span>
+          <span class="ml-2">{{ formState.threshold.threshold_unit }}</span>
           </div>
         </a-form-item>
         <a-form-item label="指标文件地址">
-          {{ formState.py_url || '-' }}
+          {{ formState.py_url || '--' }}
         </a-form-item>
         <a-form-item label="描述">
-          {{ formState.desc || '-' }}
+          <span class="break-text">{{ formState.desc || '--' }}</span>
         </a-form-item>
         <a-form-item label="创建时间">
           {{ formatDate(formState.create_date) }}
@@ -65,7 +63,7 @@
           {{ formatDate(formState.update_time) }}
         </a-form-item>
         <a-form-item label="所属用户">
-          {{ formState.create_user || '-' }}
+          {{ formState.create_user || '--' }}
         </a-form-item>
       </a-form>
     </a-spin>

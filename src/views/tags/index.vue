@@ -6,15 +6,13 @@
       <a-button type="primary" v-if="user.hasPermission('add')" @click="router.push('/tags/edit/0?tag_type=' + query.tag_type)">创建标签</a-button>
     </div>
 
-    <div class="mt-4 overflow-auto">
-      <tree-table :query="query" :columns="columns" :api="currentApi.getList" :tree-node="'display_name'">
-        <template #default="{ column, row }">
-          <template v-if="column.dataIndex == 'isTag'">
-            {{ row.isTag ? '标签' : '标签目录' }}
-          </template>
+    <tree-table style="margin-top: 16px" :query="query" :columns="columns" :api="currentApi.getList" :tree-node="'display_name'">
+      <template #default="{ column, row }">
+        <template v-if="column.dataIndex == 'isTag'">
+          {{ row.isTag ? '标签' : '标签目录' }}
         </template>
-      </tree-table>
-    </div>
+      </template>
+    </tree-table>
   </div>
 </template>
 
@@ -45,8 +43,8 @@ const onSearch = (params: RObject) => {
 /****** 表格区域 */
 const router = useRouter()
 const columns = [
-  { title: '标签名称', dataIndex: 'display_name' },
-  { title: '标签英文名称', dataIndex: 'name' },
+  { title: '标签名称', dataIndex: 'display_name', width: '300px', 'show-overflow': true },
+  { title: '标签英文名称', dataIndex: 'name', 'show-overflow': true  },
   { title: '标签类别', dataIndex: 'isTag' },
   { title: '创建时间', dataIndex: 'create_time' },
   { title: '所属用户', dataIndex: 'create_user' },
@@ -57,8 +55,15 @@ const columns = [
     fixed: 'right',
     actions: {
       查看: ({ id }: RObject) => router.push('/tags/view/' + id),
-      编辑: ({ id }: RObject) => router.push('/tags/edit/' + id + '?tag_type=' + query.value.tag_type),
-      删除: async ({ id }: { id: string }) => await currentApi.delete(id)
+      编辑: {
+        // create_user == 'admin' 代表全局标签，仅有admin可以编辑删除
+        validator: ({create_user}: RObject ) => (create_user == 'system' || create_user == 'admin') ? user.isAdminProject() : true,
+        handler: ({ id }: RObject) => router.push('/tags/edit/' + id + '?tag_type=' + query.value.tag_type)
+      },
+      删除:{
+        validator: ({create_user}: RObject ) => (create_user == 'system' || create_user == 'admin') ? user.isAdminProject() : true,
+        handler: async ({ id }: { id: string }) => await currentApi.delete(id)
+      }
     }
   }
 ]

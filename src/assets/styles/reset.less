@@ -12,7 +12,7 @@ body,
   font-family: PingFang, sans-serif, Arial, Helvetica, 'STHeiti STXihei', 'Microsoft YaHei', sans-serif;
   font-size: 14px;
   color: var(--text-main-color);
-  background-color: var(--gray-globel-bg-color);
+  background-color: var(--gray-global-bg-color);
 }
 p,
 ul,
@@ -75,15 +75,16 @@ ol {
 
 ::-webkit-scrollbar {
   margin-left: 5px;
-  width: 6px;
-  height:8px;
+  width: 4px;
+  height:4px;
+  // display: none;
 }
-::-webkit-scrollbar-thumb {
+&::-webkit-scrollbar-thumb {
   border-radius: 100px;
-  background: rgba(96,102,110,0.5);
+  background: transparent
 }
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(96,102,110,0.9);
+&:hover::-webkit-scrollbar-thumb {
+  background: rgba(96,102,110,0.5);
 }
 ::-webkit-scrollbar-corner {
   background: transparent;
@@ -93,13 +94,11 @@ ol {
   background: transparent;
 }
 
-// .ant-table-body::-webkit-scrollbar {
-//   width: 6px;
-// }
-.scroll-box::-webkit-scrollbar, .view-list::-webkit-scrollbar, 
-.rc-virtual-list-scrollbar {
-  width: 4px !important;
-}
+::-webkit-scrollbar-track-piece {
+  background-color: transparent;
+  box-shadow: none;
+  border: 0px;
+} 
 
 .rc-virtual-list-scrollbar-thumb {
   background-color: rgba(102, 102, 102, 0.5) !important

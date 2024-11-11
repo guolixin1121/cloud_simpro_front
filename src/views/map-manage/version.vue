@@ -1,10 +1,10 @@
 <template>
+  <div class="breadcrumb">
+    <router-link to="/map-manage/">地图管理</router-link>
+    <!-- <a>地图管理</a> -->
+    <span class="breadcrumb--current">地图版本</span>
+  </div>
   <div class="main">
-    <div class="breadcrumb">
-      <router-link to="/map-manage/">地图管理</router-link>
-      <!-- <a>地图管理</a> -->
-      <span class="breadcrumb--current">地图版本</span>
-    </div>
     <a-spin :spinning="loading">
       <Table ref="table" :api="mapsApi.getMapVersion" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }">
         <template #bodyCell="{ column, record }">
@@ -18,14 +18,14 @@
     </a-spin>
   </div>
   <VncModal ref="vncModal"></VncModal>
+  <upgrade ref="upgradeModal" module="simulationManage"></upgrade>
 </template>
 
 <script setup lang="ts">
 import { gotoVnc} from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
 const vncModal = ref()
-const { id } = useRoute().params
-const { name } = useRoute().query
+const { name, id } = useRoute().query
 const type: any = { 0: '内置', 1: '真实', 2: '虚拟' }
 /****** api */
 const mapsApi = api.maps
@@ -34,6 +34,15 @@ const mapsApi = api.maps
 const loading = ref(false)
 const query: Query = ref({ map: id, name })
 /****** 表格区域 */
+const user = store.user
+const upgradeModal = ref()
+const beforeHandler = () => {
+  if(user.isRegisterUser()) {
+    upgradeModal.value.show()
+    return true
+  }
+  return false
+}
 const router = useRouter()
 const columns = [
   { title: '地图版本ID', dataIndex: 'id', width: 180 },
@@ -41,17 +50,19 @@ const columns = [
   { title: '地图文件', dataIndex: 'mapFileName', width: 180, ellipsis: true },
   // { title: '地图类型', dataIndex: 'mapType', width: 100 },
   { title: '创建时间', dataIndex: 'importTime', width: 150 },
-  { title: '创建者', dataIndex: 'importUserName', width: 100 },
+  { title: '创建者', dataIndex: 'importUserName', width: 100, ellipsis: true  },
   // { title: '地图文件地址', dataIndex: 'mapUrl', ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 150,
+    width: 160,
     actions: {
       查看: (data: any) => router.push('/map-manage/version-edit/' + data.id + '?type=0'),
       编辑: (data: any) => router.push('/map-manage/version-edit/' + data.id),
-      编辑地图: (data: any) => gotoVnc({
+      编辑地图: {
+        beforeHandler,
+        handler: (data: any) => gotoVnc({
           action: 2,
           value: JSON.stringify({
             map_name: data.mapName,
@@ -62,7 +73,8 @@ const columns = [
         }, 
         loading,
         null,
-        () => vncModal.value.show()),
+        () => vncModal.value.show())
+      },
       删除: async ({ id }: { id: string }) => await mapsApi.deleteMapVersion(id)
     }
   }
@@ -84,7 +96,7 @@ const columns = [
 // const loopVnc = async (id: String) => {
 //   if(count >= 8) {
 //     loading.value = false
-//     message.info('连接服务器失败')
+//     message.success('连接服务器失败')
 //     return
 //   }
 //   try {

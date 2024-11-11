@@ -1,16 +1,13 @@
 <template>
   <a-spin :spinning="loading">
-    <Table ref="tableRef" :api="getScenes" :columns="columns" :scroll="{ y: 'auto' }">
+    <Table ref="tableRef" :api="getScenes" :columns="columns" :scroll="{ y: 'auto' }"
+      :enableCheckPermission="false">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex == 'actions'">
-          <a class="text-blue mr-2" v-if="record.obs_report && record.b_file && record.baidu_id" @click="replay(record)">回放</a>
-          <a
-            class="text-blue"
-            v-if="record.obs_report && record.baidu_id"
-            :href="'/api/simpro/resource/' + record.obs_report"
-            target="_blank"
-            >查看报告</a
-          >
+          <a class="text-link mr-2" v-if="record.osipb_link" target="_blank"
+            :href="record.osipb_link">回放</a>
+          <a class="text-link" v-if="record.obs_report" target="_blank"
+            :href="'/api/simpro/resource/' + record.obs_report">查看报告</a>
         </template>
         <template v-if="column.dataIndex == 'result'">
           {{ getSimproSceneResults(record.status) }}
@@ -33,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-import { gotoVnc } from '@/utils/vnc'
+// import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
 import { getSimproSceneResults } from '@/utils/dict'
 const vncModal = ref()
@@ -54,18 +51,18 @@ const columns = [
   }
 ]
 const loading = ref(false)
-const uuid = useRoute().query.u
-const replay = (record: any) => {
-  gotoVnc(
-    {
-      action: 3,
-      value: JSON.stringify({ uuid: uuid, baidu_id: record.baidu_id })
-    },
-    loading,
-    null,
-    () => vncModal.value.show()
-  )
-}
+// const uuid = useRoute().query.u
+// const replay = (record: any) => {
+//   gotoVnc(
+//     {
+//       action: 3,
+//       value: JSON.stringify({ uuid: uuid, baidu_id: record.baidu_id })
+//     },
+//     loading,
+//     null,
+//     () => vncModal.value.show()
+//   )
+// }
 
 const tableRef = ref()
 onMounted(() => {

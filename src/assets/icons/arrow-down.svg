@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>14px/线性/通用/向下</title>
+    <g id="云平台-场景管理1.1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="场景管理-我的场景-具体场景-进入某一场景集" transform="translate(-194, -625)">
+            <g id="侧边导航备份" transform="translate(0, 60)">
+                <g id="Group-7" transform="translate(8, 552)">
+                    <g id="Group" transform="translate(186, 13)">
+                        <rect id="矩形" fill-opacity="0" fill="currentcolor" x="0" y="0" width="14" height="14"></rect>
+                        <path d="M1.33752104,3.96252104 C1.54001512,3.76002697 1.85434359,3.73752763 2.08168975,3.89502302 L2.16247896,3.96252104 L7,8.8 L11.837521,3.96252104 C12.0400151,3.76002697 12.3543436,3.73752763 12.5816898,3.89502302 L12.662479,3.96252104 C12.864973,4.16501512 12.8874724,4.47934359 12.729977,4.70668975 L12.662479,4.78747896 L7.41247896,10.037479 C7.20998488,10.239973 6.89565641,10.2624724 6.66831025,10.104977 L6.58752104,10.037479 L1.33752104,4.78747896 C1.10971521,4.55967312 1.10971521,4.19032688 1.33752104,3.96252104 Z" id="路径" fill="#B1B6C3"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

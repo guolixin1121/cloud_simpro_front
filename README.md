@@ -1,14 +1,19 @@
 # cloud_simpro_front 云仿真
 
+## 页面权限
+接口仅控制左侧菜单route的权限；   
+二级及以上页面根据path的一级目录来判断权限，所以二级及以上页面都要归属于一级页面目录下
+
 ## 分支说明
 1. master 开发分支
 执行archive生成zip后手动部署
-2. production: 生产分支
-3. yizhuang_dev 亦庄01环境分支  
-http://simpro01.saimo.cloud:32450/
-在独立的git上  
+2. production: 生产分支 
+3. yizhuang_dev 亦庄01分支  
+4. hengrun_dev 亦庄02分支  
+4. test_dev 亦庄03分支  
+在独立的git上   
 ```
-git remote add yizhuang http://10.9.0.167:22080/cloud-simpro1/cloud_simpro_front   
+git remote add yizhuang http://10.9.0.167:22080/cloud-simpro1/cloud_simpro_front  
 账号: cloud-simpro    
 密码: Da*hF4ig
 ```
@@ -17,6 +22,9 @@ git remote add yizhuang http://10.9.0.167:22080/cloud-simpro1/cloud_simpro_front
 1. 更改jenkinfile里的版本号
 2. 提交代码：git push yizhuang yizhuang_dev  
 ```
+
+亦庄jenkins http://10.9.0.167:21080
+
 
 ## 自动import
 + `components`下所有组件的`index.vue`已在vite中配置了自动引用，组件名为目录名。使用时无需`import`

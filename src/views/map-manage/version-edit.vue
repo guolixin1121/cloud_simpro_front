@@ -1,13 +1,13 @@
 <template>
   <div class="breadcrumb">
-    <router-link to="/map-manage/">地图管理</router-link>
-    <a class="breadcrumb--current breadcrumb-title" @click="goback">地图版本</a>
+    <a @click="goback(-2)">地图管理</a>
+    <a @click="goback()">地图版本</a>
     <span class="breadcrumb--current">{{ title }}</span>
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-spin :spinning="dataLoading">
-      <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 55%" @finish="add">
+      <a-form :class="isView ? 'view-form' : ''" :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 55%" @finish="add">
         <a-form-item label="地图名称：" name="mapName">
           {{ formState.mapName }}
         </a-form-item>
@@ -28,7 +28,7 @@
         </a-form-item>
         <a-form-item label="描述" name="name">
           <ch-input v-if="!isView" type="textarea" v-model:value="formState.mapVersionDesc" placeholder="请输入描述" :maxlength="160" rows="10"></ch-input>
-          <template v-else>{{ formState.mapVersionDesc }}</template>
+          <template v-else>{{ formState.mapVersionDesc || '--' }}</template>
         </a-form-item>
         <template v-if="isView">
           <a-form-item label="创建时间："
@@ -42,7 +42,7 @@
           <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">
             {{ '修改' }}
           </a-button>
-          <a-button @click="goback">取消</a-button>
+          <a-button @click="goback()">取消</a-button>
         </a-form-item>
       </a-form>
     </a-spin>
@@ -62,14 +62,14 @@ const formState = reactive<any>({})
 
 const loading = ref(false)
 const router = useRouter()
-const goback = () => router.go(-1)
+const goback = (step = -1) => router.go(step)
 const add = async () => {
   loading.value = true
   const params: any = { mapVersionDesc: formState.mapVersionDesc, catalog: mapCategory?.id }
   try {
     await mapApi.editMapVersion({ id, data: { ...params } })
     loading.value = false
-    message.info('修改成功')
+    message.success('修改成功')
     goback()
   } catch {
     loading.value = false

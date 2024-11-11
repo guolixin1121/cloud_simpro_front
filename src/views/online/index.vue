@@ -16,7 +16,7 @@
             <div class="item-logo"><img src="@/assets/images/icon_navlogo_car.png" /></div>
             <div class="item-name">{{ item.name }}</div>
           </div>
-          <div class="item-button text-center mt-2" v-if="user.username === item.username">
+          <div class="item-button text-center mt-2" v-if="user.userId === item.user_id">
             <a-button class="mr-2" @click="quitVnc(item)">释放</a-button>
             <a-button type="primary" @click="enterVnc(item)">进入</a-button>
           </div>
@@ -24,24 +24,16 @@
       </ul>
     </a-spin>
   </div>
+  <upgrade ref="upgradeModal" module="onlineSimulation"></upgrade>
 </template>
 
 <script lang="ts" setup>
 import { gotoVnc } from '@/utils/vnc'
 
 const user = store.user.user
-const list = ref()
-// const list = ref(
-//   [
-//   { name: 'GuangQi - 1', username: '', status: 0 },
-//   { name: 'GuangQi - 2', username: 'test1', status: 1 },
-//   { name: 'GuangQi - 3', username: 'test7', status: 1 },
-//   { name: 'GuangQi - 4', username: '', status: 0 },
-//   { name: 'GuangQi - 5', username: '', status: 0 },
-//   { name: 'GuangQi - 6', username: 'test1', status: 1 }
-//   ]
-// )
+const upgradeModal = ref()
 
+const list = ref()
 const loading = ref(false)
 const loadList = async () => {
   try {
@@ -59,11 +51,15 @@ const loadList = async () => {
 }
 loadList()
 
-// let newWindow: any
-const enterVnc = ({ status, address, username }: any) => {
-  const hasCurrentUserEntered = list.value.findIndex((item: any) => item.username === user.username) > -1
+const enterVnc = ({ status, address, user_id }: any) => {
+  if(store.user.isRegisterUser()) {
+    upgradeModal.value.show()
+    return
+  }
+
+  const hasCurrentUserEntered = list.value.findIndex((item: any) => item.user_id === user.userId) > -1
   if (hasCurrentUserEntered) {
-    if (user.username == username) {
+    if (user.userId == user_id) {
       gotoVnc({ action: 0, address }, loading, loadList)
     }
   } else if (status == 0) {

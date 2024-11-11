@@ -4,25 +4,33 @@
     <span class="breadcrumb--current">{{ title }}</span>
   </div>
   <div class="min-main">
-    <span class="title mb-5">{{ title }}</span>
-    <a-spin :spinning="loading">
-      <a-form :labelCol ="{ style: { width: labelWidth + 'px' } }"  style="width: 55%">
-        <templage v-for="(item, index) in items" :key="index">
-          <a-form-item :label="item.label" v-if="item.isShow == undefined || item.isShow" >
-            <span v-if="!Array.isArray(item.value)" 
-              :class="item.isBreak == undefined || item.isBreak || item.label == '描述' ? 'break-text' : ''">
-              {{ !item.value ? '-' : item.label.indexOf('时间') > -1 ? formatDate(item.value) : item.value }}
-            </span>
-            <ul v-else-if="item.value.length > 0" class="view-list">
-              <li class="mb-2" v-for="val in item.value" :key="val">
-                {{ val }}
-              </li>
-            </ul>
-            <span v-else>无</span>
-          </a-form-item>
-        </templage>
-      </a-form>
-    </a-spin>
+    <span class="title mb-5 relative">
+      {{ subtitle || title }}
+      <div style="position: absolute; right: 20px;">
+        <slot name="button"></slot>
+      </div>      
+    </span>
+
+    <div style="width: 55%">
+      <a-spin :spinning="loading">
+        <a-form class="view-form" :labelCol ="{ style: { width: labelWidth + 'px' } }">
+          <template v-for="(item, index) in items" :key="index">
+            <a-form-item :label="item.label" v-if="item.isShow == undefined || item.isShow" >
+              <span v-if="!Array.isArray(item.value)"
+                :class="item.isBreak == undefined || item.isBreak || item.label == '描述' ? 'break-text' : ''">
+                {{ !item.value ? '--' : item.label.indexOf('时间') > -1 ? formatDate(item.value) : item.value }}
+              </span>
+              <ul v-else-if="item.value.length > 0" class="view-list">
+                <li v-for="val in item.value" :key="val">
+                  {{ val }}
+                </li>
+              </ul>
+              <span v-else>--</span>
+            </a-form-item>
+          </template>
+        </a-form>
+      </a-spin>
+    </div>
   </div>
 </template>
 
@@ -32,8 +40,14 @@ defineProps({
   title: {
     type: String
   },
+  subtitle: {
+    type: String
+  },
   items: {
     type: Array<FormItem>
+  },
+  videoUrl: {
+    type: String
   },
   loading: {
     type: Boolean,
@@ -41,15 +55,12 @@ defineProps({
   },
   labelWidth: {
     type: Number,
-    default: () => 100
+    default: () => 65
   }
 })
 </script>
 
-<style lang="less" scoped>
-.break-text {
-  word-break:break-all; 
-  // word-wrap:inherit;
-  white-space: break-spaces;
-}
+<style>
+video::-webkit-media-controls-mute-button { display: none; }
+video::-webkit-media-controls-toggle-closed-captions-button { display: none; }
 </style>

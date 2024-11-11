@@ -14,9 +14,10 @@
       <a-tab-pane key="2" tab="SOTIF泛化">
       </a-tab-pane>
     </a-tabs> 
-    <Table ref="table" :api="listApi" 
+    <Table ref="table" style="margin-top: 0px;"
+      :api="listApi" 
       :scroll="{x: 100, y: 'auto'}"
-      :columns="activeKey =='1' ? columns : sotifColumns" style="margin-top: 0px;">
+      :columns="activeKey =='1' ? columns : sotifColumns" >
       <template #bodyCell="{column, record, text}">
         <template v-if="column.dataIndex == 'name'">
           {{ name }}
@@ -28,7 +29,7 @@
           {{ record.result_scene_set?.name }}
         </template>
         <template v-if="column.dataIndex == 'scene_count'">
-          <a class="text-blue inline-block w-full" @click="() => gotoScene(record)">{{ text }}</a>
+          <a class="text-link inline-block w-full" @click="() => gotoScene(record)">{{ text }}</a>
         </template> 
       </template>
     </Table>

@@ -1,6 +1,6 @@
 <!-- 封装了 - 日期格式化、操作列（有操作权限时才展示操作按钮） -->
 <template>
-  <a-table class="ant-table-striped" v-bind="$attrs" v-on="$attrs" :loading="loading" :dataSource="dataSource" :columns="columns" :row-class-name="(_record: any, index: number) => (index % 2 === 1 ? 'table-striped' : null)" :defaultExpandAllRows="true" :pagination="pagination" @change="onChange">
+  <a-table class="ant-table-striped" v-bind="$attrs" v-on="$attrs" :loading="loading" :dataSource="dataSource" :columns="columns" :row-class-name="(_record: any, index: number) => (index % 2 === 1 ? 'table-striped' : null)" :defaultExpandAllRows="true" :pagination="false" @change="onChange">
     <template #emptyText>
       <!-- loading时不显示暂无数据 -->
       <div v-if="loading" style="height: 100px"></div>
@@ -25,6 +25,7 @@
       </template>
     </template>
   </a-table>
+  <a-pagination v-model:current="pagination.current" :page-size="pagination.size" :total="pagination.total" :show-total="pagination['show-total']" @change="onChange"/>
 </template>
 
 <script setup lang="ts">
@@ -51,14 +52,20 @@ const props = defineProps({
     // 是否只允许创建者编辑，删除
     type: Boolean,
     default: () => false
+  },
+  // 操作列是否做权限校验
+  enableCheckPermission: {
+    type: Boolean,
+    default: () => true
   }
 })
 const emits = defineEmits(['select'])
 const route = useRoute()
-// const routeName = route.path.replaceAll('/', '')
-const current = useSessionStorage(route.path + ':table-page', 1)
+const routeName = route.path // .replaceAll('/', '')
+const current = useSessionStorage(routeName + ':table-page', 1)
 const loading = ref(false)
 const data = ref()
+provide('enableCheckPermission', props.enableCheckPermission)
 
 const run = async (query: any, slient = false) => {
   try {
@@ -76,7 +83,7 @@ const run = async (query: any, slient = false) => {
 }
 const dataSource = ref([])
 const pagination = computed(() => ({
-  size: 10,
+  size: 50,
   current: current.value,
   total: data.value?.count,
   'show-total': (total: number) => `共 ${total} 条`
@@ -133,11 +140,13 @@ const clearCheckbox = () => {
 }
 
 // 页面切换 event handler
-const onChange = (params: any) => {
+const onChange = (pageNumber: number) => {
   clearCheckbox()
-  current.value = params.current
+  current.value = pageNumber
   run({ ...props.query, page: current.value, size })
   emits('select', [], [])
+  const tableBody = document.querySelector<HTMLElement>('.ant-table-body')
+  tableBody!.scrollTo({ top: 0})
 }
 
 // 查询
@@ -156,46 +165,50 @@ watch(
 // watch(current, newVal => run({ ...props.query, page: newVal, size }))
 
 // 动态计算表格父容器高度
-const calcateHeight = () => {
-  // 搜索框高度
-  let height = document.getElementsByClassName('top')?.[0]?.clientHeight
-  height = isNaN(height) ? 0 : (height + 16) // + 16的padding高度
+const calcateHeight = () => { 
+  // table父容器上方所有区域的高度
+  let height = 0
+  let tops = document.querySelectorAll('.table-container > div:not(:last-child)')
+  if(tops.length == 0) {
+    tops = document.querySelectorAll('.ant-layout-content > div:not(:last-child)')
+  }
+  tops.forEach((top) => height += isNaN(top.clientHeight) ? 0 : (top.clientHeight + 16))
 
-  // 场景集地图集标题区高度
-  let titleHeight = document.getElementsByClassName('right-title')?.[0]?.clientHeight
-  titleHeight = isNaN(titleHeight) ? 0 : (titleHeight + 16)
-  height += titleHeight
-
-  const mainContent = document.getElementsByClassName('main')?.[0] as HTMLElement
-  let tabHeight = document?.getElementsByClassName('tabs')?.[0]?.clientHeight
-  tabHeight = isNaN(tabHeight) ? 0 : 72
-
-  // 表格内容区域
-  let tableHeight = height + tabHeight + 282
+  // table父容器高度
+  const mainContent = document.querySelector<HTMLElement>('.main')
+  if (mainContent) {
+    mainContent.style.height = 'calc(100% - ' + height + 'px)'
+  }
+  
+  // table上方所有区域的高度
+  let tableHeight = height
+  const tableTop = document.querySelectorAll('.main > div:not(.ant-table-wrapper):not(:last-child)')
+  tableTop.forEach((top) => tableHeight += isNaN(top.clientHeight) ? 0 : (top.clientHeight + 16))
+  
+  tableHeight = tableHeight + 246
   if(document.body.scrollWidth <= 1440) {
     // App.vue定义的页面最小宽度1440
     // 小于这个宽度出现滚动条时，计算表格高度时要加上滚动条高度，以确保分页符离底部总是最小24px
     tableHeight += 8
   }
-  const tableScrollBody = document.getElementsByClassName('ant-table-body')?.[0] as HTMLElement
+
+  // 表格内容区域
+  const tableScrollBody = document.querySelector<HTMLElement>('.ant-table-body')
   if (tableScrollBody) {
     tableScrollBody.style.maxHeight = 'calc(100vh - ' + tableHeight + 'px)'
-  }
-
-  // 右侧内容区域高度
-  if (mainContent) {
-    mainContent.style.height = 'calc(100% - ' + height + 'px)'
   }
 }
 onMounted(() => {
   // form筛选区域为单行时，因为有默认的padding，有时会一开始计算成两行
   // nexttick保证获取筛选区域的最终高度
   nextTick(calcateHeight)
-  window.addEventListener('resize', calcateHeight)
+  window.addEventListener('resize', calcateHeight )
 })
+onUnmounted(() => window.removeEventListener('resize', calcateHeight))
 
 // 用于删除等操作后，重新加载table
 // slient: 是否显示loading
+// option: { slient: boolean, page: number, deletedRows: number}
 const refresh = (option: any) => {
   loading.value = false
   clearCheckbox()
@@ -207,6 +220,7 @@ const refresh = (option: any) => {
   const deletedRows = option?.deletedRows || 1 
   if (dataSource?.value?.length === deletedRows) {
     const page = current.value > 1 ? current.value - 1 : current.value
+    current.value = page
     run({ ...props.query, page, size }, slient)
     return
   }
@@ -243,7 +257,7 @@ defineExpose({ refresh, calcateHeight })
 }
 
 .ant-table-striped :deep(.ant-table) {
-  border: 1px solid #f0f0f0;
+  border: 1px solid #E6E7EB;
 }
 :global(.ant-table-tbody > tr.ant-table-row-selected > td) {
   background: transparent;

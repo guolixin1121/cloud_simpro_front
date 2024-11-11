@@ -1,5 +1,5 @@
 <template>
-  <div class="flex justify-between items-center">
+  <div class="title-section">
     <span class="title">{{ title }}</span>
     <div>
      <slot/>

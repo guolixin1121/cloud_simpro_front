@@ -16,7 +16,6 @@
             <span class="label">场景集名称</span>
             {{ selectedSceneset?.name }}
           </div>
-          <!-- <div class="title-item"><span class="label">路径</span>{{ selectedSceneset?.path }}</div> -->
           <div class="title-item">
             <span class="label">标签</span>
             <span v-if="!selectedSceneset"></span>
@@ -33,14 +32,13 @@
       <search-form :items="formItems" :manual="true" @search="onTableSearch"></search-form>
 
       <div class="main">
-        <div class="flex justify-between items-center">
+        <div class="title-section">
           <span class="title">场景列表</span>
           <div>
             <batch-button :disabled="!checkedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"></batch-button>
             <a-button type="primary" 
             :disabled="checkedItems.length > 0 || (selectedSceneset && !selectedSceneset.isLeaf)" 
-              v-if="user.hasPermission('add')"
-               @click="router.push('/scene/edit/0')">上传场景</a-button>
+              v-if="user.hasPermission('add')" @click="router.push('/scene/edit/0')">上传场景</a-button>
           </div>
         </div>
         <a-spin :spinning="loading">
@@ -106,8 +104,8 @@ const columns = [
   { title: '标签', dataIndex: 'labels_detail', apiField: 'display_name', ellipsis: true },
   { title: '创建时间', dataIndex: 'createTime', width: 180 },
   { title: '修改时间', dataIndex: 'updateTime', width: 180 },
-  { title: '创建者', dataIndex: 'createUser', width: 150 },
-  { title: '修改者', dataIndex: 'updateUser', width: 150 },
+  { title: '创建者', dataIndex: 'createUser', width: 150, ellipsis: true  },
+  { title: '修改者', dataIndex: 'updateUser', width: 150, ellipsis: true  },
   {
     title: '操作',
     dataIndex: 'actions',

@@ -1,5 +1,8 @@
 import dayjs from 'dayjs'
+import router from '@/router'
 import { getType } from './validate'
+import { SStorage } from './storage'
+
 /**
  * 获取 url 中的参数
  * @param { String } name url参数name
@@ -158,3 +161,34 @@ export const preventReClick = {
     })
   }
 }
+
+/*
+* 跳转到指定页面,跳转前清除目标页面的缓存
+* path：目的路径，如果是到子页面，只需指定相对路径
+* isChild：boolean path是否为当前页面的子页面
+*/
+export const gotoSubPage = (targetPath, isChild = true) => {
+  let currentpath = router.currentRoute.value.path
+  currentpath = currentpath.endsWith('/') ? currentpath.substring(0, currentpath.length - 1) : currentpath
+ 
+  const targetFullPath = isChild ?  (currentpath + targetPath) : targetPath
+  const targetKeys = SStorage.getWithPrefix(targetFullPath.split('?')[0])
+  targetKeys.forEach((key) => SStorage.remove(key))
+
+  // open subpage
+  // path = path.startsWith('/') ? path.substring(1) : path
+  router.push(targetFullPath)
+}
+
+export const goback = (step = -1) => router.go(step)
+// export const goback = (step = -1) => {
+//   const currentPath = router.currentRoute.value.path
+//   const paths = currentPath.split('/')
+//   let targetIndex = paths.length-2+step
+//   let targetPath = ''
+//   while(targetIndex) {
+//     targetPath = '/' + paths[targetIndex] +  targetPath
+//     targetIndex--
+//   }
+//   router.push(targetPath)
+// }

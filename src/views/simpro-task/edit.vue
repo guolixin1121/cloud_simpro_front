@@ -5,7 +5,7 @@
   </div>
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
-    <a-form ref="form" :model="formState" :labelCol ="{ style: { width: labelWidth } }"  style="width: 70%"
+    <a-form ref="form" :model="formState" :labelCol ="{ style: { width: labelWidth}}"  style="width: 70%"
       @finish="add">
       <a-form-item label="任务名称" name="name" :rules="[
         { required: true, message: '请输入任务名称'}, 
@@ -27,7 +27,7 @@
           <a-select-option key="0" value="0">外部</a-select-option>
         </a-select>
       </a-form-item>
-      <div v-show="formState.mount == '1'">
+      <template v-if="formState.mount == '1'">
         <!-- <a-form-item label="动力学动态库" name="dynamic_lib"
           :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择动力学动态库' }]">
           <scroll-select v-model:value="formState.dynamic_lib" 
@@ -56,20 +56,24 @@
             :api="baseApi.vehicle.getDrivers"
             placeholder="请选择驾驶员模型"></scroll-select>
         </a-form-item> -->
-      <a-form-item label="动力学横向控制方式" name="vehicle_horizontal" 
-        :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择横向控制方式' }]">
-          <a-select v-model:value="formState.vehicle_horizontal" :options="HorizontalOptions" placeholder="请选择横向控制方式"></a-select>
-        </a-form-item>
-      <a-form-item label="动力学纵向控制方式" name="vehicle_vertical" 
-        :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择纵向控制方式' }]">
-          <a-select v-model:value="formState.vehicle_vertical" :options="VerticalOptions" placeholder="请选择纵向控制方式"></a-select>
-        </a-form-item>
-      </div>
+        <a-form-item label="动力学横向控制方式" name="vehicle_horizontal" 
+          :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择横向控制方式' }]">
+            <a-select v-model:value="formState.vehicle_horizontal" :options="HorizontalOptions" placeholder="请选择横向控制方式"></a-select>
+          </a-form-item>
+        <a-form-item label="动力学纵向控制方式" name="vehicle_vertical" 
+          :rules="[{ required: formState.mount == '1' ? true : false, message: '请选择纵向控制方式' }]">
+            <a-select v-model:value="formState.vehicle_vertical" :options="VerticalOptions" placeholder="请选择纵向控制方式"></a-select>
+          </a-form-item>
+      </template>
       <!-- <a-form-item label="任务执行次数" name="batch" :rules="[{ required: true, message: '请输入任务执行次数'}]">
         <a-input-number readonly v-model:value="formState.batch" min="1" max="9999" placeholder="请输入任务执行次数"></a-input-number>
       </a-form-item> -->
       <a-form-item label="仿真频率" name="frequency" :rules="[{ required: true, message: '请输入仿真频率'}]">
         <a-input-number v-model:value="formState.frequency" :precision="0" min="10" max="200" placeholder="请输入仿真频率"></a-input-number>
+      </a-form-item>
+      <a-form-item label="单场景仿真时长" name="single_sim_time" :rules="[{ required: true, message: '请输入单场景仿真时长'}]">
+        <a-input-number v-model:value="formState.single_sim_time" :precision="0" min="10" max="1000" placeholder="请输入单场景仿真时长" style="width: calc(100% - 18px); margin-right: 4px;"></a-input-number>
+        <span>秒</span>
       </a-form-item>
       <a-form-item label="感知在环" name="is_sensor" :rules="[{ required: true, message: '请选择感知在环' }]">
         <a-select v-model:value="formState.is_sensor">
@@ -103,12 +107,12 @@
       </a-form-item>
        <a-form-item label="场景" v-if="!isAdd">
         <ul class="view-list" v-if="formState.scenes?.length > 0">
-          <li class="mb-2" v-for="item in formState.scenes as any" :key="item">
+          <li v-for="item in formState.scenes as any" :key="item">
             {{ item.adsName }}
           </li>
         </ul>
       </a-form-item>
-      <a-form-item :wrapper-col="{ style: { paddingLeft: '150px' }}">
+      <a-form-item :wrapper-col="{ style: { paddingLeft: labelWidth } }">
         <a-button class="marginR-16" type="primary" html-type="submit" :loading="loading">
           {{ isAdd ? '创建' : '修改' }}
         </a-button>
@@ -124,7 +128,7 @@ import { VerticalOptions, HorizontalOptions } from '@/utils/dict';
 import KpiList from './components/kpi-list.vue'
 import SceneList from './components/scene-list.vue'
 
-const id = useRoute().params.id
+const id = useRoute().params.id  || '0'
 const isAdd = id === '0'
 const actionText = isAdd ? '创建' : '修改'
 const title =  actionText + '仿真任务'
@@ -141,6 +145,7 @@ const formState = reactive({
   sensors: [],
   is_in_ring: '0',
   is_sensor: '1',
+  single_sim_time: 60,
   mount: '',
   driver: undefined,
   algorithm: undefined,
@@ -151,7 +156,8 @@ const formState = reactive({
   kpi: [],
   test: false
 })
-const labelWidth = computed(() => formState.mount == '1' ? '150px' : '90px')
+let labelWidth = computed(() => formState.is_in_ring == '1' ? '150px' : '114px')
+
 const loading = ref(false)
 const router = useRouter()
 const goback = () => router.push('/simpro-task')
@@ -162,6 +168,7 @@ const add = async () => {
     source: 0,
     name: formState.name,
     algorithm: formState.algorithm,
+    single_sim_time: formState.single_sim_time,
     // dynamic_lib: formState.dynamic_lib,
     dynamic_vehicle: formState.dynamic_vehicle,
     vehicle_horizontal: formState.vehicle_horizontal,
@@ -187,7 +194,7 @@ const add = async () => {
       ? await currentApi.add(data)
       : await currentApi.edit({ id, data })
 
-    message.info(`${actionText}成功`)
+    message.success(`${actionText}成功`)
     goback()
   } finally {
     loading.value = false
@@ -217,7 +224,6 @@ const onRingChanged = () => {
     formState.vehicle_horizontal = 0
     formState.vehicle_vertical = 0
     formState.dynamic_vehicle = undefined
-    // formState.dynamic_lib = ''
   }
 }
 const onMountChanged = () => {
@@ -233,14 +239,16 @@ const onMountChanged = () => {
 
 /****** 获取编辑数据 */
 const getEditData = async () => {
-   if(id !== '0') {
+   if(isAdd) {
+    if(!store.user.hasAcl('cloud:simulation:tasks:add'))
+      return message.error('您没有执行该操作的权限')
+   } else {
      const data = await currentApi.get(id)
      formState.name = data.name
      formState.batch = data.batch
+     formState.single_sim_time = data.single_sim_time
      formState.algorithm = data.algorithm_detail.id
     //  formState.dynamic_lib = data.dynamic_lib_detail?.id
-     formState.dynamic_model_id = data.vehicle_detail?.dynamic_model_id
-     formState.dynamic_vehicle = data.vehicle_detail?.id
      formState.vehicle_horizontal = data.vehicle_horizontal
      formState.vehicle_vertical = data.vehicle_vertical
      formState.is_sensor = data.sensors_detail.length ? '1' : '0'
@@ -263,9 +271,15 @@ const getEditData = async () => {
      formState.mount = data.mount.toString()
 
      // dynamic_model_id为必填项，非空时再赋值
-     if(formState.dynamic_model_id) {
-      getVehicleVersions.value = (args: any)  => api.veticleModel.getVersions({dynamic_model_id: formState.dynamic_model_id, ...args})
+     
+
+    nextTick(() => {
+      formState.dynamic_model_id = data.vehicle_detail?.dynamic_model_id
+      formState.dynamic_vehicle = data.vehicle_detail?.id
+      if(formState.dynamic_model_id) {
+        getVehicleVersions.value = (args: any)  => api.veticleModel.getVersions({dynamic_model_id: formState.dynamic_model_id, ...args})
      }
+    })
    }
    // 无论新建还是编辑都要默认加载算法
    getAlgorithm.value = (args: any)  => api.algorithm.getList({is_in_ring: formState.is_in_ring, ...args})

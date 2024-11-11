@@ -1,46 +1,64 @@
-<script setup lang="ts">
-interface MenuItem {
-  title: string
-  path: string
-}
-const user = store.user.user
-let topMenus = ref<MenuItem[]>([])
-api.user.getTopMenu().then(data => (topMenus.value = data))
-
-const logout = store.user.logout
-</script>
-
 <template>
-  <div class="flex justify-between w-full">
-    <div>
-      <a v-for="(menu, index) in topMenus" :key="index" :href="menu.path" class="ml-16" style="display: none" target="_blank">
-        {{ menu.title }}
-      </a>
-    </div>
+  <div class=" right">
     <div class="flex items-center justify-center">
-      <!-- <div class="alert mr-5">
-        <i class="alert-icon"></i>
-        <i class="alert-circle"></i>
-      </div> -->
       <a-dropdown>
         <a class="username">
-          <span style="margin-right: 8px;">{{ user?.username || '管理员' }}</span>
+          <span style="margin-right: 8px;">{{ user.user?.username }}</span>
           <svg-icon icon="arrow"/>
         </a>
         <template #overlay>
           <a-menu>
             <a-menu-item>
-              <a @click="logout">退出登录</a>
+              <a @click="showPersonal = true">账号信息</a>
+            </a-menu-item>
+            <a-menu-item>
+              <a @click="showChangePassword = true">修改密码</a>
+            </a-menu-item>
+            <a-menu-item v-if="managerAcl">
+              <a :href="'/cloud_pro_auth/#/manage/' + managerAcl" target="_blank">管理中心</a>
+            </a-menu-item>
+            <a-menu-item v-if="memberAcl">
+              <a :href="'/cloud_pro_auth/#/manage/' + memberAcl" target="_blank">成员管理</a>
+            </a-menu-item>
+            <a-menu-item>
+              <a href="/helper/" target="_blank">用户手册</a>
+            </a-menu-item>
+            <a-menu-item>
+              <a @click="user.logout">退出登录</a>
             </a-menu-item>
           </a-menu>
         </template>
       </a-dropdown>
-      <a href="/helper/" target="_blank">
-        <img src="../assets//images/icon_explain.png" class="cursor-pointer" style="width: 24px; margin-left: 16px" />
-      </a>
     </div>
   </div>
+  <a-modal title="账户信息" width="500px" v-model:visible="showPersonal" :footer="null" destroy-on-close="true">
+    <Personal></Personal>
+  </a-modal>
+  <a-modal title="修改密码" v-model:visible="showChangePassword" :footer="null" destroy-on-close="true">
+    <Password></Password>
+  </a-modal>
 </template>
+
+<script setup lang="ts">
+import Personal from './components/personal.vue'
+import Password from './components/password.vue'
+
+const user = store.user
+const showChangePassword = ref(false)
+const showPersonal = ref(false)
+
+const managerAcl = computed(() => {
+  // 有以下其中一个权限，就展示‘管理中心’
+   const keys = ['system:systemManage:enterprise', 'system:systemManage:menu', 'system:clueManage']
+   for(let i = 0; i < keys.length; i++) {
+     if(user.hasAcl(keys[i])) {
+       return keys[i]
+     }
+   }
+  return ''
+})
+const memberAcl = user.hasAcl('system:memberManage') ? 'system:memberManage' : ''
+</script>
 
 <style scoped lang="less">
 .username {

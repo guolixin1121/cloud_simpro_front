@@ -1,5 +1,5 @@
 <template>
-  <form-view title="动态库详情" :items="formItems" :loading="loading">
+  <form-view title="动态库详情" :items="formItems" :loading="loading" :label-width="80">
     <router-link to="/dll/">动力学动态库</router-link>
   </form-view>
 </template>

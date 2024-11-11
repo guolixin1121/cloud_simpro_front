@@ -68,13 +68,12 @@ const add = async () => {
   loading.value = true
 
   const data = {...formState}
-  debugger
   try {
     isAdd
       ? await currentApi.add( data)
       : await currentApi.edit({ id, data })
 
-    message.info(`${actionText}成功`)
+    message.success(`${actionText}成功`)
     goback()
   } finally {
     loading.value = false

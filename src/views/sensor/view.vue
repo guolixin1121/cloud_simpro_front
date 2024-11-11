@@ -1,5 +1,5 @@
 <template>
-  <form-view title="传感器详情" :items="formItems" :loading="loading">
+  <form-view title="传感器详情" :items="formItems" :loading="loading" label-width="80">
     <router-link to="/sensor/">传感器模型</router-link>
   </form-view>
 </template>

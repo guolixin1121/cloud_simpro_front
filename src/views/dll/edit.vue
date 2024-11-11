@@ -6,13 +6,8 @@
   <div class="min-main">
     <span class="title mb-5">{{ title }}</span>
     <a-form :model="formState" :labelCol="{ style: { width: '90px' } }" style="width: 55%" @finish="add">
-      <a-form-item
-        label="动态库名称："
-        name="name"
-        :rules="[
-          { required: true, message: '请输入动态库名称'},
-          { validator: () => checkChName(formState.name, 50) }
-        ]"
+      <a-form-item label="动态库名称：" name="name"
+        :rules="[{ required: true, message: '请输入动态库名称'}]"
       >
         <ch-input v-if="isAdd" v-model:value="formState.name" :maxlength="50" placeholder="请输入动态库名称"></ch-input>
         <template v-else>{{ formState.name }}</template>
@@ -40,8 +35,6 @@
 </template>
 
 <script setup lang="ts">
-import { checkChName } from '@/utils/tools';
-
 const id = useRoute().params.id
 const isAdd = id === '0'
 const title = isAdd ? '上传动态库' : '修改动态库'
@@ -70,7 +63,7 @@ const add = async () => {
   try {
     isAdd ? await dllApi.add({ ...params }) : await dllApi.edit({ id, data: { ...params } })
     loading.value = false
-    message.info(isAdd ? '新建成功' : '修改成功')
+    message.success(isAdd ? '新建成功' : '修改成功')
     goback()
   } catch {
     loading.value = false

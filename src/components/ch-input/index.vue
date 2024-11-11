@@ -1,15 +1,17 @@
 <!-- 可判断中文个数的input组件 -->
 <template>
   <a-input v-if="type == 'input'" 
+    ref="inputRef"
     v-bind="$attrs"
-    :value="value" 
+    v-model:value="innerValue" 
     allowClear
     @input="inputChange"
 ></a-input>
   <a-textarea v-if="type == 'textarea'" 
     style="resize:none"
+    ref="inputRef"
     v-bind="$attrs"
-    :value="value" 
+    v-model:value="innerValue" 
     @input="inputChange"
 ></a-textarea>
 </template>
@@ -34,16 +36,41 @@ const props = defineProps({
   }
 } as any)
 
+const innerValue = ref(props.value)
 const emits = defineEmits(['update:value'])
-const { value, maxlength } = toRefs(props)
+const { maxlength } = toRefs(props)
 const inputChange = (e: { target: { value: any } }) => {
   let value = e.target.value
   if(props.exclude) {
     value = value.replace(props.exclude, '')
   }
   const totalLength = getWordLength(value)
-  if ( totalLength <= +maxlength.value) {
-    emits('update:value', value)
+  if(totalLength > +maxlength.value) {
+    value = sliceWord(value)
+  }
+  innerValue.value = value
+  // inputRef.value.blur()
+  // inputRef.value.focus()
+  emits('update:value', value)
+}
+
+const sliceWord = (text: string, index: number = 1): string => {
+  const preTextToIndex = text.substring(0, index - 1)
+  const textToIndex = text.substring(0, index)
+  const lengthToIndex = getWordLength(textToIndex)
+
+  if(lengthToIndex > +maxlength.value || lengthToIndex == getWordLength(text)) {
+     return preTextToIndex
+  } else {
+    return sliceWord(text, index + 1)
   }
 }
+watch(() => props.value, (val) => {
+  innerValue.value = val
+})
+
+const inputRef = ref()
+defineExpose({
+  focus: () => inputRef.value.focus(),
+})
 </script>

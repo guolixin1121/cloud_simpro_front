@@ -2,20 +2,22 @@
   <a-layout>
     <a-layout-header class="flex justify-between items-center">
       <!-- <i class="logo"></i> -->
-      <img src="../assets/images/icon_navlogo_home.png" alt="logo"/>
+       <svg-icon icon="home" style="display: flex;"></svg-icon>
+      <!-- <img src="../assets/images/icon_navlogo_home.png" alt="logo"/> -->
       <Header />
     </a-layout-header>
     <a-layout class="layout-main">
       <div class="sidebar" :class="{'collapsed': collapsed}">
-        <a-menu
-          mode="inline"
-          :inline-collapsed="collapsed"
-          :style="{ height: '100%', borderRight: 0 }"
-          v-model:selectedKeys="selectedKeys"
-          v-model:openKeys="openKeys"
-        >
-          <Menu :menus="menus"></Menu>
-        </a-menu>
+        <div class="menu">
+          <a-menu
+            mode="inline"
+            :inline-collapsed="collapsed"
+            :style="{ height: '100%', borderRight: 0 }"
+            v-model:selectedKeys="selectedKeys"
+            v-model:openKeys="openKeys"
+          >
+            <Menu :menus="menus"></Menu>
+        </a-menu></div>
         <div class="toggle-menu" :class="{'collapsed': collapsed}" @click="toggleCollapsed">
           <svg-icon icon="collapse"></svg-icon>
         </div>
@@ -91,7 +93,6 @@ function getParentKeys(list: Permission[], keys: string[] = []): string[] | bool
   position: relative; 
   background-color: #fff; 
   padding-top: 16px; 
-  overflow: auto;
   transition: all 0.5s;
 
   &.collapsed {
@@ -103,6 +104,10 @@ function getParentKeys(list: Permission[], keys: string[] = []): string[] | bool
       width: 64px;
     }
   }
+}
+.menu {
+  overflow-y: auto;
+  height: calc(100% - 50px) !important;
 }
 .toggle-menu {
   position: absolute;

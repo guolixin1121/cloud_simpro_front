@@ -47,9 +47,8 @@ export function defineApi<A>(action: Actions<A>): () => Results<A> {
         // 与axios一样的请求配置
         let { url } = value
         if (url && url?.indexOf('/{') > -1) {
-          // url里含有变量 /scene/scenes/{sid}
           url = url.split('{')[0]
-          results[key] = (data: any) => http.request({ ...value, url: url + (data.id || data) + '/', data: data.data })
+          results[key] = (data: any) => http.request({ ...value, url: url + (data.id || data) + '/', data: data.data || data })
         } else {
           results[key] = (data: any) => http.request({ ...value, url, data })
         }

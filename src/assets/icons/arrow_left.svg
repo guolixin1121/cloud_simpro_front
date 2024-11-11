@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>icon_left16</title>
+    <g id="云平台-个人中心" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="管理端-系统管理-企业管理" transform="translate(-975, -198)">
+            <g id="4.数据录入/日期选择框/选择-年月日区间2" transform="translate(935, 182)">
+                <g id="Group" transform="translate(40, 16)">
+                    <rect id="矩形" fill-opacity="0" fill="#FFFFFF" x="0" y="0" width="16" height="16"></rect>
+                    <path d="M13.5285955,4.52859548 C13.788945,4.26824595 14.211055,4.26824595 14.4714045,4.52859548 C14.7057191,4.76291005 14.7291506,5.1282506 14.5416989,5.38877037 L14.4714045,5.47140452 L8.47140452,11.4714045 C8.23708995,11.7057191 7.8717494,11.7291506 7.61122963,11.5416989 L7.52859548,11.4714045 L1.52859548,5.47140452 C1.26824595,5.21105499 1.26824595,4.78894501 1.52859548,4.52859548 C1.76291005,4.2942809 2.1282506,4.27084945 2.38877037,4.45830111 L2.47140452,4.52859548 L8,10.057 L13.5285955,4.52859548 Z" id="路径" fill-opacity="0.6" fill="#171F26" transform="translate(8, 8) rotate(90) translate(-8, -8)"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

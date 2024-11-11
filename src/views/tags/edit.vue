@@ -22,12 +22,12 @@
           <a-input v-if="isAdd" :value="formState.name" maxlength="64" placeholder="请输入标签英文名称，支持：小写英文字符、下划线" @change="onlyEnlishInput"></a-input>
           <template v-else>{{ formState.name }}</template>
         </a-form-item>
-        <a-form-item label="标签中文名称：" name="display_name" :rules="[{ required: true, message: '请输入标签中文名称' }, { validator: () => checkChName(formState.display_name) }]">
+        <a-form-item label="标签中文名称：" name="display_name" :rules="[{ required: true, message: '请输入标签中文名称' }, { validator: () => checkChName(formState.display_name, 64) }]">
           <chInput v-model:value="formState.display_name" maxlength="64" placeholder="请输入标签中文名称，支持：中文、英文字母、数字、特殊字符" />
         </a-form-item>
         <a-form-item label="上级标签：" name="tag_type">
           <tree-select v-if="isAdd" placeholder="请选择上级标签" allowClear v-model:value="formState.parentId" v-model:selectNode="formState.parentNode" :api="tagsListApi" :api-filter="(item: any) => !item.isTag" :check-leaf="false" :fieldNames="{ label: 'display_name', value: 'name' }"> </tree-select>
-          <template v-else>{{ formState.parentNode?.display_name }}</template>
+          <template v-else>{{ formState.parentNode?.display_name || '--' }}</template>
         </a-form-item>
         <a-form-item label="描述" name="desc" :rules="[{ required: false, message: '请输入标签描述' }]">
           <ch-input type="textarea" v-model:value="formState.desc" placeholder="请输入描述" :maxlength="255" rows="10"></ch-input>
@@ -94,7 +94,7 @@ const add = async () => {
     loading.value = true
     isAdd ? await tagsApi.add({ ...params }) : await tagsApi.edit({ id, data: { ...params } })
     loading.value = false
-    message.info(isAdd ? '创建成功' : '修改成功')
+    message.success(isAdd ? '创建成功' : '修改成功')
     goback()
   } catch {
     loading.value = false

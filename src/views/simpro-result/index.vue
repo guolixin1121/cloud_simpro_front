@@ -2,22 +2,24 @@
   <search-form class="multiline-form " :items="formItems" @search="onSearch" @show-more="toggleMore"></search-form>
 
   <div class="main">
-    <div class="flex justify-between items-center">
+    <div class="title-section">
       <div class="flex items-center">
         <span class="title mr-4">仿真结果列表</span>
         <a-checkbox v-model:checked="isOwner" class="table_model" @change="onChecked">我的结果</a-checkbox>
       </div>
       <div>
-        <batch-button :disabled="!selectedRows.length" v-if="user.hasPermission('delete')" :api="batchDelete"></batch-button>
+        <template v-if="user.hasPermission('delete')">
+          <a-button v-if="user.isRegisterUser()" :disabled="!selectedRows.length" @click="beforeHandler">删除</a-button>
+          <batch-button v-else :disabled="!selectedRows.length" :api="batchDelete"></batch-button>
+        </template>
       </div>
     </div>
-    <a-spin :spinning="loading">
       <Table
         ref="table"
         :api="currentApi.getList"
         :query="query"
         :columns="columns"
-        :scroll="{ x: 2100, y: 'auto' }"
+        :scroll="{ x: 2200, y: 'auto' }"
         @select="onSelect"
       >
         <template #bodyCell="{ column, record }">
@@ -27,7 +29,6 @@
               <template v-else-if="record.results_status == 0">未通过</template>
               <template v-else-if="record.results_status == 2">N/A</template>
               <template v-else>--</template>
-              <!-- {{ record.is_passed === null ? '--' : record.is_passed ? '通过' : '未通过' }} -->
             </div>
           </template>
           <template v-if="column.dataIndex == 'status'">
@@ -42,18 +43,17 @@
           </template>
         </template>
       </Table>
-    </a-spin>
   </div>
+  <upgrade ref="upgradeModal" module="simulationManage"></upgrade>
 </template>
 
 <script setup lang="ts">
 import { TaskSourceOptions, getTaskSourceName, resultStatus, getResultStatus } from '@/utils/dict'
-import { SStorage } from '@/utils/storage'
-import { openLink } from '@/utils/tools'
+import { gotoSubPage, openLink } from '@/utils/tools'
 
 const templateId = useRoute().query.templateId as string
-const router = useRouter()
 const user = store.user
+const upgradeModal = ref()
 const currentApi = api.result
 
 const isRunOrWait = (status: number) => status === 2 || status === 1
@@ -100,20 +100,27 @@ const formItems = ref<SearchFormItem[]>([
 const onSearch = (data: Query) => (query.value = { ...data, owner: isOwner.value ? 1 : 0 })
 
 /****** 表格区域 */
+const beforeHandler = () => {
+  if(user.isRegisterUser()) {
+    upgradeModal.value.show()
+    return true
+  }
+  return false
+}
 const table = ref()
 const columns = [
   { dataIndex: 'checkbox', width: 60, validator: (data: RObject) => isNotRunning(data.status) },
   { title: '任务ID', dataIndex: 'template_number', width: 150 },
-  { title: '运行时序', dataIndex: 'serial', width: 90 },
+  { title: '运行时序', dataIndex: 'serial', width: 100 },
   { title: '仿真任务名称', dataIndex: 'name', width: 200 },
-  { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 90 },
+  { title: '任务来源', dataIndex: 'source', formatter: getTaskSourceName, width: 100 },
   { title: '主车模型', dataIndex: 'vehicle_detail', width: 200 },
   { title: '仿真算法', dataIndex: 'algorithm_detail', width: 200 },
   { title: '评测指标', dataIndex: 'kpi_detail', width: 180, ellipsis: true },
-  { title: '运行状态', dataIndex: 'status', width: 100 },
-  { title: '任务结果', dataIndex: 'results_status', width: 80 },
-  { title: '完成时间', dataIndex: 'finish_time', width: 150 },
-  { title: '所属用户', dataIndex: 'create_user', width: 120 },
+  { title: '运行状态', dataIndex: 'status', width: 120 },
+  { title: '任务结果', dataIndex: 'results_status', width: 100 },
+  { title: '完成时间', dataIndex: 'finish_time', width: 180 },
+  { title: '所属用户', dataIndex: 'create_user', width: 200 },
   {
     title: '操作',
     dataIndex: 'actions',
@@ -121,16 +128,13 @@ const columns = [
     width: 180,
     actions: {
       停止: {
+        beforeHandler,
         validator: (data: any) => isRunOrWait(data.status),
         handler: (data: any) => onStop(data)
       },
       查看结果: {
         validator: (data: any) => isFinished(data.status),
-        handler: (data: any) => {
-          const versionUrlPath = '/simpro-result/view/' + data.id
-          SStorage.remove(versionUrlPath + ':table-page')
-          router.push(`/simpro-result/view/${data.id}?u=${data.uuid}`)
-        }
+        handler: (data: any) => gotoSubPage(`/view/${data.id}?u=${data.uuid}`)
       },
       查看报告: {
         validator: (data: any) => isFinished(data.status) && data.obs_report,
@@ -138,7 +142,14 @@ const columns = [
       },
       删除: {
         validator: (data: any) => isNotRunning(data.status),
-        handler: async (data: any) => await currentApi.delete(data.id)
+        beforeHandler,
+        handler: async (data: any) => {
+          if(user.isRegisterUser()) {
+            upgradeModal.value.show()
+            return
+          }
+          await currentApi.delete(data.id)
+        }
       }
     }
   }
@@ -149,7 +160,7 @@ const onStop = async (record: RObject) => {
   try {
     loading.value = true
     await api.task.cancel({ sim_task_id: record.id })
-    message.info('停止成功')
+    message.success('停止成功')
     table.value.refresh()
   } finally {
     loading.value = false

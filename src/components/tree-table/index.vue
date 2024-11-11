@@ -1,12 +1,14 @@
 <template>
+  <div class="relative" style="height: calc(100% - 24px)">
   <a-spin :spinning="loading">
     <vxe-table stripe ref="table" 
+      style="margin-top: 16px;"
       :scroll-x="{enabled: true, gt: 0 }"
       :border="isTree ? 'none' : 'full'" :show-header="isTree ? false : true" 
       :row-config="{ isHover: true, keyField: 'id' }" 
       :tree-config="{ transform: true, reserve: true, rowField: 'id', lazy: lazy, loadMethod: loadMethod }" 
       :data="tableData" @toggle-tree-expand="onTreeExpand" @cell-click="onCellClick">
-      <vxe-column v-for="column in columns" :key="column.dataIndex" 
+      <vxe-column v-for="column in columns" :key="column.dataIndex" show-overflow
       :field="column.dataIndex" :title="column.title" :width="column.width" 
       :tree-node="column.dataIndex === treeNode"
       v-bind="column">
@@ -15,9 +17,9 @@
             <template v-for="action in Object.keys(column.actions || {})" :key="action">
               <template v-if="hasPermission(column, row, action)">
                 <a-popconfirm v-if="action === '删除'" title="是否删除？" @confirm="onHandler(column, row, action)">
-                  <a class="text-blue mr-2">删除</a>
+                  <a class="text-link mr-2">删除</a>
                 </a-popconfirm>
-                <a v-else class="text-blue mr-2" @click="onHandler(column, row, action)">
+                <a v-else class="text-link mr-2" @click="onHandler(column, row, action)">
                   {{ action }}
                 </a>
               </template>
@@ -36,8 +38,7 @@
       </vxe-column>
     </vxe-table>
   </a-spin>
-  <div class="float-right mt-4 mr-4">
-    <a-pagination v-if="page.hasPagination" :total="page.total" :show-total="(total: number) => `共 ${total} 条`" :page-size="page.size" v-model:current="current" @change="onPageChange" />
+  <a-pagination v-if="page.hasPagination" :total="page.total" :show-total="(total: number) => `共 ${total} 条`" :page-size="page.size" v-model:current="current" @change="onPageChange" />
   </div>
 </template>
 
@@ -205,7 +206,7 @@ const onHandler = async (column: any, record: RObject, key: string) => {
   const isAync = handler.constructor.name === 'AsyncFunction'
   if (isAync) {
     await handler(record)
-    message.info(key + '成功')
+    message.success(key + '成功')
     refresh()
   } else {
     handler(record)
@@ -217,7 +218,6 @@ const loadMethod = async ({ row }: any) => {
   if (data.length == 0) {
     row.hasChild = false // 子节点为空
   }
-  debugger
   row.children = data
   expandRowKeys.value.push(row)
   return Promise.resolve(data)
@@ -226,8 +226,12 @@ const loadMethod = async ({ row }: any) => {
 const calcateHeight = () => {
   if (props.isTree) return
 
-  let height = document.getElementsByClassName('top')?.[0]?.clientHeight
-  height = isNaN(height) ? 0 : height + 16 // + 16的padding高度
+  let height = 0
+  let tops = document.querySelectorAll('.table-container > div:not(:last-child)')
+  if(tops.length == 0) {
+    tops = document.querySelectorAll('.ant-layout-content > div:not(:last-child)')
+  }
+  tops.forEach((top) => height += isNaN(top.clientHeight) ? 0 : (top.clientHeight + 16))
 
   // 设置表格内容的高度
   let tableHeight = height + 278
@@ -253,7 +257,7 @@ const hasPermission = (column: RObject, row: RObject, key: string) => {
   const data = row
   // 是否配置了该页面的操作权限
   const userStore = store.user
-  let permission = userStore.hasPermission(key as DataAction)
+  let permission = userStore.hasPermission(key)
 
   // 是否只允许自己操作
   if (props.isOnlyCreator && ['编辑', '删除'].includes(key)) {
@@ -278,6 +282,7 @@ onMounted(() => {
   nextTick(calcateHeight)
   window.addEventListener('resize', calcateHeight)
 })
+onUnmounted(() => window.removeEventListener('resize', calcateHeight))
 
 defineExpose({ refresh })
 </script>

@@ -4,10 +4,23 @@ pipeline {
         CURRENT_TIME = sh(script: "echo `date '+%Y%m%d%H%M%S'`", returnStdout: true).trim()
         VERSION="build-${BUILD_ID}-${CURRENT_TIME}"
         OCI_HOST='harbor.saimo.com:20080'
-        OCI_URI='harbor.saimo.com:20080/cloud-simpro'
-        GIT_COMMIT_MESSAGE = sh(script: "git --no-pager log -1 --pretty=format:'%s'",returnStdout: true).trim()
     }
     stages {
+        stage('check') {
+            steps {
+                script {
+                    if (env.HOST == null) {
+                        error "请先设置 HOST(域名)"
+                    }
+                    if (env.OCI_URI == null) {
+                        error "请先设置 OCI_URI(镜像仓库前缀地址)"
+                    }
+                    if (env.K8S_NS == null) {
+                        error "请先设置 K8S_NS(K8S命名空间)"
+                    }
+                }
+            }
+        }
         stage('Build') {
             steps {
                  withCredentials([usernamePassword(credentialsId: 'oci-credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
@@ -19,11 +32,6 @@ docker tag ${OCI_URI}/nginx:1.21-alpine nginx:1.21-alpine
 docker build -t ${OCI_URI}/cloud_simpro_front:${VERSION} .
 '''
                 }
-            }
-        }
-        stage('Check') {
-            steps {
-                echo "Check"
             }
         }
         stage('Image Push') {
@@ -65,7 +73,7 @@ curl -X POST -H "Content-Type: application/json" \
     \\"elements\\": [{
         \\"tag\\": \\"div\\",
         \\"text\\": {
-            \\"content\\": \\"commit_id: ${GIT_COMMIT}\\ncommit_message: ${GIT_COMMIT_MESSAGE}\\",
+            \\"content\\": \\"commit_id: ${GIT_COMMIT}\\",
             \\"tag\\": \\"lark_md\\"
         }
     }, {

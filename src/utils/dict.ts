@@ -1,11 +1,23 @@
-// 数据操作权限的label，value对应关系
+// 表格操作列权限的对应关系，用于权限查询
+// key：按钮文案
+// value：权限系统里的值
 export const Operations = {
-  编辑地图: 'edit',
-  编辑场景: 'edit',
+  新增: 'add',
   编辑: 'edit',
   删除: 'delete',
-  新增: 'add',
-  查看: 'view'
+  查看: 'view',
+  查看结果: 'view',
+  仿真结果: 'view',
+  编辑地图: 'editXodr',
+  编辑场景: 'editXosc',
+  运行: 'run',
+  停止: 'stop',
+  另存为: 'saveAs',
+  申请授权: 'apply',
+  泛化: 'generalize',
+  泛化结果: 'generalize',
+  审批: 'approve',
+  复制: 'copy'
 }
 
 export const SceneSourceOptions = [
@@ -124,3 +136,56 @@ export const LogicSceneStatusOption = [
 ]
 
 export const getLogicSceneStatusOption = (value: number | string) => LogicSceneStatusOption.find(v => v.value == value)?.label
+
+// 我的场景的来源
+export const MyScenesetSourceOptions = [
+  { label: '全部', value: '' },
+  { label: '创建', value: 0 },
+  { label: '场景资源库', value: 1 },
+  { label: 'SOTIF', value: 2 },
+  { label: '语义生成', value: 3 },
+]
+// 是否是内置场景集
+export const isDefaultMySceneset = ({source} : any) => source === 3
+export const isMyScenesetEditable = ({ source }: any) => source != 1 && source != 3 // && (groupName ? groupName != '赛目大模型场景集' : name != '赛目大模型场景集')
+export const getMyScenesetSourceName = (value: number | string) => MyScenesetSourceOptions.find(v => v.value === value)?.label
+
+export const MySceneSourceOptions = [
+  { label: '全部', value: '' },
+  { label: '创建', value: 0 },
+  { label: '泛化', value: 1 },
+  // { label: '场景挖掘', value: 4 },
+  { label: '场景资源库', value: 3 },
+  { label: '语义生成', value: 5 },
+]
+export const isMySceneEditable = (value: number | string) => value != 3
+export const getMySceneSourceName = (value: number | string) => MySceneSourceOptions.find(v => v.value === value)?.label
+
+export const MyLogicScenesetSourceOptions = [
+  { label: '全部', value: '' },
+  { label: '创建', value: 0 },
+  { label: 'SOTIF', value: 1 },
+  { label: '场景资源库', value: 2 }
+]
+export const isDefaultMyLogicSceneset = ({source} : any) => source === 1
+export const isMyLogicScenesetEditable = (value: number | string) => value == 0
+export const getMyLogicScenesetSourceName = (value: number | string) => MyLogicScenesetSourceOptions.find(v => v.value === value)?.label
+
+export const MyLogicSceneSourceOptions = [
+  { label: '全部', value: '' },
+  { label: '创建', value: 0 },
+  { label: 'SOTIF', value: 1 },
+  { label: '场景资源库', value: 2 },
+]
+export const isMyLogicSceneEditable = (value: number | string) => value != 2
+export const getMyLogicSceneSourceName = (value: number | string) => MyLogicSceneSourceOptions.find(v => v.value === value)?.label
+
+
+// 申请授权状态
+export const ApplyStatusOptions = [
+  { label: '全部', value: '' },
+  { label: '待审批', value: 1 },
+  { label: '已通过', value: 2 },
+  { label: '已拒绝', value: 3 }
+]
+export const getApplyStatus = (value: number | string) => ApplyStatusOptions.find(v => v.value == value)?.label

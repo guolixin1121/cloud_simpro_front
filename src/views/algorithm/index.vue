@@ -3,7 +3,7 @@
   <div class="main">
     <page-title title="算法列表">
       <batch-button :disabled="!selectedRows.length" v-if="user.hasPermission('delete')" :api="batchDelete"></batch-button>
-      <a-button type="primary" :disabled="selectedRows.length > 0"  v-if="user.hasPermission('add')" @click="router.push('/algorithm/edit/0')">创建算法</a-button>
+      <a-button type="primary" :disabled="selectedRows.length > 0"  v-if="user.hasPermission('add')" @click="router.push('/algorithm/edit/')">创建算法</a-button>
     </page-title>
 
     <Table
@@ -40,10 +40,10 @@ const columns = [
   { dataIndex: 'checkbox', width: 60 }, 
   { title: '算法ID', dataIndex: 'id', width: 120 },
   { title: '算法名称', dataIndex: 'name', width: 200, ellipsis: true },
-  { title: '控制在环', dataIndex: 'is_in_ring', width: 100, formatter: (value: string) => value ? '是' : '否' },
-  { title: '感知在环', dataIndex: 'perception', width: 100, formatter: (value: string) => value ? '是' : '否' },
+  { title: '控制在环', dataIndex: 'is_in_ring', width: 150, formatter: (value: string) => value ? '是' : '否' },
+  { title: '感知在环', dataIndex: 'perception', width: 150, formatter: (value: string) => value ? '是' : '否' },
   { title: '描述', dataIndex: 'desc', ellipsis: true },
-  { title: '创建时间', dataIndex: 'create_time', width: 180 },
+  { title: '创建时间', dataIndex: 'create_time', width: 200 },
   { title: '创建者', dataIndex: 'create_user', width: 200, ellipsis: true },
   {
     title: '操作',

@@ -33,8 +33,13 @@
         <template v-if="column.dataIndex == 'name'">
           <router-link :to="`/simpro-result/view/${record.id}`" class="name mr-2">{{ record.name }}</router-link>
         </template>
-        <template v-if="column.dataIndex == 'is_passed'">
-          {{ record.is_passed === null ? '-' : record.is_passed ? '通过' : '未通过' }}
+        <template v-if="column.dataIndex == 'results_status'">
+          <div class="flex items-center" :class="'task-passed--' + record.results_status">
+              <template v-if="record.results_status == 1">通过</template>
+              <template v-else-if="record.results_status == 0">未通过</template>
+              <template v-else-if="record.results_status == 2">N/A</template>
+              <template v-else>--</template>
+            </div>
         </template>
         <template v-if="column.dataIndex == 'status'">
           <span :class="'task-status task-status--' + record.status">{{ getResultStatus(record.status) }}</span>
@@ -60,17 +65,21 @@ const columns = [
     title: '任务状态'
   },
   {
-    dataIndex: 'is_passed',
+    dataIndex: 'results_status',
     title: '任务结果'
   }
 ]
 const dataSource = ref([])
 const loading = ref(false)
 const fetchData = async () => {
-  loading.value = true
-  const res = await api.result.getList()
-  loading.value = false
-  dataSource.value = res.results.slice(0, 4)
+  try {
+    loading.value = true
+    const res = await api.overview.results()
+    loading.value = false
+    dataSource.value = res.results.slice(0, 4)
+  } finally {
+    loading.value = false
+  }
 }
 fetchData()
 </script>
@@ -90,7 +99,7 @@ fetchData()
     }
   }
   .ant-table-thead > tr > th {
-    background: var(--gray-globel-bg-color);
+    background: var(--gray-global-bg-color);
   }
   .ant-table-cell {
     height: 38px;

@@ -2,12 +2,16 @@
   <template v-for="key in Object.keys(scope.column.actions || [])" :key="key">
     <template v-if="hasPermission(scope, key)">
       <!-- 删除列 -->
-      <a-popconfirm v-if="key === '删除'"
-        :title="getDeleteTip(scope, key)" @confirm="onHandler(scope, key)">
-        <a class="text-blue mr-2">{{ key }}</a>
+      <a v-if="user.isRegisterUser() && scope.column.actions[key].beforeHandler" class="text-link mr-2" @click="onHandler(scope, key)">
+        {{ key }}
+      </a>
+      <a-popconfirm placement="topRight" v-else-if="key == '删除'" :title="getDeleteTip(scope, key)" 
+        :okButtonProps="{type: 'link'}" :cancelButtonProps="{type: 'text'}"
+        @confirm="onHandler(scope, key)">
+        <a class="text-link mr-2">{{ key }}</a>
       </a-popconfirm>
       <!-- 其他列 -->
-      <a v-else class="text-blue mr-2" @click="onHandler(scope, key)">
+      <a v-else class="text-link mr-2" @click="onHandler(scope, key)">
         {{ key }}
       </a>
     </template>
@@ -18,6 +22,7 @@
 import { Operations } from '@/utils/dict'
 const props = defineProps(['scope', 'isOnlyCreator'])
 const emits = defineEmits(['refresh', 'before-handler'])
+const user = store.user
 
 /**
  * 判断用户是否有某个操作的权限，目前只检查’删除‘、’编辑‘
@@ -32,12 +37,14 @@ const hasPermission = (scope: RObject, key: string) => {
   const data = scope.record
   // 是否配置了该页面的操作权限
   const userStore = store.user
-  let permission = userStore.hasPermission(key as DataAction)
+  const enableCheckPermission = inject('enableCheckPermission')
+  let permission = enableCheckPermission ? userStore.hasPermission(key) : true
 
   // 是否只允许自己操作
   const operationKeys = Object.keys(Operations)
   // 跳过查看的权限检查，所有用户都可以查看
-  if (props.isOnlyCreator && key != '查看' && operationKeys.includes(key)) {
+  // if (props.isOnlyCreator && key != '查看' && operationKeys.includes(key)) {
+  if (props.isOnlyCreator && operationKeys.includes(key)) {
     const owner = data.createUser || data.create_user || data.username
     const isOwner = owner === userStore.user.username
     permission = permission && isOwner
@@ -57,12 +64,18 @@ const getDeleteTip = ({ column }: RObject, key: string) => {
 const onHandler = async ({ column, record }: RObject, key: string) => {
   const action = column.actions[key]
   const handler = action.handler || action
+  const beforeHandler = action?.beforeHandler
+  if(beforeHandler) {
+    const isBlocked = beforeHandler()
+    if(isBlocked) return
+  }
+
   const isAync = handler.constructor.name === 'AsyncFunction'
   if (isAync) {
     try {
       key != '删除' && emits('before-handler') // 操作时将table设置为loading，避免重复操作
       await handler(record)
-      message.info(key + '成功')
+      message.success(key + '成功')
     } finally {
       emits('refresh')
     }

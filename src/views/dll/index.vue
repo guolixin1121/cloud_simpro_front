@@ -26,7 +26,6 @@ const onSearch = (data: Query) => {
 }
 /****** 表格区域 */
 const router = useRouter()
-// const preRoute = router.currentRoute.value.path
 const columns = [
   { title: '动态库ID', dataIndex: 'id', width: 100 },
   { title: '动态库名称', dataIndex: 'name', 'min-width': 105 },

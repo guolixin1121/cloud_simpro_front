@@ -1,5 +1,5 @@
 <template>
-  <a-form ref="formRef" :labelCol="{ style: { width: '100px' } }" style="width: 55%">
+  <a-form ref="formRef" :labelCol="{ style: { width: '80px' } }" style="width: 55%">
     <slot></slot>
   </a-form>
 </template>

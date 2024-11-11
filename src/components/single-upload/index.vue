@@ -14,7 +14,7 @@
 import type { UploadChangeParam } from 'ant-design-vue'
 import { getWordLength } from '@/utils/tools';
 
-const props = defineProps(['value', 'text', 'accept'])
+const props = defineProps(['value', 'text', 'accept', 'maxSize'])
 const emits = defineEmits(['update:value'])
 const { text } = toRefs(props)
 const fileList = ref()
@@ -32,8 +32,9 @@ const onFileChange = (info: UploadChangeParam) => {
     fileList.value = fileList.value ? fileList.value : null
     return
   }
-  if(file.size && (file.size / 1024 / 1024 > 100)) {
-    message.warning('文件不能大于100M')
+  const maxSize = props.maxSize || 100
+  if(file.size && (file.size / 1024 / 1024 > maxSize)) {
+    message.warning('文件不能大于' + maxSize + 'M')
     fileList.value = fileList.value ? fileList.value : null
     return
   }

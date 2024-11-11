@@ -1,4 +1,4 @@
-const TOKEN_KEY = 'cloud_saimo_token'
+const TOKEN_KEY = 'token'
 export const getToken = () => {
   return localStorage?.getItem(TOKEN_KEY) || ''
 }
@@ -29,9 +29,16 @@ class MyStorage {
 
   get(key) {
     const value = this.storage.getItem(key)
+    
     if (value) {
-      return JSON.parse(value)
+      return value.indexOf('{') > -1 ? JSON.parse(value) : value
     }
+    return null
+  }
+
+  getWithPrefix(prefix) {
+    const keys = Object.keys(sessionStorage)
+    return keys.filter(key => key.startsWith(prefix))
   }
 
   remove(key) {

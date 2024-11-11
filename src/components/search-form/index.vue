@@ -1,6 +1,5 @@
 <template>
-  <!-- top作为标记类，用于table计算自身高度以便填充满页面高度 -->
-  <div class="white-block top search-form" :class="{'opened': isOpened}">
+  <div class="white-block search-form" :class="{'opened': isOpened}">
     <a-form ref="form" :class="'col-' + colLimit"
       layout="inline" :model="formState" v-bind="$attrs">
       <template v-for="(item, index) in items" :key="item">
@@ -8,7 +7,7 @@
         :class="{'last-row': isLastRow(index), 'more-row': isMoreRow(index)}"
         :label="item.label"
         :name="item.key"
-        style="margin-bottom: 10px"
+        style="margin-bottom: 16px"
         :rules="[{ required: item.required }]"
       >
         <scroll-select
@@ -28,6 +27,25 @@
           @change="(value: string|string[]) => onTreeSelectChange(item.key, value)"
         >
         </tree-select>
+        <a-range-picker
+          v-else-if="item.type == 'range-picker'"
+          allowClear
+          v-model:value="formState[item.key]"
+          v-on="item"
+         >
+          <template #nextIcon>
+            <svg-icon icon="arrow_right"></svg-icon>
+          </template>
+          <template #prevIcon>
+            <svg-icon icon="arrow_left"></svg-icon>
+          </template>
+          <template #superNextIcon>
+            <svg-icon icon="arrow_doubleright"></svg-icon>
+          </template>
+          <template #superPrevIcon>
+            <svg-icon icon="arrow_doubleleft"></svg-icon>
+          </template>
+        </a-range-picker>
         <component
           v-else
           :is="Ant[getComponent(item.type)]"
@@ -79,9 +97,13 @@ const props = defineProps({
     // 是否手动触发首次搜索
     type: Boolean,
     default: ()=> false
+  },
+  colsPerline: {
+    type: Number,
+    default: 4
   }
 } as any)
-const emits = defineEmits(['search', 'show-more'])
+const emits = defineEmits(['search', 'show-more', 'update:items'])
 
 // form state, and get default value from props
 const formState = reactive<Record<string, any>>({})
@@ -92,33 +114,45 @@ props.items.forEach((item: any) => {
 // 获取缓存的搜索项
 // 从菜单进入时设置?menu来清空缓存
 const route = useRoute()
-const routeName = route.path.replaceAll('/', '')
+const routeName = route.path //.replaceAll('/', '')
 onMounted(() => {
   const clear = route.query.clear === null
   const isBrowserBack = window.history.state.forward // 是否是浏览器回退
   if (!clear || isBrowserBack) {
-    const storage = SStorage.get(routeName)
-    if(storage) {
-      props.items.forEach((item: any) => {
-        const key = item.key
-        const isTimeKey = key.toLowerCase().indexOf('time') > -1 || key.toLowerCase().indexOf('date') > -1
-        if (isTimeKey) {
-          // 日期控件
-          const timeValue = storage[key]
-          if (timeValue && timeValue[0]) {
-            formState[key] = [dayjs(timeValue[0]), dayjs(timeValue[1])]
-          }
-        } else {
-          formState[key] = storage[key]
-        }
-      })
-    }
+    getDataFromStorage()
     !props.manual && emitSearch(false)
   } else {
-    SStorage.clear()
     !props.manual && emitSearch()
   }
 })
+
+function getDataFromStorage() {
+  const storage = SStorage.get(routeName)
+  if(storage) {
+    const items = [...props.items]
+    items.forEach((item: any) => {
+      const key = item.key
+      const isTimeKey = key.toLowerCase().indexOf('time') > -1 || key.toLowerCase().indexOf('date') > -1
+      if (isTimeKey) {
+        // 日期控件
+        const timeValue = storage[key]
+        if (timeValue && timeValue[0]) {
+          formState[key] = [dayjs(timeValue[0]), dayjs(timeValue[1])]
+          item.cachedValue = {
+            start_date: timeValue[0],
+            end_date: timeValue[1]
+          }
+        }
+      } else {
+        formState[key] = storage[key]
+        item.cachedValue = storage[key]
+      }
+      // 需要将缓存数据回传给父组件，其他属性value | defaultValue | searchValue都会导致问题，改为采用cachedValue
+    })
+    // 同步外边默认值，主要解决manual=true时首次搜索时的搜索条件值
+    emits('update:items', items)
+  }
+}
 
 // button events
 const form = ref()
@@ -174,9 +208,9 @@ const getComponent = (name: string) =>
  */
 const getDefaultStyle = (name: string) => {
   const styleMap = {
-    'range-picker': {
-      // 'value-format': 'YYYY-MM-DD'  // 重置时组件会出现invalid date的bug，换成取值时自己转换
-    },
+    // 'range-picker': {
+    //   // 'value-format': 'YYYY-MM-DD'  // 重置时组件会出现invalid date的bug，换成取值时自己转换
+    // },
     select: {
       'max-tag-count': 1,
       'max-tag-text-length': 4
@@ -222,7 +256,8 @@ watch(
 
 /**** 3列或4列布局 *****/
 // 根据总共多少列计算每列width，css里使用
-const colLimit = props.items.length > 4 ? 3 : props.items.length == 4 ? 4 : 3 // 每行几个
+const colsPerline = props.colsPerline || 4
+const colLimit = props.items.length > colsPerline ? 3 : props.items.length == colsPerline ? colsPerline : 3 // 每行几个
 const rowTotal = computed(() => Math.ceil(props.items.length / colLimit)) // 总行数
 // 当前显示总行数
 const showRowTotal = computed(() => {
@@ -251,8 +286,7 @@ const showMore = () => {
     emits('show-more', isOpened.value)
   })
 }
-// window.addEventListener('resize', () => colLimit.value = document.body.clientWidth < 1920 ? 3 : 4)
-// onMounted(() => colLimit.value = document.body.clientWidth < 1920 ? 3 : 4 )
+defineExpose({ reset })
 </script>
 
 <style lang="less" scoped>
@@ -312,5 +346,10 @@ const showMore = () => {
       }
     }
   }
+}
+</style>
+<style lang="less">
+.search-form  .ant-form-item-label label {
+  color: var(--text-main-color);
 }
 </style>

@@ -1,9 +1,9 @@
 import axios from 'axios'
 import { message } from 'ant-design-vue'
 import 'ant-design-vue/es/message/style/css' // 必须引用
-import { getToken } from '@/utils/storage'
+import { getToken, LStorage } from '@/utils/storage'
 import AxiosCanceler from './cancelCancel'
-
+// import router from '@/router'
 // 处理错误信息
 // const errorInfo = status => {
 //   const errorMap = new Map([
@@ -81,18 +81,18 @@ class AxiosRequest {
     return new Promise((resolve, reject) => {
       const { url, data = {}, method = 'POST', headers = {} } = params || {}
       const type = headers['content-type']
-
       Object.assign(headers, {
-        Authorization: `JWT ${getToken()}`,
+        Authorization: url.indexOf('/cloud-pro/') > -1 ? getToken() : `JWT ${getToken()}`,
         'content-type': type || 'application/json',
-        'X-Project-Id': store.user?.user?.project_id || ''
+        'X-Project-Id': store.user?.user?.project_id || LStorage.get('X-Project-Id')  || ''
       })
-      // data || {} : 兼容data = null的情况
-      Object.keys(data || {}).forEach(key => {
-        if(typeof data[key] == 'string') {
-          data[key] = data[key]?.trim()
-        }
-      })
+      if(typeof data == 'object') {
+        Object.keys(data).forEach(key => {
+          if(typeof data[key] == 'string') {
+            data[key] = data[key]?.trim()
+          }
+        })
+      }
 
       let postData = data
       if(type === 'multipart/form-data') {
@@ -118,11 +118,17 @@ class AxiosRequest {
         })
         .then(res => {
           const { code, data = {}, msg, err } = res.data
-          if (code === 0 || code === 200) {
+
+          if (code == 0 || code == 200) {
             resolve(data)
-          } else if (code === 100) {
+          } else if (code == 100) {
             // token过期跳到登录页
             store.user.gotoLogin()
+          // } else if (code == 102) {
+          //   // 无当前页面的权限，自动跳转到首页
+          //   // router.push('/404')
+          //   message.error(msg || err)
+          //   location.href = '/#/'
           } else {
             message.error(typeof msg === 'string' ? msg : err)
             reject(typeof msg === 'string' ? msg : err)
@@ -130,7 +136,7 @@ class AxiosRequest {
         })
         .catch(error => {
           if(axios.isCancel(error)) return
-          if (error.response?.status === 401) {
+          if (error.response?.status == 401) {
             // token过期跳到登录页
             store.user.gotoLogin()
           } else {

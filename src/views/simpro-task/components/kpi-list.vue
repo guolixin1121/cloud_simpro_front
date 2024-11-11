@@ -2,35 +2,37 @@
   <div class="ant-transfer">
     <a-form-item-rest>
       <div class="ant-transfer-list">
-        <div class="flex justify-between">
+        <div class="ant-transfer-list-title flex justify-between">
           <span>{{ titles[0] }}</span>
-          <!-- <span class=" text-blue cursor-pointer" @click="() => onCheckedAll()">全选</span> -->
+          <!-- <span class=" text-link cursor-pointer" @click="() => onCheckedAll()">全选</span> -->
         </div>
-        <a-input-search class="my-2" placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
-        <div class="scroll-box" style="height: calc(100% - 40px); overflow: auto" @scroll="(e: Event) => onScroll(e)">
+        <a-input-search placeholder="请输入搜索内容" allowClear @search="onSearch" @pressEnter="onSearch"></a-input-search>
+        <div class="scroll-box" style="height: calc(100% - 40px);" @scroll="(e: Event) => onScroll(e)">
+          <a-spin :spinning="loading" style="width: 100%; padding-top: 20px"></a-spin>
           <a-checkbox-group v-model:value="leftState.checkedKeys" @change="onChecked">
-            <a-checkbox class="ant-checkbox-group-item" v-for="item in leftState.dataSource" :key="item.key" :value="item.value">
-              <div class="flex items-center">
-                {{ item.label }}
+            <template v-for="item in leftState.dataSource" :key="item.key" >
+              <div class="checkbox-container">
+                <a-checkbox style="width: calc(100% - 24px)" class="ant-checkbox-group-item" :value="item.value" >
+                    {{ item.label }}
+                </a-checkbox>
                 <a-tooltip placement="topLeft" :title="item.desc" v-if="item.desc">
-                  <img src="../../../assets/images/tip.png" class="ml-1 cursor-pointer" style="height: 16px;"/>
+                    <img src="../../../assets/images/tip.png" class="ml-1 cursor-pointer" style="height: 16px;"/>
                 </a-tooltip>
               </div>
-            </a-checkbox>
+              </template>
           </a-checkbox-group>
-          <a-spin v-if="loading" style="width: 100%; padding-top: 20px"></a-spin>
         </div>
       </div>
       <!-- 右侧 -->
       <div class="ant-transfer-list">
-        <div class="ant-transfer-list-title mt-1 flex justify-between">
+        <div class="ant-transfer-list-title flex justify-between">
           <span>{{ titles[1] }}</span>
-          <span class="text-blue cursor-pointer" @click="onRemoveAll">删除全部</span>
+          <span class="text-link cursor-pointer" @click="onRemoveAll">删除全部</span>
         </div>
-        <div class="scroll-box" style="height: calc(100% - 40px); overflow: auto; margin: 0">
+        <div class="scroll-box scroll-box-right" style="height: calc(100% - 40px)">
           <ul>
             <li class="transfer-checked-item flex justify-between items-center" v-for="item in selectedNodes" :key="item.value">
-              <div>{{ item.name }}</div>
+              <div style="width: 70%">{{ item.name }}</div>
               <div>
                 <template v-if="item.threshold?.threshold_type == 0">
                   <div class="flex">
@@ -241,8 +243,6 @@ getOptions()
 </script>
 <style lang="less">
 .ant-transfer-list {
-  padding: 8px 12px;
-
   .ant-input,
   .ant-input-number,
   .ant-select .ant-select-selector {
@@ -251,16 +251,8 @@ getOptions()
     border-right: 0;
   }
 }
-.scroll-box .ant-checkbox-wrapper {
-  display: flex;
-  margin-top: 4px;
-}
 </style>
 <style lang="less" scoped>
-.ant-transfer-list-title {
-  padding-bottom: 8px;
-  border-bottom: 1px solid #e6e7eb;
-}
 .transfer-checked-item {
   line-height: 20px;
   padding: 6px 12px;
@@ -268,7 +260,7 @@ getOptions()
   white-space: break-spaces;
   margin-top: 2px;
   &:hover {
-    background: var(--gray-globel-bg-color);
+    background: var(--gray-global-bg-color);
   }
   .delete-icon {
     cursor: pointer;

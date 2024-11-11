@@ -17,3 +17,20 @@ export const isObject = obj => {
   const type = Object.prototype.toString.call(obj)
   return type === '[object Object]'
 }
+
+export const validatePassword = (password) => {
+  const reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,16}$/
+  if(!password || reg.test(password)) {
+    return Promise.resolve()
+  } else {
+    return Promise.reject(new Error('密码长度为8-16位数，必须包含数字和大小写字母'))
+  }
+}
+
+export const comparePassword = (formData) => {
+  const { password, confirm_password } = formData
+  if (password.trim().length > 0 && confirm_password.trim().length > 0 && password.trim() !== confirm_password.trim()) {
+      return Promise.reject(new Error('新密码输入两次不一致'))
+  }
+  return Promise.resolve()
+}
