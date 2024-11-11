@@ -73,7 +73,7 @@ const loadSceneset = async (page: number = 1) => {
             page,
             size: 16
         })
-        if(page ==1 && res.results.length == 0) {
+        if(page ==1 && query.value.trim() != '' && res.results.length == 0) {
             message.warn('很抱歉，没有找到您想要搜索的场景集')
             query.value = ''
             await loadSceneset()
@@ -133,7 +133,6 @@ const onApply = async () => {
         })
         message.success('申请已提交')
         modal.visible = false
-        // loadSceneset()
         selectedSceneset.value.apply_status = 1
     } finally {
         submitting.value = false
