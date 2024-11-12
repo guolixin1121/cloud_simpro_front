@@ -63,9 +63,13 @@ const emits = defineEmits(['select'])
 const route = useRoute()
 const routeName = route.path // .replaceAll('/', '')
 const current = useSessionStorage(routeName + ':table-page', 1)
+const scroll = useSessionStorage(routeName + ':table-scroll', 0)
 const loading = ref(false)
 const data = ref()
 provide('enableCheckPermission', props.enableCheckPermission)
+
+let tableScrollbar: any = undefined
+let tableBody: any = undefined
 
 const run = async (query: any, slient = false) => {
   try {
@@ -77,6 +81,17 @@ const run = async (query: any, slient = false) => {
     const results = data.value?.results || data.value?.datalist
     // addKeysToData(results)
     dataSource.value = results
+
+    nextTick(() => {
+      tableBody?.scrollTo({ top: scroll.value })
+      const contanerHeight = tableBody.clientHeight
+      const tableHeight = tableBody.querySelector('table').clientHeight
+      // const clientHeight = tableBody.clientHeight
+      // const scrollHeight = tableBody.scrollHeight
+      if(tableHeight > contanerHeight) {
+        tableScrollbar.style.height = (200 / (tableHeight - contanerHeight)) + "px"
+      }
+    })
   } finally {
     loading.value = false
   }
@@ -145,7 +160,6 @@ const onChange = (pageNumber: number) => {
   current.value = pageNumber
   run({ ...props.query, page: current.value, size })
   emits('select', [], [])
-  const tableBody = document.querySelector<HTMLElement>('.ant-table-body')
   tableBody!.scrollTo({ top: 0})
 }
 
@@ -193,16 +207,27 @@ const calcateHeight = () => {
   }
 
   // 表格内容区域
-  const tableScrollBody = document.querySelector<HTMLElement>('.ant-table-body')
-  if (tableScrollBody) {
-    tableScrollBody.style.maxHeight = 'calc(100vh - ' + tableHeight + 'px)'
-  }
+  tableBody!.style.height = 'calc(100vh - ' + tableHeight + 'px)'
 }
 onMounted(() => {
   // form筛选区域为单行时，因为有默认的padding，有时会一开始计算成两行
   // nexttick保证获取筛选区域的最终高度
   nextTick(calcateHeight)
+
   window.addEventListener('resize', calcateHeight )
+  tableBody = document.querySelector<HTMLElement>('.ant-table-body')
+  tableBody?.addEventListener('scroll', () => {
+    scroll.value = tableBody!.scrollTop
+    const clientHeight = tableBody.clientHeight - 48
+    const scrollHeight = tableBody.scrollHeight
+    const scrollTop = (scroll.value / (scrollHeight - clientHeight)) * clientHeight
+    tableScrollbar.style.top = (48 + scrollTop) + 'px'
+  })
+
+  const table = document.querySelector('.ant-table')
+  tableScrollbar = document.createElement('div')
+  tableScrollbar.setAttribute('class', 'ant-table-scrollbar')
+  table?.appendChild(tableScrollbar)
 })
 onUnmounted(() => window.removeEventListener('resize', calcateHeight))
 
@@ -247,6 +272,7 @@ defineExpose({ refresh, calcateHeight })
 
 <style scoped>
 .ant-table-striped {
+  position: relative;
   margin-top: 16px;
 }
 .ant-table-striped :deep(.ant-table-pagination.ant-pagination) {
@@ -264,5 +290,24 @@ defineExpose({ refresh, calcateHeight })
 }
 :global(.ant-table-tbody > tr.ant-table-row-selected:hover > td) {
   background: #fafafa;
+}
+</style>
+<style lang="less">
+// .ant-table-body::-webkit-scrollbar { width: 0px; }
+.ant-table {
+  .ant-table-scrollbar { display: none; }
+  &:hover .ant-table-scrollbar { display: block; }
+}
+.ant-table-scrollbar {
+  content: '';
+  display: block;
+  position: absolute;
+  right: 0px;
+  top: 48px;
+  border-radius: 100px;
+  z-index: 100;
+  background: rgba(96,102,110,0.5);
+  width: 4px;
+  height: 0px;
 }
 </style>
