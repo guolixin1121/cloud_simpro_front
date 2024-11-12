@@ -82,16 +82,7 @@ const run = async (query: any, slient = false) => {
     // addKeysToData(results)
     dataSource.value = results
 
-    nextTick(() => {
-      tableBody?.scrollTo({ top: scroll.value })
-      const contanerHeight = tableBody.clientHeight
-      const tableHeight = tableBody.querySelector('table').clientHeight
-      // const clientHeight = tableBody.clientHeight
-      // const scrollHeight = tableBody.scrollHeight
-      if(tableHeight > contanerHeight) {
-        tableScrollbar.style.height = (200 / (tableHeight - contanerHeight)) + "px"
-      }
-    })
+    nextTick(setScrollbar)
   } finally {
     loading.value = false
   }
@@ -116,9 +107,6 @@ const onCheckAllChanged = () => {
 
   // 部分选中到全选时，因isCheckedAll值不改变而无法触发onselect的trick
   isCheckedAll.value = !isCheckedAll.value
-  // nextTick(() => {
-  //   isCheckedAll.value = e.target.checked
-  // })
 }
 const onSelect = (isChecked: boolean, row: any) => {
   const existRow = selectedRows.value.find((item: any) => item.id == row.id)
@@ -160,7 +148,9 @@ const onChange = (pageNumber: number) => {
   current.value = pageNumber
   run({ ...props.query, page: current.value, size })
   emits('select', [], [])
-  tableBody!.scrollTo({ top: 0})
+
+  // 翻页后滚动到顶部
+  tableBody?.scrollTo({ top: 0})
 }
 
 // 查询
@@ -209,32 +199,72 @@ const calcateHeight = () => {
   // 表格内容区域
   tableBody!.style.height = 'calc(100vh - ' + tableHeight + 'px)'
 }
+
+/**
+ * 隐藏默认滚动条，自定义滚动条
+ * 解决：ant table右侧有空白，是滚动条位置，UI上需要让表格贴边
+ */
+const addScrollbar = () => {
+  // scrollbar element
+  const table = document.querySelector('.ant-table')
+  const scrollbarContainer = document.createElement('div')
+  scrollbarContainer.setAttribute('class', 'ant-table-scrollbar')
+  tableScrollbar = document.createElement('div')
+  tableScrollbar.setAttribute('class', 'ant-table-scrollbar-thumb')
+  scrollbarContainer.appendChild(tableScrollbar)
+  table?.appendChild(scrollbarContainer)
+
+  // 点击自定义滚动条空白处，滚动到目标位置 
+  scrollbarContainer.addEventListener('click', (event: any) => {
+    if(event.target.className == 'ant-table-scrollbar-thumb') return
+     
+    const scrollPercent = event.offsetY / tableBody.clientHeight
+    const targetScrollTop = scrollPercent * (tableBody.scrollHeight - tableBody.clientHeight) 
+    tableBody.scrollTo({ top: targetScrollTop })
+  })
+
+  // 内容区域滚动时，自定义滚动条跟着动
+  tableBody = document.querySelector<HTMLElement>('.ant-table-body')
+  tableBody?.addEventListener('scroll', updateScrollbar)
+}
+const setScrollbar = () => {
+  tableBody?.scrollTo({ top: scroll.value })
+  const viewHeight = tableBody.clientHeight
+  const contentHeight = tableBody.scrollHeight
+  if(contentHeight > viewHeight) {
+    tableScrollbar.style.height = viewHeight / contentHeight * viewHeight + "px"
+  }
+}
+// 计算实际滚动条滚动时，自定义滚动条的同步滚动距离
+const updateScrollbar = () => {
+  scroll.value = tableBody?.scrollTop
+  const viewHeight = tableBody.clientHeight
+  const contentHeight = tableBody.scrollHeight
+  const scrollbarHeight = tableScrollbar.clientHeight
+  const scrollbarTop = (tableBody.scrollTop / (contentHeight - viewHeight)) * (viewHeight - scrollbarHeight)
+  tableScrollbar.style.top = scrollbarTop + 'px'
+}
+
 onMounted(() => {
   // form筛选区域为单行时，因为有默认的padding，有时会一开始计算成两行
   // nexttick保证获取筛选区域的最终高度
   nextTick(calcateHeight)
-
   window.addEventListener('resize', calcateHeight )
-  tableBody = document.querySelector<HTMLElement>('.ant-table-body')
-  tableBody?.addEventListener('scroll', () => {
-    scroll.value = tableBody!.scrollTop
-    const clientHeight = tableBody.clientHeight - 48
-    const scrollHeight = tableBody.scrollHeight
-    const scrollTop = (scroll.value / (scrollHeight - clientHeight)) * clientHeight
-    tableScrollbar.style.top = (48 + scrollTop) + 'px'
-  })
 
-  const table = document.querySelector('.ant-table')
-  tableScrollbar = document.createElement('div')
-  tableScrollbar.setAttribute('class', 'ant-table-scrollbar')
-  table?.appendChild(tableScrollbar)
+  addScrollbar()
 })
 onUnmounted(() => window.removeEventListener('resize', calcateHeight))
 
 // 用于删除等操作后，重新加载table
 // slient: 是否显示loading
 // option: { slient: boolean, page: number, deletedRows: number}
-const refresh = (option: any) => {
+interface TableRefreshOption {
+  slient?: boolean
+  page?: number
+  deletedRows?: number
+  [key: string]: any
+}
+const refresh = (option: TableRefreshOption) => {
   loading.value = false
   clearCheckbox()
   if (option?.page) {
@@ -252,21 +282,9 @@ const refresh = (option: any) => {
   run({ ...props.query, page: current.value, size }, slient)
 }
 
-// 操作时将table设置为loading，避免重复操作
+// 操作时将table设置为loading，禁用一切用户操作
 const onBeforeHandler = () => (loading.value = true)
 
-// 为了兼容树状的table，为每个数据增加key
-// const addKeysToData = (data: any) => {
-//   if (!Array.isArray(data)) return
-//   data.forEach(item => {
-//     item.key = item.id
-//     if (isEmpty(item.children)) {
-//       delete item.children
-//     } else {
-//       addKeysToData(item.children)
-//     }
-//   })
-// }
 defineExpose({ refresh, calcateHeight })
 </script>
 
@@ -293,21 +311,25 @@ defineExpose({ refresh, calcateHeight })
 }
 </style>
 <style lang="less">
-// .ant-table-body::-webkit-scrollbar { width: 0px; }
+.ant-table-body::-webkit-scrollbar { width: 0px; }
 .ant-table {
-  .ant-table-scrollbar { display: none; }
+  .ant-table-scrollbar { display: block; }
   &:hover .ant-table-scrollbar { display: block; }
 }
 .ant-table-scrollbar {
-  content: '';
-  display: block;
   position: absolute;
   right: 0px;
   top: 48px;
-  border-radius: 100px;
-  z-index: 100;
-  background: rgba(96,102,110,0.5);
   width: 4px;
-  height: 0px;
+  height: calc(100% - 50px);
+  z-index: 100;
+  
+  .ant-table-scrollbar-thumb {
+    position: absolute;
+    border-radius: 100px;
+    background: rgba(96,102,110,0.5);
+    width: 4px;
+    height: 0px;
+  }
 }
 </style>

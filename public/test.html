@@ -1,0 +1,97 @@
+<!DOCTYPE html>  
+<html lang="zh">  
+<head>  
+    <meta charset="UTF-8">  
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+    <style>  
+        .scrollable {  
+            width: 300px;  
+            height: 300px;  
+            overflow: hidden;  
+            position: relative;  
+            border: 1px solid #ccc;  
+        }  
+        .content {  
+            height: 1000px;  
+            background: linear-gradient(to bottom, #f0f0f0, #d0d0d0);  
+        }  
+        .scrollbar {  
+            position: absolute;  
+            right: 0;  
+            background-color: rgba(100, 100, 100, 0.5);  
+            border-radius: 5px;  
+            transition: top 0.2s; /* 平滑过渡 */  
+        }  
+    </style>  
+</head>  
+<body>  
+
+<div class="scrollable">  
+    <div class="content"></div>  
+    <div class="scrollbar"></div>  
+</div>  
+
+<script>  
+class CustomScrollBar {  
+    constructor(contentHeight, viewportHeight) {  
+        this.contentHeight = contentHeight;  
+        this.viewportHeight = viewportHeight;  
+        this.scrollbarHeight = this.calculateScrollbarHeight();  
+        this.scrollableContentTop = 0; // 当前内容滚动位置  
+        this.currentScrollbarTop = 0; // 当前滚动条位置  
+
+        // 获取滚动条元素  
+        this.scrollbarElement = document.querySelector('.scrollbar');  
+        this.updateScrollbar();  
+    }  
+
+    calculateScrollbarHeight() {  
+        return (this.viewportHeight / this.contentHeight) * this.viewportHeight;  
+    }  
+
+    getScrollbarTop() {  
+        return (this.scrollableContentTop / (this.contentHeight - this.viewportHeight)) * (this.viewportHeight - this.scrollbarHeight);  
+    }  
+
+    updateScrollbar() {  
+        this.scrollbarElement.style.height = this.scrollbarHeight + 'px';  
+        this.scrollbarElement.style.top = this.getScrollbarTop() + 'px';  
+    }  
+
+    scrollTo(position) {  
+        // 确保位置在合法范围内  
+        if (position < 0) position = 0;  
+        if (position > this.contentHeight - this.viewportHeight) position = this.contentHeight - this.viewportHeight;  
+
+        this.scrollableContentTop = position;  
+        this.updateScrollbar();  
+        document.querySelector('.scrollable').scrollTop = this.scrollableContentTop;  
+    }  
+
+    // 点击空白处滚动  
+    handleBlankClick(event) {  
+        const scrollableRect = document.querySelector('.scrollable').getBoundingClientRect();  
+        const clickY = event.clientY - scrollableRect.top; // 点击位置相对于可视区域的Y坐标  
+
+        // 计算目标内容滚动位置  
+        const targetScrollTop = (clickY / this.viewportHeight) * (this.contentHeight - this.viewportHeight);  
+
+        this.scrollTo(targetScrollTop);  
+    }  
+}  
+
+// 实例化组件  
+const viewportHeight = 300;  
+const contentHeight = 1000;  
+const customScrollBar = new CustomScrollBar(contentHeight, viewportHeight);  
+
+// 监听点击事件  
+document.querySelector('.scrollable').addEventListener('click', event => {  
+    if (event.target === document.querySelector('.content')) { // 确保是在空白处点击  
+        customScrollBar.handleBlankClick(event);  
+    }  
+});  
+</script>  
+
+</body>  
+</html>  
