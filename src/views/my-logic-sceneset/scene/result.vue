@@ -1,5 +1,5 @@
 <template>
-   <div class="breadcrumb">
+  <div class="breadcrumb">
     <a @click="goback(-1)">逻辑场景</a>
     <a class="cursor-auto">{{ sceneset?.name }}</a>
     <span>泛化任务</span>
@@ -91,10 +91,12 @@ const columns = [
             },
             grid: {
               left: '15%',
-              top: 10
+              top: 10,
+              right: '15%'
             },
             tooltip: {
-              show: false,
+              triggerOn: 'click',
+              // show: false,
             },
             xAxis: {
               type: 'category',
@@ -130,54 +132,54 @@ const columns = [
                 color: '#1e2229'
               }
             },
-            series: [
-              {
-                type: 'line',
-                symbol: 'emptyCircle',
-                symbolSize: 6,
-                name: schema[0],
-                data: data[0],
-              }
-            ]
+            series: data.map((item: any) => ({
+              type: 'line',
+              symbolSize: 6,
+              symbol: 'emptyCircle',
+              name: schema[0],
+              data: item
+            })) 
           }
         } else {
           chartOptions.value = {
             xAxis: { show: false },
             parallelAxis: schema.map(((item: any, index: number) => ({
               dim: index,
-              name: item
+              name: item,
+              nameTruncate: schema.length <= 2 ? { maxWidth: 150 } : {}
             }))),
             parallel: {
-                bottom: 50,
-                top: 10,
-                axisExpandable: false,
-                axisExpandCenter: 5,
-                axisExpandCount: 10,
-                axisExpandWidth: 80,
-                parallelAxisDefault: {
-                  type: 'value',
-                  nameLocation: 'start',
-                  nameTextStyle: {
-                    color: '#1e2229',
-                    fontSize: 12
-                  },
-                  axisLine: {
-                    lineStyle: {
-                      color: '#DADCE0'
-                    }
-                  },
-                  axisTick: {
-                    lineStyle: {
-                      color: '#DADCE0'
-                    }
-                  },
-                  splitLine: {
-                    show: false
-                  },
-                  axisLabel: {
-                    color: '#1e2229'
+              bottom: 50,
+              top: 10,
+              smooth: true,
+              axisExpandable: false,
+              axisExpandCenter: 5,
+              axisExpandCount: 10,
+              axisExpandWidth: 80,
+              parallelAxisDefault: {
+                type: 'value',
+                nameLocation: 'start',
+                nameTextStyle: {
+                  color: '#1e2229',
+                  fontSize: 12
+                },
+                axisLine: {
+                  lineStyle: {
+                    color: '#DADCE0'
                   }
+                },
+                axisTick: {
+                  lineStyle: {
+                    color: '#DADCE0'
+                  }
+                },
+                splitLine: {
+                  show: false
+                },
+                axisLabel: {
+                  color: '#1e2229'
                 }
+              }
             },
             series: [
               {
@@ -187,7 +189,8 @@ const columns = [
               }
             ]
           }
-      }
+          console.log(chartOptions.value)
+        }
       }
     }
   }

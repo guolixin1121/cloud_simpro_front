@@ -10,6 +10,7 @@
             placeholder="请选择"
             v-model:value="names[index(row, col)]"
             :options="options[index(row, col)]"
+            :dropdownMatchSelectWidth="false"
             @change="(value: string) => handleSelectChange(index(row, col), value)">
           </a-select>
         </template>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="echart">
     <div class="name">{{ title }}</div>
     <div :style="title ? 'height:calc(100% - 25px)' : 'height:100%'" style="width: 100%" ref="chartElement"></div>
   </div>
@@ -15,7 +15,11 @@ const controller = new AbortController()
 
 watch(() => props.option, render)
 
+onMounted(render)
+
 function render() {
+  if(!chartElement.value) return
+  
   chartInstance?.clear()
   if(!chartInstance) {
     chartInstance = echarts.init(chartElement.value)
@@ -47,5 +51,12 @@ const produceOption = (option: any) => {
   font-weight: 600;
   margin-bottom: 8px;
   color: #1e2229;
+}
+</style>
+<style lang="less">
+.echart > div:last-child > div:last-child {
+  max-height: 300px;
+  overflow: auto;
+  pointer-events: all !important; 
 }
 </style>

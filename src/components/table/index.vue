@@ -313,7 +313,7 @@ defineExpose({ refresh, calcateHeight })
 <style lang="less">
 .ant-table-body::-webkit-scrollbar { width: 0px; }
 .ant-table {
-  .ant-table-scrollbar { display: block; }
+  .ant-table-scrollbar { display: none; }
   &:hover .ant-table-scrollbar { display: block; }
 }
 .ant-table-scrollbar {

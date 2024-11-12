@@ -1,5 +1,5 @@
 import { merge, cloneDeep } from "lodash"
-import circle from '@/assets/images/circle.png'
+// import circle from '@/assets/images/circle.png'
 
 const defaultOption = {
   color: ['#00AF59', '#9BE9AA'],
@@ -29,10 +29,11 @@ const defaultOption = {
       type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
     },
     formatter: (series: any) => {
+      console.log(series)
       // const name = series[0].name
       let relVal = '' // '<div><p style="font-weight: 500; margin-bottom: 5px">' + name + '</p>';
       for (let i = 0, l = series.length; i < l; i++) {
-          relVal += '<div>' + 
+          relVal += '<div class="echarts-tooltip">' + 
             '<span style="display: inline-block; margin-right: 5px; width: 8px; height: 8px; border-radius: 10px; background-color:' + series[i].color + '"></span>' +
             '<span style="color: #1E2229">' + series[i].seriesName + '：</span>' + 
             '<span style="float: right; color: #1e2229">' + (series[i].value || 0) + ('') + '</span></div>'
@@ -92,7 +93,7 @@ const seriesOptions = {
     barMinHeight:'5',
   },
   'line': {
-    symbol: 'image://' + circle,
+    // symbol: 'image://' + circle,
     symbolSize: 10,
     lineStyle: {
       width: 3
