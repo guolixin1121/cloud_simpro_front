@@ -225,16 +225,7 @@ const addScrollbar = () => {
   tableBody = document.querySelector<HTMLElement>('.ant-table-body')
   tableBody?.addEventListener('scroll', updateScrollbar)
 
-  // 点击自定义滚动条空白处，滚动到目标位置 
-  scrollbarContainer.addEventListener('click', (event: any) => {
-    if(event.target.className == 'ant-table-scrollbar-thumb') return
-     
-    const scrollHeight = tableBody.scrollHeight - tableBody.clientHeight // 未显示的需要滚动部分的总高度
-    const scrollPercent = event.offsetY / tableBody.clientHeight // 点击的位置相对于滚动条顶部的百分比
-    tableBody.scrollTo({ top: scrollPercent * scrollHeight })
-  })
-
-  // 拖动滚动条实现滚动
+  // 点击滚动条时上下拖动的滚动
   tableScrollbar.addEventListener('mousedown', (event: any) => {
     isMouseDragging.value = true
     event.preventDefault()
@@ -250,23 +241,34 @@ const addScrollbar = () => {
       tableBody.scrollTo({ top: scrollPercent * scrollHeight })
     }
   })
+  // 点击自定义滚动条空白处，滚动到目标位置 
+  scrollbarContainer.addEventListener('click', (event: any) => {
+    if(event.target.className == 'ant-table-scrollbar-thumb') return
+     
+    const scrollHeight = tableBody.scrollHeight - tableBody.clientHeight // 未显示的需要滚动部分的总高度
+    const scrollPercent = event.offsetY / tableBody.clientHeight // 点击的位置相对于滚动条顶部的百分比
+    tableBody.scrollTo({ top: scrollPercent * scrollHeight })
+  })
 }
 const setScrollbar = () => {
-  tableBody?.scrollTo({ top: scroll.value }) // 移动到上次记录的位置
-  
   // 根据内容总高度，计算滚动条thumb的高度
   const viewHeight = tableBody.clientHeight
   const contentHeight = tableBody.scrollHeight
   if(contentHeight > viewHeight) {
     tableScrollbar.style.height = viewHeight / contentHeight * viewHeight + "px"
   }
+
+  // nextTick(() => {
+    tableBody?.scrollTo({ top: scroll.value }) // 移动到上次记录的位置
+  // })
 }
 // 计算实际滚动条滚动时，自定义滚动条的同步滚动距离
 const updateScrollbar = () => {
   scroll.value = tableBody?.scrollTop
   
+  const scrollbarHeight = tableScrollbar.style.height.replace('px', '')
   const scrollHeight = tableBody.scrollHeight - tableBody.clientHeight   // 未显示的需要滚动部分的总高度
-  const containerHeight = tableBody.clientHeight - tableScrollbar.clientHeight  // scrollbar内可滚动的高度
+  const containerHeight = tableBody.clientHeight - scrollbarHeight  // scrollbar内可滚动的高度
   const newTop = tableBody.scrollTop / scrollHeight * containerHeight
   tableScrollbar.style.top = newTop + 'px'
 }
