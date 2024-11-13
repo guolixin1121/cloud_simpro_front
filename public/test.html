@@ -3,95 +3,117 @@
 <head>  
     <meta charset="UTF-8">  
     <meta name="viewport" content="width=device-width, initial-scale=1.0">  
-    <style>  
-        .scrollable {  
-            width: 300px;  
-            height: 300px;  
-            overflow: hidden;  
+    <style>
+        html, body {  
+            margin: 0;  
+            height: 100%;
+            user-select: none; /* 禁用选中 */  
+        }  
+
+        .scroll-container {  
             position: relative;  
-            border: 1px solid #ccc;  
+            height: 100%; /* 容器高度 */  
+            overflow: hidden; /* 隐藏默认滚动条 */  
         }  
-        .content {  
-            height: 1000px;  
-            background: linear-gradient(to bottom, #f0f0f0, #d0d0d0);  
-        }  
-        .scrollbar {  
+
+        .custom-scrollbar {  
             position: absolute;  
-            right: 0;  
-            background-color: rgba(100, 100, 100, 0.5);  
-            border-radius: 5px;  
-            transition: top 0.2s; /* 平滑过渡 */  
+            right: 10px;  
+            top: 0;  
+            width: 10px;  
+            height: 100%;  
+            background: #f0f0f0;  
         }  
-    </style>  
+
+        .thumb {  
+            position: relative;  
+            width: 100%;  
+            height: 100px; /* 滚动条滑块高度 */  
+            background: #aaa;  
+            cursor: pointer;  
+        }
+        .content {
+            border: 1px solid;
+            height: 100px;
+            width: 300px;
+            margin: 100px auto;
+            overflow: auto;
+        }
+        ::-webkit-scrollbar { width: 0px; }
+    </style>
 </head>  
 <body>  
+    <div class="scroll-container">  
+        <div class="custom-scrollbar" id="scrollbar">  
+            <div class="thumb" id="thumb"></div>  
+        </div>  
+        <div class="content">  
+            <!-- 添加大量内容以便形成滚动条 -->  
+            <p>这里是一些内容...</p>  
+            <p>这里是一些内容...</p>  
+            <p>这里是一些内容...</p>  
+            <p>这里是一些内容...</p>  
+            <p>这里是一些内容...</p>  
+            <p>这里是一些内容...</p>  
+            <p>这里是一些内容...</p>  
+            <p>这里是一些内容...</p>  
+            <!-- 可添加更多内容 -->  
+        </div>  
+    </div>  
 
-<div class="scrollable">  
-    <div class="content"></div>  
-    <div class="scrollbar"></div>  
-</div>  
+    <script>
+        const scrollbar = document.getElementById('scrollbar');  
+        const thumb = document.getElementById('thumb');  
+        const content = document.querySelector('.content');  
 
-<script>  
-class CustomScrollBar {  
-    constructor(contentHeight, viewportHeight) {  
-        this.contentHeight = contentHeight;  
-        this.viewportHeight = viewportHeight;  
-        this.scrollbarHeight = this.calculateScrollbarHeight();  
-        this.scrollableContentTop = 0; // 当前内容滚动位置  
-        this.currentScrollbarTop = 0; // 当前滚动条位置  
+        let isDragging = false;  
 
-        // 获取滚动条元素  
-        this.scrollbarElement = document.querySelector('.scrollbar');  
-        this.updateScrollbar();  
-    }  
+        thumb.addEventListener('mousedown', (e) => {  
+            isDragging = true;  
+            e.preventDefault();  
+        });  
 
-    calculateScrollbarHeight() {  
-        return (this.viewportHeight / this.contentHeight) * this.viewportHeight;  
-    }  
+        document.addEventListener('mouseup', () => {  
+            isDragging = false;  
+        });  
 
-    getScrollbarTop() {  
-        return (this.scrollableContentTop / (this.contentHeight - this.viewportHeight)) * (this.viewportHeight - this.scrollbarHeight);  
-    }  
+        document.addEventListener('mousemove', (e) => {  
+            if (isDragging) {  
+                const scrollHeight = content.scrollHeight - content.clientHeight;  
+                const containerHeight = scrollbar.clientHeight - thumb.clientHeight;  
+                const mouseY = e.clientY - scrollbar.getBoundingClientRect().top;  
+                const newTop = Math.max(0, Math.min(containerHeight, mouseY - thumb.clientHeight / 2));  
+                const scrollRatio = newTop / containerHeight;  
+                content.scrollTop = scrollRatio * scrollHeight;  
+                thumb.style.top = newTop + 'px';  
+            }  
+        });
 
-    updateScrollbar() {  
-        this.scrollbarElement.style.height = this.scrollbarHeight + 'px';  
-        this.scrollbarElement.style.top = this.getScrollbarTop() + 'px';  
-    }  
+        // 点击空白处进行滚动  
+        scrollbar.addEventListener('click', (e) => {  
+            if(e.target.className == 'thumb') return
+            
+            const scrollHeight = content.scrollHeight - content.clientHeight;  
+            const containerHeight = scrollbar.clientHeight - thumb.clientHeight;  
+            const clickY = e.offsetY // e.clientY - scrollbar.getBoundingClientRect().top;  
+            console.log(e.offsetY, e.clientY - scrollbar.getBoundingClientRect().top)
 
-    scrollTo(position) {  
-        // 确保位置在合法范围内  
-        if (position < 0) position = 0;  
-        if (position > this.contentHeight - this.viewportHeight) position = this.contentHeight - this.viewportHeight;  
+            const newTop = Math.max(0, Math.min(containerHeight, clickY - thumb.clientHeight / 2));  
+            const scrollRatio = newTop / containerHeight;  
 
-        this.scrollableContentTop = position;  
-        this.updateScrollbar();  
-        document.querySelector('.scrollable').scrollTop = this.scrollableContentTop;  
-    }  
+            content.scrollTop = scrollRatio * scrollHeight;  
+            thumb.style.top = newTop + 'px';  
+        });  
 
-    // 点击空白处滚动  
-    handleBlankClick(event) {  
-        const scrollableRect = document.querySelector('.scrollable').getBoundingClientRect();  
-        const clickY = event.clientY - scrollableRect.top; // 点击位置相对于可视区域的Y坐标  
+        // 监听内容滚动以更新滑块位置  
+        content.addEventListener('scroll', () => {  
+            const scrollHeight = content.scrollHeight - content.clientHeight;  
+            const containerHeight = scrollbar.clientHeight - thumb.clientHeight;  
+            const scrollRatio = content.scrollTop / scrollHeight;  
 
-        // 计算目标内容滚动位置  
-        const targetScrollTop = (clickY / this.viewportHeight) * (this.contentHeight - this.viewportHeight);  
-
-        this.scrollTo(targetScrollTop);  
-    }  
-}  
-
-// 实例化组件  
-const viewportHeight = 300;  
-const contentHeight = 1000;  
-const customScrollBar = new CustomScrollBar(contentHeight, viewportHeight);  
-
-// 监听点击事件  
-document.querySelector('.scrollable').addEventListener('click', event => {  
-    if (event.target === document.querySelector('.content')) { // 确保是在空白处点击  
-        customScrollBar.handleBlankClick(event);  
-    }  
-});  
-</script>  
+            thumb.style.top = scrollRatio * containerHeight + 'px';  
+        });  
+    </script>
 
 </body>  
 </html>  

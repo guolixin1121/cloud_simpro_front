@@ -1,6 +1,9 @@
 <!-- 封装了 - 日期格式化、操作列（有操作权限时才展示操作按钮） -->
 <template>
-  <a-table class="ant-table-striped" v-bind="$attrs" v-on="$attrs" :loading="loading" :dataSource="dataSource" :columns="columns" :row-class-name="(_record: any, index: number) => (index % 2 === 1 ? 'table-striped' : null)" :defaultExpandAllRows="true" :pagination="false" @change="onChange">
+  <a-table class="ant-table-striped" v-bind="$attrs" v-on="$attrs" 
+    :loading="loading" :dataSource="dataSource" :columns="columns" 
+    :row-class-name="(_record: any, index: number) => (index % 2 === 1 ? 'table-striped' : null)" 
+    :class="{'is-dragging': isMouseDragging}" :pagination="false" @change="onChange">
     <template #emptyText>
       <!-- loading时不显示暂无数据 -->
       <div v-if="loading" style="height: 100px"></div>
@@ -64,6 +67,7 @@ const route = useRoute()
 const routeName = route.path // .replaceAll('/', '')
 const current = useSessionStorage(routeName + ':table-page', 1)
 const scroll = useSessionStorage(routeName + ':table-scroll', 0)
+const isMouseDragging = ref(false)
 const loading = ref(false)
 const data = ref()
 provide('enableCheckPermission', props.enableCheckPermission)
@@ -157,6 +161,8 @@ const onChange = (pageNumber: number) => {
 watch(
   () => props.query,
   newVal => {
+    tableScrollbar.style.height = '0px'
+    tableBody?.scrollTo({ top: 0 })
     clearCheckbox()
     // page默认使用session里缓存的数据，
     // 除非明确指定
@@ -197,6 +203,7 @@ const calcateHeight = () => {
   }
 
   // 表格内容区域
+  // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
   tableBody!.style.height = 'calc(100vh - ' + tableHeight + 'px)'
 }
 
@@ -214,21 +221,40 @@ const addScrollbar = () => {
   scrollbarContainer.appendChild(tableScrollbar)
   table?.appendChild(scrollbarContainer)
 
+  // 内容区域滚动时，自定义滚动条跟着动
+  tableBody = document.querySelector<HTMLElement>('.ant-table-body')
+  tableBody?.addEventListener('scroll', updateScrollbar)
+
   // 点击自定义滚动条空白处，滚动到目标位置 
   scrollbarContainer.addEventListener('click', (event: any) => {
     if(event.target.className == 'ant-table-scrollbar-thumb') return
      
-    const scrollPercent = event.offsetY / tableBody.clientHeight
-    const targetScrollTop = scrollPercent * (tableBody.scrollHeight - tableBody.clientHeight) 
-    tableBody.scrollTo({ top: targetScrollTop })
+    const scrollHeight = tableBody.scrollHeight - tableBody.clientHeight // 未显示的需要滚动部分的总高度
+    const scrollPercent = event.offsetY / tableBody.clientHeight // 点击的位置相对于滚动条顶部的百分比
+    tableBody.scrollTo({ top: scrollPercent * scrollHeight })
   })
 
-  // 内容区域滚动时，自定义滚动条跟着动
-  tableBody = document.querySelector<HTMLElement>('.ant-table-body')
-  tableBody?.addEventListener('scroll', updateScrollbar)
+  // 拖动滚动条实现滚动
+  tableScrollbar.addEventListener('mousedown', (event: any) => {
+    isMouseDragging.value = true
+    event.preventDefault()
+  })
+  document.addEventListener('mouseup', () => {
+    isMouseDragging.value = false
+  })
+  document.addEventListener('mousemove', (event: any) => {
+    if(isMouseDragging.value) {
+      const scrollHeight = tableBody.scrollHeight - tableBody.clientHeight   // 未显示的需要滚动部分的总高度
+      const offsetY = event.clientY - tableBody.getBoundingClientRect().top   // 鼠标移动的偏移量
+      const scrollPercent = offsetY / tableBody.clientHeight
+      tableBody.scrollTo({ top: scrollPercent * scrollHeight })
+    }
+  })
 }
 const setScrollbar = () => {
-  tableBody?.scrollTo({ top: scroll.value })
+  tableBody?.scrollTo({ top: scroll.value }) // 移动到上次记录的位置
+  
+  // 根据内容总高度，计算滚动条thumb的高度
   const viewHeight = tableBody.clientHeight
   const contentHeight = tableBody.scrollHeight
   if(contentHeight > viewHeight) {
@@ -238,11 +264,11 @@ const setScrollbar = () => {
 // 计算实际滚动条滚动时，自定义滚动条的同步滚动距离
 const updateScrollbar = () => {
   scroll.value = tableBody?.scrollTop
-  const viewHeight = tableBody.clientHeight
-  const contentHeight = tableBody.scrollHeight
-  const scrollbarHeight = tableScrollbar.clientHeight
-  const scrollbarTop = (tableBody.scrollTop / (contentHeight - viewHeight)) * (viewHeight - scrollbarHeight)
-  tableScrollbar.style.top = scrollbarTop + 'px'
+  
+  const scrollHeight = tableBody.scrollHeight - tableBody.clientHeight   // 未显示的需要滚动部分的总高度
+  const containerHeight = tableBody.clientHeight - tableScrollbar.clientHeight  // scrollbar内可滚动的高度
+  const newTop = tableBody.scrollTop / scrollHeight * containerHeight
+  tableScrollbar.style.top = newTop + 'px'
 }
 
 onMounted(() => {
@@ -312,9 +338,13 @@ defineExpose({ refresh, calcateHeight })
 </style>
 <style lang="less">
 .ant-table-body::-webkit-scrollbar { width: 0px; }
-.ant-table {
+.ant-table-striped {
   .ant-table-scrollbar { display: none; }
   &:hover .ant-table-scrollbar { display: block; }
+}
+.ant-table-striped.is-dragging { 
+  user-select: none; 
+  .ant-table-scrollbar { display: block; }
 }
 .ant-table-scrollbar {
   position: absolute;
@@ -328,7 +358,7 @@ defineExpose({ refresh, calcateHeight })
     position: absolute;
     border-radius: 100px;
     background: rgba(96,102,110,0.5);
-    width: 4px;
+    width: 100%;
     height: 0px;
   }
 }
