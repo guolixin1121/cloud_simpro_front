@@ -6,7 +6,7 @@
   </div>
   <div class="main">
     <a-spin :spinning="loading">
-      <Table ref="table" :api="mapsApi.getMapVersion" :query="query" :columns="columns" :scroll="{ x: 1000, y: 'auto' }">
+      <Table ref="table" :api="mapsApi.getMapVersion" :query="query" :columns="columns" :scroll="{ x: 1400, y: 'auto' }">
         <template #bodyCell="{ column, record }">
           <template v-if="column.dataIndex == 'mapType'">
             <a-tooltip placement="topLeft" :title="type[record.mapType]">
@@ -56,11 +56,11 @@ const beforeHandler = () => {
 }
 const router = useRouter()
 const columns = [
-  { title: '地图版本ID', dataIndex: 'id', width: 180 },
+  { title: '地图版本ID', dataIndex: 'id', width: 150 },
   { title: '地图版本', dataIndex: 'mapVersion', width: 90 },
   { title: '地图文件', dataIndex: 'mapFileName', width: 180, ellipsis: true },
   { title: '创建时间', dataIndex: 'importTime', width: 150 },
-  { title: '创建者', dataIndex: 'importUserName', width: 100, ellipsis: true  },
+  { title: '创建者', dataIndex: 'importUserName', width: 150, ellipsis: true  },
   {
     title: '操作',
     dataIndex: 'actions',

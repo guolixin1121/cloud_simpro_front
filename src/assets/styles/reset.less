@@ -73,11 +73,21 @@ ol {
   }
 }
 
+// firefox
+* {
+  scrollbar-width: thin;
+  scrollbar-color: transparent #fff;
+  scrollbar-track-color: #fff;
+}
+*:hover {
+  scrollbar-color: rgba(96,102,110,0.5) #fff;
+}
+// webkit
 ::-webkit-scrollbar {
   margin-left: 5px;
   width: 4px;
   height:4px;
-  // display: none;
+  border: none
 }
 &::-webkit-scrollbar-thumb {
   border-radius: 100px;
