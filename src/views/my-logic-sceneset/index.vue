@@ -325,7 +325,7 @@ const onBatchDownload = () => {
   downloadModal.visible = true
   downloadModal.downloadMap = true
   downloadModal.sourceData = selectedItems.value
-  downloadModal.fileName = selectedSceneset.value.name + '_' + date.getFullYear() + date.getMonth() + date.getDate()
+  downloadModal.fileName = selectedSceneset.value.name + '_' + date.getFullYear() + (date.getMonth() + 1) + date.getDate()
 }
 const onConfirmDownload = async () => {
   try {

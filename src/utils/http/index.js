@@ -124,7 +124,17 @@ class AxiosRequest {
           }
           const { code, data = {}, msg, err } = res.data
 
-          if (code == 0 || code == 200) {
+          if(res.data instanceof Blob) {
+            // 下载文件出错
+            const reader = new FileReader()
+            reader.addEventListener('loadend', function (e) {
+              // 输出字符串 {hello: world}
+              console.log(e.target.result, 'blob')
+              const err = JSON.parse(e.target.result).err || ''
+              message.error(err)
+            })
+            reader.readAsText(res.data)
+          } else if (code == 0 || code == 200) {
             resolve(data)
           } else if (code == 100) {
             store.user.gotoLogin()
