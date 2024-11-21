@@ -6,7 +6,6 @@
     <a-form style="margin: 0 auto" @finish="login" :model="formData" autocomplete="off">
       <span class="form-title">登录</span>
       <label className="label">账户</label>
-      <a href="http://bai.com">ceshi</a>
       <a-form-item name="username" :rules="[{ required: true, message: '请输入账户' }]" autocomplete="off">
         <a-input name="username" v-model:value="formData.username" placeholder="请输入账户" autocomplete="off"></a-input>
       </a-form-item>

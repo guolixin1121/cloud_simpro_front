@@ -11,6 +11,8 @@
       <div class="main">
         <page-title title="逻辑场景列表">
           <a-button :disabled="!selectedItems.length" v-if="user.hasPermission('saveAs')" @click="onBatchClone()">另存为</a-button>
+          <a-button v-if="user.hasPermission('download') && selectedSceneset"
+              :disabled="!selectedItems.length"  @click="onBatchDownload()">下载</a-button>
           <batch-button :disabled="!selectedItems.length" v-if="user.hasPermission('delete')" :api="onBatchDelete"
             :tips="'已勾选' + selectedItems.length+ '个场景，是否删除所有勾选场景？'"></batch-button>
           <a-button type="primary" :disabled="selectedItems.length > 0" v-if="user.hasPermission('add') && selectedSceneset?.isEditable" @click="gotoSubPage('/scene/edit/0')">上传逻辑场景</a-button>
@@ -92,16 +94,29 @@
         <a-button @click="onConfirmCloneSceneset" :loading="scenesetSubmitting" type="primary">确定</a-button>
       </div>
   </a-modal>
+
+  <a-modal v-model:visible="downloadModal.visible" :title="downloadModal.title"
+    :footer="null" :destroyOnClose="true">
+      <div class="modal-content">
+        <div style="margin-bottom: 10px;"><span v-if="downloadModal.desc">{{downloadModal.desc}}</span></div>
+        <a-checkbox v-model:checked="downloadModal.downloadMap" v-if="hasMapDownloadPerm">同时下载关联地图文件</a-checkbox>
+      </div>
+      <div class="modal-buttons">
+        <a-button @click="downloadModal.visible = false">取消</a-button>
+        <a-button @click="onConfirmDownload" :loading="submitting" type="primary">确定</a-button>
+      </div>
+  </a-modal>
 </template>
 
 <script setup lang="ts">
-import { gotoSubPage, checkChName } from '@/utils/tools'
+import { gotoSubPage, checkChName, download, getActionColumnWidth } from '@/utils/tools'
 import { MyLogicSceneSourceOptions, isMyLogicSceneEditable, isMyLogicScenesetEditable, getMyLogicSceneSourceName, getMyLogicScenesetSourceName, isDefaultMyLogicSceneset } from '@/utils/dict'
 
 const user = store.user
 const currentApi = api.logicScene
 const selectedSceneset = ref() 
 const scenesetApi = api.logicScenesets.getList
+const hasMapDownloadPerm = user.hasAcl('cloud:maps:versions:download')
 
 const onTreeSelect = (sceneset: any) => {
   if(sceneset.id == selectedSceneset.value?.id) return
@@ -189,7 +204,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 300,
+    width: getActionColumnWidth(['泛化', '泛化结果', '编辑', '另存为', '下载', '删除']),
     actions: {
       查看: (data: any) => gotoSubPage('/scene/view/' + data.id),
       泛化: {
@@ -208,6 +223,14 @@ const columns = [
         cloneModal.desc = ''
         cloneModal.sourceData = [data.id]
         cloneModal.cloneVisible = true
+      },
+      下载: (data: any) => {
+        downloadModal.title = '下载场景'
+        downloadModal.desc = '是否下载场景文件？'
+        downloadModal.visible = true
+        downloadModal.downloadMap = true
+        downloadModal.sourceData = [data.id]
+        downloadModal.fileName = data.name + '_' + data.id
       },
       删除: {
         tip: '场景删除后不可恢复，是否删除？',
@@ -284,6 +307,37 @@ const onSelect = (data: any) => selectedItems.value = data
 const onBatchDelete = async () => {
   await currentApi.batchDelete({logic_scene_ids: selectedItems.value})
   tableRef.value.refresh({ deletedRows: selectedItems.value.length })
+}
+
+// 下载
+const downloadModal = reactive({
+  title: '',
+  desc: '',
+  downloadMap: true,
+  sourceData: {},
+  fileName: '',
+  visible: false,
+})
+const onBatchDownload = () => {
+  const date = new Date()
+  downloadModal.title = '批量下载场景'
+  downloadModal.desc = `已勾选${selectedItems.value.length}个场景，是否下载所有场景文件？`
+  downloadModal.visible = true
+  downloadModal.downloadMap = true
+  downloadModal.sourceData = selectedItems.value
+  downloadModal.fileName = selectedSceneset.value.name + '_' + date.getFullYear() + date.getMonth() + date.getDate()
+}
+const onConfirmDownload = async () => {
+  try {
+    submitting.value = true
+    const file = await currentApi.download({ scenes: downloadModal.sourceData, with_map: downloadModal.downloadMap && hasMapDownloadPerm ? 1 : 0 })
+    download(file, downloadModal.fileName + '.zip')
+    message.success('下载成功')
+    downloadModal.visible = false
+    tableRef.value.refresh()
+  } finally {
+    submitting.value = false
+  }
 }
 
 // 场景集

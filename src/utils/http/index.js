@@ -110,34 +110,32 @@ class AxiosRequest {
 
       this.instance
         .request({
+          ...params,
           url,
           method,
           headers,
           data: ['POST', 'PUT', 'DELETE'].includes(method.toUpperCase()) ? postData : null,
-          params: method.toUpperCase() === 'GET' && typeof data == 'object' ? data : null
+          params: method.toUpperCase() === 'GET' && typeof data == 'object' ? data : null,
         })
         .then(res => {
+          if(res.headers['content-type'] !== 'application/json') {
+            resolve(res.data)
+            return
+          }
           const { code, data = {}, msg, err } = res.data
 
           if (code == 0 || code == 200) {
             resolve(data)
           } else if (code == 100) {
-            // token过期跳到登录页
             store.user.gotoLogin()
-          // } else if (code == 102) {
-          //   // 无当前页面的权限，自动跳转到首页
-          //   // router.push('/404')
-          //   message.error(msg || err)
-          //   location.href = '/#/'
           } else {
-            message.error(typeof msg === 'string' ? msg : err)
+            message.error((typeof msg === 'string' ? msg : err) || '服务器发生错误')
             reject(typeof msg === 'string' ? msg : err)
           }
         })
         .catch(error => {
           if(axios.isCancel(error)) return
           if (error.response?.status == 401) {
-            // token过期跳到登录页
             store.user.gotoLogin()
           } else {
             message.error(error.message || '请求错误，请稍后重试')

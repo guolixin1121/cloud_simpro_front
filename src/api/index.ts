@@ -50,6 +50,7 @@ export const scene = defineApi({
   delete: { url: '/scene/scenes/{sid}/', method: 'delete' },
   clone: { url: '/scene/scenes/copy/', method: 'post' },
   batchDelete: { url: '/scene/scenes/delete/', method: 'delete' },
+  download: { url: '/scene/download/file/', method: 'get', 'responseType': 'blob' },
   edit: {
     url: '/scene/scenes/{sid}/',
     method: 'put',
@@ -69,6 +70,7 @@ export const logicScene = defineApi({
   delete: { url: '/simpro/logic_scenes/{sid}/', method: 'delete' },
   clone: { url: '/simpro/logic_scenes/copy/', method: 'post' },
   batchDelete: { url: '/simpro/logic_scenes/batch/delete/', method: 'post' },
+  download: { url: '/simpro/logic_scenes/download/', method: 'get', 'responseType': 'blob' },
   edit: {
     url: '/simpro/logic_scenes/{sid}/',
     method: 'put'
@@ -110,7 +112,8 @@ export const maps = defineApi({
   getMap: { url: '/baidu_map/map/{sid}/', method: 'get' },
   lookMapVersion: { url: '/baidu_map/map_version/{id}/', method: 'get' },
   deleteMapVersion: { url: '/baidu_map/map_version/{id}/', method: 'delete' },
-  editMapVersion: { url: '/baidu_map/map_version/{id}/', method: 'put', headers: { 'content-type': 'multipart/form-data' } }
+  editMapVersion: { url: '/baidu_map/map_version/{id}/', method: 'put', headers: { 'content-type': 'multipart/form-data' } },
+  download: { url: '/baidu_map/download/', method: 'get', 'responseType': 'blob' },
 })()
 
 export const mapsets = defineApi({

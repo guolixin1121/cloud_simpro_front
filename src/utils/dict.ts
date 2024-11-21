@@ -17,7 +17,8 @@ export const Operations = {
   泛化: 'generalize',
   泛化结果: 'generalize',
   审批: 'approve',
-  复制: 'copy'
+  复制: 'copy',
+  下载: 'download'
 }
 
 export const SceneSourceOptions = [
@@ -158,6 +159,7 @@ export const MySceneSourceOptions = [
   { label: '场景资源库', value: 3 },
   { label: '语义生成', value: 5 },
 ]
+export const isMySceneNotBuildin = (value: number | string) => value != 5
 export const isMySceneEditable = (value: number | string) => value != 3
 export const getMySceneSourceName = (value: number | string) => MySceneSourceOptions.find(v => v.value === value)?.label
 

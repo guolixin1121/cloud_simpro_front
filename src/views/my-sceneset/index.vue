@@ -12,9 +12,11 @@
         <div class="title-section">
           <span class="title">具体场景列表</span>
           <div>
-            <a-button v-if="user.hasPermission('saveAs')"
+            <a-button v-if="user.hasPermission('saveAs') && selectedSceneset"
               :disabled="!checkedItems.length"  @click="onBatchClone()">另存为</a-button>
-            <batch-button v-if="user.hasPermission('delete')" 
+            <a-button v-if="user.hasPermission('download') && selectedSceneset"
+              :disabled="!checkedItems.length"  @click="onBatchDownload()">下载</a-button>
+            <batch-button v-if="user.hasPermission('delete') && selectedSceneset" 
               :disabled="!checkedItems.length" :api="onBatchDelete"
               :tips="'已勾选' + checkedItems.length+ '个场景，是否删除所有勾选场景？'"></batch-button>
             <a-button v-if="user.hasPermission('add') && selectedSceneset?.isEditable"
@@ -59,21 +61,35 @@
         <a-button @click="onConfirmCloneSceneset" :loading="scenesetSubmitting" type="primary">确定</a-button>
       </div>
   </a-modal>
+  <a-modal v-model:visible="downloadModal.visible" :title="downloadModal.title"
+    :footer="null" :destroyOnClose="true">
+      <div class="modal-content">
+        <div style="margin-bottom: 10px;"><span v-if="downloadModal.desc">{{downloadModal.desc}}</span></div>
+        <a-checkbox v-model:checked="downloadModal.downloadMap" v-if="hasMapDownloadPerm">同时下载关联地图文件</a-checkbox>
+      </div>
+      <div class="modal-buttons">
+        <a-button @click="downloadModal.visible = false">取消</a-button>
+        <a-button @click="onConfirmDownload" :loading="submitting" type="primary">确定</a-button>
+      </div>
+  </a-modal>
   <upgrade ref="upgradeModal" module="simulationManage"></upgrade>
 </template>
 
 <script setup lang="ts">
-import { MySceneSourceOptions, isDefaultMySceneset, isMyScenesetEditable, isMySceneEditable, getMySceneSourceName, getMyScenesetSourceName } from '@/utils/dict'
+import { MySceneSourceOptions, isDefaultMySceneset, isMyScenesetEditable, isMySceneNotBuildin,
+  isMySceneEditable, getMySceneSourceName, getMyScenesetSourceName } from '@/utils/dict'
 import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
-import { gotoSubPage, checkChName } from '@/utils/tools'
+import { gotoSubPage, checkChName, getActionColumnWidth, download } from '@/utils/tools'
 
 const loading = ref(false)
+const submitting = ref(false)
 const vncModal = ref()
 const currentApi = api.scene
 const user = store.user
 const selectedSceneset = ref() 
 const scenesetApi = api.scenesets.getListV2
+const hasMapDownloadPerm = user.hasAcl('cloud:maps:versions:download')
 
 const onTreeSelect = (sceneset: any) => {
   const isScenetSetChanged = selectedSceneset.value?.id && selectedSceneset.value.id != sceneset.id
@@ -144,6 +160,10 @@ const onTableSearch = (data: Query) => {
   query.value = { ...data, scene_set: sceneCatalog?.id }
 }
 
+// 表哥批量选中的数据
+const checkedItems = ref([])
+const onSelect = (data: any) => (checkedItems.value = data)
+
 /****** 表格区域 */
 const upgradeModal = ref()
 const beforeHandler = () => {
@@ -167,7 +187,7 @@ const columns = [
     title: '操作',
     dataIndex: 'actions',
     fixed: 'right',
-    width: 250,
+    width: getActionColumnWidth(['编辑', '编辑场景', '另存为', '下载', '删除']),
     actions: {
       查看: (data: any) => gotoSubPage('/scene/preview/' + data.id),
       编辑: { 
@@ -185,6 +205,17 @@ const columns = [
         cloneModal.sourceData = [data.id]
         cloneModal.cloneVisible = true
       },
+      下载: {
+        validator:  ({adsSource} : any) => isMySceneNotBuildin(adsSource),
+        handler: (data: any) => {
+          downloadModal.title = '下载场景'
+          downloadModal.desc = '是否下载场景文件？'
+          downloadModal.visible = true
+          downloadModal.downloadMap = true
+          downloadModal.sourceData = [data.id]
+          downloadModal.fileName = data.adsName + '_' + data.id
+        }
+      },
       删除: {
         tip: '场景删除后不可恢复，是否删除？',
         // validator: ({create_user}: any) => user.user.username == create_user,
@@ -194,6 +225,8 @@ const columns = [
   }
 ]
 
+// 另存为
+// 批量另存为
 const cloneSceneset = ref()
 const cloneModal = reactive({
   title: '',
@@ -202,7 +235,12 @@ const cloneModal = reactive({
   sourceData: {},
   targetSceneset: { sceneset: '', scenesetType: 1 } // 另存为的场景
 })
-const submitting = ref(false)
+const onBatchClone = () => {
+  cloneModal.title = '批量另存为'
+  cloneModal.desc = '您已选择' + checkedItems.value.length + '个场景，'
+  cloneModal.cloneVisible = true
+  cloneModal.sourceData = checkedItems.value
+}
 const onConfirmClone = () => {
   cloneSceneset.value.validate().then(async () => {
     try {
@@ -224,21 +262,42 @@ const onConfirmClone = () => {
   })
 }
 
-// 批量另存为
-const onBatchClone = () => {
-  cloneModal.title = '批量另存为'
-  cloneModal.desc = '您已选择' + checkedItems.value.length + '个场景，'
-  cloneModal.cloneVisible = true
-  cloneModal.sourceData = checkedItems.value
-}
-
 // 批量删除
 const tableRef = ref()
-const checkedItems = ref([])
-const onSelect = (data: any) => (checkedItems.value = data)
 const onBatchDelete = async () => {
   await currentApi.batchDelete({ scenes_id: checkedItems.value })
   tableRef.value.refresh({ deletedRows: checkedItems.value.length })
+}
+
+// 下载
+const downloadModal = reactive({
+  title: '',
+  desc: '',
+  downloadMap: true,
+  sourceData: {},
+  fileName: '',
+  visible: false,
+})
+const onBatchDownload = () => {
+  const date = new Date()
+  downloadModal.title = '批量下载场景'
+  downloadModal.desc = `已勾选${checkedItems.value.length}个场景，是否下载所有场景文件？`
+  downloadModal.visible = true
+  downloadModal.downloadMap = true
+  downloadModal.sourceData = checkedItems.value
+  downloadModal.fileName = selectedSceneset.value.name + '_' + date.getFullYear() + date.getMonth() + date.getDate()
+}
+const onConfirmDownload = async () => {
+  try {
+    submitting.value = true
+    const file = await currentApi.download({ scenes: downloadModal.sourceData, with_map: downloadModal.downloadMap && hasMapDownloadPerm ? 1 : 0 })
+    download(file, downloadModal.fileName + '.zip')
+    message.success('下载成功')
+    downloadModal.visible = false
+    tableRef.value.refresh()
+  } finally {
+    submitting.value = false
+  }
 }
 
 // 场景集操作

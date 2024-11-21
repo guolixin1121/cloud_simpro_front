@@ -2,6 +2,7 @@ import dayjs from 'dayjs'
 import router from '@/router'
 import { getType } from './validate'
 import { SStorage } from './storage'
+import { useUserStore } from '@/store/user'
 
 /**
  * 获取 url 中的参数
@@ -101,19 +102,6 @@ export function formatDate(date, formatter) {
 export function getWordLength(str) {
   // eslint-disable-next-line no-control-regex
   return str.replace(/[^\x00-\xff]/g,"**").length
-  // if (!str) return 0
-  // let total = 0
-
-  // if (str.length > 0) {
-  //   for (let i = 0; i < str.length; i++) {
-  //     let c = str.charAt(i)
-  //     if (c.match(/[\u4E00-\u9FFF]/)) {
-  //       total++
-  //     }
-  //   }
-  // }
-
-  // return total * 2 + (str.length - total)
 }
 
 export const checkEmpty = (value) => {
@@ -126,8 +114,6 @@ export const checkEmpty = (value) => {
 export const checkChName = (str, maxLength = 32, minLength = 2) => {
   if (!str) return Promise.resolve()
 
-  // const chLength = getCnWordTotal(str)
-  // const length = chLength * 2 + (str.length - chLength)
   const length = getWordLength(str)
   if(str.trim().length == 0) {
     return Promise.reject(`名称不能为空`)
@@ -181,14 +167,24 @@ export const gotoSubPage = (targetPath, isChild = true) => {
 }
 
 export const goback = (step = -1) => router.go(step)
-// export const goback = (step = -1) => {
-//   const currentPath = router.currentRoute.value.path
-//   const paths = currentPath.split('/')
-//   let targetIndex = paths.length-2+step
-//   let targetPath = ''
-//   while(targetIndex) {
-//     targetPath = '/' + paths[targetIndex] +  targetPath
-//     targetIndex--
-//   }
-//   router.push(targetPath)
-// }
+
+export const download = (fileContent, filename) => {
+  let blob = new Blob([fileContent], { type: 'application/zip'}) 
+  let tempALink = document.createElement('a')
+  tempALink.href = URL.createObjectURL(blob)
+  tempALink.download = decodeURIComponent(filename)
+  document.body.appendChild(tempALink)
+  tempALink.click()
+  document.body.removeChild(tempALink)
+}
+
+// 根据操作的个数计算需要的总宽度
+export const getActionColumnWidth = (actions) => {
+   let width = 32 + 28 // 查看按钮及列的padding
+   const user = useUserStore()
+   actions.forEach(action => {
+    user.hasPermission(action) && (width += action.length * 14 + 8)
+    // 每个字14px宽，8为margin距离
+   })
+   return width
+}

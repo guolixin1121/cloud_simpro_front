@@ -435,22 +435,13 @@ button.ant-btn-primary[disabled] {
   .ant-checkbox-wrapper {
     margin-top: 0px;
   }
-  // .ant-table-body::-webkit-scrollbar {
-  //   width: px;
-  //   height: 2px;
-  //   // scrollbar-width: 1px; // 不要滚动条
-  // }
-  // .ant-table-container {
-  //   position: relative;
-  //   &:hover:after {
-  //     content: '';
-  //     position: absolute;
-  //     height: 150px;
-  //     width: 6px !important;
-  //     top: 40px !important;
-  //     background-color: rgba(96,102,110,0.5);
-  //   }
-  // }
+  .ant-table-tbody {
+    .ant-table-cell-fix-right {
+      .text-link:last-child {
+        margin-right: 0px;
+      }
+    }
+  }
   .ant-table-tbody > tr.ant-table-row-selected > td{
     background-color: var(--active-color);
   }
@@ -479,9 +470,6 @@ button.ant-btn-primary[disabled] {
     box-shadow: none !important;
   }
   .ant-table-thead {
-    // .ant-table-cell-fix-right {
-    //   right: 0 !important;
-    // }
     .ant-table-cell-fix-right-first:before {
       display: none;
     }

@@ -17,11 +17,22 @@
       </Table>
     </a-spin>
   </div>
+
+  <a-modal v-model:visible="downloadModal.visible" title="下载地图" :footer="null" :destroyOnClose="true">
+      <div class="modal-content">
+       是否下载地图文件？
+      </div>
+      <div class="modal-buttons">
+        <a-button @click="downloadModal.visible = false">取消</a-button>
+        <a-button @click="onConfirmDownload" :loading="submitting" type="primary">确定</a-button>
+      </div>
+  </a-modal>
   <VncModal ref="vncModal"></VncModal>
   <upgrade ref="upgradeModal" module="simulationManage"></upgrade>
 </template>
 
 <script setup lang="ts">
+import { download } from '@/utils/tools'
 import { gotoVnc} from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
 const vncModal = ref()
@@ -48,10 +59,8 @@ const columns = [
   { title: '地图版本ID', dataIndex: 'id', width: 180 },
   { title: '地图版本', dataIndex: 'mapVersion', width: 90 },
   { title: '地图文件', dataIndex: 'mapFileName', width: 180, ellipsis: true },
-  // { title: '地图类型', dataIndex: 'mapType', width: 100 },
   { title: '创建时间', dataIndex: 'importTime', width: 150 },
   { title: '创建者', dataIndex: 'importUserName', width: 100, ellipsis: true  },
-  // { title: '地图文件地址', dataIndex: 'mapUrl', ellipsis: true },
   {
     title: '操作',
     dataIndex: 'actions',
@@ -75,44 +84,33 @@ const columns = [
         null,
         () => vncModal.value.show())
       },
+      下载: (data: any) => {
+        downloadModal.sourceData = data.id
+        downloadModal.visible = true
+        downloadModal.fileName = data.mapName + '_' + data.mapVersion
+      },
       删除: async ({ id }: { id: string }) => await mapsApi.deleteMapVersion(id)
     }
   }
 ]
 
-// let count = 0
-// const gotoVnc =async (data: any) => {
-//   try {
-//     loading.value = true
-//     const res = await api.vnc.enterVnc({
-//       action: 2,
-//       value: data.id
-//     })
-//     loopVnc(res.id)
-//   } catch {
-//     loading.value = false
-//   }
-// }
-// const loopVnc = async (id: String) => {
-//   if(count >= 8) {
-//     loading.value = false
-//     message.success('连接服务器失败')
-//     return
-//   }
-//   try {
-//     count++
-//     loading.value = true
-//     const res = await api.vnc.checkVnc(id)
-//     if(res.status == 1 && res.address) {
-//       loading.value = false
-//       window.open(res.address, 'vnc')
-//     } else {
-//       setTimeout(() => loopVnc(id), 1000)
-//     }
-//   } catch {
-//     loading.value = false
-//   }
-// }
+const submitting = ref(false)
+const downloadModal = reactive({
+  sourceData: '',
+  fileName: '',
+  visible: false,
+})
+const onConfirmDownload = async () => {
+  try {
+    submitting.value = true
+    const file = await mapsApi.download({ version_id: downloadModal.sourceData })
+    download(file, downloadModal.fileName + '.zip')
+    message.success('下载成功')
+    downloadModal.visible = false
+  } finally {
+    submitting.value = false
+  }
+}
 
 const table = ref()
 onMounted(()=> table.value.refresh())
