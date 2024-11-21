@@ -119,7 +119,8 @@ class AxiosRequest {
         })
         .then(res => {
           if(res.headers['content-type'] !== 'application/json') {
-            resolve(res.data)
+            // 返回的是文件
+            resolve({ success: true, file: res.data })
             return
           }
           const { code, data = {}, msg, err } = res.data
@@ -132,6 +133,7 @@ class AxiosRequest {
               console.log(e.target.result, 'blob')
               const err = JSON.parse(e.target.result).err || ''
               message.error(err)
+              resolve({success: false})
             })
             reader.readAsText(res.data)
           } else if (code == 0 || code == 200) {

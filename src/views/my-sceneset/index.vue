@@ -290,11 +290,13 @@ const onBatchDownload = () => {
 const onConfirmDownload = async () => {
   try {
     submitting.value = true
-    const file = await currentApi.download({ scenes: downloadModal.sourceData, with_map: downloadModal.downloadMap && hasMapDownloadPerm ? 1 : 0 })
-    download(file, downloadModal.fileName + '.zip')
-    message.success('下载成功')
-    downloadModal.visible = false
-    tableRef.value.refresh()
+    const { success, file} = await currentApi.download({ scenes: downloadModal.sourceData, with_map: downloadModal.downloadMap && hasMapDownloadPerm ? 1 : 0 })
+    if(success) {
+      download(file, downloadModal.fileName + '.zip')
+      message.success('下载成功')
+      downloadModal.visible = false
+      tableRef.value.refresh()
+    }
   } finally {
     submitting.value = false
   }

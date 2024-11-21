@@ -103,10 +103,12 @@ const downloadModal = reactive({
 const onConfirmDownload = async () => {
   try {
     submitting.value = true
-    const file = await mapsApi.download({ version_id: downloadModal.sourceData })
-    download(file, downloadModal.fileName + '.zip')
-    message.success('下载成功')
-    downloadModal.visible = false
+    const { success, file } = await mapsApi.download({ version_id: downloadModal.sourceData })
+    if(success) {
+      download(file, downloadModal.fileName + '.zip')
+      message.success('下载成功')
+      downloadModal.visible = false
+    }
   } finally {
     submitting.value = false
   }
