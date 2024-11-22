@@ -30,11 +30,12 @@
       <svg-icon icon="add" title="创建" v-if="user.hasPermission('addSet')" @click="onButtonClick('add')"></svg-icon>
       <svg-icon icon="edit" title="编辑" v-if="user.hasPermission('editSet')" :class="isDisabled('edit') ? 'icon--disable' : ''" @click="onButtonClick('edit')"></svg-icon>
       <svg-icon icon="saveas" title="另存为" v-if="user.hasPermission('saveAsSet')" :class="isDisabled('saveAs') ? 'icon--disable' : ''" @click="onButtonClick('saveAs')"></svg-icon>
-      <a-popconfirm placement="topRight" v-if="user.hasPermission('deleteSet')"  
+      <svg-icon icon="delete" title="删除" v-if="user.hasPermission('deleteSet') && isDisabled('delete')" class="icon--disable"></svg-icon>
+      <a-popconfirm placement="topRight" v-if="user.hasPermission('deleteSet') && !isDisabled('delete')"  
         :title="title=='地图集' ? '地图集删除后，关联数据（场景、地图等）将会一起删除，是否删除？' : '场景集删除后，关联数据将会一起删除，是否删除？'" 
         :okButtonProps="{type: 'link'}" :cancelButtonProps="{type: 'text'}"
         @confirm="onDeleteConfirm">
-        <svg-icon icon="delete" title="删除" v-if="user.hasPermission('deleteSet')" :class="isDisabled('delete') ? 'icon--disable' : ''"></svg-icon>
+        <svg-icon icon="delete" title="删除"></svg-icon>
       </a-popconfirm>
     </div>
     <!-- 调整组件大小 -->

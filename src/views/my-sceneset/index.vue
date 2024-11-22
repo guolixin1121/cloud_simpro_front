@@ -14,7 +14,7 @@
           <div>
             <a-button v-if="user.hasPermission('saveAs') && selectedSceneset"
               :disabled="!checkedItems.length"  @click="onBatchClone()">另存为</a-button>
-            <a-button v-if="user.hasPermission('download') && selectedSceneset && !isMyScenesetBuildin(selectedSceneset.source)"
+            <a-button v-if="user.hasPermission('download') && selectedSceneset && !isMyScenesetBuildin(selectedSceneset)"
               :disabled="!checkedItems.length"  @click="onBatchDownload()">下载</a-button>
             <batch-button v-if="user.hasPermission('delete') && selectedSceneset" 
               :disabled="!checkedItems.length" :api="onBatchDelete"
