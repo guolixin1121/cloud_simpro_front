@@ -38,7 +38,7 @@
 </template>
 
 <script setup lang="ts">
-import { MyScenesetSourceOptions, isMyScenesetEditable, getMyScenesetSourceName, isDefaultMySceneset } from '@/utils/dict'
+import { MyScenesetSourceOptions, isMyScenesetEditable, getMyScenesetSourceName, isMyScenesetBuildin } from '@/utils/dict'
 import { gotoSubPage, checkChName } from '@/utils/tools'
 
 /****** api */
@@ -82,7 +82,7 @@ const modal = reactive({
 const columns = [
   { 
     dataIndex: 'checkbox', width: 60,
-    validator: (data: any) => !isDefaultMySceneset(data),
+    validator: (data: any) => !isMyScenesetBuildin(data),
    },
   { title: '场景集ID', dataIndex: 'id', width: 120 },
   { title: '场景集名称', dataIndex: 'groupName', ellipsis: true },
@@ -113,7 +113,7 @@ const columns = [
       },
       删除: {
         tip: "场景集删除后，关联数据（场景、地图）将会一起删除，是否删除？",
-        validator: (data: any) => !isDefaultMySceneset(data),
+        validator: (data: any) => !isMyScenesetBuildin(data),
         handler: async ({ id }: { id: string }) => await currentApi.delete(id)
       }
     }

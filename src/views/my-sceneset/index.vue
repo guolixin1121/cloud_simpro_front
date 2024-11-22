@@ -14,7 +14,7 @@
           <div>
             <a-button v-if="user.hasPermission('saveAs') && selectedSceneset"
               :disabled="!checkedItems.length"  @click="onBatchClone()">另存为</a-button>
-            <a-button v-if="user.hasPermission('download') && selectedSceneset"
+            <a-button v-if="user.hasPermission('download') && selectedSceneset && !isMyScenesetBuildin(selectedSceneset.source)"
               :disabled="!checkedItems.length"  @click="onBatchDownload()">下载</a-button>
             <batch-button v-if="user.hasPermission('delete') && selectedSceneset" 
               :disabled="!checkedItems.length" :api="onBatchDelete"
@@ -76,7 +76,7 @@
 </template>
 
 <script setup lang="ts">
-import { MySceneSourceOptions, isDefaultMySceneset, isMyScenesetEditable, isMySceneNotBuildin,
+import { MySceneSourceOptions, isMyScenesetBuildin, isMyScenesetEditable, isMySceneNotBuildin,
   isMySceneEditable, getMySceneSourceName, getMyScenesetSourceName } from '@/utils/dict'
 import { gotoVnc } from '@/utils/vnc'
 import VncModal from '@/components/vnc-modal/index.vue'
@@ -339,7 +339,7 @@ const treeBtnHandlers = {
     scenesetModal.cloneName = ''
   },
   delete: {
-    validator: (data: any) => !isDefaultMySceneset(data),
+    validator: (data: any) => !isMyScenesetBuildin(data),
     handler: async (id: string) => {
       await api.scenesets.delete(id)
       scenesetTreeRef.value.refresh()

@@ -147,7 +147,7 @@ export const MyScenesetSourceOptions = [
   { label: '语义生成', value: 3 },
 ]
 // 是否是内置场景集
-export const isDefaultMySceneset = ({source} : any) => source === 3
+export const isMyScenesetBuildin = ({source} : any) => source === 3
 export const isMyScenesetEditable = ({ source }: any) => source != 1 && source != 3 // && (groupName ? groupName != '赛目大模型场景集' : name != '赛目大模型场景集')
 export const getMyScenesetSourceName = (value: number | string) => MyScenesetSourceOptions.find(v => v.value === value)?.label
 
