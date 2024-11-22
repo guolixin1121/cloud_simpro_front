@@ -6,7 +6,7 @@
   </div>
   <div class="main">
     <div class="flex justify-between items-center">
-      <span class="title mr-4">模型版本列表</span>
+      <span class="title mr-4">地图版本列表</span>
     </div>
     <a-spin :spinning="loading">
       <Table ref="table" :api="mapsApi.getMapVersion" :query="query" :columns="columns" :scroll="{ x: 1400, y: 'auto' }">
