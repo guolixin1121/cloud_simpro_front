@@ -3,7 +3,7 @@
     <tree :title="'地图集'" :show-icon="true" :api="mapsApi.getMapCatalog" :button-handlers="treeBtnHandlers" 
       @select="onTreeSelect"/>
 
-    <div class="main-right table-container">
+    <div class="main-right">
       <a-spin :spinning="catalogLoading">
         <div class="right-title">
           <div class="title-item"><span class="label">地图集名称</span>{{ selectedMapset?.name }}</div>
@@ -79,11 +79,16 @@ const gotoVersion = (record: any) => gotoSubPage('/version/?id=' + record.id + '
 
 const catalogLoading = ref(false)
 store.catalog.mapCatalog = {}
-const onTreeSelect = async (val: any) => {
-  selectedMapset.value = val
-  store.catalog.mapCatalog = val
+const onTreeSelect = async (mapset: any) => {
+  const isSetChanged = selectedMapset.value?.id && selectedMapset.value.id != mapset.id
+  selectedMapset.value = mapset
+  store.catalog.mapCatalog = mapset
   // 切换地图集，地图列表page重置为1
-  query.value = { ...query.value, catalog: val.id, page: 1 }
+  if(isSetChanged) {
+    query.value = { ...query.value, catalog: mapset.id, page: 1 }
+  } else {
+    query.value = { ...query.value, catalog: mapset.id }
+  }
 }
 
 const treeBtnHandlers = {

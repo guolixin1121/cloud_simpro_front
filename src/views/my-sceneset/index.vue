@@ -3,7 +3,7 @@
     <tree ref="scenesetTreeRef" :title="'场景集'" :pagination="true" :api="scenesetApi" :lazy="true" 
       :filedNames="{ label: 'groupName', value: 'id' }" :button-handlers="treeBtnHandlers" 
       :default-value="selectedSceneset" @select="onTreeSelect" />
-    <div class="main-right table-container">
+    <div class="main-right">
       <a-spin :spinning="scenesetLoading">
         <sceneset :sceneset="selectedSceneset"></sceneset>
       </a-spin>
